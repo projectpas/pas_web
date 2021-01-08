@@ -1,0 +1,520 @@
+﻿<div>
+    <div class="card-header bg-primary new-card-header">
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">General Info</h4>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="right_col" role="main">
+            <div>
+                <div class="x_content">
+                    <div class="clear"></div>
+                    <form #generalInfoForm="ngForm" class="form-horizontal1">
+                        <div class="form-row" style="margin-left: 13px;margin-top: 10px;">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Legal Entity <span class="clr-red">*</span></label>
+                                    <div class="inner-addon right-addon inline-block">
+                                        <p-autoComplete class="autocomp-customer-cstm" name="name"
+                                            [(ngModel)]="generalInformation.name" required (ngModelChange)="setvaliDate()"
+                                            (onKeyUp)="checkCustomerNameExist($event.target.value)"
+                                            (onSelect)="selectedCustomerName($event)" [suggestions]="parentLegalEntity"
+                                            field="label" (completeMethod)="filterParentLegalEntity($event)" [size]="30"
+                                            [minLength]="1" [dropdown]="true">
+                                        </p-autoComplete>
+                                        <div *ngIf="isEntityNameAlreadyExists" class="clr-red">
+                                            Entry Already Exists
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Code <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="companyCode" 
+                                        [(ngModel)]="generalInformation.companyCode" required [disabled]="true" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Company Name <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="companyName" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.companyName" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>D/B/A</label>
+                                    <input class="form-control" type="text" name="doingLegalAs" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.doingLegalAs" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Address Line 1 <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" name="address1" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.address1" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Address Line 2</label>
+                                    <input class="form-control" type="text" name="address2" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.address2" />
+                                </div>
+                                <div class="form-group">
+                                    <label>City <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="text" id="city" name="city" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.city" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        Primary State/Province
+                                        <span class="clr-red">*</span>
+                                    </label> 
+                                    <input class="form-control" type="text" name="stateOrProvince" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.stateOrProvince" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Postal <span class="clr-red">*</span></label>
+                                    <input class="form-control" (keypress)="numberonly($event)" type="text" name="postalCode" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.postalCode" required />
+                                </div>
+                                <div class="form-group">
+                                    <label>Country <span class="clr-red">*</span></label>
+                                    <div class="inner-addon right-addon inline-block">
+                                        <p-dropdown (input)="onFilterCountry($event.target.value)" [showClear]="true"   
+                                            class="p-dropdown-100 form-control border_nne" (ngModelChange)="setvaliDate()"
+                                            [options]="countryListOriginal" filter="true" field="label" required
+                                            [(ngModel)]="generalInformation.countryId" name="countryLis3"
+                                            [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                          
+                                <div class="form-group">
+                                    <label style="margin-bottom: 11px !important;">Invoice Address Position</label>
+                                    <div class="col-md-12">
+                                        <div>
+                                            <label class="radio-cstm wauto pull-left">
+                                                <input type="radio" name="invoiceAddPosition" checked="checked" (ngModelChange)="setvaliDate()"
+                                                    id="invoiceAddPosition" class="form-control" value="1"
+                                                    [(ngModel)]="generalInformation.invoiceAddressPosition">
+                                                <span class="checkmark"></span>
+                                                Top
+                                            </label>
+                                            <label class="radio-cstm wauto pull-left">
+                                                <input type="radio" name="invoiceAddPosition" id="invoiceAddPosition"
+                                                    class="form-control" value="2" (ngModelChange)="setvaliDate()"
+                                                    [(ngModel)]="generalInformation.invoiceAddressPosition">
+                                                <span class="checkmark"></span>
+                                                Bottom
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="form-group"> 
+                                    <label>Fax</label>
+                                    <input class="form-control" type="text" id="faxNumber" [pattern]="phonePattern" name="faxNumber" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.faxNumber" #faxPattren="ngModel"  (keypress)="numberonly($event)"/>
+                                </div> 
+                                <div *ngIf="faxPattren.errors" [ngClass]="'error'">
+                                    <div *ngIf="faxPattren.errors.pattern">
+                                        <span style="color: red;">Please enter atleast 6 digits</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                
+                                    <div class="col-md-12 pl-0">
+                                        <div class="col-md-6 pl-0">
+                                            <label>Phone <span class="clr-red">*</span></label>
+                                            <input type="text" id="phone" name="phone" [pattern]="phonePattern" (ngModelChange)="setvaliDate()"
+                                                #phoneNumberNg="ngModel" class="form-control" minlength="6"
+                                                maxlength="14" (keypress)="patternMobilevalidationWithSpl($event)"
+                                                [(ngModel)]="generalInformation.phoneNumber" required />
+                                        </div>
+                                        <div class="col-md-6"> 
+                                            <label>Ext </label>
+                                            <input type="text" (keypress)="numberonly($event)" name="phoneExt" style="text-align: start !important;" pInputText maxlength="15" (ngModelChange)="setvaliDate()"
+                                                [disabled]="!generalInformation.phoneNumber " [(ngModel)]="generalInformation.phoneExt" />
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="phoneNumberNg.errors" [ngClass]="'error'">
+                                        <div *ngIf="phoneNumberNg.errors.pattern">
+                                            <span style="color: red;">Please enter atleast 6 digits</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 30px;">
+                                    <label style="margin-bottom: 9px !important;margin-top: 4px;">Invoice Fax/Phone Position</label>
+                                    <div class="col-md-12">
+                                        <div>
+                                            <label class="radio-cstm wauto pull-left">
+                                                <input type="radio" name="invoicefaxPhonePosition" checked="checked" (ngModelChange)="setvaliDate()"
+                                                    id="invoicefaxPhonePosition" class="form-control" value="1"
+                                                    [(ngModel)]="generalInformation.invoiceFaxPhonePosition">
+                                                <span class="checkmark"></span>
+                                                Top
+                                            </label>
+                                            <label class="radio-cstm wauto pull-left">
+                                                <input type="radio" name="invoicefaxPhonePosition" (ngModelChange)="setvaliDate()"
+                                                    id="invoicefaxPhonePosition" class="form-control" value="2"
+                                                    [(ngModel)]="generalInformation.invoiceFaxPhonePosition">
+                                                <span class="checkmark"></span>
+                                                Bottom
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 23px;">
+                                    <label style="    margin-top: 4px;">Functional Currency <span class="clr-red">*</span></label>
+                
+                                    <p-dropdown required (input)="onFilterCurrency($event.target.value)"  
+                                        [showClear]="true" class="p-dropdown-100 form-control border_nne" (ngModelChange)="setvaliDate()"
+                                        [options]="allCurrencyInfo" filter="true" field="label"
+                                        [(ngModel)]="generalInformation.functionalCurrencyId"
+                                        name="functionalCurrencyId" [resetFilterOnHide]="true" placeholder="Select">
+                                    </p-dropdown>
+                                </div>
+                                <div class="form-group">
+                                    <label>Reporting Currency <span class="clr-red">*</span></label>
+                                 
+                                    <p-dropdown required (input)="onFilterCurrency($event.target.value)"  
+                                        [showClear]="true" class="p-dropdown-100 form-control border_nne" (ngModelChange)="setvaliDate()"
+                                        [options]="allCurrencyInfo" filter="true" field="label"
+                                        [(ngModel)]="generalInformation.reportingCurrencyId" name="reportingCurrencyId"
+                                        [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                </div>
+                                <div class="inline-block display-flex inline-adjust">
+                                    <label class="control-label">
+                                        Ledger Name
+                                    </label>
+                                </div> 
+                                <div>
+                                    <!-- <select id="LedgerName" name="LedgerName" title="Ledger Name"
+                                        [(ngModel)]="generalInformation.ledgerId">
+                                        <option *ngFor="let glAccounts of allGlInfo" [ngValue]="glAccounts.accountCode"
+                                            title="{{glAccounts.accountDescription}}">
+                                            {{glAccounts.accountCode}}
+                                        </option>
+                                    </select> -->
+                                    <p-dropdown (input)="onFilterLedgername($event.target.value)" [showClear]="true"
+                                        class="p-dropdown-100" (ngModelChange)="setvaliDate()"
+                                        [options]="allLedgerInfo" filter="true" field="label"
+                                        [(ngModel)]="generalInformation.ledgerId" name="ledgerId"
+                                        [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                </div>
+                              
+                                <div class="form-group">
+                                    <label style="    margin-top: 5px;">Cage Code</label>
+                                    <input class="form-control" type="text" id="cageCode" name="cageCode" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.cageCode" />
+                                </div>
+                                <div class="form-group">
+                                    <label>Faa Lic</label>
+                                    <input class="form-control" type="text" id="faaLicense" name="faaLicense" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.faaLicense" />
+                                </div>
+                                <div class="form-group">
+                                    <label style="    margin-top: 3px;">TAX Id</label>
+                                    <input class="form-control" type="text" id="taxId" name="taxId" (ngModelChange)="setvaliDate()"
+                                        [(ngModel)]="generalInformation.taxId" />
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-md-6-cstm">
+                                <div class="form-group">
+                                    <label style="float: none;">Logo</label>
+                                    <p-fileUpload #fileUploadInput name="fileupload[]" accept="image/*" (ngModelChange)="setvaliDate()"
+                                        [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
+                                        (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"></p-fileUpload>
+                                </div>
+                                <div class="table-responsive table-overflow"
+                                    *ngIf="sourceViewforDocumentList.length > 0">
+                                    <h4 class="panel-title B-bold" style="padding-left: 9px;"><strong>Attachment Details:</strong></h4>
+                                    <p-table class="table-responsive ptable-cus-pma"
+                                        [paginator]="sourceViewforDocumentList.length > 0"
+                                        [value]="sourceViewforDocumentList" [rows]="3"
+                                        [columns]="sourceViewforDocumentListColumns">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns">
+                                                    {{col.header}}
+                                                </th>
+                                                <th style="width: 100px;">
+                                                    Download
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-part let-rowData let-columns="columns"
+                                            let-i="rowIndex">
+                                            <tr>
+                                                <td *ngFor="let col of columns">
+                                                    <ng-container *ngIf="col.field=='fileName'">
+                                                        {{part[col.field]}}
+                                                    </ng-container>
+                                                </td>
+                                                <td style="text-align: center;">
+                                                    <a (click)="downloadFileUpload(part)" matTooltip="Download"
+                                                        matTooltipPosition="above" class="btn nobg btn-cstm"><span><i
+                                                                class="fa fa-download"></i></span></a>
+                                                    <span>
+                                                        <a class="btn nobg" (click)="openDeletes(content,rowData)"
+                                                            matTooltip="Delete" matTooltipPosition="above">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns
+                                            *ngIf="sourceViewforDocumentList.length == 0">
+                                            <tr>
+                                                <td [attr.colspan]="2"
+                                                    style="color: red; font-weight: bold; text-align: center">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #content let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                                                <button type="button" class="close" aria-label="Close"
+                                                    (click)="dismissModel()">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong>
+                                                    <h6>File Name: <span class="new-label"> {{logoRecord.fileName}}</span> </h6>
+                                                </strong>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="deleteItemAndCloseModel()">Yes</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    (click)="dismissModel()">No</button>
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                                <div class="form-group" style="margin-top: 15px;">
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label>
+                                            <input type="checkbox" name="isAddressForBilling" [(ngModel)]="
+                                generalInformation.isAddressForBilling"  (ngModelChange)="setvaliDate()"/>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Is this Address For Billing
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 15px;">
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label>
+                                            <input type="checkbox" name="isAddressForShipping" [(ngModel)]="
+                                generalInformation.isAddressForShipping"  (ngModelChange)="setvaliDate()"/>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Is this Address For Shipping
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <span class="checkbox-cstm" style="margin-left: 0;">
+                                        <label>
+                                            <input type="checkbox" name="isBalancingEntity" (ngModelChange)="setvaliDate()"
+                                                [(ngModel)]="generalInformation.isBalancingEntity" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Balancing Entity
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6" style="padding: 0px;">
+                                        <div class="form-group" style="margin-top: 10px;">
+                                            <span class="checkbox-cstm" style="margin-left: 6px;">
+                                                <label>
+                                                    <input type="checkbox" name="lastLevel"
+                                                        [(ngModel)]="generalInformation.lastLevel" (ngModelChange)="setvaliDate()"
+                                                        (ngModelChange)="getmemo()" />
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Last Level
+                                                </label>
+                                            </span>
+                                        </div>
+                                        <div class="form-group" *ngIf="generalInformation.lastLevel">
+                                            
+                                            <div class="tagNameDiv" style="display: inline-flex;    padding-left: 5px;">
+                                             <div>
+                                                <label>Tag Name</label>
+                                                <input class="form-control" type="text" id="tagName" name="tagName"
+                                                [(ngModel)]="tagName" />
+                                             </div>
+                                                <!-- <i class="fa fa-plus-circle fa-lg" matTooltipPosition="above" style="font-size: 19px !important;" (ngModelChange)="setvaliDate()"
+                                                    matTooltip="Add Tag Name" (click)="onAddTagName();"></i> -->
+                                                    <button type="button" class="btn btn-primary but_stl" [disabled]="!tagName" (click)="onAddTagName();" style="margin-left: 10px;">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="generalInformation.lastLevel">
+                                    <h4 class="panel-title B-bold"><strong>Tag Names:</strong></h4>
+                                    <p-table #ptabletagName    class="rpo-table-cstm rro-table-cstm tab-table-cstm tag_t"
+                                    [paginator]="true"
+                                    [pageLinks]="3"
+                                    [rowsPerPageOptions]="[5,10,20,50,100]"
+                                         [value]="tagNames" [rows]="pageSizeTax" [first]="0"
+                                        (onPage)="changePage($event)" [columns]="tagNamesColumns"
+                                        [totalRecords]="totalRecords"> 
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns">
+                                                    {{ col.header }}
+                                                </th>
+                                                <th style="width: 25px;">
+                                                    Actions
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th style="width:auto" *ngFor="let col of columns"
+                                                    [ngSwitch]="col.field">
+                                                    <input style="width:100%;" pInputText type="text" (input)="
+                                            ptabletagName.filter($event.target.value, col.field, 'contains')
+                                            " />
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                            let-i="rowIndex">
+                                            <tr>
+                                                <td *ngFor="let col of columns">
+                                                    {{rowData[col.field]}}
+                                                </td>
+                                                <td class="text-center">
+                                                    <span>
+                                                        <a class="btn nobg btn-edit-cstm"
+                                                            (click)="onEditTagName(editContent,rowData,i)"
+                                                            matTooltip="Edit" matTooltipPosition="above">
+                                                            <i class="fa fa-pencil"></i>
+                                                        </a>
+                                                    </span>
+                                                    <span>
+                                                        <a class="btn nobg btn-delete-cstm" (click)="openDeletesTag(contentDeleteTag,rowData,i)"
+                                                             matTooltip="Delete"
+                                                            matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns *ngIf="tagNames.length == 0">
+                                            <tr>
+                                                <td [attr.colspan]="2"
+                                                    style="color: red; font-weight: bold; text-align: center">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary" id="footer">
+                                            <label id="footer" class="footer">Total: </label>
+                                            <input style="width: 5%;" [value]="tagNames.length" name="totalRecords" disabled
+                                              pInputText type="text" />
+                  
+                                            &nbsp;&nbsp;
+                                            <label id="footer" class="footer1">Pages Count:</label>
+                  
+                                            <input style="width: 5%;" [ngModel]="
+                                                getTaxPageCount(
+                                                  tagNames.length,
+                                                  pageSizeTax
+                                                )
+                                              " name="page count tax" disabled pInputText type="text" />
+                                          </ng-template>
+                                          <ng-template #contentDeleteTag let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                                                <button type="button" class="close" aria-label="Close"
+                                                    (click)="dismissModel()">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body"> 
+                                              
+                                                <strong>
+                                                    Tag Name:
+                                                    <span class="new-label">{{tagRowData.tagName}}</span>
+                                                </strong>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary"
+                                                    (click)="onDeleteTagName()">Yes</button>
+                                                <button type="button" class="btn btn-danger"
+                                                    (click)="dismissModel()">No</button>
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row pull-right mr-10">
+                            <button type="submit" class="btn btn-primary submit-btn new-footer-btn" *ngIf="!isEditMode"
+                                [disabled]="!generalInfoForm.valid || isEntityNameAlreadyExists" (click)="saveGeneralInformation()">
+                                Save
+                            </button>
+                            <button type="submit" *ngIf="isEditMode" class="btn btn-primary submit-btn new-footer-btn"
+                                [disabled]="!generalInfoForm.valid || disableUpdatebutton || isEntityNameAlreadyExists" (click)="saveGeneralInformation()">
+                                Update
+                            </button>
+                            <!-- *ngIf="allowNextView" -->
+                            <button type="button"  [disabled]="!allowNextView"
+                                class="btn btn-primary submit-btn new-footer-btn" (click)="nextClick('Next')">
+                                Next
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ng-template #editContent let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">Edit Tag Name</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <label>Tag Name</label>
+            <div class="tagNameDiv">
+                <input class="form-control" type="text" id="tagName1" name="tagName1"  (ngModelChange)="setvaliDateTag()" [(ngModel)]="tagName1" />
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" [disabled]="tageNameValiDate" (click)="onAddTagNameEdit()">Update</button>
+            <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+        </div>
+    </ng-template>
+    <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+            <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+            <h6 style="text-align: start;">
+                <!-- Are you sure you want to go to {{nextOrPreviousTab}} tab? Unsaved changes will be lost. -->
+                Do you want to Save changes and Continue ?
+            </h6>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal"   (click)="dismissModelPermission()">No</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+        </div>
+    </ng-template>
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>

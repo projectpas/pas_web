@@ -1,0 +1,834 @@
+﻿<div class="card">
+    <div class="card-body p-t-0">
+        <div class="row">
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <div class="form-group">
+                    <label>SO Num <span class="clr-red">*</span></label>
+                    <input type="text" class="form-control" name="salesOrderNumber"
+                        [(ngModel)]="salesOrder.salesOrderNumber" [disabled]="true" #accountTypeId="ngModel"
+                        id="salesOrderNumber" #salesOrderNumber="ngModel" />
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <div class="form-group">
+                    <label>SO Quote Num</label>
+                    <input type="text" class="form-control" [(ngModel)]="salesOrder.salesOrderQuoteNumber"
+                        name="salesOrderQuoteNumber" [disabled]="true" />
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <label></label>
+                <div class="form-group">
+                    <button type="submit" class="btn submit-btn btn btn-primary">Sales
+                        order</button>
+                </div>
+
+            </div>
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <label></label>
+                <div class="form-group">
+                    <button type="submit" class="btn  submit-btn btn btn-primary">Create Shipping</button>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dt [value]="partsForBilling" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
+            [paginator]="showPaginator" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
+            [columns]="selectedColumns" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"
+            [scrollable]="true" [style]="{ width: '100%' }">
+            <!-- <ng-template pTemplate="caption"> -->
+            <!-- <div class="row">
+                    <div class="col">
+                    </div>
+                </div> -->
+            <!-- </ng-template> -->
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="width:50px !important;">Ready?</th>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                        {{ col.header }}
+                    </th>
+                    <th style="width:130px !important;">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
+                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
+                    <td style="width:50px !important; text-align: center;">
+                        <input type="checkbox" [(ngModel)]="rowData.selected"
+                            [disabled]="!rowData.isApproved || rowData.isShipped" />
+                    </td>
+                    <td *ngFor="let col of columns">
+                        <span *ngIf="col.field == 'totalSales'" class="float-right">
+                            {{convertDate(col.field , rowData) | twoDecimalGlobalNumberFormatPipe}}
+                        </span>
+                        <span *ngIf="col.field != 'totalSales'">
+                            {{convertDate(col.field , rowData)}}
+                        </span>
+                    </td>
+                    <td style="text-align:center" style="width:130px !important;">
+                        <button type="submit" class="btn submit-btn btn btn-primary"
+                            (click)="onSelectPartNumber(rowData)" [disabled]="!rowData.selected">Create
+                            Shipping</button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="partsForBilling.length == 0">
+                <tr>
+                    <td [attr.colspan]="10" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+
+                <input style="width: 5%;" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
+            </ng-template>
+        </p-table>
+
+
+        <!-- <div class="card-body"> -->
+        <div *ngIf="partSelected">
+            <form #shippingForm="ngForm">
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="card card-stock">
+                            <div class="card-body">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Shipping Order Num</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.woShippingNum" name="shippingOrderNum"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Status<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select [(ngModel)]="shippingHeader.soShippingStatusId" name="status" required
+                                            [disabled]="isView">
+                                            <option value="">Select</option>
+                                            <option
+                                                *ngFor="let status of [{'label':'Open', 'id':1}, {'label':'Shipped', 'id':2}, {'label':'In Transit', 'id':3}, {'label':'Received', 'id':4}]"
+                                                [value]="status.id">{{status.label}}</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Open Date <span class="clr-red">*</span> </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()"
+                                            [(ngModel)]="shippingHeader.openDate" name="openDate" [disabled]="isView"
+                                            required></p-calendar>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Customer</label>
+                                    </div>
+                                    <div class="col-md-8" *ngIf="customerDetails">
+                                        <input class="form-control" (change)="calculateExpiryDate()" type="text"
+                                            [(ngModel)]="customerDetails.name" name="customer" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12" *ngIf="customerDetails">
+                                    <div class="col-md-4">
+                                        <label>Cus Code</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="customerDetails.customerCode" name="customerCode" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Cert Num</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="number" [(ngModel)]="validFor" name="certNum"
+                                            disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-3">
+                            <div class="card card-stock">
+                                <div class="card-header">
+                                    <h5>Manufacturer</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <label>Manufacturer</label>
+                                        <select [(ngModel)]="stockLineForm.manufacturerId" name="manufacturerId">
+                                            <option value="0">-- Select --</option>
+                                            <option *ngFor="let manufacturer of allManufacturerInfo" [ngValue]="manufacturer.value">{{manufacturer.label}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mfg. Lot Num</label>
+                                        <input class="form-control" type="text" name="manufacturerLotNumber" [(ngModel)]="stockLineForm.manufacturerLotNumber">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mfg. Batch Num</label>
+                                        <input class="form-control" type="text" name="manufacturingBatchNumber" [(ngModel)]="stockLineForm.manufacturingBatchNumber">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Mfg. Date</label>
+                                        <p-calendar class="workflow-clder" [showIcon]="true" [maxDate]="minDateValue" name="manufacturingDate" [(ngModel)]="stockLineForm.manufacturingDate"></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            </div> -->
+
+
+                    <div class="col-md-6">
+                        <div class="card card-stock">
+                            <div class="card-body">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Ship Via <span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select [(ngModel)]="shippingHeader.shipviaId" [disabled]="isView"
+                                            name="shipVia" required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let shipvia of shipViaList" [value]="shipvia.value">
+                                                {{shipvia.label}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Ship Date<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()"
+                                            [(ngModel)]="shippingHeader.shipDate" name="shipDate" [disabled]="isView"
+                                            required></p-calendar>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>AWD/Tracking Num<span class="clr-red">*</span> </label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.airwayBill"
+                                            name="airwayBill" [disabled]="isView" required />
+                                    </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <!-- <div class="col-md-3">
+                                        <label>Weight</label>
+                                    </div> -->
+                                    <div class="col-md-6">
+                                        <label>Weight</label>
+                                        <input type="number" class="input-field-value" pKeyFilter="num" pInputText
+                                            maxlength="10" [(ngModel)]="shippingHeader.shipWeight" name="shipWeight"
+                                            id="shipWeight" title="Export Weight" (keyup)="btnChange()" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>UOM <span style="color: red;" *ngIf="shippingHeader.shipWeight">*</span>
+                                        </label>
+                                        <p-dropdown [options]="allWeightUnitOfMeasureInfo" filter="true"
+                                            [(ngModel)]="shippingHeader.shipWeightUnit" name="shipWeightUnit"
+                                            [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"
+                                            [required]="shippingHeader.shipWeight > 0" (onChange)="btnChange()">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <!-- <div class="col-md-4">
+                                        <label class="control-label">Dimension</label>
+                                    </div> -->
+                                    <div class="col-md-6">
+                                        <label class="control-label">Dimension</label>
+                                        <span class="display-flex inline-block">
+                                            <input type="number" name="exportLength" class="input-field-value"
+                                                pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                                [(ngModel)]="shippingHeader.shipSizeLength" />&nbsp;
+                                            <input type="number" name="exportWidth" class="input-field-value" pInputText
+                                                pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                                [(ngModel)]="shippingHeader.shipSizeWidth" />&nbsp;
+                                            <input type="number" name="exportHeight" class="input-field-value"
+                                                pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()"
+                                                [(ngModel)]="shippingHeader.shipSizeHeight" />
+                                        </span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label">
+                                            UOM <span style="color: red;"
+                                                *ngIf="shippingHeader.shipSizeLength || shippingHeader.shipSizeWidth || shippingHeader.shipSizeHeight">*</span>
+                                        </label>
+                                        <p-dropdown [options]="allSizeUnitOfMeasureInfo" filter="true"
+                                            [(ngModel)]="shippingHeader.shipSizeUnitOfMeasureId"
+                                            name="shipSizeUnitOfMeasureId" [resetFilterOnHide]="true"
+                                            placeholder="Select" [showClear]="true"
+                                            [required]="shippingHeader.shipSizeLength > 0 || shippingHeader.shipSizeWidth > 0 || shippingHeader.shipSizeHeight > 0"
+                                            (onChange)="btnChange()"></p-dropdown>
+                                    </div>
+                                    <!-- <div class="col-md-8">
+                                        <input class="form-control" type="number" [(ngModel)]="shippingHeader.dimension"
+                                            name="dimension" [disabled]="isView" required />
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-4">
+                        <div class="card card-stock">
+                            <div class="card-body"> -->
+                    <!-- <div class="form-group col-12">
+                                        <div class="col-6">
+                                            <label>SO Num</label>
+                                        </div>
+                                        <div class="col-6" *ngIf="customerDetails">
+                                            <input class="form-control" type="text" [(ngModel)]="salesOrderGeneralInformation.workOrderNum" name="soNum" disabled/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <div class="col-6">
+                                            <label>RO Num</label>
+                                        </div>
+                                        <div class="col-6" *ngIf="customerDetails">
+                                            <input class="form-control" type="text" [(ngModel)]="salesOrder.workOrderNum" name="roNum" readonly/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12">
+                                        <div class="col-6">
+                                            <label>PO Num</label>
+                                        </div>
+                                        <div class="col-6" *ngIf="customerDetails">
+                                            <input class="form-control" type="text" [(ngModel)]="salesOrderGeneralInformation.workOrderNum" name="poNum" readonly/>
+                                        </div>
+                                    </div> -->
+                    <!-- <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>WO Num</label>
+                                    </div>
+                                    <div class="col-md-8"
+                                        *ngIf="customerDetails">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="salesOrderGeneralInformation.workOrderNum" name="woNum" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Shipment</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="number" [(ngModel)]="shippingHeader.shipment"
+                                            name="shipment" [disabled]="isView" />
+                                    </div>
+                                </div> -->
+                    <!-- </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <h4 class="heading">Address Details</h4>
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="card card-stock">
+                            <div class="card-header">
+                                <h5 style="text-align: center;">Origin</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Name <span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <!-- <input class="form-control" type="text" [(ngModel)]="shippingHeader.originName"
+                                                   name="originName" [disabled]="isView" required /> -->
+                                        <!-- <p-dropdown placeholder="Select" name="originName" #originName="ngModel"
+                                                   [options]="orignSiteNames" class="p-dropdown-custom-md p-dropdown-mh120 shipping_v"
+                                                   [(ngModel)]="shippingHeader.originSiteId"
+                                                   (onChange)="orignSiteNameEvent($event.value)" required>
+                                       </p-dropdown> -->
+                                        <select [(ngModel)]="shippingHeader.originSiteId" name="originSiteId"
+                                            (change)="setOriginToAddress(shippingHeader.originSiteId)" required>
+                                            <!-- <option value=""></option> -->
+                                            <option *ngFor="let site of orignSiteNames" [ngValue]="site.originSiteId">
+                                                {{site.originName}}</option>
+                                        </select>
+                                        <!-- 
+                                        <select [(ngModel)]="receivingForm.siteId" name="siteId"
+                                                (change)="siteValueChange(receivingForm.siteId)" required>
+                                            <option value="0">-- Select --</option>
+                                            <option *ngFor="let site of allSites" [ngValue]="site.siteId">{{site.name}}</option>
+                                        </select> -->
+
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Address Line 1<span
+                                                class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.originAddress1" name="originAddress1" disabled
+                                            required />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Address Line 2</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.originAddress2" name="originAddress2"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>City<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.originCity"
+                                            name="originCity" disabled required />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>State<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.originState"
+                                            name="originState" disabled required />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Zip<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.originZip"
+                                            name="originZip" required disabled />
+                                    </div>
+                                </div>
+                                <!-- <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>Country<span class="clr-red">*</span></label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <select [(ngModel)]="shippingHeader.originCountryId" name="originCountry" required [disabled]="isView">
+                                                <option value=""></option>
+                                                <option *ngFor="let country of countryList" [value]="country.value">{{country.label}}</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Country<span class="clr-red">*</span></label>
+                                    </div>
+                                    <!--<div class="col-md-8">
+                                            <select [(ngModel)]="shippingHeader.soldToCountryId" name="soldToCountryId" required [disabled]="isView" disabled>
+                                                <option value=""></option>
+                                                <option *ngFor="let country of countryList" [value]="country.value">{{country.label}}</option>
+                                            </select>
+                                        </div>-->
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.originCountryName" name="soldToCountryName2"
+                                            required disabled />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card card-stock">
+                            <div class="card-header">
+                                <h5 style="text-align: center;">Bill To</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Name <span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToName"
+                                            name="soldName" [disabled]="isView" required disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Site <span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select [(ngModel)]="shippingHeader.soldToSiteId" (change)="setSoldToAddress()"
+                                            [disabled]="isView" name="soldToSite" required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of siteList"
+                                                [value]="site.customerShippingAddressId">
+                                                {{site.siteName}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Address Line 1<span
+                                                class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.soldToAddress1" name="soldToAddress1" required
+                                            [disabled]="isView" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Address Line 2</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.soldToAddress2" name="soldToAddress2"
+                                            [disabled]="isView" disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>City<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToCity"
+                                            name="soldToCity" [disabled]="isView" required disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>State<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToState"
+                                            name="soldToState" [disabled]="isView" required disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Zip<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.soldToZip"
+                                            name="soldToZip" [disabled]="isView" required disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Country<span class="clr-red">*</span></label>
+                                    </div>
+                                    <!--<div class="col-md-8">
+                                            <select [(ngModel)]="shippingHeader.soldToCountryId" name="soldToCountryId" required [disabled]="isView" disabled>
+                                                <option value=""></option>
+                                                <option *ngFor="let country of countryList" [value]="country.value">{{country.label}}</option>
+                                            </select>
+                                        </div>-->
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.soldToCountryName" name="soldToCountryName"
+                                            [disabled]="isView" required disabled />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card card-stock">
+                            <div class="card-header">
+                                <div class="checkbox-cstm" style="margin-left: 0;">
+                                    <label style="width: auto !important;margin-top: 3px;">
+                                        <!--  -->
+                                        <input type="checkbox" [(ngModel)]="shippingHeader.isSameForShipTo"
+                                            name="cparent" id="cparent"
+                                            (click)="assignDetails($event.target.checked)" />
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Is same for Ship To
+                                    </label>
+                                </div>
+                                <h5 style="text-align: center;">Ship To</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Name <span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <!-- <input class="form-control" type="text"
+                                                 [(ngModel)]="shippingHeader.shipToName" name="shipToName"
+                                                  [disabled]="isView" required/> -->
+
+                                        <p-autoComplete field="customerName"
+                                            [(ngModel)]="shippingHeader.shipToCustomerId" name="shipToName"
+                                            errorMessage="Records not found" [forceSelection]="true"
+                                            (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                            [suggestions]="customerNamesList"
+                                            (completeMethod)="filterCustomerName($event)"
+                                            (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
+                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                            class="p-autoComplete-ctsm" [disabled]="isView">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Site <span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <select [(ngModel)]="shippingHeader.shipToSiteId" (change)="setShipToAddress()"
+                                            [disabled]="isView" name="shipToSite" required>
+                                            <option value="">Select</option>
+                                            <option *ngFor="let site of shipCustomerSiteList"
+                                                [value]="site.customerShippingAddressId">{{site.siteName}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Address Line 1<span
+                                                class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.shipToAddress1" name="shipToAddress1"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label class="workorder-label">Address Line 2</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.shipToAddress2" name="shipToAddress2"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>City<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToCity"
+                                            name="shipToCity" disabled required />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>State<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToState"
+                                            name="shipToState" disabled required />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Zip<span class="clr-red">*</span></label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" [(ngModel)]="shippingHeader.shipToZip"
+                                            name="shipToZip" disabled required />
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4">
+                                        <label>Country<span class="clr-red">*</span></label>
+                                    </div>
+                                    <!--<div class="col-md-8">
+                                            <select [(ngModel)]="shippingHeader.shipToCountryId" disabled name="shipToCountry" required>
+                                                <option value=""></option>
+                                                <option *ngFor="let country of countryList" [value]="country.value">{{country.label}}</option>
+                                            </select>
+                                        </div>-->
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text"
+                                            [(ngModel)]="shippingHeader.shipToCountryName" name="shipToCountryName"
+                                            disabled required />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <!--  -->
+                <!-- {{shippingHeader.originCountryId}}- {{shippingHeader.shipToCountryId}} -->
+                <!-- *ngIf="(shippingHeader.soldToCountryId && shippingHeader.shipToCountryId) && shippingHeader.soldToCountryId !=shippingHeader.shipToCountryId" -->
+                <div
+                    *ngIf="(shippingHeader.originCountryId && shippingHeader.shipToCountryId) && shippingHeader.originCountryId !=shippingHeader.shipToCountryId">
+                    <h4 class="heading">Custom Info </h4>
+                    <div class="form-row">
+                        <div class="col-md-4">
+                            <div class="card card-stock">
+                                <div class="card-body">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>Entry Type </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['entryType']"
+                                                name="entryType" [disabled]="isView" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>Entry Num</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['entryNumber']"
+                                                name="entryNumber" [disabled]="isView" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label class="workorder-label">Entry Commodity Code</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['commodityCode']"
+                                                name="entryCommodityCode" [disabled]="isView" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card card-stock">
+                                <div class="card-body">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>EPU </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['epu']" name="epu"
+                                                [disabled]="isView" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>UCR</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['ucr']" name="ucr"
+                                                [disabled]="isView" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>Master UCR</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['masterUCR']"
+                                                name="masterUCR" [disabled]="isView" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label class="workorder-label">Movement Ref No</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="text"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['movementRefNo']"
+                                                name="MovementRefNo" [disabled]="isView" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card card-stock">
+                                <div class="card-body">
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label class="workorder-label">Customs Value </label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="number"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['customsValue']"
+                                                name="customsValue" [disabled]="isView" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>Net Mass</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="number"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['netMass']"
+                                                name="netMass" [disabled]="isView" required />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="col-md-4">
+                                            <label>VAT Value</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input class="form-control" type="number"
+                                                [(ngModel)]="shippingHeader['workOrderCustomsInfo']['vatValue']"
+                                                name="VATValue" [disabled]="isView" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <!-- [disabled]="!shippingForm.valid" -->
+                <button *ngIf="!isView" class="btn btn-primary pull-right" style="width: 100px;"
+                    (click)="save()">Save</button>
+            </div>
+        </div>
+
+        <!-- </div> -->
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

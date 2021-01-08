@@ -1,0 +1,252 @@
+﻿<div class="x_panel">
+    <div class="x_content">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" aria-current="page">General Ledger / Intercompany Setup</li>
+                <li class="breadcrumb-item active" aria-current="page">Intercompany Setup</li>
+            </ol>
+        </nav>
+        <div class="pheading">
+            <h4 class="page-heading">Intercompany Setup</h4>
+        </div><br /><br />
+        <div class="col-xs-12 bhoechie-tab-container">
+            <div class="form-group">
+                <label class="control-label col-sm-4">CO</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <!--<input type="text" class="green-text" [(ngModel)]="interCompanySetup.affiliateCode" />-->
+                    <div class="col-sm-7">
+                        <div class="inner-addon right-addon inline-block">
+
+                            <p-autoComplete sstyle="font-size: 1px"
+                                            (onSelect)="onCustomercodeSelected($event)"
+                                            [suggestions]="customerCodes" 
+                                            (completeMethod)="filterCustomerCodes($event)" 
+                                            [size]="30"
+                                            [minLength]="1" 
+                                            [dropdown]="true"
+                                            [(ngModel)]="interCompanySetup.affiliateCode">
+                               
+                            </p-autoComplete>
+                            <div *ngIf="disableSaveCusCode" class="clr-red">Entry Already Exists</div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">Company Name</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <!--<input type="text" class="green-text" [(ngModel)]="interCompanySetup.affiliateName" />-->
+                    <div class="col-sm-7">
+                        <div class="inner-addon right-addon inline-block">
+
+                            <p-autoComplete sstyle="font-size: 1px"
+                                            (onSelect)="onCustomernameSelected($event)"
+                                            [suggestions]="customerNames"
+                                            (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30"
+                                            [minLength]="1"
+                                            [dropdown]="true"
+                                            [(ngModel)]="interCompanySetup.affiliateName">
+
+                            </p-autoComplete>
+                            <div *ngIf="disableSaveCusName" class="clr-red">Entry Already Exists</div>
+                        </div>
+
+                    </div>
+                
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">GL Account To be Credited</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <select class="dropdown-down" [(ngModel)]="interCompanySetup.gLAccountToBeCredited">
+                        <option value="0">Select</option>
+                        <option *ngFor="let glAccount of GlAccountList" [ngValue]="glAccount.glAccountId">{{glAccount.accountCode}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">GL Account To be Debited</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <select class="dropdown-down" [(ngModel)]="interCompanySetup.gLAccountToBeDebited">
+                        <option value="0">Select</option>
+                        <option *ngFor="let glAccount of GlAccountList" [ngValue]="glAccount.glAccountId">{{glAccount.accountCode}}</option>
+                    </select>
+                </div>
+            </div>
+                       <div class="form-group">
+                <label class="control-label col-sm-4">Journal Type</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <select class="dropdown-down" [(ngModel)]="interCompanySetup.journalType">
+                        <option value="0">Select</option>
+                        <option *ngFor="let journalType of journalTypes" [ngValue]="journalType.journalTypeId">{{journalType.journalType}}</option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="small-header">Payment From Customers</label><br /><br />
+            <div class="form-group">
+                <label class="control-label col-sm-4">Early Payment Discount Taken</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <input type="text" class="green-text" [(ngModel)]="interCompanySetup.discountFromCustomer" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">FX Gain and Loss</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <input type="text" class="green-text" [(ngModel)]="interCompanySetup.fxGainAndLossFromCustomer" />
+                </div>
+            </div>
+
+            <label class="small-header">Payment To Vendor</label><br /><br />
+            <div class="form-group">
+                <label class="control-label col-sm-4">Early Payment Discount Taken</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <input type="text" class="green-text" [(ngModel)]="interCompanySetup.discountToCustomer" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4">FX Gain and Loss</label>
+                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                    <input type="text" class="green-text" [(ngModel)]="interCompanySetup.fxGainAndLossToCustomer" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div *ngIf="!editableMode">
+                    <button type="button" (click)="addInterCompanySetup()" class="btn btn-success pull-right submit-btn">Save</button>
+                </div>
+                <div *ngIf="editableMode">
+                    <button type="button" (click)="updateInterCompanySetup()" class="btn btn-success pull-right submit-btn">Update</button>
+                    <button type="button" (click)="resetEditableMode()" class="btn btn-success pull-right submit-btn">Clear</button>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="table-responsive">
+            <!--<h4 class="page-heading">Intercompany Setup</h4>-->
+            <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                <div id="DataTables_Table_0_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="DataTables_Table_0"></label></div><div class="dataTables_scroll">
+                    <div class="dataTables_scrollHead" style="overflow: hidden; position: relative; border: 0px; width: 100%;">
+                        <div class="dataTables_scrollHeadInner" style="box-sizing: content-box; width: 1138px; padding-right: 0px;">
+                            <table class="table table-bordered table-striped" role="grid" style="margin-left: 0px; width: 1138px;">
+                                <thead>
+                                    <tr role="row">
+
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 202px;" aria-label="Old GL Account Code: activate to sort column ascending">Affiliates Co</th>
+                                        <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 165px;" aria-label="GL Account Code: activate to sort column descending" aria-sort="ascending">Affiliate Name</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending">Journal Type</th>
+                                        <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 128px;" aria-label="Account Type: activate to sort column ascending"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let InterCompanySetup of listInterCompanySetup">
+                                        <td>{{InterCompanySetup.affiliateCode}}</td>
+                                        <td>{{InterCompanySetup.affiliateName}}</td>
+                                        <td>{{InterCompanySetup.objjournalType.journalType}}</td>
+                                        <td>
+
+                                            <span (click)="viewInterCompanySetup(viewContent,InterCompanySetup)" data-toggle="modal" data-target="#view">
+                                                <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" title="View">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </span>
+
+                                            <span (click)="editInterCompanySetup(InterCompanySetup)" data-toggle="modal" data-target="#data">
+                                                <a class="btn btn-danger nobg" data-toggle="tooltip" title="Edit" data-original-title="Edit">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                            </span>
+
+
+                                            <!--<a href="#" data-toggle="tooltip" title="Edit" class="btn btn-primary boxed-float-btn nobg"><i class="fa fa-edit"></i></a>-->
+                                            <!--<span data-toggle="modal" data-target="#history"><a class="btn btn-success nobg" data-toggle="tooltip" title="History"><i class="fa fa-history"></i></a></span>
+                                            <a href="intercompany-records.php" data-toggle="tooltip" title="Records" class="btn btn-primary boxed-float-btn nobg"><i class="fa fa-external-link clr-blue"></i></a>-->
+
+                                            <span (click)="openDelete(content,InterCompanySetup)" data-toggle="modal" data-target="#data">
+                                                <a class="btn btn-danger nobg" data-toggle="tooltip" title="" data-original-title="Delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </span>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div><div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">Showing 1 to 1 of 1 entries</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title">Confirm</h4>
+        <p>Are you sure you want to delete Intercompany Setup {{currentWorkingInterCompanySetup.affiliateCode}}</p>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+
+<ng-template #viewContent let-c="close" let-d="dismiss">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Details of {{internetCompanySetupView.affiliateName}}</h4>
+            </div>
+            <div class="modal-body viewform">
+                <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <div id="step1">
+                                <div class="panel-body">
+                                    <div class="col-sm-6 w40p">
+                                        <p><span class="label"><b>CO: </b></span><span class="value">{{internetCompanySetupView.affiliateCode}}</span></p>
+                                        <p><span class="label"><b>Company Name: </b></span><span class="value">{{internetCompanySetupView.affiliateName}}</span></p>
+                                        <p><span class="label"><b>GL Account to be Credited: </b></span><span class="value">{{internetCompanySetupView.gLAccountToBeCredited}}</span></p>
+                                        <p><span class="label"><b>GL Account to be Debited: </b></span><span class="value">{{internetCompanySetupView.gLAccountToBeDebited}}</span></p>
+                                        <p><span class="label"><b>Journal Type: </b></span><span class="value">{{internetCompanySetupView.objjournalType.journalType}}</span></p>
+                                    </div>
+                                    <div class="col-sm-6 w40p">
+                                        <p><span class="label clr-red"><b>Payment To Customers: </b></span></p>
+                                        <p><span class="label"><b>Early Payment Discount Taken: </b></span><span class="value">{{internetCompanySetupView.discountFromCustomer}}</span></p>
+                                        <p><span class="label"><b>FX Gain and Loss: </b></span><span class="value">{{internetCompanySetupView.fXGainAndLossFromCustomer}}</span></p>
+                                        <p><span class="label clr-red"><b>Payment To Vendors: </b></span></p>
+                                        <p><span class="label"><b>Early Payment Discount Taken: </b></span><span class="value">{{internetCompanySetupView.discountToCustomer}}</span></p>
+                                        <p><span class="label"><b>FX Gain and Loss: </b></span><span class="value">{{internetCompanySetupView.fXGainAndLossToCustomer}}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>-->
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+

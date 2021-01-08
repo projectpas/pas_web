@@ -1,0 +1,89 @@
+﻿<div class="md-stepper-horizontal orange">
+  <div
+    class="md-step"
+    [ngClass]="{
+      active: activeMenuItem >= 1,
+      editable: activeMenuItem === 1
+    }"
+    [class.isDisabled]="!isDisabledSteps"
+    (click)="changeStep(1)"
+  >
+    <div class="md-step-circle"><span>1</span></div>
+    <div class="md-step-title">General Info</div>
+    <div class="md-step-bar-left"></div>
+    <div class="md-step-bar-right"></div>
+  </div>
+  <div
+    class="md-step"
+    [ngClass]="{
+      active: activeMenuItem >= 2,
+      editable: activeMenuItem === 2
+    }"
+    (click)="changeStep(2)"
+    [class.isDisabled]="!isDisabledSteps"
+  >
+    <div class="md-step-circle"><span>2</span></div>
+    <div class="md-step-title">Contacts</div>
+    <div class="md-step-bar-left"></div>
+    <div class="md-step-bar-right"></div>
+  </div>
+  <div
+    class="md-step"
+    [ngClass]="{
+      active: activeMenuItem >= 3,
+      editable: activeMenuItem === 3
+    }"
+    (click)="changeStep(3)"
+    [class.isDisabled]="!isDisabledSteps"
+  >
+    <div class="md-step-circle"><span>3</span></div>
+    <div class="md-step-title">Banking Info</div>
+    <div class="md-step-bar-left"></div>
+    <div class="md-step-bar-right"></div>
+  </div>
+  
+  <div
+    class="md-step"
+    [ngClass]="{
+      active: activeMenuItem >= 4,
+      editable: activeMenuItem === 4
+    }"
+    (click)="changeStep(6)"
+    [class.isDisabled]="!isDisabledSteps"
+  >
+    <div class="md-step-circle"><span>4</span></div>
+    <div class="md-step-title">Billing Info</div>
+    <div class="md-step-bar-left"></div>
+    <div class="md-step-bar-right"></div>
+  </div>
+  <div
+    class="md-step"
+    [ngClass]="{
+      active: activeMenuItem >= 5,
+      editable: activeMenuItem === 5
+    }"
+    (click)="changeStep(7)"
+    [class.isDisabled]="!isDisabledSteps"
+  >
+    <div class="md-step-circle"><span>5</span></div>
+    <div class="md-step-title">Shipping Info</div>
+    <div class="md-step-bar-left"></div>
+    <div class="md-step-bar-right"></div>
+  </div>
+  
+  
+  <div
+    class="md-step"
+    [ngClass]="{
+      active: activeMenuItem >= 6,
+      editable: activeMenuItem === 6
+    }"
+    (click)="changeStep(10)"
+    [class.isDisabled]="!isDisabledSteps"
+  >
+    <div class="md-step-circle"><span>6</span></div>
+    <div class="md-step-title">Documents</div>
+    <div class="md-step-bar-left"></div>
+    <div class="md-step-bar-right"></div>
+  </div>
+</div>

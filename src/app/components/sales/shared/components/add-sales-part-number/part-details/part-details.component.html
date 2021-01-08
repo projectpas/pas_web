@@ -1,0 +1,250 @@
+<div class="row">
+    <div style="overflow-y: auto;">
+        <p-table #dt class="rpo-table-cstm rro-table-cstm sales-quote-part-search-data"
+         [value]="parts" [rows]="10" [lazy]="true"
+            [paginator]="showPaginator" 
+            [rowsPerPageOptions]="[10, 20, 30]"
+             [totalRecords]="totalRecords"
+            [pageLinks]="pageLinks" [columns]="columns" 
+            [scrollable]="true" [resizableColumns]="true"
+            [reorderableColumns]="true" scrollHeight="450px"
+             [style]="{ width: '100%' }"
+            (onLazyLoad)="onPaging($event)">
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns"
+                     [ngStyle]="{'width': col.width, 'text-align': col.textalign}" />
+                    <col style="width:80px" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngIf="!isStockLineViewMode"></th>
+                    <th style="text-align: left !important;" *ngFor="let col of columns" pResizableColumn
+                        pReorderableColumn>
+                        <span *ngIf="col.field == 'conditionDescription' || col.field == 'qtyToOrder'">
+                            {{ col.header }}<span class="clr-red">*</span>
+                        </span>
+                        <span *ngIf="col.field != 'conditionDescription' && col.field != 'qtyToOrder'">
+                            {{ col.header }}
+                        </span>
+                    </th>
+                    <th style="width:80px;">Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-part let-columns="columns" let-rowIndex="rowIndex">
+                <tr [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
+                    <td>
+                        <a class="expand-row" *ngIf="!hideme[rowIndex]" (click)="viewSelectedRow(part,rowIndex)">
+                            <i class="fa fa-plus btn btn-success btn-cstm btn-xs" matTooltip="Show stock line details"
+                                style="padding: 3px 8px !important;"></i>
+                        </a>
+                        <a class="expand-row" *ngIf="hideme[rowIndex]" (click)="hideStockline(rowIndex)">
+                            <i class="fa fa-minus btn-danger btn-cstm btn-xs" matTooltip="Hide stock line details"
+                                style="padding: 3px 8px !important;"></i>
+                        </a>
+                    </td>
+                    <td *ngFor="let col of columns" pReorderableRowHandle>
+                        <span *ngIf="col.field == 'select' && !isStockLineViewMode">
+                            <!-- <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
+                                <input type="checkbox" (change)="onChange($event, part)" />
+                            </span> -->
+                            <input type="checkbox" (change)="onChange($event, part)" />
+                        </span>
+                        <span *ngIf="col.field == 'partNumber'">
+                            {{part.partNumber}}
+                            <span class="alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
+                            <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span>
+                        </span>
+                        <span *ngIf="col.field == 'itemClassification'">
+                            {{part.itemClassification !== null? part.itemClassification: ""}}
+                        </span>
+                        <span
+                            *ngIf="col.field != 'qtyToOrder' && col.field != 'qtyAvailable' && col.field != 'qtyOnHand' && col.field != 'unitListPrice' && col.field != 'unitCost' && col.field != 'partNumber'&& col.field != 'selected'&&col.field != 'itemClassification'&& col.field != 'glAccount'">{{part[col.field] }}</span>
+                        <span *ngIf="col.field == 'unitCost'" class="float-right">
+                            {{ part.unitCost | twoDecimalGlobalNumberFormatPipe }}
+                        </span>
+                        <span *ngIf="col.field == 'qtyOnHand'" class="float-right">
+                            {{ part.qtyOnHand | globalNmberFormat}}
+                        </span>
+                        <span *ngIf="col.field == 'qtyToOrder'" class="float-right">
+                            {{ part.qtyToOrder | globalNmberFormat}}
+                        </span>
+                        <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
+                            {{ part.qtyAvailable | globalNmberFormat }}
+                            <!-- <span class="
+                            alternate-part-label"
+                                *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
+                            </span> -->
+                        </span>
+                    </td>
+                    <td style="width:80px; text-align:center">
+                        <span>
+                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                (click)="viewSelectedRow(part, itemMasterViewTemplate)" matTooltip="View">
+                                <i class="fa fa-list"></i>
+                            </a>
+                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                (click)="viewStockLineHistory(part)" matTooltip="History">
+                                <i class="fa fa-history"></i>
+                            </a>
+                        </span>
+                    </td>
+
+                </tr>
+                <tr [hidden]="!hideme[rowIndex]" class="sub-table no-bg">
+
+                    <td *ngIf="!isStockLineViewMode" style="text-align: center;"> </td>
+
+                    <td colspan="13" class="p-0">
+                        <p-table #dt class="rpo-table-cstm rro-table-cstm 
+                        sales-quote-part-search-data"
+                            [value]="roleUpMaterialList" [rows]="10" 
+                            [lazy]="true" [paginator]="showPaginator"
+                            [rowsPerPageOptions]="[10, 20, 30]" 
+                            [totalRecords]="totalRecords" [pageLinks]="pageLinks"
+                            [columns]="stockLinecolumns" [scrollable]="true"
+                             [resizableColumns]="true"
+                            [reorderableColumns]="true" scrollHeight="450px"
+                             [style]="{ width: '100%' }"
+                            (onLazyLoad)="onPaging($event)">
+                            <ng-template pTemplate="colgroup" let-stockLinecolumns>
+                                <colgroup>
+                                    <col *ngFor="let col of stockLinecolumns"
+                                        [ngStyle]="{'width': col.width, 'text-align': col.textalign}" />
+                                    <col style="width:80px" />
+                                </colgroup>
+                            </ng-template>
+
+                            <ng-template pTemplate="header" let-stockLinecolumns>
+                <tr>
+                    <!-- <th></th> -->
+                    <th style="text-align: left !important;" *ngFor="let col of stockLinecolumns" pResizableColumn
+                        pReorderableColumn>
+
+                        <span *ngIf="col.field == 'stockLineNumber' ||
+                                            col.field == 'controlNumber' || 
+                                            col.field == 'idNumber' || 
+                                            col.field == 'stockType' || 
+                                            col.field == 'partNumber' || 
+                                            col.field == 'description' || 
+                                            col.field == 'qtyAvailable' || 
+                                            col.field == 'qtyOnHand' || 
+                                            col.field == 'mfg' || 
+                                            col.field == 'unitCost'">
+                            {{ col.header }}<span class="clr-red">*</span>
+                        </span>
+                        <span *ngIf="col.field != 'stockLineNumber' &&
+                                            col.field != 'controlNumber' && 
+                                            col.field != 'idNumber' && 
+                                            col.field != 'stockType' && 
+                                            col.field != 'partNumber' &&
+                                            col.field != 'description' && 
+                                            col.field != 'qtyAvailable' && 
+                                            col.field != 'qtyOnHand' && 
+                                            col.field != 'mfg' && 
+                                            col.field != 'unitCost'">
+                            {{ col.header }}
+                        </span>
+
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-part let-rowIndex="rowIndex" let-columns="stockLinecolumns">
+
+                <tr>
+                    <!-- <td>
+                                        <input type="checkbox" [disabled]="getCheckBoxDisplay(part, rowIndex)"
+                                            (change)="onChangeStock($event, part)" />
+                                    </td> -->
+                    <!-- <td *ngIf="getCheckBoxDisplay(part, rowIndex)">&nbsp;</td> -->
+                    <td *ngFor="let col of stockLinecolumns" pReorderableRowHandle>
+                        <span *ngIf="col.field == 'selected' && !isStockLineViewMode">
+                            <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
+                                <input type="checkbox" (change)="onChangeStock($event, part)" />
+                            </span>
+
+                        </span>
+
+                        <span *ngIf=" col.field=='partNumber'">{{ part.partNumber }} <span class="
+                                                alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span> <span
+                                class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span></span>
+
+                        <span *ngIf="col.field == 'itemClassification'">
+                            {{
+                                    part.itemClassification !== null
+                                        ? part.itemClassification
+                                        : ""
+                                                }}
+                        </span>
+
+                        <span
+                            *ngIf="col.field != 'certifiedDate' && col.field != 'tagDate' && col.field != 'unitCost' && col.field != 'qtyOnHand' && col.field != 'qtyAvailable' && col.field != 'partNumber' && col.field != 'selected' && col.field != 'itemClassification'">{{part[col.field] }}</span>
+                        <span *ngIf="col.field == 'tagDate'">
+                            {{
+                                    part.tagDate | date: "MM/dd/yyyy"
+                                                }}
+                        </span>
+                        <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
+                            {{
+                                    part.qtyAvailable | globalNmberFormat
+                                                }}
+                            <span matTooltip="Qty Available" matTooltipPosition="above" class="
+                                            alternate-part-label"
+                                *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
+                            </span>
+                        </span>
+                        <span *ngIf="col.field == 'certifiedDate'" class="float-right">
+                            {{
+                                    part.certifiedDate | date: "MM/dd/yyyy"
+                                                }}
+                        </span>
+                        <span *ngIf="col.field == 'qtyOnHand'" class="float-right">
+                            {{
+                                    part.qtyOnHand | globalNmberFormat
+                                                }}
+                        </span>
+                        <span *ngIf="col.field == 'unitCost'" class="float-right">
+                            {{
+                                    part.unitCost | twoDecimalGlobalNumberFormatPipe
+                                                }}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                (click)="viewStockSelectedRow(part)" matTooltip="View">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                (click)="viewStockLineHistory(part)" matTooltip="History">
+                                <i class="fa fa-history"></i>
+                            </a>
+                        </span>
+                    </td>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="roleUpMaterialList.length == 0">
+                <tr>
+                    <td [attr.colspan]="21" class="no-records-cstm" style="text-align: left;">
+                        No Record Exist
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        </td>
+        </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
+            <tr>
+                <td [attr.colspan]="12" class="no-records-cstm" style="text-align: left;">
+                    No records found
+                </td>
+            </tr>
+        </ng-template> -->
+        </p-table>
+    </div>
+</div>

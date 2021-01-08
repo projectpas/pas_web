@@ -1,0 +1,181 @@
+﻿// .ms-block {
+//     padding: 5px;
+//     box-shadow: 1px 1px 5px #bbb;
+//     background: #fff;
+//     width: 300px;
+//     text-align: center;
+// }
+
+// .calibration-block, .inspection-block, .verification-block, .maintenance-block,
+//  .certification-block, .warranty-block {  
+//     background: #e2e2e2;
+//     clear: both;
+//     padding: 10px 0;
+//     border: 1px solid #bbb;
+// }
+.btn-adjhist-cstm i.fa-history {
+    color: #333333;
+}
+label {
+    text-align: left;
+    width: 100%;
+    margin-right: 0;
+    font-weight: normal;
+  }
+  input[type="text"], input[type="number"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+  }
+  textarea {
+    border-radius: 5px !important;
+  }
+  .card-stock {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  .card-stock .card-header {
+    padding: 10px 12px;
+  }
+  .card-stock .card-header h5 {
+    margin-bottom: 0; 
+    font-size: 12px;
+  }
+  .card-stock .card-body {
+    padding: 12px 12px 4px;
+  }
+  .text_editor_box {
+    padding: 10px 3px !important;
+    width:100%;
+  }
+  .fs12 {
+    display: inline-flex !important;
+  }
+  .card-tolerance .form-group {
+    margin-bottom: 4px;
+  }
+  .header-h5 {
+    line-height: normal!important;
+    color: initial!important;
+  }
+  #invView .modal-body div.form-group label {
+      float: none;
+  }
+  .border-box-cstm {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0 10px;
+  }
+  .m-t-5 {
+      margin-top: 5px;
+  }
+.assetInv-audit table th {
+    padding: 2px;
+    text-align: center;
+    min-width: 130px;
+}
+.assetInv-audit table td {
+  padding: 0px 2px;
+}
+.min-w-100 {
+  min-width: 100px;
+}
+  @media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+    .col-md-6-cstm {
+      max-width: 44%;
+      margin-right: 30px;
+    }
+    // .col-md-6 .col-md-6 {
+    //     max-width: 44%;
+    //     margin-right: 15px;
+    // }
+  }
+
+
+  // loader
+
+  .container {
+    width: 6em;
+    margin: 2em auto;
+    text-align: center;
+  }
+  .container .ball {
+    width: 1em;
+    height: 1em;
+    margin: 0 auto;
+    border-radius: 1em;
+    background: #848484;
+    -webkit-animation: load 2000ms linear infinite;
+    -moz-animation: load 2000ms linear infinite;
+    animation: load 2000ms linear infinite;
+  }
+  .container span {
+    display: block;
+    margin: 0.5em 0 0 0;
+    color: #848484;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    -webkit-animation: pulse 2000ms linear infinite;
+    -moz-animation: pulse 2000ms linear infinite;
+    animation: pulse 2000ms linear infinite;
+  }
+  
+  @-webkit-keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.25;
+    }
+  }
+  @-webkit-keyframes load {
+    0%, 100% {
+      -webkit-transform: scale(1) translateX(0);
+      transform: scale(1) translateX(0);
+    }
+    25% {
+      -webkit-transform: scale(0.25) translateX(-6.5em);
+      transform: scale(0.25) translateX(-6.5em);
+    }
+    50% {
+      -webkit-transform: scale(0.15) translateX(0);
+      transform: scale(0.15) translateX(0);
+    }
+    75% {
+      -webkit-transform: scale(0.25) translateX(6.5em);
+      transform: scale(0.25) translateX(6.5em);
+    }
+  }
+  @keyframes load {
+    0%, 100% {
+      -webkit-transform: scale(1) translateX(0);
+      transform: scale(1) translateX(0);
+    }
+    25% {
+      -webkit-transform: scale(0.25) translateX(-6.5em);
+      transform: scale(0.25) translateX(-6.5em);
+    }
+    50% {
+      -webkit-transform: scale(0.15) translateX(0);
+      transform: scale(0.15) translateX(0);
+    }
+    75% {
+      -webkit-transform: scale(0.25) translateX(6.5em);
+      transform: scale(0.25) translateX(6.5em);
+    }
+  }
+  .font_adjust{
+    font-size: 13px !important;
+    margin: 0px !important;
+}

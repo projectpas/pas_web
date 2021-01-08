@@ -1,0 +1,711 @@
+﻿<div class="x_panel" style="">
+    <div class="x_content add-customer-work">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">General Ledger</li>
+                <li class="breadcrumb-item active" aria-current="page">Open/Close AP</li>
+            </ol>
+        </nav>
+        <div class="pheading">
+            <h4 class="page-heading">Open/Close AP</h4>
+        </div>
+     
+        <div class="clear"></div>
+        <form action="#" method="post" id="add-customerwork" name="" class="form-horizontal add-custustomer">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="tab-content form-bg">
+                    <div class="tab-pane active" id="home">
+                        <div class="col-sm-3 w250">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">Ledger Name</label>
+                                <div class="col-sm-7">
+                                    <div class="inner-addon right-addon inline-block">
+                                        <select [(ngModel)]="currentApledgerObj.legalEntityId" [ngModelOptions]="{standalone: true}">
+                                            <option *ngFor="let entity of companyList" [ngValue]="entity.legalEntityId">  {{entity.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">Fiscal Year</label>
+                                <div class="col-sm-7">
+                                    <select id="fiscalyear" name="fiscalyear" class="w100" [(ngModel)]="currentApledgerObj.fiscalYear" [ngModelOptions]="{standalone: true}">
+                                        <option value="2018">2018</option>
+                                        <option value="2019" selected="">2019</option>
+                                        <option value="2020">2020</option>
+                                        <option value="2021">2021</option>
+                                    </select>
+                                </div>
+                            </div>
+                           
+                        </div>
+                        <!--<div class="col-sm-3">
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Ledger Name</label>
+                                <div class="col-sm-7">
+                                    <input type="text" [(ngModel)]="currentApledgerObj.ledgerName" [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                        </div>-->
+                        <div class="col-sm-2">
+                            <div class="form-group col-sm-12"> <button class="btn btn-success show-cal-btn" (click)="getDataBasedonYear()">Show Calendar</button> </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </form>
+        <div id="" class="table-responsive default-bg clear current-year table-2019  col-sm-7 input-85">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Calendar/Fiscal</th>
+                        <th>Year</th>
+                        <th>Period #</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Period Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+               
+                    <tr *ngFor="let obj of finalCalendarArry">
+                        <td>
+                            <select class="w120" (change)="setIsUpdate($event.target.value,obj)" [(ngModel)]="obj.status" [disabled]="obj.status === '3' && obj.isUpdate==true">
+                                <option value="1">Current</option>
+                                <option value="2">Open</option>
+                                <option value="3">Closed</option>
+                                <option value="4">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>{{obj.fiscalName}}</td>
+                        <td>{{obj.fiscalYear}}</td>
+                        <td>{{obj.period}}</td>
+                        <td><input type="date"  value="{{obj.fromDate}}" disabled></td>
+                        <td><input type="date"  value="{{obj.toDate}}" disabled></td>
+                        <td>{{obj.periodName}}</td>
+                        <!--<th><input type="checkbox" /></th>-->
+                    </tr>
+
+                </tbody>
+            </table>
+            <div class="clear"></div>
+            <br>
+            <button  class="btn btn-success pull-right" (click)="saveCalendar()">Save</button>
+            <div class="clear"></div>
+            <hr>
+            <br>
+        </div>
+        <!--Table1 End-->
+        <div id="" class="table-responsive default-bg clear table-2018 col-sm-7 input-85" style="display: none;">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Fiscal</th>
+                        <th>Year</th>
+                        <th>Period </th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Period Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Closed</td>
+                        <td>ADJ-PD</td>
+                        <td>2018</td>
+                        <td>13</td>
+                        <td><input type="text" class="form-control" value="12/31/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="12/31/2018" disabled="disabled"></td>
+                        <td>ADJ-PD-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Dec</td>
+                        <td>2018</td>
+                        <td>12</td>
+                        <td><input type="text" class="form-control" value="12/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="12/31/2018" disabled="disabled"></td>
+                        <td>Dec-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Nov</td>
+                        <td>2018</td>
+                        <td>11</td>
+                        <td><input type="text" class="form-control" value="11/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="11/30/2018" disabled="disabled"></td>
+                        <td>Nov-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Oct</td>
+                        <td>2018</td>
+                        <td>10</td>
+                        <td><input type="text" class="form-control" value="10/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="10/31/2018" disabled="disabled"></td>
+                        <td>Oct-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Sep</td>
+                        <td>2018</td>
+                        <td>9</td>
+                        <td><input type="text" class="form-control" value="9/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="9/30/2018" disabled="disabled"></td>
+                        <td>Sep-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Aug</td>
+                        <td>2018</td>
+                        <td>8</td>
+                        <td><input type="text" class="form-control" value="8/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="8/31/2018" disabled="disabled"></td>
+                        <td>Aug-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Jul</td>
+                        <td>2018</td>
+                        <td>7</td>
+                        <td><input type="text" class="form-control" value="7/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="7/31/2018" disabled="disabled"></td>
+                        <td>Jul-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Jun</td>
+                        <td>2018</td>
+                        <td>6</td>
+                        <td><input type="text" class="form-control" value="6/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="6/30/2018" disabled="disabled"></td>
+                        <td>Jun-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>May</td>
+                        <td>2018</td>
+                        <td>5</td>
+                        <td><input type="text" class="form-control" value="5/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="5/31/2018" disabled="disabled"></td>
+                        <td>May-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Apr</td>
+                        <td>2018</td>
+                        <td>4</td>
+                        <td><input type="text" class="form-control" value="4/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="4/30/2018" disabled="disabled"></td>
+                        <td>Apr-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Mar</td>
+                        <td>2018</td>
+                        <td>3</td>
+                        <td><input type="text" class="form-control" value="3/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="3/31/2018" disabled="disabled"></td>
+                        <td>Mar-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Feb</td>
+                        <td>2018</td>
+                        <td>2</td>
+                        <td><input type="text" class="form-control" value="2/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="2/28/2018" disabled="disabled"></td>
+                        <td>Feb-2018</td>
+                    </tr>
+                    <tr>
+                        <td>Closed</td>
+                        <td>Jan</td>
+                        <td>2018</td>
+                        <td>1</td>
+                        <td><input type="text" class="form-control" value="1/1/2018" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="1/31/2018" disabled="disabled"></td>
+                        <td>Jan-2018</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clear"></div>
+            <br>
+            <a href="#" class="btn btn-success pull-right">Save</a>
+            <div class="clear"></div>
+            <hr>
+            <br>
+        </div>
+        <!--Table2 End-->
+        <div id="" class="table-responsive default-bg clear table-2020 col-sm-7 input-85" style="display: none;">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Calendar/Fiscal</th>
+                        <th>Year</th>
+                        <th>Period #</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Period Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>ADJ-PD</td>
+                        <td>2020</td>
+                        <td>13</td>
+                        <td><input type="text" class="form-control" value="12/31/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="12/31/2020" disabled="disabled"></td>
+                        <td>ADJ-PD-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Dec</td>
+                        <td>2020</td>
+                        <td>12</td>
+                        <td><input type="text" class="form-control" value="12/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="12/31/2020" disabled="disabled"></td>
+                        <td>Dec-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Nov</td>
+                        <td>2020</td>
+                        <td>11</td>
+                        <td><input type="text" class="form-control" value="11/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="11/30/2020" disabled="disabled"></td>
+                        <td>Nov-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Oct</td>
+                        <td>2020</td>
+                        <td>10</td>
+                        <td><input type="text" class="form-control" value="10/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="10/31/2020" disabled="disabled"></td>
+                        <td>Oct-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Sep</td>
+                        <td>2020</td>
+                        <td>9</td>
+                        <td><input type="text" class="form-control" value="9/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="9/30/2020" disabled="disabled"></td>
+                        <td>Sep-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Aug</td>
+                        <td>2020</td>
+                        <td>8</td>
+                        <td><input type="text" class="form-control" value="8/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="8/31/2020" disabled="disabled"></td>
+                        <td>Aug-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Jul</td>
+                        <td>2020</td>
+                        <td>7</td>
+                        <td><input type="text" class="form-control" value="7/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="7/31/2020" disabled="disabled"></td>
+                        <td>Jul-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Jun</td>
+                        <td>2020</td>
+                        <td>6</td>
+                        <td><input type="text" class="form-control" value="6/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="6/30/2020" disabled="disabled"></td>
+                        <td>Jun-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>May</td>
+                        <td>2020</td>
+                        <td>5</td>
+                        <td><input type="text" class="form-control" value="5/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="5/31/2020" disabled="disabled"></td>
+                        <td>May-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Apr</td>
+                        <td>2020</td>
+                        <td>4</td>
+                        <td><input type="text" class="form-control" value="4/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="4/30/2020" disabled="disabled"></td>
+                        <td>Apr-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Mar</td>
+                        <td>2020</td>
+                        <td>3</td>
+                        <td><input type="text" class="form-control" value="3/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="3/31/2020" disabled="disabled"></td>
+                        <td>Mar-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Feb</td>
+                        <td>2020</td>
+                        <td>2</td>
+                        <td><input type="text" class="form-control" value="2/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="2/28/2020" disabled="disabled"></td>
+                        <td>Feb-2020</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Jan</td>
+                        <td>2020</td>
+                        <td>1</td>
+                        <td><input type="text" class="form-control" value="1/1/2020" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="1/31/2020" disabled="disabled"></td>
+                        <td>Jan-2020</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clear"></div>
+            <br>
+            <a href="#" class="btn btn-success pull-right">Save</a>
+            <div class="clear"></div>
+            <hr>
+            <br>
+        </div>
+        <div id="" class="table-responsive default-bg clear table-2021 col-sm-7 input-85" style="display: none;">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Calendar/Fiscal</th>
+                        <th>Year</th>
+                        <th>Period #</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th>Period Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>ADJ-PD</td>
+                        <td>2021</td>
+                        <td>13</td>
+                        <td><input type="text" class="form-control" value="12/31/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="12/31/2021" disabled="disabled"></td>
+                        <td>ADJ-PD-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Dec</td>
+                        <td>2021</td>
+                        <td>12</td>
+                        <td><input type="text" class="form-control" value="12/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="12/31/2021" disabled="disabled"></td>
+                        <td>Dec-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Nov</td>
+                        <td>2021</td>
+                        <td>11</td>
+                        <td><input type="text" class="form-control" value="11/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="11/30/2021" disabled="disabled"></td>
+                        <td>Nov-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Oct</td>
+                        <td>2021</td>
+                        <td>10</td>
+                        <td><input type="text" class="form-control" value="10/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="10/31/2021" disabled="disabled"></td>
+                        <td>Oct-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Sep</td>
+                        <td>2021</td>
+                        <td>9</td>
+                        <td><input type="text" class="form-control" value="9/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="9/30/2021" disabled="disabled"></td>
+                        <td>Sep-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Aug</td>
+                        <td>2021</td>
+                        <td>8</td>
+                        <td><input type="text" class="form-control" value="8/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="8/31/2021" disabled="disabled"></td>
+                        <td>Aug-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Jul</td>
+                        <td>2021</td>
+                        <td>7</td>
+                        <td><input type="text" class="form-control" value="7/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="7/31/2021" disabled="disabled"></td>
+                        <td>Jul-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Jun</td>
+                        <td>2021</td>
+                        <td>6</td>
+                        <td><input type="text" class="form-control" value="6/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="6/30/2021" disabled="disabled"></td>
+                        <td>Jun-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>May</td>
+                        <td>2021</td>
+                        <td>5</td>
+                        <td><input type="text" class="form-control" value="5/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="5/31/2021" disabled="disabled"></td>
+                        <td>May-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Apr</td>
+                        <td>2021</td>
+                        <td>4</td>
+                        <td><input type="text" class="form-control" value="4/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="4/30/2021" disabled="disabled"></td>
+                        <td>Apr-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Mar</td>
+                        <td>2021</td>
+                        <td>3</td>
+                        <td><input type="text" class="form-control" value="3/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="3/31/2021" disabled="disabled"></td>
+                        <td>Mar-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120">
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Feb</td>
+                        <td>2021</td>
+                        <td>2</td>
+                        <td><input type="text" class="form-control" value="2/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="2/28/2021" disabled="disabled"></td>
+                        <td>Feb-2021</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="w120" >
+                                <option>Current</option>
+                                <option>Open</option>
+                                <option>Closed</option>
+                                <option selected="">Never Opened</option>
+                            </select>
+                        </td>
+                        <td>Jan</td>
+                        <td>2021</td>
+                        <td>1</td>
+                        <td><input type="text" class="form-control" value="1/1/2021" disabled="disabled"></td>
+                        <td><input type="text" class="form-control" value="1/31/2021" disabled="disabled"></td>
+                        <td>Jan-2021</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="clear"></div>
+            <br>
+            <a href="#" class="btn btn-success pull-right">Save</a>
+            <div class="clear"></div>
+            <hr>
+            <br>
+        </div>
+        <!--Table2 End-->
+        <div class="clear"></div>
+        <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
+    </div>
+</div>

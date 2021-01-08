@@ -1,0 +1,6 @@
+/*.workflow-table-direc tr td {
+    padding: 4px;
+}*/
+.workflow-table-direc tr th:first-child {
+    padding: 0 10px !important;
+}

@@ -1,0 +1,77 @@
+﻿.x_panel {
+    padding: 0 10px;
+}
+.mr-10{
+    margin-right: 10px;
+}
+label {
+    text-align: left;
+    width: auto; /*140px*/
+    margin-right: 0;
+    font-weight: normal;
+}
+.label-cstm {
+    width: auto;
+    float: left;
+    text-align: left;
+    margin-right: 0;
+    font-weight: normal;
+}
+.form-control:disabled {
+    background-color: #e9ecef !important;
+}
+.radio-cstm {
+    float: left;
+    margin-right: 10px !important;
+    padding-left: 21px !important;
+}
+input[type="text"], input[type="number"], input[type="email"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+}
+.checkbox-cstm {
+    margin-left: 10px;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+}
+
+.table-small{
+    width :  300px !important;
+    border: 1px transparent;
+}
+
+    td {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+:host ::ng-deep p-multiselect .ui-multiselect .ui-multiselect-label {
+    white-space: nowrap;
+    width: calc(100% - 30px);
+}
+
+:host ::ng-deep .ui-widget {
+    padding-top: 0px !important;
+}
+
+.classification {
+    border: 1px solid red !important;
+}
+
+

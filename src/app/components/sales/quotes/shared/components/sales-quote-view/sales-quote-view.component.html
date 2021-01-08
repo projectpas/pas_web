@@ -1,0 +1,312 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive default-bg clear">
+      <div class="col-md-3">
+        <p><span class="label"><b>Quote Type <span class="clr-red">*</span> : </b></span>
+          <span class="value">
+            {{salesQuote.quoteTypeName ? salesQuote.quoteTypeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>SO Quote Num: </b></span>
+          <span class="value">
+            {{salesQuote.salesOrderQuoteNumber ? salesQuote.salesOrderQuoteNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Version Num: </b></span>
+          <span class="value">
+            {{salesQuote.versionNumber ? salesQuote.versionNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Open Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.openDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Ref <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesQuote.customerReference}}
+          </span>
+        </p>
+        <p><span class="label"><b>Valid For (Days) <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.validForDays ? salesQuote.validForDays : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Quote Exp Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.quoteExpireDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>SO Status: </b></span>
+          <span class="value">{{salesQuote.status ? salesQuote.status :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Warnings: </b></span>
+          <span class="value">
+            {{salesQuote.customerWarningMessage ? salesQuote.customerWarningMessage : '-'}}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p><span class="label"><b>Account Type <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesQuote.accountTypeName ? salesQuote.accountTypeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Name <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesQuote.customerName ? salesQuote.customerName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Contact <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesQuote.customerContactName ? salesQuote.customerContactName :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Cust Email: </b></span>
+          <span class="value">
+            {{salesQuote.customerContactEmail ? salesQuote.customerContactEmail : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Contract Ref: </b></span>
+          <span class="value">
+            {{salesQuote.contractReference ? salesQuote.contractReference :'-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Limit: </b></span>
+          <span class="value">
+            {{ salesQuote.creditLimit | twoDecimalGlobalNumberFormatPipe}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Terms: </b></span>
+          <span class="value">
+            {{salesQuote.creditTerms ? salesQuote.creditTerms : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Employee <span class="clr-red">*</span>:</b></span>
+          <span class="value">
+            {{salesQuote.employeeName ? salesQuote.employeeName : '-'}}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p><span class="label"><b>Restrict PMA: </b></span>
+          <span class="value">
+            <input type="checkbox" [(ngModel)]="salesQuote.restrictPMA" name="restrictPMA" id="restrictPMA"
+              [disabled]="true" />
+            <!-- {{salesQuote.restrictPMA == true ? 'Yes' : "No" }} -->
+          </span>
+        </p>
+        <p><span class="label"><b>Restrict DER: </b></span>
+          <span class="value">
+            <input type="checkbox" [(ngModel)]="salesQuote.restrictDER" name="restrictDER" id="restrictDER"
+              [disabled]="true" />
+            <!-- {{salesQuote.restrictDER == true ? 'Yes' : "No" }} -->
+          </span>
+        </p>
+        <p><span class="label"><b>Salesperson/Agent: </b></span>
+          <span class="value">{{salesQuote.salesPersonName ? salesQuote.salesPersonName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>CSR: </b></span>
+          <span class="value">
+            {{salesQuote.customerSeviceRepName ? salesQuote.customerSeviceRepName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Lead Source : </b></span>
+          <span class="value">
+            {{salesQuote.leadSource ? salesQuote.leadSource : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Probability : </b></span>
+          <span class="value">
+            {{salesQuote.probability ? salesQuote.probability : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Memo: </b></span>
+          <span class="value">
+
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.memo"></p>
+
+          </span>
+        </p>
+        <p><span class="label"><b>Notes: </b></span>
+          <span class="value">
+
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.notes"></p>
+
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-header" style="padding:.1rem 2rem">
+            <label style="text-align: center; width:100%">Margin Summary</label>
+          </div>
+          <div style="padding:5px">
+            <p style="padding:0px"><span class="label"><b>Sales</b></span>
+              <span class="value" style="text-align:right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Misc Amt</b></span>
+              <span class="value" style="text-align:right">{{marginSummary.misc |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Net Sales</b></span>
+              <span class="value" style="text-align:right">{{marginSummary.netSales |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Product Cost</b></span>
+              <span class="value"
+                style="text-align:right">{{marginSummary.productCost |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Margin Amt</b></span>
+              <span class="value"
+                style="text-align:right">{{marginSummary.marginAmount |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Margin %</b></span>
+              <span class="value"
+                style="text-align:right">{{marginSummary.marginPercentage |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+          </div>
+        </div>
+        <div style="padding-top: 10px"></div>
+        <div class="card">
+          <div class="card-header" style="padding:.1rem 3rem">
+            <label style="text-align: center; width:100%">Management Structure</label>
+          </div>
+          <div style="padding:5px">
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="companyName" [(ngModel)]="managementStructure.level1"
+                disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="BUName" [(ngModel)]="managementStructure.level2" disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="divisionName" [(ngModel)]="managementStructure.level3"
+                disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="deptName" [(ngModel)]="managementStructure.level4" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+  <p-tabPanel header="Parts List">
+    <app-sales-part-number [salesQuote]="salesQuote" [isViewMode]="true"></app-sales-part-number>
+  </p-tabPanel>
+  <p-tabPanel header="Internal Approvers">
+    <app-sales-approve>
+    </app-sales-approve>
+  </p-tabPanel>
+  <p-tabPanel header="Approver Process">
+    <app-sales-customer-approvals [salesQuoteView]="salesQuoteView" [customerContactList]="customerContactList"
+      [marginSummary]="marginSummary" (quoteApprovedCheck)="verifySalesQuoteConversion($event)"
+      (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
+    </app-sales-customer-approvals>
+  </p-tabPanel>
+  <p-tabPanel header="Address">
+    <div class="table-responsive default-bg clear">
+      <div class="col-sm-4">
+        <h5 class="po-head">Ship To</h5>
+        <p><span class="label"><b>User Type: </b></span><span
+            class="value">{{salesQuote.shipToUserType ? salesQuote.shipToUserType : '-'}}</span></p>
+        <p><span class="label"><b>User: </b></span><span
+            class="value">{{salesQuote.shipToUser ? salesQuote.shipToUser : '-'}}</span></p>
+        <p><span class="label"><b>Site Name: </b></span><span
+            class="value">{{salesQuote.shipToSiteName ? salesQuote.shipToSiteName : '-'}}</span></p>
+        <p><span class="label"><b>Address1: </b></span><span
+            class="value">{{salesQuote.shipToAddress1 ? salesQuote.shipToAddress1 : '-'}}</span></p>
+        <p><span class="label"><b>Address2: </b></span><span
+            class="value">{{salesQuote.shipToAddress2 ? salesQuote.shipToAddress2 : '-'}}</span></p>
+        <p><span class="label"><b>Address3: </b></span><span
+            class="value">{{salesQuote.shipToAddress3 ? salesQuote.shipToAddress3 : '-'}}</span></p>
+        <p><span class="label"><b>City: </b></span><span
+            class="value">{{salesQuote.shipToCity ? salesQuote.shipToCity : '-'}}</span></p>
+        <p><span class="label"><b>Primary State/Province: </b></span><span
+            class="value">{{salesQuote.shipToState ? salesQuote.shipToState : '-'}}</span></p>
+        <p><span class="label"><b>Postal: </b></span><span
+            class="value">{{salesQuote.shipToPostalCode ? salesQuote.shipToPostalCode : '-'}}</span></p>
+        <p><span class="label"><b>Country: </b></span><span
+            class="value">{{salesQuote.shipToCountry ? salesQuote.shipToCountry : '-'}}</span></p>
+        <p><span class="label"><b>Contact Name: </b></span><span
+            class="value">{{salesQuote.shipToContactName ? salesQuote.shipToContactName : '-'}}</span></p>
+        <p><span class="label"><b>Memo: </b></span><span class="value">
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.shipViaMemo"></p>
+
+
+          </span></p>
+        <p><span class="label"><b>Ship Via: </b></span><span
+            class="value">{{salesQuote.shipViaName ? salesQuote.shipViaName : '-'}}</span></p>
+        <p><span class="label"><b>Shipping Acct Info: </b></span><span
+            class="value">{{salesQuote.shipViaShippingAccountInfo ? salesQuote.shipViaShippingAccountInfo : '-'}}</span>
+        </p>
+      </div>
+      <div class="col-sm-4">
+        <h5 class="po-head">Bill To</h5>
+        <p><span class="label"><b>User Type: </b></span><span
+            class="value">{{salesQuote.billToUserType ? salesQuote.billToUserType : '-'}}</span></p>
+        <p><span class="label"><b>User: </b></span><span
+            class="value">{{salesQuote.billToUser ? salesQuote.billToUser : '-'}}</span></p>
+        <p><span class="label"><b>Site Name: </b></span><span
+            class="value">{{salesQuote.billToSiteName ? salesQuote.billToSiteName : '-'}}</span></p>
+        <p><span class="label"><b>Address1: </b></span><span
+            class="value">{{salesQuote.billToAddress1 ? salesQuote.billToAddress1 : '-'}}</span></p>
+        <p><span class="label"><b>Address2: </b></span><span
+            class="value">{{salesQuote.billToAddress2 ? salesQuote.billToAddress2 : '-'}}</span></p>
+        <p><span class="label"><b>Address3: </b></span><span
+            class="value">{{salesQuote.billToAddress3 ? salesQuote.billToAddress3 : '-'}}</span></p>
+        <p><span class="label"><b>City: </b></span><span
+            class="value">{{salesQuote.billToCity ? salesQuote.billToCity : '-'}}</span></p>
+        <p><span class="label"><b>Primary State/Province: </b></span><span
+            class="value">{{salesQuote.billToState ? salesQuote.billToState : '-'}}</span></p>
+        <p><span class="label"><b>Postal: </b></span><span
+            class="value">{{salesQuote.billToPostalCode ? salesQuote.billToPostalCode : '-'}}</span></p>
+        <p><span class="label"><b>Country: </b></span><span
+            class="value">{{salesQuote.billToCountry ? salesQuote.billToCountry : '-'}}</span></p>
+        <p><span class="label"><b>Contact Name: </b></span><span
+            class="value">{{salesQuote.billToContactName ? salesQuote.billToContactName : '-'}}</span></p>
+        <p><span class="label"><b>Memo: </b></span><span class="value">
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesQuote.billToMemo"></p>
+          </span></p>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <p-tabPanel header="Freight">
+    <app-sales-order-quote-freight [freightForm]="freight" [customerId]="customerId"
+      [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" (saveFreightListForSO)="saveSalesOrderFreightsList($event)"
+      (updateFreightListForWo)="updateSalesOrderFreightsList($event)" (refreshData)="getFreightList($event)"
+      [markupList]="markupList" [isView]="true" [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
+    </app-sales-order-quote-freight>
+  </p-tabPanel>
+  <p-tabPanel header="Charges">
+    <app-sales-order-quote-charges [chargeForm]="charge" [customerId]="customerId"
+      [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" (saveChargesListForSO)="saveSalesOrderChargesList($event)"
+      (updateChargesListForSO)="updateSalesOrderChargesList($event)" (refreshData)="getChargesList()"
+      [markupList]="markupList" [isView]="true" [isQuote]="true">
+    </app-sales-order-quote-charges>
+  </p-tabPanel>
+  <p-tabPanel header="Document">
+    <app-salesQuote-documents [isEditMode]="false" [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [viewMode]="true">
+    </app-salesQuote-documents>
+  </p-tabPanel>
+</p-tabView>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

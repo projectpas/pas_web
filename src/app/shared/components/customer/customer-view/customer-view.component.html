@@ -1,0 +1,1321 @@
+﻿<div class="modal-header">
+    <button type="button"
+            class="close"
+            style="padding: 0 !important"
+            (click)="dismissModel()">
+        &times;
+    </button>
+    <div class="col-sm-3">
+        <h4 class="modal-title">Details of Customer</h4>
+    </div>
+    <div class="col-sm-3" style="margin-top: 5px !important;">
+        Customer Name<span style="color:red">
+            : {{ viewDataGeneralInformation.name }}
+        </span>
+    </div>
+    <div class="col-sm-3" style="margin-top: 5px !important;">
+        Customer Code<span style="color:red">
+            : {{ viewDataGeneralInformation.customerCode }}
+        </span>
+    </div>
+</div>
+<div class="modal-body" *ngIf="viewDataGeneralInformation">
+    <div class="col-sm-6">
+        <button type="button"
+                class="btn btn-primary"
+                (click)="ExpandAllCustomerDetailsModel()">
+            Open All
+        </button>
+        <button type="button"
+                class="btn btn-secondary"
+                (click)="CloseAllCustomerDetailsModel()">
+            Close All
+        </button>
+    </div>
+    <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+        <button type="button" name="isActive" [ngClass]="viewDataGeneralInformation.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+            <span class="value">{{viewDataGeneralInformation.isActive ? 'Active' : 'In-Active'}}</span>
+         </button> 
+    </div>
+    <div class="panel-group mt-2" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <div></div>
+                    <a data-toggle="collapse" href="#step1">General Info</a>
+                </h4>
+            </div>
+            <div id="step1" class="panel-collapse collapse in show">
+                <div class="panel-body">
+                    <div class="modal-content p-1">
+                        <div class="default-bg clear">
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Internal / External / Affiliate:
+                                            <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.accountType }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Account Type: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.type }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Customer Name: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.name }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Customer Code: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.customerCode }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b>D/B/A: </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.doingBuinessAsName }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b> Is Parent: </b></span>
+                                    <span class="value">
+                                        <input type="checkbox"
+                                               name="isParent"
+                                               [(ngModel)]="viewDataGeneralInformation.isParent"
+                                               disabled />
+                                    </span>
+                                </p>
+
+                                <p *ngIf="viewDataGeneralInformation.isParent">
+                                    <span class="label"><b>Parent: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.customerParentName }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Phone: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.customerPhone }} Ext
+                                        {{ viewDataGeneralInformation.customerPhoneExt }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Email: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.email }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b>Address 1: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.address1 }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Address 2: </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.address2 }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b>City: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.city }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Primary State/Province:
+                                            <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.stateOrProvince }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Postal: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.postalCode }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Country: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.countryName | titlecase }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label"><b> Is this Address For Billing: </b></span>
+                                    <span class="value">
+                                        <input type="checkbox"
+                                               name="restrictBER"
+                                               [(ngModel)]="viewDataGeneralInformation.isAddressForBilling"
+                                               disabled />
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b> Is this Address For Shipping: </b></span>
+                                    <span class="value">
+                                        <input type="checkbox"
+                                               name="restrictBER"
+                                               [(ngModel)]="viewDataGeneralInformation.isAddressForShipping"
+                                               disabled />
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b> Is Customer Also Vendor: </b></span>
+                                    <span class="value">
+                                        <input type="checkbox"
+                                               name="restrictBER"
+                                               [(ngModel)]="viewDataGeneralInformation.isCustomerAlsoVendor"
+                                               disabled />
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Classification: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{ viewDataclassification }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Contract Ref: </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.contractReference }}
+                                    </span>
+                                </p>                                                           
+                                <p>
+                                    <span class="label"><b>PBH Customer: </b></span><span class="value" style="vertical-align: middle;" [innerHTML]="viewDataGeneralInformation.pbhCustomerMemo">
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Integration With: </b></span><span class="value">
+                                        {{ viewDataIntegration }}
+                                    </span>
+                                </p>     
+                                <p>
+                                    <span class="label"><b>URL to Customer site: </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.customerURL }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Restrict PMA: </b></span>
+                                        <span class="value">
+                                            <input type="checkbox"
+                                               name="restrictBER"
+                                               [(ngModel)]="viewDataGeneralInformation.restrictPMA"
+                                               disabled />
+                                        </span>
+                                </p>
+                                <div *ngIf="viewDataGeneralInformation.restrictPMA == true">
+                                    <div style="text-align: right !important; padding-right: 10px;">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label style="width: auto; margin-bottom: 10px !important; ">
+                                            <input type="checkbox" [(ngModel)]="currantDeletedStatusPMA" name="currantDeletedStatusPMA" id="currantDeletedStatusPMA"  (click)="getPMAPartListByStatus($event.target.checked)"/>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Show Deleted List
+                                        </label>
+                                        </div>
+                                    </div>
+                                    <p-table #restrictPMATable
+                                             class="rpo-table-cstm"
+                                             [value]="restrictedPMAParts"
+                                             [metaKeySelection]="true"
+                                             [paginator]="true"
+                                             [pageLinks]="3"
+                                             (onPage)="pageIndexChange1($event)"
+                                             [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                             [rows]="pageSize"
+                                             [columns]="customerPMAColumns"
+                                             [resizableColumns]="true"
+                                             [reorderableColumns]="true"
+                                             [scrollable]="true"
+                                             scrollHeight="450px">
+                                        <ng-template pTemplate="colgroup" let-columns>
+                                            <colgroup>
+                                                <col *ngFor="let col of columns" style="width:130px" />
+                                            </colgroup>
+                                        </ng-template>
+
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns"
+                                                    [pSortableColumn]="col.field">
+                                                    {{ col.header }}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th style="width:auto"
+                                                    *ngFor="let col of columns"
+                                                    [ngSwitch]="col.field">
+                                                    <input style="width:100%;"
+                                                           pInputText
+                                                           type="text"
+                                                           (input)="
+                              restrictPMATable.filter(
+                                $event.target.value,
+                                col.field,
+                                'contains'
+                              )
+                            " />
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body"
+                                                     let-part
+                                                     let-rowData
+                                                     let-columns="columns"
+                                                     let-i="rowIndex">
+                                            <tr>
+                                                <td *ngFor="let col of columns">
+                                                    {{ part[col.field] }}
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage"
+                                                     let-columns
+                                                     *ngIf="restrictedPMAParts?.length == 0">
+                                            <tr>
+                                                <td [attr.colspan]="columns.length"
+                                                    style="color: red; font-weight: bold; text-align: center">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary" id="footer">
+                                            <label id="footer" class="footer">Total:</label>
+                                            <input style="width: 5%;"
+                                                   [(ngModel)]="restrictPMATable._totalRecords"
+                                                   [disabled]="true"
+                                                   pInputText
+                                                   type="text" />
+                                            &nbsp;&nbsp;
+                                            <label id="footer" class="footer1">Pages Count:</label>
+                                            <input style="width: 5%;"
+                                                   [ngModel]="
+                          getPageCount(restrictPMATable._totalRecords, pageSize)
+                        "
+                                                   [disabled]="true"
+                                                   pInputText
+                                                   type="text" />
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+
+                                <p>
+                                    <span class="label"><b>Restrict DER: </b></span><span class="value">
+                                        <input type="checkbox"
+                                               name="restrictBER"
+                                               [(ngModel)]="viewDataGeneralInformation.restrictDER"
+                                               disabled />
+                                    </span>
+                                </p>
+                                <div *ngIf="viewDataGeneralInformation.restrictDER == true">
+                                     <div style="text-align: right !important; padding-right: 10px;">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                          <label style="width: auto; margin-bottom: 10px !important; ">
+                                            <input type="checkbox" [(ngModel)]="currantDeletedStatusDER" name="currantDeletedStatusDER" id="currantDeletedStatusDER"  (click)="getDERPartListByStatus($event.target.checked)"/>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                             Show Deleted List  
+                                          </label>
+                                        </div>
+                                      </div>
+                                    <p-table #table2
+                                             class="rpo-table-cstm"
+                                             [paginator]="true"
+                                             [pageLinks]="3"
+                                             [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                             [value]="restrictedDERParts"
+                                             [metaKeySelection]="true"
+                                             (onPage)="pageIndexChange2($event)"
+                                             [rows]="pageSize"
+                                             [columns]="customerDERColumns"
+                                             [resizableColumns]="true"
+                                             [reorderableColumns]="true"
+                                             [scrollable]="true"
+                                             scrollHeight="450px">
+                                        <ng-template pTemplate="colgroup" let-columns>
+                                            <colgroup>
+                                                <col *ngFor="let col of columns" style="width:130px" />
+                                            </colgroup>
+                                        </ng-template>
+
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns"
+                                                    [pSortableColumn]="col.field">
+                                                    {{ col.header }}
+                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th style="width:auto"
+                                                    *ngFor="let col of columns"
+                                                    [ngSwitch]="col.field">
+                                                    <input style="width:100%;"
+                                                           pInputText
+                                                           type="text"
+                                                           (input)="
+                              table2.filter(
+                                $event.target.value,
+                                col.field,
+                                'contains'
+                              )
+                            " />
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body"
+                                                     let-part
+                                                     let-rowData
+                                                     let-columns="columns"
+                                                     let-i="rowIndex">
+                                            <tr>
+                                                <td *ngFor="let col of columns">
+                                                    {{ part[col.field] }}
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage"
+                                                     let-columns
+                                                     *ngIf="restrictedDERParts?.length == 0">
+                                            <tr>
+                                                <td [attr.colspan]="columns.length"
+                                                    style="color: red; font-weight: bold; text-align: center">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="summary" id="footer">
+                                            <label id="footer" class="footer">Total:</label>
+                                            <input style="width: 5%;"
+                                                   [(ngModel)]="table2._totalRecords"
+                                                   [disabled]="true"
+                                                   pInputText
+                                                   type="text" />
+                                            &nbsp;&nbsp;
+                                            <label id="footer" class="footer1">Pages Count:</label>
+                                            <input style="width: 5%;"
+                                                   [ngModel]="getPageCount(table2._totalRecords, pageSize)"
+                                                   [disabled]="true"
+                                                   pInputText
+                                                   type="text" />
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
+                </h4>
+            </div>
+            <div id="step2" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                        <app-customer-contacts [customerDataFromExternalComponents]="viewDataGeneralInformation"></app-customer-contacts>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step3">Aircraft Info</a>
+                </h4>
+            </div>
+            <div id="step3" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                        <app-customer-aircraft [customerDataFromExternalComponents]="viewDataGeneralInformation"></app-customer-aircraft>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step4">ATA Info</a>
+                </h4>
+            </div>
+            <div id="step4" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <div class="shadow-Box">
+                            <p-table #atainfotable
+                                     class="rpo-table-cstm"
+                                     [paginator]="true"
+                                     [value]="ataListDataValues"
+                                     [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                     [rows]="pageSize"
+                                     [columns]="ataHeaders"
+                                     [metaKeySelection]="true"
+                                     [pageLinks]="3"
+                                     [resizableColumns]="true"
+                                     [reorderableColumns]="true"
+                                     [scrollable]="true"
+                                     scrollHeight="450px"
+                                     (onPage)="pageIndexChange5($event)">
+                                <ng-template pTemplate="colgroup" let-columns>
+                                    <colgroup>
+                                        <col *ngFor="let col of columns" style="width:130px" />
+                                    </colgroup>
+                                </ng-template>
+
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns"
+                                            [pSortableColumn]="col.field">
+                                            {{ col.header }}
+                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                        <th style="width:70px; text-align: center">Actions</th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:auto"
+                                            *ngFor="let col of columns"
+                                            [ngSwitch]="col.field">
+                                            <input style="width:100%;"
+                                                   pInputText
+                                                   type="text"
+                                                   (input)="
+                                            atainfotable.filter(
+                                                $event.target.value,
+                                                col.field,
+                                                'contains'
+                                            )
+                                            " />
+                                        </th>      
+                                         <th style="width:auto"></th>                               
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body"
+                                             let-part
+                                             let-rowData
+                                             let-columns="columns"
+                                             let-i="rowIndex">
+                                    <tr>
+                                        <td *ngFor="let col of columns">
+                                            {{ part[col.field] }}
+                                        </td>
+                                        <td style="width:70px; text-align: center">
+                                            <span data-toggle="modal" data-target="#viewcontentATAChapterHist"><a class="btn nobg"
+                                                (click)="getATAAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i
+                                                  class="fa fa-history"></i></a></span>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage"
+                                             let-columns
+                                             *ngIf="ataListDataValues.length == 0">
+                                    <tr>
+                                        <td [attr.colspan]="columns.length"
+                                            style="color: red; font-weight: bold; text-align: center">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary" id="footer">
+                                    <label id="footer" class="footer">Total:</label>
+                                    <input style="width: 5%;"
+                                           [(ngModel)]="atainfotable._totalRecords"
+                                           [disabled]="true"
+                                           pInputText
+                                           type="text" />
+                                    &nbsp;&nbsp;
+                                    <label id="footer" class="footer1">Pages Count:</label>
+
+                                    <input style="width: 5%;"
+                                           [ngModel]="
+                                          getPageCount(atainfotable._totalRecords, pageSize)"
+                                           [disabled]="true"
+                                           pInputText
+                                           type="text" />
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step5">Financial Info</a>
+                </h4>
+            </div>
+            <div id="step5" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="shadow-Box">
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label"><b>MarkUp %: </b></span><span class="value">
+                                        {{
+                                            financeInfoListDataValues.markUpPercentage | number : '1.2-2'
+                                        }} %
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Discount %: </b></span><span class="value">
+                                        {{
+                                            financeInfoListDataValues.discountId | number : '1.2-2'
+                                        }} %
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Credit Limit: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">
+                                        {{
+                                            financeInfoListDataValues.creditLimit | number : '1.2-2'
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Credit Terms: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{
+                                            financeInfoListDataValues.creditTermsName
+                                        }}
+                                    </span>
+                                </p>                                
+                                <p>
+                                    <span class="label"><b>Currency: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{
+                                            financeInfoListDataValues.currency
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Allow Netting of AP/AR: </b></span><span class="value">
+                                        <input type="checkbox"
+                                               name="allowNettingOfAPAR"
+                                               [(ngModel)]="
+                                               financeInfoListDataValues.allowNettingOfAPAR"
+                                               disabled />
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Allow Partial Billing: </b></span><span class="value">
+                                        <input type="checkbox"
+                                               name="allowPartialBilling"
+                                               [(ngModel)]="
+                                               financeInfoListDataValues.allowPartialBilling"
+                                               disabled />
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Allow ProForma Billing: </b></span><span class="value">
+                                        <input type="checkbox"
+                                               name="allowProformaBilling"
+                                               [(ngModel)]="
+                                               financeInfoListDataValues.allowProformaBilling"
+                                               disabled />
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label" style="width: 90px !important;"><b>Tax Exempt: </b></span>
+                                    <span class="checkbox-cstm" style="text-align: left !important;">
+                                        <input type="checkbox" 
+                                               name="isTaxExempt"
+                                               [(ngModel)]="financeInfoListDataValues.isTaxExempt"
+                                               disabled />  
+                                    </span>                                    
+                                    <span class="checkbox-cstm" style="margin-left: 0; padding-left: 255px !important; text-align: left !important;">
+                                        <label style="width: auto !important;margin-top: 3px;">
+                                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="showDeletedListTax" id="showDeletedListTax"  (click)="getDeleteListByStatus($event.target.checked)"/>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Show Deleted List 
+                                        </label>
+                                    </span>
+                                </p>
+                                <p-table #financialTable
+                                         class="rpo-table-cstm"
+                                         [metaKeySelection]="true"
+                                         [paginator]="true"
+                                         [pageLinks]="3"
+                                         [rowsPerPageOptions]="[5, 10, 15, 20]"
+                                         [value]="taxTypeRateMapping"
+                                         [rows]="pageSize"
+                                         [columns]="taxTypeRateMappingColumns"
+                                         [resizableColumns]="true"
+                                         [reorderableColumns]="true"
+                                         [scrollable]="true"
+                                         scrollHeight="450px">
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:130px" />
+                                        </colgroup>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns"
+                                                [pSortableColumn]="col.field">
+                                                {{ col.header }}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:auto"
+                                                *ngFor="let col of columns"
+                                                [ngSwitch]="col.field">
+                                                <input style="width:100%;"
+                                                       pInputText
+                                                       type="text"
+                                                       (input)="
+                                                    financialTable.filter(
+                                                    $event.target.value,
+                                                    col.field,
+                                                    'contains'
+                                                    )
+                                                " />
+                                            </th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body"
+                                                 let-part
+                                                 let-rowData
+                                                 let-columns="columns"
+                                                 let-i="rowIndex">
+                                        <tr>
+                                            <td *ngFor="let col of columns">
+                                                {{ part[col.field] }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage"
+                                                 let-columns
+                                                 *ngIf="taxTypeRateMapping.length == 0">
+                                        <tr>
+                                            <td [attr.colspan]="columns.length"
+                                                style="color: red; font-weight: bold; text-align: center">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;"
+                                               [(ngModel)]="financialTable._totalRecords"
+                                               [disabled]="true"
+                                               pInputText
+                                               type="text" />
+                                        &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+
+                                        <input style="width: 5%;"
+                                               [ngModel]="
+                                                getPageCount(financialTable._totalRecords, pageSize)"
+                                               [disabled]="true"
+                                               pInputText
+                                               type="text" />
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                        <div class="form-row" style="padding-top: 12px;">
+                            <div class="col-sm-12">
+                                <div *ngIf="financeInfoListDataValues.isTaxExempt==true">
+                                    <div>
+                                        <p>
+                                            <span class="label"><b>Attachment Details: </b></span>
+                                        </p>
+                                        <p-table #taxexeptTable
+                                                class="rpo-table-cstm lastcol-fix"
+                                                [paginator]="true"
+                                                [value]="allCustomerFinanceDocumentsList"
+                                                [rows]="pageSize"
+                                                [columns]="allCustomerFinanceDocumentsListColumns"
+                                                [metaKeySelection]="true"
+                                                [resizableColumns]="true"
+                                                [pageLinks]="3"
+                                                [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                                [reorderableColumns]="true"
+                                                [scrollable]="true"
+                                                scrollHeight="450px">
+                                            <ng-template pTemplate="colgroup" let-columns>
+                                                <colgroup>
+                                                    <col *ngFor="let col of columns"
+                                                        style="width:130px" />
+                                                </colgroup>
+                                            </ng-template>
+
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th style="width:70%"
+                                                        *ngFor="let col of columns"
+                                                        [pSortableColumn]="col.field">
+                                                        {{ col.header }}
+                                                        <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'" [field]="col.field"></p-sortIcon>
+                                                    </th>
+                                                    <th>
+                                                        Download
+                                                    </th>
+                                                </tr>
+
+                                                <tr>
+                                                    <th style="width:70%"
+                                                        *ngFor="let col of columns"
+                                                        [ngSwitch]="col.field">
+                                                        <input *ngIf="col.field !='download' && col.field !='delete'"
+                                                            style="width:100%;"
+                                                            pInputText
+                                                            type="text"
+                                                            (input)="
+                                                            taxexeptTable.filter(
+                                                            $event.target.value,
+                                                            col.field,
+                                                            'contains'
+                                                            )
+                                                        " />
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body"
+                                                        let-part
+                                                        let-rowData
+                                                        let-columns="columns"
+                                                        let-i="rowIndex">
+                                                <tr>
+                                                    <td *ngFor="let col of columns" style="width:70%">
+                                                        <ng-container *ngIf="col.field !='download' && col.field !='delete'">
+                                                            {{
+                                                                col.field == 'createdDate'
+                                                                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                                                                : rowData[col.field] && col.field == 'updatedDate'
+                                                                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                                                : rowData[col.field]
+                                                            }}
+                                                        </ng-container>
+                                                        <ng-container *ngIf="col.field =='download'" class="align_center">
+                                                            <div style="text-align: center !important;" >
+                                                                <a (click)="downloadFileUpload(part)"
+                                                                matTooltip="Download"
+                                                                class="btn nobg btn-cstm">
+                                                                    <span><i class="fa fa-download"></i></span>
+                                                                </a>
+
+                                                                <span data-toggle="modal" data-target="#contentAuditHistDoc">
+                                                                    <a class="btn nobg"
+                                                                    (click)="openHistoryDoc(rowData)"
+                                                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                                                </span>
+                                                            </div>
+                                                        </ng-container>
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage"
+                                                        let-columns
+                                                        *ngIf="allCustomerFinanceDocumentsList.length == 0">
+                                                <tr>
+                                                    <td [attr.colspan]="6"
+                                                        style="color: red; font-weight: bold; text-align: center">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="summary" id="footer">
+                                                <label id="footer" class="footer">Total:</label>
+                                                <input style="width: 5%;"
+                                                    [(ngModel)]="taxexeptTable._totalRecords"
+                                                    [disabled]="true"
+                                                    pInputText
+                                                    type="text" />
+                                                &nbsp;&nbsp;
+                                                <label id="footer" class="footer1">Pages Count:</label>
+                                                <input style="width: 5%;"
+                                                    [ngModel]="
+                                                    getPageCount(taxexeptTable._totalRecords, pageSize)"
+                                                    [disabled]="true"
+                                                    pInputText
+                                                    type="text" />
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                        </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
+                </h4>
+            </div>
+            <div id="step6" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                        <app-customer-billing-information [customerDataFromExternalComponents]="viewDataGeneralInformation"></app-customer-billing-information>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
+                </h4>
+            </div>
+            <div id="step7" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                        <app-customer-shipping-information (tab)="changeOfTab($event)" 
+                        [selectedCustomerTab]="currentTab" [customerDataFromExternalComponents]="viewDataGeneralInformation"></app-customer-shipping-information>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step8">Sales Person/Agent Info</a>
+                </h4>
+            </div>
+            <div id="step8" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="shadow-Box">
+                        <div class="form-row">
+                            <div class="col-sm-12">
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Primary Sales Person:
+                                            <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">
+                                        {{
+                                            salesInfoListDataValues.primarySalesPersonName
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Secondary Sales Person: </b></span><span class="value">
+                                        {{
+                                            salesInfoListDataValues.secondarySalesPersonName
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Customer Service Rep: </b></span><span class="value">
+                                        {{
+                                            salesInfoListDataValues.csrName
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Agent: </b></span><span class="value">
+                                        {{
+                                            salesInfoListDataValues.agentName
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Annual Revenue Potential: </b></span><span class="value">
+                                        {{
+                                            salesInfoListDataValues.annualRevenuePotential | number : '1.2-2'
+                                        }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Annual Quota : </b></span><span class="value">
+                                        {{
+                                            salesInfoListDataValues.annualQuota | number : '1.2-2'
+                                        }}
+                                    </span>
+                                </p>                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step9">Warnings</a>
+                </h4>
+            </div>
+            <div id="step9" class="panel-collapse  collapse">
+                <div class="panel-body">
+                    <div class="col-sm-12">
+                        <div class="shadow-Box">
+                            <p-table #warningsTable
+                                     class="rpo-table-cstm"
+                                     [paginator]="true"
+                                     [pageLinks]="3"
+                                     [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                     [value]="waringInfoList"
+                                     [metaKeySelection]="true"
+                                     [rows]="pageSize"
+                                     (onPage)="pageIndexChange($event)"
+                                     [columns]="warningHeaders"
+                                     [resizableColumns]="true"
+                                     [reorderableColumns]="true"
+                                     [scrollable]="true"
+                                     scrollHeight="450px">
+                                <ng-template pTemplate="colgroup" let-columns>
+                                    <colgroup>
+                                        <col *ngFor="let col of columns" style="width:130px" />
+                                    </colgroup>
+                                </ng-template>
+
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns"
+                                            [pSortableColumn]="col.field">
+                                            {{ col.header }}
+                                            <p-sortIcon *ngIf="col.field !='isActive'" [field]="col.field"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:auto"
+                                            *ngFor="let col of columns"
+                                            [ngSwitch]="col.field">
+                                            <input *ngIf="col.field !='isActive' "
+                                                   style="width:100%;"
+                                                   pInputText
+                                                   type="text"
+                                                   (input)="
+                                                    warningsTable.filter(
+                                                        $event.target.value,
+                                                        col.field,
+                                                        'contains'
+                                                    )
+                                                    " />
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body"
+                                             let-part
+                                             let-rowData
+                                             let-columns="columns"
+                                             let-i="rowIndex">
+                                    <tr>
+                                        <td *ngFor="let col of columns" [ngClass]="{'align_center': col.field =='isActive' }">
+                                            <p *ngIf="col.field !='isActive'">{{ part[col.field] }}</p>
+                                            <input *ngIf="col.field =='isActive'" type="checkbox"
+                                                   name="isIsBillingAddress"
+                                                   [(ngModel)]=" part[col.field]" disabled />
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage"
+                                             let-columns
+                                             *ngIf="waringInfoList.length == 0">
+                                    <tr>
+                                        <td [attr.colspan]="columns.length"
+                                            style="color: red; font-weight: bold; text-align: center">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="summary" id="footer">
+                                    <label id="footer" class="footer">Total:</label>
+                                    <input style="width: 5%;"
+                                           [(ngModel)]="warningsTable._totalRecords"
+                                           [disabled]="true"
+                                           pInputText
+                                           type="text" />
+                                    &nbsp;&nbsp;
+                                    <label id="footer" class="footer1">Pages Count:</label>
+
+                                    <input style="width: 5%;"
+                                           [ngModel]="
+                      getPageCount(warningsTable._totalRecords, pageSize)
+                    "
+                                           [disabled]="true"
+                                           pInputText
+                                           type="text" />
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
+                </h4>
+            </div>
+            <div id="step10" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                        <div>
+                            <app-customer-documents [customerDataFromExternalComponents]="
+                  viewDataGeneralInformation
+                "></app-customer-documents>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal popup-blur"
+             id="contentAuditHistDoc"
+             data-backdrop="static">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h4 class="modal-title">History of  Documents</h4>
+                        <button type="button" class="close" data-dismiss="modal">
+                            &times;
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> Name</th>
+                                        <th>Description</th>
+                                        <th>Memo</th>
+                                        <th>File Name</th>
+                                        <th>File Size</th>
+                                        <th>Created By</th>
+                                        <th>Created Date</th>
+                                        <th>Updated By</th>
+                                        <th>Updated Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                                    <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
+                                        <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'docName', audit.docName)
+                  ? 'black'
+                  : 'red'
+              }">
+                                            {{ audit.docName }}
+                                        </td>
+                                        <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(
+                  i,
+                  'docDescription',
+                  audit.docDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }">
+                                            {{ audit.docDescription }}
+                                        </td>
+                                        <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)
+                  ? 'black'
+                  : 'red'
+              }">
+                                            {{ audit.docMemo }}
+                                        </td>
+                                        <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName)
+                  ? 'black'
+                  : 'red'
+              }">
+                                            {{ audit.fileName }}
+                                        </td>
+                                        <td>{{ audit.fileSize }}</td>
+                                        <td>{{ audit.createdBy }}</td>
+                                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+                                        <td>{{ audit.updatedBy }}</td>
+                                        <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            Close
+        </button>
+    </div>
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+    <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+
+    <!-- <div id="contentATAChapterHist" style="z-index: 15000 !important;" class="modal" data-backdrop="static"> -->
+    <div class="modal popup-blur"
+        id="viewcontentATAChapterHist" style="z-index: auto;"
+        data-backdrop="static"> 
+        <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+              <p class="fs12">
+                <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                </label>
+                <span class="span-header-red" style="text-transform: capitalize">
+                    {{ viewDataGeneralInformation.name }}
+                </span>
+              </p>
+            </div>
+            <div class="col-md-6">
+              <p class="fs12">
+                <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                </label>
+                <span class="span-header-red" style="text-transform: capitalize">
+                    {{ viewDataGeneralInformation.customerCode }}
+                </span>
+              </p>
+            </div>
+          </div> 
+          <h4 class="modal-title">History of ATA Chapter</h4>
+        </div>
+        
+        <div class="modal-body">
+          <div class="table-responsive">           
+            <table class="table table-bordered" > 
+              <thead>
+                <tr>
+                  <th>Contact</th>
+                  <th>ATA Chapter Code</th>
+                  <th>ATA Chapter Name</th>
+                  <th>ATA Sub Chapter</th>
+                  <th>ATA Sub Code</th>
+                  <th>Updated By</th>
+                  <th>Updated Date</th>
+                  <th>Created By</th>
+                  <th>Created Date</th>
+                </tr>
+              </thead>
+              <!-- <tbody *ngIf="auditHistory1.length > 0"> -->
+                <tbody>
+                    <!-- <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                    <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index"> -->
+                <tr *ngFor="let audit of auditHistoryATA; let i = index">
+                    <td [ngStyle]="{
+                      color: getColorCodeForHistoryATA(
+                        i,
+                        'firstName',
+                        audit.firstName
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                        {{ audit.firstName }} {{ audit.lastName ? audit.lastName : ''}}
+                    </td>
+  
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistoryATA(
+                        i,
+                        'ataChapterCode',
+                        audit.ataChapterCode
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.ataChapterCode }}
+                  </td>
+  
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistoryATA(
+                        i,
+                        'ataChapterName',
+                        audit.ataChapterName
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.ataChapterName }}
+                  </td>
+                  <td [ngStyle]="{
+                      color: getColorCodeForHistoryATA(
+                        i,
+                        'ataSubChapterDescription',
+                        audit.ataSubChapterDescription
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                    {{ audit.ataSubChapterDescription }}
+                  </td>
+                  <td [ngStyle] ="{
+                      color: getColorCodeForHistoryATA(
+                        i,
+                        'ataSubChapterCode',
+                        audit.ataSubChapterCode
+                      )
+                        ? 'black'
+                        : 'red'
+                    }">
+                      {{audit.ataSubChapterCode}}
+                  </td>
+                  <td>{{ audit.updatedBy }}</td>
+                  <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+  
+                  <td>{{ audit.createdBy }}</td>
+                  <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+                </tr>
+              </tbody>
+            </table>
+             <!-- <ng-template >
+              <div class="text-center">
+                <h4 style="color: #ff5663;">No History Found</h4>
+              </div>
+            </ng-template> -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+     </div>
+    </div>

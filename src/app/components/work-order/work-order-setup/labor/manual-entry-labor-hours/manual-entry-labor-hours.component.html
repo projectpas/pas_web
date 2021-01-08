@@ -1,0 +1,761 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="col-md-12">
+            <div class="x_panel" style="">
+                <div class="x_content">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a routerLink="/">WO Setup</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Labor</li>
+                        </ol>
+                    </nav>
+                    <div class="pheading">
+                        <h4 class="page-heading clr-green">WO Setup - Add Labor</h4>
+                    </div>
+                    <div class="cdetails-top">
+                        <div class="col-sm-12">
+                            <label>Company</label>
+                            <span>Silverxis</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>BU</label>
+                            <span>Adso</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Division</label>
+                            <span>Development</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Dept</label>
+                            <span>Java</span>
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-12 po-ro-setup">
+            <div class="x_panel">
+                <div>
+                    &nbsp;
+                    <label class="wauto"><input type="radio" class="labor-block1" value="labor-block1" name="labor-blocks-input" checked /> Labor Hours</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="wauto"><input type="radio" class="labor-block2" value="labor-block2" name="labor-blocks-input" /> Labor Checkin Checkout</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="wauto"><input type="radio" class="labor-block3" value="labor-block3" name="labor-blocks-input" /> Scan</label>
+                </div>
+
+                <hr />
+
+                <div class="x_content labor-hrs-block">
+                    <form id="" class="form-horizontal ro-grid-form mtop10" name="" action="#" method="post" onsubmit="return false;">
+                        <div class="col-sm-3">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">WO ID</label>
+                                <div class="col-sm-7">
+                                    <div class="inner-addon right-addon inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control numberids" value="123456">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">Data Entered By</label>
+                                <div class="col-sm-7">
+                                    <div class="inner-addon right-addon inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control names" value="Roger">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">Expertise</label>
+                                <div class="col-sm-7">
+                                    <select>
+                                        <option value="">Select Expertise</option>
+                                        <option value="Technician">Technician</option>
+                                        <option value="Quality">Quality</option>
+                                        <option value="Mechanic">Mechanic</option>
+                                        <option value="Inspector">Inspector</option>
+                                        <option value="Receiver">Receiver</option>
+                                        <option value="Auditor">Auditor</option>
+                                        <option value="Engineer">Engineer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">Employee</label>
+                                <div class="col-sm-7">
+                                    <select>
+                                        <option value="">Select Expertise</option>
+                                        <option value="Technician">Technician</option>
+                                        <option value="Quality">Quality</option>
+                                        <option value="Mechanic">Mechanic</option>
+                                        <option value="Inspector">Inspector</option>
+                                        <option value="Receiver">Receiver</option>
+                                        <option value="Auditor">Auditor</option>
+                                        <option value="Engineer">Engineer</option>
+                                    </select>
+                                </div>
+                                <!--<div class="col-sm-7">
+                                    <div class="inner-addon right-addon inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control names" value="Roger">
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Actions completed by ONE Tech/Mech</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Use target hours from Workflow</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Assign hours by specific Actions</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Assign Total Hours to Work Order</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-3">Memo</label>
+                                <div class="col-sm-8">
+                                    <textarea placeholder="Memo" style="height:110px; width:100%;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="clear"></div>
+
+
+                    </form>
+                    <div class="table-responsive">
+                        <div class="clear mtop5"></div>
+                        <table class="table table-bordered table-striped ">
+                            <thead>
+                                <tr>
+                                    <th>Actions</th>
+                                    <th>Employee</th>
+                                    <th>Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total Hours - ALL Actions</td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names" value="Roger">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="form-control w80 time" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Receive</td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names" value="Roger">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="form-control w80 time" value="1.00" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Inspect</td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names" value="Roger">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="form-control w80 time" value="2.50" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Evaluate</td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names" value="Roger">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="form-control w80 time" value="1.50" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Teardown</td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names" value="Roger">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="form-control w80 time" value="4.00" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Disassemble</td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names" value="Roger">
+                                        </div>
+                                    </td>
+                                    <td><input type="text" class="form-control w80 time" value="2.00" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Assemble</td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control w80 time" value="-" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Testing</td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control w80 time" value="-" /></td>
+                                </tr>
+                                <tr>
+                                    <td>QC</td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control w80 time" value="-" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Ship</td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control w80 time" value="-" /></td>
+                                </tr>
+                                <tr>
+                                    <td>Clean</td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control w80 time" value="-" /></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><input type="text" class="form-control w80 time" value="11.00" /></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="x_content labor-inout-hrs-block">
+                    <form id="" class="form-horizontal ro-grid-form mtop10" name="" action="#" method="post" onsubmit="return false;">
+                        <div class="col-sm-3">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">WO ID</label>
+                                <div class="col-sm-7">
+                                    <div class="inner-addon right-addon inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control numberids" value="123456">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-4">Employee</label>
+                                <!--<div class="col-sm-7">
+                                    <div class="inner-addon right-addon inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control names" value="Roger">
+                                    </div>
+                                </div>-->
+                                <div class="col-sm-7">
+                                    <select>
+                                        <option value="">Select Expertise</option>
+                                        <option value="Technician">Technician</option>
+                                        <option value="Quality">Quality</option>
+                                        <option value="Mechanic">Mechanic</option>
+                                        <option value="Inspector">Inspector</option>
+                                        <option value="Receiver">Receiver</option>
+                                        <option value="Auditor">Auditor</option>
+                                        <option value="Engineer">Engineer</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Actions completed by ONE Tech/Mech</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Assign hours by specific Actions</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-10">Assign Total Hours to Work Order</label>
+                                <div class="col-sm-1">
+                                    <input type="checkbox" class="form-control">
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="col-sm-5">
+                            <div class="form-group col-sm-12">
+                                <label class="control-label col-sm-3">Memo</label>
+                                <div class="col-sm-8">
+                                    <textarea placeholder="Memo" style="height:110px; width:100%;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+
+
+                    </form>
+                    <div class="table-responsive">
+                        <div class="clear mtop5"></div>
+                        <table class="table table-bordered table-striped po-ro-setup-table">
+                            <thead>
+                                <tr>
+                                    <th>Actions</th>
+                                    <th>Expertise</th>
+                                    <th>Employee</th>
+                                    <th>Billable /NonBillable</th>
+                                    <th>Start</th>
+                                    <th>Start Date and Time</th>
+                                    <th>Stop</th>
+                                    <th>End Date and Time</th>
+                                    <th>Hours/Mins</th>
+                                    <th>Adjustments</th>
+                                    <th>Adjusted Hours</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Total Hours - ALL Actions</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Receive</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Inspect</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Evaluate</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Teardown</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Disassemble</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Assemble</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Testing</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names w100 ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>QC</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Ship</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+                                <tr>
+                                    <td>Clean</td>
+                                    <td>
+                                        <select>
+                                            <option value="">Select Expertise</option>
+                                            <option value="Technician">Technician</option>
+                                            <option value="Quality">Quality</option>
+                                            <option value="Mechanic">Mechanic</option>
+                                            <option value="Inspector">Inspector</option>
+                                            <option value="Receiver">Receiver</option>
+                                            <option value="Auditor">Auditor</option>
+                                            <option value="Engineer">Engineer</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control names ui-autocomplete-input" value="Roger" autocomplete="off">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <select>
+
+                                            <option value="billable">Billable</option>
+                                            <option value="non-billable">Non Billable</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="checkbox" class="start-date-checkbox"></td>
+                                    <td><span class="start-date">26/03/2018 10:00</span></td>
+                                    <td><input type="checkbox" class="end-date-checkbox"></td>
+                                    <td><span class="end-date">26/03/2018 10:30</span></td>
+                                    <td>20.30</td>
+                                    <td><input type="text" class="form-control w50 decimal2"></td>
+                                    <td>20.30</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <div class="x_content labor-hrs-scan-block">
+                    <h4>Content not given</h4>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="clear"></div>
+                <br />
+                <a class="btn btn-info">Submit</a>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

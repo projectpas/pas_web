@@ -1,0 +1,26 @@
+﻿button {
+    border-radius: 5px;
+}
+
+:host ::ng-deep .ui-chkbox-label {
+     width: 33% !important;
+    top: 0px !important;
+    text-align: right !important;
+}
+
+:host ::ng-deep .ui-chkbox {
+    position: relative;
+    top: -6px;
+}
+
+:host ::ng-deep .ui-chkbox-box.ui-state-active {
+    background-color: #007ad9;
+    color: #ffffff;
+    padding: 0px;
+}
+
+@media (min-width: 1100px) {
+    :host ::ng-deep .modal-lg {
+        max-width: 1250px !important;
+    }
+}

@@ -1,0 +1,68 @@
+﻿// hide tabs data dynamically
+.hideTab {
+  display: none !important;
+}
+.labels-font-header {
+  // font-size: 16px !important;
+  font-weight: normal !important;
+}
+.span-header-red {
+  color: red;
+  font-weight: bold;
+}
+label {
+  text-align: left;
+  width: 140px;
+  margin-right: 0;
+  font-weight: normal;
+}
+input[type='text'],
+input[type='number'],
+select,
+textarea {
+  height: 24px !important;
+  border-radius: 5px !important;
+}
+.isDisabled {
+  pointer-events: none;
+}
+.button-save-cstm {  
+  margin-top: 30px;
+  margin-bottom: 100px;
+}
+:host ::ng-deep label.ui-dropdown-label{
+  font-size: 10px !important;
+}
+
+@media (min-width: 768px) {  
+  .col-row .col-md-3 {
+    max-width: 22%;
+    margin-right: 30px;
+  }
+}
+
+::ng-deep .ui-inputtext.ui-widget:disabled{
+  background: #e9ecef !important;
+  opacity: 1 !important;
+}
+
+.grayColor {
+    color: gray;
+}
+
+.aligin_cer{
+  display: inline-flex;
+  width: 72%;
+  text-align: center;
+  padding-left: 8%;
+  .value{
+      color: #ff5663;
+      padding-left: 4px;
+
+  }
+}
+.atv_cv{
+  position: relative;
+  top: -9px;
+  left: 23px;
+}

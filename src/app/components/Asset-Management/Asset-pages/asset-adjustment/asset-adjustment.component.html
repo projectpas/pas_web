@@ -1,0 +1,463 @@
+﻿<div class="bg-white">
+	<!-- <div class="card">
+		<div class="card-header">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
+                    <li class="breadcrumb-item active" aria-current="page">Asset Adjustment</li>
+                </ol>
+            </nav>
+		</div> -->
+		<div class="card new-card">
+            <div class="card-header bg-primary new-card-header">
+              <div class="row">
+                <div class="col">
+                  <h4 class="new-card-heading">Asset Adjustment</h4>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn-sm new-btn-primary"
+                    [routerLink]="['/assetmodule/assetpages/app-asset-inventory-listing']"
+                  >
+                    Asset Inventory List
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body new-card-body">
+			<form #assetAdjForm="ngForm">
+				<div class="form-row">
+					<div class="col-md-2">
+						<span><b class="clr-red">Asset ID:</b> {{assetAdjustmentSetup.assetId}}</span>
+					</div>
+					<div class="col-md-2">
+						<span><b class="clr-red">Asset Description:</b> {{assetAdjustmentSetup.description}}</span>
+					</div>
+					<div class="col-md-2">
+						<span><b class="clr-red">Alt Asset ID:</b> {{assetAdjustmentSetup.alternateAssetId}}</span>
+					</div>
+					<div class="col-md-2">
+						<span><b class="clr-red">In Service Date:</b> {{assetAdjustmentSetup.expirationDate | date: 'MM/dd/yyyy'}}</span>
+                    </div>
+                    <div class="col-md-2">
+						<span><b class="clr-red">Updated Cost:</b> {{assetAdjustmentSetup.unitCost}}</span>
+                    </div>
+                    <div class="col-md-2">
+						<span><b class="clr-red">Existing Book Value:</b> {{assetAdjustmentSetup.unitCost}}</span>
+					</div>
+                </div>
+                <div class="form-row" style="margin-top: 8px;">
+                    <div class="col-md-2">
+						<span><b class="clr-red">Serial Num:</b> {{assetAdjustmentSetup.serialNo}}</span>
+					</div>
+					<div class="col-md-2">
+						<span><b class="clr-red">Control Num:</b> </span>
+					</div>
+					<div class="col-md-2">
+						<span><b class="clr-red">Asset Life:</b> {{assetAdjustmentSetup.assetLife}}</span>
+					</div>
+                </div>
+				<div class="table-responsive mtop10" id="smovement">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Field Name</th>
+								<th>Existing Value</th>
+								<th>New Value</th>
+								<th>Adjustment Reason</th>
+								<th>Memo</th>
+								<th>Documents</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let item of assetAdjustmentData">
+								<ng-container *ngIf="item.adjustmentDataTypeId == 1">
+									<!-- <tr>
+										<td colspan="7" class="text-center bg-blue" style="color: #fff;"><strong>Organization</strong></td>
+									</tr> -->
+									<tr>
+										<td><input type="checkbox" name="isCompanyEnable" [(ngModel)]="companyAllow" (change)="isCompanyEnable(item)"></td>
+										<!-- <td>Management Structure</td> -->
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td>
+											{{existingMgmentStuc.level1 ? existingMgmentStuc.level1 : ''}}									
+										</td>
+										<td>
+											<div *ngIf="showCompany" class="col-md-8">
+												<select class="form-control" name="companyId" [(ngModel)]="managementStructure.companyId" 
+													(change)="selectedLegalEntity(managementStructure.companyId, item);" required>
+													<option value="0">Select Legal Entity</option>
+													<option *ngFor="let name of legalEntityList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td rowspan="4" style="vertical-align: top;">
+                                            <!-- <textarea *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="MgmtStructureReason" required></textarea> -->
+                                            <div *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="col-md-8">
+												<select class="form-control" name="mgmtStructureAdjReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeMgmtStrucAdjReason(item.adjustmentReasonId)" required>
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td rowspan="4" style="vertical-align: top;">
+											<textarea *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="form-control" [(ngModel)]="item.adjustmentMemo" name="ManagementStructureMemo"></textarea>
+                                        </td>
+                                        <td rowspan="4"></td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isBusinessEnable" [(ngModel)]="businessAllow" [disabled]="!existingMgmentStuc.level2 || companyAllow" (change)="isBusinessEnable(item)"></td>
+										<td></td>
+										<td>
+											{{existingMgmentStuc.level2 ? existingMgmentStuc.level2 : ''}}										
+										</td>
+										<td>
+											<div *ngIf="showBusiness" class="col-md-8">
+												<select class="form-control" [(ngModel)]="managementStructure.buId" name="buId" (change)="selectedBusinessUnit(managementStructure.buId, item)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of businessUnitList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+                                        </td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isDivisionEnable" [(ngModel)]="divisionAllow" [disabled]="!existingMgmentStuc.level3 || businessAllow" (change)="isDivisionEnable(item)"></td>
+										<td></td>
+										<td>
+											{{existingMgmentStuc.level3 ? existingMgmentStuc.level3 : ''}}	
+										</td>
+										<td>
+											<div *ngIf="showDivision" class="col-md-8">
+												<select class="form-control" [(ngModel)]="managementStructure.divisionId" name="divisionId" (change)="selectedDivision(managementStructure.divisionId, item)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of divisionList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+                                        </td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isDeptEnable" [(ngModel)]="deptAllow" [disabled]="!existingMgmentStuc.level4 || divisionAllow" (change)="isDeptEnable(item)"></td>
+										<td></td>
+										<td>
+											{{existingMgmentStuc.level4 ? existingMgmentStuc.level4 : ''}}	
+										</td>
+										<td>
+											<div *ngIf="showDepartment" class="col-md-8">
+												<select class="form-control" [(ngModel)]="managementStructure.departmentId" name="departmentId" (change)="selectedDepartment(managementStructure.departmentId, item)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of departmentList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+                                        </td>
+									</tr>
+                                </ng-container>
+
+                                <ng-container *ngIf="item.adjustmentDataTypeId == 2">
+									<tr>
+										<td><input type="checkbox"></td>
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td></td>
+										<td></td>
+                                        <td></td>
+										<td></td>
+                                        <td></td>
+									</tr>
+                                </ng-container>
+
+                                <ng-container *ngIf="item.adjustmentDataTypeId == 3">
+									<tr>
+										<td><input type="checkbox" name="usefulLifeAllow" [(ngModel)]="usefulLifeAllow" (change)="onChangeUsefulLife(item)"></td>
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td>{{assetAdjustmentSetup.assetLife ? assetAdjustmentSetup.assetLife : ''}}</td>
+										<td>
+											<div *ngIf="usefulLifeAllow" class="col-md-8">
+												<input type="number" class="form-control" name="usefulLife" [(ngModel)]="item.afterValue" required />
+											</div>
+										</td>
+                                        <td>
+											<div *ngIf="usefulLifeAllow" class="col-md-8">
+												<select class="form-control" name="usefulLifeAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeUsefulLifeAdjReason(item.adjustmentReasonId)" required>
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="usefulLifeAllow" class="form-control" [(ngModel)]="item.adjustmentMemo" name="usefulLifeAdjustmentMemo"></textarea>
+                                        </td>
+                                        <td></td>
+									</tr>
+                                </ng-container>
+                                
+                                <ng-container *ngIf="item.adjustmentDataTypeId == 4">
+									<tr>
+										<td><input type="checkbox" name="assetIdAllow" [(ngModel)]="assetIdAllow" (change)="onChangeAssetId(item)"></td>
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td>{{assetAdjustmentSetup.assetId ? assetAdjustmentSetup.assetId : ''}}</td>
+										<td>
+											<div *ngIf="assetIdAllow" class="col-md-8">
+												<p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="item.afterValue" name="assetId" [suggestions]="assetListFilter" (completeMethod)="filterAssetList($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required></p-autoComplete>
+											</div>
+										</td>
+                                        <td>
+											<div *ngIf="assetIdAllow" class="col-md-8">
+												<select class="form-control" name="assetIdAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeAssetIdAdjReason(item.adjustmentReasonId)" required>
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="assetIdAllow" class="form-control" [(ngModel)]="item.adjustmentMemo" name="assetIdAdjustmentMemo"></textarea>
+                                        </td>
+                                        <td></td>
+									</tr>
+                                </ng-container>
+                                
+                                <ng-container *ngIf="item.adjustmentDataTypeId == 5">
+									<tr>
+										<td><input type="checkbox" name="locationAllow" [(ngModel)]="locationAllow" (change)="onChangeLocation(item)"></td>
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td>{{assetAdjustmentSetup.asset_LocationName ? assetAdjustmentSetup.asset_LocationName : ''}}</td>
+										<td>
+                                            <div *ngIf="locationAllow" class="col-md-8">
+												<select [(ngModel)]="item.afterValue" name="location" (change)="onChangeLocationSelect(item.afterValue)" required>
+													<option value="0">-- Select --</option>
+													<option *ngFor="let itemType of allLocationList" [ngValue]="itemType.assetLocationId">{{itemType.name}}</option>
+												</select>
+											</div>
+										</td>
+                                        <td>
+											<div *ngIf="locationAllow" class="col-md-8">
+												<select class="form-control" name="locationAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeLocationAdjReason(item.adjustmentReasonId)" required>
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="locationAllow" class="form-control" [(ngModel)]="item.adjustmentMemo" name="locationAdjustmentMemo"></textarea>
+                                        </td>
+                                        <td></td>
+									</tr>
+                                </ng-container>	
+                                
+                                <ng-container *ngIf="item.adjustmentDataTypeId == 6">
+									<tr>
+										<td><input type="checkbox"></td>
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td></td>
+										<td></td>
+                                        <td></td>
+										<td></td>
+                                        <td></td>
+									</tr>
+                                </ng-container>
+
+                                <ng-container *ngIf="item.adjustmentDataTypeId == 7">
+									<tr>
+										<td><input type="checkbox"></td>
+										<td>{{item.assetInventoryAdjustmentDataType}}</td>
+										<td></td>
+										<td></td>
+                                        <td></td>
+										<td></td>
+                                        <td></td>
+									</tr>
+                                </ng-container>
+							</ng-container>							
+						</tbody>
+					</table>
+				</div>
+				<div class="clear"></div>
+				<br>
+				<button class="btn btn-primary pull-right" (click)="onSaveAssetAdj()" [disabled]="!assetAdjForm.valid || disableLevel1 || disableLevel2 || disableLevel3 || disableLevel4 || disableMgmtStrucAdj || disableUsefulLifeAdj || disableAssetIdAdj || disableLocation || disableLocationAdj">Save</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
+
+<!-- <form #generalForm="ngForm" method="post" id="" name="" class="form-horizontal add-custustomer">
+        <div class="form-row">
+            
+            <div class="col-md-12">
+    
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-2">
+                            <label class="fs12">Asset ID : </label>
+                            <span class="span-header-red"> {{local?.assetId}}</span>
+                        </div>
+                        <div class="col-md-2">
+                                <label class="fs12">Asset Description : </label>
+                                <span class="span-header-red"> {{local?.description}}</span>
+                                
+                        </div>
+                        <div class="col-md-2">
+                            <label class="fs12">Alt Asset ID : </label>
+                            <span class="span-header-red"> {{local?.alternateAssetId}}</span>
+                        </div>
+                        <div class="col-md-2">
+                                <label class="fs12">In Service Date : </label>
+                                <span class="span-header-red"> {{local?.expirationDate| date: 'MM/dd/yyyy' }}</span>
+                            </div>
+                            <div class="col-md-2">
+                                    <label class="fs12">Updated Cost : </label>
+                                    <span class="span-header-red"> {{local?.unitCost}}</span>
+                                    
+                            </div>
+                            <div class="col-md-2">
+                                <label class="fs12">Existing Book Vaue : </label>
+                                <span class="span-header-red"> {{local?.unitCost}}</span>
+                            </div>
+                            <div class="col-md-2">
+                                    <label class="fs12">Serial Num : </label>
+                                    <span class="span-header-red"> {{local?.assetId}}</span>
+                                </div>
+                                <div class="col-md-2">
+                                        <label class="fs12">Control Num : </label>
+                                        <span class="span-header-red"> {{local?.alternateAssetId}}</span>
+                                        
+                                </div>
+                                <div class="col-md-2">
+                                    <label class="fs12">Asset Life : </label>
+                                    <span class="span-header-red"> 0</span>
+                                </div>
+                        
+                        <div class="clear"></div>
+                        <hr />
+                        <div class="clear"></div>
+                        
+    
+                        <div class="col-md-12">
+                            <div class="form-row">
+
+                            <p-table #dt class="rpo-table-cstm rro-table-cstm" 
+                                [value]="data"
+                                [columns]="cols">
+                           
+                           <ng-template pTemplate="colgroup" let-columns>
+                               <colgroup>
+                                    <col style="width:20px">
+                                   <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                               </colgroup>
+                           </ng-template>
+                           <ng-template pTemplate="header" let-columns>
+                               <tr>
+                                   <th></th>
+                                   <th *ngFor="let col of columns">
+                                       {{col.header}}
+                                      
+                                   </th>
+                                  
+                               </tr>
+                              
+                           </ng-template>
+                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset>
+                               <tr>
+                                   <td><input type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="rowData.selected"></td>
+                                   <td>{{ rowData.fieldName}}</td>
+                                   <td>{{ rowData.existingValue}}</td>
+                                   <td>
+                                       <span *ngIf="!rowData.selected">{{ rowData.changeValueTo}}</span>
+                                       <ng-container *ngIf="rowData.selected">
+
+                                                        <div class="form-group" *ngIf="rowData.field=='company'">
+                                                                <select [(ngModel)]="rowData.changeValueTo" [ngModelOptions]="{standalone: true}" (change)="getBUList(rowData.changeValueTo)">
+                                                                    <option>--Select--</option>
+                                                                    <option *ngFor="let managementStructure of maincompanylist" [ngValue]="managementStructure.managementStructureId">{{managementStructure.code}}</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group"  *ngIf="rowData.field=='bu'">
+                                                               
+                                                                <select [(ngModel)]="rowData.changeValueTo" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlist(rowData.changeValueTo)">
+                                                                    <option>--Select--</option>
+                                                                    <option *ngFor="let managementStructure of bulist" [ngValue]="managementStructure.managementStructureId">{{managementStructure.code}}</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group"  *ngIf="rowData.field=='dept'">
+                                                               
+                                                                <select [(ngModel)]="rowData.changeValueTo" [ngModelOptions]="{standalone: true}" (change)="getDivisionlist(rowData.changeValueTo)">
+                                                                    <option>--Select--</option>
+                                                                    <option *ngFor="let managementStructure of departmentList " [ngValue]="managementStructure.managementStructureId">{{managementStructure.code}}</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group"  *ngIf="rowData.field=='div'">
+                                                                <select [(ngModel)]="rowData.changeValueTo" [ngModelOptions]="{standalone: true}" (change)="divisionChange(rowData.changeValueTo)">
+                                                                    <option>--Select--</option>
+                                                                    <option *ngFor="let managementStructure of divisionlist " [ngValue]="managementStructure.managementStructureId">{{managementStructure.code}}</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group" *ngIf="rowData.field=='revaluation'">
+                                                                    <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="rowData.changeValueTo">
+                                                            </div>
+                                                            <div class="form-group" *ngIf="rowData.field=='usefulLife'">
+                                                                    <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="rowData.changeValueTo">
+                                                            </div>
+                                                            <div class="form-group" *ngIf="rowData.field=='assetId'">
+                                                                    <p-autoComplete class="pautocomp-cstm asset-adjustment-autoComplete" sstyle="font-size: 1px" (onSelect)="onAssetIdselection($event)" (onKeyUp)=assetIdHandler($event) [(ngModel)]="rowData.changeValueTo" [ngModelOptions]="{standalone: true}" [suggestions]="localCollection" (completeMethod)="filterAssetId($event)" [size]="30"
+                                                                [minLength]="1" [dropdown]="true">
+                                                                    <ng-template let-assetId pTemplate="item">
+                                                                        <div class="ui-helper-clearfix">{{assetId}}</div>
+                                                                    </ng-template>
+                                                                </p-autoComplete>
+                                                            </div>
+                                                            <div class="form-group" *ngIf="rowData.field=='location'">
+                                                                    <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="rowData.changeValueTo">
+                                                            </div>
+                                                            <div class="form-group" *ngIf="rowData.field=='depreciationExpense'">
+                                                                    <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="rowData.changeValueTo">
+                                                            </div>
+                                                            <div class="form-group" *ngIf="rowData.field=='accumulatedDepreciation'">
+                                                                    <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="rowData.changeValueTo">
+                                                            </div>
+                                       </ng-container>
+                                    </td>
+                                   <td>
+                                        <span *ngIf="!rowData.selected">{{ rowData.adjustmentReason}}</span>
+                                        <textarea *ngIf="rowData.selected"  [(ngModel)]="rowData.adjustmentReason" [ngModelOptions]="{standalone: true}"></textarea>
+                                       
+                                    </td>
+                                   <td>
+                                        <span *ngIf="!rowData.selected">{{ rowData.documents}}</span>
+                                        <div class="form-group" *ngIf="rowData.selected">
+                                                <p-fileUpload name="fileupload[]" #createUploader multiple="multiple" [showCancelButton]="false" [showUploadButton]="false" customUpload="true" styleClass="asset-adjustment-upload"  (onSelect)="fileUpload($event)">
+                                                        <ng-template let-file pTemplate="file">
+                                                                <div class="ui-fileupload-row">
+                                                                    <div>{{file.name}}</div>
+                                                                    <div>
+                                                                        <button icon="fa-close" pButton type="button" label="Remove" (click)="removeFile(file,createUploader)"></button>
+                                                                    </div>
+                                                                </div>
+                                                              </ng-template>
+                                                </p-fileUpload>
+                                        </div>
+                                    </td>
+                                  
+                               </tr>
+                            </ng-template>
+                            </p-table>
+                            
+                                       
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                                <div class="margintop">
+                                        <button type="submit" class="btn btn-danger pull-right submit-btn" (click)="backClick()">Close</button>
+                                        <button type="submit" class="btn btn-primary pull-right submit-btn" (click)="saveAssetAdjustment()">Save</button> 
+                                </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+ -->

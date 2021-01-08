@@ -1,0 +1,101 @@
+<div class="fixed-table-container-inner table-responsive cat4-table" style="height:300px;">
+  <div style="width: 100%; z-index: 1;" *ngIf="!isEdit">
+    <span class="cat-heading cat4">Add {{ isWorkOrder ? moduleName : ' Tool'
+      }}<i (click)="addRow()" class="fa fa-plus"></i></span>
+  </div>
+  <form #toolsCreateForm="ngForm">
+  <table class="table table-bordered table-fixed workflow-table-equip">
+    <tr>
+      <!-- <th><label>S.No</label></th> -->
+      <!-- <th *ngIf="!isWorkOrder"><label>Tool Class *</label></th> -->
+      
+      <th><label>Tool Name</label></th>
+      <th> <label for="">{{moduleName}} ID</label></th>
+      <th><label>{{moduleName}} Description</label></th>
+      <th><label>Tool Class</label></th>
+      <th><label>Qty *</label></th>
+      <!-- <th><label>Min *</label></th>
+      <th><label>Max *</label></th> -->
+      <th><label>Actions </label></th>
+    </tr>
+    <tr *ngFor="let eqp of workFlow.equipments; let i = index">
+      <!-- <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td> -->
+      <td>
+        <!-- <p-autoComplete (onSelect)="onPartSelect($event, eqp)" [suggestions]="partCollection"
+          (completeMethod)="filterpartItems($event)" [size]="30" [(ngModel)]="eqp.partNumber" [minLength]="1"
+          [dropdown]="true" class="autocomp-customer-cstm" [ngModelOptions]="{standalone: true}">
+          <ng-template let-assetId pTemplate="asset">
+            <div class="ui-helper-clearfix">{{ assetId }}</div>
+          </ng-template>
+        </p-autoComplete> -->
+        <p-autoComplete (onSelect)="onPartSelect($event, eqp)" [suggestions]="partCollection"
+        (completeMethod)="filterpartItems($event)" [size]="30" [(ngModel)]="eqp.partNumber" [minLength]="1"
+        [dropdown]="true" class="autocomp-customer-cstm" [ngModelOptions]="{standalone: true}">
+        <ng-template let-assetId pTemplate="asset">
+          <div class="ui-helper-clearfix">{{ assetId  }}</div>
+        </ng-template>
+      </p-autoComplete>
+      </td>
+      <td>
+        {{ eqp.assetName }}
+        <!-- <input type="text" class="form-control" [disabled]="true" value="{{ eqp.name }}" [(ngModel)]="eqp.name" /> -->
+      </td>
+      <!-- <td>
+        <select class="form-control custom-select" id="dllEquipmentAssetTypes" [(ngModel)]="eqp.assetTypeId"
+          [disabled]="true">
+          <option value=""></option>
+          <option value="{{ assetType.id }}" *ngFor="let assetType of equipmentAssetType">{{ assetType.name }}</option>
+        </select>
+      </td> -->
+      <td>
+        {{ eqp.assetDescription }}
+        <!-- <input type="text" class="form-control" [disabled]="true" value="{{ eqp.assetDescription }}"
+          [(ngModel)]="eqp.assetDescription" /> -->
+      </td>
+      <td >
+        {{ eqp.assetTypeName }}
+        <!-- <input type="text" class="form-control" [disabled]="true" value="{{ eqp.class }}" [(ngModel)]="eqp.class" /> -->
+      </td>
+      <td class="text-center">
+        <input type="text" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum" value="{{ eqp.quantity }}"
+          [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required/>
+      </td>
+      <!-- <td class="text-center">
+        <input type="text" class="form-control" maxlength="10" pInputText pKeyFilter="pnum" value="{{ eqp.minQuantity }}"
+          [(ngModel)]="eqp.minQuantity" />
+      </td>
+      <td class="text-center">
+        <input type="text" class="form-control" maxlength="10" pInputText pKeyFilter="pnum" value="{{ eqp.maxQuantity }}"
+          [(ngModel)]="eqp.maxQuantity" />
+      </td> -->
+
+      <td>
+        <button class="btn btn-danger nobg" (click)="deleteRow(i)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </table>
+  </form> 
+  <div *ngIf="isWorkOrder && !isEdit" style="float:right">
+    <button *ngIf="isWorkOrder" type="button" class="btn btn-primary btn-primary" data-dismiss="modal" (click)="saveEquipmentWorkOrder()"
+      style="padding: 6px 12px !important; margin-top: 10px;"  [disabled]="!toolsCreateForm.valid|| checkQuantityAvailability()">
+      Save 
+    </button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+      style="padding: 6px 12px !important;margin-top: 10px;">
+      Close
+    </button>
+  </div>
+
+  <div *ngIf="isWorkOrder && isEdit" style="float:right">
+    <button *ngIf="isWorkOrder" class="btn btn-primary btn-primary" (click)="updateEquipmentWorkOrder()"
+      style="padding: 6px 12px !important; margin-top: 10px;" [disabled]="!toolsCreateForm.valid || checkQuantityAvailability()">
+      Update
+    </button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+      style="padding: 6px 12px !important;margin-top: 10px;">
+      Close
+    </button>
+  </div>
+</div>

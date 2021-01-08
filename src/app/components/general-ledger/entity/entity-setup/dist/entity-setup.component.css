@@ -1,0 +1,9 @@
+.viewBtn {
+  padding: 3px 3px !important;
+}
+
+.control-label span.clr-red {
+  position: absolute;
+  right: revert !important;
+  top: 2px;
+}

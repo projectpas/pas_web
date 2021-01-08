@@ -1,0 +1,81 @@
+<div class="row">
+  <div style="overflow-y: auto;">
+    <p-table #dt class="rpo-table-cstm rro-table-cstm sales-quote-part-search-data" [value]="parts" [rows]="10"
+      [lazy]="true" [paginator]="showPaginator" [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords"
+      [pageLinks]="pageLinks" [columns]="columns" [scrollable]="true" [resizableColumns]="true"
+      [reorderableColumns]="true" [style]="{ width: '100%' }" (onLazyLoad)="onPaging($event)">
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [ngStyle]="{'width': col.width, 'text-align': col.textalign}" />
+          <col style="width:80px" />
+        </colgroup>
+      </ng-template>
+
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th style="text-align: left !important;" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
+            {{ col.header }}
+
+          </th>
+          <th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-part let-columns="columns">
+        <tr [pSelectableRow]="part" [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
+
+          <td *ngFor="let col of columns" pReorderableRowHandle>
+            <span *ngIf="col.field == 'selected'"><input type="checkbox" (change)="onChange($event, part)" /></span>
+            <span *ngIf="col.field == 'partNumber'">{{ part.partNumber }} <span class="alternate-part-label"
+                *ngIf="part.mappingType==1">(Alt)</span> <span class="alternate-part-label"
+                *ngIf="part.mappingType==2">(Eq)</span></span>
+
+            <span *ngIf="col.field == 'itemClassification'">
+              {{
+                      part.itemClassification !== null
+                        ? part.itemClassification.itemType
+                        : ""
+                    }}
+            </span>
+
+            <span
+              *ngIf="col.field != 'qtyOnOrder' && col.field != 'qtyToOrder' && col.field != 'qtyOnHand' && col.field != 'qtyAvailable' && col.field != 'partNumber' && col.field != 'selected'&&col.field != 'itemClassification'">{{part[col.field] }}</span>
+            <span *ngIf="col.field == 'qtyAvailable'" class="float-right">
+              {{
+                    part.qtyAvailable | globalNmberFormat
+                  }}
+            </span>
+            <span *ngIf="col.field == 'qtyOnHand'" class="float-right">
+              {{
+                    part.qtyOnHand | globalNmberFormat
+                  }}
+            </span>
+            <span *ngIf="col.field == 'qtyToOrder'" class="float-right">
+              {{
+                    part.qtyToOrder | globalNmberFormat
+                  }}
+            </span>
+            <span *ngIf="col.field == 'qtyOnOrder'" class="float-right">
+              {{
+                    part.qtyOnOrder | globalNmberFormat
+                  }}
+            </span>
+
+
+          </td>
+          <td>
+            <span>
+              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewSelectedRow(part)"
+                matTooltip="View">
+                <i class="fa fa-eye"></i>
+              </a>
+              <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewStockLineHistory(part)"
+                matTooltip="History">
+                <i class="fa fa-history"></i>
+              </a>
+            </span>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -1,0 +1,402 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="inline-block display-flex">
+                            <h3 class="po-head lead">Job Type</h3>
+                            &nbsp;&nbsp;
+                            <a class="plusicon-cstm new-margin" matTooltipPosition="above" matTooltip="Add Job Type" tooltipPosition="right" (click)="resetJobTypeForm()" data-target="#addJobType" data-toggle="modal">
+                                <i class="fa fa-plus-circle fa-lg"></i>
+                            </a>
+                        </div>
+                        <p-table #dt class="rpo-table-cstm rro-table-cstm" 
+                        [value]="jobTypeData" 
+                        [first]="0" 
+                        [rows]="pageSize" 
+                        [paginator]="true" 
+                        [pageLinks]="3" 
+                        [rowsPerPageOptions]="[10,20,50,100]" 
+                        [columns]="selectedColumns" 
+                        selectionMode="multiple" 
+                        [metaKeySelection]="true"
+                        (onPage)="changePage($event)" 
+                        [resizableColumns]="true" 
+                        [reorderableColumns]="true" 
+                        [scrollable]="true" 
+                        [totalRecords]="totalRecords" 
+                        scrollHeight="450px">
+                            <ng-template pTemplate="caption">
+                                <div style="text-align: right;margin-left:-6px !important;">
+                                    <p-multiSelect [maxSelectedLabels]="2" [options]="uomHeaders" optionLabel="header" [(ngModel)]="selectedColumns" [resetFilterOnHide]="true" 
+                                                   [style]="{minWidth: '200px'}" style="float:left" (onChange)="columnsChanges()"></p-multiSelect>
+                                    <button type="button" class="btn btn-primary " matTooltipPosition="above" matTooltip="Download All Data"   pButton icon="fa-download"
+                                            iconPos="left" label="Export All Data" (click)="dt.exportCSV()"></button>
+                                    <button type="button" class="btn btn-primary " matTooltipPosition="above" matTooltip="Download Selected"   pButton icon="fa-download"
+                                            iconPos="left" label="Export Selection Only" (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                    <div class="excel-upload  excel-upload-cstm">
+
+                                        <input type="file" name="upload[]" id="upload" class="uploaddoc upload-file"
+                                               accept=".xlsx, .xls, .csv">
+                                        <label>
+                                           
+                                            <!--<span matTooltip="Upload Data (Excel)">
+                        <i class="fa fa-upload"></i>
+                    </span>-->
+                                        </label>
+                                        &nbsp; &nbsp;
+                                        <button class="btn btn-primary" matTooltipPosition="above" matTooltip="Download Sample file" matTooltipPosition="above"    (click)="sampleExcelDownload()">Sample File Download</button>
+                                    </div>
+
+                                </div>
+                                <br />
+                            </ng-template>
+                            
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width:120px" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th style="width:200px;position:sticky" *ngIf="selectedColumns.length> 0"> Actions</th>
+                                </tr>
+                                <tr>
+                                    <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                    </th>
+                                    <th style="width:200px;position:sticky"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData" pReorderableRowHandle>
+                                    <td style="width:120px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle data-toggle="modal" data-target="#view" (dblclick)="viewSelectedRow(rowData)">
+                                        {{
+col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?
+                                        (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]
+                                        }}
+                                    </td>
+                                    <td style="width:200px" *ngIf="selectedColumns.length> 0">
+                                        <!--<p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{rowIndex}}" (onChange)="changeStatus(rowData)"></p-inputSwitch>-->
+                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+
+                                        <span data-toggle="modal" data-target="#view">
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" matTooltip="View" (click)="viewSelectedRow(rowData)" data-target="#view" data-toggle="modal">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                        <button class="btn-edit" mat-icon-button (click)="editJobType(rowData)" data-target="#addJobType" data-toggle="modal" matTooltip="Edit">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                        <button class="btn-delete" mat-icon-button matTooltip="Delete" data-target="#delete" data-toggle="modal" (click)="delete(rowData)">
+                                            <mat-icon color="warn">delete</mat-icon>
+                                        </button>
+                                        <button class="btn-history" mat-icon-button matTooltip="History" data-target="#contentHist" data-toggle="modal" (click)="getAuditHistoryById(rowData)">
+                                            <mat-icon color="green">history</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #auditContent let-c="close" let-d="dismiss">
+                                <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+                                    <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <label id="footer" class="footer">Total:</label>
+                                <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                                <label id="footer" class="footer1">Pages Count:</label>
+                                <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #auditContent let-c="close" let-d="dismiss" data-backdrop="static">
+    <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+        <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+    </div>
+</ng-template>
+
+
+<div *ngIf="selectedRowforDelete" #delete id="delete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    Job Type:
+                    <span class="new-label">{{selectedRowforDelete.jobTypeName}}</span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteConformation('Yes')">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteConformation('No')">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div #addJobType id="addJobType" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add' }} Job Type  </h4>
+            </div>
+            <div class="modal-body">
+                <form #JobType="ngForm">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="jobTypeName" class="control-label">
+                                    Job Type
+                                    <span class="clr-red">*</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <p-autoComplete field="jobTypeName" [(ngModel)]="addNewJobType.jobTypeName" 
+                                    (onSelect)="selectedJobType($event)" name="jobTypeName"  (onBlur)="onBlur($event)"
+                                    (onKeyUp)="checkJobTypeExists('jobTypeName', $event.target.value)" 
+                                    [suggestions]="jobTypeList" (completeMethod)="filterJobTypes($event)" 
+                                    [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                                </p-autoComplete>
+                                <div *ngIf="disableSaveForJobTypeMSG" class="clr-red">Already Exists</div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="jobTypeMemo" class="control-label">
+                                    Memo
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" name="jobTypeMemo" class="form-control" #jobTypeMemo="ngModel" [(ngModel)]="addNewJobType.jobTypeMemo" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="checkbox-cstm">
+                                <label>
+                                    <input type="checkbox" name="isActive" [(ngModel)]="addNewJobType.isActive">
+                                    <span class="cr">
+                                        <i class="cr-icon pi pi-check"></i>
+                                    </span>
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" [disabled]="JobType.invalid || disableSaveForJobType" (click)="saveJobType();"> {{isEdit ? 'Update' : 'Save' }}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetJobTypeForm()">Close</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div *ngIf="existingRecordsResponse" id="duplicateRecords" #duplicateRecords class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Duplicate Records</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive rro-table-cstm">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Job Type</th>
+                                <th>Memo</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="existingRecordsResponse.length> 0">
+                            <tr *ngFor="let ext of existingRecordsResponse; let i = index;">
+
+                                <td>{{ext.jobTypeName}}</td>
+                                <td>{{ext.jobTypeMemo}}</td>
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog"data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">History of Job Type</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive rro-table-cstm">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>JobType</th>
+                                <th>Memo</th>
+                                <th>Is Active</th>
+                                <th>Updated By</th>
+                                <th>Updated Time</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="auditHistory.length> 0">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'jobTypeName', audit.jobTypeName)  ? 'black' : 'red'  }">{{audit.jobTypeName}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'jobTypeMemo', audit.jobTypeMemo)  ? 'black' : 'red'  }">{{audit.jobTypeMemo}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                                <td>{{audit.updatedBy}}</td>
+                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div *ngIf="viewRowData" #view class="modal fade " id="view" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="" name="" (click)="resetViewData()">×</button>
+                <h4 class="modal-title">Job Type Details</h4>
+            </div>
+            <div class="modal-body viewform ">
+                <div class="col-sm-12">
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Job Type: </b>
+                        </span>
+                        <span class="value">{{ viewRowData.jobTypeName}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Memo: </b>
+                        </span>
+                        <span class="value">{{ viewRowData.jobTypeMemo}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Is Active</b>
+                        </span>
+                        <span class="value">{{viewRowData.isActive === true ? 'Yes' : 'No'}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Created By: </b>
+                        </span>
+                        <span class="value">{{viewRowData.createdBy }}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Created Date: </b>
+                        </span>
+                        <span class="value">{{viewRowData.createdDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Updated By: </b>
+                        </span>
+                        <span class="value">{{viewRowData.updatedBy}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Updated Date: </b>
+                        </span>
+                        <span class="value">{{viewRowData.updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+                    </p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="" name="" (click)="resetViewData()">Close</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<ng-template #helpText class="modal fade" id="help-popup" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+
+            <h4 class="modal-title">Help text about the page</h4>
+        </div>
+        <div class="modal-body">
+            <p>Sample Point 1 about Page Description</p>
+            <p>Sample Point 2 about Page Description</p>
+            <p>Sample Point 3 about Page Description</p>
+            <p>Sample Point 4 about Page Description</p>
+            <p>Sample Point 5 about Page Description</p>
+            <hr />
+            <p>
+                <b>
+                    Excell format to upload the Data -
+                    <a href="documents/action-table-format.xlsx" class="clr-red">Download</a>
+                </b>
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal" (click)="dismissModel()">Close</button>
+        </div>
+    </div>
+</ng-template>

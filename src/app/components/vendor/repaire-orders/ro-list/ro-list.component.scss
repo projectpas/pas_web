@@ -1,0 +1,27 @@
+﻿.status-radio label {
+    text-align: left;
+    width: 140px;
+    margin-right: 0;
+    font-weight: normal;
+}
+input.hidePlaceHolder {
+    color: transparent !important;
+}
+input.hidePlaceHolder:focus,
+input.hidePlaceHolder:hover,
+input.hidePlaceHolder:active {
+    color: #000 !important;
+}
+#roView .modal-body p .label {
+    width: 40% !important;
+}
+#roView .modal-body p .value {
+    width: 60% !important;
+}
+.roview-table-cstm table.table-bordered thead tr th {
+    min-width: 70px !important;
+}
+
+.red {
+    background-color:#ED2939 !important;
+}

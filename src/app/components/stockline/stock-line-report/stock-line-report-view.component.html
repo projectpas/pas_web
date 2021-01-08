@@ -1,0 +1,97 @@
+﻿<div>
+    <div class="inline-block display-flex">
+        <h3 class="po-head lead">Stock Line Report</h3>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <!--<a matTooltip="Stock Line Report"
+           class="plusicon-cstm new-margin"
+           [routerLink]="[
+            '/workordersmodule/workorderspages/app-work-order-add'
+          ]">
+            <i class="fa fa-plus-circle fa-lg"></i>
+        </a>-->
+    </div>
+    <p-table #dt
+             class="rpo-table-cstm rro-table-cstm"
+             [value]="stockLineReportList"
+             [first]="0"
+             [rows]="pageSize"
+             [paginator]="true"
+             [pageLinks]="3"
+             [rowsPerPageOptions]="[10, 20, 50, 100]"
+             [columns]="headers"
+             selectionMode="multiple"
+             expandableRows="true"
+             rowExpandMode="single"
+             [lazy]="true"
+             (onLazyLoad)="loadData($event)"
+             [resizableColumns]="true"
+             [reorderableColumns]="true"
+             [totalRecords]="totalRecords"
+             [scrollable]="true"
+             [metaKeySelection]="true"
+             scrollHeight="450px">
+        <ng-template pTemplate="caption">
+            <div style="text-align: right;margin-left:-6px !important;min-height: 30px;">
+
+                <button type="button"
+                        class="btn btn-primary "
+                        pButton
+                        icon="fa-download"
+                        iconPos="left"
+                        label="Download" matTooltip="Download" matTooltipPosition="above"
+                        (click)="downloadStockLineReport()"></button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:130px">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+
+                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                    [pSortableColumn]="col.field" style="text-align:center;">
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+            </tr>
+            <tr>
+                <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <!-- <input type="text" style="width:100%;" pInputText   (keyup)="filterData($event)"> -->
+                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch($event.target.value, col.field , 'contains' )">
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body"
+                     let-rowData
+                     let-rowIndex="rowIndex"
+                     let-expanded="expanded"
+                     let-columns="columns">
+            <tr class="ui-widget-header">
+                <td *ngFor="let col of columns" style="text-overflow: ellipsis; overflow: hidden;">
+                    {{rowData[col.field]}}
+                </td>
+
+
+
+
+            </tr>
+
+        </ng-template>
+        <ng-template pTemplate="summary" id="footer">
+            <label id="footer" class="footer">Total:</label>
+            <input style="width: 5%;"
+                   [(ngModel)]="totalRecords"
+                   [disabled]="true"
+                   pInputText
+                   type="text" />
+            &nbsp;&nbsp;
+            <label id="footer" class="footer1">Pages Count:</label>
+            <input style="width: 5%;"
+                   [(ngModel)]="totalPages"
+                   [disabled]="true"
+                   pInputText
+                   type="text" />
+        </ng-template>
+    </p-table>
+</div>

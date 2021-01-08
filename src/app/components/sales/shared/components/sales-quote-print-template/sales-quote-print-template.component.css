@@ -1,0 +1,77 @@
+.t0 td {
+             
+  border: 1px solid #999; 
+  -webkit-print-color-adjust: exact; 
+  
+      }
+      .t1 .td1, .t1 .td3 {
+          padding-right: 30px;
+      }
+      .t1 .td2{
+          padding-right: 100px;
+      }
+      .t4 th, .t3 th{
+          background: #4298ff;  
+          -webkit-print-color-adjust: exact; 
+          color: #FFF;
+          
+          padding: 5px;
+      }
+      .t4 th{
+       border: 1px solid #999;
+
+      }
+      .t2 th{
+          background: #c7c6c6;  
+          color: #000;
+          padding: 5px;
+          border: 1px solid #999;
+          -webkit-print-color-adjust: exact; 
+      }
+      .t2{
+          border: 1px solid #999;   
+          -webkit-print-color-adjust: exact; 
+          margin-top: 20px;
+      }
+     .t4 td{
+          border: 1px solid #999;
+          padding: 5px; 
+          -webkit-print-color-adjust: exact; 
+  
+      }
+      .t2 td {
+          border-bottom: 1px solid #999;
+          -webkit-print-color-adjust: exact; 
+          border-left: 1px solid #999;
+          padding: 5px;
+      }
+      
+      .t2 .th2, .t2 .td2{
+          width: 265px;
+      }
+      .t3 .td2{
+          border: 1px solid #999; 
+          min-width: 100px;
+          -webkit-print-color-adjust: exact; 
+  
+      }
+      .t2 td{
+          height: 25px;
+      }
+     .t2 td.blank {
+      border: 0;
+      }
+      .t3{
+       width: 100%;
+       margin-bottom: 20px;
+     }
+     .t3 th{
+       font-size: 12px !important
+     }
+     .t4 {
+       margin-top: 20px
+     }
+
+     table {
+       font-size: 12px !important;
+     }

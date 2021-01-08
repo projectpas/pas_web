@@ -1,0 +1,43 @@
+﻿.nonstock-form label {
+    text-align: left;
+}
+.control-label {
+    margin-top: 10px;
+    text-align: left;
+    width: 150px !important;
+    font-weight: 500;
+}
+
+
+.radio-value {
+    margin-top: 10px;
+    margin-left: -69px;
+}
+.spacing-label {
+    margin-left: 6px;
+}
+.new-checkbox {
+    margin-top: 10px !important;
+    margin-left: -39px;
+}
+label{
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+  }
+.checkbox-cstm label {
+    width: 135px !important;
+}
+.form-horizontal .control-label {
+    font-weight: normal !important;
+  }
+  .status-radio {
+    padding: 10px;
+  }
+  @media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }    
+}

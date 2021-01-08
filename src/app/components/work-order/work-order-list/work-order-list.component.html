@@ -1,0 +1,1115 @@
+﻿<div *ngIf="!isSubWorkOrder">
+
+    <!-- <div class="inline-block display-flex">
+        <h3 class="po-head lead">Work Order List</h3>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <a matTooltip="Create Work Order" class="plusicon-cstm new-margin" [routerLink]="[
+            '/workordersmodule/workorderspages/app-work-order-add'
+          ]">
+            <i class="fa fa-plus-circle fa-lg"></i>
+        </a>
+    </div> -->
+
+    <div class="card new-card">
+        <div class="card-header bg-primary new-card-header">
+          <div class="row">
+            <div class="col">
+              <h4 class="new-card-heading">Work Order List</h4>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="btn-sm new-btn-primary"
+                [routerLink]="['/workordersmodule/workorderspages/app-work-order-add']"
+              >
+              Create Work Order
+              </button>
+            </div>
+          </div>
+        </div>
+
+    
+
+    <div class="card-body new-card-body">
+    <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="workOrderData" [first]="0"
+             [rows]="pageSize" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
+             [columns]="selectedColumns" selectionMode="multiple" expandableRows="true" rowExpandMode="single" [lazy]="true"
+             (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
+             [totalRecords]="totalRecords" [scrollable]="true" [metaKeySelection]="true"
+             [dataKey]="workOrderPartListDataKeys" scrollHeight="450px" (onPage)="pageIndexChange($event)">
+        <ng-template pTemplate="caption">
+            <div class="row">
+                <div class="col">
+                <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
+                               [(ngModel)]="selectedColumns" [style]="{ minWidth: '200px' }" style="float:left"
+                               (onChange)="columnsChanges()"></p-multiSelect>
+                </div>
+                <div class="col">
+                    <div
+                      style="width: auto !important; float: right;"
+                      class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                    >
+                    <i class="fa fa-search"></i>
+                    <input type="text" pInputText size="50" class="form-control"
+                           (input)="globalSearch($event.target.value)" placeholder=" Filter" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+                        style="padding: 5px 12px !important;" label="Export Data" matTooltip="Download Data"
+                        matTooltipPosition="above" (click)="dt.exportCSV()"></button>
+                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+                        label="Export Selected Data" style="padding: 5px 12px !important;"
+                        matTooltip="Download Selected Data" matTooltipPosition="above"
+                        (click)="dt.exportCSV({selectionOnly:true})"></button>
+                <!-- <div class="excel-upload  excel-upload-cstm">
+                  <input
+                    type="file"
+                    name="upload[]"
+                    id="upload"
+                    (change)="customExcelUpload($event)"
+                    class="uploaddoc upload-file"
+                    accept=".xlsx, .xls, .csv"
+                  />
+                  <label for="upload">
+                    <span matTooltip="Upload Data (Excel)">
+                      <i class="fa fa-upload"></i>
+                    </span>
+                  </label>
+                  &nbsp; &nbsp;
+                  <a
+                    matTooltip="Create Customer"
+                    class="btn btn-success nobg btn-cstm"
+                    [routerLink]="[
+                      '/workordersmodule/workorderspages/app-work-order-add'
+                    ]"
+                    ><span><i class="fa fa-plus"></i></span
+                  ></a>
+                </div> -->
+            </div>
+            <div class="col">
+                <div class="">
+                  <div
+                    class="col"
+                    style="width: 656px; float: right; padding-top: 3px;"
+                  >
+                    <div class="form-group">
+                      <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
+                      <div
+                        class="pull-left"
+                        style="margin-top: 4px; margin-right: 15px;"
+                      >
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="viewType" class="form-control" value="mpn" [(ngModel)]="viewType"
+                                       (click)="changeOfStatus('','mpn')">
+                                <span class="checkmark"></span>MPN View
+                            </label>
+                        </div>
+                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="viewType" class="form-control" value="wp" [(ngModel)]="viewType"
+                                       (click)="changeOfStatus('','wp')">
+                                <span class="checkmark"></span>WO View
+                            </label>
+                        </div>
+        
+                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="woStatus" class="form-control" value="open"
+                                       [(ngModel)]="currentStatus" (click)="changeOfStatus('open', '')">
+                                <span class="checkmark"></span>Open
+                            </label>
+                        </div>
+                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="woStatus" class="form-control" value="closed"
+                                       [(ngModel)]="currentStatus" (click)="changeOfStatus('closed', '')">
+                                <span class="checkmark"></span>Closed
+                            </label>
+                        </div>
+                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="woStatus" class="form-control" value="canceled"
+                                       [(ngModel)]="currentStatus" (click)="changeOfStatus('canceled', '')">
+                                <span class="checkmark"></span>Cancelled
+                            </label>
+                        </div>
+                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                            <label class="radio-cstm wauto">
+                                <input type="radio" name="woStatus" class="form-control" value="all" [(ngModel)]="currentStatus"
+                                       (click)="changeOfStatus('all', '')">
+                                <span class="checkmark"></span>All
+                            </label>
+                        </div>
+                        </div>
+                        </div>
+        
+        
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:140px">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field"
+                    style="text-align:center;">
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th style="width:80px;position:sticky" *ngIf="selectedColumns.length > 0">
+                    Actions
+                </th>
+            </tr>
+            <tr>
+                <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <!-- <input type="text" style="width:100%;" pInputText   (keyup)="filterData($event)"> -->
+                    <input *ngIf="col.field !== 'openDate'
+                    && col.field !== 'customerRequestDateType'
+                    && col.field !== 'promisedDateType'
+                    && col.field !== 'estimatedShipDateType'
+                    && col.field !== 'estimatedCompletionDateType'" style="width:100%;" pInputText type="text"
+                           (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch($event.target.value, col.field , 'contains' )">
+                    <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;"
+                           (change)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input type="date" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate"
+                           style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input type="date" *ngIf="col.field == 'promisedDateType'" name="promisedDate" style="width:100%;"
+                           (change)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input type="date" *ngIf="col.field == 'estimatedShipDateType'" name="estimatedShipDate"
+                           style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input type="date" *ngIf="col.field == 'estimatedCompletionDateType'" name="estimatedCompletionDate"
+                           style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
+                </th>
+                <th style="width:80px;position:sticky"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded" let-columns="columns">
+            <!-- <tr class="ui-widget-header"> -->
+            <tr class="ui-widget-header" [pSelectableRow]="rowData" pReorderableRowHandle
+                (dblclick)="openViewOnDbl(rowData)">
+                <!--  <td>
+                   <a [pRowToggler]="rowData">
+                     <i
+                       (click)="getWorkOrderPartListByWorkOrderId(rowData)"
+                       [ngClass]="
+                         expanded
+                           ? 'fa fa-fw fa-chevron-circle-down'
+                           : 'fa fa-fw fa-chevron-circle-right'
+                       "
+                     ></i>
+                     <span> {{ rowData.workOrderNum }}</span>
+                   </a>
+
+                 </td> -->
+                <!-- [ngStyle]="{'color': convertDate(col.field , rowData)   == 'Multiple' ? 'green' : 'red'  }" -->
+                <td *ngFor="let col of columns" style="text-overflow: ellipsis; "
+                    [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above" [matTooltipDisabled]="rowData['partNoType'] != 'Multiple' ||
+                    rowData['workScopeType'] != 'Multiple' || rowData['priorityType'] != 'Multiple'||
+                    rowData['pnDescriptionType'] != 'Multiple' || rowData['stageType'] != 'Multiple' ||
+                    rowData['customerRequestDateType'] != 'Multiple' || rowData['estimatedShipDateType'] != 'Multiple' ||
+                    rowData['customerRequestDateType'] != 'Multiple' || rowData['estimatedCompletionDateType'] != 'Multiple'
+                    " [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
+                    {{convertDate(col.field , rowData)}}
+                </td>
+                <td style="width:80px" *ngIf="selectedColumns.length > 0">
+                    <!-- <p-inputSwitch [(ngModel)]="rowData['isActive']"
+                                   name="isActive{{ rowIndex }}"
+                                   (onChange)="changeStatus(rowData)"></p-inputSwitch> -->
+                    <span data-toggle="modal" data-target="#viewWorkOrder">
+                        <a class="btn nobg btn-view-cstm"
+                           (click)="view(rowData)" matTooltip="View" matTooltipPosition="above">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </span>
+                    <span>
+                        <a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit"
+                           matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                    </span>
+                    <!-- <span data-toggle="modal" data-target="#contentHist"><a class="btn nobg btn-hist-cstm"
+                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
+                    <!-- <span data-toggle="modal" data-target="#viewWorkOrder">
+                        <a class="btn btn-info boxed-float-btn nobg"
+                           data-toggle="tooltip"
+                           (click)="view(rowData)">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                    </span> -->
+                    <!-- <button class="btn-edit ptable-wo-btns"
+                            mat-icon-button
+                            (click)="edit(rowData)"
+                            matTooltip="Edit">
+                        <mat-icon>edit</mat-icon>
+                    </button> -->
+                    <!-- <button class="btn-delete ptable-wo-btns"
+                            mat-icon-button
+                            matTooltip="Delete"
+                            data-target="#delete"
+                            data-toggle="modal"
+                            (click)="delete(rowData)">
+                        <mat-icon color="warn">delete</mat-icon>
+                    </button> -->
+                    <!-- <button class="btn-history ptable-wo-btns"
+                            mat-icon-button
+                            matTooltip="History"
+                            data-target="#contentHist"
+                            data-toggle="modal"
+                            (click)="getAuditHistoryById(rowData)">
+                        <mat-icon color="green">history</mat-icon>
+                    </button>  dt._totalRecords-->
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" id="footer">
+            <label id="footer" class="footer">Total:</label>
+            <input style="width: 5%;" [(ngModel)]=" totalRecords" [disabled]="true" pInputText type="text" />
+            &nbsp;&nbsp;
+            <label id="footer" class="footer1">Pages Count:</label>
+            <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
+                   type="text" />
+        </ng-template>
+        <!-- <ng-template pTemplate="rowexpansion" let-rowData let-rowIndex="rowIndex">
+                  <tr>
+        [(ngModel)]="totalPages"
+                  </tr>
+                </ng-template> -->
+    </p-table>
+</div>
+</div>
+</div>
+<!-- Modal -->
+<div id="viewWorkOrder" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="closeView.emit(false); workOrderId = 0;">
+                    &times;
+                </button>
+                <h4 class="modal-title">Work Order View</h4>
+            </div>
+
+            <div class="card-body" *ngIf="workOrderId">
+                <app-work-view-component [workOrderId]="workOrderId" [currencyList]="currencyList" [employeesOriginalData]="employeesOriginalData"></app-work-view-component>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeView.emit(false); workOrderId = 0;">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isSubWorkOrder">
+    <h4 class="modal-title">Work Order View</h4>
+    <div class="card-body" *ngIf="viewWorkOrderHeader">
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive default-bg clear">
+
+                    <div>
+                        <div class="col-md-6">
+
+                            <p>
+                                <span class="label"><b> MPN Type : </b></span><span class="value">
+                                    {{
+                  viewWorkOrderHeader.singleMPN
+                                    }}
+                                </span>
+
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+
+
+                            <p>
+                                <span class="label"><b> Work Order Type : </b></span><span class="value">
+                                    {{
+                      viewWorkOrderHeader.workOrderType
+                                    }}
+                                </span>
+
+                            </p>
+                        </div>
+                    </div>
+                    <hr style="clear: both;">
+
+                    <div>
+                        <div class="col-sm-3">
+                            <p>
+                                <span class="label"><b>WorkOrder Number: </b></span><span class="value">
+                                    {{
+                            viewWorkOrderHeader.workOrderNumber
+                                    }}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Open Date: </b></span><span class="value">
+                                    {{
+                            viewWorkOrderHeader.openDate | date: 'MM/dd/yyyy'
+                                    }}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>WO Status: </b></span><span class="value">{{ viewWorkOrderHeader.woStatus }}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p>
+                                <span class="label"><b>Customer Name: </b></span><span class="value">
+                                    {{
+                            viewWorkOrderHeader.customerName
+                                    }}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Customer Code: </b></span><span class="value"></span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Customer Ref: </b></span><span class="value"></span>
+                            </p>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <p>
+                                <span class="label"><b>Contract: </b></span><span class="value">
+                                    {{
+                            viewWorkOrderHeader.isContractAvl
+                                    }}
+                                </span>
+                            </p>
+                            <p *ngIf="isContractAvl">
+                                <span class="label"> <b>Contract Reference:</b> </span><span class="value">
+                                    {{
+                            viewWorkOrderHeader.contractReference
+                                    }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-sm-3">
+                            <p>
+                                <span class="label"><b>Credit Limit & Terms: </b></span><span class="value">
+                                    {{ viewWorkOrderHeader.creditTerm }} &
+                                    {{ viewWorkOrderHeader.creditLimit }}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Employee: </b></span><span class="value">{{ viewWorkOrderHeader.employee }}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Sales person: </b></span><span class="value">
+                                    {{
+                            viewWorkOrderHeader.salesperson
+                                    }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive" *ngIf="viewWorkOrderMPN" style="height: 300px;">
+                    <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+                           id="mpn-list-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">MPN *</th>
+                                <th rowspan="2">MPN Description *</th>
+                                <th rowspan="2">Revised MPN</th>
+                                <!-- <th rowspan="2">Work Scope *</th> -->
+                                <th rowspan="2">NTE</th>
+                                <th rowspan="2">Condition Id *</th>
+                                <th rowspan="2">Stock Line Num *</th>
+                                <th rowspan="2">Serial Num *</th>
+                                <th rowspan="2">CMM/Pub Ref</th>
+                                <!-- <th rowspan="2">Workflow ID </th> -->
+                                <th rowspan="2">Stage *</th>
+                                <th rowspan="2">Status *</th>
+                                <th rowspan="2">Priority *</th>
+                                <th rowspan="2">Customer Request Date *</th>
+                                <th rowspan="2">Promised Date *</th>
+                                <th rowspan="2">Est. Comp Date *</th>
+                                <th rowspan="2">Est. Ship Date *</th>
+                                <th colspan="2">Restrictions</th>
+                                <th rowspan="2">Tech Name</th>
+                                <th rowspan="2">Tech Station</th>
+                                <th rowspan="2">Tear Down Report</th>
+                                <th colspan="2">TAT (Days)</th>
+                                <!-- <th rowspan="2"></th> -->
+                            </tr>
+                            <tr>
+                                <th>PMA</th>
+                                <th>DER</th>
+                                <th>Current</th>
+                                <th>Standard</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="mpn-row" style="display: table-row;"
+                                *ngFor="let p of viewWorkOrderMPN; let i = index">
+                                <td>
+                                    {{ p.partNumber }}
+                                </td>
+                                <td>
+                                    {{ p.partDescription }}
+                                </td>
+                                <td>
+                                    {{ p.revisedPartNo }}
+                                </td>
+                                <td>
+                                    {{ p.nte }}
+                                </td>
+                                <td>
+                                    {{ p.condition }}
+                                </td>
+                                <td>
+                                    {{ p.stockLine }}
+                                </td>
+
+                                <td>
+                                    {{ p.serialNumber }}
+                                </td>
+
+                                <td>
+                                    {{ p.publicationId }}
+                                </td>
+                                <td>
+                                    {{ p.workOrderStage }}
+                                </td>
+                                <td>
+                                    {{ p.workOrderStatus }}
+                                </td>
+                                <td>
+                                    {{ p.priority }}
+                                </td>
+                                <td>
+                                    {{ p.customerRequestDate | date: 'MM/dd/yyyy' }}
+                                </td>
+                                <td>
+                                    {{ p.promisedDate | date: 'MM/dd/yyyy' }}
+                                </td>
+                                <td>
+                                    {{ p.estimatedShipDate | date: 'MM/dd/yyyy' }}
+                                </td>
+
+                                <td>
+                                    {{ p.estimatedCompletionDate | date: 'MM/dd/yyyy' }}
+                                </td>
+
+                                <td>
+                                    {{ p.isDER }}
+                                </td>
+                                <td>
+                                    {{ p.isPMA }}
+                                </td>
+                                <td>
+                                    {{ p.firstName }}
+                                </td>
+                                <td>
+                                    {{ p.techStation }}
+                                </td>
+                                <td>
+                                    {{ p.tearDownReport }}
+                                </td>
+                                <td>
+                                    {{ p.tatDaysCurrent }}
+                                </td>
+                                <td>
+                                    {{ p.tatDaysStandard }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" *ngIf="showMPN">
+            <div class="card-body">
+                <p-dropdown [options]="mpnPartNumbersList" placeholder="Select Part Number" class="p-dropdown-custom-md"
+                            (onChange)="changeofMPN($event.value)">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body" *ngIf="showTableGrid">
+                <p-tabView class="pas-tabview" [activeIndex]="activeIndex">
+
+                    <p-tabPanel *ngIf="workFlowId" header="Work Flow">
+                        <app-workflow-list [isWorkOrder]="isWorkOrder" [workFlowId]="workFlowId"></app-workflow-list>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Material List">
+                        <div class="equipment-tab-content">
+                            <div class="x_panel" *ngIf="workOrderMaterialList">
+                                <div class="tab-content">
+                                    <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                        <table class="table table-bordered ">
+                                            <thead>
+                                                <tr>
+
+                                                    <th class="text-center">Part Number </th>
+                                                    <th class="text-center">Part Description</th>
+                                                    <th class="text-center">Alternate PN</th>
+                                                    <th class="text-center">SerialNumber</th>
+                                                    <th class="text-center">Provision</th>
+                                                    <th class="text-center">OEM</th>
+                                                    <th class="text-center">Control</th>
+                                                    <th class="text-center">Condition</th>
+                                                    <th class="text-center">Item Type</th>
+                                                    <th class="text-center">Qunatity Requried</th>
+                                                    <th class="text-center">Qunatity Reserved</th>
+                                                    <th class="text-center">Qunatity TurnIn</th>
+                                                    <th class="text-center">Qunatity Issued</th>
+                                                    <th class="text-center">Qunatity BackOrder</th>
+                                                    <th class="text-center">Qunatity Remaining</th>
+                                                    <th class="text-center">Unit Cost</th>
+                                                    <th class="text-center">Extended Cost</th>
+                                                    <th class="text-center">Currency</th>
+                                                    <th class="text-center">Purchase OrderNumber</th>
+                                                    <th class="text-center">Repair OrderNumber</th>
+                                                    <th class="text-center">Part Quantity OnHand</th>
+                                                    <th class="text-center">Part Quantity Available</th>
+                                                    <th class="text-center">Part Quantity OnOrder</th>
+                                                    <th class="text-center">WorkOrder Number</th>
+                                                    <th class="text-center">Sub WorkOrder</th>
+                                                    <th class="text-center">SalesOrder</th>
+                                                    <th class="text-center">Condition</th>
+                                                    <th class="text-center">TimeLife</th>
+                                                    <th class="text-center">Ware House</th>
+                                                    <th class="text-center">Location</th>
+                                                    <th class="text-center">Shelf</th>
+                                                    <th class="text-center">Bin</th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <tr *ngFor="let m  of workOrderMaterialList; let i=index;">
+                                                    <td>{{m.partNumber}}</td>
+                                                    <td>{{m.partDescription}}</td>
+                                                    <td>{{m.altPartNumber}}</td>
+                                                    <td>{{m.serialNumber}}</td>
+                                                    <td>{{m.provision}}</td>
+                                                    <td>{{m.oem}}</td>
+                                                    <td>{{m.control}}</td>
+                                                    <td>{{m.condition}}</td>
+                                                    <td>{{m.itemType}}</td>
+                                                    <td>{{m.qunatityRequried}}</td>
+                                                    <td>{{m.qunatityReserved}}</td>
+                                                    <td>{{m.qunatityTurnIn}}</td>
+                                                    <td>{{m.qunatityIssued}}</td>
+                                                    <td>{{m.qunatityBackOrder}}</td>
+                                                    <td>{{m.qunatityRemaining}}</td>
+                                                    <td>{{m.unitCost}}</td>
+                                                    <td>{{m.extendedCost}}</td>
+                                                    <td>{{m.currency}}</td>
+                                                    <td>{{m.purchaseOrderNumber}}</td>
+                                                    <td>{{m.repairOrderNumber}}</td>
+                                                    <td>{{m.partQuantityOnHand}}</td>
+                                                    <td>{{m.partQuantityAvailable}}</td>
+                                                    <td>{{m.partQuantityOnOrder}}</td>
+                                                    <td>{{m.receiver}}</td>
+                                                    <td>{{m.workOrderNumber}}</td>
+                                                    <td>{{m.subWorkOrder}}</td>
+                                                    <td>{{m.salesOrder}}</td>
+                                                    <td>{{m.timeLife}}</td>
+                                                    <td>{{m.wareHouse}}</td>
+                                                    <td>{{m.location}}</td>
+                                                    <td>{{m.shelf}}</td>
+                                                    <td>{{m.bin}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+
+                    <p-tabPanel header="Labor">
+
+                        <p-accordion [multiple]="true">
+
+                            <p-accordionTab header="{{x.task}}" *ngFor="let x of workOrderLaborList; let i = index;">
+
+                                <div class="equipment-tab-content">
+                                    <div class="x_panel" *ngIf="workOrderLaborList">
+                                        <div class="tab-content">
+                                            <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                                <table class="table table-bordered ">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">Expertise</th>
+                                                            <th class="text-center">Description</th>
+
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>{{x.expertise}}</td>
+                                                            <td>{{x.hours}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                    </div>
+                                </div>
+                            </p-accordionTab>
+
+
+
+
+                        </p-accordion>
+
+
+
+                    </p-tabPanel>
+                    <p-tabPanel header="Tools">
+
+                        <div class="equipment-tab-content" *ngIf="workOrderAssetList">
+                            <div class="x_panel">
+                                <div class="tab-content">
+                                    <div class="table-responsive" id="workflow-attributes-block">
+                                        <table class="table table-bordered ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Tool Id </th>
+                                                    <th class="text-center">Tool Name</th>
+                                                    <th class="text-center">Tool Description</th>
+                                                    <th class="text-center">Tool Type</th>
+                                                    <th class="text-center">Qty</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let asset of workOrderAssetList; let i=index;">
+                                                    <td>{{asset.assetId}}</td>
+                                                    <td>{{asset.name}}</td>
+                                                    <td>{{asset.description}}</td>
+                                                    <td>{{asset.assetTypeName}}</td>
+                                                    <td>{{asset.quantity}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+
+
+                    </p-tabPanel>
+
+
+                    <p-tabPanel header="Quote">
+
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+
+                    </p-tabPanel>
+                    <p-tabPanel header="Main Component">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Billing/Invocing">
+                        <div class="h-300" *ngIf="billing">
+                            <!-- <h3>No Data Found</h3> -->
+                            <app-work-order-billing [billingorInvoiceForm]="billing" [legalEntityList]="legalEntityList"
+                                                    [currencyList]="currencyList" [savedWorkOrderData]="savedWorkOrderData"
+                                                    [employeesOriginalData]="employeesOriginalData" [isEditBilling]="isEditBilling"
+                                                    (saveWOBilling)="saveWorkOrderBilling($event)" (updateWOBilling)="saveWorkOrderBilling($event)"
+                                                    [workOrderQuoteId]="workOrderQuoteId" [quoteExclusionList]="quoteExclusionList"
+                                                    [quoteMaterialList]="quoteMaterialList" [quoteFreightsList]="quoteFreightsList"
+                                                    [quoteChargesList]="quoteChargesList" [quoteLaborList]="quoteLaborList" [taskList]="taskList" [buildMethodDetails]="buildMethodDetails" [isViewMode]="isView"></app-work-order-billing>
+                        </div>
+                        <div class="h-300" *ngIf="!billing">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Shipping">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+
+                    <p-tabPanel header="Sub-WO">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+
+                    <p-tabPanel>
+                        <ng-template pTemplate="header" style="height: 36px; width: 134px;">
+                            Communication
+                            <i (click)="showOtherCommunicationOptions()" class="fa fa-caret-down" aria-hidden="true"></i>
+                            <div class="vertical-menu-wolist" *ngIf="communicationOptionShow">
+                                <a (click)="otherCommunicationOptionSelected('memo')"
+                                   style="color: #333333 !important">Memo</a>
+                                <a (click)="otherCommunicationOptionSelected('email')"
+                                   style="color: #333333 !important">Email</a>
+                                <a (click)="otherCommunicationOptionSelected('phone')"
+                                   style="color: #333333 !important">Phone</a>
+                                <a (click)="otherCommunicationOptionSelected('text')"
+                                   style="color: #333333 !important">Text</a>
+                            </div>
+
+                        </ng-template>
+                        <div>
+                            <div>
+                                <div *ngIf="selectedCommunicationOption == 'memo'">
+                                    <app-memo [workOrderId]="workOrderId"></app-memo>
+                                </div>
+                                <div *ngIf="selectedCommunicationOption == 'email'">
+                                    <app-email [workOrderId]="workOrderId"></app-email>
+                                </div>
+                                <div *ngIf="selectedCommunicationOption == 'phone'">
+                                    <app-text [workOrderId]="workOrderId"></app-text>
+                                </div>
+                                <div *ngIf="selectedCommunicationOption == 'text'">
+                                    <app-phone [workOrderId]="workOrderId"></app-phone>
+                                </div>
+                            </div>
+                        </div>
+                    </p-tabPanel>
+
+
+                    <p-tabPanel header="Documents">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+
+
+                    <p-tabPanel header="Work Complete">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+
+
+
+                    <p-tabPanel header="WO Analysis">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+
+
+                    <p-tabPanel header="Labor Analysis">
+                        <div class="h-300">
+                            <h3>No Data Found</h3>
+                        </div>
+                    </p-tabPanel>
+                    <p-tabPanel header="Tear Down">
+                        <div class="h-300">
+                            <h3>workFlowWorkOrderId : {{workFlowWorkOrderId }}</h3>
+
+                            <app-teardown-overview *ngIf="workFlowWorkOrderId"
+                                                   [workFlowWorkOrderId1]="workFlowWorkOrderId"></app-teardown-overview>
+                        </div>
+                    </p-tabPanel>
+
+
+                    <p-tabPanel>
+                        <ng-template pTemplate="header" style="height: 36px; width: 134px;">
+                            Other Options
+                            <i (click)="showOtherOptions()" class="fa fa-caret-down" aria-hidden="true"></i>
+                            <div class="vertical-menu-wolist" *ngIf="otherOptionShow">
+                                <a (click)="otherOptionSelected('freight')"
+                                   style="color: #333333 !important">Freight</a>
+                                <a (click)="otherOptionSelected('contactGrid')"
+                                   style="color: #333333 !important">Contact Grid</a>
+                                <a (click)="otherOptionSelected('accounting')"
+                                   style="color: #333333 !important">Accounting</a>
+                                <a (click)="otherOptionSelected('charges')"
+                                   style="color: #333333 !important">Charges</a>
+                                <a (click)="otherOptionSelected('exclusion')"
+                                   style="color: #333333 !important">Exclusion</a>
+                            </div>
+
+                        </ng-template>
+
+                        <div>
+
+                            <div class="equipment-tab-content" *ngIf="selectedOtherSubTask === 'charges'">
+                                <div class="x_panel" *ngIf="workOrderChargesList">
+                                    <div class="tab-content">
+                                        <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                            <!-- <table class="table table-bordered ">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">Charge Type </th>
+                                                        <th class="text-center">Description</th>
+                                                        <th class="text-center">Quantity</th>
+                                                        <th class="text-center">Unit Cost</th>
+                                                        <th class="text-center">Extented Cost</th>
+                                                        <th class="text-center">Unit Price</th>
+                                                        <th class="text-center">Extended Price</th>
+                                                        <th class="text-center">vendorName</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr *ngFor="let w  of workOrderChargesList; let i=index;">
+                                                        <td>{{w.chargeType}}</td>
+                                                        <td>{{w.description}}</td>
+                                                        <td>{{w.quantity}}</td>
+                                                        <td>{{w.unitCost}}</td>
+                                                        <td>{{w.extendedCost}}</td>
+                                                        <td>{{w.unitPrice}}</td>
+                                                        <td>{{w.extendedPrice}}</td>
+                                                        <td>{{w.vendorName}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table> -->
+                                            <app-work-order-charges workFlowObject="[]" [isWorkOrder]="isWorkOrder"
+                                                                    [workOrderChargesList]="workOrderChargesList" [taskList]="taskList"
+                                                                    (refreshData)="getChargesListByWorkOrderId()"></app-work-order-charges>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div *ngIf="selectedOtherSubTask === 'exclusion'">
+                            <app-work-order-exclusions [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
+                                                       [workOrderExclusionsList]="workOrderExclusionsList" [taskList]="taskList"
+                                                       (refreshData)="getExclusionListByWorkOrderId()" [isView]="isView"></app-work-order-exclusions>
+
+                            <!-- <div class="equipment-tab-content">
+                                <div class="x_panel" *ngIf="workOrderExclusionsList">
+                                    <div class="tab-content">
+                                        <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                            <table class="table table-bordered ">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center">EPN</th>
+                                                        <th class="text-center">EPN Description</th>
+                                                        <th class="text-center">Quantity</th>
+                                                        <th class="text-center">Unit Cost</th>
+                                                        <th class="text-center">Extended Cost</th>
+                                                        <th class="text-center">Memo</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <tr *ngFor="let w  of workOrderExclusionsList; let i=index;">
+                                                        <td>{{w.epn}}</td>
+                                                        <td>{{w.epnDescription}}</td>
+                                                        <td>{{w.quantity}}</td>
+                                                        <td>{{w.unitCost}}</td>
+                                                        <td>{{w.extendedCost}}</td>
+                                                        <td>{{w.memo}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <br />
+                                </div>
+                            </div> -->
+
+                        </div>
+                        <div *ngIf="selectedOtherSubTask === 'freight'">
+                            <app-work-order-freight [freightForm]="freight" [workOrderFreightList]="workOrderFreightList"
+                                                    [savedWorkOrderData]="savedWorkOrderData" (refreshData)="getFreightListByWorkOrderId()" [taskList]="taskList" [isView]="isView">
+                            </app-work-order-freight>
+                        </div>
+                    </p-tabPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <!-- <p-tabPanel header="Publications">
+
+                         <div class="equipment-tab-content" >
+                             <div class="x_panel" *ngIf="workOrderPublicationList">
+                                 <div class="tab-content">
+                                     <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                         <table class="table table-bordered ">
+                                             <thead>
+                                                 <tr>
+                                                     <th class="text-center">Publication ID</th>
+                                                     <th class="text-center">Description</th>
+                                                     <th class="text-center">Type</th>
+                                                     <th class="text-center">Revision Date</th>
+                                                     <th class="text-center">Sequence</th>
+                                                     <th class="text-center">Source</th>
+                                                     <th class="text-center">AirCraft Manufacturer</th>
+                                                     <th class="text-center">AirCraft Model</th>
+                                                     <th class="text-center">AirCraft DashNumber</th>
+                                                     <th class="text-center">Location</th>
+                                                     <th class="text-center">VerifiedBy</th>
+                                                     <th class="text-center">VerifiedDate</th>
+                                                     <th class="text-center">Status</th>
+                                                 </tr>
+                                             </thead>
+
+                                             <tbody>
+                                               <tr *ngFor="let w  of workOrderPublicationList; let i=index;">
+                                                     <td>{{w.publicationName}}</td>
+                                                     <td>{{w.publicationDescription}}</td>
+                                                     <td>{{w.publicationType}}</td>
+                                                     <td>{{w.revisionDate | date: 'MM-dd-YYYY'}}</td>
+                                                     <td>{{w.sequence}}</td>
+                                                     <td>{{w.source}}</td>
+                                                     <td>{{w.airCraftManufacturer}}</td>
+                                                     <td>{{w.model}}</td>
+                                                     <td></td>
+                                                     <td>{{w.location}}</td>
+                                                     <td>{{w.verifiedBy}}</td>
+                                                     <td>{{w.verifiedDate | date: 'MM-dd-YYYY'}}</td>
+                                                     <td>{{w.status}}</td>
+                                                 </tr>
+                                             </tbody>
+                                         </table>
+                                     </div>
+                                 </div>
+                                 <div class="clear"></div>
+                                 <br />
+                                 <br />
+                                 <br />
+                                 <br />
+                             </div>
+                         </div>
+                     </p-tabPanel>  -->
+                    <!-- <p-tabPanel  header="Directions" >
+
+                        <div class="equipment-tab-content" >
+                            <div class="x_panel" *ngIf="workOrderDirectionList">
+                                <div class="tab-content">
+                                    <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                        <table class="table table-bordered ">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Action</th>
+                                                    <th class="text-center">Direction Name</th>
+                                                    <th class="text-center">Sequence</th>
+                                                    <th class="text-center">Memo</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                              <tr *ngFor="let w  of workOrderDirectionList; let i=index;">
+                                                    <td>{{w.action}}</td>
+                                                    <td>{{w.directionName}}</td>
+                                                    <td>{{w.sequence}}</td>
+                                                    <td>{{w.memo}}</td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <br />
+                                <br />
+                                <br />
+                                <br />
+                            </div>
+                        </div>
+                    </p-tabPanel> -->
+
+
+
+                </p-tabView>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xsm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Message</h4>
+                <!-- <p id="clockdiv" class="clockdiv"></p> -->
+            </div>
+            <div class="pad_msf">
+                <p *ngIf="warningID != 0" class="mar_o">
+                    <strong>Warning Message</strong>
+                    :{{warningMessage}}
+                </p>
+                <!-- <p *ngIf="warningMessage != undefined">Not able to create customer work because cuatomer having restrcitions</p> -->
+                <p *ngIf="restrictID != 0" class="mar_o">
+                    <strong>Restrcition Message</strong>
+                    {{restrictMessage}}
+                </p>
+                <p *ngIf=" restrictID != 0" class="mar_o">
+                    Not able to Edit Wo because this customer
+                    having restrictions
+                </p>
+            </div>
+            <div class="modal-footer" style="padding:10px;">
+                <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
+                        style="padding: 6px 12px !important;">
+                    Ok
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div> 

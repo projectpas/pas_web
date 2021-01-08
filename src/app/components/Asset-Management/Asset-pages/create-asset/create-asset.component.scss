@@ -1,0 +1,59 @@
+﻿block-bg2 {
+    border: 1px solid lightgray;
+    margin: 2px;
+}
+
+control-label-pad-30 {
+    margin-top: 10px;
+    text-align: left;
+    width: 100% !important;
+    font-weight: 500;
+    padding-left: 30px;
+}
+label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: 400;
+  }
+  .span-header-red {
+    color: red;
+    font-weight: bold;
+  }
+  
+  input[type='text'],
+  input[type='number'],
+  input[type='email'],
+  select,
+  textarea {
+    height: 24px !important;
+    border-radius: 5px !important;
+  }
+  
+  .po-head {
+    font-weight: 700;
+    font-size: 16px !important;
+    color: #295d92 !important;
+  }
+  
+  .fa-plus-circle.fa-lg {
+      color: green !important;
+  }
+  
+  @media (min-width: 768px) {
+      .col-md-3 {
+          max-width: 22%;
+          margin-right: 15px;
+      }
+  }
+  
+  
+  .btn-tbl-file-download { 
+    line-height: 7px !important;
+    width: 85px !important;
+    height: 19px;
+    border: 0;
+    color: #ffffff !important;
+    background: #337ab7;
+  }
+  

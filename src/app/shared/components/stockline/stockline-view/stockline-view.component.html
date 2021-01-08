@@ -1,0 +1,808 @@
+﻿<div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Stock List Details</h4>
+    </div>
+    <div class="modal-body viewform">
+        <form>            
+            <div class="form-row">
+                <div class="col-md-3">
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>General</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="isCustomerStock" [(ngModel)]="viewSLInfo.isCustomerStock" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Is Customer Stock
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>PN <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="partNumber" [(ngModel)]="viewSLInfo.partNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>PN Description</label>
+                                <input class="form-control" type="text" name="pnDescription" [(ngModel)]="viewSLInfo.partDescription" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Revised PN</label>
+                                <input class="form-control" type="text" name="revisedPart" [(ngModel)]="viewSLInfo.revisedPart" disabled>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="oem" [(ngModel)]="viewSLInfo.oem" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        OEM
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm">
+                                    <label style="width: 100%; margin-top: 10px;">
+                                        <input type="checkbox" name="isPMA" [(ngModel)]="viewSLInfo.isPMA" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        PMA
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm">
+                                    <label style="width: 100%; margin-top: 10px;">
+                                        <input type="checkbox" name="isDER" [(ngModel)]="viewSLInfo.isDER" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        DER
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Item Group</label>
+                                <input class="form-control" type="text" name="itemGroup" [(ngModel)]="viewSLInfo.itemGroup" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Condition <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="conditionId" [(ngModel)]="viewSLInfo.condition" disabled>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="isSerialized" [(ngModel)]="viewSLInfo.isSerialized" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Is Serialized
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-top: 35px;" *ngIf="viewSLInfo.isSerialized">
+                                <label>Serial Num <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="serialNumber" [(ngModel)]="viewSLInfo.serialNumber" disabled>
+                            </div>
+                            <div class="form-group" *ngIf="viewSLInfo.isSerialized">
+                                <label>Stockline Num</label>
+                                <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
+                            </div>
+                            <div class="form-group" style="margin-top: 35px;" *ngIf="!viewSLInfo.isSerialized">
+                                <label>Stockline Num</label>
+                                <input class="form-control" type="text" name="stockLineNumber" [(ngModel)]="viewSLInfo.stockLineNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Control Num</label>
+                                <input class="form-control" type="text" name="controlNumber" [(ngModel)]="viewSLInfo.controlNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Control ID Num</label>
+                                <input class="form-control" type="text" name="idNumber" [(ngModel)]="viewSLInfo.idNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label matTooltip="National Stock Number" matTooltipPosition="above">NSN</label>
+                                <input class="form-control" type="text" name="nationalStockNumber" [(ngModel)]="viewSLInfo.nationalStockNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label matTooltip="Engine Serial Number" matTooltipPosition="above">ESN</label>
+                                <input class="form-control" type="text" name="engineSerialNumber" [(ngModel)]="viewSLInfo.engineSerialNumber" disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Expiration</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Days Since Received</label>
+                                <input class="form-control text-right" type="text" name="daysReceived" [(ngModel)]="viewSLInfo.daysReceived" disabled>
+                            </div> 
+                            <div class="form-group">
+                                <label>Days Since Mfg</label>
+                                <input class="form-control text-right" type="text" name="manufacturingDays" [(ngModel)]="viewSLInfo.manufacturingDays" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Days Since Tagged</label>
+                                <input class="form-control text-right" type="text" name="tagDays" [(ngModel)]="viewSLInfo.tagDays" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Days Opened</label>
+                                <input class="form-control text-right" type="text" name="openDays" [(ngModel)]="viewSLInfo.openDays" disabled>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="shelfLife" [(ngModel)]="viewSLInfo.shelfLife" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Shelf Life
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="viewSLInfo.shelfLife">
+                                <label>Shelf Life Exp Date</label>
+                                <input type="text" class="form-control" name="shelfLifeExpirationDate" [(ngModel)]="viewSLInfo.shelfLifeExpirationDate" disabled>
+                            </div> 
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Application</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label matTooltip="Next Higher Assembly" matTooltipPosition="above">NHA <span *ngIf="viewSLInfo.nhaPartNumber != undefined && viewSLInfo.nhaPartNumber != ''" class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="nhaPartNumber" [(ngModel)]="viewSLInfo.nhaPartNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label matTooltip="Top Level Assembly" matTooltipPosition="above">TLA <span *ngIf="viewSLInfo.tlaPartNumber != undefined && viewSLInfo.tlaPartNumber != ''" class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="tlaPartNumber" [(ngModel)]="viewSLInfo.tlaPartNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Aircraft Tail Num</label>
+                                <input class="form-control" type="text" name="aircraftTailNumber" [(ngModel)]="viewSLInfo.aircraftTailNumber" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-3">
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Manufacturer</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Manufacturer <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="manufacturer" [(ngModel)]="viewSLInfo.manufacturer" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Mfg. Lot Num</label>
+                                <input class="form-control" type="text" name="manufacturerLotNumber" [(ngModel)]="viewSLInfo.manufacturerLotNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Mfg. Batch Num</label>
+                                <input class="form-control" type="text" name="manufacturingBatchNumber" [(ngModel)]="viewSLInfo.manufacturingBatchNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Mfg. Date</label>
+                                <input type="text" class="form-control" name="manufacturingDate" [(ngModel)]="viewSLInfo.manufacturingDate" disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Acquisition</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Acquisition Type</label>
+                                <input class="form-control" type="text" name="acquistionTypeName" [(ngModel)]="viewSLInfo.acquistionTypeName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Order Date</label>
+                                <input type="text" class="form-control" name="orderDate" [(ngModel)]="viewSLInfo.orderDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Entry Date</label>
+                                <input type="text" class="form-control" name="entryDate" [(ngModel)]="viewSLInfo.entryDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Expiration Date</label>
+                                <input type="text" class="form-control" name="expirationDate" [(ngModel)]="viewSLInfo.expirationDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Vendor</label>
+                                <input class="form-control" type="text" name="vendorName" [(ngModel)]="viewSLInfo.vendorName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>PO Num</label>
+                                <input class="form-control" type="text" name="purchaseOrderNumber" [(ngModel)]="viewSLInfo.purchaseOrderNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>RO Num</label>
+                                <input class="form-control" type="text" name="repairOrderNumber" [(ngModel)]="viewSLInfo.repairOrderNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Requestor</label>
+                                <input class="form-control" type="text" name="requestedByName" [(ngModel)]="viewSLInfo.requestedByName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Received Date <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="receivedDate" [(ngModel)]="viewSLInfo.receivedDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Receiver Num <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="receiverNumber" [(ngModel)]="viewSLInfo.receiverNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Reconciliation Num</label>
+                                <input class="form-control" type="text" name="reconciliationNumber" [(ngModel)]="viewSLInfo.reconciliationNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>WO Num</label>
+                                <input class="form-control" type="text" name="workOrderNumber" [(ngModel)]="viewSLInfo.workOrderNumber" disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Traceability</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Obtain From</label>
+                                <input class="form-control" type="text" name="obtainFromTypeName" [(ngModel)]="viewSLInfo.obtainFromTypeName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="obtainFromName" [(ngModel)]="viewSLInfo.obtainFromName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Owner</label>
+                                <input class="form-control" type="text" name="ownerTypeName" [(ngModel)]="viewSLInfo.ownerTypeName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="ownerName" [(ngModel)]="viewSLInfo.ownerName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Traceable To</label>
+                                <input class="form-control" type="text" name="traceableToTypeName" [(ngModel)]="viewSLInfo.traceableToTypeName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="traceableToName" [(ngModel)]="viewSLInfo.tracableToName" disabled>
+                            </div>   
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Export/International</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label matTooltip="Export Control Classification Number" matTooltipPosition="above">ECCN</label>
+                                <input class="form-control" type="text" name="ExportECCN" [(ngModel)]="viewSLInfo.exportECCN" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label matTooltip="International Traffic in Arms Regulations Number" matTooltipPosition="above">ITAR</label>
+                                <input class="form-control" type="text" name="ITARNumber" [(ngModel)]="viewSLInfo.itarNumber" disabled>
+                            </div>
+                        </div>
+                    </div>  
+                </div>
+    
+                <div class="col-md-3">
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Inventory</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Qty On Hand <span class="clr-red">*</span></label>
+                                <input class="form-control text-right" type="text" name="QuantityOnHand" [(ngModel)]="viewSLInfo.quantityOnHand" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Qty Reserved</label>
+                                <input class="form-control text-right" type="text" name="QuantityReserved" [(ngModel)]="viewSLInfo.quantityReserved" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Qty Issued</label>
+                                <input class="form-control text-right" type="text" name="QuantityIssued" [(ngModel)]="viewSLInfo.quantityIssued" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Qty Avail</label>
+                                <input class="form-control text-right" type="text" name="quantityAvailable" [(ngModel)]="viewSLInfo.quantityAvailable" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>PO Unit Cost</label>
+                                <input class="form-control text-right" type="text" name="purchaseOrderUnitCost" [(ngModel)]="viewSLInfo.purchaseOrderUnitCost" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>RO Unit Cost</label>
+                                <input class="form-control text-right" type="text" name="repairOrderUnitCost" [(ngModel)]="viewSLInfo.repairOrderUnitCost" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Unit Sale Price</label>
+                                <input class="form-control text-right" type="text" name="unitSalesPrice" [(ngModel)]="viewSLInfo.unitSalesPrice" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Core Cost/Unit</label>
+                                <input class="form-control text-right" type="text" name="coreUnitCost" [(ngModel)]="viewSLInfo.coreUnitCost" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>GL Account</label>
+                                <input class="form-control" type="text" name="glAccountName" [(ngModel)]="viewSLInfo.glAccountName" disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Location</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Site <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="siteName" [(ngModel)]="viewSLInfo.siteName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Warehouse</label>
+                                <input class="form-control" type="text" name="warehouse" [(ngModel)]="viewSLInfo.warehouse" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input class="form-control" type="text" name="location" [(ngModel)]="viewSLInfo.location" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Shelf</label>
+                                <input class="form-control" type="text" name="shelfName" [(ngModel)]="viewSLInfo.shelfName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Bin</label>
+                                <input class="form-control" type="text" name="binName" [(ngModel)]="viewSLInfo.binName" disabled>
+                            </div>
+                        </div>
+                    </div> 
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Lot & Consignment</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Lot Num</label>
+                                <input class="form-control" type="text" name="lotNumber" [(ngModel)]="viewSLInfo.lotNumber" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Lot Description</label>
+                                <input class="form-control" type="text" name="lotDescription" [(ngModel)]="viewSLInfo.lotDescription" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Lot Cost</label>
+                                <input class="form-control text-right" type="text" name="lotCost" [(ngModel)]="viewSLInfo.lotCost" disabled>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Warnings</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="blackListed" [(ngModel)]="viewSLInfo.blackListed" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Black List
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="viewSLInfo.blackListed">
+                                 <div [innerHTML]="viewSLInfo.blackListedReason" class="form-control"
+                                      style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="accident" [(ngModel)]="viewSLInfo.accident" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Accident
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="viewSLInfo.accident">
+                                 <div [innerHTML]="viewSLInfo.accidentReason" class="form-control"
+                                      style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="incident" [(ngModel)]="viewSLInfo.incident" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Incident
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="viewSLInfo.incident">
+                                 <div [innerHTML]="viewSLInfo.incidentReason" class="form-control"
+                                 style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                            </div>                              
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-md-3">
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Management Structure</b> <span class="text-danger">*</span></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group" style="margin-bottom: 4px;">
+                                <input class="form-control" type="text" name="companyName"
+                                    [(ngModel)]="managementStructure.level1" disabled>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 4px;">
+                                <input class="form-control" type="text" name="BUName"
+                                    [(ngModel)]="managementStructure.level2" disabled>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 4px;">
+                                <input class="form-control" type="text" name="divisionName"
+                                    [(ngModel)]="managementStructure.level3" disabled>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 4px;">
+                                <input class="form-control" type="text" name="deptName"
+                                    [(ngModel)]="managementStructure.level4" disabled>
+                            </div>                    
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Certification, Tag and Inspection</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Part Cert Num</label>
+                                <input class="form-control" type="text" name="partCertificationNumber" [(ngModel)]="viewSLInfo.partCertificationNumber" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Certify By</label>
+                                <input class="form-control" type="text" name="certifiedBy" [(ngModel)]="viewSLInfo.certifiedBy" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Certified Date</label>
+                                <input type="text" class="form-control" name="certifiedDate" [(ngModel)]="viewSLInfo.certifiedDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Certify Due Date</label>
+                                <input type="text" class="form-control" name="certifiedDueDate" [(ngModel)]="viewSLInfo.certifiedDueDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Tag Type</label>
+                                <input class="form-control" type="text" name="tagTypeName" [(ngModel)]="viewSLInfo.tagType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Tag Num</label>
+                                <input class="form-control" type="text" name="tagNumber" [(ngModel)]="viewSLInfo.tagNumber" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Tag Date</label>
+                                <input type="text" class="form-control" name="tagDate" [(ngModel)]="viewSLInfo.tagDate" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Inspection By</label>
+                                <input class="form-control" type="text" name="inspectionByName" [(ngModel)]="viewSLInfo.inspectionByName" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label>Inspection Date</label>
+                                <input type="text" class="form-control" name="inspectionDate" [(ngModel)]="viewSLInfo.inspectionDate" disabled>
+                            </div>                                
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Other</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Integration With</label>
+                                <input class="form-control" type="text" name="integrationPortal" [(ngModel)]="viewSLInfo.integrationPortal" disabled />
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <h5><b>Memo</b></h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Memo</label>
+                                 <div [innerHTML]="viewSLInfo.memo" class="form-control"
+                                 style="width:100%;background-color: #c9c9c9 !important;" class="text_editor_box" disabled></div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row" *ngIf="allDocumentsList.length > 0">
+                <div class="col-md-12">
+                    <div class="card card-stock">
+                        <div class="card-header">
+                            <div class="col-md-4">
+                                <h5>Attachments</h5>
+                            </div>
+                            <div class="col-md-8" style="float: right;">                              
+                                <div class="checkbox-cstm" style="margin-left: 0; margin-right: 0px !important; text-align: right;">
+                                    <label style="width: 120px;">
+                                      <input type="checkbox" [(ngModel)]="isShowDeletedList" name="cparent"  />
+                                      <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                      <p style="font-weight: bold;"> Show Deleted List </p>  
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="text-align: center;" *ngIf="(isShowDeletedList)?deletedDocumentList.length == 0:allDocumentsList.length == 0">
+                            No Record Found
+                        </div>
+                        <div class="card-body" *ngIf="(isShowDeletedList)?deletedDocumentList.length > 0:allDocumentsList.length > 0">
+                            <p-table #table3 class="rro-table-cstm lastcol-fix"
+                            [paginator]="true"
+                            [value]="(isShowDeletedList)?deletedDocumentList:allDocumentsList" [rows]="5" [pageLinks]="3"
+                            [rowsPerPageOptions]="[5,10,15,20]" [columns]="documentTableColumns" [scrollable]="true" scrollHeight="500px">
+                       <ng-template pTemplate="colgroup" let-columns>
+                           <colgroup>
+                               <col *ngFor="let col of columns" style="width:100px" />
+                           </colgroup>
+                       </ng-template>
+                       <ng-template pTemplate="header" let-columns>
+                           <tr>
+                               <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                   [pSortableColumn]="col.field">
+                                   <div>
+                                       {{ col.header }}
+                                       <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'" [field]="col.field">
+                                       </p-sortIcon>
+                                   </div>
+                               </th>
+
+                           </tr>
+                           <tr>
+                               <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                   <input type="text" class="form-control" (input)="table3.filter($event.target.value, col.field,'contains') "
+                                          *ngIf="col.field !='download' && col.field !='delete' && col.field != 'createdDate' && col.field != 'updatedDate'"
+                                          pInputText>
+                                   <input type="date" class="hidePlaceHolder w-100" *ngIf="col.field == 'createdDate'"
+                                          name="createdDate"
+                                          (change)="dateFilterForTable($event.target.value, col.field )">
+                                   <input type="date" class="hidePlaceHolder w-100" *ngIf="col.field == 'updatedDate'"
+                                          name="updatedDate"
+                                          (change)="dateFilterForTable($event.target.value, col.field )">
+                               </th>
+                               <!-- <th style="width:140px;position:sticky"></th> -->
+                               <!-- <th></th> -->
+                           </tr>
+                       </ng-template>
+                       <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                           <tr *ngIf="allDocumentsList.length > 0">
+                               <td *ngFor="let col of columns">
+                                   <div *ngIf="col.field !='download' && col.field !='docMemo'">
+                                       <span>
+                                           {{
+                                                col.field == 'createdDate'
+                                                ? (rowData[col.field] | date: 'MM-dd-yyyy, h:mm a')
+                                                : rowData[col.field] && col.field == 'updatedDate'
+                                                ? (rowData[col.field] | date: 'MM-dd-yyyy, h:mm a')
+                                                : rowData[col.field]
+                                           }}
+                                       </span>
+                                   </div>
+                                   <div *ngIf="col.field =='download'" class="align_center">
+                                       <a (click)="downloadFileUpload(rowData)" matTooltip="Download"
+                                          matTooltipPosition="above" class="btn nobg btn-cstm">
+                                           <span>
+                                               <i class="fa fa-download"></i>
+                                           </span>
+                                       </a>
+                                       <span data-toggle="modal" data-target="#contentAuditHistDoc">
+                                           <a class="btn nobg"
+                                              (click)="openHistoryDoc(rowData)"
+                                              matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                       </span>
+                                   </div>
+                                   <div *ngIf="col.field == 'docMemo'">
+                                    <p class="p_textEditor" [innerHTML]=rowData[col.field]></p></div>
+                               </td>                             
+                           </tr>
+                       </ng-template>
+                       <ng-template pTemplate="summary" id="footer">
+                           <label id="footer" class="footer">Total:</label>
+                           <input style="width: 5%;" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
+                                  pInputText type="text" />
+
+                           &nbsp;&nbsp;
+                           <label id="footer" class="footer1">Pages Count:</label>
+
+                           <input style="width: 5%;" [ngModel]="getPageCount(table3._totalRecords, table3.rows)"
+                                  name="page count" disabled pInputText type="text" />
+                       </ng-template>
+                       <ng-template pTemplate="emptymessage" let-columns
+                                    *ngIf="allDocumentsList.length == 0">
+                           <tr>
+                               <td [attr.colspan]="7" style="color: red; font-weight: bold; text-align: center;">
+                                   No records found
+                               </td>
+                           </tr>
+                       </ng-template>
+                             </p-table>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+
+            <div class="form-row" >  <!-- *ngIf="sourceTimeLife.timeLife" -->
+                <div class="col-md-8">
+                    <div class="table-responsive form-group" style="padding: 0 5px;">                            
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="15" class="text-center"><strong>Time Life Info (Hours)</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center">Cycles</th>
+                                    <th class="text-center">Time</th>
+                                    <th class="text-center">Last</th>
+                                </tr>
+                                <tr>
+                                    <td>Remaining</td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="cyclesRemaining" [(ngModel)]="sourceTimeLife.cyclesRemaining" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="timeRemaining" [(ngModel)]="sourceTimeLife.timeRemaining" disabled />
+                                    </td>
+                                    <td></td>
+    
+                                </tr>
+                                <tr>
+                                    <td>Since New</td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="cyclesSinceNew" [(ngModel)]="sourceTimeLife.cyclesSinceNew" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="timeSinceNew" [(ngModel)]="sourceTimeLife.timeSinceNew" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="lastSinceNew" [(ngModel)]="sourceTimeLife.lastSinceNew" disabled />
+                                    </td>
+    
+                                </tr>
+                                <tr>
+                                    <td>Since Ovh</td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="cyclesSinceOVH" [(ngModel)]="sourceTimeLife.cyclesSinceOVH" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="timeSinceOVH" [(ngModel)]="sourceTimeLife.timeSinceOVH" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="lastSinceOVH" [(ngModel)]="sourceTimeLife.lastSinceOVH" disabled />
+                                    </td>
+    
+                                </tr>
+                                <tr>
+                                    <td>Since Insp</td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="cyclesSinceInspection" [(ngModel)]="sourceTimeLife.cyclesSinceInspection" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="timeSinceInspection" [(ngModel)]="sourceTimeLife.timeSinceInspection" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="lastSinceInspection" [(ngModel)]="sourceTimeLife.lastSinceInspection" disabled />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Since Repair</td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="cyclesSinceRepair" [(ngModel)]="sourceTimeLife.cyclesSinceRepair" disabled />
+                                    </td>
+                                    <td class="clr2">
+                                        <input class="form-control" type="text" name="timeSinceRepair" [(ngModel)]="sourceTimeLife.timeSinceRepair" disabled />
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </form>  
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">Close</button>
+    </div>
+</div>
+
+<div class="modal popup-blur"
+                     id="contentAuditHistDoc"
+                     data-backdrop="static">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h4 class="modal-title">History of Documents</h4>
+                                <button type="button" class="close" data-dismiss="modal">
+                                    &times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th> Name</th>
+                                                <th>Description</th>
+                                                <th>Memo</th>
+                                                <th>File Name</th>
+                                                <th>File Size</th>
+                                                <th>Created Date</th>
+                                                <th>Created By</th>
+                                                <th>Updated Date</th>
+                                                <th>Updated By</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                                            <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
+                                                <td [ngStyle]="{
+                                                        color: getColorCodeForHistoryDoc(i, 'docName', audit.docName)
+                                                        ? 'black'
+                                                        : 'red'
+                                                    }">
+                                                    {{ audit.docName }}
+                                                </td>
+                                                <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'docDescription', audit.docDescription) ? 'black' : 'red' }">
+                                                    {{ audit.docDescription }}
+                                                </td>
+                                                <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }" [innerHTML]="audit.docMemo">
+                                                </td>
+                                                <td [ngStyle]="{ color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName) ? 'black' : 'red'}">
+                                                    {{ audit.fileName }}
+                                                </td>
+                                                <td>{{ audit.fileSize }}</td>                                                
+                                                <td>{{ audit.createdDate | date: 'MM-dd-yyyy h:mm a' }}</td>
+                                                <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'createdBy', audit.createdBy) ? 'black' : 'red' }">
+                                                    {{ audit.createdBy }}
+                                                </td>
+                                                 <td>{{ audit.updatedDate | date: 'MM-dd-yyyy h:mm a' }}</td>
+                                                <td [ngStyle]="{color: getColorCodeForHistoryDoc(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red' }">
+                                                    {{ audit.updatedBy }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

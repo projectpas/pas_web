@@ -1,0 +1,506 @@
+﻿<div class="card" style="padding: 5px">
+    <div class="form-row status-radio">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label class="radiobtn-label">Item Type:</label>
+                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                        <input type="radio" name="stock" class="form-control" (click)="stock()">
+                        <span class="checkmark"></span>Stock
+                    </label>
+                </div>
+                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                        <input type="radio" name="stock" class="form-control" [checked]="true" (click)="nonStock()">
+                        <span class="checkmark"></span>Non-Stock
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="form-group row form-bg">
+        <div class="col-sm-8 mleft25">
+            <label class="radio-inline">
+                <input type="radio" name="stock" (click)="stock()"> Stock
+            </label>
+            <label class="radio-inline" style="color: #fd6428; font-weight: bold;">
+                <input type="radio" name="stock" [checked]="true" (click)="nonStock()"> Non-Stock
+            </label>
+        </div>
+    </div> -->
+    <div class="card new-card">
+        <div class="card-header bg-primary">
+          <div class="row">
+            <div class="col">
+              <h4 class="new-card-heading">Item Master Setup (Non-Stock)</h4>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="btn-sm new-btn-primary"
+                [routerLink]="['/itemmastersmodule/itemmasterpages/app-item-master-list']"
+              >
+                Item Master List
+              </button>
+            </div>
+          </div>
+        </div>
+    
+    <div class="clear"></div>
+    <br>
+    <div class="pheading">
+        <h4 class="page-heading clr-green">Item Master Setup (Non-Stock)</h4>
+    </div>
+    <form #nonStockForm="ngForm" class="form-horizontal add-custustomer">
+        <div>
+            <div class="form-row col-row">
+                <div class="col-md-3">
+                    <div class="form-group" style="margin-left: 13px">
+                        <label for="customerName" class="control-label">
+                            PN <strong class="clr-red">*</strong>
+                        </label>
+                        <p-autoComplete [(ngModel)]="sourceItemMaster.partNumber" (onKeyUp)=eventHandler($event) (onSelect)="partnmId($event)" name="partNumber" [suggestions]="partCollection" (completeMethod)="filterpartItems($event)" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPN()" required>
+                            <ng-template let-partName pTemplate="part">
+                                <div class="ui-helper-clearfix">{{partName}}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <div *ngIf="disableSavePartName" style="color:red">Already Exist</div>
+                        <!-- <div *ngIf="disableSavepartNumber" style="color:red">Already Exists</div> -->
+                        <label class="control-label">PN Description <strong class="clr-red">*</strong></label>
+                        <p-autoComplete (onKeyUp)=descriptionHandler($event) (onSelect)="partdescriptionId($event)" [suggestions]="descriptionCollection" name="partdescription" (completeMethod)="filterdescription($event)" [(ngModel)]="sourceItemMaster.partdescription" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPNDesc()" required>
+                            <ng-template let-partDescription pTemplate="item">
+                                <div class="ui-helper-clearfix">{{partDescription}}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <!-- <div *ngIf="disableSavepartDescription" style="color:red">Already Exist</div> -->
+                        <div class="inline-block display-flex">
+                            <label class="control-label">
+                                Item Classification <strong class="clr-red">*</strong>
+                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addCustomerClass" matTooltip="Add Item Classification"  matTooltipPosition="above" (click)="itemclassification(contentEdit)"></i></span> -->
+                            </label>
+                        </div>
+                        <div>
+                            <p-dropdown class="p-dropdown-100" [options]="allitemNonStockclassificationInfo" filter="true" [(ngModel)]="sourceItemMaster.itemNonStockClassificationId" name="itemNonStockClassificationId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
+
+                            <!-- <select name="itemNonStockClassificationId" [(ngModel)]="sourceItemMaster.itemNonStockClassificationId" required>
+                                <option value="">-- Select --</option>
+                                <option *ngFor="let itemName of allitemNonStockclassificationInfo" [ngValue]="itemName.value">{{itemName.label}}</option>
+                            </select> -->
+                        </div>
+                        <div class="inline-block display-flex">
+                            <label class="control-label">
+                                Item Group
+                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addCustomerClass" matTooltip="Add Item Group" matTooltipPosition="above" (click)="item(contentEdits)"></i></span> -->
+                            </label>
+                        </div>
+                        <div>
+                            <p-dropdown class="p-dropdown-100" [options]="allitemgroupobjInfo" filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
+                            <!-- <select name="itemGroupId" [(ngModel)]="sourceItemMaster.itemGroupId">
+                                <option value="">-- Select --</option>
+                                <ng-container *ngFor="let itemGroupName of allitemgroupobjInfo">
+                                    <option  [ngValue]="itemGroupName.itemGroupId">{{itemGroupName.description}}</option>
+                                  </ng-container> 
+                             </select> -->
+                        </div>
+                        <div class="inline-block display-flex spacing-label" style="margin-top: 5px;">
+                            <label class="control-label">Acquired?</label>
+                            <div class="radio-value">
+                                <label class="radio-inline">
+                                    <input type="radio" [value]="true" name="isAcquiredMethodBuy"
+                                           [(ngModel)]="sourceItemMaster.isAcquiredMethodBuy">
+                                    Buy
+                                </label>&nbsp;&nbsp;
+                                <label class="radio-inline">
+                                    <input type="radio" [value]="false" name="isAcquiredMethodBuy"
+                                           [(ngModel)]="sourceItemMaster.isAcquiredMethodBuy">
+                                    Make
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <div class="inline-block display-flex">
+                            <label class="control-label control-item">
+                                Manufacturer <strong class="clr-red">*</strong>
+                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addCustomerClass" matTooltip="Add Manufacturer" matTooltipPosition="above" (click)="Mfacturer(modeledt)"></i></span> -->
+                            </label>
+                        </div>
+                        <div>
+                            <p-dropdown class="p-dropdown-100" [options]="allManufacturerInfo" filter="true" [(ngModel)]="sourceItemMaster.manufacturerId" name="manufacturerId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
+                            <!-- <select name="manufacturerId" [(ngModel)]="sourceItemMaster.manufacturerId" required>
+                                <option value="">-- Select --</option>
+                                <ng-container *ngFor="let name of allManufacturerInfo">
+                                    <option  [ngValue]="name.value">{{name.label}}</option>
+                                </ng-container>
+                            </select> -->
+                        </div>
+                        <label class="control-label control-item">Discount (%) on Purchases </label>
+                        <p-dropdown class="p-dropdown-100" [options]="discDataList" filter="true" [(ngModel)]="sourceItemMaster.discountPurchasePercent" name="discountPurchasePercent" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
+                        <!-- <select name="discountPurchasePercent" class="select-drop" [(ngModel)]="sourceItemMaster.discountPurchasePercent" (change)="getSelectedValue($event.target.value)">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let number of discDataList" value="{{number.value}}">{{number.label}}</option>
+                        </select> -->
+                        <div class="inline-block display-flex">
+                            <label class="control-label control-item">
+                                GL Account <strong class="clr-red">*</strong>
+                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" [routerLink]="['/generalledgermodule/generalledgerpage/app-glaccount-create']"></i></span> -->
+                            </label>
+                        </div>
+                        <p-dropdown class="p-dropdown-100" [options]="allGlInfo" filter="true" [(ngModel)]="sourceItemMaster.glAccountId" name="glAccountId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
+                        <!-- <select name="glAccountId" [(ngModel)]="sourceItemMaster.glAccountId" required>
+                            <option value="">-- Select --</option>
+                            <option class="form-control" *ngFor="let glAccounts of allGlInfo" [ngValue]="glAccounts.value">
+                                {{glAccounts.label}}
+                            </option>
+                        </select> -->
+                        <div class="inline-block display-flex">
+                            <label class="control-label control-item">
+                                Purchase UOM <strong class="clr-red">*</strong>
+                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addPurchaseUom" matTooltip="Add UOM" matTooltipPosition="above" (click)="unitmeasure(conEdit)"></i></span> -->
+                            </label>
+                        </div>
+                        <p-dropdown class="p-dropdown-100" [options]="allUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
+                        <!-- <select name="purchaseUnitOfMeasureId" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" required>
+                            <option value="">-- Select --</option>
+                            <ng-container *ngFor="let unitName of allUnitOfMeasureinfo">
+                                <option  [ngValue]="unitName.value">{{unitName.label}}</option>
+                            </ng-container>
+                        </select> -->
+                        <div class="checkbox-cstm" style="margin-top: 14px;">
+                            <label>
+                                <input type="checkbox" name="isHazardousMaterial"
+                                       [(ngModel)]="sourceItemMaster.isHazardousMaterial">
+                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                Hazardous Material
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Currency </label>
+                        <p-dropdown class="p-dropdown-100" [options]="allCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.currencyId" name="currencyId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
+                        <!-- <select name="currencyId" class="select-drop" [(ngModel)]="sourceItemMaster.currencyId">
+                            <option value="">-- Select --</option>
+                            <option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.value">{{currencyName.label}}</option>
+                        </select> -->
+                        <label class="control-label">Unit Cost</label>
+                        <input class="form-control text-right" type="text" name="unitCost" pKeyFilter="money" [(ngModel)]="sourceItemMaster.unitCost" (change)="onChangeUnitCost()">
+                        <label class="control-label">List Price </label>
+                        <input class="form-control text-right" type="text" name="listPrice" pKeyFilter="money" [(ngModel)]="sourceItemMaster.listPrice" (change)="onChangeListPrice()">
+                        <label class="control-label">Price Date </label>
+                        <p-calendar [showIcon]="true" name="priceDate" [(ngModel)]="sourceItemMaster.priceDate"></p-calendar>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div>
+                <div>
+                    <!-- <div class="clear"></div>
+                    <hr> -->
+                    <button type="submit" class="btn btn-primary pull-right submit-btn" (click)="editItemAndCloseModel()" [disabled]="!nonStockForm.valid || disableSavePartName">{{isEdit ? 'Update' : 'Save'}}</button>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+    </form>
+
+    <!-- <div class="pull-right"> © 2018 <a href="#">PAS</a> </div> -->
+
+</div>
+
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+          [width]="350" [minWidth]="200" [responsive]="true"
+          [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{'color':'red'}">
+        Please Enter (*) Mandatory Fields
+    </h5>
+    <p-footer>
+        <button type="button"  pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+    </p-footer>
+</p-dialog>
+
+<ng-template #contentEdits let-c="close" let-d="dismiss" style="width:auto">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="isEditMode">Edit Item Group</h4>
+        <h4 class="modal-title" *ngIf="!isEditMode">Add Item Group</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveitemgroup()">
+            <div class="form-group">
+                <label for="sourceItem.name" class="control-label col-sm-4">Item Group Id<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <p-autoComplete [(ngModel)]="itemGroupName" name="id" (onKeyUp)=ItemGroupHandler($event) (onSelect)="itemGroupCode($event)" [suggestions]="localgroup" (completeMethod)="filterItemgroups($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                        <ng-template let-itemGroupName pTemplate="item">
+                            <div class="ui-helper-clearfix">{{itemGroupName}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <div *ngIf="disableSaveItemGroup" class="clr-red">Already Exists</div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="netDays" class="control-label col-sm-4">Item Group Description<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <input type="text" name="description" class="form-control" required #description="ngModel" [(ngModel)]="sourceItem.description" minlength="2">
+                    <div *ngIf="description.dirty && description.errors?.required && description.errors" class="invalid-form-error-message">
+                        Item Group Description required.
+                    </div>
+                    <div *ngIf="description.dirty && description.errors?.minlength && description.errors" class="invalid-form-error-message">
+                        Item Group Description category must be at least 2 characters long.
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="control-label col-sm-4">Memo</label>
+                <div class="col-sm-5">
+                    <textarea placeholder="Memo" #memo="ngModel" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItem.memo"></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form-group">
+                <div class="checkbox-cstm">
+                    <label>
+                        <input type="checkbox" name="isActive" #isActive="ngModel" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Active
+                    </label>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary pull-right submit-btn" [disabled]="!userForm.valid || disableSaveItemGroup" (click)="saveitemgroup()">Save</button>
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+            </div>
+        </form>
+    </div>
+
+</ng-template>
+
+<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="isEditMode">Edit Item Classification</h4>
+        <h4 class="modal-title" *ngIf="!isEditMode">Add Item Classification</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveItemNonStockclass()">
+            <div class="form-group">
+                <label for="name" class="control-label col-sm-4">Item Classification Code<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <p-autoComplete [(ngModel)]="itemName" name="classification" (onKeyUp)=ItemHandler($event) (onSelect)="ItemClassficationCode($event)" [suggestions]="localCollection" (completeMethod)="filterItems($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                        <ng-template let-itemName pTemplate="item">
+                            <div class="ui-helper-clearfix">{{itemName}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <div *ngIf="disableSaveItemClassficationCode" class="clr-red">Already Exists</div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="netDays" class="control-label col-sm-4">Item Classification Name<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <p-autoComplete (onSelect)="classificationId($event)" (onKeyUp)=classeventHandler($event) [(ngModel)]="className" name="itemname" [suggestions]="localNameCollection" (completeMethod)="filterItemNames($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                        <ng-template let-className pTemplate="description">
+                            <div class="ui-helper-clearfix">{{className}}</div>
+                        </ng-template>
+
+                    </p-autoComplete>
+                    <div *ngIf="disableClassdesc" style="color:Red">Already Exist</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="netDays" class="control-label col-sm-4">Item Type<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <p-autoComplete (onSelect)="classificationtypeId($event)" class="p-autoComplete-ctsm" (onKeyUp)=classeventtypeHandler($event) [(ngModel)]="itemTypeName" name="type" [suggestions]="localtypeCollection" (completeMethod)="filterItemtypes($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" required>
+                        <ng-template let-itemTypeName pTemplate="ItemType">
+                            <div class="ui-helper-clearfix">{{itemTypeName}}</div>
+                        </ng-template>
+
+                    </p-autoComplete>
+                    <div *ngIf="disabletypeSave" style="color:Red">Already Exist</div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="control-label col-sm-4">Memo</label>
+                <div class="col-sm-5">
+                    <textarea #memo="ngModel" id="memo" name="memoDescription" [(ngModel)]="sourceAction.memo"></textarea>
+                    <div *ngIf="memo.dirty && memo.errors?.required && memo.errors" class="invalid-form-error-message">
+                        Memo Name required.
+                    </div>
+                    <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors" class="invalid-form-error-message">
+                        Memo category must be at least 2 characters long.
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <div class="checkbox-cstm">
+                        <label>
+                            <input type="checkbox" name="isActive" #isActive="ngModel" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                            Active
+                        </label>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary pull-right submit-btn" [disabled]="!userForm.valid || disableSaveItemClassficationCode || disableClassdesc || disabletypeSave" (click)="saveItemNonStockclass()">Save</button>
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+            </div>
+        </form>
+    </div>
+
+</ng-template>
+
+<ng-template #conEdit let-c="close" let-d="dismiss" style="width:auto">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="isEditMode">Edit Unit Of Mearsure</h4>
+        <h4 class="modal-title" *ngIf="!isEditMode">Add Unit Of Mearsure</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveunitofmeasure()">
+            <div class="form-group">
+                <label for="description" class="control-label col-sm-4">Unit Of Measure<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <p-autoComplete [(ngModel)]="unitName" name="unitname" (onKeyUp)=PurchaseUOMHandler($event) (onSelect)="PurchaseUOMdescription($event)" [suggestions]="localunit" (completeMethod)="filterUnitOfMeasures($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                        <ng-template let-unitName pTemplate="item">
+                            <div class="ui-helper-clearfix">{{unitName}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <div *ngIf="disableSavePurchaseUOM" class="clr-red">Already Exists</div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form-group">
+                <label for="shortName" class="control-label col-sm-4">Short Name<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <input type="text" name="shortName" class="form-control" #shortName="ngModel" [(ngModel)]="sourceUOM.shortName" minlength="2" required>
+                    <div *ngIf="shortName.dirty && shortName.errors?.required && shortName.errors" class="invalid-form-error-message">
+                        Short Name required.
+                    </div>
+                    <div *ngIf="shortName.dirty && shortName.errors?.minlength && shortName.errors" class="invalid-form-error-message">
+                        Short Name must be at least 2 characters long.
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form-group">
+                <label for="standard" class="control-label col-sm-4">Standard<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <input type="text" name="standard" class="form-control" #standard="ngModel" [(ngModel)]="sourceUOM.standard" minlength="2" required>
+                    <div *ngIf="standard.dirty && standard.errors?.required && standard.errors" class="invalid-form-error-message">
+                        Standard required.
+                    </div>
+                    <div *ngIf="standard.dirty && standard.errors?.minlength && standard.errors" class="invalid-form-error-message">
+                        Standard must be at least 2 characters long.
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="control-label col-sm-4">Memo</label>
+                <div class="col-sm-5">
+                    <textarea placeholder="Memo" #memo="ngModel" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceUOM.memo" minlength="2"></textarea>
+                    <div *ngIf="memo.dirty && memo.errors?.required && memo.errors" class="invalid-form-error-message">
+                        Memo required.
+                    </div>
+                    <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors" class="invalid-form-error-message">
+                        Memo must be at least 2 characters long.
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <div class="checkbox-cstm">
+                        <label>
+                            <input type="checkbox" name="isActive" #isActive="ngModel" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                            Active
+                        </label>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary pull-right submit-btn" [disabled]="!userForm.valid || disableSavePurchaseUOM" (click)="saveunitofmeasure()">Save</button>
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+            </div>
+        </form>
+    </div>
+
+
+</ng-template>
+<ng-template #modeledt let-c="close" let-d="dismiss" style="width:auto">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="isEditMode">Edit Manufacturer</h4>
+        <h4 class="modal-title" *ngIf="!isEditMode">Add Manufacturer</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveManufacturer()">
+            <div class="form-group">
+                <label for="name" class="control-label col-sm-4">Manufacturer Name<strong class="clr-red">*</strong></label>
+                <div class="col-sm-5">
+                    <p-autoComplete [(ngModel)]="sourcemanufacturer.name" name="manufacturer" (onKeyUp)=ManufacturerHandler($event) (onSelect)="Manufacturerdescription($event)" [suggestions]="localmanufacturer" (completeMethod)="filtermanufacturer($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                        <ng-template let-name pTemplate="item">
+                            <div class="ui-helper-clearfix">{{name}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                    <div *ngIf="disableSaveManufacturer" class="clr-red">Already Exists</div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <div class="checkbox-cstm">
+                        <label>
+                            <input type="checkbox" name="isActive" #isActive="ngModel" checked id="isActive" [(ngModel)]="sourceAction.isActive">
+                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                            Active
+                        </label>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary pull-right submit-btn" [disabled]="!userForm.valid || disableSaveManufacturer" (click)="saveManufacturer()">Save</button>
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<app-spinner *ngIf="isSpinnerVisible"></app-spinner>

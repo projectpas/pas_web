@@ -1,0 +1,555 @@
+﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary">
+      <div class="row">
+        <div class="col">
+          <h4 class="new-card-heading">  {{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset Calibration</h4>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn-sm new-btn-primary"
+            [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+            Asset List
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body new-card-body">
+<div class="md-stepper-horizontal orange new-stepper-align">
+    <div class="md-step"
+         [ngClass]="{ active: activeIndex >= 0 , editable : activeIndex === 0}" (click)="changeOfTab('General')">
+        <div class="md-step-circle"><span>1</span></div>
+        <div class="md-step-title">General Information</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+    <div class="md-step"
+         [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
+         (click)="changeOfTab('Capes')">
+        <div class="md-step-circle"><span>2</span></div>
+        <div class="md-step-title">Capes</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+    <div class="md-step"
+         [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
+         (click)="changeOfTab('Calibration')">
+        <div class="md-step-circle"><span>3</span></div>
+        <div class="md-step-title">Calibration</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+    <div class="md-step"
+         [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
+         (click)="changeOfTab('Maintenance')">
+        <div class="md-step-circle"><span>4</span></div>
+        <div class="md-step-title">Maintenance & Warranty</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+</div>
+
+
+<form #generalForm="ngForm" method="post" id="" name="" class="form-horizontal add-custustomer">
+        <div class="form-row">
+            
+            <div class="col-md-12">
+    
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-md-3">
+                            <label class="fs12">Asset ID : </label>
+                            <span class="span-header-red"> {{assetService.listCollection?.assetId}}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fs12">Asset Name : </label>
+                            <span class="span-header-red"> {{assetService.listCollection?.name}}</span>
+
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fs12">Alt Asset ID : </label>
+                            <span class="span-header-red">{{assetService.listCollection?.alternateAssetName}}</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="fs12">Asset Class/Attribute : </label>
+                            <span class="span-header-red"> {{assetService.listCollection?.assetAttributeType}}</span> 
+                        </div>
+                        <div class="clear"></div>
+                        <hr />
+                        <div class="clear"></div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="card new-card">
+                           
+                                    <div class="card-header bg-primary">
+                                        <h4 class="new-card-heading"> Calibration</h4>
+                                    </div>
+                                    </div>
+                                    </div>
+</div>
+                        <div class="col-md-12">
+                            <div class="form-row">
+                                <div class="col-sm-3 asset_border">
+                                    <div class="form-group">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <label>
+                                                <input type="checkbox" (change)="calibrationMethod()" (ngModelChange)="setvaliDate($event)" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.calibrationRequired">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Calibration Required
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="currentCalibration.calibrationRequired">
+                                        <div class="form-group">
+                                            <label >Calibration Frequency  <span class="clr-red">*</span></label>
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label >Months</label>
+                                                    <input type="number" (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.calibrationFrequencyMonths" min="0" max="12">
+
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label > Days</label>
+                                                    <input type="number" (ngModelChange)="setvaliDate($event)" (input)="validateDates($event.target.value,currentCalibration,1)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.calibrationFrequencyDays" min="0" max="31">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                     
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">Default Vendor</label>
+                                            <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="vendorName" [dropdown]="true"
+                                            errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                                            (completeMethod)="filterWarentyVendor($event)"  [size]="30" [minLength]="1"
+                                            [(ngModel)]="currentCalibration.calibrationDefaultVendorId"  #prellRevInsp="ngModel" >
+                                        </p-autoComplete>
+                                        </div>
+                                    
+                                        <div class="form-group">
+
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label>Default Cost</label>
+                                                    <input class="form-control amount text-right"  (ngModelChange)="setvaliDate($event)" type="text" [ngModelOptions]="{standalone: true}" 
+                                                           [(ngModel)]="currentCalibration.calibrationDefaultCost" (change)="formatToGlobal(currentCalibration)">
+
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.calibrationDefaultCost !=0">*</span></label>
+                                             
+                                                    <p-dropdown [required]="currentCalibration.calibrationDefaultCost !=0" [showClear]="true" class="p-dropdown-100" (ngModelChange)="setvaliDate($event)"   [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.calibrationCurrencyId" name="calibrationCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                                </div>
+                                            </div>
+                                            <div>
+
+                                            </div>
+                                        </div>
+                                       
+                                        <div style="padding: 8px;">
+                                            
+                                            <label class="mr-tp-10">GL Account <span class="clr-red" *ngIf="currentCalibration.calibrationRequired">*</span></label>
+                            <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="Inspector1" [dropdown]="true"
+                            errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
+                            (completeMethod)="filterWarentyGl($event)"  [size]="30" [minLength]="1"
+                            [(ngModel)]="currentCalibration.calibrationGlAccountId" [required]="currentCalibration.calibrationRequired"  #prellRevInsp3="ngModel" >
+                        </p-autoComplete> 
+    
+    
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Calibration Memo</label>
+                                          <div class="align_adh">
+                                                        <div [innerHTML]="currentCalibration.calibrationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentCalibration.calibrationMemo)" class="text_editor_box"
+                                                            style="width: 96% !important;"></div>
+                                                        <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                                            data-target="#textarea-popup" matTooltip="Memo"
+                                                            matTooltipPosition="above"
+                                                            (click)="onAddTextAreaInfo(currentCalibration.calibrationMemo,1)"></i>
+                                                    </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                    <div class="form-group col-sm-12 calibration-block w400" *ngIf="currentCalibration.calibrationRequired ">
+                                        <div>
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th colspan="2" class="tol_cld">Tolerance</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Min</td>
+                                                        <td>
+                                                            <input (ngModelChange)="setvaliDate($event)" type="text" class="form-control mauto" [ngModelOptions]="{standalone: true}"
+                                                                   [(ngModel)]="currentCalibration.assetCalibrationMin">
+                                                        </td>
+                                                        <td>
+                                                            <input (ngModelChange)="setvaliDate($event)" type="text" class="form-control mauto" [ngModelOptions]="{standalone: true}"
+                                                                   [(ngModel)]="currentCalibration.assetCalibrationMinTolerance">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Max</td>
+                                                        <td>
+                                                            <input (ngModelChange)="setvaliDate($event)" type="text" class="form-control mauto" [ngModelOptions]="{standalone: true}"
+                                                                   [(ngModel)]="currentCalibration.assetCalibratonMax">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" class="form-control mauto" (ngModelChange)="setvaliDate($event)" [ngModelOptions]="{standalone: true}"
+                                                                   [(ngModel)]="currentCalibration.assetCalibrationMaxTolerance">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Expected</td>
+                                                        <td>
+                                                            <input (ngModelChange)="setvaliDate($event)" type="text" class="form-control mauto" [ngModelOptions]="{standalone: true}"
+                                                                   [(ngModel)]="currentCalibration.assetCalibrationExpected">
+                                                        </td>
+                                                        <td>
+                                                            <input (ngModelChange)="setvaliDate($event)" type="text" class="form-control mauto" [ngModelOptions]="{standalone: true}"
+                                                                   [(ngModel)]="currentCalibration.assetCalibrationExpectedTolerance">
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Memo</td>
+                                                        <td colspan="2">
+                                                          <div class="align_adh">
+                                                                        <div [innerHTML]="currentCalibration.assetCalibrationMemo"  matTooltipPosition="above" [matTooltip]="parsedText(currentCalibration.assetCalibrationMemo)" class="text_editor_box"
+                                                                            style="width: 96% !important;"></div>
+                                                                        <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                                                            data-target="#textarea-popup" matTooltip="Memo"
+                                                                            matTooltipPosition="above"
+                                                                            (click)="onAddTextAreaInfo(currentCalibration.assetCalibrationMemo,5)"></i>
+                                                                    </div>
+                                                       </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 asset_border">
+                                    <div class="form-group">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <label>
+                                                <input (change)="ceretificationMethod()" (ngModelChange)="setvaliDate($event)" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.certificationRequired">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Certification Required
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="currentCalibration.certificationRequired">
+                                        <div class="form-group">
+                                            <label>Certification Frequency  <span class="clr-red">*</span></label>
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label>Months</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" type="number" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.certificationFrequencyMonths" min="0" max="12">
+
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label> Days</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" type="number" (input)="validateDates($event.target.value,currentCalibration,2)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.certificationFrequencyDays" min="0" max="31">
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                     
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">Default Vendor</label>
+                                            <p-autoComplete (ngModelChange)="setvaliDate($event)"  class="p-autoComplete-ctsm" field="name" name="vendorName2" [dropdown]="true"
+                                            errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                                            (completeMethod)="filterWarentyVendor2($event)"  [size]="30" [minLength]="1"
+                                            [(ngModel)]="currentCalibration.certificationDefaultVendorId"  #prellRevInsp="ngModel" >
+                                        </p-autoComplete>
+                                        </div>
+                                        <div class="form-group">
+
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label >Default Cost </label>
+                                                    <input class="form-control amount text-right" (ngModelChange)="setvaliDate($event)" [ngModelOptions]="{standalone: true}" (change)="formatToGlobal(currentCalibration)"
+                                                           [(ngModel)]="currentCalibration.certificationDefaultCost" type="text">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.certificationDefaultCost !=0">*</span> </label>
+                                                  
+                                                    <p-dropdown [required]="currentCalibration.certificationDefaultCost !=0" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="setvaliDate($event)"  [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.certificationCurrencyId" name="certificationCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                      
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">GL Account <span class="clr-red" *ngIf="currentCalibration.certificationRequired">*</span></label>
+                            <p-autoComplete  (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="Inspector2" [dropdown]="true"
+                            errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
+                            (completeMethod)="filterWarentyGl2($event)"  [size]="30" [minLength]="1"
+                            [(ngModel)]="currentCalibration.certificationGlAccountId"  [required]="currentCalibration.certificationRequired" #prellRevInsp3="ngModel" >
+                        </p-autoComplete> 
+    
+    
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Certification Memo</label>
+                                            <!-- <textarea (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                      [(ngModel)]="currentCalibration.certificationMemo"></textarea> -->
+                                                      <div class="align_adh">
+                                                        <div [innerHTML]="currentCalibration.certificationMemo"  matTooltipPosition="above"  [matTooltip]="parsedText(currentCalibration.certificationMemo)" class="text_editor_box"
+                                                            style="width: 96% !important;"></div>
+                                                        <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                                            data-target="#textarea-popup" matTooltip="Memo"
+                                                            matTooltipPosition="above"
+                                                            (click)="onAddTextAreaInfo(currentCalibration.certificationMemo,2)"></i>
+                                                    </div>
+                                      
+                                                    </div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-3 asset_border">
+                                    <div class="form-group">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <label>
+                                                <input (ngModelChange)="setvaliDate($event)" (change)="inspectionMethod()" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.inspectionRequired">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Inspection Required
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="currentCalibration.inspectionRequired">
+                                        <div class="form-group">
+                                            <label>Inspection Frequency  <span class="clr-red">*</span></label>
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label>Months</label>
+                                                    <input  (ngModelChange)="setvaliDate($event)" type="number" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.inspectionFrequencyMonths" min="0" max="12">
+
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label> Days</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" type="number" (input)="validateDates($event.target.value,currentCalibration,3)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.inspectionFrequencyDays" min="0" max="31">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">Default Vendor</label>
+                                            <p-autoComplete (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="vendorName3" [dropdown]="true"
+                                            errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                                            (completeMethod)="filterWarentyVendor3($event)"  [size]="30" [minLength]="1"
+                                            [(ngModel)]="currentCalibration.inspectionDefaultVendorId"  #prellRevInsp="ngModel" >
+                                        </p-autoComplete>
+                                        </div>
+                                        <div class="form-group">
+
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label>Default Cost</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" class="form-control amount text-right" type="text" [ngModelOptions]="{standalone: true}" (change)="formatToGlobal(currentCalibration)"
+                                                           [(ngModel)]="currentCalibration.inspectionDefaultCost">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.inspectionDefaultCost !=0">*</span></label>
+                                                
+                                                    <p-dropdown [required]="currentCalibration.inspectionDefaultCost !=0"  [showClear]="true" class="p-dropdown-100" (ngModelChange)="setvaliDate($event)"   [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.inspectionCurrencyId" name="inspectionCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                                </div>
+                                            </div>
+                                        </div>
+                                     
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">GL Account <span *ngIf="currentCalibration.inspectionRequired">*</span></label>
+                            <p-autoComplete (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="Inspector3" [dropdown]="true"
+                            errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
+                            (completeMethod)="filterWarentyGl3($event)"  [size]="30" [minLength]="1" [required]="currentCalibration.inspectionRequired"
+                            [(ngModel)]="currentCalibration.inspectionGlaAccountId"  #prellRevInsp3="ngModel" >
+                        </p-autoComplete> 
+    
+    
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Inspection Memo</label>
+                                            <!-- <textarea  (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                      [(ngModel)]="currentCalibration.inspectionMemo"></textarea> -->
+                                                      <div class="align_adh">
+                                                        <div [innerHTML]="currentCalibration.inspectionMemo"  matTooltipPosition="above" [matTooltip]="parsedText(currentCalibration.inspectionMemo)" class="text_editor_box"
+                                                            style="width: 96% !important;"></div>
+                                                        <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                                            data-target="#textarea-popup" matTooltip="Memo"
+                                                            matTooltipPosition="above"
+                                                            (click)="onAddTextAreaInfo(currentCalibration.inspectionMemo,3)"></i>
+                                                    </div>
+                                                    </div>
+                                        <div class="clear"></div>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-3 asset_border">
+                                    <div class="form-group">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <label>
+                                                <input (ngModelChange)="setvaliDate($event)" (change)="verificationMethod()" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentCalibration.verificationRequired">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Verification Required
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div *ngIf="currentCalibration.verificationRequired">
+                                        <div class="form-group">
+                                            <label>Verification Frequency <span class="clr-red">*</span></label>
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label>Months</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" type="number" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.verificationFrequencyMonths" min="0" max="12">
+
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label> Days</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" type="number" (input)="validateDates($event.target.value,currentCalibration,4)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                           [(ngModel)]="currentCalibration.verificationFrequencyDays" min="0" max="31">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">Default Vendor</label>
+                                            <p-autoComplete  (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="vendorName4" [dropdown]="true"
+                                            errorMessage="Records not found"  [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                                            (completeMethod)="filterWarentyVendor4($event)"  [size]="30" [minLength]="1"
+                                            [(ngModel)]="currentCalibration.verificationDefaultVendorId"  #prellRevInsp="ngModel" >
+                                        </p-autoComplete>
+                                        </div>
+                                        <div class="form-group">
+
+                                            <div class="col-md-12">
+                                                <div class="col-sm-6">
+                                                    <label>Default Cost</label>
+                                                    <input (ngModelChange)="setvaliDate($event)" class="form-control amount text-right" [ngModelOptions]="{standalone: true}" (change)="formatToGlobal(currentCalibration)"
+                                                           [(ngModel)]="currentCalibration.verificationDefaultCost" type="text">
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label>Currency <span class="clr-red" *ngIf="currentCalibration.verificationDefaultCost !=0">*</span></label>
+            
+                                                    <p-dropdown [required]="currentCalibration.verificationDefaultCost !=0"  [showClear]="true" class="p-dropdown-100" (ngModelChange)="setvaliDate($event)"    [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentCalibration.verificationCurrencyId" name="verificationCurrencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 8px;">
+                                            <label class="mr-tp-10">GL Account <span *ngIf="currentCalibration.verificationRequired">*</span></label>
+                            <p-autoComplete  (ngModelChange)="setvaliDate($event)" class="p-autoComplete-ctsm" field="name" name="Inspector4" [dropdown]="true"
+                            errorMessage="Records not found"  [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
+                            (completeMethod)="filterWarentyGl4($event)"  [size]="30" [minLength]="1" [required]="currentCalibration.verificationRequired"
+                            [(ngModel)]="currentCalibration.verificationGlAccountId"  #prellRevInsp3="ngModel" >
+                        </p-autoComplete> 
+    
+    
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Verification Memo</label>
+                                            <!-- <textarea (ngModelChange)="setvaliDate($event)" class="form-control" [ngModelOptions]="{standalone: true}"
+                                                      [(ngModel)]="currentCalibration.verificationMemo"></textarea> -->
+                                                      <div class="align_adh">
+                                                        <div [innerHTML]="currentCalibration.verificationMemo"  matTooltipPosition="above" [matTooltip]="parsedText(currentCalibration.verificationMemo)" class="text_editor_box"
+                                                            style="width: 96% !important;"></div>
+                                                        <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                                            data-target="#textarea-popup" matTooltip="Memo"
+                                                            matTooltipPosition="above"
+                                                            (click)="onAddTextAreaInfo(currentCalibration.verificationMemo,4)"></i>
+                                                    </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="margintop">
+                                        <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
+                                        <button  [disabled]="!generalForm.valid ||  disableSaveForEdit" type="submit" class="btn btn-primary pull-right submit-btn"
+                                                (click)="saveCalibration()">
+                                             {{currentCalibration.assetCal==true ? 'Update' : 'Save'}}
+                                        </button>
+                                      <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">Previous</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+                </form>
+
+
+                <ng-template #tabRedirectConfirmationModal3 let-c="close" let-d="dismiss">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+                      <h4 class="modal-title">Confirmation</h4>
+                    </div>
+                    <div class="modal-body">
+                      <h6 >
+                        Do you want to Save changes and Continue ?
+                      </h6>
+                    </div>
+                    <div class="modal-footer">
+                  
+                      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="redirectdismissModel()">No</button>
+                      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+                    </div>
+                  </ng-template>
+
+                  <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+                  <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                                <h4 class="modal-title">Edit Memo</h4>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-fixed workflow-table-material">
+                                    <thead>
+                                        <th style="color: #fff;">Memo</th>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <p-editor [(ngModel)]="textAreaInfo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo($event)"
+                                                name="textAreaInfo" required></p-editor>
+                                            </td>
+                                        </tr>
+                                    </tbody> 
+                                </table>
+                                <div style="float:right;margin-top: 12px;">
+                                    <button type="button" class="btn btn-primary" (ngModelChange)="setvaliDate($event)" (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+                               </div> 
+                            </div>
+                        </div>
+
+                    </div>
+                </div>   
+                </div>
+
+                <div class="preloader" *ngIf="isSpinnerVisible">
+                    <div class="loading">
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </div>
+                </div>

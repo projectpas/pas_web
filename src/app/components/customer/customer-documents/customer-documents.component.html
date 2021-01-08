@@ -1,0 +1,996 @@
+﻿<div class="right_col" role="main" style="padding: 2px 6px;">
+  <div>
+    <div class="x_content">
+      <div *ngIf="isViewMode == false">
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-4">
+            <p class="fs12">
+              <label
+                class="control-label labels-font-header"
+                style="width: auto;"
+                >Customer Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p class="fs12">
+              <label
+                class="control-label labels-font-header"
+                style="width: auto;"
+                >Customer Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="card new-card" style="padding: 10px;">
+        <div class="card-header bg-primary new-card-header" >
+          <div class="row">
+            <div class="col">
+              <h4 class="new-card-heading">  Documents List</h4>
+            </div>
+            <div>
+              <a *ngIf="isViewMode == false" 
+               data-toggle="modal" data-target="#addDocumentDetails">
+                <button type="button" class="btn-sm new-btn-primary"
+                  matTooltip="Add Documents" matTooltipPosition="above" (click)="addDocumentDetails();">
+                  Add Documents
+                </button>
+              </a>              
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <hr />        
+        <div class="card-body new-card-body">
+          <p-table
+            #documents
+            class="rpo-table-cstm"
+            [value]="customerdocumentsDestructuredData"            
+            [rows]="pageSize"
+            [paginator]="true"
+            [pageLinks]="3"
+            [first]="0"
+            [rowsPerPageOptions]="[10, 20,  50, 100]"
+            [columns]="selectedColumns"
+            selectionMode="multiple"
+            [metaKeySelection]="true"
+            [resizableColumns]="true"
+            [reorderableColumns]="true"
+            [scrollable]="true"
+            (onPage)="pageIndexChange($event)"
+            scrollHeight="450px"
+          >
+            <ng-template pTemplate="colgroup" let-columns>
+              <colgroup>
+                <col *ngFor="let col of columns" style="width:auto" />
+              </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="caption" *ngIf="isViewMode == false">
+              <div class="row">
+                <div class="col">
+                <p-multiSelect
+                  [options]="customerDocumentsColumns"
+                  [(ngModel)]="selectedColumns"
+                  [ngModelOptions]="{ standalone: true }"
+                  optionLabel="header"
+                  selectedItemsLabel="{0} columns selected"
+                  [style]="{ minWidth: '200px' }"
+                  defaultLabel="Choose Columns"
+                  style="float:left"
+                ></p-multiSelect>
+              </div>
+              <div class="col">
+                <div
+                  style="width: auto !important; float: right;"
+                  class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                >
+                  <i class="fa fa-search"></i>
+                  <input
+                    type="text"
+                    pInputText
+                    size="50"
+                    class="form-control"
+                    (input)="
+                      documents.filterGlobal($event.target.value, 'contains')
+                    "
+                    placeholder=" Filter"
+                    style="height: 28px !important;"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button
+                  type="button"
+                  class="btn btn-primary new-table-button"
+                  pButton
+                  icon="fa-download"
+                  matTooltip="Download  Data"
+                  matTooltipPosition="above"
+                  iconPos="left"
+                  label="Export  Data"
+                  (click)="documents.exportCSV()"
+                  style="padding: 5px 10px !important;"
+                ></button>
+                <button
+                  type="button"
+                  class="btn btn-primary new-table-button"
+                  pButton
+                  icon="fa-download"
+                  matTooltip="Download Selected Data"
+                  matTooltipPosition="above"
+                  iconPos="left"
+                  label="Export Selected Data"
+                  (click)="documents.exportCSV({ selectionOnly: true })"
+                  style="padding: 5px 10px !important;"
+                ></button>
+              </div>
+              <div class="col">
+                <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
+                  <label style="width: auto !important;margin-top: 3px;">
+                   <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"/>
+                   <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                     Show Deleted List 
+                 </label>
+               </div>
+             </div>
+            </div> 
+          </ng-template>
+
+          <ng-template pTemplate="caption" *ngIf="isViewMode == true">
+            <div class="row">
+              <div class="col">
+                <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
+                  <label style="width: auto !important;margin-top: 3px;">
+                   <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"/>
+                   <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                     Show Deleted List 
+                 </label>
+               </div>
+             </div>
+            </div>
+          </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <ng-container *ngFor="let col of columns">
+                  <th
+                    *ngIf="col.field !== 'fileName' && col.field !== 'fileName' "
+                    pResizableColumn
+                    pReorderableColumn
+                    [pSortableColumn]="col.field">
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th *ngIf="col.field == 'fileName'">
+                    File Name
+                  </th>
+                </ng-container>
+                <th>Actions</th>
+              </tr>
+              <tr>
+                <th
+                  style="width:auto"
+                  *ngFor="let col of columns"
+                  [ngSwitch]="col.field"
+                >
+                  <input type="text" (input)="documents.filter($event.target.value,col.field,'contains')" *ngIf=" col.field != 'fileCreatedDate' && col.field != 'fileUpdatedDate'" style="width:100%;" pInputText >
+                  <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'fileCreatedDate'" name="fileCreatedDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )"> 
+                  <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'fileUpdatedDate'" name="fileUpdatedDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )">
+                </th>
+                <th></th>
+              </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+              <tr
+                [pSelectableRow]="rowData"
+                [pSelectableRowDblClick]="rowData"
+                (dblclick)="docviewdblclick(rowData)"
+              >
+                <ng-container *ngFor="let col of columns">
+                    <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                        class="ui-resizable-column"
+                        pReorderableRowHandle>
+                        {{
+                          col.field == 'fileCreatedDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                        : rowData[col.field] && col.field == 'fileUpdatedDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                        : rowData[col.field]
+                        }}
+                    </td>
+                  <td *ngIf="col.field == 'docMemo'">
+                      <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                  </td>
+                  <td *ngIf="col.field == 'fileName'">
+                    <a class="filelink" (click)="downloadFileUpload(x)">
+                      {{ rowData[col.field] }}</a
+                    >
+                  </td>
+                </ng-container>
+
+                <td class="text-center" *ngIf="isViewMode == false">
+                  <div  *ngIf="currentDeletedstatus==true" >
+                      <span>
+                        <a 
+                          class="btn btn-info boxed-float-btn nobg"
+                          data-toggle="modal"
+                          data-target="#docView"
+                          (click)="openDocument(rowData)"
+                          matTooltip="View"  matTooltipPosition="above"
+                        >
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </span>
+                      <span><a class="btn nobg" 
+                        (click)="openHistory(contentAuditHist, rowData)"
+                        matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                      </span>
+                      <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                  </div>
+                  <div  *ngIf="currentDeletedstatus==false" >
+                    <span>
+                      <a
+                        class="btn btn-info boxed-float-btn nobg"
+                        data-toggle="modal"
+                        data-target="#docView"
+                        (click)="openDocument(rowData)"
+                        matTooltip="View"  matTooltipPosition="above"
+                      >
+                        <i class="fa fa-eye"></i>
+                      </a>
+                    </span>
+  
+                    <span data-toggle="modal"
+                    data-target="#addDocumentDetails">
+                      <a class="btn nobg" 
+                      (click)="editCustomerDocument(rowData)" matTooltip="Edit" 
+                      matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+  
+                    <span><a class="btn nobg"
+                      (click)="openDelete(deleteContent, rowData); documents.reset()"
+                      matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+  
+                      <span><a class="btn nobg" 
+                        (click)="openHistory(contentAuditHist, rowData)"
+                        matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                  </div>
+                </td>
+                <td class="text-center" *ngIf="isViewMode == true">
+                  <span>
+                    <a
+                      class="btn btn-info boxed-float-btn nobg"
+                      data-toggle="modal"
+                      data-target="#docView"
+                      (click)="openDocument(rowData)"
+                      matTooltip="View"  matTooltipPosition="above"
+                    >
+                      <i class="fa fa-eye"></i>
+                    </a>
+                  </span>
+
+                  <span><a class="btn nobg" 
+                    (click)="openHistory(contentAuditHist, rowData)"
+                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template
+              pTemplate="emptymessage"
+              let-columns
+              *ngIf="customerdocumentsDestructuredData.length == 0"
+            >
+              <tr>
+                <td
+                  [attr.colspan]="10"
+                  *ngIf="isViewMode == false"
+                  style="color: red; font-weight: bold; text-align: center"
+                >
+                  No records found
+                </td>
+                <td
+                  [attr.colspan]="10"
+                  *ngIf="isViewMode == true"
+                  style="color: red; font-weight: bold; text-align: center"
+                >
+                  No records found
+                </td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+              <label id="footer" class="footer">Total:</label>
+              <input
+                style="width: 5%;"
+                [(ngModel)]="documents._totalRecords" name="no'of records"
+                [disabled]="true"
+                pInputText
+                type="text"
+              />
+
+              &nbsp;&nbsp;
+              <label id="footer" class="footer1">Pages Count:</label>
+
+              <input
+                style="width: 5%;"
+                [ngModel]="getPageCount(documents._totalRecords, pageSize)" name="page count"
+                [disabled]="true"
+                pInputText
+                type="text"
+              />
+            </ng-template>
+          </p-table>
+        </div>
+        <div style="margin-top:10px">
+          <button
+            type="button"
+            class="btn btn-primary pull-right submit-btn"
+            (click)="addNewClick()"
+            *ngIf="isViewMode == false">
+            Add New
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary pull-right submit-btn"
+            (click)="backClick()"
+            *ngIf="isViewMode == false">
+            Previous
+          </button>          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template
+  #deleteContent
+  let-c="close"
+  let-d="dismiss"
+  data-backdrop="static"
+>
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div> 
+  </div>
+
+  <div class="modal-body">
+    <strong>
+      Document Name:
+      <span class="new-label">{{ selectedRowForDelete.docName }}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="deleteItemAndCloseModel()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+
+<div id="docView" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Details of Customer Document</h4>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div> 
+      </div>
+      <div class="modal-body" *ngIf="sourceViewforDocument">
+        <div class="col-sm-12">
+          <p>
+            <span class="label"
+              ><b>Name<span class="clr-red">*</span> : </b></span
+            ><span class="value">{{ sourceViewforDocument.docName }}</span>
+          </p>
+          <p>
+            <span class="label"
+              ><b>Description<span class="clr-red">*</span> : </b></span
+            ><span class="value">{{
+              sourceViewforDocument.docDescription
+            }}</span>
+          </p>
+          <p style="vertical-align: top;">
+            <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
+            <span class="value">
+          <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDocument.docMemo">
+          </p></span></p>
+          <div class="mt-3">
+            <h6 class="panel-title">Attachment Details:</h6>
+            <p-table
+              #dt
+              class="table-responsive ptable-cus-pma"
+              [paginator]="sourceViewforDocumentList.length > 0"
+              [value]="sourceViewforDocumentList"
+              [rows]="3"
+              [columns]="sourceViewforDocumentListColumns"
+            >
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th *ngFor="let col of columns">
+                    {{ col.header }}
+                  </th>
+                  <th>
+                    Download
+                  </th>
+                </tr>
+                <tr>
+                  <th
+                    style="width:auto"
+                    *ngFor="let col of columns"
+                    [ngSwitch]="col.field"
+                  >
+                    <input
+                      style="width:100%;"
+                      pInputText
+                      type="text"
+                      (input)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      "
+                    />
+                  </th>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template
+                pTemplate="body"
+                let-part
+                let-rowData
+                let-columns="columns"
+                let-i="rowIndex"
+              >
+                <tr>
+                  <td *ngFor="let col of columns">
+                    <ng-container *ngIf="col.field == 'fileName'">
+                      {{ part[col.field] }}
+                    </ng-container>
+                  </td>
+                  <td>
+                    <a
+                      (click)="downloadFileUpload(part)"
+                      matTooltip="Download"  matTooltipPosition="above"
+                      class="btn nobg btn-cstm"
+                      ><span><i class="fa fa-download"></i></span
+                    ></a>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template
+                pTemplate="emptymessage"
+                let-columns
+                *ngIf="sourceViewforDocumentList.length == 0"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="2"
+                    style="color: red; font-weight: bold; text-align: center"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="addDocumentDetails"
+  role="dialog"
+  data-backdrop="static"
+  >
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          (click)="closeMyModel('#addDocumentDetails')"
+        >
+          &times;
+        </button>
+        <h4 class="modal-title">Add Document Details</h4>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div> 
+      </div>
+      <form #addDocumentForm="ngForm" class="form-horizontal">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Name <span class="clr-red">*</span></label>
+                <input
+                  class="form-control"
+                  type="text"
+                  name="name"
+                  [(ngModel)]="documentInformation.docName"
+                  (ngModelChange)="enableSave()"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label>Description </label>
+                <textarea
+                  class="form-control"
+                  name="description"
+                  [(ngModel)]="documentInformation.docDescription"
+                  (ngModelChange)="enableSave()"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <span class="label">Memo </span>
+                <div class="col-sm-11">
+                  <span>                    
+                    <div class="form-group memo-popup-cstm mat_emo">
+                      <div
+                      (ngModelChange)="enableSave()"
+                        [innerHTML]=" documentInformation.docMemo.trim()"
+                        [matTooltip]="parsedText(documentInformation.docMemo)"
+                        matTooltipPosition="above"
+                        class="form-control"
+                        style="width: 109%;"
+                        class="text_editor_box"
+                      ></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-sm-1">
+                  <span style="margin-left:10px">
+                    <a
+                    class="btn nobg"
+                    data-toggle="modal"
+                    (ngModelChange)="enableSave()"
+                    data-target="#memo-popup-Doc"
+                    (click)="onClickMemo()"
+                    matTooltip="Add Memo"
+                    matTooltipPosition="above"><i class="fa fa-pencil"></i>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label style="float: none;"
+                  >Attachments <span class="clr-red">*</span></label
+                >
+                <p-fileUpload
+                  #fileUploadInput
+                  name="fileupload[]"
+                  multiple="multiple"
+                  [showCancelButton]="false"
+                  [showUploadButton]="false"
+                  customUpload="true"
+                  (onSelect)="fileUpload($event)"
+                  (onRemove)="removeFile($event)"
+                ></p-fileUpload>
+              </div> 
+            </div>
+            <div
+              class="table-responsive table-overflow"
+              *ngIf="sourceViewforDocumentList.length > 0"
+            >
+              <h6 class="panel-title" style="padding-left: 10px;">
+                Attachment Details:
+              </h6>
+              <p-table
+                class="table-responsive ptable-cus-pma"
+                [paginator]="sourceViewforDocumentList.length > 0"
+                [value]="sourceViewforDocumentList"
+                [rows]="3"
+                [columns]="sourceViewforDocumentListColumns"
+              >
+                <ng-template pTemplate="header" let-columns>
+                  <tr>
+                    <th *ngFor="let col of columns">
+                      {{ col.header }}
+                    </th>
+                    <th>
+                      Download
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template
+                  pTemplate="body"
+                  let-part
+                  let-rowData
+                  let-columns="columns"
+                  let-i="rowIndex">
+                  <tr>
+                    <td *ngFor="let col of columns">
+                      <ng-container *ngIf="col.field == 'fileName'">
+                        {{ part[col.field] }}
+                      </ng-container>
+                    </td>
+                    <td>
+                      <a
+                        (click)="downloadFileUpload(part)"
+                        matTooltip="Download"  matTooltipPosition="above"
+                        class="btn nobg btn-cstm"
+                        ><span><i class="fa fa-download"></i></span
+                      ></a>
+                    </td>
+                  </tr>
+                </ng-template>
+                <ng-template
+                  pTemplate="emptymessage"
+                  let-columns
+                  *ngIf="sourceViewforDocumentList.length == 0"
+                >
+                  <tr>
+                    <td
+                      [attr.colspan]="2"
+                      style="color: red; font-weight: bold; text-align: center"
+                    >
+                      No records found
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            *ngIf="!isEditButton"
+            class="btn btn-primary pull-right submit-btn"
+            style="text-align:center"
+            (click)="saveDocumentInformation()"
+            [disabled]="!addDocumentForm.valid"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            *ngIf="isEditButton"
+            class="btn btn-primary pull-right submit-btn"
+            style="text-align:center"
+            (click)="saveDocumentInformation()"
+            [disabled]="!addDocumentForm.valid || disableSave"
+          >
+            Update
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            (click)="dismissDocumentPopupModel(); closeMyModel('#addDocumentDetails')"
+          >
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close">
+            &times;
+          </button>
+          <h4 class="modal-title">Edit Memo</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered table-fixed workflow-table-material">
+            <thead>
+              <th style="color: #fff;">Memo</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="white-space: inherit">
+                  <p-editor
+                   spellcheck="true"
+                   (ngModelChange)="enableSave()"
+                    [(ngModel)]="memoPopupContent"
+                    [style]="{ height: '320px' }"
+                    name="memoPopupContent"
+                    required
+                  ></p-editor>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="float: right;">
+            <button
+              type="button"
+              class="btn btn-primary"
+              style="padding: 6px 12px !important; margin-top: 10px;"
+              (click)="onClickPopupSave()" [disabled]="disableSave">
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              style="padding: 6px 12px !important; margin-top: 10px;"
+              (click)="closeMemoModel()" >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template
+  #contentAuditHist
+  let-c="close"
+  let-d="dismiss"
+  style="width:auto"
+  data-backdrop="static"
+>
+  <div class="modal-header">
+    <h4 class="modal-title">History of Customer Documents</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div> 
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Document Name</th>
+            <th>Description</th>
+            <th>Memo</th>
+            <th>File Name</th>     
+            <th>Created Date</th>       
+            <th>Created By</th>
+            <th>Updated Date</th>
+            <th>Updated By</th>
+            <!-- <th>Is Deleted</th>  -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let audit of documentauditHisory"></tr>
+          <tr *ngFor="let audit of documentauditHisory; let i = index">
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'docName', audit.docName)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.docName }}
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'docDescription',
+                  audit.docDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }" >
+              {{ audit.docDescription }}
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'docMemo', audit.docMemo)
+                  ? 'black'
+                  : 'red'
+              }">
+            <p [innerHTML]="audit.docMemo"></p>
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'fileName', audit.fileName)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.fileName }}
+            </td>
+            <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'createdBy',
+                  audit.createdBy
+                )
+                  ? 'black'
+                  : 'red'
+              }" >
+              {{ audit.createdBy }}
+            </td>
+            <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'updatedBy',
+                  audit.updatedBy
+                )
+                  ? 'black'
+                  : 'red'
+              }" >
+              {{ audit.updatedBy }}
+            </td>
+            
+            <!-- <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td> -->
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      Close
+    </button>
+  </div>
+</ng-template>
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+  <div class="modal-header">
+      <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+
+      <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+          <span aria-hidden="true">&times;</span>
+      </button>
+      <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+              <p class="fs12">
+                  <label class="control-label labels-font-header" style="width: auto;">
+                      Customer Name:
+                  </label>
+                  <span class="span-header-red" style="text-transform: capitalize">
+                      {{ customerName }}
+                  </span>
+              </p>
+          </div>
+          <div class="col-md-6">
+              <p class="fs12">
+                  <label class="control-label labels-font-header" style="width: auto;">
+                      Customer Code:
+                  </label>
+                  <span class="span-header-red" style="text-transform: capitalize">
+                      {{ customerCode }}
+                  </span>
+              </p>
+          </div>
+      </div>
+  </div>
+<div class="modal-body">
+    <strong>
+      Document Name:
+        <span class="new-label">{{restorerecord.docName}}</span>
+    </strong>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+</div>
+</ng-template>  
+
+
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

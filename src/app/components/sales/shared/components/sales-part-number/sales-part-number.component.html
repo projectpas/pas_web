@@ -1,0 +1,686 @@
+<div class="form-group">
+    <div class="row" *ngIf="isViewMode == false" style="padding-bottom: 8px;">
+        <button type="button" class="btn btn-primary" (click)="addPartNumber()" [disabled]="salesQuote.isApproved">
+            Add PN
+        </button>
+    </div>
+    <div class="row" style="overflow-y: auto;  border: 1px solid rgba(0,0,0,.125);">
+        <!-- <div style="overflow-y: auto;"> -->
+        <p-table #dt class="rpo-table-cstm rro-table-cstm sales-quote-part-search-data" [value]="summaryParts"
+            [lazy]="true" [rows]="10" [paginator]="showPaginator" [first]="0" [rowsPerPageOptions]="[10, 20, 30]"
+            selectionMode="multiple" [totalRecords]="totalRecords" [columns]="summaryColumns" [scrollable]="true"
+            [resizableColumns]="true" [reorderableColumns]="true" scrollHeight="450px" (onLazyLoad)="onPaging($event)">
+            <ng-template pTemplate="colgroup" let-summaryColumns>
+                <colgroup>
+                    <col *ngFor="let summaryColumn of summaryColumns"
+                        [ngStyle]="{'width': summaryColumn.width, 'text-align': summaryColumn.textalign}" />
+
+
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-summaryColumns>
+                <tr>
+                    <!-- <th></th> -->
+                    <th style="text-align: left !important; width:auto; background-color:rgb(107 149 239) !important; color: #fff !important;"
+                        *ngFor="let summaryColumn of summaryColumns">
+                        <span *ngIf="summaryColumn.field == 'quantityToBeQuoted'
+                                 || summaryColumn.field == 'customerRef'
+                                 || summaryColumn.field == 'quantityRequested'">
+                            {{ summaryColumn.header }}<span class="clr-red">*</span>
+                        </span>
+                        <span *ngIf="summaryColumn.field != 'quantityToBeQuoted' 
+                            && summaryColumn.field != 'customerRef'
+                                && summaryColumn.field != 'quantityRequested'">
+                            {{ summaryColumn.header }}
+                        </span>
+                    </th>
+                    <th
+                        style="position: sticky !important;width:80px; background-color:rgb(107 149 239) !important; color: #fff !important;">
+                        Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-summaryPart let-columns="summaryColumns" let-rowIndex="rowIndex">
+                <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                    <td *ngFor="let summaryColumn of summaryColumns" style="width:auto" pReorderableRowHandle>
+                        <span *ngIf="summaryColumn.field == 'hidePart'">
+                            <a class="expand-row" *ngIf="!summaryPart[field]"
+                                (click)="summaryPart[field] = !summaryPart[field]">
+                                <i class="fa fa-plus btn
+                                            btn-success btn-cstm btn-xs" matTooltip="Show details"
+                                    style="padding: 3px 8px !important;">
+                                </i>
+                            </a>
+                            <a class="expand-row" *ngIf="summaryPart[field]"
+                                (click)="summaryPart[field] =!summaryPart[field]">
+                                <i class="fa fa-minus btn-danger btn-cstm btn-xs" matTooltip="Hide details"
+                                    style="padding: 3px 8px !important;">
+                                </i>
+                            </a>
+                        </span>
+                        <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
+                            {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
+                        </span>
+                        <span *ngIf="summaryColumn.field != 'hidePart'
+                                        && summaryColumn.field != 'quantityRequested'
+                                        && summaryColumn.field != 'quantityToBeQuoted'
+                                        && summaryColumn.field != 'quantityAlreadyQuoted'
+                                        && summaryColumn.field != 'fixRate'
+                                        && summaryColumn.field != 'grossSalePrice'
+                                        && summaryColumn.field != 'salesDiscountExtended'
+                                        && summaryColumn.field != 'netSalesPriceExtended'
+                                        && summaryColumn.field != 'misc'
+                                        && summaryColumn.field != 'freight'
+                                        && summaryColumn.field != 'taxAmount'
+                                        && summaryColumn.field != 'totalSales'
+                                        && summaryColumn.field != 'unitCostExtended'
+                                        && summaryColumn.field != 'marginAmountExtended'
+                                        && summaryColumn.field != 'marginPercentageExtended'">
+                            {{summaryPart[summaryColumn.field]}}
+                        </span>
+                        <span class="float-right" *ngIf="summaryColumn.field == 'quantityRequested'
+                                        || summaryColumn.field == 'quantityToBeQuoted'
+                                        || summaryColumn.field == 'quantityAlreadyQuoted'">
+                            {{summaryPart[summaryColumn.field] | globalNmberFormat}}
+                        </span>
+                        <span class="float-right" *ngIf="summaryColumn.field == 'grossSalePrice'
+                                        || summaryColumn.field == 'salesDiscountExtended'
+                                        || summaryColumn.field == 'netSalesPriceExtended'
+                                        || summaryColumn.field == 'misc'
+                                        || summaryColumn.field == 'freight'
+                                        || summaryColumn.field == 'taxAmount'
+                                        || summaryColumn.field == 'totalSales'
+                                        || summaryColumn.field == 'unitCostExtended'
+                                        || summaryColumn.field == 'marginAmountExtended'
+                                        || summaryColumn.field == 'marginPercentageExtended'">
+                            {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
+                        </span>
+                    </td>
+                    <td style="position:sticky;width:80px">
+                        <span>
+                            <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}" class="btn nobg"
+                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add/Edit Stock Line"
+                                matTooltipPosition="above">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </span>
+                        <span>
+                            <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
+                                matTooltip="View Stock Line" matTooltipPosition="above">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </span>
+                    </td>
+                </tr>
+                <tr [hidden]="!summaryPart[field]" class="sub-table no-bg">
+                    <td style="text-align: center;"></td>
+                    <div class="zui-wrapper" style="padding-bottom:60px;margin-top:10px;margin-left:10px">
+                        <td colspan="23" class="p-0" style="overflow-y: auto !important;">
+                            <div class="zui-scroller">
+                                <p-table #dt class="zui-table rpo-table-cstm sales-quote-part-search-data"
+                                    [value]="summaryPart.childParts" [lazy]="true" [rows]="10"
+                                    [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords"
+                                    [pageLinks]="pageLinks" [paginator]="showPaginator" [columns]="columns"
+                                    [resizableColumns]="true" [scrollable]="true" scrollHeight="450px"
+                                    [reorderableColumns]="true" [style]="{ width: '100%'}"
+                                    (onLazyLoad)="onPaging($event)">
+
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                <tr style="text-align: left !important;">
+                    <th style="width:25px">&nbsp;</th>
+                    <th>PN</th>
+                    <th>PN Description</th>
+                    <th>Stk Line Num</th>
+                    <th>Ser Num</th>
+                    <th>Cond</th>
+                    <th>Priority<span class="clr-red">*</span></th>
+                    <th>Quote Date</th>
+                    <th>Qty Available<span class="clr-red">*</span></th>
+                    <th>Qty Quoted<span class="clr-red">*</span></th>
+                    <th rowspan="2">Qty Prev Quoted</th>
+                    <th>Cust Request Date<span class="clr-red">*</span></th>
+                    <th>Cust Promised Date<span class="clr-red">*</span></th>
+                    <th>Est.Ship Date<span class="clr-red">*</span></th>
+                    <th>Status</th>
+                    <th>Unit Cost</th>
+                    <th>MarkUp %</th>
+                    <th>MarkUp Amt/Unit</th>
+                    <th>Gross Price/Unit</th>
+                    <th>Disc. %</th>
+                    <th>Disc. Amt/Unit</th>
+                    <th>MarkUp Amt</th>
+                    <th>Gross Sales Amt</th>
+                    <th>Disc. Amt</th>
+                    <th>Net Sales Amt</th>
+                    <th>Tax Type</th>
+                    <th>Tax Amt</th>
+                    <th>Total</th>
+                    <th>Extended Cost</th>
+                    <th>Product Margin</th>
+                    <th>Product Margin (%)</th>
+                    <th>Stk Type</th>
+                    <th>Alt/Equiv</th>
+                    <th>Cntrl Num</th>
+                    <th>Cntrl ID Num</th>
+                    <th style="width:120px">Notes</th>
+                    <th class="zui-sticky-col" *ngIf="isViewMode == false">Actions</th>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-part let-stockIndex="rowIndex" let-columns="columns">
+                <tr>
+                    <td style="width:25px">&nbsp;</td>
+                    <td>
+                        {{ part.partNumber }}
+                    </td>
+                    <td>
+                        {{ part.description }}
+                    </td>
+                    <td>
+                        {{ part.stockLineNumber }}
+                    </td>
+                    <td>
+                        {{ part.serialNumber }}
+                    </td>
+                    <td>
+                        {{ part.conditionDescription }}
+                    </td>
+                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
+                            #priorityId="ngModel" (change)="onEditPartDetails()">
+                            <option *ngFor="let p of salesQuote.priorities" [ngValue]="p.priorityId">
+                                {{ p.description }}
+                            </option>
+                        </select>
+                    </td>
+                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                        {{ part.priorityName }}
+                    </td>
+                    <td>
+                        {{ salesQuote.openDate | date: "MM/dd/yyyy"}}
+                    </td>
+                    <td class="text-right">
+                        {{ part.qtyAvailable | globalNmberFormat}}
+                    </td>
+                    <td class="text-right">
+                        {{ part.quantityToBeQuoted | globalNmberFormat}}
+                    </td>
+                    <td class="text-right">
+                        {{ part.quantityAlreadyQuoted | globalNmberFormat}}
+                    </td>
+                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                        {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
+                    </td>
+                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''" class="pas-clder"
+                            [showIcon]="true" appendTo="body" name="customerRequestDate" [yearNavigator]="true"
+                            [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="part.customerRequestDate"
+                            (ngModelChange)="onEditPartDetails()" #customerRequestDate="ngModel"
+                            [minDate]="salesQuote.openDate" required>
+                        </p-calendar>
+                        <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
+                            class="alert alert-danger alert-danger-cstm">
+                            <div *ngIf="customerRequestDate.errors.required">
+                                <small>Customer Request Date is required </small>
+                            </div>
+                        </div>
+                    </td>
+                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                        {{  part.promisedDate | date: "MM/dd/yyyy"}}
+                    </td>
+                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''" class="pas-clder"
+                            [showIcon]="true" appendTo="body" name="promisedDate" [yearNavigator]="true"
+                            [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="part.promisedDate"
+                            (ngModelChange)="onEditPartDetails()" #promisedDate="ngModel"
+                            [minDate]="salesQuote.openDate" required>
+                        </p-calendar>
+                        <div *ngIf="promisedDate.invalid && (promisedDate.dirty || promisedDate.touched)"
+                            class="alert alert-danger alert-danger-cstm">
+                            <div *ngIf="promisedDate.errors.required">
+                                <small>Promised Date is required </small>
+                            </div>
+                        </div>
+                    </td>
+                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                        {{  part.estimatedShipDate | date: "MM/dd/yyyy" }}
+                    </td>
+                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''" class="pas-clder"
+                            [showIcon]="true" appendTo="body" name="estimatedShipDate" [yearNavigator]="true"
+                            [monthNavigator]="true" yearRange="1900:2100" [(ngModel)]="part.estimatedShipDate"
+                            (ngModelChange)="onEditPartDetails()" #estimatedShipDate="ngModel"
+                            [minDate]="salesQuote.openDate" required>
+                        </p-calendar>
+                        <div *ngIf="estimatedShipDate.invalid && (estimatedShipDate.dirty || estimatedShipDate.touched)"
+                            class="alert alert-danger alert-danger-cstm">
+                            <div *ngIf="estimatedShipDate.errors.required">
+                                <small>Estimated Ship Date is required </small>
+                            </div>
+                        </div>
+                    </td>
+                    <td *ngIf="isViewMode == false">
+                        {{ salesQuote.statusName }}
+                    </td>
+                    <td *ngIf="isViewMode == true">
+                        {{ salesQuote.status }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.unitCostPerUnit  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.markUpPercentage  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.markupPerUnit  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
+                    </td>
+                    <td class="text-right">
+                        {{ part.salesDiscount  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.markupExtended  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
+                    </td>
+                    <td class="text-right">
+                        {{ part.salesDiscountExtended  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.netSalesPriceExtended  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.taxType }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.taxAmount  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.totalSales  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.unitCostExtended  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.marginAmountExtended  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td class="text-right">
+                        {{ part.marginPercentageExtended  | twoDecimalGlobalNumberFormatPipe }}
+                    </td>
+                    <td>
+                        {{ part.pmaStatus }}
+                    </td>
+                    <td>
+                        {{ part.altOrEqType }}
+                    </td>
+                    <td>
+                        {{ part.controlNumber }}
+                    </td>
+                    <td>
+                        {{ part.idNumber }}
+                    </td>
+                    <td style="width:120px" *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                        <div class="form-group notes-popup-cstm mat_emo"
+                            style="width: 120px;    display: inline-flex;    margin-bottom: 0;">
+                            <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                            <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal"
+                                style="position: relative;top: 6px;" data-target="#textarea-popupNotes"
+                                matTooltip="Notes" matTooltipPosition="above"
+                                (click)="onAddTextAreaInfo(part,stockIndex, rowIndex)"></i>
+                        </div>
+                    </td>
+                    <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
+                        <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                    </td>
+                    <td class="zui-sticky-col" style="width:130px !important" *ngIf="isViewMode == false">
+                        <span>
+                            <a [class.disabled]="isEditDisabled(salesQuote, part)"
+                                [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}" class="btn nobg"
+                                (click)="openPartToEdit(part)" matTooltip="Edit" matTooltipPosition="above">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+                        </span>
+
+                        <span>
+                            <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
+                                [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}" class="btn nobg"
+                                (click)="openPartDelete(deleteContent,part)" matTooltip="Delete"
+                                matTooltipPosition="above">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </span>
+                        <!-- <button [disabled]="isEditDisabled(salesQuote, part)" class="btn-edit" mat-icon-button
+                            (click)="openPartToEdit(part)" matTooltip="edit" matTooltipPosition="above">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button [disabled]="isDeleteDisabled(salesQuote, part)" class="btn-delete" mat-icon-button
+                            matTooltip="Delete" matTooltipPosition="above" (click)="openPartDelete(deleteContent,part)">
+                            <mat-icon color="warn">delete</mat-icon>
+                        </button> -->
+                        <span data-toggle="modal" data-target="#soqPartHistory">
+                            <a [class.disabled]="!part.salesOrderQuotePartId"
+                                [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}" class="btn nobg btn-hist-cstm"
+                                (click)="getAuditHistoryById(part)" matTooltip="History" matTooltipPosition="above"><i
+                                    class="fa fa-history"></i></a>
+                        </span>
+
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="selectedParts.length == 0">
+                <tr>
+                    <td *ngFor="let col of columns">&nbsp;</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    </td>
+</div>
+</tr>
+</ng-template>
+<ng-template pTemplate="emptymessage" let-columns *ngIf="summaryParts.length == 0">
+    <tr>
+        <td *ngFor="let col of summaryColumns">&nbsp;</td>
+        <td>&nbsp;</td>
+    </tr>
+</ng-template>
+</p-table>
+<!-- </div> -->
+</div>
+<div class="modal fade" id="textarea-popupNotes" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit {{"Notes"}}</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                        <th style="color: #fff;">{{"Notes"}}</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                                    required>
+                                </p-editor>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="float:right">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        style="padding: 6px 12px !important;margin-top: 10px;"
+                        (click)="onSaveTextAreaInfo(textAreaInfo)">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                        data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="isViewMode == false" style="text-align:right; width:100%; padding-top:5px;">
+    <button type="button" [disabled]="canSaveParts" class="btn btn-primary" style="width:55px;height:20px;"
+        (click)="approve()">Save</button>
+</div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<ng-template #updatePNDetailsModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
+        <h4 class="modal-title">Do you want to save the Part Details?</h4>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="approve()">Save</button>
+    </div>
+</ng-template>
+<ng-template #addPart let-c="close" let-d="dismiss">
+    <app-add-sales-part-number [display]="show" [selectedParts]="selectedParts" [salesQuote]="salesQuote"
+        [isStockLineViewMode]="isStockLineViewMode" [selectedSummaryRow]="selectedSummaryRow"
+        (select)="openSalesMargin($event)" (close)="onClose($event)">
+    </app-add-sales-part-number>
+</ng-template>
+
+<ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
+    <app-sales-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
+        (close)="onCloseMargin($event)"></app-sales-margin>
+</ng-template>
+
+<ng-template #deleteContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onClosePartDelete()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <h6 class="modal-body">Part Number : {{part.partNumber}}</h6>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="deletePart()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="onClosePartDelete()">No</button>
+    </div>
+
+</ng-template>
+<ng-template #partSaveConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
+        <h4 class="modal-title">Do you want to save the Part Details?</h4>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+            (click)="closeConfirmationModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="approve()">Save</button>
+    </div>
+</ng-template>
+
+<div id="soqPartHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
+                <h4 class="modal-title">History of Sales Order Quote Part</h4>
+            </div>
+            <div class="modal-body" *ngIf="auditHistory">
+                <div class="table-responsive" style="overflow-x:auto;">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Stk Line Num</th>
+                                <th>Ser Num</th>
+                                <th>Cond</th>
+                                <th>Priority</th>
+                                <th>Qty Quoted</th>
+                                <th>Cust Request Date</th>
+                                <th>Cust Promised Date</th>
+                                <th>Est.Ship Date</th>
+                                <th>Status</th>
+                                <th>Cust Ref</th>
+                                <th>Unit Cost</th>
+                                <th>MarkUp %</th>
+                                <th>MarkUp Amt/Unit</th>
+                                <th>Disc. Amt/Unit</th>
+                                <th>Disc. Amt</th>
+                                <th>Disc. %</th>
+                                <th>Extended Cost</th>
+                                <th>Fix Rate</th>
+                                <th>UOM</th>
+                                <th>Product Margin</th>
+                                <th>Product Margin (%)</th>
+                                <th>Cntrl Num</th>
+                                <th>Cntrl ID Num</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Modified Date</th>
+                                <th>Modified By</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <!--*ngIf="auditHistory.length> 0"-->
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
+                                    {{audit.partNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+                                    {{audit.partDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'stockLineNumber', audit.stockLineNumber)  ? 'black' : 'red'  }">
+                                    {{audit.stockLineNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'serialNumber', audit.serialNumber)  ? 'black' : 'red'  }">
+                                    {{audit.serialNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'conditionDescription', audit.conditionDescription)  ? 'black' : 'red'  }">
+                                    {{audit.conditionDescription}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'priorityName', audit.priorityName)  ? 'black' : 'red'  }">
+                                    {{audit.priorityName}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'qtyQuoted', audit.qtyQuoted)  ? 'black' : 'red'  }">
+                                    {{audit.qtyQuoted}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'customerRequestDate', audit.customerRequestDate)  ? 'black' : 'red'  }">
+                                    {{audit.customerRequestDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'promisedDate', audit.promisedDate)  ? 'black' : 'red'  }">
+                                    {{audit.promisedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'estimatedShipDate', audit.estimatedShipDate)  ? 'black' : 'red'  }">
+                                    {{audit.estimatedShipDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'statusName', audit.statusName)  ? 'black' : 'red'  }">
+                                    {{audit.statusName}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
+                                    {{audit.customerReference}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'unitCost', audit.unitCost)  ? 'black' : 'red'  }">
+                                    {{audit.unitCost | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'markUpPercentage', audit.markUpPercentage)  ? 'black' : 'red'  }">
+                                    {{audit.markUpPercentage}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'markupExtended', audit.markupExtended)  ? 'black' : 'red'  }">
+                                    {{audit.markupExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'discount', audit.discount)  ? 'black' : 'red'  }">
+                                    {{audit.discount | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'discountAmount', audit.discountAmount)  ? 'black' : 'red'  }">
+                                    {{audit.discountAmount | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'salesDiscountExtended', audit.salesDiscountExtended)  ? 'black' : 'red'  }">
+                                    {{audit.salesDiscountExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'unitCostExtended', audit.unitCostExtended)  ? 'black' : 'red'  }">
+                                    {{audit.unitCostExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'fxRate', audit.fxRate)  ? 'black' : 'red'  }">
+                                    {{audit.fxRate}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'uomName', audit.uomName)  ? 'black' : 'red'  }">
+                                    {{audit.uomName}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'marginAmountExtended', audit.marginAmountExtended)  ? 'black' : 'red'  }">
+                                    {{audit.marginAmountExtended | twoDecimalGlobalNumberFormatPipe}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'marginPercentage', audit.marginPercentage)  ? 'black' : 'red'  }">
+                                    {{audit.marginPercentage}}</td>
+
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'controlNumber', audit.controlNumber)  ? 'black' : 'red'  }">
+                                    {{audit.controlNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'idNumber', audit.idNumber)  ? 'black' : 'red'  }">
+                                    {{audit.idNumber}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                    {{audit.createdBy}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                                    {{audit.updatedBy}}</td>
+                                <td>
+                                    <p style="background-color: #fff !important;"> <input type="checkbox"
+                                            name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <!-- <img src="../../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;"> -->
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+            <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

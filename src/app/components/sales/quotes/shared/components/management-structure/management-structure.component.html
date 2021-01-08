@@ -1,0 +1,89 @@
+<!-- <div class="card">
+  <div class="card-body">
+    <h5 class="po-head-15f">Management Structure <span class="clr-red">*</span> </h5>
+    <div class="col-md-12">
+      <div class="form-group">
+        <p-dropdown placeholder="Select Legal Entity" name="company" #wocompanyId="ngModel" required
+          [options]="legalEntityList" class="p-dropdown-custom-md-2" (onChange)="selectedLegalEntity($event.value)"
+          [(ngModel)]="salesQuote.companyId">
+        </p-dropdown>
+      </div>
+      <div class="form-group">
+        <p-dropdown placeholder="Select " name="bu" #wobu="ngModel" [options]="businessUnitList"
+          class="p-dropdown-custom-md-2" (onChange)="selectedBusinessUnit($event.value)" [(ngModel)]="salesQuote.buId">
+        </p-dropdown>
+      </div>
+      <div class="form-group">
+
+        <p-dropdown placeholder="Select " name="division" #wodivision="ngModel" [options]="divisionList"
+          class="p-dropdown-custom-md-2" (onChange)="selectedDivision($event.value)"
+          [(ngModel)]="salesQuote.divisionId">
+        </p-dropdown>
+      </div>
+      <div class="form-group">
+        <p-dropdown placeholder="Select " name="department" #wodepartment="ngModel" [options]="departmentList"
+          class="p-dropdown-custom-md-2" (onChange)="selectedDepartment($event.value)"
+          [(ngModel)]="salesQuote.departmentId">
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="card" style="margin-top: 20px;">
+  <div class="card-header" style="padding: 10px 12px;">
+    <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="clr-red">*</span></h5>
+
+  </div>
+  <div class="card-body" style="padding: 12px 12px 4px;">
+    <div class="form-group">
+      <select [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''" class="form-control" name="primaryCompany"
+        [(ngModel)]="salesQuote.companyId"
+        (change)="getBUList(salesQuote.companyId); checkValidOnChange(salesQuote.companyId, 'companyId');" #mCompanyName
+        (ngModelChange)="enableHeaderSave()" required>
+        <option value="0">Select</option>
+        <option *ngFor="let name of maincompanylist" [ngValue]="name.value">{{name.label}}</option>
+      </select>
+      <div *ngIf="mCompanyName.invalid && (mCompanyName.dirty || mCompanyName.touched)"
+        class="alert alert-danger alert-danger-cstm">
+        <div *ngIf="mCompanyName.errors.required">
+          <small> Company Name is required </small>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <select [(ngModel)]="salesQuote.buId" name="primaryBU" (change)="getDivisionlist(salesQuote.buId)"
+        class="form-control" (ngModelChange)="enableHeaderSave()">
+        <option value="0">Select</option>
+        <option *ngFor="let name of bulist" [ngValue]="name.value">{{name.label}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" [(ngModel)]="salesQuote.divisionId" name="primaryDivision"
+        (change)="getDepartmentlist(salesQuote.divisionId)" (ngModelChange)="enableHeaderSave()">
+        <option value="0">Select</option>
+        <option *ngFor="let name of divisionlist" [ngValue]="name.value">{{name.label}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" [(ngModel)]="salesQuote.departmentId" name="primaryDept"
+        (change)="getDepartmentId(salesQuote.departmentId)" (ngModelChange)="enableHeaderSave()">
+        <option value="0">Select</option>
+        <option *ngFor="let name of departmentList" [ngValue]="name.value">{{name.label}}</option>
+      </select>
+    </div>
+  </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

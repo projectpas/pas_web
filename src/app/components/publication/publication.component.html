@@ -1,0 +1,1856 @@
+﻿<div [@fadeInOut] class="page-content">
+  <div class="right_col" role="main" style="min-height: 629px;">
+    <div class="x_panel">
+      <div class="x_content">
+        <div class="card">
+          <div class="card-header bg-primary new-card-header">
+            <div class="row">
+              <div class="col">
+                <h4 class="new-card-heading">Publications Listing
+                </h4>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="btn-sm new-btn-primary"
+                  matTooltip="Add Publication" matTooltipPosition="above"
+                  [routerLink]="[
+                    '/singlepages/singlepages/app-create-publication'
+                  ]"
+                >
+                  Add Publication
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="card-body new-card-body">
+            <p-table
+              #dt
+              class="rpo-table-cstm rro-table-cstm pub-ptable-cstm croes"
+              [first]="0"
+              [rows]="pagesize"
+              [value]="allpublicationInfo"
+              [metaKeySelection]="true"
+              [paginator]="true"
+              [pageLinks]="3"
+              [rowsPerPageOptions]="[10, 20, 50, 100]"
+              [columns]="selectedColumns"
+              selectionMode="multiple"
+              [resizableColumns]="true"
+              [reorderableColumns]="true"
+              [totalRecords]="totalRecords"
+              (onLazyLoad)="publicationPagination($event)"
+              [lazy]="true"
+              [scrollable]="true"
+              scrollHeight="450px"
+              (onPage)="pageIndexChange($event)"
+            >
+              <ng-template pTemplate="caption">
+                <div class="row">
+                  <div class="col">
+                    <p-multiSelect
+                      [options]="cols"
+                      [(ngModel)]="selectedColumns"
+                      optionLabel="header"
+                      selectedItemsLabel="{0} columns selected"
+                      [style]="{ minWidth: '200px' }"
+                      defaultLabel="Choose Columns"
+                      style="float: left;"
+                    ></p-multiSelect>
+                  </div>
+                  <div class="col">
+                    <div
+                      style="width: auto !important; float: right;"
+                      class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                    >
+                      <i class="fa fa-search"></i>
+                      <input
+                        type="text"
+                        pInputText
+                        size="50"
+                        class="form-control"
+                        (input)="
+                          dt.filterGlobal($event.target.value, 'contains')
+                        "
+                        placeholder="Filter"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <button
+                      type="button"
+                      class="btn btn-primary new-table-button"
+                      matTooltip="Download Data"
+                      matTooltipPosition="above"
+                      pButton
+                      icon="fa-download"
+                      iconPos="left"
+                      label="Export Data"
+                      (click)="dt.exportCSV()"
+                    ></button>
+                    <button
+                      type="button"
+                      class="btn btn-primary new-table-button"
+                      matTooltip="Download Selected Data"
+                      matTooltipPosition="above"
+                      pButton
+                      icon="fa-download"
+                      iconPos="left"
+                      label="Export Selected Data"
+                      (click)="dt.exportCSV({ selectionOnly: true })"
+                    ></button>
+                    
+                  </div>
+                  <div class="col">
+                    <div class="">
+                      <div
+                        class="col"
+                        style="width: 700px; float: right; padding-top: 3px;"
+                      >
+                        <div class="form-group atv_cv">
+                          <div
+                          class="pull-left"
+                          style="margin-top: 4px; margin-right: 15px;"
+                        >
+                          <label class="radio-cstm wauto">
+                            <input
+                              type="radio"
+                              name="viewType"
+                              class="form-control"
+                              value="mpn"
+                              [(ngModel)]="viewType"
+                              (click)="changeOfStatus('', 'mpn')"
+                            />
+                            <span class="checkmark"></span>PN View
+                          </label>
+                        </div>
+                        <div
+                          class="pull-left"
+                          style="margin-top: 4px; margin-right: 15px;"
+                        >
+                          <label class="radio-cstm wauto">
+                            <input
+                              type="radio"
+                              name="viewType"
+                              class="form-control"
+                              value="publication"
+                              [(ngModel)]="viewType"
+                              (click)="changeOfStatus('', 'publication')"
+                            />
+                            <span class="checkmark"></span>Publication View
+                          </label>
+                        </div>
+
+                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                        
+                          <div
+                            class="pull-left"
+                            style="margin-top: 4px; margin-right: 15px;"
+                          >
+                            <label class="radio-cstm wauto">
+                              <input
+                                type="radio"
+                                name="vendorStatus"
+                                class="form-control"
+                                value="Active"
+                                (click)="getVenListByStatus('Active')"
+                                checked
+                                [(ngModel)]="currentstatus"
+                              />
+                              <span class="checkmark"></span>Active</label
+                            >
+                          </div>
+                          <div
+                            class="pull-left"
+                            style="margin-top: 4px; margin-right: 15px;"
+                          >
+                            <label class="radio-cstm wauto">
+                              <input
+                                type="radio"
+                                name="vendorStatus"
+                                class="form-control"
+                                value="Inactive"
+                                (click)="getVenListByStatus('InActive')"
+                                [(ngModel)]="currentstatus"
+                                [(ngModel)]="currentstatus"
+                              />
+                              <span class="checkmark"></span>In-Active</label
+                            >
+                          </div>
+                          <div
+                            class="pull-left"
+                            style="margin-top: 4px; margin-right: 15px;"
+                          >
+                            <label class="radio-cstm wauto">
+                              <input
+                                type="radio"
+                                name="vendorStatus"
+                                class="form-control"
+                                value="ALL"
+                                (click)="getVenListByStatus('ALL')"
+                                [(ngModel)]="currentstatus"
+                              />
+                              <span class="checkmark"></span>All</label
+                            >
+                          </div>
+                          <div class="checkbox-cstm" style="margin-left: 0;">
+                            <label
+                              style="width: auto !important; margin-top: 3px;"
+                            >
+                              <!--  -->
+                              <input
+                                type="checkbox"
+                                [(ngModel)]="currentDeletedstatus"
+                                name="cparent"
+                                id="cparent"
+                                (click)="
+                                  getDeleteListByStatus($event.target.checked)
+                                "
+                              />
+                              <span class="cr"
+                                ><i class="cr-icon pi pi-check"></i
+                              ></span>
+                              Show Deleted
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+               
+              </ng-template>
+
+              <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                  <col *ngFor="let col of columns" style="width: 120px;" />
+                </colgroup>
+              </ng-template>
+
+              <ng-template pTemplate="header" let-columns>
+                <tr>
+                  <th
+                    *ngFor="let col of columns"
+                    pResizableColumn
+                    pReorderableColumn
+                    [pSortableColumn]="col.field"
+                  >
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                  </th>
+                  <th
+                    style="width: 140px; position: sticky;"
+                    *ngIf="selectedColumns.length > 0"
+                  >
+                    Actions
+                  </th>
+                </tr>
+                <tr>
+                  <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input
+                      *ngIf="
+                        col.field !== 'revisionDate' &&
+                        col.field !== 'nextReviewDate' &&
+                        col.field !== 'expirationDate' &&
+                        col.field !== 'verifiedBy'&&
+                        col.field !== 'verifiedDate'&&
+                        col.field !== 'createdBy'&&
+                        col.field !== 'createdDate'&&
+                        col.field!=='modifyBy'&&
+                        col.field!=='modifiedDate'
+                      "
+                      style="width: 100%;"
+                      pInputText
+                      type="text"
+                      (input)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      "
+                      [ngModel]="inputValue"
+                    />
+
+                    <input
+                      type="date"
+                      *ngIf="col.field == 'revisionDate'"
+                      name="revisionDate"
+                      style="width: 100%;"
+                      (change)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      "
+                      [ngModel]="inputValue"
+                    />
+                    <input
+                      type="date"
+                      *ngIf="col.field == 'nextReviewDate'"
+                      name="nextReviewDate"
+                      style="width: 100%;"
+                      (change)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      "
+                      [ngModel]="inputValue"
+                    />
+                    <input
+                      type="date"
+                      *ngIf="col.field == 'expirationDate'"
+                      name="expirationDate"
+                      style="width: 100%;"
+                      (change)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      "
+                      [ngModel]="inputValue"
+                    />
+
+                    <input
+                    type="text"
+                    *ngIf="col.field == 'verifiedBy'"
+                    name="verifiedBy"
+                    style="width: 100%;"
+                    (change)="
+                      dt.filter($event.target.value, col.field, 'contains')
+                    "
+                    [ngModel]="inputValue"
+                  />
+
+                    <input
+                      type="date"
+                      *ngIf="col.field == 'verifiedDate'"
+                      name="verifiedDate"
+                      style="width: 100%;"
+                      (change)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      "
+                      [ngModel]="inputValue"
+                    />
+
+
+                    <input
+                    type="date"
+                    *ngIf="col.field == 'createdBy'"
+                    name="createdBy"
+                    style="width: 100%;"
+                    (change)="
+                      dt.filter($event.target.value, col.field, 'contains')
+                    "
+                    [ngModel]="inputValue"
+                  />
+
+                  <input
+                  type="date"
+                  *ngIf="col.field == 'createdDate'"
+                  name="createdDate"
+                  style="width: 100%;"
+                  (change)="
+                    dt.filter($event.target.value, col.field, 'contains')
+                  "
+                  [ngModel]="inputValue"
+                />
+                <input
+                type="date"
+                *ngIf="col.field == 'modifyBy'"
+                name="modifyBy"
+                style="width: 100%;"
+                (change)="
+                  dt.filter($event.target.value, col.field, 'contains')
+                "
+                [ngModel]="inputValue"
+              />
+              <input
+              type="date"
+              *ngIf="col.field == 'modifyDate'"
+              name="modifyDate"
+              style="width: 100%;"
+              (change)="
+                dt.filter($event.target.value, col.field, 'contains')
+              "
+              [ngModel]="inputValue"
+            />
+                  </th>
+                  <!-- <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                            <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                        </th> -->
+                  <th style="width: 140px; position: sticky;"></th>
+                </tr>
+              </ng-template>
+
+              <ng-template
+                pTemplate="body"
+                let-rowData
+                let-columns="columns"
+                let-rowIndex="rowIndex"
+              >
+                <tr
+                  [pSelectableRow]="rowData"
+                  [pSelectableRowIndex]="rowIndex"
+                  [pSelectableRowDblClick]="rowData"
+                  pReorderableRowHandle
+                  (dblclick)="viewSelectedRowdbl(rowData)"
+                >
+                  <td
+                    *ngFor="let col of columns"
+                    class="ui-resizable-column"
+                    pReorderableRowHandle
+                  >
+                    {{
+                      col.field == 'revisionDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                        : rowData[col.field] && col.field == 'nextReviewDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                        : rowData[col.field] && col.field == 'nextReviewDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                        : rowData[col.field] && col.field == 'expirationDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                        : rowData[col.field] && col.field == 'verifiedDate'
+                        ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                        : rowData[col.field]
+                    }}
+                  </td>
+
+                  <td
+                    style="width: 140px; position: sticky;"
+                    *ngIf="selectedColumns.length > 0"
+                  >
+                    <div *ngIf="currentDeletedstatus == false">
+                      <p-inputSwitch
+                        [(ngModel)]="rowData['isActive']"
+                        name="isActive{{ rowIndex }}"
+                        matTooltip="{{
+                          rowData['isActive'] ? 'Active' : 'In Active'
+                        }}"
+                        matTooltipPosition="above"
+                        (onChange)="handleChange(rowData,$event)"
+                      ></p-inputSwitch>
+                      <span>
+                        <a
+                          class="btn btn-info boxed-float-btn nobg"
+                          data-toggle="tooltip"
+                          data-target="#view"
+                          data-toggle="modal"
+                          (click)="openView(rowData)"
+                          matTooltip="View"
+                          matTooltipPosition="above"
+                          ><i class="fa fa-eye"></i
+                        ></a>
+                      </span>
+
+                      <span>
+                        <a
+                          class="btn btn-info boxed-float-btn nobg"
+                          (click)="openDocumentsList(documentsContent, rowData)"
+                          data-toggle="tooltip"                         
+                          data-toggle="modal"                         
+                          matTooltip="View Document"
+                          matTooltipPosition="above"
+                          ><i class="fa fa-file-text"></i
+                        ></a>
+                      </span>
+
+                      <span
+                        ><a
+                          class="btn nobg"
+                          (click)="openEdit(rowData)"
+                          matTooltip="Edit"
+                          matTooltipPosition="above"
+                          ><i class="fa fa-pencil"> </i
+                        ></a>
+                      </span>
+                      <span>
+                        <a
+                          class="btn nobg"
+                          (click)="openDelete(content, rowData)"
+                          matTooltip="Delete"
+                          matTooltipPosition="above"
+                        >
+                          <i class="fa fa-trash"></i
+                        ></a>
+                      </span>
+                      <span
+                        data-target="#publicationHistory"
+                        data-toggle="modal"
+                        ><a
+                          class="btn nobg"
+                          (click)="getAuditHistoryById(rowData)"
+                          matTooltip="History"
+                          matTooltipPosition="above"
+                        >
+                          <i class="fa fa-history"></i></a
+                      ></span>
+                    </div>
+                    <div *ngIf="currentDeletedstatus == true">
+                      <p-inputSwitch
+                        [(ngModel)]="rowData['isActive']"
+                        name="isActive{{ rowIndex }}"
+                        [disabled]="true"
+                        matTooltip="{{
+                          rowData['isActive'] ? 'Active' : 'In Active'
+                        }}"
+                        matTooltipPosition="above"
+                        (onChange)="handleChange(rowData)"
+                      ></p-inputSwitch>
+                      <span>
+                        <a
+                          class="btn btn-info boxed-float-btn nobg"
+                          data-toggle="tooltip"
+                          data-target="#view"
+                          data-toggle="modal"
+                          (click)="openView(rowData)"
+                          matTooltip="View"
+                          matTooltipPosition="above"
+                          ><i class="fa fa-eye"></i
+                        ></a>
+                      </span>
+                      <span
+                        ><a
+                          class="btn nobg"
+                          (click)="restore(restoreId, rowData)"
+                          matTooltip="Restore Record"
+                          matTooltipPosition="above"
+                          ><i class="fa fa-undo" aria-hidden="true"></i
+                        ></a>
+                      </span>
+                    </div>
+                  </td>
+                </tr>
+              </ng-template>
+
+              <ng-template #auditContent let-c="close" let-d="dismiss">
+                <div
+                  *ngIf="AuditDetails != undefined && AuditDetails.length > 0"
+                >
+                  <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+                </div>
+              </ng-template>
+              <ng-template
+                pTemplate="emptymessage"
+                let-columns
+                *ngIf="allpublicationInfo.length == 0"
+              >
+                <tr>
+                  <td
+                    [attr.colspan]="14"
+                    style="color: red; font-weight: bold; text-align: center;"
+                  >
+                    No records found
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer1">Total:</label>
+                <input
+                  style="width: 5%;"
+                  [(ngModel)]="dt._totalRecords"
+                  [disabled]="true"
+                  pInputText
+                  type="text"
+                />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input
+                  style="width: 5%;"
+                  [ngModel]="getPageCount(dt._totalRecords, pageSize)"
+                  [disabled]="true"
+                  pInputText
+                  type="text"
+                />
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <strong
+      >Pub ID:
+      <span class="new-label">{{ selectedRowforDelete.publicationId }}</span>
+    </strong>
+  </div>
+
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="deleteItemAndCloseModel()"
+    >
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+
+<div
+  id="publicationHistory"
+  class="modal fade"
+  role="dialog"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">History of Publication</h4>
+      </div>
+      <div class="modal-body" *ngIf="auditHistory">
+        <div class="table-responsive">
+          <table
+            class="table table-bordered pubHistory-table"
+            *ngIf="auditHistory.length > 0; else noDatavailable"
+          >
+            <thead>
+              <tr>
+                <th *ngFor="let x of cols">{{ x.header }}</th>
+                <th>IsActive</th>
+                <th>Updated By</th>
+                <th>Updated Date</th>
+              </tr>
+            </thead>
+            <tbody class="audithistory-cstm">
+              <!--*ngIf="auditHistory.length> 0"-->
+              <tr *ngFor="let audit of auditHistory; let i = index">
+                <!-- auditHistory[i>0 ? i-1 : i] -->
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'publicationId',
+                      audit.publicationId
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.publicationId }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'description',
+                      audit.description
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.description }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'publicationType',
+                      audit.publicationType
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.publicationType }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'publishby',
+                      audit.publishby
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.publishby }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'revisionDate',
+                      audit.revisionDate
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.revisionDate | date: 'MM/dd/yyyy' }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'revisionNum',
+                      audit.revisionNum
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.revisionNum }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'nextReviewDate',
+                      audit.nextReviewDate
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.nextReviewDate | date: 'MM/dd/yyyy' }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'expirationDate',
+                      audit.expirationDate
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.expirationDate | date: 'MM/dd/yyyy' }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(i, 'location', audit.location)
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.location }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'verifiedBy',
+                      audit.verifiedBy
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.verifiedBy }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'verifiedDate',
+                      audit.verifiedDate
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(i, 'isActive', audit.isActive)
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.isActive }}
+                </td>
+                <td>{{ audit.updatedBy }}</td>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy' }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #noDatavailable>
+            <div class="text-center">
+              <img
+                src="../../assets/images/binoculars.png"
+                style="height: 100px; width: 100px;"
+              />
+              <h4 style="color: #ff5663;">No History Found</h4>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  id="view"
+  *ngIf="generalInfo"
+  class="modal fade"
+  role="dialog"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">×</button>
+        <h4 class="modal-title">Publication Details</h4>
+        <div class="aligin_cer">
+          <p style="min-width: 24%;">
+            <span class="label"><b>Pub Id: </b></span
+            ><span class="value">{{
+              generalInfo.publicationId ? generalInfo.publicationId : '-'
+            }}</span>
+          </p>
+          <p style="min-width: 24%;">
+            <span class="label"><b>Pub Description: </b></span
+            ><span class="value">{{
+              generalInfo.description ? generalInfo.description : '-'
+            }}</span>
+          </p>
+          <p style="min-width: 30%;">
+            <span class="label"><b>Pub Type: </b></span
+            ><span class="value">{{
+              generalInfo.publicationType ? generalInfo.publicationType : '-'
+            }}</span>
+          </p>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div
+          id="adminsearchlocationajax"
+          class="table-responsive default-bg clear"
+        >
+          <!--<a href="#" class="btn btn-primary openall">open all</a> <a href="#" class="btn btn-warning closeall">close all</a>-->
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-toggle="collapse"
+                  (click)="openAllCollapse()"
+                >
+                  Open All
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary collapsed"
+                  data-toggle="collapse"
+                  (click)="closeAllCollapse()"
+                >
+                  Close All
+                </button>
+        <button type="button" [ngClass]="isActive ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'" style="margin: 2px 27px;">
+          <span class="value">{{isActive ? 'Active' : 'In-Active'}}</span>
+      </button>
+                <hr />
+              </div>
+              <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" href="#step1">General Info</a>
+                </h4>
+              </div>
+              <div id="step1" class="panel-collapse collapse in show"
+                *ngIf="generalInfo"
+              >
+                <div class="panel-body">
+                  <div class="card">
+                    <div class="card-body">
+                      <div>
+                        <div class="table-responsive default-bg clear">
+                          <div class="col-sm-4">
+                            <p>
+                              <span class="label"><b>Entry Date: </b></span
+                              ><span class="value">{{
+                                generalInfo.entryDate | date: 'dd-MM-yyyy'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"><b>Publication ID: </b> <span class="clr-red">*</span></span
+                              ><span class="value">{{
+                                generalInfo.publicationId
+                                  ? generalInfo.publicationId
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"
+                                ><b>Publication Description: </b></span
+                              ><span class="value">{{
+                                generalInfo.description
+                                  ? generalInfo.description
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"
+                                ><b>Publication Type: </b> <span class="clr-red">*</span></span
+                              ><span class="value">{{
+                                generalInfo.publicationType
+                                  ? generalInfo.publicationType
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"
+                                ><b>Author / Source / Directive: </b></span
+                              ><span class="value">{{
+                                generalInfo.asd ? generalInfo.asd : '-'
+                              }}</span>
+                            </p>
+                          </div>
+                          <div class="col-sm-4">
+                            <p>
+                              <span class="label"><b>Sequence: </b></span
+                              ><span class="value">{{
+                                generalInfo.sequence
+                                  ? generalInfo.sequence
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"><b>Published By: </b> <span class="clr-red">*</span></span
+                              ><span class="value">{{
+                                generalInfo.publishby
+                              }}</span>
+                            </p>
+                            <p
+                              *ngIf="
+                                generalInfo.publishby == 'Vendor' ||
+                                generalInfo.publishby == ' Manufacturer'
+                              "
+                            >
+                              <span class="label"
+                                ><b>Published Reference Name: </b></span
+                              ><span class="value">{{
+                                generalInfo.publishedByRefName
+                                  ? generalInfo.publishedByRefName
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p *ngIf="generalInfo.publishby == 'Others'">
+                              <span class="label"
+                                ><b>Published Others: </b></span
+                              ><span class="value">{{
+                                generalInfo.publishedByOthers
+                                  ? generalInfo.publishedByOthers
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"><b>Location: </b><span class="clr-red">*</span></span
+                              ><span class="value">{{
+                                generalInfo.location
+                                  ? generalInfo.location
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"><b>Revision Date: </b></span
+                              ><span class="value">{{
+                                generalInfo.revisionDate | date: 'dd-MM-yyyy'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"><b>Revision Number: </b></span
+                              ><span class="value">{{
+                                generalInfo.revisionNum
+                                  ? generalInfo.revisionNum
+                                  : '-'
+                              }}</span>
+                            </p>
+                            <p>
+                              <span class="label"><b>Expiration Date: </b></span
+                              ><span class="value">{{
+                                generalInfo.expirationDate | date: 'dd-MM-yyyy'
+                              }}</span>
+                            </p>
+                          </div>
+                          <div class="col-sm-4">
+                            <p>
+                              <span class="label"
+                                ><b>Next Review Date: </b></span
+                              ><span class="value">{{
+                                generalInfo.nextReviewDate | date: 'dd-MM-yyyy'
+                              }}</span>
+                            </p>
+                            <!-- <p><span class="label"><b>Employee: </b></span><span class="value">{{generalInfo.employeeName ? generalInfo.employeeName : '-'}}</span></p> -->
+                            <p>
+                              <span class="label"><b>Verified By: </b> <span class="clr-red">*</span></span
+                              ><span class="value">{{
+                                generalInfo.verifiedBy
+                                  ? generalInfo.verifiedBy
+                                  : '-'
+                              }}</span>
+                            </p>
+
+                            <p>
+                              <span class="label"><b>Verified Date: </b> <span class="clr-red">*</span></span
+                              ><span class="value">{{
+                                generalInfo.verifiedDate | date: 'dd-MM-yyyy'
+                              }}</span>
+                            </p>
+                          </div>
+                        <!--<div *ngIf="allCustomerFinanceDocumentsList.length > 0" class="col-sm-6">
+                                                            <div>
+                                                                <p>
+                                                                    <span class="label"><b>Attachment Details: </b></span>
+                                                                </p>-->
+                        <div class="col-sm-12">
+                          <div
+                            class="shadow-Box"
+                            *ngIf="allCustomerFinanceDocumentsList.length > 0"
+                          >
+                            <p>
+                              <span class="label"
+                                ><b>Attachment Details: </b></span
+                              >
+                            </p>
+
+                            <p-table
+                              #taxexeptTable
+                              class="rpo-table-cstm rro-table-cstm"
+                              [paginator]="true"
+                              [value]="allCustomerFinanceDocumentsList"
+                              [rows]="pageSize"
+                              [columns]="allCustomerFinanceDocumentsListColumns"
+                              [metaKeySelection]="true"
+                              [resizableColumns]="true"
+                              [pageLinks]="3"
+                              [rowsPerPageOptions]="[10, 20, 50, 100]"
+                              [reorderableColumns]="true"
+                              [scrollable]="true"
+                              scrollHeight="450px"
+                            >
+                              <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                  <col
+                                    *ngFor="let col of columns"
+                                    style="width: 130px;"
+                                  />
+                                </colgroup>
+                              </ng-template>
+
+                              <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                  <th
+                                    style="width: 70%;"
+                                    *ngFor="let col of columns"
+                                    [pSortableColumn]="col.field"
+                                  >
+                                    {{ col.header }}
+                                    <p-sortIcon
+                                      *ngIf="
+                                        col.field != 'download' &&
+                                        col.field != 'delete'
+                                      "
+                                      [field]="col.field"
+                                    ></p-sortIcon>
+                                  </th>
+                                  <th>
+                                    Download
+                                  </th>
+                                </tr>
+
+                                <tr>
+                                  <th
+                                    style="width: 70%;"
+                                    *ngFor="let col of columns"
+                                    [ngSwitch]="col.field"
+                                  >
+                                    <input
+                                      *ngIf="
+                                        col.field != 'download' &&
+                                        col.field != 'delete'
+                                      "
+                                      style="width: 100%;"
+                                      pInputText
+                                      type="text"
+                                      (input)="
+                                        taxexeptTable.filter(
+                                          $event.target.value,
+                                          col.field,
+                                          'contains'
+                                        )
+                                      "
+                                    />
+                                  </th>
+                                  <th></th>
+                                </tr>
+                              </ng-template>
+                              <ng-template
+                                pTemplate="body"
+                                let-part
+                                let-rowData
+                                let-columns="columns"
+                                let-i="rowIndex"
+                              >
+                                <tr>
+                                  <td
+                                    *ngFor="let col of columns"
+                                    style="width: 70%;"
+                                  >
+                                    <!-- <ng-container *ngIf="col.field != 'link'">
+                      {{ part[col.field] }}
+                    </ng-container> -->
+
+                                    <ng-container
+                                      *ngIf="
+                                        col.field != 'download' &&
+                                        col.field != 'delete'
+                                      "
+                                    >
+                                      <!-- {{ rowData.field | json}} -->
+                                      {{
+                                        col.field == 'createdDate'
+                                          ? (rowData[col.field]
+                                            | date: 'MM/dd/yyyy')
+                                          : rowData[col.field] &&
+                                            col.field == 'updatedDate'
+                                          ? (rowData[col.field]
+                                            | date: 'MM/dd/yyyy')
+                                          : rowData[col.field]
+                                      }}
+                                    </ng-container>
+                                    <ng-container
+                                      *ngIf="col.field == 'download'"
+                                      class="align_center"
+                                    >
+                                      <a
+                                        (click)="downloadFileUpload(part)"
+                                        matTooltip="Download"
+                                        class="btn nobg btn-cstm"
+                                      >
+                                        <span
+                                          ><i class="fa fa-download"></i
+                                        ></span>
+                                      </a>
+
+                                      <span
+                                        data-toggle="modal"
+                                        data-target="#contentAuditHistDoc"
+                                      >
+                                        <a
+                                          class="btn nobg"
+                                          (click)="openHistoryDoc(rowData)"
+                                          matTooltip="History"
+                                          matTooltipPosition="above"
+                                          ><i class="fa fa-history"></i
+                                        ></a>
+                                      </span>
+                                    </ng-container>
+                                  </td>
+                                  <!-- <td>
+                  <a
+                    (click)="downloadFileUpload(part)"
+                    matTooltip="Download"
+                    class="btn nobg btn-cstm"
+                    ><span><i class="fa fa-download"></i></span
+                  ></a>
+                </td> -->
+                                </tr>
+                              </ng-template>
+                              <ng-template
+                                pTemplate="emptymessage"
+                                let-columns
+                                *ngIf="
+                                  allCustomerFinanceDocumentsList.length == 0
+                                "
+                              >
+                                <tr>
+                                  <td
+                                    [attr.colspan]="6"
+                                    style="
+                                      color: red;
+                                      font-weight: bold;
+                                      text-align: center;
+                                    "
+                                  >
+                                    No records found
+                                  </td>
+                                </tr>
+                              </ng-template>
+                              <ng-template pTemplate="summary" id="footer">
+                                <label id="footer" class="footer">Total:</label>
+                                <input
+                                  style="width: 5%;"
+                                  [(ngModel)]="taxexeptTable._totalRecords"
+                                  [disabled]="true"
+                                  pInputText
+                                  type="text"
+                                />
+                                &nbsp;&nbsp;
+                                <label id="footer" class="footer1"
+                                  >Pages Count:</label
+                                >
+
+                                <input
+                                  style="width: 5%;"
+                                  [ngModel]="
+                                    getPageCount(
+                                      taxexeptTable._totalRecords,
+                                      pageSize
+                                    )
+                                  "
+                                  [disabled]="true"
+                                  pInputText
+                                  type="text"
+                                />
+                              </ng-template>
+                            </p-table>
+                          </div>
+                        </div>
+
+                        <!--<div>
+                                      <h4 class="panel-title" style="padding-left: 10px;">Attachment Details:</h4>
+                                      <div class="col-sm-6">
+                                          <p-table #dt
+                                                   class="rpo-table-cstm rro-table-cstm"
+                                                   [columns]="headersforAttachment"
+                                                   [value]="attachmentList"
+                                                   [paginator]="true"
+                                                   [rows]="attachmentsPageSize"
+                                                   [first]="first"
+                                                   [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                              <ng-template pTemplate="header" let-columns>
+                                                  <tr>
+                                                      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                                          {{ col.header }}
+                                                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                      </th>
+                                                      <th style="width: 200px;">File(s)</th>
+                                                  </tr>
+                                                  <tr>
+                                                      <th *ngFor="let col of columns"
+                                                          [ngSwitch]="col.field">
+                                                          <input style="width:100%;"
+                                                                 pInputText
+                                                                 type="text"
+                                                                 (input)="dt.filter($event.target.value, col.field, 'contains')
+                                                " />
+                                                      </th>
+                                                      <th></th>
+                                                  </tr>
+                                              </ng-template>
+                                              <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                                  <tr>
+                                                      <td *ngFor="let col of columns" style="text-align: center;">
+                                                          {{ rowData[col.field] }}
+                                                      </td>
+                                                      <td>
+                                                          <ng-container *ngFor="let fileItem of rowData.attachmentDetails">
+                                                              <a (click)="downloadFileUpload(fileItem)" matTooltip="Download"
+                                                                 matTooltipPosition="above" class="filelink"
+                                                                 style="padding-right: 5px;">{{fileItem.fileName}}</a>
+
+                                                          </ng-container>
+                                                      </td>
+                                                  </tr>
+
+                                              </ng-template>
+                                              <ng-template pTemplate="emptymessage" let-columns *ngIf="attachmentList.length == 0">
+                                                  <tr>
+                                                      <td [attr.colspan]="2" style="color: red; font-weight: bold; text-align: center">
+                                                          No records found
+                                                      </td>
+                                                  </tr>
+                                              </ng-template>
+                                              <ng-template pTemplate="summary" id="footer">
+                                                  <label id="footer" class="footer">Total:</label>
+                                                  <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText
+                                                         type="text" />
+                                                  &nbsp;&nbsp;
+                                                  <label id="footer" class="footer1">Pages Count:</label>
+
+                                                  <input style="width: 5%;" [ngModel]="
+      getPageCount(dt._totalRecords, attachmentsPageSize)
+    " [disabled]="true" pInputText type="text" />
+                                              </ng-template>
+                                          </p-table>
+                                      </div>
+                                  </div>-->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step2"
+                      >PN Mapping</a
+                    >
+                  </h4>
+                </div>
+                <div id="step2" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="col-sm-12">
+                      <div class="shadow-Box">
+                        <p-table
+                          #pnTable
+                          class="rpo-table-cstm"
+                          [columns]="headersforPNMapping"
+                          [value]="pnMappingList"
+                          [paginator]="true"
+                          [rows]="pnMappingPageSize"
+                          [first]="first"
+                          [rowsPerPageOptions]="[10, 20, 50, 100]"
+                        >
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <!-- <th>Sl.No</th> -->
+                              <th
+                                style="padding: 8px 5px !important;"
+                                *ngFor="let col of columns"
+                                [pSortableColumn]="col.field"
+                              >
+                                {{ col.header }}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                              </th>
+                            </tr>
+                            <tr>
+                              <th
+                                *ngFor="let col of columns"
+                                [ngSwitch]="col.field"
+                              >
+                                <input
+                                  style="width: 100%;"
+                                  pInputText
+                                  type="text"
+                                  (input)="
+                                    pnTable.filter(
+                                      $event.target.value,
+                                      col.field,
+                                      'contains'
+                                    )
+                                  "
+                                />
+                              </th>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="body"
+                            let-rowData
+                            let-columns="columns"
+                            let-rowIndex="rowIndex"
+                          >
+                            <tr>
+                              <!-- <td>{{ rowIndex + 1 }}</td> -->
+                              <td *ngFor="let col of columns">
+                                {{ rowData[col.field] }}
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="emptymessage"
+                            let-columns
+                            *ngIf="pnMappingList.length == 0"
+                          >
+                            <tr>
+                              <td
+                                [attr.colspan]="4"
+                                style="
+                                  color: red;
+                                  font-weight: bold;
+                                  text-align: center;
+                                "
+                              >
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input
+                              style="width: 5%;"
+                              [(ngModel)]="pnTable._totalRecords"
+                              [disabled]="true"
+                              pInputText
+                              type="text"
+                            />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1"
+                              >Pages Count:</label
+                            >
+
+                            <input
+                              style="width: 5%;"
+                              [ngModel]="
+                                getPageCount(
+                                  pnTable._totalRecords,
+                                  pnMappingPageSize
+                                )
+                              "
+                              [disabled]="true"
+                              pInputText
+                              type="text"
+                            />
+                          </ng-template>
+                        </p-table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step3"
+                      >Aircraft Info</a
+                    >
+                  </h4>
+                </div>
+                <div id="step3" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="col-sm-12">
+                      <div class="shadow-Box">
+                        <p-table
+                          #aircraftTable
+                          class="rpo-table-cstm"
+                          [columns]="aircraftInformationCols"
+                          [value]="aircraftList"
+                          [paginator]="true"
+                          [rows]="aircraftPageSize"
+                          [first]="first"
+                          [rowsPerPageOptions]="[10, 20, 50, 100]"
+                        >
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <!-- <th>ID</th> -->
+                              <th
+                                style="padding: 8px 5px !important;"
+                                *ngFor="let col of columns"
+                                [pSortableColumn]="col.field"
+                              >
+                                {{ col.header }}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                              </th>
+                            </tr>
+                            <tr>
+                              <th
+                                *ngFor="let col of columns"
+                                [ngSwitch]="col.field"
+                              >
+                                <input
+                                  style="width: 100%;"
+                                  pInputText
+                                  type="text"
+                                  (input)="
+                                    aircraftTable.filter(
+                                      $event.target.value,
+                                      col.field,
+                                      'contains'
+                                    )
+                                  "
+                                />
+                              </th>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="body"
+                            let-rowData
+                            let-columns="columns"
+                            let-rowIndex="rowIndex"
+                          >
+                            <tr>
+                              <!-- <td>{{ rowIndex + 1 }}</td> -->
+                              <td *ngFor="let col of columns">
+                                {{ rowData[col.field] }}
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="emptymessage"
+                            let-columns
+                            *ngIf="aircraftList.length == 0"
+                          >
+                            <tr>
+                              <td
+                                [attr.colspan]="3"
+                                style="
+                                  color: red;
+                                  font-weight: bold;
+                                  text-align: center;
+                                "
+                              >
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input
+                              style="width: 5%;"
+                              [(ngModel)]="aircraftTable._totalRecords"
+                              [disabled]="true"
+                              pInputText
+                              type="text"
+                            />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1"
+                              >Pages Count:</label
+                            >
+
+                            <input
+                              style="width: 5%;"
+                              [ngModel]="
+                                getPageCount(
+                                  aircraftTable._totalRecords,
+                                  aircraftPageSize
+                                )
+                              "
+                              [disabled]="true"
+                              pInputText
+                              type="text"
+                            />
+                          </ng-template>
+                        </p-table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step4"
+                      >ATA Chapter</a
+                    >
+                  </h4>
+                </div>
+                <div id="step4" class="panel-collapse collapse">
+                  <div class="panel-body">
+                    <div class="col-sm-12">
+                      <div class="shadow-Box">
+                        <p-table
+                          #ataTable
+                          class="rpo-table-cstm"
+                          [columns]="atacols"
+                          [value]="ataList"
+                          [paginator]="true"
+                          [rows]="ataPageSize"
+                          [first]="first"
+                          [rowsPerPageOptions]="[10, 20, 50, 100]"
+                        >
+                          <ng-template pTemplate="header" let-columns>
+                            <tr>
+                              <!-- <th>ID</th> -->
+                              <th
+                                style="padding: 8px 5px !important;"
+                                *ngFor="let col of columns"
+                                [pSortableColumn]="col.field"
+                              >
+                                {{ col.header }}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                              </th>
+                            </tr>
+                            <tr>
+                              <th
+                                *ngFor="let col of columns"
+                                [ngSwitch]="col.field"
+                              >
+                                <input
+                                  style="width: 100%;"
+                                  pInputText
+                                  type="text"
+                                  (input)="
+                                    ataTable.filter(
+                                      $event.target.value,
+                                      col.field,
+                                      'contains'
+                                    )
+                                  "
+                                />
+                              </th>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="body"
+                            let-rowData
+                            let-columns="columns"
+                            let-rowIndex="rowIndex"
+                          >
+                            <tr>
+                              <!-- <td>{{ rowIndex + 1 }}</td> -->
+                              <td *ngFor="let col of columns">
+                                {{ rowData[col.field] }}
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template
+                            pTemplate="emptymessage"
+                            let-columns
+                            *ngIf="ataList.length == 0"
+                          >
+                            <tr>
+                              <td
+                                [attr.colspan]="2"
+                                style="
+                                  color: red;
+                                  font-weight: bold;
+                                  text-align: center;
+                                "
+                              >
+                                No records found
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input
+                              style="width: 5%;"
+                              [(ngModel)]="ataTable._totalRecords"
+                              [disabled]="true"
+                              pInputText
+                              type="text"
+                            />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1"
+                              >Pages Count:</label
+                            >
+
+                            <input
+                              style="width: 5%;"
+                              [ngModel]="
+                                getPageCount(
+                                  ataTable._totalRecords,
+                                  ataPageSize
+                                )
+                              "
+                              [disabled]="true"
+                              pInputText
+                              type="text"
+                            />
+                          </ng-template>
+                        </p-table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="modal popup-blur"
+                id="contentAuditHistDoc"
+                data-backdrop="static"
+              >
+                <div class="modal-dialog modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h4 class="modal-title">History of Documents</h4>
+                      <button
+                        type="button"
+                        class="close"
+                        (click)="
+                          dismissDocumentPopupModel('#contentAuditHistDoc')
+                        "
+                      >
+                        &times;
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="table-responsive">
+                        <table class="table table-bordered">
+                          <thead>
+                            <tr>
+                              <th>Tag Type</th>
+                              <th>Name</th>
+                              <th>Description</th>
+                              <th>Memo</th>
+                              <th>File Name</th>
+                              <th>File Size</th>
+
+                              <th>Updated By</th>
+                              <th>Last Updated Time</th>
+                              <th>Created By</th>
+                              <th>Created Time</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="let audit of sourceViewforDocumentAudit"
+                            ></tr>
+                            <tr
+                              *ngFor="
+                                let audit of sourceViewforDocumentAudit;
+                                let i = index
+                              "
+                            >
+                              <td
+                                [ngStyle]="{
+                                  color: getColorCodeForHistoryDoc(
+                                    i,
+                                    'tagType',
+                                    audit.tagType
+                                  )
+                                    ? 'black'
+                                    : 'red'
+                                }"
+                              >
+                                {{ audit.tagType }}
+                              </td>
+                              <td
+                                [ngStyle]="{
+                                  color: getColorCodeForHistoryDoc(
+                                    i,
+                                    'docName',
+                                    audit.docName
+                                  )
+                                    ? 'black'
+                                    : 'red'
+                                }"
+                              >
+                                {{ audit.docName }}
+                              </td>
+
+                              <td
+                                [ngStyle]="{
+                                  color: getColorCodeForHistoryDoc(
+                                    i,
+                                    'docDescription',
+                                    audit.docDescription
+                                  )
+                                    ? 'black'
+                                    : 'red'
+                                }"
+                              >
+                                {{ audit.docDescription }}
+                              </td>
+                              <td
+                                [ngStyle]="{
+                                  color: getColorCodeForHistoryDoc(
+                                    i,
+                                    'docMemo',
+                                    audit.docMemo
+                                  )
+                                    ? 'black'
+                                    : 'red'
+                                }"
+                              >
+                                <!-- {{ audit.docMemo }} -->
+                                <p class="p-0 m-0 p_textEditor" [innerHTML]="audit.docMemo">												
+                                </p>
+                              </td>
+                              <td
+                                [ngStyle]="{
+                                  color: getColorCodeForHistoryDoc(
+                                    i,
+                                    'fileName',
+                                    audit.fileName
+                                  )
+                                    ? 'black'
+                                    : 'red'
+                                }"
+                              >
+                                {{ audit.fileName }}
+                              </td>
+                              <td>{{ audit.fileSize }}</td>
+
+                              <td>{{ audit.updatedBy }}</td>
+                              <td>
+                                {{
+                                  audit.updatedDate | date: 'dd-MM-yyyy h:mm a '
+                                }}
+                              </td>
+                              <td>{{ audit.createdBy }}</td>
+                              <td>
+                                {{
+                                  audit.createdDate | date: 'dd-MM-yyyy h:mm a '
+                                }}
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        (click)="
+                          dismissDocumentPopupModel('#contentAuditHistDoc')
+                        "
+                      >
+                        Close
+                      </button>
+
+                      <!--<button type="button" class="btn btn-danger" data-dismiss="modal">
+                                                        Close
+                                                    </button>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <strong>
+          Part Number:
+          <span class="new-label">{{restorerecord.partNos}}</span>
+      </strong>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="restoreRecord()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+</div>

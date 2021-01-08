@@ -1,0 +1,24 @@
+﻿<!--<div style="border: 1px solid red">Asset-Steps Component</div>-->
+
+
+        <div class="md-stepper-horizontal orange" *ngIf="showComponentPTab">
+            <ng-container *ngFor="let item of items">
+                <div class="md-step"
+                    [ngClass]="{active: activeIndex >= item.index, editable: activeIndex === item.index}"
+                    [class.isDisabled]="!isDisabledSteps"
+                    (click)="item.command(item)"
+                  >
+                    <div class="md-step-circle"><span>{{ item.step }}</span></div>
+                    <div class="md-step-title">{{ item.label }}</div>
+                    <div class="md-step-bar-left"></div>
+                    <div class="md-step-bar-right"></div>
+                </div>
+
+            </ng-container>
+         
+      
+         
+      </div>
+      
+
+

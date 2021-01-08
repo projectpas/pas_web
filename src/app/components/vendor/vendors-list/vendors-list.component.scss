@@ -1,0 +1,56 @@
+﻿.po-head {
+  font-weight: 700;
+  font-size: 16px !important;
+  color: #295d92 !important;
+  margin-left: 0 !important;
+}
+
+.contact-no-record{
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.history-no-record{
+  font-size: 20px;
+  text-align: center;
+}
+.btn-pos {
+  color: #259e08;
+}
+.btn-ros {
+  color: #ff5663;
+}
+.view-header {
+  padding-top: 2px !important;
+  margin: 0;
+}
+.table-cstm thead tr th {
+  padding: 2px 5px;
+}
+.table-cstm tr td a {
+  padding: 1px !important;
+}
+.table-cstm thead {
+  background: #4298ff !important;
+}
+.status-radio label {
+  text-align: left;
+  width: 140px;
+  margin-right: 0;
+  font-weight: normal;
+}
+.parent-info{
+  box-shadow: 1px 1px 3px 1px #d8d4d4;
+  width: 80%;
+  padding: 4px;
+  display: grid;
+
+  .checkbox-cstm{
+    border-bottom: 1px solid #d4d4d4;
+    padding: 8px 0;
+  }
+  .vendor_Name{
+    width: 100%;
+  }
+}

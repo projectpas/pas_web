@@ -1,0 +1,128 @@
+.red {
+    background-color:#ED2939 !important;
+}
+
+.gray-background {
+    background-color:#c9c9c9 !important;
+}
+.btn-header-list {
+    text-align: right;
+    margin-right: -20px !important;
+    margin-top: 15px;
+    margin-bottom: 0px !important;
+}
+label {
+    text-align: left;
+    width: 150px;
+    margin-right: 0;
+    font-weight: normal;
+}
+input[type="text"], input[type="number"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+}
+.head-notes {
+    height: 25px !important;
+}
+.inner-addon .ui-autocomplete-input {
+    width: 100% !important;
+}
+.po-head {
+    font-weight: bold;
+    font-size: 16px;
+    color: #295d92;
+}
+.partsList-table-tr th {
+    min-width: 100px;
+}
+.addpn-btn {
+    padding: 5px 10px !important;
+    font-size: 13px;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.partsList-modal .form-group {
+    margin-bottom: 6px !important;
+}
+.rpo-table-cstm th {
+    padding: 8px 5px !important;
+}
+.child-add-icon {
+    cursor: pointer;
+    margin: 2px -12px;
+}
+.child-add-icon a:before, .child-add-icon i:before{
+    font-size: 16px;
+}
+.approver-details-cstm {
+    margin-top: 7px;
+}
+.approver-details-cstm p {
+    float: left;
+    margin-right: 40px;
+}
+.approver-tab-cstm .col-md-3 {
+    padding-right: 40px;
+    margin-right: 0;
+}
+.approver-tab-cstm .form-row {
+    margin-top: 10px;
+}
+.pas-table-cstm thead tr th {
+    text-align: center;
+}
+.ui-tabview .ui-tabview-panel {
+    overflow: initial !important;
+}
+.approvers-table tr th {
+    padding: 5px 10px;
+    text-align: center;
+}
+.approvers-table tr td {
+    padding: 5px;
+}
+.approverslist-table tr th {
+    padding: 5px 10px;
+    text-align: center;
+    min-width: 80px;
+}
+.approverslist-table tr td {
+    padding: 5px;
+}
+
+// .p-autocomplete .ui-autocomplete input.ui-inputtext {
+//     background-color: white;
+// }
+// .approverslist-table label {
+//     width: auto !important;
+// }
+
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+    .col-md-4 {
+        max-width: 31.5%;
+        margin-right: 15px;
+    }
+    .col-md-9 {
+        max-width: 70%;
+        margin-right: 15px;
+    }
+    #addContactInfo .col-md-6 {
+        max-width: 44%;
+        margin-right: 15px;
+    }
+}
+
+.vendorCapes-generalInfo .label{
+    width: 100px !important;
+}
+.vendorCapes-generalInfo .value{
+    width: calc(100% - 100px) !important;
+}

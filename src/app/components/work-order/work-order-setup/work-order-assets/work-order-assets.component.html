@@ -1,0 +1,649 @@
+<div>
+  <button data-target="#addNewEquipments" (click)="createNew()" data-toggle="modal" class="btn btn-primary btn-primary"
+    style="padding: 6px 12px !important;margin-left: 6px;" *ngIf="!isView">
+    Add Tools
+  </button>
+</div>
+
+<div id="addNewEquipments" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeAddNew()">
+          &times;
+        </button>
+        <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add'}} Tools </h4>
+      </div>
+      <div class="modal-body " id="asset_create">
+
+        <div *ngIf="!isEdit && addNewEquipment">
+          <grd-equipment [workFlowObject]="workFlowObject" [moduleName]="moduleName" [isWorkOrder]="isWorkOrder"
+            (saveEquipmentListForWO)="saveEquipmentList($event)"></grd-equipment>
+        </div>
+        <div *ngIf="isEdit && editData && addNewEquipment">
+          <grd-equipment [isEdit]="isEdit" [editData]="editData" [moduleName]="moduleName"
+            [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
+            (updateEquipmentListForWO)="updateEquipmentList($event)"></grd-equipment>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="equipment-tab-content">
+  <div class="x_panel">
+    <div class="tab-content">
+      <div class="table-responsive" id="workflow-attributes-block">
+        <table class="table table-bordered ">
+          <thead>
+            <tr>
+              <!-- <th colspan="9" class="text-center">
+                                Equipment &nbsp; &nbsp;<a class="add-asset-checkin-checkout" data-toggle="modal"
+                                    data-target=".asset-checkin-checkout"><i class="fa fa-plus plus-icon"></i></a>
+                            </th> -->
+            </tr>
+            <tr *ngIf="!isView">
+              <th colspan="4" class="text-center"></th>
+              <th colspan="2" class="text-center" *ngIf="!isView">Actions</th>
+              <!-- <th colspan="4" class="text-center"></th> -->
+            </tr>
+            <tr>
+              <th class="text-center">Tool Name</th>
+              <th class="text-center">Tool Id</th>
+              <th class="text-center">Tool Description</th>
+              <th class="text-center">Tool Type</th>
+              <th class="text-center">Qty</th>
+              <!-- <th class="text-center">Min</th>
+              <th class="text-center">Max</th> -->
+              <!-- <th class="text-center">Expected</th>
+              <th class="text-center">Findings</th> -->
+              <th class="text-center" *ngIf="!isView"></th>
+            </tr>
+          </thead>
+          <tbody *ngIf="workOrderAssetList.length > 0">
+            <tr *ngFor="let asset of workOrderAssetList; let i = index">
+              <td>{{ asset.name }}</td>
+              <td>{{ asset.assetId }}</td>
+              <td>{{ asset.description }}</td>
+              <td>{{ asset.assetTypeName }}</td>
+              <td class="text-right">{{ asset.quantity }}</td>
+              <!-- <td>
+                {{ asset.minQuantity }}
+              </td>
+              <td>
+                {{ asset.maxQuantity }}
+              </td> -->
+              <!-- <td>
+                {{ asset.expectedQuantity }}
+              </td> -->
+              <!-- <td>
+                {{ asset.findings }}
+              </td> -->
+              <!-- 
+              <td>
+                <a
+                  class="btn  boxed-float-btn nobg"
+                  data-toggle="modal"
+                  data-target="#view"
+                  (click)="viewAsstes(asset)"
+                >
+                  <i class="fa fa-eye"></i>
+                </a>
+              </td> -->
+
+              <td class="text-center" *ngIf="!isView">
+                <span data-target="#addNewEquipments" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+                    (click)="edit(asset)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                </span>
+                <span>
+                  <!-- *ngIf="asset.checkInOutStatus === 2" -->
+                  <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkOut'); viewAsstes(asset)"
+                    data-toggle="modal" data-target="#checkIn" matTooltipPosition="above"
+                    matTooltip="Asset Checked-Out">
+                    <i class="fa fa-sign-out clr-red"></i>
+                  </a>
+                </span>
+                <span>
+                  <!-- *ngIf="asset.checkInOutStatus === 1" -->
+                  <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkIn'); viewAsstes(asset)"
+                    data-toggle="modal" data-target="#checkIn" matTooltipPosition="above" matTooltip="Asset Checked-In">
+                    <i class="fa fa-sign-in clr-blue"></i></a>
+                </span>
+
+
+                <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,asset)" matTooltip="Delete"
+                    matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                <span data-toggle="modal" data-target="#assetHistory">
+                  <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(asset)" matTooltip="History"><i
+                      class="fa fa-history"> </i></a></span>
+                <!-- <button class="btn-edit ptable-wo-btns" mat-icon-button data-target="#addNewEquipments"
+                  data-toggle="modal" (click)="edit(asset)" matTooltip="Edit" matTooltipPosition="above">
+                  <mat-icon>edit</mat-icon>
+                </button> -->
+              </td>
+              <!-- <td *ngIf="asset.checkInOutStatus === 1">
+                <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkIn'); viewAsstes(asset)"
+                  data-toggle="modal" data-target="#checkIn" matTooltipPosition="above" matTooltip="Asset Checked-In">
+                  <i class="fa fa-sign-in clr-blue"></i>
+                </a>
+              </td> -->
+              <!-- <td *ngIf="asset.checkInOutStatus === 2">
+                <a class="btn  boxed-float-btn nobg" (click)="checkStatus(asset, 'checkOut'); viewAsstes(asset)"
+                  data-toggle="modal" data-target="#checkIn" matTooltipPosition="above" matTooltip="Asset Checked-Out">
+                  <i class="fa fa-sign-out clr-red"></i>
+                </a>
+              </td> -->
+              <!-- <td>
+                <span data-toggle="modal" data-target="#assetHistory">
+                  <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(asset)" matTooltip="History"><i
+                      class="fa fa-history"> </i></a></span>
+              </td> -->
+              <!-- <td>
+                <button class="btn-delete ptable-wo-btns" mat-icon-button data-toggle="modal" (click)="delete(asset)">
+                  <mat-icon color="warn">delete</mat-icon>
+                </button>
+              </td> -->
+              <!--<td>
+                <span data-toggle="modal" data-target="#delete">
+                  <a
+                    class="btn btn-success boxed-float-btn nobg"
+                    data-toggle="tooltip"
+                    title="Delete Asset"
+                    ><i class="fa fa-trash"></i
+                  ></a>
+                </span>
+              </td>-->
+            </tr>
+            <!-- <div class="text-right">
+                                <button class="btn btn-primary" (click)="saveAssets()" >
+                                        save Assets
+                                    </button>
+                        </div> -->
+          </tbody>
+          <tbody *ngIf="workOrderAssetList.length == 0">
+            <tr>
+              <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                No records found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <br />
+    <br />
+    <br />
+    <br />
+  </div>
+</div>
+
+<div id="view" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Asstes View</h4>
+      </div>
+      <div class="modal-body" *ngIf="assetRecordId">
+        <app-asset-listing [assetsId]="assetRecordId" [isWorkOrder]="isWorkOrder">
+        </app-asset-listing>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="checkIn" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="releaseInventory()">
+          &times;
+        </button>
+        <h4 class="modal-title" *ngIf="assetsform.assetStatus == 'checkIn'">
+          Tools Check-In
+        </h4>
+        <h4 class="modal-title" *ngIf="assetsform.assetStatus == 'checkOut'">
+          Tools Check-Out
+        </h4>
+      </div>
+      <div class="modal-body" *ngIf="assetRecordId">
+        <div class="form-row" style="margin-top: 10px;">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label style="width: auto;">WO Num</label>
+              <input class="form-control" type="text" [(ngModel)]="woNumber" name="woNumber" disabled />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label style="width: auto;">Customer</label>
+              <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" disabled />
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label style="width: 100%;">WO Open Date</label>
+              <!-- <input class="form-control" type="text" [(ngModel)]="woOperDate" name="woOperDate"
+                disabled /> -->
+              <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+                [(ngModel)]="woOperDate" disabled appendTo="body">
+              </p-calendar>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <!-- <h4 class="panel-title">
+                    <input type="checkbox" name="contract2"  class="set_cds" disabled
+                    [(ngModel)]="saveTearDownData.isPmaDerBulletins">
+                  </h4> -->
+              <table class="asset_tablee"
+                style="border: 1px solid #c8c8c8 !important; width: 100%;table-layout: fixed;">
+                <thead>
+                  <tr>
+                    <th style="width:36px;"></th>
+                    <th style="text-align:center">Tool Name</th>
+                    <th style="text-align:center">Tool Id</th>
+                    <th style="text-align:center">Inventory Num</th>
+                    <th style="text-align:center">Qty Needed</th>
+                    <th style="text-align:center">Qty Seleted</th>
+                    <th style="text-align:center">Qty Available</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="width:36px;">
+                      <span>
+                        <a class="collapsed ac_cs" data-toggle="collapse" href="#step2">
+                          <i class="fa fa-plus btn btn-success btn-cstm btn-xs" matTooltip="Show Asset Inventory list"
+                            matTooltipPosition="above" style="padding: 3px 8px !important;" (click)="openGrid()"></i>
+                        </a>
+                      </span>
+                    </td>
+                    <td>
+                      {{currentRecord.name}}
+                    </td>
+                    <td>
+                      {{currentRecord.assetId}}
+                    </td>
+                    <td>
+                      <!-- {{currentRecord.quantitySelected}} -->
+                      <!-- {{currentRecord.inventoryNumber}} -->
+                      Multiple
+                    </td>
+                    <td style="    text-align: end;">
+                      {{currentRecord.quantity}}
+                    </td>
+                    <td style="    text-align: end;">
+                      {{quantitySelected}}
+                    </td>
+                    <td style="    text-align: end;">
+                      <!-- {{currentRecord.qyantityAvalilable}} -->
+                      {{AvailableCount}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="step2" class="panel-collapse  collapse" *ngIf="showcheckInOutlist">
+              <div class="panel-body m-lr-7">
+                <form #assetCheckForm="ngForm" style="background: #fff;" >
+                  <!-- class="table-responsive" id="workflow-attributes-block" -->
+                  <div >
+                    <table class="table table-bordered table-border-modal1">
+                      <thead>
+                        <tr>
+                          <th *ngFor="let col of assetChekinCheckoutheaders" style="text-align:center">
+                            {{col.header}}
+                          </th>
+                          <th style="width: 45px;">Actions </th>
+                        </tr>
+                      </thead>
+                      <tbody *ngIf="workOrderCheckInCheckOutList && workOrderCheckInCheckOutList.length !=0">
+                        <!-- <ng-container *ngFor="let x of reservedList; let i=index;" > -->
+                        <tr *ngFor="let row of workOrderCheckInCheckOutList; let i = index" id="row_{{i}}">
+                          <td style="min-width: 36px;"> 
+                            <div *ngIf="assetsform.assetStatus == 'checkOut'">
+                              <input type="checkbox" name="contract2" class="set_cds"  *ngIf="row.inventoryStatus=='Available'"
+                              [(ngModel)]="row.isChecked" required (change)="checkValue(workOrderCheckInCheckOutList)">
+                            </div>
+                              <input type="checkbox" name="contract2" class="set_cds"  *ngIf="assetsform.assetStatus == 'checkIn'"
+                              [(ngModel)]="row.isChecked" required (change)="checkValue(workOrderCheckInCheckOutList)">
+                            </td>
+                          <td>{{row.assetName}}</td>
+                          <td>{{row.assetId}}</td>
+                          <td>{{row.inventoryNumber}}</td>
+                          <td>{{row.assetType}}</td>
+                          <td>{{row.manufacturer}}</td>
+                          <td>{{row.serialNo}}</td>
+                          <td>{{row.assetLocation}}</td>
+                          <td>{{row.inventoryStatus}}</td>
+                          <td style="width: 135px;">
+                            <p-autoComplete *ngIf="assetsform.assetStatus == 'checkOut'" field="label" [disabled]="!row.isChecked"
+                              class="pautocomp-cstm" [(ngModel)]="row.checkOutById" name="checkInBy{{i}}"
+                              [suggestions]="employeeList" (completeMethod)="filterEmployee($event)" [size]="30"
+                              [minLength]="1" [dropdown]="true" errorMessage="Records not found" 
+                              [forceSelection]="true" > 
+                            </p-autoComplete>
+                            <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutBy}}</div>
+                          </td>
+                          <td style="width: 100px;">
+                            <div  *ngIf="assetsform.assetStatus == 'checkOut'">
+                              <p-calendar class="pas-clder" [(ngModel)]="row.checkOutDate" [showIcon]="true" [disabled]="!row.isChecked"
+                                name="checkOutDate{{i}}"></p-calendar>
+                            </div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkIn'">{{row.checkOutDate | date: 'MM/dd/yyyy'}}</div>
+                          </td>
+                          <td style="width: 135px;">
+                            <div class="form-group" *ngIf="assetsform.assetStatus == 'checkIn'">
+                              <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="row.checkInById" [disabled]="!row.isChecked"
+                                name="checkInBy{{i}}" [suggestions]="employeeList"
+                                (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                errorMessage="Records not found" [forceSelection]="true">
+                              </p-autoComplete>
+                            </div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInBY}}</div>
+                          </td>
+                          <td style="width: 100px;"> 
+                            <div  *ngIf="assetsform.assetStatus == 'checkIn'">
+                              <p-calendar class="pas-clder" [(ngModel)]="row.checkInDate" [showIcon]="true" [disabled]="!row.isChecked"
+                                name="checkInDate{{i}}"></p-calendar>
+                            </div>
+                            <div *ngIf=" assetsform.assetStatus == 'checkOut'"> {{row.checkInDate | date: 'MM/dd/yyyy'}}</div>
+                          </td>
+                          <td> <i class="fa fa-info-circle fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" 
+                            matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(row,i)"></i></td>
+                          <td>
+                            <span> 
+                              <!-- data-toggle="modal" data-target="#view" -->
+                              <!-- <a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#checkInOutView"   matTooltip="Asset Inventory View" matTooltipPosition="above">
+                                  <i class="fa fa-eye"></i>
+                              </a> -->
+                              <a
+                              class="btn  boxed-float-btn nobg" matTooltip="Asset Inventory View" matTooltipPosition="above"
+                              data-toggle="modal"
+                              data-target="#checkInOutView1"
+                              (click)="viewAsstes(asset)"
+                            >
+                              <i class="fa fa-eye"></i>
+                            </a>
+                          </span>
+                          <!-- <span>
+                            <a class="btn nobg btn-delete-cstm" data-toggle="modal" data-target="#checkInOutHistory"  matTooltip="History" matTooltipPosition="above">
+                                <i class="fa fa-history"></i>
+                            </a>
+                        </span> -->
+                          </td>
+                        </tr>
+                        <!-- </ng-container> -->
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div class="text-right save-work-btn cust_ma">
+                    <!-- ; getEquipmentData.emit() -->
+                    <button class="btn btn-primary btn-primary" (click)="saveAssets(workOrderCheckInCheckOutList)"
+                      style="padding: 6px 12px !important;" data-dismiss="modal" [disabled]="!assetCheckForm.valid"
+                      type="submit">
+                      Save
+                    </button>
+                    <button type="button" class="btn btn-danger" (click)="releaseInventory()" data-dismiss="modal"
+                      style="padding: 6px 12px !important;">
+                      Close
+                    </button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+          <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                <h4 class="modal-title">Memo</h4>
+              </div>
+              <div class="modal-body">
+                  <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+  
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="checkInOutView" role="dialog" data-backdrop="static" data-keyboard="false">
+          <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"></h4>
+              </div>
+              <!-- <div class="modal-body" *ngIf="assetInventoryId!=0"> -->
+                <!-- [assetsId]="assetRecordId" -->
+                <!-- <app-asset-inventory-listing  [assetInventoryId]="assetInventoryId" [isWorkOrder]="isWorkOrder">
+                </app-asset-inventory-listing> -->
+              <!-- </div> -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo()">Save</button>
+                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="assetHistory" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Work Order Tools History</h4>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>	Tool Name</th>
+                <th>
+                  Tool Id
+                </th>
+                <th>Inventory Num</th>
+                <th>Tool Type</th>
+                <th>Manufacturer</th>
+                <th>Serial Num</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>CheckOut Date</th>
+                <th>CheckOut By</th>
+                <th>CheckIn Date</th>
+                <th>CheckIn By</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let audit of assetAuditHistory; let i = index">
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'assetName',
+                    audit.assetName
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.assetName }}
+              </td>
+                <td [ngStyle]="{
+                    color: getColorCodeForHistory(i, 'assetId', audit.assetId)
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.assetId }}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(i, 'inventoryNumber', audit.inventoryNumber)
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.inventoryNumber }}
+              </td>
+              <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'assetType', audit.assetType)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.assetType }}
+            </td>
+            <td [ngStyle]="{
+              color: getColorCodeForHistory(i, 'manufacturer', audit.manufacturer)
+                ? 'black'
+                : 'red'
+            }">
+            {{ audit.manufacturer }}
+          </td>
+          <td [ngStyle]="{
+            color: getColorCodeForHistory(i, 'serialNo', audit.serialNo)
+              ? 'black'
+              : 'red'
+          }">
+          {{ audit.serialNo }}
+        </td>
+        <td [ngStyle]="{
+          color: getColorCodeForHistory(i, 'assetLocation', audit.assetLocation)
+            ? 'black'
+            : 'red'
+        }">
+        {{ audit.assetLocation }}
+      </td>
+      <td [ngStyle]="{
+        color: getColorCodeForHistory(i, 'inventoryStatus', audit.inventoryStatus)
+          ? 'black'
+          : 'red'
+      }">
+      {{ audit.inventoryStatus }}
+    </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'checkOutDate',
+                    audit.checkOutDate
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.checkOutDate | date: 'MM/dd/yyyy'}}
+              </td>
+              <td [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'checkOutBy',
+                  audit.checkOutBy
+                )
+                  ? 'black'
+                  : 'red'
+              }">
+                {{ audit.checkOutBy }}
+              </td>
+                <td [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'checkInDate',
+                      audit.checkInDate
+                    )
+                      ? 'black'
+                      : 'red'
+                  }">
+                  {{ audit.checkInDate  | date: 'MM/dd/yyyy'}}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'checkInBy',
+                    audit.checkInBy
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  {{ audit.checkInBy }}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'notes',
+                    audit.notes
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  <!-- {{ audit.notes }}  -->
+                  <p class="p_textEditor" [innerHTML]="audit.notes"></p>
+                </td>
+                
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+
+
+    </button>
+
+  </div>
+
+  <!-- <div class="modal-body">
+      <strong>
+        Tool Name:
+          <span class="new-label">{{currentRow.name}}</span>
+      </strong>
+  </div> -->
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="delete()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+  </div>
+
+
+</ng-template>

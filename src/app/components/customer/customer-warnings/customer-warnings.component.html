@@ -1,0 +1,117 @@
+﻿
+	<div class="right_col" role="main" style="padding: 2px 6px;">
+		<div  style="">
+            <div class="x_content">
+                <div class="col-md-12 shadow-box-cstm">        
+                    <div class="col-md-4">
+                        <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Customer Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{customerName }} </span> </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Customer Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{customerCode }} </span> </p>
+                    </div>                            
+                </div>
+
+        <div class="card" style="padding: 10px;">
+            <div class="card-header bg-primary new-card-header" >
+                <div class="row">
+                  <div class="col">
+                    <h4 class="new-card-heading"> Warnings </h4>
+                  </div>
+                </div>
+              </div>
+            <div class="clear"></div>
+            <hr />
+                <form action="#" method="post" #WarningsForm="ngForm" id="" name="" class="form-horizontal add-custustomer">
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="menu7">
+                                <div class="col-sm-8">
+                                    <div class="table-responsive" >
+                                      <div class="tableFixHead">                                      
+                                        <table class="table table-bordered warnings-table">
+                                            <thead style="position: sticky; top: 0;">
+                                                <tr align="center">
+                                                    <th style="font-size: 12px !important; text-align: left !important;">Warning Name</th>
+                                                    <th style="font-size: 12px !important;">Allow <input type="checkbox" name="allowAll" [ngModel]="isAllow"  [disabled]="isRestrict" (change)="allowAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control" /></th>
+                                                    <th style="font-size: 12px !important;">Warning <input type="checkbox" name="warningAll" [ngModel]="isWarning" [disabled]="isRestrict"  (change)="warningAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control" /></th>
+                                                    <th style="font-size: 12px !important;">Restrict <input type="checkbox" name="RestrictAll" [ngModel]="isRestrict" (change)="restrictAll($event.target.checked)" (ngModelChange)="enableSave()" class="form-control"  /> </th>
+                                                    <th style="font-size: 12px !important;">Warning Msg</th>
+                                                    <th style="font-size: 12px !important;">Restrict Msg</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody> 
+                                                    <tr align="center" *ngFor="let w of warningMessages; let i=index">
+                                                            <td style="text-align: left; padding-left: 5px !important">{{w.sourceModule}}</td>                                                          
+                                                            <td><input type="checkbox" name="allow{{i}}"  [(ngModel)]="w.allow" (change)="onAllowClick($event)" (ngModelChange)="enableSave()"  [disabled]="w.restrict"  class="form-control" /></td>
+                                                            <td><input type="checkbox" name="warning{{i}}"  [(ngModel)]="w.warning" (change)="onWarningClick($event)" (ngModelChange)="enableSave()" [disabled]="w.restrict" class="form-control" /></td>
+                                                            <td><input type="checkbox" name="restrict{{i}}" [(ngModel)]="w.restrict" (change)="onRestrictClick($event, i)" (ngModelChange)="enableSave()" class="form-control" /></td>
+                                                            <td><textarea class="form-control" name="warningMessage{{i}}" [(ngModel)]="w.warningMessage" (ngModelChange)="enableSave()" [disabled]="!w.warning" [required]="w.warning == true" ></textarea></td>
+                                                            <td><textarea class="form-control" name="restrictMessage{{i}}"[(ngModel)]="w.restrictMessage" (ngModelChange)="enableSave()" [required]="w.restrict == true"  [disabled]="!w.restrict"  ></textarea></td>
+                                                        </tr>
+                                            </tbody>
+                                        </table>
+                                      </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                        <div style="margin-top: 10px">
+                            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
+                            <button type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveWarnings()">{{warningsUpdateBoolean ? 'Update' : 'Save' }}</button>
+                            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">Previous</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+		</div>
+    </div>
+</div>
+
+	<div class="modal fade success-msg" id="success-popup" role="dialog">
+		<div class="modal-dialog modal-sm popup-timeout">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button  type="button" class="close" data-dismiss="modal" aria-label="Close" ><span aria-hidden="true">×</span></button>
+					<h4> <i class="fa fa-check"></i>&nbsp; You Added Successfully !</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+          <h6 style="padding-left: 2%;">
+            Do you want to Save changes and Continue ?
+          </h6>
+        </div>
+        <div class="modal-footer">
+      
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!WarningsForm.valid" (click)="redirectToTab()">Yes</button>
+        </div>
+      </ng-template>
+
+      <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+          <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>

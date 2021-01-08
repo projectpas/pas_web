@@ -1,0 +1,700 @@
+<div [@fadeInOut] class="page-content">
+    <!-- <div class="card padding-10">
+        <div class="card-header">
+            <div class="pull-left">
+                <h4 class="po-head m-0">
+                    {{isEdit ? 'Edit' : 'New'}} Customer CRM</h4>
+            </div>
+        
+        
+        </div> -->
+        <div class="card new-card">
+            <div class="card-header bg-primary">
+              <div class="row">
+                <div class="col">
+                  <h4 class="new-card-heading">
+                    {{isEdit ? 'Edit' : 'Create'}} Customer CRM</h4>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn-sm new-btn-primary"
+                    [routerLink]="['/customersmodule/customerpages/app-crm-list']"
+                  >
+                    CRM List
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body new-card-body">
+        <div class="right_col" role="main">
+            <div class="x_panel">
+                <div class="x_content">
+                    <form #crmForm="ngForm" class="add-custustomer">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                      
+                                
+                                    <div class="col-sm-3" style="width:180px">
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;
+                                            text-align: left;">Account Type <span class="clr-red">*</span></label>
+
+                                            <select [(ngModel)]="crmInfo.customerTypeId" name="customerTypeId" required
+                                            [disabled]="disableAccountType">
+                                            <option *ngFor="let CustomerType of customertypes"
+                                             [ngValue]="CustomerType.customerTypeId">{{ CustomerType.description }}</option>
+                                           </select>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">Reports</label>
+                                          
+                                            <select [(ngModel)]="crmInfo.ReportId" name="ReportId">
+                                            <option *ngFor="let Report of reportList"
+                                              [ngValue]="Report.value">{{ Report.label }}</option>
+                                          </select>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Customer Name<span class="clr-red">*</span></label>
+                                            <p-autoComplete class="pautocomp-cstm" name="customerName"
+                                            [(ngModel)]="crmInfo.name" (onKeyUp)="
+                                              checkCustomerNameExist($event.target.value)
+                                            " (onChange)="checkCustomerNameExist($event.target.value)" (onSelect)="selectedCustomerName()"
+                                             [suggestions]="customerNames" field="name"
+                                            (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                            required>
+                                          </p-autoComplete>
+                                          
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Customer Code <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <p-autoComplete class="pautocomp-cstm" name="customerCode" (onKeyUp)="
+                              checkCustomerCodeExist($event.target.value)
+                            " (onSelect)="selectedCustomerCode()" [(ngModel)]="crmInfo.customerCode"
+                            [suggestions]="customerCodes" field="customerCode"
+                            (completeMethod)="filterCustomerCode($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                            required>
+                          </p-autoComplete>
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">Parent Name</label>
+                                            <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                            [(ngModel)]="crmInfo.parentId" field="name" [suggestions]="parentCustomer" [forceSelection]="true"
+                                          emptyMessage="No Match Found" (onClear)="onClearParent()" (completeMethod)="
+                                            filterCustomerParentNames($event)
+                                          " [size]="30" (onSelect)="selectedParentName($event)"
+                                          (onKeyUp)="checkWithName($event.target.value)"
+                                          (onChange)="checkWithName($event.target.value)" [minLength]="1" [dropdown]="true">
+                                               
+                                            </p-autoComplete>
+                                          
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Classification  <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <p-multiSelect [options]="allcustomerclassificationInfo" [(ngModel)]="
+                                                        crmInfo.customerClassificationIds" name="customerClassificationId" required="true">
+                                            </p-multiSelect>                                            
+                                         </div>
+                                        </div>
+
+                                        
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Address 1  <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" id="address1" name="address1"
+                                                [(ngModel)]="crmInfo.address1" required />                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">Address 2</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" id="address2" name="address2" [(ngModel)]="crmInfo.address2" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">City <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" id="cscity" name="cscity"
+                                                [(ngModel)]="crmInfo.city" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">State / Province <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" name="stateOrProvince"
+                                                [(ngModel)]="crmInfo.stateOrProvince" required />
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Postal Zip <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" name="postalCode"
+                                                [(ngModel)]="crmInfo.postalCode" required />
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Country <span class="clr-red">*</span></label>
+                                            <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                            filter="true"
+                                            [(ngModel)]="crmInfo.countryId" emptyMessage="No Match Found" name="country1"
+                                            [suggestions]="countrycollection" field="nice_name"
+                                            (completeMethod)="filterCountries($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                            [forceSelection]="true" required>
+                                               
+                                            </p-autoComplete>
+                                          
+                                        </div>
+            
+
+                                       
+                                    </div>
+
+                        <div class="col-sm-6" style="width:700px">                                                  
+                                    
+                                        <div class="x_panel">
+                                            <div class="x_content">
+                                              
+                                                <p-tabView class="crm-tabs tab">
+                                                    <p-tabPanel header="Dashboards">
+                                                      
+                                                    </p-tabPanel>
+                                                    <p-tabPanel header="Communications">
+                                                      
+                                                    </p-tabPanel>
+                                                    <p-tabPanel header="Deals">
+                                                        <div>
+                                                            <div>
+                                                                <div class="col-md-12">
+                                                                    <h4 class="po-head-sm">
+                                                                        Deal
+                                                                        <a class="plusicon-cstm"  [routerLink]="['/customersmodule/customerpages/app-deal-setup']">
+                                                                            <i class="fa fa-plus-circle fa-lg"
+                                                                             matTooltip="Create Deal"
+                                                                                matTooltipPosition="above"></i></a>
+                                                                    </h4>
+                                                                </div>
+                                                                <div class="clear"></div>
+                                                                <hr />
+                                                                
+                                                            </div>
+                                                            <div class="form-row status-radio">
+
+                                                                <div class="col-md-10">
+                                                                    <div class="form-group">
+                                                                        <label class="radiobtn-label">Satge:</label>
+                                                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                            <label class="radio-cstm wauto">
+                                                                                <input type="radio" name="satge" class="form-control" value="All">
+                                                                                <span class="checkmark"></span>All
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                            <label class="radio-cstm wauto">
+                                                                                <input type="radio" name="stage" class="form-control" value="Closed">
+                                                                                <span class="checkmark"></span>Closed
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                            <label class="radio-cstm wauto">
+                                                                                <input type="radio" name="stage" class="form-control" value="NotClosed">
+                                                                                <span class="checkmark"></span>Not-Closed
+                                                                            </label>
+                                                                        </div>
+                                                    
+                                                                    </div>
+                                                                </div>
+                                                                </div>
+                                                    
+                                                            <p-table #dt  class="rpo-table-cstm  rro-table-cstm" [metaKeySelection]="true"
+                                                                [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
+                                                                [columns]="selectedColumnsDeals" selectionMode="multiple"
+                                                                 [(selection)]="selectedColumn"
+                                                                [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+                                                               >
+                                                                
+                                                                <ng-template pTemplate="colgroup" let-columns>
+                                                                    <colgroup>
+                                                                        <col *ngFor="let col of columns" style="width:auto">
+                                                                    </colgroup>
+                                                                </ng-template>
+                            
+                                                                <ng-template pTemplate="header" let-columns>
+                                                                    <tr>
+                                                                        <th style="width: 40px;">Flag</th>
+                                                                        <th *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'"
+                                                                            pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                                                            {{col.header}}
+                                                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                                        </th>
+                                                                        <th style="width:140px;position:sticky">
+                                                                            Actions
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th style="width: 40px;"></th>
+                                                                        <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field"
+                                                                            [hidden]="col.field == 'isPrimayPayment'">
+                                                                            <input style="width:100%;" pInputText type="text"
+                                                                                (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                                                        </th>
+                                                                        <th style="width:140px;position:sticky"></th>
+                                                                    </tr>
+                                                                </ng-template>
+                            
+                                                                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                                                    <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
+                                                                        pReorderableRowHandle (dblclick)="openView(view,rowData)">
+                            
+                                                                        <td style="width: 40px;"> <span class="flag" matTooltip="Primary"
+                                                                                matTooltipPosition="above">
+                                                                                <i *ngIf="rowData.isPrimayPayment == true" class="fa fa-flag"
+                                                                                    aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </td>
+                                                                        <td *ngFor="let col of columns" class="ui-resizable-column"
+                                                                            [hidden]="col.field == 'isPrimayPayment'" pReorderableRowHandle>
+                                                                            {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                                                        </td>
+                            
+                                                                        <td style="width:140px;">
+                                                                            <div *ngIf="currentDeletedstatus==false">
+                                                                            <p-inputSwitch  *ngIf="rowData['isActive']==true"
+                                                                                matTooltip="Active" matTooltipPosition="above" onLabel="on"
+                                                                                offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                                                [(ngModel)]="rowData['isActive']">
+                                                                            </p-inputSwitch>
+                                                                            <p-inputSwitch  *ngIf="rowData['isActive']==false"
+                                                                                matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                                                                offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                                                [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                                                            <p-inputSwitch  *ngIf="rowData['isActive']==null"
+                                                                                matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                                                                offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                                                [(ngModel)]="rowData['isActive']">
+                                                                            </p-inputSwitch>
+                            
+                                                                            <span data-toggle="modal" data-target="#view"> <a
+                                                                                    class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                                                                    (click)="openView(view,rowData)" matTooltip="View"
+                                                                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                                                           
+                                                                           
+                                                                           
+                                                                                    <span><a class="btn nobg btn-edit-cstm" data-target="#addPaymentInfo"
+                                                                                        data-toggle="modal" (click)="openEdit(rowData)"
+                                                                                         matTooltip="Edit"
+                                                                                         matTooltipPosition="above">
+                                                                                        <i class="fa fa-pencil"></i></a> </span>
+                            
+                            
+                                                                                    <span><button class="btn nobg btn-delete-cstm" [disabled]="rowData.isPrimayPayment == true"
+                                                                                        (click)=" openDelete(deletePaymentInfo,rowData);dt.reset();" matTooltip="Delete" 
+                                                                                         matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                                                                                    
+                                                                                    
+                                                                                      
+                                                                                    
+                                                                                         <span data-toggle="modal">
+                                                                                        <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)" 
+                                                                                        matTooltip="History" matTooltipPosition="above">
+                                                                                        <i class="fa fa-history"></i></a></span>
+                            
+                                                                                   
+                                                                            
+                            </div>
+                            <div *ngIf="currentDeletedstatus==true">
+                                <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                matTooltipPosition="above" ></p-inputSwitch> 
+                                <span data-toggle="modal" data-target="#view"> <a
+                                    class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openView(view,rowData)" matTooltip="View"
+                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                              </div>
+                                                                        </td>
+                            
+                                                                    </tr>
+                                                                </ng-template>
+                                                                <ng-template pTemplate="emptymessage" let-columns>
+                                                                    <tr>
+                                                                        <td colspan="13" style="color: red; font-weight: bold; text-align: center">
+                                                                            No records found
+                                                                        </td>
+                                                                    </tr>
+                                                                </ng-template>
+                                                                <ng-template pTemplate="summary" id="footer">
+                                                                    <label id="footer" class="footer">Total:</label>
+                                                                    <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true"
+                                                                        pInputText type="text" /> &nbsp;&nbsp;
+                                                                    <label id="footer" class="footer1">Pages Count:</label>
+                                                                    <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)"
+                                                                        [disabled]="true" pInputText type="text" />
+                                                                </ng-template>
+                                                            </p-table>
+                                                        </div>
+                                                    </p-tabPanel>
+                                                    <p-tabPanel header="Assign">
+                                                       
+                                                    </p-tabPanel>
+                                                </p-tabView>
+                            
+                                               
+                                                <div *ngIf="isViewMode">
+                                                    <p-table #dt class="rpo-table-cstm"  [metaKeySelection]="true"
+                                                        [rows]="pageSize" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
+                                                        (onPage)="pageIndexChange($event)" [columns]="selectedColumns" selectionMode="multiple"
+                                                        [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true"
+                                                        [scrollable]="true">
+                                                      
+                                                        <ng-template *ngIf="!isViewMode" pTemplate="caption">
+                                                            <div style="text-align: right; min-height: 30px;">
+                                                                <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns"
+                                                                    [ngModelOptions]="{standalone: true}" optionLabel="header"
+                                                                    selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                                                                    defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                                                <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                                                                    <i class="fa fa-search"></i>
+                                                                    <input type="text" pInputText size="50"
+                                                                        class="form-control ui-autocomplete-input"
+                                                                        (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                                        placeholder=" Filter" style="height: 28px !important;">
+                                                                </div>
+                                                                <button type="button" class="btn btn-primary" matTooltip="Download Data"
+                                                                    matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                                                                    label="Export Data" (click)="dt.exportCSV()"
+                                                                    style="padding:5px 10px !important;"></button>
+                                                                <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
+                                                                    matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                                                                    label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
+                                                                    style="padding:5px 10px !important;"></button>
+                                                            </div>
+                                                        </ng-template>
+                            
+                                                        <ng-template pTemplate="colgroup" let-columns>
+                                                            <colgroup>
+                                                                <col *ngFor="let col of columns" style="width:auto">
+                                                            </colgroup>
+                                                        </ng-template>
+                            
+                                                        <ng-template pTemplate="header" let-columns>
+                                                            <tr>
+                                                                <th style="width: 40px;">Flag</th>
+                                                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                                    [pSortableColumn]="col.field">
+                                                                    {{col.header}}
+                                                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                                </th>
+                                                                <th style="width:140px;position:sticky">
+                                                                    Actions
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 40px;"></th>
+                                                                <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                                    <input style="width:100%;" pInputText type="text"
+                                                                        (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                                                </th>
+                                                                <th style="width:140px;position:sticky"></th>
+                                                            </tr>
+                                                        </ng-template>
+                            
+                                                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                                            <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
+                                                                (dblclick)="openView(view,rowData)">
+                            
+                                                                <td style="width: 40px;"> <span class="flag">
+                                                                        <i *ngIf="rowData.isPrimayPayment == true" class="fa fa-flag"
+                                                                            matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
+                                                                    </span>
+                                                                </td>
+                                                                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                                                    {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                                                </td>
+                            
+                                                                <td class="text-center" style="width:140px;">
+                                                                    <span data-toggle="modal" data-target="#view"> <a
+                                                                            class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                                                            (click)="openView(view,rowData)" matTooltip="View"
+                                                                            matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                                                    <button class="btn-history" mat-icon-button matTooltip="history"
+                                                                        matTooltipPosition="above" (click)="openHist(contentHist,rowData)">
+                                                                        <mat-icon color="green">history</mat-icon>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="emptymessage" let-columns>
+                                                            <tr>
+                                                                <td colspan="8" style="color: red; font-weight: bold; text-align: center">
+                                                                    No records found
+                                                                </td>
+                                                            </tr>
+                                                        </ng-template>
+                                                        <ng-template pTemplate="summary" id="footer">
+                                                            <label id="footer" class="footer">Total:</label>
+                                                            <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText
+                                                                type="text" /> &nbsp;&nbsp;
+                                                            <label id="footer" class="footer1">Pages Count:</label>
+                                                            <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)"
+                                                                [disabled]="true" pInputText type="text" />
+                                                        </ng-template>
+                                                    </p-table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                      
+                                    
+
+
+                                    
+
+                                    <div class="ntae-section" >
+                                        <div class="clear"></div>
+                                        <div class="card" style="margin: 5px">
+                                            <div class="md-stepper-horizontal orange">
+                                                <div class="md-step"
+                                                    [ngClass]="{ active: activeNTAEMenuItem >= 1 , editable : activeNTAEMenuItem === 1}"
+                                                    (click)="changeOfNTAETab('Activities')">
+                                                    <div class="md-step-title">Activities</div>
+                                                    <div class="md-step-bar-left"></div>
+                                                    <div class="md-step-bar-right"></div>
+                                                </div>
+                                                <div class="md-step"
+                                                    [ngClass]="{ active: activeNTAEMenuItem >= 2, editable : activeNTAEMenuItem === 2 }"
+                                                    (click)="changeOfNTAETab('Notes')"
+                                                    [class.isDisabled]="!isNTAEDisabledSteps">
+                                                    <div class="md-step-title">Notes</div>
+                                                    <div class="md-step-bar-left"></div>
+                                                    <div class="md-step-bar-right"></div>
+                                                </div>
+                                                <div class="md-step"
+                                                    [ngClass]="{ active: activeNTAEMenuItem >= 3 , editable : activeNTAEMenuItem === 3 }"
+                                                    (click)="changeOfNTAETab('Follow Ups')"
+                                                    [class.isDisabled]="!isNTAEDisabledSteps">
+                                                    <div class="md-step-title">Follow Ups</div>
+                                                    <div class="md-step-bar-left"></div>
+                                                    <div class="md-step-bar-right"></div>
+                                                </div>
+                        
+                                                <div class="md-step"
+                                                    [ngClass]="{ active: activeNTAEMenuItem >= 4 , editable : activeNTAEMenuItem === 4}"
+                                                    (click)="changeOfNTAETab('Communication')"
+                                                    [class.isDisabled]="!isNTAEDisabledSteps">
+                                                    <div class="md-step-title">Communication</div>
+                                                    <div class="md-step-bar-left"></div>
+                                                    <div class="md-step-bar-right"></div>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="currentNTAETab != ''">
+                                                <div style="padding: 5px;">
+                                                    <app-crm-tabs [selectedTab]="currentNTAETab" (triggeNTAETab)="changeOfNTAETab('NHA')" [itemMasterId]="ItemMasterId"
+                                                     [partData]="sourceItemMaster"></app-crm-tabs>                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+
+                                            <div>
+
+                                        <button class="btn-primary" style="margin-top:20px">
+                                           Open Activities<i class="dropdown-down"></i>
+                                       </button>
+                                        <button class="btn-primary" style="margin-top:20px">
+                                         Follow Up<i class="dropdown-down"></i>
+                                        </button>
+                                       <button class="btn-primary" style="margin-top:20px">
+                                      Other Info<i class="dropdown-down"></i>
+                                       </button>
+                                      <button class="btn-primary" style="margin-top:20px">
+                                      All Contact<i class="dropdown-down"></i>
+                                      </button>
+                                      <button class="btn-primary" style="margin-top:20px">
+                                       Campaigns<i class="dropdown-down"></i>
+                                       </button>
+                                      <button class="btn-primary" style="margin-top:20px">
+                                     RFQ<i class="dropdown-down"></i>
+                                      </button>
+                                     <button class="btn-primary" style="margin-top:20px">
+                                     Recent Items<i class="dropdown-down"></i>
+                                     </button>
+
+                                      </div>
+                                      </div>
+                                    
+                        </div>
+                           
+
+
+                                    <div class="col-sm-3" style="width:180px">
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Phone <span class="clr-red">*</span></label>
+                                            <div class="col-sm-12">
+                                                <div class="col-sm-6">
+                                                  <input type="text" id="customerPhone" name="customerPhone" #customerPhone="ngModel" class="form-control"
+                                                    maxlength="20" (keypress)="
+                                                      patternMobilevalidationWithSpl($event)
+                                                    " [(ngModel)]="crmInfo.customerPhone" required maxlength="20" required/>
+                                                </div>
+                      
+                                                <div class="col-sm-6">
+                                                  <input type="text" name="customerPhoneExt" pInputText maxlength="15"
+                                                    [disabled]="crmInfo.customerPhone == ''"
+                                                    [(ngModel)]="crmInfo.customerPhoneExt" />
+                                                </div>
+                                              </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Email <span class="clr-red">*</span></label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" id="email" name="email" [pattern]="emailPattern"
+                                                #userEmail="ngModel" type="email" pKeyFilter="email" mask="email"
+                                                [(ngModel)]="crmInfo.email" required />
+                                              <div *ngIf="userEmail.errors" [ngClass]="'error'">
+                                                <div *ngIf="userEmail.errors.pattern">
+                                                  <span style="color:red">User Email not valid</span>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">Primary Sales Person</label>
+                                            <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                            name="primarySalesPersonFirstName"
+                                            [(ngModel)]="crmInfo.primarySalesPersonId"
+                                            [suggestions]="primarySPList"
+                                            [forceSelection]="true"
+                                            emptyMessage="No Match Found"
+                                            field="name"
+                                            (onSelect)="selectedSalesPerson($event, 'PrimarySalesPerson')"
+                                            (completeMethod)="filterPrimary($event)"
+                                            [size]="30"
+                                            [minLength]="1"
+                                            [dropdown]="true">
+                                               
+                                            </p-autoComplete>
+                                        </div>
+
+
+
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">Secondary Sales Person</label>
+                                            <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                            name="secondarySalesPersonName"
+                                            [forceSelection]="true"
+                                            emptyMessage="No Match Found"
+                                            [(ngModel)]="crmInfo.secondarySalesPersonId"
+                                            [suggestions]="secondarySPList"
+                                            field="name"
+                                            (onSelect)="selectedSalesPerson($event, 'SecondarySalesPerson')"
+                                            (completeMethod)="filterSecondary($event)"
+                                            [size]="30"
+                                            [minLength]="1"
+                                            [dropdown]="true">
+                                               
+                                            </p-autoComplete>
+                                          
+                                        </div>
+
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">CSR</label>
+                                            <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                            name="name"
+                                            [(ngModel)]="crmInfo.csrId"
+                                            [suggestions]="csrList"
+                                            [forceSelection]="true"
+                                            emptyMessage="No Match Found"
+                                            field="name"
+                                            (completeMethod)="filterCSR($event)"
+                                            [size]="30"
+                                            [minLength]="1"
+                                            [dropdown]="true">
+                                               
+                                            </p-autoComplete>
+                                          
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">YTD Revenue TY</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" [(ngModel)]="crmInfo.YTDRevenueTY" name="YTDRevenueTY" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">YTD Revenue LY</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="number" [(ngModel)]="crmInfo.YTDRevenueLY" name="YTDRevenueLY" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Quota (Annual)</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" [(ngModel)]="crmInfo.annualQuota" name="quota" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Accounts Receivables</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input class="form-control" type="text" [(ngModel)]="crmInfo.accountsReceivables" name="accountsReceivables" >
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label class="control-label" style="display: block; width: 100%;text-align: left;">Credit Limit & Terms  </label>
+                                           
+                                              <div class="col-sm-5 inner-addon right-addon autosuggesions-add inline-block"> 
+                                                <input type="text" class="form-control" [(ngModel)]="crmInfo.creditLimit" name="creditLimit" />
+
+                                              </div>
+                                              
+                                                <div class=" col-sm-5 inner-addon right-addon inline-block">
+                                                    <p-autoComplete class="pautocomp-cstm" name="creditTermsId" [(ngModel)]="crmInfo.creditTermsId"
+                                                     field="label" [suggestions]="crmList" [forceSelection]="true"
+                                                                    emptyMessage="No Match Found" (completeMethod)="filterCreditTerm($event)" [size]="30"
+                                                                    [minLength]="1" [dropdown]="true">
+                                                    </p-autoComplete>
+                                                </div>   
+                                        </div>
+
+
+
+                                        
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">DSO</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input type="text" class="form-control" [(ngModel)]="crmInfo.DSO" name="dso" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group-crm col-sm-12">
+                                            <label style="display: block; width: 100%;text-align: left;">Warnings</label>
+                                            <div class="inner-addon right-addon inline-block">
+                                                <input type="text" class="form-control" [(ngModel)]="crmInfo.warnings" name="warnings" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                                          
+                          
+                       
+    
+                        </div>
+                    </form>
+
+                    <div class="form-row pull-right">
+                        <button type="submit" class="btn btn-primary submit-btn"
+                         (click)="saveCrm()">
+                          {{isEdit ? 'Update' : 'Save'}}
+                        </button>
+                       
+                      </div>
+                </div>
+            </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+

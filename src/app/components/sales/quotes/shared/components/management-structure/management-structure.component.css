@@ -1,0 +1,50 @@
+.row {
+  margin-top: 5px;
+}
+
+.sub-header-title {
+  border-bottom: 1px solid lightgray;
+  width: 100%;
+  font-size: 18px;
+  padding: 5px 8px;
+  margin-bottom: 5px;
+}
+.sales-quote-approver-info {
+  display: flex;
+  width: 85%;
+  align-items: center;
+  margin-top: 22px;
+}
+.sales-quote-approver-info p {
+  flex: 30%;
+  padding: 0;
+}
+.sales-quote-approver-info p .label {
+  color: #000 !important;
+  font-weight: bold;
+}
+label {
+  font-size: 12px !important;
+  text-align: left;
+  width: 150px;
+  margin-right: 0;
+  font-weight: 400;
+}
+.approver-details-cstm {
+  margin-top: 16px;
+}
+.approver-details-cstm p {
+  float: left;
+  margin-right: 40px;
+}
+.approver-tab-cstm .col-md-3 {
+  padding-right: 40px;
+  margin-right: 0;
+}
+.approver-tab-cstm .form-row {
+  margin-top: 10px;
+}
+
+:host ::ng-deep div.ui-dropdown {
+  width: 100% !important;
+}

@@ -1,0 +1,1534 @@
+
+  <div class="card new-card">
+    <div class="card-header bg-primary">
+      <div class="row">
+        <div class="col">
+          <h4 class="new-card-heading">
+            Create Opportunity</h4>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn-sm new-btn-primary"
+            [routerLink]="['/customersmodule/customerpages/app-opportunity-list']"
+          >
+            Opportunity List
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body new-card-body">
+        <div class="right_col menu2" role="main">
+            <div class="x_panel">
+                <div class="x_content">
+                 
+                    <p-tabView class="pas-tabview vpay-tabview" *ngIf="!isViewMode">
+                        <p-tabPanel header="General Information">
+                            <div class="col-md-12">
+                                <h4 class="po-head-sm">Create General Information</h4>
+                            </div>
+                            <div class="clear"></div>
+                            <hr />
+                            <form #addDomesticWireForm="ngForm" class="form-horizontal">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="col-md-4">
+                                          <label class="radio-inline">
+                                            <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                             [disabled]="DisabledMode"  [checked]="isTangible == true"
+                                             (change)="onTangible()">
+                                            Lead
+                                          </label>
+                                          <label class="radio-inline">
+                                            <input type="radio" value="2" name="assetRadio" (change)="onIntangible()" 
+                                            [disabled]="DisabledMode"  [checked]="isIntangible == true">
+                                            Opportunity
+                                          </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-row">
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label>
+                                                        Source Type <span class="clr-red">*</span> <span style="margin-left:3px;cursor:pointer;">
+                                                           
+                                                        </span>
+                                                    </label>
+                                                    <select   required>
+                                                        <option ng-option value="">--Select--</option>
+                                                        <option *ngFor="let acquisitionType of AssetAcquisitionTypeList"
+                                                                [ngValue]="acquisitionType.assetAcquisitionTypeId">
+                                                            {{acquisitionType.name}}
+                                                        </option>
+                                                    </select>
+            
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label>Source Details<span class="clr-red">*</span></label>
+                                                    <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                                                    (onSelect)="onAssetIdselection($event)"  
+                                                                    [suggestions]="localCollection" (completeMethod)="filterAssetId($event)"
+                                                                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                                                       
+                                                    </p-autoComplete>
+                
+                                                  
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Account Name<span class="clr-red">*</span></label>
+                                                    <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                                                    (onSelect)="onAssetIdselection($event)"  
+                                                                    [suggestions]="localCollection" (completeMethod)="filterAssetId($event)"
+                                                                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                                                       
+                                                    </p-autoComplete>
+                
+                                                  
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Account Code <span class="clr-red">*</span></label>
+                                                    <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                                                    (onSelect)="onAssetIdselection($event)"  
+                                                                    [suggestions]="localCollection" (completeMethod)="filterAssetId($event)"
+                                                                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                                                       
+                                                    </p-autoComplete>
+                
+                                                  
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Address Line 1 <span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Address Line 2 <span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>City<span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label>State/Province<span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label>Postal<span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Country <span class="clr-red">*</span></label>
+                                                    <div class="inner-addon right-addon inline-block">
+                                                      <p-autoComplete class="autocomp-customer-cstm" filter="true"
+                                                       name="country1" [suggestions]="countrycollection" field="nice_name"
+                                                        [size]="30" [minLength]="1" [dropdown]="true"
+                                                        [forceSelection]="true" required>
+                                                      </p-autoComplete>
+                                                    </div>
+                                                  </div>
+                                                <div class="form-group">
+                                                    <label>Website<span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Classification<span class="clr-red">*</span></label>
+                                                    <input type="text" class="form-control">
+                                                </div>
+                                                
+
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div>
+                                                    <div class="form-group">
+                                                        <label>Convert To<span class="clr-red">*</span></label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Contact Tag<span class="clr-red">*</span></label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Contact Name<span class="clr-red">*</span></label>
+                                                        <div class="col-md-12">
+                                                            <div class="col-md-11">
+                                                                <input type="text" class="form-control">
+                                                            </div>
+                                                            <div class="col-md-1">
+                                                                    <span class="btn btn-primary" data-dismiss="modal" data-toggle="modal"
+                                                                    data-target="#addContactDetails"><i class="fa fa-edit"></i>
+                                                                    </span>
+                                                            </div>
+                                                        
+                                                        </div>
+                                                       
+                                                    </div>
+                                                
+                                                    <div class="form-group">
+                                                        <label>Decision Maker<span class="clr-red">*</span></label>
+                                                        <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                                                        (onSelect)="onAssetIdselection($event)"  
+                                                                        [suggestions]="localCollection" (completeMethod)="filterAssetId($event)"
+                                                                        [size]="30" [minLength]="1" [dropdown]="true" required>
+                                                           
+                                                        </p-autoComplete>
+                    
+                                                      
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Annual Revenue<span class="clr-red">*</span></label>
+                                                        <input type="number" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Number of Emloyees<span class="clr-red">*</span></label>
+                                                        <input type="number" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Competition<span class="clr-red">*</span></label>
+                                                        <input type="text" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Primary Sales Person<span class="clr-red">*</span></label>
+                                                        <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                                                        (onSelect)="onAssetIdselection($event)"  
+                                                                        [suggestions]="localCollection" (completeMethod)="filterAssetId($event)"
+                                                                        [size]="30" [minLength]="1" [dropdown]="true" required>
+                                                           
+                                                        </p-autoComplete>
+                    
+                                                      
+                                                    </div>
+                                                   
+                                                   
+                                                        <div class="form-group">
+                                                            <label>Memo</label>
+                                                            <textarea class="text-item" style="height: 50px !important;resize: none"
+                                                                       ></textarea>
+                                                        </div>
+                                                   
+                
+                                                </div>
+                                               
+                                            </div> 
+                                           
+                                        </div>
+                                    </div>
+                                   
+                                </div>
+                                <div class="form-row pull-right">
+                                    <button type="button" class="btn btn-primary pull-right"
+                                        [disabled]="!addDomesticWireForm.valid"
+                                       >Save</button>
+                                </div>
+                            </form>
+                        </p-tabPanel>
+                        <p-tabPanel header="Aircraft Information">
+                            <div class="col-md-12 shadow-box-cstm">
+                                <div class="col-md-4">
+                                  <p class="fs12">
+                                    <label class="control-label labels-font-header" style="width: auto;">Opportunity Name:
+                                    </label>
+                                    <span class="span-header-red" style="text-transform: capitalize">
+                                     
+                                    </span>
+                                  </p>
+                                </div>
+                                <div class="col-md-4">
+                                  <p class="fs12">
+                                    <label class="control-label labels-font-header" style="width: auto;">Opportunity Code:
+                                    </label>
+                                    <span class="span-header-red" style="text-transform: capitalize">
+                                     
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+
+                            <div>
+                                <div>
+                                    <div class="col-md-12">
+                                        <h4 class="po-head-sm">
+                                            Add Inventory
+                                            <a class="plusicon-cstm" data-toggle="modal" data-target="#ModalDashNumber"><i class="fa fa-plus-circle fa-lg"
+                                                     matTooltip="Add Aircraft"
+                                                    matTooltipPosition="above"></i></a>
+                                        </h4>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm pull-right"
+                                    style="padding: 5px 10px !important;"
+                                    
+                                    *ngIf="showAdvancedSearchCard == false"
+                                    type="button"
+                                    (click)="enableDisableAdvancedSearch(true)">
+                                Advanced Search <i class="fa fa-caret-down"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm pull-right"
+                                    style="padding: 5px 10px !important;"
+            
+                                    *ngIf="showAdvancedSearchCard == true"
+                                    type="button"
+                                    (click)="enableDisableAdvancedSearch(false)">
+                                Advanced Search <i class="fa fa-caret-up"></i>
+                            </button>
+                            <div class="advance-search-card"
+                            *ngIf="showAdvancedSearchCard == true">
+                           <div class="col-md-12">
+                               <div class="col-md-12 ">
+                                   <div class="col-md-1 col-md-1-cstm">
+                                       <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                   </div>
+                                   <div class="col-md-3">
+                                       <div class="form-group ">
+                                           <label class="fs12">Aircraft </label>
+                                           <p-multiSelect [options]="manufacturerData" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectAircraftManfacturer" (onChange)="getAircraftModelByManfacturerType()"
+                                            ></p-multiSelect>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3">
+                                       <div class="form-group">
+                                           <label class="fs12">
+                                               Aircraft Model
+                                           </label>
+                                           <p-multiSelect [maxSelectedLabels]="2" [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel" [ngModelOptions]="{standalone: true}"
+                                                          (onChange)="getDashNumberByManfacturerandModel()" [selectionLimit]="30"></p-multiSelect>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-3">
+                                       <div class="form-group">
+                                           <label class="fs12">DashNumber </label>
+                                           <p-multiSelect [maxSelectedLabels]="2" [options]="dashNumberList" [(ngModel)]="selectedDashNumbers" [ngModelOptions]="{standalone: true}"
+                                                        [selectionLimit]="30"></p-multiSelect>
+                                       </div>
+                                   </div>
+                                   <div class="col-md-1">
+                                       <div class="form-group">
+                                           <button class="btn btn-primary mtop20" type="button" (click)="searchAircraftInformation()">
+                                               <i class="pi pi-search pi-search"></i>
+                                           </button>
+                                       </div>
+                                   </div>
+                                   <div class="clear"></div>
+
+                               </div>
+                           </div>
+                       </div> 
+                                    <div class="clear"></div>
+                                    <hr />
+                                 
+       
+                                    <div class="form-row status-radio">
+                                        <div class="col-md-8">
+                                            <div class="form-group"> 
+                                                <label class="radiobtn-label">Status:</label>
+                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                  
+                                                    <p-radioButton class="custom_set" name="groupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
+                                                </div>
+                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                  
+                                                    <p-radioButton class="custom_set" name="groupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
+                                                </div>
+                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                  
+                                                    <p-radioButton class="custom_set" name="groupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
+                                                </div>
+                                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                                      <label style="width: auto !important;margin-top: 3px;">
+                                                       
+                                                        <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
+                                                          />
+                                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                      Show  Deleted List 
+                                                      </label>
+                                                    </div>
+                              
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <p-table #dt class="rpo-table-cstm" [value]="allActions" [metaKeySelection]="true"
+                                    [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
+                                    [columns]="selectedColumnsForAircraftInformation" selectionMode="multiple" [(selection)]="selectedColumn"
+                                    [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+                                    [loading]="loaderForPaymentCheck">
+                                   
+                                    <ng-template *ngIf="!isViewMode" pTemplate="caption">
+                                        <div style="text-align: right; min-height: 30px;">
+                                            <p-multiSelect [options]="aircraftInformationHeaders"
+                                            
+                                                [ngModelOptions]="{standalone: true}" optionLabel="header"
+                                                selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                                                defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                            <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                                                <i class="fa fa-search"></i>
+                                                <input type="text" pInputText size="50"
+                                                    class="form-control ui-autocomplete-input"
+                                                    (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                    placeholder=" Filter" style="height: 28px !important;">
+                                            </div>
+                                            <button type="button" class="btn btn-primary" matTooltip="Download Data"
+                                                matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                                                label="Export Data" (click)="dt.exportCSV()"
+                                                style="padding:5px 10px !important;"></button>
+                                            <button type="button" class="btn btn-primary"
+                                                matTooltip="Download Selected Data" matTooltipPosition="above" pButton
+                                                icon="fa-download" iconPos="left" label="Export Selected Data"
+                                                (click)="dt.exportCSV({selectionOnly:true})"
+                                                style="padding:5px 10px !important;"></button>
+
+                                               
+
+                                            <div class="excel-upload  excel-upload-cstm">
+                                                <button type="button" class="btn btn-primary"
+                                                    matTooltip="Download Sample File" matTooltipPosition="above"
+                                                    (click)="sampleExcelDownload()"
+                                                    style="padding: 5px 10px !important;">Sample File Download</button>
+
+                                                <input type="file" name="upload[]" id="upload"
+                                                    (change)="customExcelUpload($event)" class="uploaddoc upload-file"
+                                                    accept=".xlsx, .xls, .csv">
+                                                <label for="upload">
+                                                    <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                                                        <i class="fa fa-upload"></i>
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:auto">
+                                        </colgroup>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                           
+                                            <th *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'"
+                                                pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            <th style="width:140px;position:sticky">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                          
+                                            <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field"
+                                                [hidden]="col.field == 'isPrimayPayment'">
+                                                <input style="width:100%;" pInputText type="text"
+                                                    (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                            </th>
+                                            <th style="width:140px;position:sticky"></th>
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                        <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
+                                            pReorderableRowHandle (dblclick)="openView(view,rowData)">
+
+                                            <td *ngFor="let col of columns" class="ui-resizable-column"
+                                                [hidden]="col.field == 'isPrimayPayment'" pReorderableRowHandle>
+                                                {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                            </td>
+
+                                            <td style="width:140px;">
+                                                <div *ngIf="currentDeletedstatus==false">
+                                                <p-inputSwitch  *ngIf="rowData['isActive']==true"
+                                                    matTooltip="Active" matTooltipPosition="above" onLabel="on"
+                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                    [(ngModel)]="rowData['isActive']">
+                                                </p-inputSwitch>
+                                                <p-inputSwitch  *ngIf="rowData['isActive']==false"
+                                                    matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                    [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                                <p-inputSwitch  *ngIf="rowData['isActive']==null"
+                                                    matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                    [(ngModel)]="rowData['isActive']">
+                                                </p-inputSwitch>
+
+                                                <span data-toggle="modal" data-target="#view"> <a
+                                                        class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                                        (click)="openView(view,rowData)" matTooltip="View"
+                                                        matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                               
+                                               
+                                               
+                                                        <span><a class="btn nobg btn-edit-cstm" data-target="#addPaymentInfo"
+                                                            data-toggle="modal" (click)="openEdit(rowData)"
+                                                             matTooltip="Edit"
+                                                             matTooltipPosition="above">
+                                                            <i class="fa fa-pencil"></i></a> </span>
+
+
+                                                        <span><button class="btn nobg btn-delete-cstm" [disabled]="rowData.isPrimayPayment == true"
+                                                            (click)=" openDelete(deletePaymentInfo,rowData);dt.reset();" matTooltip="Delete" 
+                                                             matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                                                        
+                                                        
+                                                        
+                                                             <span data-toggle="modal">
+                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)" 
+                                                            matTooltip="History" matTooltipPosition="above">
+                                                            <i class="fa fa-history"></i></a></span>
+
+                                                          
+</div>
+<div *ngIf="currentDeletedstatus==true">
+    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+    matTooltipPosition="above" ></p-inputSwitch> 
+    <span data-toggle="modal" data-target="#view"> <a
+        class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+        (click)="openView(view,rowData)" matTooltip="View"
+        matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+    <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+  </div>
+                                            </td>
+
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions.length == 0">
+                                        <tr>
+                                            <td colspan="8" style="color: red; font-weight: bold; text-align: center">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true"
+                                            pInputText type="text" /> &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+                                        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)"
+                                            [disabled]="true" pInputText type="text" />
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                           
+                          
+                        </p-tabPanel>
+                        <p-tabPanel header="ATA Chapters">
+                            <div class="col-md-12 shadow-box-cstm">
+                                <div class="col-md-4">
+                                  <p class="fs12">
+                                    <label class="control-label labels-font-header" style="width: auto;">Opportunity Name:
+                                    </label>
+                                    <span class="span-header-red" style="text-transform: capitalize">
+                                      <!-- {{ leadName }} -->
+                                    </span>
+                                  </p>
+                                </div>
+                                <div class="col-md-4">
+                                  <p class="fs12">
+                                    <label class="control-label labels-font-header" style="width: auto;">Opportunity Code:
+                                    </label>
+                                    <span class="span-header-red" style="text-transform: capitalize">
+                                      <!-- {{ leadCode }} -->
+                                    </span>
+                                  </p>
+                                </div>
+                              </div>
+
+                            <div>
+                                <div>
+                                    <div class="col-md-12">
+                                        <h4 class="po-head-sm">
+                                            ATA Chapters
+                                            <a class="plusicon-cstm" data-target="#ATAADD" data-toggle="modal"><i class="fa fa-plus-circle fa-lg"
+                                                (click)="addATAChapter(rowData)" matTooltip="ATA Chapter"
+                                                    matTooltipPosition="above"></i></a>
+                                        </h4>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm pull-right"
+                                    style="padding: 5px 10px !important;"
+                                    *ngIf="showAdvancedSearchCardAtaChapter == false"
+                                    type="button"
+                                    (click)="enableDisableAdvancedSearchAtaChapter(true)">
+                                Advanced Search <i class="fa fa-caret-down"></i>
+                            </button>
+                            <button class="btn btn-primary btn-sm pull-right"
+                                    style="padding: 5px 10px !important;"
+                                    *ngIf="showAdvancedSearchCardAtaChapter == true"
+                                    type="button"
+                                    (click)="enableDisableAdvancedSearchAtaChapter(false)">
+                                Advanced Search <i class="fa fa-caret-up"></i>
+                            </button>
+
+                            <div class="advance-search-card col-md-12"
+                            *ngIf="showAdvancedSearchCardAtaChapter == true">
+                           <div class="col-md-1 col-md-1-cstm">
+                               <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                           </div>
+                           <div class="col-md-3">
+                               <div class="form-group ">
+                                   <label class="fs12">ATA Chapter</label>
+                                   <p-multiSelect [options]="LoadAtachapter"
+                                                  [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedATAchapter" (onChange)=" getSubChapterByATAChapter()"
+                                                  [panelStyle]="{minWidth:'12em'}" ></p-multiSelect>
+                               </div>
+                           </div>
+                           <div class="col-md-3">
+                               <div class="form-group">
+                                   <label class="fs12">
+                                       ATA Subchapter
+                                   </label>
+                                   <p-multiSelect [options]="atasubchapterValues" [ngModelOptions]="{standalone: true}"
+                                                  [(ngModel)]="selectedATASubChapter" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+                               </div>
+                           </div>
+                           <div class="col-md-1">
+                               <div class="form-group">
+                                   <button type="button" class="btn btn-primary mtop20" (click)="searchATA()">
+                                       <i class="pi pi-search pi-search"></i>
+                                   </button>
+                               </div>
+                           </div>
+                       </div> 
+                                    <div class="clear"></div>
+                                    <hr />
+                                 
+                                    <div class="form-row status-radio">
+                                        <div class="col-md-8">
+                                            <div class="form-group"> 
+                                                <label class="radiobtn-label">Status:</label>
+                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                 
+                                                    <p-radioButton class="custom_set" name="groupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
+                                                </div>
+                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                   
+                                                    <p-radioButton class="custom_set" name="groupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
+                                                </div>
+                                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                   
+                                                    <p-radioButton class="custom_set" name="groupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
+                                                </div>
+                                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                                      <label style="width: auto !important;margin-top: 3px;">
+                                                       
+                                                        <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
+                                                          />
+                                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                      Show  Deleted List 
+                                                      </label>
+                                                    </div>
+                              
+                                            </div>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <p-table #dt class="rpo-table-cstm" [value]="allActions" [metaKeySelection]="true"
+                                    [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
+                                    [columns]="selectedColumnsAtaChapter" selectionMode="multiple" [(selection)]="selectedColumn"
+                                    [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+                                    [loading]="loaderForPaymentCheck">
+                                  
+                                    <ng-template *ngIf="!isViewMode" pTemplate="caption">
+                                        <div style="text-align: right; min-height: 30px;">
+                                            <p-multiSelect [options]="ataChapterHeaders"
+                                                [ngModelOptions]="{standalone: true}" optionLabel="header"
+                                                selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                                                defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                            <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                                                <i class="fa fa-search"></i>
+                                                <input type="text" pInputText size="50"
+                                                    class="form-control ui-autocomplete-input"
+                                                    (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                                    placeholder=" Filter" style="height: 28px !important;">
+                                            </div>
+                                            <button type="button" class="btn btn-primary" matTooltip="Download Data"
+                                                matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                                                label="Export Data" (click)="dt.exportCSV()"
+                                                style="padding:5px 10px !important;"></button>
+                                            <button type="button" class="btn btn-primary"
+                                                matTooltip="Download Selected Data" matTooltipPosition="above" pButton
+                                                icon="fa-download" iconPos="left" label="Export Selected Data"
+                                                (click)="dt.exportCSV({selectionOnly:true})"
+                                                style="padding:5px 10px !important;"></button>
+
+                                            <div class="excel-upload  excel-upload-cstm">
+                                                <button type="button" class="btn btn-primary"
+                                                    matTooltip="Download Sample File" matTooltipPosition="above"
+                                                    (click)="sampleExcelDownload()"
+                                                    style="padding: 5px 10px !important;">Sample File Download</button>
+
+                                                <input type="file" name="upload[]" id="upload"
+                                                    (change)="customExcelUpload($event)" class="uploaddoc upload-file"
+                                                    accept=".xlsx, .xls, .csv">
+                                                <label for="upload">
+                                                    <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                                                        <i class="fa fa-upload"></i>
+                                                    </span>
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:auto">
+                                        </colgroup>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                           
+                                            <th *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'"
+                                                pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            <th style="width:140px;position:sticky">
+                                                Actions
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                           
+                                            <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field"
+                                                [hidden]="col.field == 'isPrimayPayment'">
+                                                <input style="width:100%;" pInputText type="text"
+                                                    (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                            </th>
+                                            <th style="width:140px;position:sticky"></th>
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                        <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
+                                            pReorderableRowHandle (dblclick)="openView(view,rowData)">
+
+                                          
+                                            <td *ngFor="let col of columns" class="ui-resizable-column"
+                                                [hidden]="col.field == 'isPrimayPayment'" pReorderableRowHandle>
+                                                {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                            </td>
+
+                                            <td style="width:140px;">
+                                                <div *ngIf="currentDeletedstatus==false">
+                                                <p-inputSwitch  *ngIf="rowData['isActive']==true"
+                                                    matTooltip="Active" matTooltipPosition="above" onLabel="on"
+                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                    [(ngModel)]="rowData['isActive']">
+                                                </p-inputSwitch>
+                                                <p-inputSwitch  *ngIf="rowData['isActive']==false"
+                                                    matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                    [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                                <p-inputSwitch  *ngIf="rowData['isActive']==null"
+                                                    matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                    [(ngModel)]="rowData['isActive']">
+                                                </p-inputSwitch>
+
+                                                <span data-toggle="modal" data-target="#view"> <a
+                                                        class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                                        (click)="openView(view,rowData)" matTooltip="View"
+                                                        matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                               
+                                               
+                                               
+                                                        <span><a class="btn nobg btn-edit-cstm" data-target="#addPaymentInfo"
+                                                            data-toggle="modal" (click)="openEdit(rowData)"
+                                                             matTooltip="Edit"
+                                                             matTooltipPosition="above">
+                                                            <i class="fa fa-pencil"></i></a> </span>
+
+
+                                                        <span><button class="btn nobg btn-delete-cstm" [disabled]="rowData.isPrimayPayment == true"
+                                                            (click)=" openDelete(deletePaymentInfo,rowData);dt.reset();" matTooltip="Delete" 
+                                                             matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
+                                                        
+                                                        
+                                                        
+                                                             <span data-toggle="modal">
+                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)" 
+                                                            matTooltip="History" matTooltipPosition="above">
+                                                            <i class="fa fa-history"></i></a></span>
+
+</div>
+<div *ngIf="currentDeletedstatus==true">
+    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+    matTooltipPosition="above" ></p-inputSwitch> 
+    <span data-toggle="modal" data-target="#view"> <a
+        class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+        (click)="openView(view,rowData)" matTooltip="View"
+        matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+    <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+  </div>
+                                            </td>
+
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions.length == 0">
+                                        <tr>
+                                            <td colspan="8" style="color: red; font-weight: bold; text-align: center">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true"
+                                            pInputText type="text" /> &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+                                        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)"
+                                            [disabled]="true" pInputText type="text" />
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </p-tabPanel>
+                     
+                    </p-tabView>
+
+                    <div *ngIf="isViewMode">
+                        <p-table #dt class="rpo-table-cstm" [value]="allActions" [metaKeySelection]="true"
+                            [rows]="pageSize" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
+                            (onPage)="pageIndexChange($event)" [columns]="selectedColumns" selectionMode="multiple"
+                            [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true"
+                            [scrollable]="true">
+                            
+                            <ng-template *ngIf="!isViewMode" pTemplate="caption">
+                                <div style="text-align: right; min-height: 30px;">
+                                    <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns"
+                                        [ngModelOptions]="{standalone: true}" optionLabel="header"
+                                        selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                                        defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                    <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" pInputText size="50"
+                                            class="form-control ui-autocomplete-input"
+                                            (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                            placeholder=" Filter" style="height: 28px !important;">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" matTooltip="Download Data"
+                                        matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                                        label="Export Data" (click)="dt.exportCSV()"
+                                        style="padding:5px 10px !important;"></button>
+                                    <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
+                                        matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
+                                        label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
+                                        style="padding:5px 10px !important;"></button>
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" style="width:auto">
+                                </colgroup>
+                            </ng-template>
+
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    
+                                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                        [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th style="width:140px;position:sticky">
+                                        Actions
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th style="width: 40px;"></th>
+                                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text"
+                                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                    </th>
+                                    <th style="width:140px;position:sticky"></th>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
+                                    (dblclick)="openView(view,rowData)">
+
+                                
+                                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                        {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                                    </td>
+
+                                    <td class="text-center" style="width:140px;">
+                                        <span data-toggle="modal" data-target="#view"> <a
+                                                class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                                (click)="openView(view,rowData)" matTooltip="View"
+                                                matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                        <button class="btn-history" mat-icon-button matTooltip="history"
+                                            matTooltipPosition="above" (click)="openHist(contentHist,rowData)">
+                                            <mat-icon color="green">history</mat-icon>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns *ngIf="allActions.length == 0">
+                                <tr>
+                                    <td colspan="8" style="color: red; font-weight: bold; text-align: center">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <label id="footer" class="footer">Total:</label>
+                                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText
+                                    type="text" /> &nbsp;&nbsp;
+                                <label id="footer" class="footer1">Pages Count:</label>
+                                <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)"
+                                    [disabled]="true" pInputText type="text" />
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom: 60px;" *ngIf="!isViewMode">
+                <button type="button" class="btn btn-primary pull-right" (click)="nextClick()">Next</button>
+                <button type="button" class="btn btn-primary pull-right" (click)="previousClick()">Previous</button>
+            </div>
+        </div>
+
+    </div>
+<!-- </div> -->
+
+
+<div id="ModalDashNumber" class="modal fade custom-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h5 class="modal-title">Aircraft Info</h5>
+            </div>
+            <div class="modal-body">
+               
+                <form #aircraftAddForm="ngForm">
+                    <div class="form-row mt-2">
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm">Aircraft Type</label>
+                                <p-dropdown class="p-dropdown-custom-md p-dropdown-cus-fullwidth" 
+                                name="selectedAircraftId"
+                                placeholder="Select" required></p-dropdown>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm" style="width: 150px !important">
+                                    Model
+                                    <input type="checkbox" name="unknownmodel" [(ngModel)]="modelUnknown"  [disabled]="!selectedAircraftId"  style="width: 20px !important;
+                                margin-left: 7px; " > Unknown
+                                </label>
+
+                                <p-multiSelect *ngIf="!modelUnknown" [maxSelectedLabels]="2" [disabled]="!selectedAircraftId" class="imstock-pmselect" [options]="LoadValues" [(ngModel)]="selectedModelId" name="selectedModelId" (onChange)="getDashNumberByTypeandModel($event); checkCanAircraftAddable()" required></p-multiSelect>
+                            </div>
+                        </div>
+                        <div class="col-md-2" *ngIf="!modelUnknown">
+                            <div class="form-group">
+                                <label class="popup-plusicon-cstm" style="width: 190px !important">
+                                    DashNumber
+                                    
+                                    <input type="checkbox" name="unknownDashNumber" [(ngModel)]="dashNumberUnknown" 
+                                     style="width: 20px !important;
+                                    margin-left: 7px; "> Unknown
+                                </label>
+
+
+                                <p-multiSelect *ngIf=" !modelUnknown && !dashNumberUnknown" [maxSelectedLabels]="2"
+                                class="imstock-pmselect" [options]="LoadDashnumber" [(ngModel)]="selectedDashnumber" name="selectedDashnumber" required></p-multiSelect>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 20px" [disabled]="!aircraftAddForm.valid || canAddAircraft == false">Save</button>
+                            
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="ATAADD" class="modal fade custom-popup" role="dialog" #ATAADD data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-full">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h4 class="modal-title">Add ATA Information</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-row">
+              <div class="modal-body">
+                <form *ngIf="isViewMode == false">
+                  <div class="form-row">
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <div class="col-md-12">
+                          <label class="popup-plusicon-cstm">
+                            ATA Chapter
+                          </label>
+                        </div>
+                        <div class="col-md-12">
+                          <p-dropdown name="ataPopUp" placeholder="Select ATA Chapter"
+                            class="p-dropdown-custom-md p-dropdown-cus-fullwidth"
+                             [(ngModel)]="add_SelectedId"
+                            (onChange)="getATASubChapterByATAChapter()" 
+                            [options]="add_ataChapterList"></p-dropdown>
+                        </div>
+                      </div>
+                    </div>
+  
+                    <div class="col-md-5">
+                      <div class="form-group">
+                        <label class="popup-plusicon-cstm" style="width: 170px !important;">
+                          ATA SubChapters
+                        </label>
+                        <p-multiSelect class="imstock-pmselect p-multi-aircraft-dash" [options]="add_ataSubChapterList"
+                          [(ngModel)]="add_SelectedModels" [disabled]="!add_SelectedId" name="popUpATASubchapter" [panelStyle]="{ minWidth: '12em' }">
+                        </p-multiSelect>
+                      </div>
+                    </div>
+  
+                    <div class="col-md-2">
+                      <button style="margin-top: 20px;" type="button"  [disabled]="!add_SelectedId" class="btn btn-primary" (click)="addATAMapping()">
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <p-table #ata [value]="" [scrollable]="true" [style]="{ width: '100%' }"
+                  [paginator]="true" [pageLinks]="3" [columns]="ataHeaders" [rowsPerPageOptions]="[10, 20, 50, 100]"
+                  [rows]="" [resizableColumns]="true" [reorderableColumns]="true"
+                 >
+                  <ng-template pTemplate="header" let-columns>
+                    <tr>
+                      <th *ngFor="let col of ataHeaders">
+                        {{ col.header }}
+                      </th>
+                      <th class="action-width">Action</th>
+                    </tr>
+                    <tr>
+                      <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input style="width:100%;" pInputText type="text" (input)="
+                          ata.filter(
+                            $event.target.value,
+                            col.field,
+                            'contains'
+                          )" />
+                      </th>
+                      <th></th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
+                    <tr>
+                      <td class="uiTable_td_ovrflw_control" *ngFor="let col of ataHeaders">
+                       <p style="text-transform: capitalize;margin: 0px;"> {{ rowData[col.field] }}</p>
+                      </td>
+                      <td class="action-width">
+                        <span *ngIf="isViewMode == false"   data-toggle="modal" data-target="#editATAChapter"><a class="btn nobg"
+                            (click)="editContactATAChapters(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+                              class="fa fa-pencil"></i></a>
+                        </span>
+  
+                        <button *ngIf="isViewMode == false" class="btn btn-danger nobg" (click)="deleteATAMapped(deleteContent1, rowData)"
+                          matTooltip="Delete" matTooltipPosition="above">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                        <span data-toggle="modal" data-target="#contentATAChapterHist"><a class="btn nobg"
+                            (click)="getATAAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i
+                              class="fa fa-history"></i></a></span>
+                      </td>
+                    </tr>
+  
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage" let-columns >
+                    <tr>
+                      <td [attr.colspan]="8" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                      </td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="summary" id="footer">
+                    <label id="footer" class="footer">Total:</label>
+                    <input style="width: 5%;" [(ngModel)]="ata._totalRecords" pInputText name="noofrecordsata" type="text"
+                      disabled />
+                    &nbsp;&nbsp;
+                    <label id="footer" class="footer1">Pages Count:</label>
+  
+                    <input style="width: 5%;" name="pagecountata"
+                      pInputText type="text" disabled />
+                  </ng-template>
+                </p-table>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+<ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">History of Payment Info</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                      
+                        <th>Site Name</th>
+                        <th>Address1</th>
+                        <th>Address2</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Postal Code</th>
+                        <th>Country</th>
+                        <th>Is Primary</th>
+                        <th>Is Active</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                        <th>Updated By</th>
+                        <th>Updated Date</th>
+                    </tr>
+                </thead>
+                <tbody class="audithistory-cstm">
+                    <tr *ngFor="let audit of auditHisory;let i = index;">
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">
+                            {{audit.siteName}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'address1', audit.address1)  ? 'black' : 'red'  }">
+                            {{audit.address1}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'address2', audit.address2)  ? 'black' : 'red'  }">
+                            {{audit.address2}}</td>
+                        <td [ngStyle]="{'color': getColorCodeForHistory(i, 'city', audit.city)  ? 'black' : 'red'  }">
+                            {{audit.city}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'stateOrProvince', audit.stateOrProvince)  ? 'black' : 'red'  }">
+                            {{audit.stateOrProvince}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'postalCode', audit.postalCode)  ? 'black' : 'red'  }">
+                            {{audit.postalCode}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'country', audit.country)  ? 'black' : 'red'  }">
+                            {{audit.country}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">
+                            {{audit.isPrimary}}</td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">
+                            {{audit.isActive}}</td>
+                        <td>{{audit.createdBy}}</td>
+                        <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+
+                        <td>{{audit.updatedBy}}</td>
+                        <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+    </div>
+</ng-template>
+<ng-template #view class="modal fade " id="view" role="dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal">×</button>
+            <h4 class="modal-title">View Payment Info</h4>
+        </div>
+        <div class="modal-body viewform">
+            <p><span class="label"><b>Primary: </b></span><span class="value">
+                <div *ngIf="isPrimary === true ">
+                    <input type="checkbox" name="isPrimary" checked disabled>                                   
+                </div>
+                    <div *ngIf="isPrimary === false ">
+                        <input type="checkbox" name="isPrimary" disabled>
+                    </div>
+            </span></p>
+            <p><span class="label"><b>Site Name: </b> <span class="clr-red">*</span></span><span
+                    class="value">{{siteName}}</span></p>
+            <p><span class="label"><b>Address 1: </b><span class="clr-red">*</span></span><span
+                    class="value">{{address1}}</span></p>
+            <p><span class="label"><b>Address 2: </b></span><span class="value">{{address2}}</span></p>
+            <p><span class="label"><b>City: </b><span class="clr-red">*</span></span><span class="value">{{city}}</span>
+            </p>
+            <p><span class="label"><b>State Or Province: </b><span class="clr-red">*</span></span><span
+                    class="value">{{stateOrProvince}}</span></p>
+            <p><span class="label"><b>Postal Code : </b><span class="clr-red">*</span></span><span
+                    class="value">{{postalCode}}</span></p>
+            <p><span class="label"><b>Country : </b><span class="clr-red">*</span></span><span
+                    class="value">{{country}}</span></p>
+            <div class="clear"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">Close</button>
+        </div>
+    </div>
+</ng-template>
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px"
+    maximizedTop="140px" [width]="350" [minWidth]="200" [responsive]="true" [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{'color':'red'}">
+        Please Enter (*) Mandatory Fields
+    </h5>
+</p-dialog>
+
+<div class="modal fade" id="addContactDetails" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="closeMyModel()">
+            &times;
+          </button>
+          <h4 class="modal-title">
+            {{ isEdit ? 'Edit' : 'Add' }} Contact Details
+          </h4>
+        </div>
+        <form #ccForm="ngForm" #addContactForm="ngForm" class="form-horizontal" id="">
+          <div class="modal-body">
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="tag">Tag <span class="clr-red">*</span></label>
+                  <input type="text" class="form-control"  name="tag" required />
+                </div>
+                <div class="form-group">
+                  <label>Prefix</label>
+                  <select name="preifx" >
+                    <option value="" selected>None selected</option>
+                    <option value="Dr.">Dr.</option>
+                    <option value="Mr.">Mr.</option>
+                    <option value="Mrs.">Mrs.</option>
+                    <option value="Ms.">Ms.</option>
+                  </select>
+                </div>
+
+                
+                <div class="form-group">
+                  <label>First Name <span class="clr-red">*</span></label>
+                 
+                    <p-autoComplete class="pautocomp-cstm"  name="firstName" field="firstName"  [size]="30" [minLength]="1" [dropdown]="true"
+                      [inputStyle]="{ width: '100%' }" required>
+                    </p-autoComplete>
+                 
+                </div>
+                <div class="form-group">
+                  <label>Middle Name</label>
+                
+                    <p-autoComplete class="pautocomp-cstm"  name="middleName"
+                     field="middleName"[size]="30" [minLength]="1" [dropdown]="true"
+                      [inputStyle]="{ width: '100%' }">
+                    </p-autoComplete>
+               
+  
+                </div>
+                <div class="form-group">
+                  <label>Last Name <span class="clr-red">*</span></label>
+                 
+                    <p-autoComplete class="pautocomp-cstm"  name="lastName"  [size]="30" [minLength]="1" [dropdown]="true"
+                      [inputStyle]="{ width: '100%' }" required>
+                    </p-autoComplete>
+                 
+                </div>
+                <div class="form-group">
+                  <label>Suffix</label>
+                  <select name="suffix" >
+                    <option value="">None selected</option>
+                    <option value="II">II</option>
+                    <option value="III">III</option>
+                    <option value="Jr.">Jr.</option>
+                    <option value="Sr.">Sr.</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Contact Title</label>
+                  <input class="form-control" type="text" name="contactTitle"
+                   />
+                </div>
+                
+              </div>
+              <div class="col-md-6">
+
+                <div class="form-group" style="width:300px;margin-top:20px;">
+                    <label>Work Phone  <span class="clr-red">*</span></label>
+                    <div class="col-md-12">
+                      <input class="form-control" type="text" required name="workPhone"
+                      
+                        style="width: calc(62% - 63px) !important;"
+                        maxlength="20" />
+                      -
+                      <input class="form-control" type="text" name="workPhoneExtn"
+                         style="width: calc(43% - 63px) !important;" />
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Email <span class="clr-red">*</span></label>
+                    <input class="form-control" email type="text" name="email"
+                      required />
+                    
+                  </div>
+
+                <div class="form-group">
+                  <div class="form-group" style="margin-top: 15px; margin-bottom: 20px;">
+                    <span class="checkbox-cstm">
+                      <label>
+                        <input type="checkbox" name="isDefaultContact" />
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Primary Contact
+                      </label>
+                    </span>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Website</label>
+                  <input class="form-control" type="text" name="websiteURL" />
+                 
+                </div>
+                <div class="form-group">
+                  <label>Mobile Phone</label>
+                  <input class="form-control" type="text" name="mobilePhone" maxlength="20" />
+                </div>
+                <div class="form-group">
+                  <label>Alternate Phone</label>
+                  <input class="form-control" type="text" name="alternatePhone" maxlength="20" />
+                </div>
+                <div class="form-group">
+                  <label>Fax</label>
+                  <input class="form-control" pKeyFilter="pint" type="text" name="fax" maxlength="20" />
+                </div>
+  
+                <div class="form-group">
+                  <label>Memo</label>
+                  <textarea name="notes" ></textarea>
+                </div>
+  
+               
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary pull-right submit-btn"
+              style="text-align:center" data-dismiss="modal">
+              Save
+            </button>
+           
+            <button type="button" class="btn btn-danger"  data-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+
+<div class="modal fade" id="addPaymentInfo" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{isEditPaymentInfo ? 'Edit' : 'Add'}} Payment Information</h4>
+            </div>
+            <form #addPaymentForm="ngForm" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-group">
+                           <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                        <label> Primary</label>
+                                    </div>
+                                    <div class="col-sm-5">
+                                            <input type="checkbox" name="isDefaultContact"
+                                                [(ngModel)]="sourceVendor.isPrimayPayment" [disabled]="sourceVendor.tempIsPrimary == true"
+                                                (ngModelChange)="enableSave()">
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                <label>Site Name <span class="clr-red">*</span></label>
+                                </div>
+                                <div class="col-sm-5">
+                                <input class="form-control" type="text" name="paymentsitename"
+                                    (ngModelChange)="enableSave()" [(ngModel)]="sourceVendor.siteName" required>
+                               </div>
+                           </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label>Address 1 <span class="clr-red">*</span></label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-control" type="text" name="vsaddress1" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="sourceVendor.address1" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label>Address 2 </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input class="form-control" type="text" name="vsaddress2" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="sourceVendor.address2">
+                            </div>
+                        </div>
+                            <div class="col-sm-12">
+                             <div class="col-sm-4">
+                                <label>City <span class="clr-red">*</span></label>
+                             </div>
+                             <div class="col-sm-5">
+                                <input class="form-control" type="text" name="vscity" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="sourceVendor.city" required>
+                             </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                <label>State/Prov <span class="clr-red">*</span></label>
+                                </div>
+                                <div class="col-sm-5">
+                                <input class="form-control" type="text" name="vsstate" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="sourceVendor.stateOrProvince" required>
+                               </div>
+                           </div>
+                           <div class="col-sm-12">
+                              <div class="col-sm-4">
+                                <label>Postal Code <span class="clr-red">*</span></label>
+                              </div>
+                              <div class="col-sm-5">
+                                <input class="form-control" type="text" name="vspostal" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="sourceVendor.postalCode" required>
+                               </div>
+                           </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label>Country <span class="clr-red">*</span></label>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="inner-addon right-addon inline-block" style="width: 100%">
+                                    <p-autoComplete class="autocomp-customer-cstm" filter="true"
+                                    name="country1" [suggestions]="countrycollection" field="nice_name"
+                                     [size]="30" [minLength]="1" [dropdown]="true"
+                                     [forceSelection]="true" required>
+                                   </p-autoComplete>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" *ngIf="sourceVendor.checkPaymentId == undefined"
+                        class="btn btn-primary pull-right" (click)="saveCheckPaymentInfo()"
+                        [disabled]="!addPaymentForm.valid" data-dismiss="modal">Save</button>
+                    <button type="button"
+                        *ngIf="sourceVendor.checkPaymentId != undefined && sourceVendor.checkPaymentId !=0"
+                        class="btn btn-primary pull-right" (click)="saveCheckPaymentInfo()"
+                        [disabled]="!addPaymentForm.valid  || disableSave" data-dismiss="modal">Update</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ng-template #deletePaymentInfo let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>
+            Site Name:
+            <span class="new-label">{{selectedRowforDelete.siteName}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="deleteConformation('Yes')">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+<div id="deletePayment" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">Alert !</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Primary Record Cannot be Deleted
+                    <img class="delete-emoji" src="../../../assets/images/oopsimage.png" />
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+  
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="col-md-12 shadow-box-cstm" >
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{getVendorName()}}
+                    </span> </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{local?.vendorCode }}
+                    </span> </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <strong>
+            Site Name:
+            <span class="new-label">{{restorerecord.siteName}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> 
+

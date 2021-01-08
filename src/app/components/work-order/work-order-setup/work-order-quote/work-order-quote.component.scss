@@ -1,0 +1,118 @@
+﻿label {
+  text-align: left;
+  width: 140px;
+  margin-right: 0;
+  font-weight: normal;
+}
+input[type='text'],
+input[type='number'],
+select,
+textarea {
+  height: 100px;
+  border-radius: 5px !important;
+}
+.form-control[readonly] {
+  background-color: #e9ecef !important;
+}
+.pad_workflo th , .pad_workflo td{
+  padding: 4px !important;
+}
+.list_caps{
+  background: #f1f1f1;
+  margin-top: 10px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.set_align{
+  padding: 6px 12px !important;
+  margin-left: 9px;
+  margin-bottom: 10px;
+}
+@media (min-width: 768px) {
+  .col-md-6 .col-md-6 {
+    max-width: 44%;
+    margin-right: 15px;
+  }
+  .col-md-3 {
+    max-width: 22%;
+    margin-right: 15px;
+  }
+  .col-md-6-cstm{
+    max-width: 45%;
+    margin-right: 20px;
+    padding-right: 0;
+  }
+}
+
+
+// #accordion h4 a.collapsed {
+//   font-size: 12px !important;
+// }
+// #accordion h4 a {
+//   font-size: 12px !important; 
+// }
+.p-radiobutton-label-horizontal .ui-radiobutton-label{
+  color: white;
+}
+select:disabled{
+  background-color: #e9ecef !important;
+}
+.select-read-only{
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  box-shadow: none !important;
+}
+.matlist-table {
+  background-color: #fff !important;
+}
+.matlist-table thead tr th {
+  min-width: 50px;
+  padding: 4px !important;
+}
+body .ui-radiobutton .ui-radiobutton-box{
+  border: 3px solid #ffffff;
+}
+
+.ui-radiobutton .ui-radiobutton-box.ui-state-active .ui-radiobutton-icon{
+  background-color:#212121 !important;
+}
+.text-area-cstm{
+  height: 90px !important;
+}
+
+.footer{
+  background-color: #eaf2fd
+}
+.table-header-col1 {
+  border-top: 1px solid #fff !important;
+    border-bottom: 1px solid #fff !important;
+    border-left: 1px solid #fff !important;
+}
+.table select.select-read-only {
+  background-color: #ffffff !important;
+}
+table thead tr th {
+  text-align: center;
+}
+.text-align-right{
+  text-align: right;
+}
+.p-radiobutton-label-horizontal .ui-radiobutton-label {
+  width: unset !important;
+}
+
+.ui-radiobutton-label{
+  margin-right: 10px;
+}
+
+.approver-limit-exceeded{
+  td {
+    background-color: #d01313;
+    label{
+      color: white;
+    }
+  }
+}

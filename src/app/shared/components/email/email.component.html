@@ -1,0 +1,414 @@
+﻿<div class="card" style="padding: 10px;">
+    <div class="col-md-12">
+        <h4 class="po-head-sm">
+            Communication - Email
+            <a href="#" data-toggle="modal" data-target="#addNewMemo" (click)="addMemo()" *ngIf="!isViewFromWO">
+                <i class="fa fa-plus-circle fa-lg"></i></a>
+        </h4>
+    </div>
+</div>
+<div>
+    <p-table #dt class="rpo-table-cstm rro-table-cstm ptable-f10" [value]="data" [first]="0" [rows]="pageSize"
+        [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
+        selectionMode="multiple" [metaKeySelection]="true" [lazy]="false" [resizableColumns]="true"
+        [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true" scrollHeight="450px">
+        <!--(onLazyLoad)="loadData($event)"-->
+        <ng-template pTemplate="caption">
+            <div style="text-align: right; min-height: 30px;">
+                <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" [ngModelOptions]="{ standalone: true }"
+                    optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
+                    defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                    <i class="fa fa-search"></i>
+                    <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
+                        style="height: 28px !important;" />
+                </div>
+                <button type="button" class="btn btn-primary" matTooltip="Download Data" matTooltipPosition="above"
+                    pButton icon="fa-download" iconPos="left" label="Export Data" (click)="dt.exportCSV()"
+                    style="padding:5px 10px !important;"></button>
+                <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
+                    matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+                    (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
+
+                <!-- <div class="excel-upload excel-upload-cstm">
+                <button type="button" class="btn btn-primary" matTooltip="Download Sample File"
+                    matTooltipPosition="above" (click)="sampleExcelDownload()" style="padding: 5px 10px !important;">
+                    Sample File Download
+                </button>
+
+                <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
+                    class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
+                <label for="upload">
+                    <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                    <i class="fa fa-upload"></i>
+                    </span>
+                </label>
+                </div> -->
+            </div>
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:130px">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                    [pSortableColumn]="col.field">
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th style="width:50px;position:sticky" *ngIf="selectedColumns.length > 0 && !isViewFromWO">
+                    Actions
+                </th>
+            </tr>
+            <tr>
+                <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input style="width:100%;" pInputText type="text" (input)="
+                            dt.filter($event.target.value, col.field, 'contains')
+                        " />
+                </th>
+                <th style="width: 50px;" *ngIf="!isViewFromWO"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
+                <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                    {{rowData[col.field]}}
+                </td>
+                <td style="width:50px;position:sticky" class="ui-resizable-column" *ngIf="!isViewFromWO">
+                    <!-- <button class="btn-edit ptable-wo-btns" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
+                            (click)="editEmail(rowData)" matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button> -->
+                    <span data-toggle="modal" data-target="#viewEmail"><a class="btn nobg btn-view-cstm"
+                            (click)="emailView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                                class="fa fa-eye"></i></a> </span>
+                    <span data-toggle="modal" data-target="#deleteRowConfirmation"><a class="btn nobg btn-delete-cstm"
+                            (click)="showDeleteConfirmation(rowData)" matTooltip="Delete" matTooltipPosition="above"><i
+                                class="fa fa-trash"></i></a> </span>
+                    <!-- <button class="btn btn-danger nobg" > (click)="data.splice(i, 1)"
+                                <a href="#" data-toggle="modal" data-target="#viewEmail" (click)="emailView(rowData)">
+                            <i _ngcontent-c313="" class="fa fa-eye view_icon_adjust"></i></a>
+                        </button> -->
+                    <!-- <button class="btn btn-danger nobg" (click)="addList.splice(i, 1)">
+                                <i class="fa fa-trash"></i>
+                            </button> -->
+                </td>
+            </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">No'of records:</label>
+                <input style="width: 5%;"
+                        [(ngModel)]="totalRecords"
+                        [disabled]="true"
+                        pInputText
+                        type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input style="width: 5%;"
+                        [(ngModel)]="totalPages"
+                        [disabled]="true"
+                        pInputText
+                        type="text" />
+            </ng-template> -->
+        <ng-template pTemplate="emptymessage" let-columns *ngIf="data.length == 0">
+            <tr>
+                <td colspan="5" style="color: red; font-weight: bold; text-align: center">
+                    No records found
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" id="footer">
+            <label id="footer">Total:</label>
+            <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+            &nbsp;&nbsp;
+            <label id="footer">Pages Count:</label>
+            <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
+                type="text" />
+        </ng-template>
+    </p-table>
+</div>
+
+
+<div id="addNewMemo" class="modal fade" role="dialog" data-backdrop="static">
+
+    <div class="modal-dialog" style="margin-top:0%;">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Email</h4>
+
+
+                <div class="col-md-12 shadow-box-cstm">
+                    <div class="col-md-6">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                            </label>
+                            <span class="span-header-red" style="text-transform: capitalize">
+                                {{customerDetails.customerName}}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                            </label>
+                            <span class="span-header-red" style="text-transform: capitalize">
+                                {{customerDetails.customerCode}}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <form #attachDocForm="ngForm" class="form-horizontal" ngNativeValidate>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group col-md-12">
+                                    <label>Email Type <span class="clr-red">*</span></label>
+                                    <select [(ngModel)]="emailType" class="form-control" name="emailType" required>
+                                        <option value="">Select</option>
+                                        <option *ngFor="let emailTy of emailTypes" [value]="emailTy.value">
+                                            {{emailTy.label}}</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-12">Customer Contact <span class="clr-red">*</span></label>
+                                    <p-autoComplete field="contactName" [(ngModel)]="customerContact" required
+                                        name="cusContact" #cusContact="ngModel" errorMessage="Records not found"
+                                        [forceSelection]="true" [dropdown]="true" [suggestions]="cusContactList"
+                                        (completeMethod)="filterCustomerContact($event)" [size]="30" [minLength]="1"
+                                        (onSelect)="contactSelected($event)" class="p-autoComplete-ctsm">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>BCC</label>
+                                    <input class="form-control" type="email" name="bcc" [(ngModel)]="bcc"
+                                        multiple="true">
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-6">
+
+                                <div class="form-group col-md-12">
+                                    <label class="col-md-12">Contacted By <span class="clr-red">*</span></label>
+                                    <!-- <select [(ngModel)]="contactBy" class="form-control" name="createdBy" required>
+                                    <option value="">Select</option>
+                                    <option *ngFor="let employee of employees" [value]="employee.employeeId">{{employee.firstName}}</option>
+                                </select> -->
+                                    <p-autoComplete field="name" [(ngModel)]="contactBy" required name="employees"
+                                        #employees="ngModel" errorMessage="Records not found" [forceSelection]="true"
+                                        [dropdown]="true" [suggestions]="employeeList"
+                                        (completeMethod)="filterEmployee($event)" [size]="30" [minLength]="1"
+                                        [dropdown]="true" class="p-autoComplete-ctsm">
+                                    </p-autoComplete>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label>Email To <span class="clr-red">*</span></label>
+                                    <input class="form-control" type="email" name="email" [(ngModel)]="toEmail" required
+                                        disabled>
+                                </div>
+                                <div class="form-group col-md-12" style="margin-top:-7px">
+                                    <label>CC</label>
+                                    <input class="form-control" type="email" name="cc" [(ngModel)]="cc" multiple="true">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 ">
+                            <div class="form-group">
+                                <label class="col-md-12">Email Subject <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" [(ngModel)]="subject" name="subject" rows="1"
+                                    required>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email Body</label>
+                                    <p-editor class="p-editor-cstm" [(ngModel)]="emailBody" style="overflow-y: auto;;"
+                                        [style]="{'height':'150px'}" name="emailBody" required></p-editor>
+                                    <!-- <textarea class="form-control" rows="50" [(ngModel)]="emailBody" name="emailBody" required></textarea> -->
+                                </div>
+
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label style="float: none;width: auto;">Attachments:</label>
+                                    <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple"
+                                        [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
+                                        (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"
+                                        class="form-control col-md-12 fileupload"></p-fileUpload>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer" style="padding-top:0px; padding-bottom:0px;">
+                        <button type="submit" class="btn btn-primary btn-primary" (click)="send(attachDocForm.valid)"
+                            style="padding: 6px 12px !important;margin-top: 10px;"
+                            [disabled]="!attachDocForm.valid || checkValidEmails()">
+                            Send
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<div id="deleteRowConfirmation" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Are You Sure Want to Delete the record?</h4>
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="delete(deletingRecord)">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<div id="viewEmail" class="modal fade" role="dialog" data-backdrop="static">
+
+    <div class="modal-dialog modal-sm">
+
+        <!-- Modal content-->
+        <div class="modal-content" *ngIf="isView==true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title"> Email Details</h4>
+                <div class="col-md-12 shadow-box-cstm">
+                    <div class="col-md-6">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+                            </label>
+                            <span class="span-header-red" style="text-transform: capitalize">
+                                {{customerDetails.customerName}}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+                            </label>
+                            <span class="span-header-red" style="text-transform: capitalize">
+                                {{customerDetails.customerCode}}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <p>
+                        <span class="label"><strong> Email Type: </strong></span><span class="value">{{
+                            emailViewData.emailType
+                          }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><strong> CC: </strong></span><span class="value">{{
+                                emailViewData.cc
+                            }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><strong> BCC: </strong></span><span class="value">{{
+                                emailViewData.bcc
+                            }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><strong>Subject: </strong></span><span class="value">{{
+                                emailViewData.subject
+                            }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><strong> Contacted By: </strong></span><span class="value">{{
+                                emailViewData.contactBy
+                            }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><strong> Contact Date: </strong></span><span class="value">{{
+                                emailViewData.contactDate
+                            }}</span>
+                    </p>
+                    <!-- <hr> -->
+                    <p class="email-content">
+                        <span class="label" style="float: left;"><strong> Email Content: </strong></span>
+                        <span class="value" [innerHTML]="emailViewData.emailBody"></span>
+                    </p>
+                    <div>
+                        <label class="label"
+                            style="float: left;width: 30%; padding: 0;display: inline-block;">Attachments:</label>
+                        <ul style="list-style: none;">
+                            <li *ngFor="let attachment of emailViewData.attachmentDetails">
+                                {{attachment.fileName}} - <a class="filelink"
+                                    (click)="downloadFileUpload(attachment.link)">
+                                    {{ attachment.link }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer" style="padding: 0px;">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"
+                            style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <ng-template #emailQuotePopup let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+            <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+            <h6 class="text-center">
+                Are you sure you want to send this Quote to Customer?
+            </h6>
+            <a class="filelink btn btn-link" (click)="downloadFileUpload(pdfPath)" target="_blank" download>Preview
+                Quote</a>
+            <!-- <a href="{{pdfPath}}" class="btn btn-link" target="_blank" >Preview Quote</a> -->
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                (click)="triggerMailSalesQuote()">Yes</button>
+        </div>
+    </ng-template>

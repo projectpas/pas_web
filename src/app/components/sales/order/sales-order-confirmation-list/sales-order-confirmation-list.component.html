@@ -1,0 +1,156 @@
+<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary new-card-header">
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">Sales Order Confirmation List</h4>
+            </div>
+        </div>
+    </div>
+    <div class="card-body new-card-body">
+        <p-table #dt [value]="sales" class="rpo-table-cstm rro-table-cstm" [columns]="selectedColumns"
+            [scrollable]="true" [autoLayout]="true" [resizableColumns]="true" [style]="{ width: '100%' }">
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col">
+                        <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" optionLabel="header"
+                            selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                            defaultLabel="Choose Columns" style="float:left">
+                        </p-multiSelect>
+                    </div>
+                    <div class="col">
+                        <div style="width: auto !important; float: right;"
+                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            <i class="fa fa-search"></i>
+                            <input type="text" pInputText size="50" class="form-control"
+                                (input)="globalSearch($event.target.value)" placeholder="Filter">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+                            matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
+                            (click)="dt.exportCSV()"></button>
+                        <button type="button" class="btn btn-primary new-table-button"
+                            matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download"
+                            iconPos="left" label="Export Selected Data"
+                            (click)="dt.exportCSV({ selectionOnly: true })"></button>
+                        <!-- <button type="button" matTooltip="Download Data" matTooltipPosition="above" pButton
+                            icon="fa-download " class="btn-primary" iconPos="left" label="Export Data"
+                            (click)="dt.exportCSV()"></button>
+                        <button type="button" matTooltip="Download Selected Data" matTooltipPosition="above" pButton
+                            icon="fa-download " class="btn-primary" iconPos="left" label="Export Selected Data"
+                            (click)="dt.exportCSV({selectionOnly:true})"></button> -->
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th style="width:100px;">
+                        Actions
+                    </th>
+                </tr>
+                <tr>
+                    <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input style="width:100%;" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                    <th style="width:100px;position:sticky"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-sale let-columns="columns" let-rowIndex="rowIndex">
+                <tr [pSelectableRow]="sale" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle
+                    [pSelectableRowDblClick]="rowData">
+                    <td *ngFor="let col of columns" pReorderableRowHandle>
+                        {{
+      (col.type === "date") ? ( sale[col.field] ? ( sale[col.field] | date: "MM/dd/yyyy"  ) : '' ): sale[col.field]
+                    }}
+                    </td>
+                    <td style="width: 100px">
+                        <button class="btn-edit" mat-icon-button (click)="viewSelectedRow(viewOrder,sale)"
+                            matTooltip="View" matTooltipPosition="above">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="sales.length == 0">
+                <tr>
+                    <td [attr.colspan]="10" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+
+                <input style="width: 5%;" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
+            </ng-template>
+        </p-table>
+
+
+    </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="deleteQuote()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+
+</ng-template>
+
+<ng-template #viewOrder let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" (click)="dismissModel()">
+            &times;
+        </button>
+        <h4 class="modal-title">Details of Order</h4>
+    </div>
+
+    <div class="modal-body">
+        <app-sales-order-view [customerId]="customerId" [salesOrderId]="salesOrderId" [salesOrderView]="salesOrderView">
+        </app-sales-order-view>
+
+
+    </div>
+
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Okay</button>
+    </div>
+
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

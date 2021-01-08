@@ -1,0 +1,49 @@
+﻿<div>
+    <div class="col-md-12">
+        <div class="x_panel" style="">
+            <div class="x_content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item" aria-current="page">Admin</li>
+                        <li class="breadcrumb-item" aria-current="page">Employee</li>
+                        <li class="breadcrumb-item active" aria-current="page">User Role Mapping</li>
+                    </ol>
+                </nav>
+                <div class="pheading">
+                    <h4 class="page-heading">Add New Role</h4>
+                    <!--<form id="" class="lgrey-bg div8 filters" name="" action="#" method="post" onsubmit="return false;">-->
+                    <div class="col-sm-2 emp-filter">
+                        <label>User Name</label>
+                        <br>
+                        <select class="form-control" (change)="onUserChange($event.target.value)" [(ngModel)]="selectedUserId">
+                            <option value="0">--All--</option>
+                            <option *ngFor="let user of Users" value={{user.id}}>
+                                {{user.userName}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2 emp-filter">
+                        <label>User Role</label>
+                        <br>
+                        <p-multiSelect [options]="UserRoles" 
+                                       [(ngModel)]="selectedRoles" 
+                                       optionLabel="name"
+                                       [style]="{minWidth: '200px'}" 
+                                       defaultLabel="Roles" 
+                                       style="float:left">
+
+                        </p-multiSelect>
+
+                    </div>
+                    <div class="col-sm-2 emp-filter">
+                        <br>
+                        <button (click)="assignRole()" class="btn btn-success">Assign Role</button>
+                    </div>
+                    <!--</form>-->
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    
+</div>

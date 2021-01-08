@@ -1,0 +1,301 @@
+﻿<div class="card new-card" style="padding: 10px;">
+  <div class="card-header bg-primary new-card-header" >
+    <div class="row">
+      <div class="col">
+        <h4 class="new-card-heading">  Documents List</h4>
+      </div>
+      <div>
+      <a class="plusicon-cstm" href="#" data-toggle="modal"
+       data-target="#documentDetails"
+         *ngIf="!isView">
+         <button type="button" class="btn-sm new-btn-primary"
+        (click)="addDocumentDetails()"
+        matTooltip="Create Documents"  matTooltipPosition="above">
+      Add Documents</button>
+      </a>
+    </div>
+  </div>
+</div>
+<div class="clear"></div>
+<hr />        
+<div class="card-body new-card-body">
+  <p-table #documents 
+  class="rpo-table-cstm lastcol-fix ptable-f10" 
+  [value]="documentsDestructuredData" 
+  [loading]="loader" [rows]="pageSize" 
+  [paginator]="true" 
+  [pageLinks]="3" [first]="0" 
+  [rowsPerPageOptions]="[10, 20,  50, 100]" 
+  [columns]="selectedColumns"
+   selectionMode="multiple" 
+   [resizableColumns]="true" 
+   [reorderableColumns]="true" 
+   [scrollable]="true" 
+   [metaKeySelection]="true"
+    (onPage)="pageIndexChange($event)" scrollHeight="450px">
+
+    <ng-template pTemplate="caption">
+      <div style="text-align: right;min-height: 30px;">
+        <p-multiSelect [options]="documentsColumns" [(ngModel)]="selectedColumns"
+          [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected"
+          [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+        <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+          <i class="fa fa-search"></i>
+          <input type="text" pInputText size="50" class="form-control ui-autocomplete-input" (input)="
+                        documents.filterGlobal($event.target.value, 'contains')
+                      " placeholder=" Filter" style="height: 28px !important;" />
+        </div>
+        <button type="button" class="btn btn-primary" pButton icon="fa-download" matTooltip="Download  Data"
+          matTooltipPosition="above" iconPos="left" label="Export  Data" (click)="documents.exportCSV()"
+          style="padding: 5px 10px !important;"></button>
+        <button type="button" class="btn btn-primary" pButton icon="fa-download" matTooltip="Download Selected Data"
+          matTooltipPosition="above" iconPos="left" label="Export Selected Data"
+          (click)="documents.exportCSV({ selectionOnly: true })" style="padding: 5px 10px !important;"></button>
+      </div>
+    </ng-template>
+
+    <ng-template pTemplate="colgroup" let-columns>
+      <colgroup>
+          <col *ngFor="let col of columns" style="width:auto">
+      </colgroup>
+    </ng-template>
+
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <ng-container *ngFor="let col of columns">
+          <th *ngIf="col.field !== 'fileName'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+          <th *ngIf="col.field == 'fileName'">
+            File Name
+          </th>
+        </ng-container>
+        <th *ngIf="!isView">Actions</th>
+      </tr>
+      <tr>
+        <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+          <input style="width:100%;" pInputText type="text" (input)="
+                        documents.filter(
+                          $event.target.value,
+                          col.field,
+                          'contains'
+                        )
+                      " />
+        </th>
+        <th *ngIf="!isView"></th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <tr 
+          [pSelectableRow]="rowData" 
+          [pSelectableRowDblClick]="rowData" 
+          (dblclick)="docviewdblclick(rowData)"
+      >
+        <ng-container *ngFor="let col of columns">
+          <td 
+              *ngIf="col.field != 'fileName' && col.field !='memo'"
+              class="ui-resizable-column" 
+              pReorderableRowHandle
+           >
+            {{
+                        col.field == 'fileCreatedDate'
+                          ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                          : rowData[col.field] && col.field == 'fileUpdatedDate'
+                          ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                          : rowData[col.field]
+            }}
+          </td>
+          <td *ngIf="col.field == 'fileName'">
+            <a class="filelink" (click)="downloadFileUpload(rowData)">
+              {{ rowData[col.field] }}</a>
+          </td>
+          <td *ngIf="col.field == 'memo'"><p class="p_textEditor" [innerHTML]=rowData[col.field]></p></td>
+          
+        </ng-container>
+
+        <td class="text-center" *ngIf="!isView">
+          <span data-toggle="modal" data-target="#documentDetails"><a class="btn nobg btn-edit-cstm" (click)="editWODocument(rowData)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+          <span><a class="btn nobg btn-delete-cstm" (click)="openWoDelete(deleteContent, rowData)" matTooltip="Delete"><i class="fa fa-trash"></i></a> </span>
+
+          <!-- <button class="btn-edit" mat-icon-button (click)="editWODocument(rowData)" matTooltip="Edit"
+            data-toggle="modal" data-target="#documentDetails">
+            <mat-icon>edit</mat-icon>
+          </button> -->
+
+          <!-- <button 
+            class="btn-delete" 
+            mat-icon-button 
+            matTooltip="Delete" matTooltipPosition="above"
+            (click)="openWoDelete(deleteContent, rowData)">
+            <mat-icon color="warn">delete</mat-icon>
+          </button> -->
+        </td>
+        
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns *ngIf="documentsDestructuredData.length == 0">
+      <tr>
+
+        <td [attr.colspan]="10" style="color: red; font-weight: bold; text-align: center">
+          No records found
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary" id="footer">
+      <label id="footer" class="footer">Total:</label>
+      <input style="width: 5%;" [(ngModel)]="documents._totalRecords" name="no'of records" [disabled]="true" pInputText
+        type="text" />
+
+      &nbsp;&nbsp;
+      <label id="footer" class="footer1">Pages Count:</label>
+
+      <input style="width: 5%;" [ngModel]="getPageCount(documents._totalRecords, pageSize)" name="page count"
+        [disabled]="true" pInputText type="text" />
+    </ng-template>
+  </p-table>
+</div>
+</div>
+<!-- </div>
+      </div>
+    </div>
+  </div> -->
+
+
+
+
+<div class="modal fade" id="documentDetails" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closeMyModel('#documentDetails')">
+          &times;
+        </button>
+        <h4 class="modal-title">Add Document Details</h4>
+      </div>
+      <form #documentDetails="ngForm" class="form-horizontal">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Name <span class="clr-red">*</span></label>
+                <input class="form-control" type="text" name="name" [(ngModel)]="documentForm.name"
+                  (ngModelChange)="enableSave()" required />
+              </div>
+              <div class="form-group">
+                <label>Description </label>
+                <textarea class="form-control" name="description" [(ngModel)]="documentForm.description"
+                  (ngModelChange)="enableSave()" ></textarea>
+              </div>
+              <div class="form-group">
+                  <label style="width:100%;">Type <span class="clr-red">*</span></label>
+                  <p-dropdown placeholder="Select" name="typeId" #cmm="ngModel"
+                              [options]="documentTypeList" class="p-dropdown-wo-doc"
+                              [(ngModel)]="documentForm.typeId" (ngModelChange)="enableSave()" required>
+                  </p-dropdown>
+              </div>                   
+            </div> 
+
+            <div class="col-md-12">
+              <div class="form-group">
+                <label>Memo </label>
+                <!-- <textarea class="form-control" name="memo" [(ngModel)]="documentForm.memo"
+                  (ngModelChange)="enableSave()"></textarea> -->
+                  <p-editor [style]="{'height':'100px'}" name="textAreaInfo11" (ngModelChange)="enableSave()" [(ngModel)]="documentForm.memo"></p-editor>
+              </div>
+              <div class="form-group" *ngIf="!isEditButton">
+                <label style="float: none;width: auto;">Attachments <span class="clr-red">*</span></label>
+                <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple" [showCancelButton]="false"
+                  [showUploadButton]="false" customUpload="true" (ngModelChange)="enableSave()"
+                  (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"></p-fileUpload>
+              </div>
+              <div class="table-responsive table-overflow"
+              *ngIf="isEditButton">
+             <h4 class="panel-title" style="padding-left: 5px;">
+                 Attachment Details:
+             </h4>
+
+             <table class="table-responsive ptable-cus-pma">
+                 <tr>
+                     <th>File Name</th>
+                     <th>Download</th>
+                 </tr>
+                 <tr>
+                     <td>{{sourceViewforDocumentList.fileName}}</td>
+                     <td style="text-align: center;">
+                         <a *ngIf="sourceViewforDocumentList.attachmentDetailId > 0" (click)="downloadFileUpload(sourceViewforDocumentList)"
+                            matTooltip="Download" matTooltipPosition="above"
+                            class="btn nobg btn-cstm">
+                             <span><i class="fa fa-download"></i></span>
+                         </a>
+                         <a *ngIf="sourceViewforDocumentList.attachmentDetailId==0"
+                            [href]="sourceViewforDocumentList.link"
+                            download="{{sourceViewforDocumentList.fileName}}"
+                            matTooltip="Download" matTooltipPosition="above"
+                            class="filelink">
+                             <span><i class="fa fa-download"></i></span>
+
+                         </a>
+
+                     </td>
+
+                 </tr>
+             </table>
+           </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
+            style="text-align:center" (click)="saveDocumentInformation()"
+            [disabled]="!documentDetails.valid || disableSave">
+            Save
+          </button>
+          <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"
+            style="text-align:center" (click)="saveDocumentInformation()"
+            [disabled]="!documentDetails.valid || disableSave">
+            Update
+          </button>
+          <button type="button" class="btn btn-danger" (click)="
+            closeMyModel('#documentDetails')
+            ">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #deleteContent
+             let-c="close"
+             let-d="dismiss"
+             data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <!-- <strong>
+            Document Name:
+            <span class="new-label">{{ selectedRowForDelete.name }}</span>
+        </strong> -->
+    </div>
+    <div class="modal-footer">
+        <button type="button"
+                class="btn btn-primary"
+                (click)="deleteItemAndCloseModel()">
+            Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            No
+        </button>
+    </div>
+</ng-template>

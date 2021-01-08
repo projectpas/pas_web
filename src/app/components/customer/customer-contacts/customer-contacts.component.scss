@@ -1,0 +1,76 @@
+﻿.right_col {
+    padding: 2px 6px;
+}
+.x_panel {
+    padding: 0 10px;
+    background-color: #fff;
+}
+label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+}
+.viewform-cstm .label {
+    width: 120px !important;
+    //text-align: right;
+}
+.viewform-cstm .value {
+    margin-left: 10px;
+}
+.form-control:disabled {
+    background-color: #e9ecef !important;
+}
+input[type="text"], input[type="number"], input[type="email"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+    //height: 24px !important;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.label-cstm {
+    width: auto;
+    float: left;
+    text-align: left;
+    margin-right: 0;
+    font-weight: normal;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.checkbox-cstm {
+    margin-left: 10px;
+}
+.cus-contact-table tr th {
+    padding: 7px;
+}
+.cus-contact-table tr td {
+    padding: 4px;
+}
+.action-width{
+    width: 20%;
+    text-align: center;
+}
+.uiTable_td_ovrflw_control {
+    white-space: normal !important;
+}
+.update_withFlag{
+    width: 45px !important;
+}
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+    .col-md-6 {
+        max-width: 44%;
+        margin-right: 15px;
+    }
+}
+th{
+    text-align:center;
+}

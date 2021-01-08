@@ -1,0 +1,49 @@
+﻿.control-label {
+    margin-top: 10px;
+    text-align: left;
+    width: 150px !important;
+    font-weight: 500;
+}
+
+.clr-red {
+    color: red;
+}
+
+.btn-line {
+    line-height: 0.44 !important;
+    border-radius: 0px 5px 5px 0px !important;
+}
+
+.ui-autocomplete-input {
+    border-radius: 5px 0px 0px 5px !important;
+}
+
+.col-row1 {
+    margin-left: 2px
+}
+
+.new-margin {
+    margin-top: 10px;
+}
+
+.modal.editdisposaltype {
+    .modal-body div.form-group label, label {
+        font-weight: normal;
+        width: 100%;
+        text-align: left;
+        
+    }
+}
+
+.modal {
+    .modal-body.editdisposaltype label {
+        font-weight: normal !important;
+        width: 100% !important;
+        text-align: left;
+        margin-top: 0;
+    }
+
+    .modal-body.editdisposaltype .form-group {
+        margin-bottom: 10px;
+    }
+}

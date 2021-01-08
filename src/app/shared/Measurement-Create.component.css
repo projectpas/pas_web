@@ -1,0 +1,6 @@
+/*.workflow-table-measment tr td {
+    padding: 4px;
+}*/
+.workflow-table-measment tr th:first-child {
+    padding: 0 10px !important;
+}

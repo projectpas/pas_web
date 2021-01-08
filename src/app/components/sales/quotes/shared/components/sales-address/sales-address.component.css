@@ -1,0 +1,26 @@
+.sub-header-title {
+    border-bottom: 1px solid lightgray;
+    width: 100%;
+    font-size: 18px;
+    padding: 5px 8px;
+    margin-bottom: 5px;
+  }
+  a.fa.fa-plus-circle {
+    color: green !important;
+  }
+  @media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+  }
+  
+  .modal .add-site-name label{
+    /* font-size: 12px !important; */
+    width: 150px;
+    margin-right: 0;
+    font-weight: 400;
+  }
+  .text_editor_box .p{
+    margin-bottom: -7px;
+  }

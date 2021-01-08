@@ -1,0 +1,117 @@
+﻿<div [@fadeInOut] class="page-content">
+	<div class="right_col" role="main">
+		<div class="x_panel" style="">
+			<div class="x_content">
+				<div class="clear"></div>
+				<form action="#" method="post" id="" name="" class="form-horizontal add-custustomer">
+					<div class="tab-content form-bg">
+								<div class="" id="menu5">
+									<div class="form-group row">
+										<div class="form-group vendor-details-heading marginr50">
+											<p class="fs10">
+												<label class="control-label text-left">Vendor Name:</label>
+												<!--{{local?.vendorName}}-->
+											</p>
+										</div>
+										<div class="form-group vendor-details-heading">
+											<p class="fs10">
+												<label class="control-label text-left">Vendor Code:</label>
+												<!--{{local?.vendorCode}}-->
+											</p>
+										</div>
+									</div>
+									<h5 class="heading" style="height:36px">Vendor Conversations</h5>
+									<div class="col-sm-12">
+										<span class="btn btn-primary pull-right" data-toggle="modal" href="#" (click)="openClassification(contentEdit)"><i class="fa fa-plus"></i></span>
+										<div class="table-responsive">
+											<table class="table table-bordered warnings-table">
+												<thead>
+													<tr>
+														<th>Subjectline</th>
+														<th>Contacted By</th>
+														<th>Conversation</th>
+														<th>Contacted Date</th>
+														<th>Next Callback Date</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>Regarding Sales</td>
+														<td>Shabbir Ahmad</td>
+														<td>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt</td>
+														<td>06/28/2018</td>
+														<td>06/30/2018</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+									<div class="clear"></div>
+									<br>
+									<button type="button" class="btn btn-success pull-right submit-btn">Save</button>
+								</div>
+								<div class="clear"></div>
+							</div>					
+				</form>
+			</div>
+			<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">×</button>
+						<h4 class="modal-title"> Conversation</h4>
+					</div>
+					<div class="modal-body">
+						<div class="col-xs-12">
+							<div class="form-group col-sm-4"><p class="fs10"><label class="control-label w100">Account Name</label>&nbsp; Shabbir Ahmad</p></div>
+							<div class="form-group col-sm-4"><p class="fs10"><label class="control-label w100">Account Code</label>&nbsp; CUS12345</p></div>
+						</div>
+						<div class="clear"></div>
+						<hr>
+						<form method="post" id="" name="">
+							<p>
+								<span class="col-sm-2"><b>Subjectline: </b></span>
+								<span class="col-sm-10 inline-block">
+									<input type="text" class="form-control w200" id="" name="" >
+								</span>
+							</p>
+							<p>
+								<span class="col-sm-2"><b>Conversation Details: </b></span>
+								<span class="col-sm-10">
+									<textarea class="form-control w100p" rows="10" ></textarea>
+								</span>
+							</p>
+							<p>
+								<span class="col-sm-2"><b>Contacted By: </b></span>
+								<span class="col-sm-10 inline-block">
+									<input type="text" class="form-control w200" id="" name="" >
+
+
+								</span>
+							</p>
+							<p>
+								<span class="col-sm-2"><b>Contacted Date: </b></span>
+								<span class="col-sm-10 inline-block">
+									<input type="text" class="form-control datepicker w200 hasDatepicker" id="datepicker" name="" >
+								</span>
+							</p>
+							<p>
+								<span class="col-sm-2"><b>Next Contacted Date: </b></span>
+								<span class="col-sm-10 inline-block">
+									<input type="text" class="form-control datepicker w200 hasDatepicker" id="datepicker" name="" >
+								</span>
+							</p>
+							<p>
+								<span class="col-sm-4 col-xs-offset-5">
+									<button type="button" id="" name="" class="btn btn-success add" data-toggle="modal" data-target="#success-popup"><i data-dismiss="modal" (click)="dismissModel()">Save</i></button>
+								</span>
+							</p>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">Close</button>
+					</div>
+				</div>
+			</ng-template>
+</div>
+	</div>
+</div>

@@ -1,0 +1,885 @@
+﻿<div class="card new-card">
+  <div class="card-header bg-primary new-card-header">
+    <div class="row">
+       <div class="col">
+        <h4 class="new-card-heading">Vendor Capes List</h4>
+      </div>
+      <div *ngIf="!isViewMode">
+        <button
+          type="button"
+          class="btn-sm new-btn-primary"
+          (click)="navigateTogeneralInfo()"
+          *ngIf="!isEnableVendor">
+          Add Vendor Capabilities
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body new-card-body">
+    <p-table
+      #dt
+      class="rpo-table-cstm lastcol-fix"
+      [value]="allvendorCapsList"      
+      [first]="0"
+      [rows]="pageSize"
+      [lazy]="true"
+      (onLazyLoad)="loadData($event)"   
+      [metaKeySelection]="true"
+      [paginator]="true"
+      [pageLinks]="3"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [columns]="selectedColumns"
+      selectionMode="multiple"
+      [(selection)]="selectedColumn"
+      [resizableColumns]="true"
+      [reorderableColumns]="true"
+      [scrollable]="true"
+      scrollHeight="450px" 
+      [totalRecords]="totalRecords" 
+    >
+      <ng-template pTemplate="caption" *ngIf="!isViewMode">
+        <div class="row">
+          <div class="col">
+            <p-multiSelect
+              [options]="cols"
+              [(ngModel)]="selectedColumns"
+              optionLabel="header"
+              selectedItemsLabel="{0} columns selected"
+              [style]="{ minWidth: '220px' }"
+              defaultLabel="Choose Columns"
+              style="float: left;"
+            ></p-multiSelect>
+          </div>
+          <div class="col">
+            <div
+              style="width: auto !important; float: right;"
+              class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+            >
+              <i class="fa fa-search"></i>
+              <input
+                type="text"
+                pInputText
+                size="50"
+                class="form-control"
+                (input)="globalSearch($event.target.value)"
+                placeholder="Filter"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-primary new-table-button"
+              matTooltip="Download Data"
+              matTooltipPosition="above"
+              pButton
+              icon="fa-download"
+              iconPos="left"
+              label=" Export Data"
+              data-toggle="modal" 
+                            (click)="selectedOnly = false; targetData = dt;"
+                             data-target="#downloadConfirmation"
+            ></button>
+            <button
+              type="button"
+              class="btn btn-primary new-table-button"
+              matTooltip="Download Selected Data"
+              matTooltipPosition="above"
+              pButton
+              icon="fa-download"
+              iconPos="left"
+              label=" Export Selected Data"
+              data-target="#downloadConfirmation"
+              data-toggle="modal"
+              (click)="selectedOnly = true; targetData = dt;"
+            ></button>
+          </div>
+          <div class="col">
+            <div class="">
+              <div
+                class="col"
+                style="width: 395px; float: right; padding-top: 3px;"
+              >
+                <div class="form-group">
+                  <div
+                    class="pull-left"
+                    style="margin-top: 4px; margin-right: 15px;"
+                  >
+                    <label class="radio-cstm wauto">
+                      <input
+                        type="radio"
+                        name="capesStatus"
+                        class="form-control"
+                        value="active"
+                        (click)="getVenCapesListByStatus('active')"
+                        checked
+                      />
+                      <span class="checkmark"></span>Active</label
+                    >
+                  </div>
+                  <div
+                    class="pull-left"
+                    style="margin-top: 4px; margin-right: 15px;"
+                  >
+                    <label class="radio-cstm wauto">
+                      <input
+                        type="radio"
+                        name="capesStatus"
+                        class="form-control"
+                        value="inactive"
+                        (click)="getVenCapesListByStatus('inactive')"
+                      />
+                      <span class="checkmark"></span>In-Active</label
+                    >
+                  </div>
+                  <div
+                    class="pull-left"
+                    style="margin-top: 4px; margin-right: 15px;"
+                  >
+                    <label class="radio-cstm wauto">
+                      <input
+                        type="radio"
+                        name="capesStatus"
+                        class="form-control"
+                        value="all"
+                        (click)="getVenCapesListByStatus('all')"
+                      />
+                      <span class="checkmark"></span>All</label
+                    >
+                  </div>
+                  <div class="checkbox-cstm" style="margin-left: 0;">
+                    <label style="width: auto !important; margin-top: 3px;">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="currentDeletedstatus"
+                        name="cparent"
+                        id="cparent"
+                        (click)="getDeleteListByStatus($event.target.checked)"
+                      />
+                      <span class="cr"
+                        ><i class="cr-icon pi pi-check"></i
+                      ></span>
+                      Show Deleted List
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" style="width: 130px;" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            pResizableColumn
+            pReorderableColumn
+            [pSortableColumn]="col.field"
+          >
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+          <th
+            style="width: 200px; position: sticky;"
+            *ngIf="selectedColumns.length > 0"
+          >
+            Actions
+          </th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+              <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" style="width: 100%;"
+                     pInputText
+                     type="text"
+                     (keyup)=" dt.filter($event.target.value, col.field, 'contains'); resetGlobalFilter() " />
+              <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+              <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+          </th>
+        <th style="width: 200px;"></th>
+      </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr
+          [pSelectableRow]="rowData"
+          [pSelectableRowDblClick]="rowData"
+          pReorderableRowHandle
+          (dblclick)="viewSelectedRowdbl(vendorCapesView,rowData)"
+        >
+          <td
+            *ngFor="let col of columns"
+            class="ui-resizable-column"
+            pReorderableRowHandle
+          >
+            {{
+              col.field == 'createdDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                : rowData[col.field] && col.field == 'updatedDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                : rowData[col.field]
+            }}
+          </td>
+
+          <td class="text-center" style="width: 200px;">
+            <div *ngIf="currentDeletedstatus == false">
+              <ng-container *ngIf="!isViewMode">
+                <p-inputSwitch
+                  *ngIf="!isViewMode"
+                  name="isActive{{ i }}"
+                  matTooltip="Active"
+                  [disabled]="rowData.isDefaultContact == true"
+                  matTooltipPosition="above"
+                  onLabel="on"
+                  offLabel="off"
+                  (onChange)="handleChange(rowData, $event)"
+                  [(ngModel)]="rowData['isActive']"
+                >
+                </p-inputSwitch>
+              </ng-container>
+
+              <span data-toggle="modal" data-target="#vendorCapesView"
+                ><a
+                  class="btn nobg"
+                  (click)="viewSelectedRow(vendorCapesView,rowData)"
+                  matTooltip="View"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-eye"></i
+                ></a>
+              </span>
+              <span *ngIf="!isViewMode"
+                ><a
+                  class="btn nobg"
+                  (click)="openEdits(rowData)"
+                  matTooltip="Edit"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-pencil"></i
+                ></a>
+              </span>
+              <span
+                ><a
+                  class="btn nobg"
+                  (click)="openHistory(contentAuditHist, rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i></a
+              ></span>
+              <span *ngIf="!isViewMode"
+                ><a
+                  class="btn nobg"
+                  (click)="openDelete(content, rowData)"
+                  matTooltip="Delete"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-trash"></i
+                ></a>
+              </span>
+              <span *ngIf="!isViewMode"
+                ><a
+                  class="btn nobg btn-pluspo-cstm"
+                  (click)="gotoCreatePO(rowData)"
+                  matTooltip="Create PO"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-plus"></i
+                ></a>
+              </span>
+              <span *ngIf="!isViewMode"
+                ><a
+                  class="btn nobg btn-plusro-cstm"
+                  (click)="gotoCreateRO(rowData)"
+                  matTooltip="Create RO"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-plus" style="color: #259e08;"></i
+                ></a>
+              </span>
+            </div>
+            <div *ngIf="currentDeletedstatus == true">
+              <p-inputSwitch
+                *ngIf="!isViewMode"
+                name="isActive{{ i }}"
+                matTooltip="Active"
+                matTooltipPosition="above"
+                onLabel="on"
+                [disabled]="true"
+                offLabel="off"
+                (onChange)="handleChanges(rowData, $event)"
+                [(ngModel)]="rowData['isActive']"
+              >
+              </p-inputSwitch>
+              <span data-toggle="modal" data-target="#vendorCapesView"
+                ><a
+                  class="btn nobg"
+                  (click)="viewSelectedRow(vendorCapesView,rowData)"
+                  matTooltip="View"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-eye"></i
+                ></a>
+              </span>
+              <span
+                ><a
+                  class="btn nobg"
+                  (click)="openHistory(contentAuditHist, rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i></a
+              ></span>
+              <span
+                ><a
+                  class="btn nobg"
+                  (click)="restore(restoreId, rowData)"
+                  matTooltip="Restore Record"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-undo" aria-hidden="true"></i
+                ></a>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="13" style="color: red; font-weight: bold; text-align: center">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
+      <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer">Total:</label>
+        <input
+          style="width: 5%;"
+          [(ngModel)]="totalRecords"
+          [disabled]="true"
+          pInputText
+          type="text"
+        />
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+
+        <input
+          style="width: 5%;"
+          [ngModel]="getPageCount(totalRecords, pageSize)"
+          [disabled]="true"
+          pInputText
+          type="text"
+        />
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span *ngIf="!selectedOnly">
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Restore ?</h4>
+
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;"
+            >Vendor Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+              {{ restorerecord.vendorName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;"
+            >Vendor Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+              {{ restorerecord.vendorCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <strong>
+      Vendor Capes:
+      <span class="new-label">{{ restorerecord.capabilityTypeName }}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="restoreRecord()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+<ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;"
+            >Vendor Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ sourceAction.vendorName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;"
+            >Vendor Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ sourceAction.vendorCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <strong
+      >Vendor Name:
+      <span class="new-label">{{ sourceAction.vendorName }}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="deleteItemAndCloseModel()"
+    >
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+
+<ng-template
+  #contentAuditHist
+  let-c="close"
+  let-d="dismiss"
+  style="width: auto;"
+  data-backdrop="static"
+>
+  <div class="modal-header" *ngIf="capabilityauditHisory.length > 0">
+    <h4 class="modal-title">
+      History of Vendor Capability
+    </h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;"
+            >Vendor Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+              {{ vendorNameInHistory }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;"
+            >Vendor Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+              {{ vendorCodeInHistory }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive rro-table-cstm">
+      <table style=" overflow: scroll;"
+        class="table table-bordered"
+        *ngIf="capabilityauditHisory.length > 0; else noDatavailable" >
+        <thead>
+          <tr>
+            <th>Vendor Code <span class="clr-red">*</span></th>
+            <th>Vendor Name <span class="clr-red">*</span></th>
+            <th>Vendor Capability Type <span class="clr-red">*</span></th>            
+            <th>Capability Type Description </th>
+            <th>Part Number <span class="clr-red">*</span></th>
+            <th>Part Description</th>           
+            <th>Vendor Ranking <span class="clr-red">*</span></th>
+            <th>Cost <span class="clr-red">*</span></th>
+            <th>TAT <span class="clr-red">*</span></th>
+            <th>Is Active</th>
+            <th>Created Date</th>
+            <th>Created By</th>
+            <th>Updated Date</th>
+            <th>Updated By</th>
+            <th>Is Deleted</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="capabilityauditHisory.length > 0">
+          <tr *ngFor="let audit of capabilityauditHisory; let i = index">
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'vendorCode', audit.vendorCode)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.vendorCode }}
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'vendorName', audit.vendorName)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.vendorName }}
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'capabilityType',
+                  audit.capabilityType
+                )
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.capabilityType }}
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'capabilityTypeDescription',
+                  audit.capabilityTypeDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }" [innerHTML]="audit.capabilityTypeDescription"
+            >
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'partNumber', audit.partNumber)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.partNumber }}
+            </td>
+            <td
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'partDescription',
+                  audit.partDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.partDescription }}
+            </td>
+            
+            <td style="text-align: right;"
+              [ngStyle]="{
+                color: getColorCodeForHistory(
+                  i,
+                  'vendorRanking',
+                  audit.vendorRanking
+                )
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.vendorRanking }}
+            </td>
+            <td style="text-align: right;"
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'cost', audit.cost)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.cost | twoDecimalGlobalNumberFormatPipe }}
+            </td>
+            <td style="text-align: right;"
+              [ngStyle]="{
+                color: getColorCodeForHistory(i, 'tat', audit.tat)
+                  ? 'black'
+                  : 'red'
+              }"
+            >
+              {{ audit.tat }}
+            </td>
+            <td style="text-align: center;">
+              <span class="value">
+                  <label class="wauto">
+                      <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
+                  </label>
+              </span>
+          </td>
+            <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.createdBy }}
+            </td>
+            <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)
+                    ? 'black'
+                    : 'red'
+                }">
+                {{ audit.updatedBy }}
+            </td>
+            <td style="background-color: #fff !important; text-align: center;">
+              <span class="value">
+                  <label class="wauto">
+                      <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled>
+                  </label>
+              </span>
+          </td>          
+          </tr>
+        </tbody>
+      </table>
+      <ng-template #noDatavailable>
+        <div class="text-center">
+          <img
+            src="../../../../assets/images/binoculars.png"
+            style="height: 100px; width: 100px;"
+          />
+          <h4 style="color: #ff5663;">No History Found</h4>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      Close
+    </button>
+  </div>
+</ng-template>
+    <ng-template #vendorCapesView class="modal fade " id="vendorCapesView" role="dialog" style="max-width: 60%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">
+                        Capability Details of Vendor
+                    </h4>
+                    <div class="col-md-12 shadow-box-cstm">
+                        <div class="col-md-6">
+                            <p class="fs12">
+                                <label
+                                       class="control-label labels-font-header"
+                                       style="width: auto;"
+                                       >Vendor Name:
+                                </label>
+                                <span class="span-header-red" style="text-transform: capitalize;">
+                                    {{ vendorCapesGeneralInfo.vendorName }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="fs12">
+                                <label
+                                       class="control-label labels-font-header"
+                                       style="width: auto;"
+                                       >Vendor Code:
+                                </label>
+                                <span class="span-header-red" style="text-transform: capitalize;">
+                                    {{ vendorCapesGeneralInfo.vendorCode }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body" *ngIf="vendorCapesGeneralInfo" >
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="po-head">General Information:</h4>
+                                <div
+                                    class="table-responsive default-bg clear vendorCapes-generalInfo"
+                                     >
+                                    <div class="col-sm-12">
+                                        <p>
+                                            <span class="label"
+                                                  ><b>Part Number:<span class="clr-red">*</span> </b></span
+                                                  ><span class="value">{{ vendorCapesGeneralInfo.partNumber ? vendorCapesGeneralInfo.partNumber : '-'  }}</span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>PN Description: </b></span
+                                            ><span class="value">{{ vendorCapesGeneralInfo.partDescription ? vendorCapesGeneralInfo.partDescription : '-' }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Part Manufacturer: </b></span
+                                          ><span class="value">{{ vendorCapesGeneralInfo.manufacturerName ? vendorCapesGeneralInfo.manufacturerName : '-' }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Vendor Capability Type:<span class="clr-red">*</span>
+                                              </b></span
+                                              ><span class="value">{{ vendorCapesGeneralInfo.capabilityType ? vendorCapesGeneralInfo.capabilityType : '-' }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Capability Type Description: </b></span
+                                              ><span class="value">{{ vendorCapesGeneralInfo.capabilityTypeDescription ? vendorCapesGeneralInfo.capabilityTypeDescription : '-' }}</span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Vendor Ranking: <span class="clr-red">*</span></b></span ><span class="value">{{ vendorCapesGeneralInfo.vendorRanking ? vendorCapesGeneralInfo.vendorRanking : '-' }}</span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Cost: <span class="clr-red">*</span></b></span ><span class="value">{{ vendorCapesGeneralInfo.cost | twoDecimalGlobalNumberFormatPipe }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>TAT (Days): <span class="clr-red">*</span></b></span><span class="value">{{ vendorCapesGeneralInfo.tat ? vendorCapesGeneralInfo.tat : '-' }}</span>
+                                        </p>
+                                        <p>
+                                          <span class="label"><b>Is PMA: </b></span><span class="value">
+                                            <div>
+                                                <input style="margin-top: 3px;" type="checkbox" [(ngModel)]="vendorCapesGeneralInfo.isPMA" name="isPMA" disabled/>
+                                            </div>
+                                          </span>
+                                      </p>
+                                      <p>
+                                          <span class="label"><b>Is DER: </b></span ><span class="value">
+                                            <div>
+                                              <input type="checkbox" [(ngModel)]="vendorCapesGeneralInfo.isDER" name="isDER" disabled/>
+                                          </div>
+                                          </span>
+                                      </p>
+                                      <p>
+                                          <span class="label"><b>Is Active: </b></span ><span class="value">
+                                              <div>
+                                                  <input type="checkbox" [(ngModel)]="vendorCapesGeneralInfo.isActive" name="isActive" disabled/>
+                                              </div>
+                                          </span>
+                                      </p>                                        
+                                      <p>
+                                        <span class="label"><b>Memo: </b></span><span class="value" style="vertical-align: middle;" 
+                                        [innerHTML]="vendorCapesGeneralInfo.memo ? vendorCapesGeneralInfo.memo  : '-'">
+                                    </span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>Created Date: </b></span ><span class="value">{{ vendorCapesGeneralInfo.createdDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+                                    </p>
+                                    <p>
+                                      <span class="label"><b>Created By: </b></span><span class="value">{{ vendorCapesGeneralInfo.createdBy }}</span>
+                                    </p>
+                                    <p>
+                                      <span class="label"><b>Updated Date: </b></span ><span class="value">{{ vendorCapesGeneralInfo.updatedDate | date: 'MM/dd/yyyy h:mm:ss a' }}</span>
+                                  </p>
+                                  <p>
+                                    <span class="label"><b>Updated By: </b></span><span class="value">{{ vendorCapesGeneralInfo.updatedBy }}</span>
+                                  </p>
+                                    </div>
+                                    <!-- <div class="col-sm-6">
+                                        <p>
+                                            <span class="label"><b>IsPMA: </b></span><span class="value">
+                                              <div>
+                                                  <input style="margin-top: 3px;" type="checkbox" [(ngModel)]="vendorCapesGeneralInfo.isPMA" name="isPMA" disabled/>
+                                              </div>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>IsDER: </b></span ><span class="value">
+                                              <div>
+                                                <input type="checkbox" [(ngModel)]="vendorCapesGeneralInfo.isDER" name="isDER" disabled/>
+                                            </div>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Is Active: </b></span ><span class="value">
+                                                <div>
+                                                    <input type="checkbox" [(ngModel)]="vendorCapesGeneralInfo.isActive" name="isActive" disabled/>
+                                                </div>
+                                            </span>
+                                        </p>                                        
+                                        <p>
+                                          <span class="label"><b>Memo: </b></span><span class="value" style="vertical-align: middle;" 
+                                          [innerHTML]="vendorCapesGeneralInfo.memo ? vendorCapesGeneralInfo.memo  : '-'">
+                                      </span>
+                                      </p>
+                                      <p>
+                                          <span class="label"><b>Created Date: </b></span ><span class="value">{{ vendorCapesGeneralInfo.createdDate }}</span>
+                                      </p>
+                                      <p>
+                                        <span class="label"><b>Created By: </b></span><span class="value">{{ vendorCapesGeneralInfo.createdBy }}</span>
+                                      </p>
+                                      <p>
+                                        <span class="label"><b>Updated Date: </b></span ><span class="value">{{ vendorCapesGeneralInfo.updatedDate }}</span>
+                                    </p>
+                                    <p>
+                                      <span class="label"><b>Updated By: </b></span><span class="value">{{ vendorCapesGeneralInfo.updatedBy }}</span>
+                                    </p>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+      <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+  </div>
+</div>

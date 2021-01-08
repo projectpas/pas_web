@@ -1,0 +1,120 @@
+﻿﻿
+        <table class="table table-bordered warnings-table-for-view" *ngIf="isViewMode == true">
+            <thead>
+                <tr align="center">
+                    <th>Warning Name</th>
+                    <th>Allow </th>
+                    <th>Warning</th>
+                    <th>Restrict</th>
+                    <th>Warning Msg</th>
+                    <th>Restrict Msg</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr align="center" *ngFor="let w of warningMessages; let i=index">
+                    <td >{{w.sourceModule}}</td>
+                    <td><input type="checkbox" name="allow{{i}}"  [(ngModel)]="w.allow" [disabled]="true" class="form-control" /></td>
+                    <td><input type="checkbox" name="warning{{i}}"  [(ngModel)]="w.warning" [disabled]="true" class="form-control" /></td>
+                    <td><input type="checkbox" name="restrict{{i}}" [(ngModel)]="w.restrict" [disabled]="true"  class="form-control" /></td>
+                    <td>{{w.warningMessage}}</td>
+                    <td>{{w.restrictMessage}}</td>
+                </tr>                                                                                             
+            </tbody>
+        </table>
+        <div class="card"  *ngIf="isViewMode == false">
+            <div class="card-body" style="padding: 1px 5px;">
+                <div class="x_panel">
+                    <div class="x_content">    
+                        <div class="col-md-12 shadow-box-cstm" >        
+                            <div class="col-md-4">
+                                <p class="fs12">
+                                <label class="control-label labels-font-header" style="width: auto;">Vendor Name: </label>
+                            <span class="span-header-red" style="text-transform: capitalize"> {{getVendorName()}} </span> </p>
+                            </div>
+                            <div class="col-md-4">
+                                <p class="fs12">
+                                <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
+                                <span class="span-header-red" style="text-transform: capitalize"> {{local?.vendorCode }} </span> </p>
+                            </div>                            
+                        </div>
+
+                        <div class="card" style="padding: 10px;">
+                            <div class="card-header bg-primary new-card-header" >
+                                <div class="row">
+                                  <div class="col">
+                                    <h4 class="new-card-heading"> Warnings </h4>
+                                  </div>
+                                </div>
+                              </div>
+                            <div class="clear"></div>
+                            <hr />
+                        <form action="#" method="post" #WarningsForm="ngForm" id="" name="" class="form-horizontal add-custustomer">
+                            <div class="tab-content">
+                                <div class="" id="menu5">
+                                    <div class="col-sm-8">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered warnings-table">
+                                                <thead>
+                                                    <tr align="center">
+                                                        <th>Warning Name</th>
+                                                        <th>Allow <input type="checkbox" name="allowAll"
+                                                             [ngModel]="isAllow"  [disabled]="isRestrict"
+                                                              (change)="allowAll($event.target.checked)" 
+                                                              (ngModelChange)="enableUpdateButton()"  class="form-control" /></th>
+                                                        <th>Warning <input type="checkbox" name="warningAll"
+                                                            (ngModelChange)="enableUpdateButton()" [ngModel]="isWarning" [disabled]="isRestrict"  (change)="warningAll($event.target.checked)"  class="form-control" /></th>
+                                                        <th>Restrict <input type="checkbox" name="RestrictAll"
+                                                            (ngModelChange)="enableUpdateButton()" [ngModel]="isRestrict" (change)="restrictAll($event.target.checked)" class="form-control"  /> </th>
+                                                        <th>Warning Msg</th>
+                                                        <th>Restrict Msg</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr align="center" *ngFor="let w of warningMessages; let i=index">
+                                                        <td>{{w.sourceModule}}</td>
+                                                        <td><input type="checkbox" name="allow{{i}}"  [(ngModel)]="w.allow" (change)="onAllowClick($event)" (ngModelChange)="enableUpdateButton()"  [disabled]="w.restrict" class="form-control" /></td>
+                                                        <td><input type="checkbox" name="warning{{i}}"  [(ngModel)]="w.warning" (change)="onWarningClick($event, i)" (ngModelChange)="enableUpdateButton()" [disabled]="w.restrict" class="form-control" /></td>
+                                                        <td><input type="checkbox" name="restrict{{i}}" [(ngModel)]="w.restrict" 
+                                                            (change)="onRestrictClick($event, i)"  (ngModelChange)="enableUpdateButton()" class="form-control" /></td>
+                                                        <td><textarea class="form-control" name="warningMessage{{i}}"  (ngModelChange)="enableUpdateButton()" [(ngModel)]="w.warningMessage" [disabled]="!w.warning"  [required]="w.warning == true" ></textarea></td>
+                                                        <td><textarea class="form-control" name="restrictMessage{{i}}"  (ngModelChange)="enableUpdateButton()" [(ngModel)]="w.restrictMessage"  [required]="w.restrict == true" [disabled]="!w.restrict"  ></textarea></td>
+                                                    </tr>                                                                                             
+                                                </tbody>
+                                            </table>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+                            <div >
+                                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')">Next</button>
+                                <button *ngIf ="!enableUpdate" type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableSave" (click)="saveDetails()">Save</button>
+                                <button *ngIf ="enableUpdate" type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="!WarningsForm.valid || disableUpdate" (click)="saveDetails()">Update</button>
+                                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Previous')">Previous</button>
+                            </div>
+                            <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+                                  <h4 class="modal-title">Confirmation</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <h6 style="padding-left: 2%;">
+                                    Do you want to Save changes and Continue ?
+                                  </h6>
+                                </div>
+                                <div class="modal-footer">                              
+                                  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+                                  <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!WarningsForm.valid" (click)="redirectToTab()">Yes</button>
+                                </div>
+                            </ng-template>
+                        </form>                        
+                      </div>                    
+                    </div>
+                </div>
+            </div>           
+        </div>
+          <div class="preloader" *ngIf="isSpinnerVisible">
+            <div class="loading">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>

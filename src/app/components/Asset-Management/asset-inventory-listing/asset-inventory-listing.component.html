@@ -1,0 +1,1894 @@
+﻿<div class="x_content">
+               
+    <!-- <nav aria-label="breadcrumb">
+        <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
+            <li class="breadcrumb-item active" aria-current="page">Asset Inventory</li>
+            <li class="breadcrumb-item" aria-current="page">Asset Inventory List</li>
+        </ol>
+    </nav> -->
+    <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+              <div class="card new-card">
+                            <div class="card-header bg-primary new-card-header">
+                              <div class="row">
+                                <div class="col">
+                                  <h4 class="new-card-heading">Asset Inventory List</h4>
+                                </div>
+                                <div>
+                                  <button
+                                    type="button"
+                                    class="btn-sm new-btn-primary"
+                                    (click)="navigateTogeneralInfo()"                                
+                                  >
+                                  Add Asset Inventory 
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-body new-card-body">
+                       
+                        <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="allAssetInfo"
+                                 [metaKeySelection]="true"
+                                 [(first)]="pageNumber"
+                                 [rows]="pageSize"
+                                 [paginator]="true"
+                                 [pageLinks]="3"
+                                 [rowsPerPageOptions]="[10,20,50,100]"
+                                 [columns]="selectedColumns"
+                                 selectionMode="multiple"
+                                 [(selection)]="selectedRows"
+                                 [metaKeySelection]="true"
+                                 [resizableColumns]="true"
+                                 [reorderableColumns]="true"
+                                 [scrollable]="true"
+                                 [totalRecords]="totalRecords"
+                                 scrollHeight="450px"
+                                 (onLazyLoad)="onDataLoad($event)" [lazy]="true">
+                            <ng-template pTemplate="caption">
+                         
+                                <div class="row">
+                                    <div class="col">
+                                        <p-multiSelect [maxSelectedLabels]="2"
+                                                   [options]="cols"
+                                                   optionLabel="header"
+                                                   [(ngModel)]="selectedColumns"
+                                                   [style]="{minWidth: '200px'}" style="float:left"
+                                                   selectedItemsLabel="{0} columns selected"
+                                                   defaultLabel="Choose Columns">
+                                    </p-multiSelect>
+                                </div>
+                                <div class="col">
+                                  <div
+                                    style="width: auto !important; float: right;"
+                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                                  >
+                                    <i class="fa fa-search"></i>
+                                    <input type="text" pInputText size="50"
+                                     class="form-control"
+                                    (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                    placeholder="Filter" style="min-height: 28px;" />
+                                 </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
+                                pButton icon="fa-download" iconPos="left" label="Export All Data" style="padding: 5px 12px !important;"  data-toggle="modal"
+                                (click)="selectedOnly = false; targetData = dt;" 
+                                data-target="#downloadConfirmation"></button>
+                                 <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
+                                pButton icon="fa-download" iconPos="left" style="padding: 5px 12px !important;" label="Export Selected Data"  data-toggle="modal"
+                                data-target="#downloadConfirmation"
+                                (click)="selectedOnly = true; targetData = dt;"></button>
+                               
+                               </div>
+                                <div class="col">
+                                    <div class="">
+                                      <div
+                                        class="col"
+                                        style="width: 370px; float: right; padding-top: 3px;"
+                                      >
+                                        <div class="form-group">
+                                          <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
+                                        <div
+                                            class="pull-left"
+                                            style="margin-top: 4px; margin-right: 15px;"
+                                          >
+                                              <label class="radio-cstm wauto">
+                                              <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="geListByStatus('Active')" [(ngModel)]="currentstatus">
+                                              <span class="checkmark"></span>Active
+                                              </label>
+                                        </div>
+                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="geListByStatus('InActive')" [(ngModel)]="currentstatus">
+                                            <span class="checkmark"></span>In-active
+                                        </label>
+                                    </div>
+                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)="geListByStatus('ALL')" [(ngModel)]="currentstatus">
+                                            <span class="checkmark"></span>All
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label style="width: auto !important;margin-top: 3px;">
+                                         
+                                          <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
+                                            />
+                                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Show  Deleted List 
+                                        </label>
+                                    </div> 
+                                </div> 
+                            </div>
+                        </div>
+                      </div>
+                      </div>
+                            </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" style="width:140px">
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns style="padding-top: 1% !important">
+                                <tr>
+                                    <ng-container *ngFor="let col of columns">
+                                        <th class="text-center" *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='deptName' && col.field!='divName'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                            {{col.header}}
+                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                        <th class="text-center" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                            Management Structure
+                                        </th>
+                                    </ng-container>
+                                    <th style="width:150px;position: sticky;" *ngIf="selectedColumns.length> 0">Actions</th>
+                                </tr>
+                                <tr>
+                                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <!--  -->
+                                        <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                        name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+                     (change)="dateFilterForTable($event.target.value,col.field)" />
+                                    </th>
+                                    <th style="width:150px;position: sticky"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset>
+                                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(invView,rowData)" >
+
+                                    <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+                                        pReorderableRowHandle>
+
+                                          <ng-container *ngIf="col.field !='calibrationRequiredNew'">
+                                            {{
+                                                col.field == 'createdDate'
+                                                  ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                                  : rowData[col.field] && col.field == 'updatedDate'
+                                                  ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                                  : rowData[col.field] 
+                                              }}
+                                        </ng-container> 
+                                        <ng-container *ngIf="col.field =='calibrationRequiredNew'">
+                                            <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                                                   style="margin: 0px auto; display: block;" />
+                                        </ng-container>
+                                    </td>
+                                    <td class="action-icons-cstm" style="width:150px" *ngIf="selectedColumns.length> 0">
+                                        <div *ngIf="currentDeletedstatus==false">
+                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                                           matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
+                                                           <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                            <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                            <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
+                                            <span><a class="btn nobg btn-adjhist-cstm" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                            <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
+                                            <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+
+                                        </div>
+                                        <div *ngIf="currentDeletedstatus==true">
+                                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
+                                            <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                            <span ><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                            <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
+                                        </div>
+                                 </td> 
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td colspan="21" style="color: red; font-weight: bold; text-align: start;padding-left: 21% !important;">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <div style="text-align: right;">
+                                    <label id="footer" class="footer">Total:</label>
+                                    <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                                    <label id="footer" class="footer1">Pages Count:</label>
+                                    <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
+                                </div>
+                            </ng-template>
+                        </p-table>
+        </div>
+    </div>
+    </div>
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+<p>Asset Name : <span class="new-label">{{this.assetService.listCollection.name}} </span></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="removeAsset()">Yes</button>
+            <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+        </div>
+    </ng-template>
+<div class="modal fade" id="invView" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="onCloseView()">&times;</button>
+            <div class="col-md-10" >
+
+                <h4 class="modal-title">Details of Asset Inventory  <span *ngIf="currentAsset">"{{currentAsset.assetId}}" </span></h4> <!--: <span *ngIf="currentAsset">"{{currentAsset.assetId}}"</span>-->
+            </div>
+            <div class="form-row" style="width: 100%;">
+                <div class="col-md-12 shadow-box-cstm">
+                    <div class="col-md-2">
+                        <p class="fs12">
+                            <span class="control-label labels-font-header">Asset ID : </span>
+                            <span class="span-header-red pl-1" style="text-transform: capitalize;">{{ currentAsset.assetId }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="fs12">
+                            <span class="control-label labels-font-header">Asset Name : </span>
+                            <span class="span-header-red pl-1" style="text-transform: capitalize; ">{{ currentAsset.name }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="fs12">
+                            <span class="control-label labels-font-header">Alt Asset ID : </span>
+                            <span class="span-header-red pl-1" style="text-transform: capitalize">{{ currentAsset.alternateAssetRecord }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="fs12">
+                            <span class="control-label labels-font-header">Asset Class : </span>
+                            <span class="span-header-red pl-1" style="text-transform: capitalize" *ngIf="currentAsset.isTangible">{{ currentAsset.assetType }}</span>
+                            <span class="span-header-red pl-1" style="text-transform: capitalize" *ngIf="!currentAsset.isTangible">{{ currentAsset.assetIntangibleTypeName }}</span>
+                            
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12" style="text-align-last: end; padding-right: 2%;">
+                <button type="button" name="isActive" [ngClass]="currentAsset.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                    <span class="value">{{currentAsset.isActive ? 'Active' : 'In-Active'}}</span>
+                 </button> 
+            </div>
+        </div>
+        <div class="modal-body"> 
+            <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+                <div class="loading">
+                    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
+            <form #generalForm="ngForm" >
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-cstm  wauto">
+                                    <input type="radio" name="assetRadio" class="form-control" value="1" disabled [checked]="currentAsset.isTangible">
+                                    <span class="checkmark"></span> Tangible
+                                </label>
+                            </div>
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-cstm  wauto">
+                                    <input type="radio" name="assetRadio" class="form-control" value="2" disabled [checked]="currentAsset.isIntangible">
+                                    <span class="checkmark"></span> Intangible
+                                </label>
+                            </div>
+                        </div> 
+
+
+                    </div>
+            
+                    <div class="col-md-3" *ngIf="currentAsset.isTangible">
+                        <div class="form-group">
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-cstm  wauto">
+                                    <input type="radio" name="assetisDepreciable" class="form-control" value="1" disabled [checked]="currentAsset.isDepreciable">
+                                    <span class="checkmark"></span> Depreciable
+                                </label>
+                            </div>
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-cstm  wauto">
+                                    <input type="radio" name="assetisDepreciable" class="form-control" value="2" disabled [checked]="currentAsset.isNonDepreciable">
+                                    <span class="checkmark"></span> Non-Depreciable
+                                </label>
+                            </div>
+                        </div> 
+                    </div>
+            
+                    <div class="col-md-3" *ngIf="currentAsset.isIntangible">
+                        <div class="form-group">
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-cstm  wautomodal-dialog modal-xlg">
+                                    <input type="radio" name="assetisAmortizable" class="form-control" value="1" disabled [checked]="currentAsset.isAmortizable">
+                                    <span class="checkmark"></span> Amortizable
+                                </label>
+                            </div>
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-cstm  wautomodal-dialog modal-xlg">
+                                    <input type="radio" name="assetisAmortizable" class="form-control" value="2" disabled [checked]="currentAsset.isNonAmortizable">
+                                    <span class="checkmark"></span> Non-Amortizable
+                                </label>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            
+                <div class="form-row m-t-10">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Inventory Num</label>
+                            <input type="text" class="form-control" name="inventoryNumber" [(ngModel)]="currentAsset.inventoryNumber" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Entry Date <span class="clr-red">*</span></label>
+                            <p-calendar [showIcon]="true" name="entryDate" [(ngModel)]="currentAsset.entryDate" [disabled]="true"></p-calendar>
+                        </div>
+                       
+                        <div class="form-group">
+                            <label>Asset ID <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control" name="assetId" [(ngModel)]="currentAsset.assetId" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Alt Asset ID</label>
+                            <input type="text" class="form-control" name="alternateAssetId" [(ngModel)]="currentAsset.alternateAssetRecord" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Asset Name <span class="clr-red">*</span></label>
+                            <input type="text" class="form-control" name="name" [(ngModel)]="currentAsset.name" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label>Asset Description</label>
+                            <input type="text" class="form-control" name="description" [(ngModel)]="currentAsset.description" disabled>
+                        </div>
+                       
+                        <ng-container *ngIf="currentAsset.isTangible">
+                            <div class="form-group">
+                                <label>Acquisition Type <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="acquisitionType" [(ngModel)]="currentAsset.acquisitionType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Model Number</label>
+                                <input type="text" class="form-control" name="model" [(ngModel)]="currentAsset.model" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Asset Parent</label>
+                                <input type="text" class="form-control" name="assetParentId" [(ngModel)]="currentAsset.assetParenRecord" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Manufacturer</label>
+                                <input type="text" class="form-control" name="manufacturerName" [(ngModel)]="currentAsset.manufacturerName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Manufactured Date</label>
+                                <p-calendar [showIcon]="true" name="manufacturedDate" [(ngModel)]="currentAsset.manufacturedDate" [disabled]="true"></p-calendar>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                    <label>
+                                        <input type="checkbox" name="isSerialized" [(ngModel)]="currentAsset.isSerialized" disabled>
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Is Serialized
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group" *ngIf="currentAsset.isSerialized">
+                                <label>Serial No <span class="clr-red">*</span></label>
+                                <input class="form-control" type="text" name="serialNumber" [(ngModel)]="currentAsset.serialNo" disabled> 
+                            </div>
+                        </ng-container>
+                        </div>
+                            <div class="col-md-3" *ngIf="currentAsset.isTangible">
+                                <ng-container *ngIf="currentAsset.isTangible">
+                            <div class="form-group">
+                                <label>Asset Status</label>
+                                <input type="text" class="form-control" name="assetStatus" [(ngModel)]="currentAsset.assetStatus" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Asset Inventory Status</label>
+                                <input type="text" class="form-control" name="inventoryStaus" [(ngModel)]="currentAsset.inventoryStaus" disabled>
+                            </div>
+                           
+                            
+                            <div class="form-group">
+                                <label>UOM <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="unitOfMeasureName" [(ngModel)]="currentAsset.unitOfMeasureName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Expiration Date</label>
+                                <p-calendar [showIcon]="true"  name="expirationDate" [(ngModel)]="currentAsset.expirationDate" [disabled]="true"></p-calendar>
+                            </div>
+                            <div class="form-group">
+                                <label>Asset Location</label>
+                                <input type="text" class="form-control" name="asset_LocationName" [(ngModel)]="currentAsset.asset_LocationName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Currency <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="currencyName" [(ngModel)]="currentAsset.currencyName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Unit Cost <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control text-right" name="unitCost" [(ngModel)]="currentAsset.unitCost" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Installation Cost</label>
+                                <input type="text" class="form-control text-right" name="installationCost" [(ngModel)]="currentAsset.installationCost" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Freight</label>
+                                <input type="text" class="form-control text-right" name="freight" [(ngModel)]="currentAsset.freight" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Insurance</label>
+                                <input type="text" class="form-control text-right" name="insurance" [(ngModel)]="currentAsset.insurance" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Taxes</label>
+                                <input type="text" class="form-control text-right" name="taxes" [(ngModel)]="currentAsset.taxes" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Total Cost</label>
+                                <input type="text" class="form-control text-right" name="totalCost" [(ngModel)]="currentAsset.totalCost" disabled>
+                            </div>
+                            <div class="form-group">
+                                <a style="color:#3498db" (click)="openCapes()" data-toggle="modal" data-target="#capesData">
+                                    <u>Link to Capes</u>
+                                </a>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="col-md-3">
+                        <ng-container *ngIf="currentAsset.isTangible">
+                          
+                            <div class="form-group">
+                                <label>Asset Class/Attribute <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="assetTypeName" [(ngModel)]="currentAsset.assetType" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Depreciation Method</label>
+                                <input type="text" class="form-control" name="depreciationMethod" [(ngModel)]="currentAsset.depreciationMethod" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Residual %</label>
+                                <input type="text" class="form-control" name="residualPercentage" [(ngModel)]="currentAsset.residualPercentage" disabled>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label>Residual Value</label>
+                                <input type="text" class="form-control" name="residualValue" [(ngModel)]="currentAsset.residualValue" disabled>
+                            </div> -->
+                            <div class="form-group">
+                                <label>Asset Life</label>
+                                <input type="number" class="form-control" name="assetLife" [(ngModel)]="currentAsset.assetLife" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Depr Frequency</label>
+                                <input type="text" class="form-control" name="depreciationFrequency" [(ngModel)]="currentAsset.depreciationFrequency" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Acquired GL Account</label>
+                                <input type="text" class="form-control" name="acquiredGLAccount" [(ngModel)]="currentAsset.acquiredGLAccount" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Depr Expense GL Account</label>
+                                <input type="text" class="form-control" name="deprExpenseGLAccount" [(ngModel)]="currentAsset.deprExpenseGLAccount" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Accum Depr GL Account</label>
+                                <input type="text" class="form-control" name="adDepsGLAccount" [(ngModel)]="currentAsset.adDepsGLAccount" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Sale GL Account</label>
+                                <input type="text" class="form-control" name="assetSale" [(ngModel)]="currentAsset.assetSale" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Write Off GL Account</label>
+                                <input type="text" class="form-control" name="assetWriteOff" [(ngModel)]="currentAsset.assetWriteOff" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Write Down GL Account</label>
+                                <input type="text" class="form-control" name="assetWriteDown" [(ngModel)]="currentAsset.assetWriteDown" disabled>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="currentAsset.isIntangible">
+                            <div class="form-group">
+                                <label>Intangible Class <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="assetIntangibleTypeName" [(ngModel)]="currentAsset.assetIntangibleTypeName" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Amortization Method</label>
+                                <input type="text" class="form-control" name="amortizationMethod" [(ngModel)]="currentAsset.amortizationMethod" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Intangible Life</label>
+                                <input type="text" class="form-control" name="intangibleLife" [(ngModel)]="currentAsset.intangibleLife" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Amortization Frequency</label>
+                                <input type="text" class="form-control" name="amortizationFrequency" [(ngModel)]="currentAsset.amortizationFrequency" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Intangible GL Account</label>
+                                <input type="text" class="form-control" name="intangibleGLAccount" [(ngModel)]="currentAsset.intangibleGLAccount" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Amort Expense GL Account</label>
+                                <input type="text" class="form-control" name="amortExpenseGLAccount" [(ngModel)]="currentAsset.amortExpenseGLAccount" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Acc Amort Depr GL Account</label>
+                                <input type="text" class="form-control" name="accAmortDeprGLAccount" [(ngModel)]="currentAsset.accAmortDeprGLAccount" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Intangible Write Down GL Account</label>
+                                <input type="text" class="form-control" name="intangibleWriteDownGLAccount" [(ngModel)]="currentAsset.intangibleWriteDownGLAccount" disabled>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card card-stock">
+                            <div class="card-header">
+                                <h5 class="header-h5">Management Structure <span class="text-danger">*</span></h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group" style="margin-bottom: 4px;">
+                                    <input class="form-control" type="text" name="companyName"
+                                        [(ngModel)]="currentAsset.companyName" disabled>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 4px;">
+                                    <input class="form-control" type="text" name="BUName"
+                                        [(ngModel)]="currentAsset.buName" disabled>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 4px;">
+                                    <input class="form-control" type="text" name="divisionName"
+                                        [(ngModel)]="currentAsset.divName" disabled>
+                                </div>
+                                <div class="form-group" style="margin-bottom: 4px;">
+                                    <input class="form-control" type="text" name="deptName"
+                                        [(ngModel)]="currentAsset.deptName" disabled>
+                                </div>                    
+                            </div>
+                        </div>
+                        <div class="form-group memo-popup-cstm">
+                            <label style="float: inherit;">Memo</label>
+                            <span matTooltipPosition="above"   [matTooltip]="parsedText(currentAsset.memo)">
+                                <div [innerHTML]="currentAsset.memo" class="form-control" class="p_editor_box"></div></span>
+                        </div>
+                      
+                    </div>
+                </div>
+<div class="form-row" *ngIf="currentAsset.isTangible">
+    <div class="col-md-3-custm1"  >
+        <div [ngClass]="(currentAsset.calibrationRequired) ? 'border-box-cstm' : ''">
+            <div class="form-group">
+                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                    <label>
+                        <input type="checkbox" name="calibrationRequired" [(ngModel)]="currentAsset.calibrationRequired" disabled>
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Calibration Required
+                    </label>
+                </div>
+            </div>
+            <ng-container *ngIf="currentAsset.calibrationRequired">
+                <div class="form-group">
+                    <label>Calibration Frequency <span class="clr-red">*</span></label>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Months</label>
+                                <input type="number" class="form-control" name="calibrationFrequencyMonths" [(ngModel)]="currentAsset.calibrationFrequencyMonths" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Days</label>
+                                <input type="number" class="form-control" name="calibrationFrequencyDays" [(ngModel)]="currentAsset.calibrationFrequencyDays" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Default Vendor</label>
+                    <input type="text" class="form-control" name="calibrationDefaultVendorName" [(ngModel)]="currentAsset.calibrationDefaultVendorName" disabled>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Default Cost</label>
+                                <input type="text" class="form-control text-right" name="calibrationDefaultCost" [(ngModel)]="currentAsset.calibrationDefaultCost" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <input type="text" class="form-control" name="calibrationCurrencyName" [(ngModel)]="currentAsset.calibrationCurrencyName" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>GL Account</label>
+                    <input type="text" class="form-control" name="calibrationGlAccountName" [(ngModel)]="currentAsset.calibrationGlAccountName" disabled>
+                </div>
+                <div class="form-group memo-popup-cstm">
+                    <label style="float: inherit;">Calibration Memo</label>
+                    <span matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.calibrationMemo)"  >
+                        <div [innerHTML]="currentAsset.calibrationMemo" class="form-control" class="p_editor_box"></div>
+                    </span>
+                </div>
+                <div class="card card-stock card-tolerance">
+                    <div class="card-header">
+                        <h5 class="header-h5">Tolerance</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <label style="width: 100%; margin-left: 6px;">Min</label>
+                            <div class="col-md-6">
+                                <div class="form-group">                                                
+                                    <input type="number" class="form-control" name="assetCalibrationMin" [(ngModel)]="currentAsset.assetCalibrationMin" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="assetCalibrationMinTolerance" [(ngModel)]="currentAsset.assetCalibrationMinTolerance" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label style="width: 100%; margin-left: 6px;">Max</label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="assetCalibratonMax" [(ngModel)]="currentAsset.assetCalibratonMax" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="assetCalibrationMaxTolerance" [(ngModel)]="currentAsset.assetCalibrationMaxTolerance" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <label style="width: 100%; margin-left: 6px;">Expected</label>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="assetCalibrationExpected" [(ngModel)]="currentAsset.assetCalibrationExpected" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="number" class="form-control" name="assetCalibrationExpectedTolerance" [(ngModel)]="currentAsset.assetCalibrationExpectedTolerance" disabled>
+                                </div>
+                            </div>
+                        </div>                                    
+                    </div>
+                </div>
+                <div class="form-group memo-popup-cstm">
+                    <label style="float: inherit;">Memo</label>
+                    <span matTooltipPosition="above"   [matTooltip]="parsedText(currentAsset.assetCalibrationMemo)"  >
+                        <div [innerHTML]="currentAsset.assetCalibrationMemo" class="form-control" class="p_editor_box"></div>
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+        <div class="col-md-3-custm1" >
+        <div [ngClass]="(currentAsset.certificationRequired) ? 'border-box-cstm m-t-5' : ''">
+            <div class="form-group">
+                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                    <label>
+                        <input type="checkbox" name="certificationRequired" [(ngModel)]="currentAsset.certificationRequired" disabled>
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Certification Required
+                    </label>
+                </div>
+            </div>
+            <ng-container *ngIf="currentAsset.certificationRequired">
+                <div class="form-group">
+                    <label>Certification Frequency <span class="clr-red">*</span></label>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Months</label>
+                                <input type="number" class="form-control" name="certificationFrequencyMonths" [(ngModel)]="currentAsset.certificationFrequencyMonths" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Days</label>
+                                <input type="number" class="form-control" name="certificationFrequencyDays" [(ngModel)]="currentAsset.certificationFrequencyDays" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Default Vendor</label>
+                    <input type="text" class="form-control" name="certificationDefaultVendorName" [(ngModel)]="currentAsset.certificationDefaultVendorName" disabled>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Default Cost</label>
+                                <input type="text" class="form-control text-right" name="certificationDefaultCost" [(ngModel)]="currentAsset.certificationDefaultCost" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <input type="text" class="form-control" name="certificationCurrencyName" [(ngModel)]="currentAsset.certificationCurrencyName" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>GL Account</label>
+                    <input type="text" class="form-control" name="certificationGlAccountName" [(ngModel)]="currentAsset.certificationGlAccountName" disabled>
+                </div>
+                <div class="form-group memo-popup-cstm">
+                    <label style="float: inherit;">Certification Memo</label>
+                    <span matTooltipPosition="above"   [matTooltip]="parsedText(currentAsset.certificationMemo)" >
+                        <div [innerHTML]="currentAsset.certificationMemo" class="form-control" class="p_editor_box"></div>
+                    </span>
+                </div>
+            </ng-container>
+        </div>                        
+    </div>
+    <div class="col-md-3-custm1" >
+        <div [ngClass]="(currentAsset.inspectionRequired) ? 'border-box-cstm m-t-5' : ''">
+            <div class="form-group">
+                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                    <label>
+                        <input type="checkbox" name="inspectionRequired" [(ngModel)]="currentAsset.inspectionRequired" disabled>
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Inspection Required
+                    </label>
+                </div>
+            </div>
+            <ng-container *ngIf="currentAsset.inspectionRequired">
+                <div class="form-group">
+                    <label>Inspection Frequency <span class="clr-red">*</span></label>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Months</label>
+                                <input type="number" class="form-control" name="inspectionFrequencyMonths" [(ngModel)]="currentAsset.inspectionFrequencyMonths" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Days</label>
+                                <input type="number" class="form-control" name="inspectionFrequencyDays" [(ngModel)]="currentAsset.inspectionFrequencyDays" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Default Vendor</label>
+                    <input type="text" class="form-control" name="inspectionDefaultVendorName" [(ngModel)]="currentAsset.inspectionDefaultVendorName" disabled>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Default Cost</label>
+                                <input type="text" class="form-control text-right" name="inspectionDefaultCost" [(ngModel)]="currentAsset.inspectionDefaultCost" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <input type="text" class="form-control" name="inspectionCurrencyName" [(ngModel)]="currentAsset.inspectionCurrencyName" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>GL Account</label>
+                    <input type="text" class="form-control" name="inspectionGlaAccountName" [(ngModel)]="currentAsset.inspectionGlaAccountName" disabled>
+                </div>
+                <div class="form-group memo-popup-cstm">
+                    <label style="float: inherit;">Inspection Memo</label>
+                    <span matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.inspectionMemo)">
+                        <div [innerHTML]="currentAsset.inspectionMemo" class="form-control" class="p_editor_box"></div>
+                    </span>
+                </div>
+            </ng-container>
+        </div>                        
+    </div>
+    <div class="col-md-3-custm1" >
+        <div [ngClass]="(currentAsset.verificationRequired) ? 'border-box-cstm m-t-5' : ''">
+            <div class="form-group">
+                <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                    <label>
+                        <input type="checkbox" name="verificationRequired" [(ngModel)]="currentAsset.verificationRequired" disabled>
+                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                        Verification Required
+                    </label>
+                </div>
+            </div>
+            <ng-container *ngIf="currentAsset.verificationRequired">
+                <div class="form-group">
+                    <label>Verification Frequency <span class="clr-red">*</span></label>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Months</label>
+                                <input type="number" class="form-control" name="verificationFrequencyMonths" [(ngModel)]="currentAsset.verificationFrequencyMonths" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Days</label>
+                                <input type="number" class="form-control" name="verificationFrequencyDays" [(ngModel)]="currentAsset.verificationFrequencyDays" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Default Vendor</label>
+                    <input type="text" class="form-control" name="verificationDefaultVendorName" [(ngModel)]="currentAsset.verificationDefaultVendorName" disabled>
+                </div>
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Default Cost</label>
+                                <input type="text" class="form-control text-right" name="verificationDefaultCost" [(ngModel)]="currentAsset.verificationDefaultCost" disabled>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Currency <span class="clr-red" *ngIf="currentAsset.calibrationDefaultCost !=0">*</span></label>
+                                <input type="text" class="form-control" name="verificationCurrencyName" [(ngModel)]="currentAsset.verificationCurrencyName" disabled>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>GL Account</label>
+                    <input type="text" class="form-control" name="verificationGlAccountName" [(ngModel)]="currentAsset.verificationGlAccountName" disabled>
+                </div>
+                <div class="form-group memo-popup-cstm">
+                    <label style="float: inherit;">Verification Memo</label>
+                    <span matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.verificationMemo)">
+                        <div [innerHTML]="currentAsset.verificationMemo" class="form-control" class="p_editor_box"></div>
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+                <div class="form-row" *ngIf="currentAsset.isTangible">
+                    <div class="col-md-6 col-md-6-cstm1" style="margin-right: 1%;" [ngClass]="(currentAsset.assetIsMaintenanceReqd) ? 'border-box-cstm m-t-5' : ''">
+                       
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                        <label>
+                                            <input type="checkbox" name="assetIsMaintenanceReqd" [(ngModel)]="currentAsset.assetIsMaintenanceReqd" disabled>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Maintenance Required
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" *ngIf="currentAsset.assetIsMaintenanceReqd">
+                                <ng-container >
+                                    <div class="form-group">
+                                        <label>Maintenance Frequency <span class="clr-red">*</span></label>
+                                        <div class="form-row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Months</label>
+                                                    <input type="number" class="form-control" name="maintenanceFrequencyMonths" [(ngModel)]="currentAsset.maintenanceFrequencyMonths" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Days</label>
+                                                    <input type="number" class="form-control" name="maintenanceFrequencyDays" [(ngModel)]="currentAsset.maintenanceFrequencyDays" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Default Vendor</label>
+                                        <input type="text" class="form-control" name="defaultVendorName" [(ngModel)]="currentAsset.defaultVendorName" disabled>
+                                    </div>
+                                   
+                                </ng-container>
+                            </div>
+                            <div class="col-md-6"  *ngIf="currentAsset.assetIsMaintenanceReqd" style="padding-top: 17px;">
+                                <div class="form-group">
+                                    <label>GL Account</label>
+                                    <input type="text" class="form-control" name="glAccountName" [(ngModel)]="currentAsset.glAccountName" disabled>
+                                </div>
+                                <div class="form-group memo-popup-cstm">
+                                    <label style="float: inherit;margin-top: 10px;">Maintenance Memo</label>
+                                    <span matTooltipPosition="above" [matTooltip]="parsedText(currentAsset.maintenanceMemo)">
+                                        <div [innerHTML]="currentAsset.maintenanceMemo" class="form-control" class="p_editor_box"></div>
+                                    </span>
+                                </div>
+                                </div>
+                        </div>
+                        <div class="form-row" *ngIf="currentAsset.assetIsMaintenanceReqd">
+                            <div class="w-100" style="padding-top: 24px;">
+                                        <div>
+                                            <h6 class="panel-title alignb" style="padding-left: 6px;">Attachment Details</h6>
+                                          </div>
+                                    <div class="checkbox-cstm setDelts" >
+                                        <label style="width: auto !important;margin-top: 3px;">
+                                         
+                                          <input type="checkbox" [(ngModel)]="maitananceeletedList" name="cparent1" id="cparent1"  (click)="getDeleteListByStatusAttachments($event.target.checked,1)"
+                                            />
+                                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Show  Deleted List 
+                                        </label>
+                                    </div> 
+                                <p-table #table4 class="rro-table-cstm lastcol-fix ptable-attach"
+                                         [columns]="selectedColumnsDoc"
+                                         [value]="sourceViewforDocumentList"
+                                         [paginator]="true"
+                                         [rows]="3"
+                                         [rowsPerPageOptions]="[3, 6, 9, 15]" [scrollable]="true" scrollHeight="500px">
+                                        
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:100px" />
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                [pSortableColumn]="col.field">
+                                                {{ col.header }}
+                                                <p-sortIcon [field]="col.field">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th style="width:70px;position:sticky">Actions</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                <!--  -->
+                                                <input type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                                                       (input)="table4.filter($event.target.value, col.field,'contains') "
+                                                      
+                                                       style="width:100%;" pInputText>
+                                                <input type="date" class="hidePlaceHolder"
+                                                       *ngIf="col.field == 'createdDate'" name="createdDate"
+                                                       style="width:100%;"
+                                                       (change)="dateFilterForTableNew($event.target.value, col.field )">
+                                                <input type="date" class="hidePlaceHolder"
+                                                       *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                                       style="width:100%;"
+                                                       (change)="dateFilterForTableNew($event.target.value, col.field )">
+                                            </th>
+
+                                            <th style="width:70px;position:sticky"></th>
+
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body"
+                                                 let-rowData
+                                                 let-columns="columns"
+                                                 let-rowIndex="rowIndex">
+                                        <tr [pSelectableRow]="rowData">
+                                            <ng-container *ngFor="let col of columns">
+                                                <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                                                    class="ui-resizable-column"
+                                                    pReorderableRowHandle>
+                                                    {{
+                                                    col.field == 'createdDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                                                        : rowData[col.field] && col.field == 'updatedDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                                                        : rowData[col.field]
+                                                    }}
+                                                </td>
+                                                <td *ngIf="col.field == 'fileName'">
+                                                    <a class="filelink" (click)="downloadFileUpload(rowData)">
+                                                        {{ rowData[col.field] }}
+                                                    </a>
+                                                </td>
+                                                <td *ngIf="col.field == 'docMemo'">
+                                                    <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
+                                                </td>
+                                            </ng-container>
+
+                                            <td style="width: 70px;">
+                                                <button class="btn-edit set_proper_align set_position"
+                                                        mat-icon-button (click)="openHistoryDoc(contentAuditHist,rowData)"
+                                                        matTooltip="History" matTooltipPosition="above">
+                                                    <i class="fa fa-history"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage"
+                                                 let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="10"
+                                                style="color: red; font-weight: bold; text-align: left; padding-left: 30% !important;">
+                                                No records found
+                                            </td>
+
+                                        </tr>
+                                    </ng-template> 
+
+                                    <ng-template pTemplate="summary" id="footer1">
+                                        <label id="footer" class="footer">Total:</label> 
+                                        <!-- [(ngModel)]="table4._totalRecords"   [(ngModel)]="totalRecords" -->
+                                        <input style="width: 5%;"  [(ngModel)]="table4._totalRecords"  name="mainTotalRecords" disabled
+                                               pInputText type="text" />
+                                        &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+                                        <!-- [ngModel]="getPageCount(table4._totalRecords, pageSizeNew)"      [(ngModel)]="totalPages"  -->
+                                        <input style="width: 5%;"
+                                               name="mainpagecount" [ngModel]="getPageCount(table4._totalRecords, pageSizeNew)" disabled pInputText type="text" />
+                                    </ng-template>
+
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-md-6-cstm1" [ngClass]="(currentAsset.assetIsMaintenanceReqd) ? 'border-box-cstm m-t-5' : ''">
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
+                                        <label>
+                                            <input type="checkbox" name="warrantyRequired" [(ngModel)]="currentAsset.isWarrantyRequired" disabled>
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Warranty Required
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6" *ngIf="currentAsset.isWarrantyRequired">
+                             
+                                <ng-container >
+                                    <div class="form-group">
+                                        <label>Warranty Company</label>
+                                        <input type="text" class="form-control" name="warrantyCompanySelectName" [(ngModel)]="currentAsset.warrantyCompany" disabled>
+                                    </div>
+                                    <div class="form-group" *ngIf="currentAsset.warrantyCompanySelectId == 2">
+                                        <input type="text" class="form-control" name="warrantyCompanyVendorName" [(ngModel)]="currentAsset.warrantyCompanyVendorName" disabled>
+                                    </div>
+                                    <div class="form-group" *ngIf="currentAsset.warrantyCompanySelectId == 4">
+                                        <input type="text" class="form-control" name="warrantyCompanyName" [(ngModel)]="currentAsset.warrantyCompanyName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Warranty GL Account</label>
+                                        <input type="text" class="form-control" name="warrantyGlAccountName" [(ngModel)]="currentAsset.warrantyGlAccountName" disabled>
+                                    </div>
+                                  
+                                    <div class="form-group memo-popup-cstm">
+                                        <label style="float: inherit;">Warranty Memo</label>
+                                        <span matTooltipPosition="above"  [matTooltip]="parsedText(currentAsset.warrantyMemo)" >
+                                            <div [innerHTML]="currentAsset.warrantyMemo" class="form-control p_editor_box" ></div>
+                                        </span>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="col-md-6" *ngIf="currentAsset.isWarrantyRequired">
+                                <div class="form-group">
+                                    <label>Warranty Start Date</label>
+                                    <p-calendar [showIcon]="true" name="warrantyStartDate" [(ngModel)]="currentAsset.warrantyStartDate" [disabled]="true"></p-calendar>
+                                </div>
+                                <div class="form-group">
+                                    <label>Warranty End Date</label>
+                                    <p-calendar [showIcon]="true" name="warrantyEndDate" [(ngModel)]="currentAsset.warrantyEndDate" [disabled]="true"></p-calendar>
+                                </div>
+                                <div class="form-group">
+                                    <label>Warranty Status</label>
+                                    <input type="text" class="form-control" name="warrantyStatusName" [(ngModel)]="currentAsset.warrantyStatusName" disabled>
+                                </div>
+                                </div>
+                        </div>
+                        <div class="form-row" *ngIf="currentAsset.isWarrantyRequired">
+                            <div class="w-100">
+                                        <h6 class="panel-title alignb" style="padding-left: 6px;">Attachment Details</h6>
+                                <div class="checkbox-cstm setDelts">
+                                    <label style="width: auto !important;margin-top: 3px;">
+                                     
+                                      <input type="checkbox" [(ngModel)]="warrentyDeletedList" name="cparent2" id="cparent2"  (click)="getDeleteListByStatusAttachments($event.target.checked,2)"
+                                        />
+                                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                    Show  Deleted List 
+                                    </label>
+                                </div>
+                                <p-table #table5 class="rro-table-cstm lastcol-fix ptable-attach"
+                                         [columns]="selectedColumnsDoc"
+                                         [value]="sourceViewforDocumentListWarranty"
+                                         [paginator]="true"
+                                         [rows]="3"
+                                         [rowsPerPageOptions]="[3, 6, 9, 15]" [scrollable]="true" scrollHeight="500px">
+
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:100px" />
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                [pSortableColumn]="col.field">
+                                                {{ col.header }}
+                                                <p-sortIcon [field]="col.field">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th style="width:70px;position:sticky">Actions</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                <!--  -->
+                                                <input type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                                                       (input)="table5.filter($event.target.value, col.field,'contains') "
+                                                      
+                                                       style="width:100%;" pInputText>
+                                                <input type="date" class="hidePlaceHolder"
+                                                       *ngIf="col.field == 'createdDate'" name="createdDate"
+                                                       style="width:100%;"
+                                                       (change)="dateFilterForTableWarranty($event.target.value, col.field )">
+                                                <input type="date" class="hidePlaceHolder"
+                                                       *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                                       style="width:100%;"
+                                                       (change)="dateFilterForTableWarranty($event.target.value, col.field )">
+                                            </th>
+                                            <th style="width:70px;position:sticky"></th>
+
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body"
+                                                 let-rowData
+                                                 let-columns="columns"
+                                                 let-rowIndex="rowIndex">
+                                        <tr [pSelectableRow]="rowData">
+                                            <ng-container *ngFor="let col of columns">
+                                                <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                                                    class="ui-resizable-column"
+                                                    pReorderableRowHandle>
+                                                    {{
+                                                    col.field == 'createdDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                                                        : rowData[col.field] && col.field == 'updatedDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                                                        : rowData[col.field]
+                                                    }}
+                                                </td>
+                                                <td *ngIf="col.field == 'fileName'">
+                                                    <a class="filelink" (click)="downloadFileUpload(rowData)">
+                                                        {{ rowData[col.field] }}
+                                                    </a>
+                                                </td>
+                                                <td *ngIf="col.field == 'docMemo'">
+                                                    <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
+                                                </td>
+                                            </ng-container>
+
+                                            <td style="width: 70px;">
+                                                <button class="btn-edit set_proper_align set_position"
+                                                        mat-icon-button (click)="openHistoryDoc(contentAuditHist,rowData)"
+                                                        matTooltip="History" matTooltipPosition="above">
+                                                    <i class="fa fa-history"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    </ng-template>
+
+                                    <ng-template pTemplate="emptymessage"
+                                    let-columns
+                                   >
+                           <tr>
+                               <td [attr.colspan]="10"
+                                   style="color: red; font-weight: bold; text-align: left; padding-left: 30% !important;">
+                                   No records found
+                               </td>
+
+                           </tr>
+                       </ng-template> 
+                                    <ng-template pTemplate="summary" id="footer1">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;" [(ngModel)]="table5._totalRecords" name="warrTotalRecords" disabled
+                                               pInputText type="text" />
+                                        &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+                                        <input style="width: 5%;" [ngModel]="getPageCount(table5._totalRecords, pageSizeNew)"
+                                               name="warrpagecount" disabled pInputText type="text" />
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row" *ngIf="currentAsset.isIntangible">
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div>
+                                        <h6 class="panel-title alignb" style="padding-left: 6px;">Attachment Details</h6>
+                                <div class="checkbox-cstm setDelts">
+                                    <label style="width: auto !important;margin-top: 3px;">
+                                     
+                                      <input type="checkbox" [(ngModel)]="intangibleDeletedList" name="cparent3" id="cparent3"  (click)="getDeleteListByStatusAttachments($event.target.checked,3)"
+                                        />
+                                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                    Show  Deleted List 
+                                    </label>
+                                </div> 
+                                <p-table #intUpload class="rpo-table-cstm lastcol-fix ptable-attach"
+                                         [columns]="selectedColumnsDoc"
+                                         [value]="sourceViewforDocumentListInt"
+                                         [paginator]="true"
+                                         [rows]="3"
+                                         [rowsPerPageOptions]="[3, 6, 9, 15]">
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                [pSortableColumn]="col.field">
+                                                {{ col.header }}
+                                                <p-sortIcon [field]="col.field">
+                                                </p-sortIcon>
+                                            </th>
+                                            <th style="width:70px;position:sticky">Actions</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                <!-- -->
+                                                <input type="text"  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                                                       (input)="intUpload.filter($event.target.value, col.field,'contains') "
+                                                 
+                                                       style="width:100%;" pInputText>
+                                                <input type="date" class="hidePlaceHolder"
+                                                       *ngIf="col.field == 'createdDate'" name="createdDate"
+                                                       style="width:100%;"
+                                                       (change)="dateFilterForTableInt($event.target.value, col.field )">
+                                                <input type="date" class="hidePlaceHolder"
+                                                       *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                                       style="width:100%;"
+                                                       (change)="dateFilterForTableInt($event.target.value, col.field )">
+                                            </th>
+                                            <th style="width:70px;position:sticky"></th>
+
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="body"
+                                                 let-rowData
+                                                 let-columns="columns"
+                                                 let-rowIndex="rowIndex">
+                                        <tr [pSelectableRow]="rowData">
+                                            <ng-container *ngFor="let col of columns">
+                                                <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                                                    class="ui-resizable-column"
+                                                    pReorderableRowHandle>
+                                                    {{
+                                                    col.field == 'createdDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                                                        : rowData[col.field] && col.field == 'updatedDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                                                        : rowData[col.field]
+                                                    }}
+                                                </td>
+                                                <td *ngIf="col.field == 'fileName'">
+                                                    <a class="filelink" (click)="downloadFileUpload(rowData)">
+                                                        {{ rowData[col.field] }}
+                                                    </a>
+                                                </td>
+                                                <td *ngIf="col.field == 'docMemo'">
+                                                    <p class="m-0 p-0" [innerHTML]="rowData[col.field]"></p>
+                                                </td>
+                                            </ng-container>
+
+                                            <td style="width: 70px;">
+                                                <button class="btn-edit set_proper_align set_position"
+                                                        mat-icon-button (click)="openHistoryDoc(contentAuditHist,rowData)"
+                                                        matTooltip="History" matTooltipPosition="above">
+                                                    <i class="fa fa-history"
+                                                       [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage"
+                                                 let-columns
+                                                 >
+                                        <tr>
+                                            <td [attr.colspan]="10"
+                                                style="color: red; font-weight: bold; text-align: center;">
+                                                No records found
+                                            </td>
+
+                                        </tr>
+                                    </ng-template>
+
+                                    <ng-template pTemplate="summary" id="footer1">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;" [(ngModel)]="intUpload._totalRecords" name="intTotalRecords" disabled
+                                               pInputText type="text" />
+                                        &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+                                        <input style="width: 5%;" [ngModel]="getPageCount(intUpload._totalRecords, pageSizeNew)"
+                                               name="intpagecount" disabled pInputText type="text" />
+                                    </ng-template>
+
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="onCloseView()">Close</button>
+        </div>
+        </div>
+    </div>
+<!-- </ng-template> -->
+</div>
+
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<ng-template #contentAuditHist
+             let-c="close"
+             let-d="dismiss"
+             style="width:auto"
+             data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">History of  Documents</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="dismissModelNew()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th> Name</th>
+                        <th>Description</th>
+                        <th>Memo</th>
+                        <th>File Name</th>
+                        <th>File Size</th>
+                        <th>Is Active</th>
+                        <th>Is Deleted</th>
+                        <th>Created Date</th>
+                        <th>Created By</th>
+                        <th>Updated Date</th>
+                        <th>Updated By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                    <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
+                        <td [ngStyle]="{
+                color: getColorCodeForHistoryMain(i, 'docName', audit.docName)
+                  ? 'black'
+                  : 'red'
+              }">
+                            {{ audit.docName }}
+                        </td>
+                        <td [ngStyle]="{
+                color: getColorCodeForHistoryMain(
+                  i,
+                  'docDescription',
+                  audit.docDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }">
+                            {{ audit.docDescription }}
+                        </td>
+                        <td [ngStyle]="{
+                color: getColorCodeForHistoryMain(i, 'docMemo', audit.docMemo)
+                  ? 'black'
+                  : 'red'
+              }">
+              <p class="m-0 p-0" [innerHTML]="audit.docMemo"></p>
+                            <!-- {{ audit.docMemo }} -->
+                        </td>
+                        <td [ngStyle]="{
+                color: getColorCodeForHistoryMain(i, 'fileName', audit.fileName)
+                  ? 'black'
+                  : 'red'
+              }">
+                            {{ audit.fileName }}
+                        </td>
+                        <td>{{ audit.fileSize }}</td>
+                        <td>
+                            <input type="checkbox" disabled [checked]="audit.isActive == true"
+                            style="margin: 0px auto; display: block;" />  
+                        </td>
+                        <td>
+                            <input type="checkbox" disabled [checked]="audit.isDeleted == true"
+                            style="margin: 0px auto; display: block;" />  
+                        </td>
+                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                        <td>{{ audit.createdBy }}</td>
+                        <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                        <td>{{ audit.updatedBy }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModelNew()">
+            Close
+        </button>
+    </div>
+</ng-template>
+
+<div class="modal fade" id="capesData" role="dialog">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Capes</h4>
+        </div>
+        <div class="modal-body"> 
+            <app-asset-capes *ngIf="currentAsset && currentAsset.assetRecordId"  [isView]="true" [viewassetRecordId]="currentAsset.assetRecordId"></app-asset-capes>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>      
+    </div>
+</div>
+
+<div id="assetInvAudit" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xlg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">History of Asset Inventory</h4>
+      </div>
+      <div class="modal-body">
+        <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+            <div class="loading">
+                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+        <div class="table-responsive assetInv-audit">
+          <table class="table table-bordered"  *ngIf="showhistorylist">
+              <ng-container *ngIf="!isIntangible">
+                <thead>
+                    <tr>
+                      <th rowspan="2">Entry Date <span class="clr-red">*</span></th>
+                      <th rowspan="2">Asset ID <span class="clr-red">*</span></th>
+                      <th rowspan="2">Alt Asset ID</th>
+                      <th rowspan="2">Asset Name <span class="clr-red">*</span></th>
+                      <th rowspan="2">Asset Description</th>
+                      <th rowspan="2">Acquisition Type <span class="clr-red">*</span></th>
+                      <th rowspan="2">Model Number</th>
+                      <th rowspan="2">Is Serialized</th>
+                      <th rowspan="2">Serial No <span class="clr-red">*</span></th>
+                      <th rowspan="2">Asset Status</th>
+                      <th rowspan="2">Inventory Status</th>
+                      <th rowspan="2">Asset Parent</th>
+                      <th rowspan="2">Manufacturer</th>
+                      <th rowspan="2">Manufactured Date</th>
+                      <th rowspan="2">UOM <span class="clr-red">*</span></th>
+                      <th rowspan="2">Expiration Date</th>
+                      <th rowspan="2">Asset Location</th>
+                      <th rowspan="2">Currency <span class="clr-red">*</span></th>
+                      <th rowspan="2">Unit Cost <span class="clr-red">*</span></th>
+                      <th rowspan="2">Installation Cost</th>
+                      <th rowspan="2">Freight</th>
+                      <th rowspan="2">Insurance</th>
+                      <th rowspan="2">Taxes</th>
+                      <th rowspan="2">Total Cost</th>
+                      <th rowspan="2">Asset Class</th>
+                      <th rowspan="2">Depreciation Method</th>
+                      <th rowspan="2">Residual %</th>
+                      <!-- <th rowspan="2">Residual Value</th> -->
+                      <th rowspan="2">Asset Life</th>
+                      <th rowspan="2">Depr Frequency</th>
+                      <th rowspan="2">Acquired GL Account</th>
+                      <th rowspan="2">Depr Expense GL Account</th>
+                      <th rowspan="2">Accum  Depr GL Account</th>
+                      <th rowspan="2">Sale GL Account</th>
+                      <th rowspan="2">Write Off GL Account</th>
+                      <th rowspan="2">Write Down GL Account</th>
+                      <th rowspan="2">Calibration Required</th>
+                      <th colspan="2">Calibration Frequency <span class="clr-red">*</span></th>
+                      <th rowspan="2">Default Vendor</th>
+                      <th rowspan="2">Default Cost </th>
+                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">GL Account</th>
+                      <th colspan="6">Tolerance</th>
+                      <th rowspan="2">Calibration Memo</th>
+                      <th rowspan="2">Certification Required</th>
+                      <th colspan="2">Certification Frequency <span class="clr-red">*</span></th>
+                      <th rowspan="2">Default Vendor</th>
+                      <th rowspan="2">Default Cost</th>
+                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">GL Account</th>
+                      <th rowspan="2">Certification Memo</th>
+                      <th rowspan="2">Inspection Required</th>
+                      <th colspan="2">Inspection Frequency</th>
+                      <th rowspan="2">Default Vendor</th>
+                      <th rowspan="2">Default Cost</th>
+                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">GL Account</th>
+                      <th rowspan="2">Inspection Memo</th>
+                      <th rowspan="2">Verification Required</th>
+                      <th colspan="2">Verification Frequency <span class="clr-red">*</span></th>
+                      <th rowspan="2">Default Vendor</th>
+                      <th rowspan="2">Default Cost </th>
+                      <th rowspan="2">Currency</th>
+                      <th rowspan="2">GL Account</th>
+                      <th rowspan="2">Verification Memo</th>
+                      <th rowspan="2">Maintenance Required</th>
+                      <th colspan="2">Maintenance Frequency <span class="clr-red">*</span></th>
+                      <th rowspan="2">Default Vendor</th>
+                      <th rowspan="2">GL Account</th>
+                      <th rowspan="2">Maintenance Memo</th>
+                      <th rowspan="2">Warranty Required</th>
+                      <th rowspan="2">Warranty Company</th>
+                      <th rowspan="2">Warranty Vendor Name</th>
+                      <th rowspan="2">Warranty GL Account</th>
+                      <th rowspan="2">Warranty Start Date</th>
+                      <th rowspan="2">Warranty End Date</th>
+                      <th rowspan="2">Warranty Status</th>
+                      <th rowspan="2">Warranty Memo</th>
+                      <th colspan="4" rowspan="2">Management Structure <span class="clr-red">*</span></th>
+                      <th rowspan="2">Memo</th>
+                      <th rowspan="2">Is Active</th>
+                      <th rowspan="2">Is Deleted</th>
+                      <th rowspan="2">Created Date</th>
+                      <th rowspan="2">Created By</th>
+                      <th rowspan="2">Updated Date</th>
+                      <th rowspan="2">Updated By</th>
+                    </tr>
+                    <tr>
+                      <th>Months</th>
+                      <th>Days</th>
+                      <th colspan="2">Min</th>
+                      <th colspan="2">Max</th>
+                      <th colspan="2">Expected</th>
+                      <th>Months</th>
+                      <th>Days</th>
+                      <th>Months</th>
+                      <th>Days</th>
+                      <th>Months</th>
+                      <th>Days</th>
+                      <th>Months</th>
+                      <th>Days</th>
+                      <!-- <th>Months</th>
+                      <th>Days</th> -->
+                  </tr>
+                </thead>
+                <tbody *ngIf="auditHistory.length > 0">
+                <tr *ngFor="let audit of auditHistory; let i = index">
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'entryDate', audit.entryDate) ? 'black' : 'red'}">{{ audit.entryDate | date: 'MM/dd/yyyy' }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetId', audit.assetId) ? 'black' : 'red'}">{{ audit.assetId }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'alternateAssetRecordId', audit.alternateAssetRecordId) ? 'black' : 'red'}">{{ audit.alternateAssetRecordId }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'name', audit.name) ? 'black' : 'red'}">{{ audit.name }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'description', audit.description) ? 'black' : 'red'}">{{ audit.description }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'acquisitionType', audit.acquisitionType) ? 'black' : 'red'}">{{ audit.acquisitionType }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'model', audit.model) ? 'black' : 'red'}">{{ audit.model }}</td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isSerialized', audit.isSerialized) ? 'black' : 'red'}">{{ audit.isSerialized }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.isSerialized == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td> 
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'serialNo', audit.serialNo) ? 'black' : 'red'}">{{ audit.serialNo }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetStatus', audit.assetStatus) ? 'black' : 'red'}">{{ audit.assetStatus }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'inventoryStaus', audit.inventoryStaus) ? 'black' : 'red'}">{{ audit.inventoryStaus }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetParentRecordId', audit.assetParentRecordId) ? 'black' : 'red'}">{{ audit.assetParentRecordId }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturerName', audit.manufacturerName) ? 'black' : 'red'}">{{ audit.manufacturerName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturedDate', audit.manufacturedDate) ? 'black' : 'red'}">{{ audit.manufacturedDate | date: 'MM/dd/yyyy' }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'unitOfMeasureName', audit.unitOfMeasureName) ? 'black' : 'red'}">{{ audit.unitOfMeasureName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'expirationDate', audit.expirationDate) ? 'black' : 'red'}">{{ audit.expirationDate | date: 'MM/dd/yyyy' }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'asset_LocationName', audit.asset_LocationName) ? 'black' : 'red'}">{{ audit.asset_LocationName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'currencyName', audit.currencyName) ? 'black' : 'red'}">{{ audit.currencyName }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'unitCost', audit.unitCost) ? 'black' : 'red'}">{{ audit.unitCost }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'installationCost', audit.installationCost) ? 'black' : 'red'}">{{ audit.installationCost }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'freight', audit.freight) ? 'black' : 'red'}">{{ audit.freight }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'insurance', audit.insurance) ? 'black' : 'red'}">{{ audit.insurance }}</td>
+                    <td class="text-right" class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'taxes', audit.taxes) ? 'black' : 'red'}">{{ audit.taxes }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'totalCost', audit.totalCost) ? 'black' : 'red'}">{{ audit.totalCost }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetType', audit.assetType) ? 'black' : 'red'}">{{ audit.assetType }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'depreciationMethod', audit.depreciationMethod) ? 'black' : 'red'}">{{ audit.depreciationMethod }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'residualPercentage', audit.residualPercentage) ? 'black' : 'red'}">{{ audit.residualPercentage }}</td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'residualValue', audit.residualValue) ? 'black' : 'red'}">{{ audit.residualValue }}</td> -->
+                    <td  class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetLife', audit.assetLife) ? 'black' : 'red'}">{{ audit.assetLife }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'depreciationFrequency', audit.depreciationFrequency) ? 'black' : 'red'}">{{ audit.depreciationFrequency }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'acquiredGLAccount', audit.acquiredGLAccount) ? 'black' : 'red'}">{{ audit.acquiredGLAccount }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'deprExpenseGLAccount', audit.deprExpenseGLAccount) ? 'black' : 'red'}">{{ audit.deprExpenseGLAccount }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'adDepsGLAccount', audit.adDepsGLAccount) ? 'black' : 'red'}">{{ audit.adDepsGLAccount }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetSale', audit.assetSale) ? 'black' : 'red'}">{{ audit.assetSale }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetWriteOff', audit.assetWriteOff) ? 'black' : 'red'}">{{ audit.assetWriteOff }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetWriteDown', audit.assetWriteDown) ? 'black' : 'red'}">{{ audit.assetWriteDown }}</td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationRequired', audit.calibrationRequired) ? 'black' : 'red'}">{{ audit.calibrationRequired }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.calibrationRequired == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationFrequencyMonths', audit.calibrationFrequencyMonths) ? 'black' : 'red'}">{{ audit.calibrationFrequencyMonths }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationFrequencyDays', audit.calibrationFrequencyDays) ? 'black' : 'red'}">{{ audit.calibrationFrequencyDays }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationDefaultVendorName', audit.calibrationDefaultVendorName) ? 'black' : 'red'}">{{ audit.calibrationDefaultVendorName }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationDefaultCost', audit.calibrationDefaultCost) ? 'black' : 'red'}">{{ audit.calibrationDefaultCost }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationCurrencyName', audit.calibrationCurrencyName) ? 'black' : 'red'}">{{ audit.calibrationCurrencyName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationGlAccountName', audit.calibrationGlAccountName) ? 'black' : 'red'}">{{ audit.calibrationGlAccountName }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetCalibrationMin', audit.assetCalibrationMin) ? 'black' : 'red'}">{{ audit.assetCalibrationMin }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetCalibrationMinTolerance', audit.assetCalibrationMinTolerance) ? 'black' : 'red'}">{{ audit.assetCalibrationMinTolerance }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetCalibratonMax', audit.assetCalibratonMax) ? 'black' : 'red'}">{{ audit.assetCalibratonMax }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetCalibrationMaxTolerance', audit.assetCalibrationMaxTolerance) ? 'black' : 'red'}">{{ audit.assetCalibrationMaxTolerance }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetCalibrationExpected', audit.assetCalibrationExpected) ? 'black' : 'red'}">{{ audit.assetCalibrationExpected }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'assetCalibrationExpectedTolerance', audit.assetCalibrationExpectedTolerance) ? 'black' : 'red'}">{{ audit.assetCalibrationExpectedTolerance }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'calibrationMemo', audit.calibrationMemo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.calibrationMemo"></p>
+                    </td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'certificationRequired', audit.certificationRequired) ? 'black' : 'red'}">{{ audit.certificationRequired }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.certificationRequired == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'certificationFrequencyMonths', audit.certificationFrequencyMonths) ? 'black' : 'red'}">{{ audit.certificationFrequencyMonths }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'certificationFrequencyDays', audit.certificationFrequencyDays) ? 'black' : 'red'}">{{ audit.certificationFrequencyDays }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'certificationDefaultVendorName', audit.certificationDefaultVendorName) ? 'black' : 'red'}">{{ audit.certificationDefaultVendorName }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'certificationDefaultCost', audit.certificationDefaultCost) ? 'black' : 'red'}">{{ audit.certificationDefaultCost }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'certificationCurrencyName', audit.certificationCurrencyName) ? 'black' : 'red'}">{{ audit.certificationCurrencyName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'certificationGlAccountName', audit.certificationGlAccountName) ? 'black' : 'red'}">{{ audit.certificationGlAccountName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'certificationMemo', audit.certificationMemo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.certificationMemo"></p>
+                    </td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionRequired', audit.inspectionRequired) ? 'black' : 'red'}">{{ audit.inspectionRequired }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.inspectionRequired == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionFrequencyMonths', audit.inspectionFrequencyMonths) ? 'black' : 'red'}">{{ audit.inspectionFrequencyMonths }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionFrequencyDays', audit.inspectionFrequencyDays) ? 'black' : 'red'}">{{ audit.inspectionFrequencyDays }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDefaultVendorName', audit.inspectionDefaultVendorName) ? 'black' : 'red'}">{{ audit.inspectionDefaultVendorName }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDefaultCost', audit.inspectionDefaultCost) ? 'black' : 'red'}">{{ audit.inspectionDefaultCost }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionCurrencyName', audit.inspectionCurrencyName) ? 'black' : 'red'}">{{ audit.inspectionCurrencyName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionGlaAccountName', audit.inspectionGlaAccountName) ? 'black' : 'red'}">{{ audit.inspectionGlaAccountName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionMemo', audit.inspectionMemo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.inspectionMemo"></p>
+                    </td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'verificationRequired', audit.verificationRequired) ? 'black' : 'red'}">{{ audit.verificationRequired }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.verificationRequired == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'verificationFrequencyMonths', audit.verificationFrequencyMonths) ? 'black' : 'red'}">{{ audit.verificationFrequencyMonths }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'verificationFrequencyDays', audit.verificationFrequencyDays) ? 'black' : 'red'}">{{ audit.verificationFrequencyDays }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'verificationDefaultVendorName', audit.verificationDefaultVendorName) ? 'black' : 'red'}">{{ audit.verificationDefaultVendorName }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'verificationDefaultCost', audit.verificationDefaultCost) ? 'black' : 'red'}">{{ audit.verificationDefaultCost }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'verificationCurrencyName', audit.verificationCurrencyName) ? 'black' : 'red'}">{{ audit.verificationCurrencyName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'verificationGlAccountName', audit.verificationGlAccountName) ? 'black' : 'red'}">{{ audit.verificationGlAccountName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'verificationMemo', audit.verificationMemo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.verificationMemo"></p>
+                    </td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetIsMaintenanceReqd', audit.assetIsMaintenanceReqd) ? 'black' : 'red'}">{{ audit.assetIsMaintenanceReqd }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.assetIsMaintenanceReqd == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'maintenanceFrequencyMonths', audit.maintenanceFrequencyMonths) ? 'black' : 'red'}">{{ audit.maintenanceFrequencyMonths }}</td>
+                    <td class="text-right" [ngStyle]="{color: getColorCodeForHistory(i, 'maintenanceFrequencyDays', audit.maintenanceFrequencyDays) ? 'black' : 'red'}">{{ audit.maintenanceFrequencyDays }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'defaultVendorName', audit.defaultVendorName) ? 'black' : 'red'}">{{ audit.defaultVendorName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'glAccountName', audit.glAccountName) ? 'black' : 'red'}">{{ audit.glAccountName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'maintenanceMemo', audit.maintenanceMemo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.maintenanceMemo"></p>
+                    </td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isWarrantyRequired', audit.isWarrantyRequired) ? 'black' : 'red'}">{{ audit.isWarrantyRequired }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.isWarrantyRequired == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyCompanySelectName', audit.warrantyCompanySelectName) ? 'black' : 'red'}">{{ audit.warrantyCompanySelectName }}</td> -->
+  <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyCompany', audit.warrantyCompany) ? 'black' : 'red'}">{{ audit.warrantyCompany }}</td>
+                   <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyDefaultVendorName', audit.warrantyDefaultVendorName) ? 'black' : 'red'}">{{ audit.warrantyDefaultVendorName }}</td>
+                    <!-- <ng-container *ngIf="!audit.warrantyCompanyVendorName && !audit.warrantyCompanyName"><td></td></ng-container> -->
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyGlAccountName', audit.warrantyGlAccountName) ? 'black' : 'red'}">{{ audit.warrantyGlAccountName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyStartDate', audit.warrantyStartDate) ? 'black' : 'red'}">{{ audit.warrantyStartDate | date: 'MM/dd/yyyy' }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyEndDate', audit.warrantyEndDate) ? 'black' : 'red'}">{{ audit.warrantyEndDate | date: 'MM/dd/yyyy' }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyStatusName', audit.warrantyStatusName) ? 'black' : 'red'}">{{ audit.warrantyStatusName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'warrantyMemo', audit.warrantyMemo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.warrantyMemo"></p>
+                    </td>
+                    <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">{{ audit.companyName }}</td>
+                    <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">{{ audit.buName }}</td>
+                    <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">{{ audit.divName }}</td>
+                    <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">{{ audit.deptName }}</td>
+                    <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                        <p class="p_editor" [innerHTML]="audit.memo"></p>
+                    </td>
+                    <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isActive', audit.isActive) ? 'black' : 'red'}">{{ audit.isActive }}</td> -->
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.isActive == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td >
+                        <input type="checkbox" disabled [checked]="audit.isDeleted == true"
+                               style="margin: 0px auto; display: block;" />
+                    </td>
+                    <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                    <td>{{ audit.createdBy }}</td>
+                    <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                    <td>{{ audit.updatedBy }}</td>
+                </tr>
+                </tbody>
+              </ng-container>
+
+              <ng-container *ngIf="isIntangible">
+                <thead>
+                    <tr>
+                      <th rowspan="2">Entry Date <span class="clr-red">*</span></th>
+                      <th rowspan="2">Asset ID <span class="clr-red">*</span></th>
+                      <th rowspan="2">Alt Asset ID</th>
+                      <th rowspan="2">Asset Name <span class="clr-red">*</span></th>
+                      <th rowspan="2">Asset Description</th>
+                      <th rowspan="2">Intangible Class <span class="clr-red">*</span></th>
+                      <th rowspan="2">Amortization Method</th>
+                      <th rowspan="2">Intangible Life</th>
+                      <th rowspan="2">Amortization Frequency</th>
+                      <th rowspan="2">Intangible GL Account</th>
+                      <th rowspan="2">Amort Expense GL Account</th>
+                      <th rowspan="2">Acc Amort Depr GL Account</th>
+                      <th rowspan="2">Intangible Write Down GL Account</th>
+                      <th colspan="4" rowspan="2">Management Structure <span class="clr-red">*</span></th>
+                      <th rowspan="2">Memo</th>
+                      <th rowspan="2">Is Active</th>
+                      <th rowspan="2">Is Deleted</th>
+                      <th rowspan="2">Created Date</th>
+                      <th rowspan="2">Created By</th>
+                      <th rowspan="2">Updated Date</th>
+                      <th rowspan="2">Updated By</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="auditHistory.length > 0">
+                    <tr *ngFor="let audit of auditHistory; let i = index">
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'entryDate', audit.entryDate) ? 'black' : 'red'}">{{ audit.entryDate | date: 'MM/dd/yyyy' }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetId', audit.assetId) ? 'black' : 'red'}">{{ audit.assetId }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'alternateAssetId', audit.alternateAssetId) ? 'black' : 'red'}">{{ audit.alternateAssetId }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'name', audit.name) ? 'black' : 'red'}">{{ audit.name }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'description', audit.description) ? 'black' : 'red'}">{{ audit.description }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'assetIntangibleTypeName', audit.assetIntangibleTypeName) ? 'black' : 'red'}">{{ audit.assetIntangibleTypeName }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'amortizationMethod', audit.amortizationMethod) ? 'black' : 'red'}">{{ audit.amortizationMethod }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'intangibleLife', audit.intangibleLife) ? 'black' : 'red'}">{{ audit.intangibleLife }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'amortizationFrequency', audit.amortizationFrequency) ? 'black' : 'red'}">{{ audit.amortizationFrequency }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'intangibleGLAccount', audit.intangibleGLAccount) ? 'black' : 'red'}">{{ audit.intangibleGLAccount }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'amortExpenseGLAccount', audit.amortExpenseGLAccount) ? 'black' : 'red'}">{{ audit.amortExpenseGLAccount }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'accAmortDeprGLAccount', audit.accAmortDeprGLAccount) ? 'black' : 'red'}">{{ audit.accAmortDeprGLAccount }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'intangibleWriteDownGLAccount', audit.intangibleWriteDownGLAccount) ? 'black' : 'red'}">{{ audit.intangibleWriteDownGLAccount }}</td>
+                        <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">{{ audit.companyName }}</td>
+                        <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">{{ audit.buName }}</td>
+                        <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">{{ audit.divName }}</td>
+                        <td class="min-w-100" [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">{{ audit.deptName }}</td>
+                        <td [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                            <p class="p_editor" [innerHTML]="audit.memo"></p>
+                        </td>
+                        <!-- <td [ngStyle]="{color: getColorCodeForHistory(i, 'isActive', audit.isActive) ? 'black' : 'red'}">{{ audit.isActive }}</td> -->
+                        <td >
+                            <input type="checkbox" disabled [checked]="audit.isActive == true"
+                                   style="margin: 0px auto; display: block;" />
+                        </td>
+                        <td >
+                            <input type="checkbox" disabled [checked]="audit.isDeleted == true"
+                                   style="margin: 0px auto; display: block;" />
+                        </td>
+                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                        <td>{{ audit.createdBy }}</td>
+                        <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm:ss a' }}</td>
+                        <td>{{ audit.updatedBy }}</td>
+                    </tr>
+                    </tbody>
+              </ng-container>
+            
+          </table>
+          <ng-template *ngIf="!showhistorylist">
+            <div class="text-center">
+                <div class="text-center">
+                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <h4 style="color: #ff5663;">No History Found </h4>
+                </div>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+  
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>
+            Asset Name:
+            <span class="new-label">{{restorerecord.name}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> 
+
+
+
+<div class="preloader" *ngIf="isSpinnerVisible" style="    z-index: 1060;">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
+
+

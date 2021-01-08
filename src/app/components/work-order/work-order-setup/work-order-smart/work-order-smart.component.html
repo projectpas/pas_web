@@ -1,0 +1,82 @@
+<div *ngIf="isSpinnerEnable">
+  <!-- ; else loader  -->
+  <!-- Edit  -->
+  <div *ngIf="
+    (isEdit &&
+    editWorkOrderGeneralInformation &&
+    workOrderTypes &&
+    workOrderStatusList &&
+    creditTerms &&
+    employeesOriginalData &&
+    workScopesList &&
+    workOrderStagesList &&
+    priorityList &&
+    partNumberOriginalData &&
+    legalEntityList &&
+    conditionList  && jobTitles   && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList &&
+    techStationList )
+  ">
+    <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated" [subWorkOrderDetails]="paramsData" [isEdit]="isEdit"
+      [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList" [creditTerms]="creditTerms"
+      [jobTitles]="jobTitles" [employeesOriginalData]="employeesOriginalData"
+      [salesPersonOriginalList]="salesPersonOriginalList" [salesAgentsOriginalList]="salesAgentsOriginalList"
+      [csrOriginalList]="csrOriginalList" [technicianOriginalList]="technicianOriginalList"
+      [workScopesList]="workScopesList" [workOrderStagesList]="workOrderStagesList" [priorityList]="priorityList"
+      [workorderSettings]="workorderSettings" [currencyList]="currencyList"
+      [partNumberOriginalData]="partNumberOriginalData" [legalEntityList]="legalEntityList"
+      [conditionList]="conditionList" [workOrderGeneralInformation]="editWorkOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+      [techStationList]="techStationList">
+    </app-work-order-add>
+  </div>
+  <div *ngIf="
+    !(
+      isEdit &&
+      workOrderTypes &&
+      workOrderStatusList &&
+      creditTerms &&
+      employeesOriginalData &&
+      workScopesList &&
+      workOrderStagesList &&
+      priorityList &&
+      partNumberOriginalData &&
+      legalEntityList && 
+      conditionList && jobTitles && salesPersonOriginalList && salesAgentsOriginalList && csrOriginalList && technicianOriginalList && technicianByExpertiseTypeList &&
+      techStationList 
+    )
+  ">
+    <!-- using add form as subworkOrder also -->
+    <app-work-order-add [isSubWorkOrder]="isSubWorkOrder" [subWoMpnGridUpdated]="subWoMpnGridUpdated"  [subWorkOrderDetails]="paramsData"
+      [workOrderId]="subWorkOrderId" [workFlowWorkOrderId]="workFlowWorkOrderId" [showTabsGrid]="showTabsGrid"
+      [showGridMenu]="showGridMenu" [workOrderTypes]="workOrderTypes" [workOrderStatusList]="workOrderStatusList"
+      [creditTerms]="creditTerms" [jobTitles]="jobTitles" [currencyList]="currencyList"
+      [employeesOriginalData]="employeesOriginalData" [salesPersonOriginalList]="salesPersonOriginalList"
+      [salesAgentsOriginalList]="salesAgentsOriginalList" [csrOriginalList]="csrOriginalList"
+      [technicianOriginalList]="technicianOriginalList" [workScopesList]="workScopesList"
+      [workOrderStagesList]="workOrderStagesList" [workorderSettings]="workorderSettings" [priorityList]="priorityList"
+      [partNumberOriginalData]="partNumberOriginalData" [legalEntityList]="legalEntityList"
+      [conditionList]="conditionList" [workOrderGeneralInformation]="workOrderGeneralInformation" [technicianByExpertiseTypeList]="technicianByExpertiseTypeList"
+      [techStationList]="techStationList"
+      (getLatestDefaultSettingByWorkOrderTypeId)="getWorkOrderDefaultSetting($event)">
+    </app-work-order-add>
+  </div>
+</div>
+<ng-template #loader>
+  <div class="loader-css">
+    <img src="../../../../assets/images/loader.gif">
+  </div>
+</ng-template>
+
+<div class="preloader" *ngIf="!isSpinnerEnable">
+  <div class="loading">
+      <div class="lds-roller">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div> 
+          <div></div>
+      </div>
+  </div>
+</div> 

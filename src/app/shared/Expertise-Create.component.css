@@ -1,0 +1,12 @@
+select {
+    background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
+}
+/*.workflow-table-expertise .expertise-tr td {
+    padding: 4px;
+}*/
+.workflow-table-expertise tr th:first-child {
+    padding: 0 10px !important;
+}
+.vd_cls .form-control:disabled {
+    background-color: #ffffff !important;
+}

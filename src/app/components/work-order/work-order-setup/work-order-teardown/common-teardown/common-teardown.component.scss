@@ -1,0 +1,71 @@
+// component css goes here
+label {   
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+}
+.panel-body {
+    background: #ffffff;
+    padding: 20px;
+}
+.panel-title{
+    margin-bottom: 0px;
+}
+.adjust_dwn{
+    margin-top: 16px;
+    margin-left: 22%;
+}
+.mr_right{
+    margin-left: 20px;
+    position: relative;
+    top: 1px;
+}
+
+.p-calendar-cstm{
+    width: 181px !important;
+}
+.panel-title{
+    font-size: 14px;
+    position: relative;
+}
+textarea{
+    border-radius: 3px;
+}
+.text-area-cstm {
+    height: 70px !important;
+}
+.p-dropdown-custom-md-2 .ui-dropdown {
+    width: 100% !important;
+}
+.align_fc{
+    display: inline-flex;
+    width: 100%;
+}
+.set_cds{
+    position: absolute;
+    top: 7.3px;
+    left: 9px;
+    zoom: 1.4;
+}
+.ac_cs{
+    padding-left: 40px !important;
+}
+.view_bt{
+    margin-left: 30px;
+    background-color: #75b0f7 !important;
+}
+.view_bt:hover{
+    background-color: #337ab7 !important;
+}
+.red_bomb{
+    color: red;
+    font-size: 10px;
+    margin-top: 5px;
+}
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+}

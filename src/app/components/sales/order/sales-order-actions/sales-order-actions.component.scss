@@ -1,0 +1,35 @@
+:host {
+  ::ng-deep {
+    div.ui-widget {
+      padding: 0px !important;
+    }
+
+    div.ui-widget > button {
+      padding: 0px !important;
+      padding-right: 5px !important;
+    }
+
+    div.ui-widget > button > span.ui-button-text {
+      padding: 2px 5px 2px 5px !important;
+    }
+
+    div.ui-widget > button.ui-splitbutton-menubutton {
+      padding-right: 14px !important;
+    }
+
+    div.ui-widget
+      > button.ui-splitbutton-menubutton
+      > span.ui-button-icon-left {
+      left: 0% !important;
+    }
+
+    div.ui-menu > ul > li {
+      padding: 0px !important;
+      text-align: left !important;
+    }
+
+    div.sales-order-actions {
+      padding: 4px 6px !important;
+    }
+  }
+}

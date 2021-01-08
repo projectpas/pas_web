@@ -1,0 +1,113 @@
+﻿label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+}
+input[type="text"], input[type="number"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+}
+.inner-addon .ui-autocomplete-input {
+    width: 100% !important;
+}
+.po-head {
+    font-weight: bold;
+    font-size: 16px;
+    color: #295d92;
+}
+.partsList-table-tr th {
+    min-width: 80px;
+}
+.addpn-btn {
+    padding: 5px 10px !important;
+    font-size: 13px;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.partsList-modal .form-group {
+    margin-bottom: 6px !important;
+}
+.rpo-table-cstm th {
+    padding: 8px 5px !important;
+}
+.child-add-icon {
+    cursor: pointer;
+    margin: 2px -12px;
+}
+.child-add-icon a:before, .child-add-icon i:before{
+    font-size: 16px;
+}
+table th {
+    padding: 4px;
+}
+table td {
+    padding: 4px;
+}
+.card-stock {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+.card-stock .card-header {
+    padding: 10px 12px;
+}
+.card-stock .card-header h5 {
+    margin-bottom: 0; 
+    font-size: 12px;
+}
+.card-stock .card-body {
+    padding: 12px 12px 4px;
+}
+
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+    .col-md-6 .col-md-6 {
+        max-width: 44%;
+        margin-right: 15px;
+    }
+    .integrationWith {
+        max-width: 91%;
+        margin-right: 15px;
+    }
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 150%;
+    left: 50%;
+    margin-left: -60px;
+  }
+  
+  .tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+  }
+  

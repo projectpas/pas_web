@@ -1,0 +1,601 @@
+﻿<div [@fadeInOut] class="page-content">
+	<div class="right_col" role="main">
+		<div class="x_panel">
+			<div class="x_content">
+				<!-- <div class="card">
+					<div class="card-body">
+						<div class="inline-block display-flex">
+							<h3 class="po-head lead">Warehouse</h3>
+							&nbsp;&nbsp;
+							<a class="plusicon-cstm new-margin"
+							 matTooltip="Add Warehouse" matTooltipPosition="above"
+							  (click)="open(contentEdit)">
+								<i class="fa fa-plus-circle fa-lg"></i>
+							</a>
+						</div> -->
+						<div class="card new-card">
+                            <div class="card-header bg-primary new-card-header">
+                              <div class="row">
+                                <div class="col">
+                                  <h4 class="new-card-heading">Warehouse</h4>
+                                </div>
+                                <div>
+                                  <button
+                                    type="button"
+                                    class="btn-sm new-btn-primary"
+									(click)="open(contentEdit)"
+                                  >
+								  Add Warehouse
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-body new-card-body">
+                       
+						
+						<p-table #dt class="rpo-table-cstm rro-table-cstm"
+								 [totalRecords]="totalRecords"
+								 [value]="wareHousedata"
+								 [lazy]="true" (onLazyLoad)="loadAllWareHousesData($event)"
+								 [rows]="10"
+								 [paginator]="true"
+								 [pageLinks]="3"
+								 [rowsPerPageOptions]="[10,20,50,100]"
+								 [columns]="selectedColumns"
+								 selectionMode="multiple"
+								 [metaKeySelection]="true"
+								 [(selection)]="selectedColumn"
+								 [resizableColumns]="true"
+								 [reorderableColumns]="true"
+								 [scrollable]="true"
+								 scrollHeight="450px">
+							<ng-template pTemplate="caption">
+								<div class="row">
+                                    <div class="col">
+									<p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header" selectedItemsLabel="{0} columns selected"
+												   [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+												</div>
+												<div class="col">
+												  
+													  <div
+														style="width: 370px; float: right; padding-top: 3px;"
+													  >
+														<div class="form-group">
+														  <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
+														  <div
+															class="pull-left"
+															style="margin-top: 4px; margin-right: 15px;"
+														  >
+														  <label class="radio-cstm wauto">
+															<input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="getListByStatus('Active')" [(ngModel)]="currentstatus">
+															<span class="checkmark"></span>Active
+														</label>
+													</div>
+													<div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+														<label class="radio-cstm wauto">
+															<input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="getListByStatus('InActive')" [(ngModel)]="currentstatus">
+															<span class="checkmark"></span>In-Active
+														</label>
+													</div>
+													<div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+														<label class="radio-cstm wauto">
+															<input type="radio" name="EmpStatus" class="form-control" value="ALL" 
+															(click)="getListByStatus('ALL')" [(ngModel)]="currentstatus">
+															<span class="checkmark"></span>All
+														</label>
+													</div>
+														<div class="checkbox-cstm" style="margin-left: 0;">
+														  <label style="width: auto !important;margin-top: 3px;">
+															<!--  -->
+															<input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" 
+															 (click)="getDeleteListByStatus($event.target.checked)"
+															  />
+															<span class="cr"><i class="cr-icon pi pi-check"></i></span>
+														  Show  Deleted List 
+														  </label>
+														</div>
+								
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+									<button type="button" class="btn btn-primary new-table-button " matTooltip="Download Data" matTooltipPosition="above" pButton icon="fa-download"
+											iconPos="left" label="Export  Data" style="padding: 5px 12px !important;" (click)="dt.exportCSV()"></button>
+									<button type="button" class="btn btn-primary new-table-button " matTooltip="Download Selected" matTooltipPosition="above" pButton icon="fa-download"
+											iconPos="left" label="Export Selection Only" style="padding: 5px 12px !important" (click)="dt.exportCSV({selectionOnly:true})"></button>
+									<div class="excel-upload  excel-upload-cstm">
+										<input type="file" name="upload[]" id="upload" class="uploaddoc upload-file" data-multiple-caption="{count} files selected"
+											   accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+											   (change)="bulkUpload($event)">
+										<label for="upload">
+											<span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+												<i class="fa fa-upload"></i>
+											</span>
+										</label>
+										&nbsp; &nbsp;
+										<button class="btn btn-primary" style="padding: 5px 12px !important;" matTooltip="Download Sample file" matTooltipPosition="above" (click)="sampleExcelDownload()">Sample File Download</button>
+									</div>
+								</div>
+							</div>
+													
+							</ng-template>
+							<!-- <ng-template pTemplate="colgroup" let-columns>
+								<colgroup>
+									<col *ngFor="let col of columns" style="width:140px">
+								</colgroup>
+							</ng-template> -->
+							<ng-template pTemplate="header" let-columns>
+								<tr>
+									<th style="width:120px" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+										{{col.header}}
+										<p-sortIcon [field]="col.field"></p-sortIcon>
+									</th>
+									<th style="width:200px;position:sticky" *ngIf="selectedColumns.length> 0"> Actions</th>
+								</tr>
+								<tr>
+									<th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+										<input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+									</th>
+									<th style="width:180px;position:sticky"></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-rowData let-columns="columns">
+								<tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdits(rowData)">
+									<td style="width:120px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+										{{
+col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?
+										(rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]
+										}}
+									</td>
+									<td  class="action-icons-cstm" style="width:200px" *ngIf="selectedColumns.length> 0">
+										<div *ngIf="currentDeletedstatus==false">
+										<p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)"
+													   [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+										<p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)"
+													   [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+										<p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)"
+													   [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+										<span data-toggle="modal" data-target="#view">
+											<a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+											   (click)="openView(view,rowData)" matTooltip="View" matTooltipPosition="above">
+												<i class="fa fa-eye"></i>
+											</a>
+										</span>
+
+										<span>
+											<a class="btn nobg"
+											   (click)="openEdit(contentEdit,rowData)"
+											   matTooltip="Edit"
+											   matTooltipPosition="above">
+												<i class="fa fa-pencil">
+												</i>
+											</a>
+										</span>
+
+
+										<!-- <button class="btn-edit" mat-icon-button
+				(click)="openEdit(contentEdit,rowData)"
+				 matTooltip="Edit" matTooltipPosition="above">
+					<mat-icon>edit</mat-icon>
+				</button> -->
+
+										<span>
+											<a class="btn nobg"
+											   (click)="openDelete(content,rowData)"
+											   matTooltip="Delete" matTooltipPosition="above">
+												<i class="fa fa-trash"></i>
+											</a>
+										</span>
+
+										<!-- <button class="btn-delete" mat-icon-button
+				matTooltip="Delete" matTooltipPosition="above"
+				(click)="openDelete(content,rowData)">
+					<mat-icon color="warn">delete</mat-icon>
+				</button> -->
+
+										<span>
+											<a class="btn nobg"
+											   (click)="showAuditPopup(auditContent,rowData.warehouseId)"
+											   matTooltip="History" matTooltipPosition="above">
+												<i class="fa fa-history"></i>
+											</a>
+										</span>
+
+										<!-- <button class="btn-history" mat-icon-button
+				 matTooltip="History" matTooltipPosition="above"
+				 (click)="showAuditPopup(auditContent,rowData.warehouseId)">
+					<mat-icon color="green">history</mat-icon>
+				</button> -->
+
+
+			</div>
+
+			<div *ngIf="currentDeletedstatus==true">
+				<p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+				matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+			   <span data-toggle="modal" data-target="#view"><a class="btn nobg"
+				(click)="openView(view,rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+			  <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+				<!-- <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg" (click)="getAuditHistoryById(contentAuditHist,rowData)" matTooltip="History"  matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
+			 
+			</div> 
+									</td>
+								</tr>
+							</ng-template>
+							<ng-template #auditContent let-c="close" let-d="dismiss">
+								<div class="audit-template-launcher">
+									<warehouse-audit [Data]="AuditDetails" [Modal]="modal" *ngIf="HasAuditDetails"></warehouse-audit>
+									<audit-no-history [Modal]="modal" [Title]="AuditHistoryTitle" *ngIf="!HasAuditDetails"></audit-no-history>
+								</div>
+							</ng-template>
+							<ng-template pTemplate="emptymessage" let-columns
+										 *ngIf="wareHousedata && wareHousedata.length == 0 || wareHousedata && wareHousedata.length ==null">
+								<tr>
+									<td [attr.colspan]="11" class="no-records-cstm">
+										No records found
+									</td>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="summary" id="footer">
+								<label id="footer" class="footer1">Total:</label>
+								<input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+								<label id="footer" class="footer1">Pages Count:</label>
+								<input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
+							</ng-template>
+						</p-table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+  
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+       
+	</div>
+	<div class="modal-body">
+		<strong>
+			Warehouse Name:
+			<span class="new-label">{{restorerecord.name}}
+			</span>
+		</strong>
+	</div>
+  
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> 
+
+<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+	<div class="modal-header">
+		<h4 class="modal-title" *ngIf="isEditMode">Edit Warehouse</h4>
+		<h4 class="modal-title" *ngIf="!isEditMode">Add Warehouse</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-body">
+		<form #userForm="ngForm" class="form-horizontal" (ngSubmit)="SaveandEditWarehouse()">
+			<div class="col-sm-12">
+				<div class="col-sm-5">
+					<div class="form-group">
+						<div class="col-sm-12">
+							<div class="col-sm-4">
+								<label class="control-label">Site Name
+									<span class="clr-red">*</span>
+								</label>
+							</div>
+							<div class="col-sm-7">
+								<select [(ngModel)]="sourceWarehouse.siteId" (ngModelChange)="getmemo()"  [ngModelOptions]="{standalone: true}" (change)="siteValueChange($event.target.value)">
+									<option *ngFor="let site of allSites" [ngValue]="site.siteId">{{site.name}}</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="col-sm-4">
+								<label for="actionname" class="control-label">Warehouse Name
+									<span class="clr-red">*</span>
+								</label>
+							</div>
+							<div class="col-sm-7">
+								<p-autoComplete (onSelect)="Manufacturerdescription($event)" (onKeyUp)=ManufacturerHandler($event) (completeMethod)="filtermanufacturer($event)"
+								 [(ngModel)]="name" (ngModelChange)="getmemo()" [suggestions]="localCollection" [size]="30" [minLength]="2" name="warehouse"
+								 [dropdown]="true" class="p-autoComplete-ctsm">
+								</p-autoComplete>
+								<div *ngIf="disableSaveManufacturer" class="clr-red">Already Exists</div>
+								<div class="clear"></div>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">Address Line 1</label>
+							</div>
+							<div class="col-sm-7">
+								<input type="text" (ngModelChange)="getmemo()" class="form-control" disabled placeholder="Address Line 1" id="memo" required value={{address1}}>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">Address Line 2</label>
+							</div>
+							<div class="col-sm-7">
+								<input class="form-control" (ngModelChange)="getmemo()" type="text" disabled placeholder="Address Line 2" minlength="2" required value={{address2}}>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">Address Line 3</label>
+							</div>
+							<div class="col-sm-7">
+								<input class="form-control" (ngModelChange)="getmemo()" type="text" disabled placeholder="Address Line 3" minlength="2" required value={{address3}}>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">City</label>
+							</div>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" (ngModelChange)="getmemo()" disabled placeholder="City" minlength="2" required value={{city}}>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">State</label>
+							</div>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" (ngModelChange)="getmemo()" disabled placeholder="State" minlength="2" required value={{stateOrProvince}}>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">Country</label>
+							</div>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" (ngModelChange)="getmemo()" disabled placeholder="Country" minlength="2" required value={{country}}>
+							</div>
+						</div>
+						<div class="col-sm-12" *ngIf="showAddress">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">Zip Code</label>
+							</div>
+							<div class="col-sm-7">
+								<input type="text" class="form-control" (ngModelChange)="getmemo()" disabled placeholder="Zip Code" minlength="2" required value={{postalCode}}>
+							</div>
+						</div>
+						<div class="col-sm-12">
+							<div class="col-sm-4">
+								<label for="description" class="control-label">Memo</label>
+							</div>
+							<div class="col-sm-7">
+								<textarea [(ngModel)]="sourceWarehouse.memo" (ngModelChange)="getmemo()" name="memo"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-7">
+							<div class="checkbox-cstm">
+								<label>
+									<input type="checkbox" (ngModelChange)="getmemo()" name="isActive" #isActive="ngModel" checked id="isActive" [(ngModel)]="sourceWarehouse.isActive">
+									<span class="cr">
+										<i class="cr-icon pi pi-check"></i>
+									</span>
+									Active
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-6" *ngIf="showManagement">
+					<p-treeTable [value]="gridData" [columns]="cols1" class="p-Treetable-view" [(selection)]="selectedNodeTest">
+						<ng-template pTemplate="header" let-columns>
+							<tr>
+								<th *ngFor="let col of columns">
+									{{col.header}}
+								</th>
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+							<tr>
+								<td class="warehouse-tree-td" *ngFor="let col of columns; let i = index">
+									<p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
+									<p-treeTableCheckbox [value]="rowNode" class="p-Tree-checkbox" *ngIf="i == 0"></p-treeTableCheckbox>
+									{{rowData[col.field]}}
+								</td>
+							</tr>
+						</ng-template>
+					</p-treeTable>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<button class="btn btn-primary" [disabled]="!userForm.valid || disableSaveManufacturer || disableSaveForEdit">{{isEditMode ? 'Update' : 'Save' }}</button>
+				<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+			</div>
+		</form>
+	</div>
+
+</ng-template>
+
+<!-- Delete -->
+<ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+	<div class="modal-header">
+		<h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<strong>
+			Warehouse Name:
+			<span class="new-label">
+				{{warehouse_Name}}
+			</span>
+		</strong>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
+		<button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+	</div>
+
+</ng-template>
+
+
+
+<!-- History -->
+
+
+<ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+	<div class="modal-header">
+		<h4 class="modal-title">History of Credit Terms</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>siteId</th>
+					<th>Description</th>
+					<th>Previous Value</th>
+					<th>New Value</th>
+					<th>Last Updated By</th>
+					<th>Last Updated Time</th>
+				</tr>
+			</thead>
+			<tr *ngFor="let audit of auditHisory">
+				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'auditHistoryId', audit.auditHistoryId)  ? 'black' : 'red'  }">>{{audit.auditHistoryId}}</td>
+				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'columnName', audit.columnName)  ? 'black' : 'red'  }">>{{audit.columnName}}</td>
+				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'previousValue', audit.previousValue)  ? 'black' : 'red'  }">>{{audit.previousValue}}</td>
+				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'newValue', audit.newValue)  ? 'black' : 'red'  }">>{{audit.newValue}}</td>
+				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">>{{audit.updatedBy}}</td>
+				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+	</div>
+</ng-template>
+
+<!-- View -->
+
+<ng-template #view class="modal fade " id="view" role="dialog">
+
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+			<h4 class="modal-title">Warehouse Details</h4>
+		</div>
+		<div class="modal-body viewform">
+			<div class="col-sm-6">
+				<p>
+					<span class="label view-Header">
+						<b> Warehouse Name : </b>
+					</span>
+					<span class="value">{{warehouse_Name}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> Site Name : </b>
+					</span>
+					<span class="value">{{siteName}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> Address1: </b>
+					</span>
+					<span class="value">{{address1}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> Address2: </b>
+					</span>
+					<span class="value">{{address2}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> Address3: </b>
+					</span>
+					<span class="value">{{address3}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> City: </b>
+					</span>
+					<span class="value">{{city}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> State: </b>
+					</span>
+					<span class="value">{{stateOrProvince}}</span>
+				</p>
+
+			</div>
+			<div class="col-sm-6">
+				<p>
+					<span class="label view-Header">
+						<b> Country: </b>
+					</span>
+					<span class="value">{{country}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b> ZipCode: </b>
+					</span>
+					<span class="value">{{postalCode}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b>Memo: </b>
+					</span>
+					<span class="value">{{memo}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b>Created By: </b>
+					</span>
+					<span class="value">{{createdBy}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b>Created Date: </b>
+					</span>
+					<span class="value">{{createdDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b>Updated By: </b>
+					</span>
+					<span class="value">{{updatedBy}}</span>
+				</p>
+				<p>
+					<span class="label view-Header">
+						<b>Updated Date: </b>
+					</span>
+					<span class="value">{{updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+				</p>
+			</div>
+
+			<div class="clear"></div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-danger" data-dismiss="modal" id="" name="" (click)="dismissModel()">Close</button>
+		</div>
+	</div>
+
+</ng-template>

@@ -1,0 +1,35 @@
+<!-- Modal content-->
+<div class="modal-content">
+  <div class="modal-header">
+    <button
+      type="button"
+      (click)="dismissModel()"
+      class="close"
+      data-dismiss="modal"
+    >
+      &times;
+    </button>
+    <h4 class="modal-title">{{ Title }}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive rro-table-cstm">
+      <div class="text-center">
+        <img
+          src="../../../assets/images/binoculars.png"
+          style="height: 100px; width: 100px;"
+        />
+        <h4 style="color: #ff5663;">No History Found</h4>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-dismiss="modal"
+      (click)="dismissModel()"
+    >
+      Close
+    </button>
+  </div>
+</div>

@@ -1,0 +1,198 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="x_panel">
+            <div class="x_content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                        <li class="breadcrumb-item"><a routerLink="/">WO Setup</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Memo</li>
+                    </ol>
+                </nav>
+                <h4 class="page-heading clr-green">WO Setup - Memo</h4>
+                <div class="col-sm-12 form-bg">
+                    <!--calssification Body Start-->
+                    <div class="form-group add-inputs">
+                        <!--Add claffication Start -->
+
+                        <form id="" name="" method="post">
+                            <div class="form-group col-sm-3">
+                                <label class="control-label col-sm-4">Memo ID</label>
+                                <div class="col-sm-7 cust-name">
+                                    <div class="inner-addon right-addon w200 inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control ui-autocomplete-input" id="cmname" name="" placeholder="Memo ID">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <label class="control-label col-sm-4">Memo</label>
+                                <div class="col-sm-7 cust-name">
+                                    <div class="inner-addon right-addon w200 inline-block">
+                                        <i class="fa fa-search"></i>
+                                        <input type="text" class="form-control " id="" name="" placeholder="Memo" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-2">
+                                <button type="button" id="" name="" data-toggle="tooltip" data-original-title="Filter" class="btn btn-warning"><i class="fa fa-search"></i></button>
+                                <button type="button" id="" name="" data-toggle="tooltip" data-original-title="Add" class="btn btn-success"><i class="fa fa-plus"></i></button>
+                            </div>
+                        </form>
+                    </div><!--Add claffication End -->
+                    <!--Uplad Doc-->
+                    <form id="" name="" class="mtop10">
+                        <div class="upload pull-right">
+                            <input type="file" name="upload[]" multiple="" id="upload" class="uploaddoc upload-file" data-multiple-caption="{count} files selected" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                            <label for="upload">
+                                <span data-toggle="tooltip" title="Excel Upload (table rows)"><i class="fa fa-file-excel-o"></i></span>
+                            </label>
+                        </div>
+                    </form>
+                    <!--End-->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>MID</th>
+                                    <th>Memo ID</th>
+                                    <th>Memo</th>
+                                    <th>&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Customs</td>
+                                    <td>Perform custom exam - Perfrom measurement and record weight in Kg and lbs</td>
+                                    <td>
+                                        <span data-toggle="tooltip" class="status" title="Active" data-placement="right"><input type="checkbox" checked data-toggle="toggle" data-width="30" id="toggle-one" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>" data-onstyle="success" data-offstyle="danger"></span>
+                                        <span data-toggle="modal" data-target="#Ecurrency"> <a data-toggle="tooltip" title="" class="btn btn-primary nobg" data-original-title="Edit"><i class="fa fa-edit"></i></a> </span>
+                                        <span data-toggle="modal" data-target="#Hcurrency"> <a data-toggle="tooltip" title="" class="btn btn-success nobg" data-original-title="History"><i class="fa fa-history"></i></a> </span>
+                                        <span data-toggle="modal" data-target="#Dcurrency"> <a class="btn btn-danger nobg" data-toggle="tooltip" title="" data-original-title="Delete"><i class="fa fa-trash"></i></a> </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <br>
+                    <div class="padding5">
+                        <ul class="pagination">
+                            <li class="arrows disabled"><a > <i class="fa fa-angle-left"></i> </a></li>
+                            <li class="active"><a >1</a></li>
+                            <li><a >2</a></li>
+                            <li><a >3</a></li>
+                            <li class="arrows"><a > <i class="fa fa-angle-right"></i> </a></li>
+                        </ul>
+                        <div class="pull-right"> &copy; 2018 <a routerLink="/">PAS</a> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Dcurrency" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="" name="">×</button>
+                    <h4 class="modal-title">Are You Sure Want to Delete 'Memo' ?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Delete  Modal End-->
+    <!-- Edit Modal -->
+    <div class="modal fade" id="Ecurrency" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> Edit 'Customs' Memo ID</h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <span class="col-sm-3"><b>MID: </b></span> <span class="col-sm-6">
+                            1
+                        </span>
+                    </p>
+                    <hr>
+                    <p>
+                        <span class="col-sm-3"><b>Memo ID: </b></span> <span class="col-sm-6">
+                            <input type="text" name="" value="Customs" class="form-control">
+                        </span>
+                    </p>
+                    <hr>
+                    <p>
+                        <span class="col-sm-3"><b>Memo: </b></span> <span class="col-sm-6">
+                            <input type="text" name="" value="Perform custom exam - Perfrom measurement and record weight in Kg and lbs" class="form-control">
+                        </span>
+                    </p>
+                    <hr>
+                    <p><span class="col-sm-3"><b>Last update by: </b></span> <span class="col-sm-9">Meghanadh D</span></p>
+                    <hr>
+                    <p><span class="col-sm-3"><b>Last Updated Time: </b></span> <span class="col-sm-9">02-03-2018 21:15:45</span></p><hr>
+                    <p><span class="col-sm-3"><b>Created by: </b></span> <span class="col-sm-9">Shabbir</span></p>
+                    <hr>
+                    <p><span class="col-sm-3"><b>Created Time: </b></span> <span class="col-sm-9">02-01-2018 09:20:30</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Update Memo</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Edit Modal End-->
+    <!-- Histroy Modal -->
+    <div class="modal fade" id="Hcurrency" role="dialog" data-backdrop="static">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"> History of Memo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>MID</th>
+                                    <th>Memo ID</th>
+                                    <th>Memo</th>
+                                    <th>Last Updated By</th>
+                                    <th>Last Updated Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Customs</td>
+                                    <td>Perform custom exam - Perfrom measurement and record weight in Kg and lbs</td>
+                                    <td>Meghanadh D</td>
+                                    <td>02-03-2018 14:15:45</td>
+
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Customs</td>
+                                    <td>Perform custom exam</td>
+                                    <td>Roger A</td>
+                                    <td>01-23-2018 15:23:21</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

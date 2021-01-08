@@ -1,0 +1,91 @@
+﻿<div [@fadeInOut] class="page-content">
+
+	<div class="right_col" role="main">
+		<div class="x_panel">
+			<div class="x_content">
+				<div style="text-align:center">
+					<h4 class="page-heading clr-green">Roles Structure</h4>
+
+
+					<!--<a (click)="open(contentEdit)" matTooltip="Add Root Entity" class="btn btn-success nobg"><span><i class="fa fa-plus"></i></span></a>-->
+				</div>
+				<hr />
+				<!--<p-toast [style]="{marginTop: '80px'}"></p-toast>-->
+				<!--<button (click)="expandAll($event)">Toggle</button>-->
+				<div>
+				<select [(ngModel)]="userRolelevelId" (change)="getRolesyuserRolelevelId(userRolelevelId)">
+					<option *ngFor="let pow of allUserRoleLevelList" [value]="pow.userRoleLevelId">{{pow.description}}</option>
+				</select>
+				</div>
+				<hr />
+				<div>
+					<p-treeTable [value]="gridData" [columns]="cols1" selectionMode="checkbox" [(selection)]="selectedNode">
+
+						<ng-template pTemplate="header" let-columns>
+							<tr>
+								<th>Entity Name</th>
+								<th>Screen Name</th>
+								<th>Field Name</th>
+								<th>View</th>
+								<th>Add</th>
+								<th>Delete</th>
+								<th>Update</th>
+								<th>No Access</th>
+
+							</tr>
+						</ng-template>
+						<ng-template pTemplate="body" let-rowNode let-rowNode1 let-rowData="rowData" let-columns="columns">
+
+							<tr>
+								<td>
+									<p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+									<div *ngIf="rowData.screenName==null || !rowData.screenName ">
+										{{rowData.entityName}}
+									</div>
+
+								</td>
+
+								<td>
+									<div *ngIf="rowData.fieldName==null || !rowData.fieldName ">
+										{{rowData.screenName}}
+									</div>
+
+								</td>
+								<td>{{rowData.fieldName}}</td>
+
+								<td>
+									<input type="checkbox" value="4" [(ngModel)]="rowData.isViewed" (change)="SetViewValue('isViewed',rowNode)" />
+									<!--<p-treeTableCheckbox [value]="rowNode"  (click)="SetViewValue(selectedNode,rowData,'View')"></p-treeTableCheckbox>-->
+								</td>
+								<td>
+									<input type="checkbox" value="4" [(ngModel)]="rowData.isAdd" (change)="SetViewValue('isAdd',rowNode)" />
+									<!--<p-treeTableCheckbox [value]="rowNode1" (click)="SetViewValue(selectedNode,rowData,'Add')"></p-treeTableCheckbox>-->
+								</td>
+								<td>
+									<input type="checkbox" value="4" [(ngModel)]="rowData.isDelete" (change)="SetViewValue('isDelete',rowNode)" />
+									<!--<p-treeTableCheckbox [value]="rowNode" (click)="SetViewValue(selectedNode,rowData,'Delete')"></p-treeTableCheckbox>-->
+								</td>
+								<td>
+									<input type="checkbox" value="4" [(ngModel)]="rowData.isUpdate" (change)="SetViewValue('isUpdate',rowNode)" />
+
+									<!--<p-treeTableCheckbox [value]="rowNode" (click)="SetViewValue(selectedNode,rowData,'Update')"></p-treeTableCheckbox>-->
+								</td>
+								<td>
+									<input type="checkbox" value="4" [(ngModel)]="rowData.isNoAccess" (change)="SetViewValue('isNoAccess', rowNode)" />
+
+									<!--<p-treeTableCheckbox [value]="rowNode" (click)="SetViewValue(selectedNode,rowData,'No Access')"></p-treeTableCheckbox>-->
+								</td>
+
+							</tr>
+
+
+						</ng-template>
+					</p-treeTable>
+					<!--<p-tree [value]="gridData" selectionMode="single" [(selection)]="selectedFile"></p-tree>-->
+				</div>
+			</div>
+
+			<button (click)="editItemAndCloseModel()" >Save</button>
+		</div>
+	</div>
+</div>

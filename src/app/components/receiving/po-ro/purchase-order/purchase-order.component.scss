@@ -1,0 +1,41 @@
+﻿.x_panel {
+    border: none;
+}
+.rpo-bcrumb {
+    background-color: transparent;
+    color: #295d92;
+}
+.rpo-bcrumb li {
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+// .right-addon .fa-search {
+//     right: 14px;
+// }
+.align_center{
+    text-align: center;
+}
+.roview-table-cstm table.table-bordered thead tr th {
+    min-width: 60px !important;
+}
+input.hidePlaceHolder {
+    color: transparent !important;
+}
+
+input.hidePlaceHolder:focus,
+input.hidePlaceHolder:hover,
+input.hidePlaceHolder:active {
+    color: #000 !important;
+}
+.status-radio label {
+    text-align: left;
+    width: 140px;
+    margin-right: 0;
+    font-weight: normal;
+}
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+}

@@ -1,0 +1,1806 @@
+﻿<app-pn-header [partData]="viewItemMaster"></app-pn-header>
+
+<div class="table-responsive default-bg clear mt-2">
+    <div>
+        <div class="table-responsive default-bg clear">
+            <div class="col-sm-6">
+                <button type="button" class="btn btn-primary" (click)="expandAllItemMasterDetails()">
+                    Open
+                    All
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="closeAllItemMasterDetails()">
+                    Close
+                    All
+                </button>    
+            </div>
+            <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+                <button type="button" name="isActive" [ngClass]="viewItemMaster.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                    <span class="value">{{viewItemMaster.isActive ? 'Active' : 'In-Active'}}</span>
+                 </button> 
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" href="#step1" aria-expanded="false"
+                       aria-controls="receive" class="collapsed">
+                        General Info
+                    </a>
+                </h4>
+            </div>
+            <div id="step1" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                <div class="panel-body">
+                    <div class="modal-content p-1">
+                        <div class="table-responsive default-bg clear">
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            PN: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.partNumber}}</span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            PN Desc: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.partDescription}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Revised PN: </b></span><span class="value">{{viewItemMaster.revisedPart ? viewItemMaster.revisedPart : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>OEM: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isOEM" [(ngModel)]="viewItemMaster.isOEM" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>PMA: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox"
+                                                   name="isPma"
+                                                   [(ngModel)]="viewItemMaster.isPma"
+                                                   disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                
+                                <p *ngIf="viewItemMaster.isPma">
+                                    <span class="label"><b>OEM PN: <span class="text-danger">*</span></b></span><span class="value">{{viewItemMaster.oemPN ? viewItemMaster.oemPN : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>DER: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isDER" [(ngModel)]="viewItemMaster.isDER" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                               
+                                
+                                <p>
+                                    <span class="label"><b>Serialized: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isSerialized" [(ngModel)]="viewItemMaster.isSerialized" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Time Life: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isTimeLife" [(ngModel)]="viewItemMaster.isTimeLife" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>NSN: </b></span><span class="value">{{viewItemMaster.nationalStockNumber ? viewItemMaster.nationalStockNumber : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Item Classification: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.itemClassification}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Item Group: <span *ngIf="viewItemMaster.itemClassification == 'Rotable'" class="text-danger">*</span> </b></span><span class="value">{{viewItemMaster.itemGroup ? viewItemMaster.itemGroup : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Acquisition Type: </b></span><span class="value">{{viewItemMaster.assetAcquistionType ? viewItemMaster.assetAcquistionType : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Expiration Date: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isTimeLife" [(ngModel)]="viewItemMaster.isExpirationDateAvailable" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p *ngIf="viewItemMaster.isExpirationDateAvailable">
+                                    <span class="label"><b>Lesser Of: </b></span><span class="value">{{viewItemMaster.expirationDate | date: 'MM-dd-yyyy'}}</span>
+                                </p>
+                                <div class="form-row" *ngIf="viewItemMaster.isExpirationDateAvailable">
+                                    <div class="col-md-6">
+                                        <div class="snumber-block2">
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label control-alter1 col-sm-5">
+                                                    Rec'd
+                                                    date
+                                                </label>
+                                                <div class="col-sm-7">
+                                                    <label class="wauto">
+                                                        <input type="checkbox" style="margin-left:11px;"
+                                                               name="isReceivedDateAvailable"
+                                                               [(ngModel)]="viewItemMaster.isReceivedDateAvailable"
+                                                               disabled>
+                                                    </label>
+                                                    <input *ngIf="viewItemMaster.isReceivedDateAvailable"
+                                                           class="form-control number exp-date-inputs w48"
+                                                           type="number" name="daysReceived"
+                                                           [(ngModel)]="viewItemMaster.daysReceived"
+                                                           disabled>
+                                                    <span *ngIf="viewItemMaster.isReceivedDateAvailable"
+                                                          style="margin-left: 8px;">Days</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label control-alter col-sm-5">
+                                                    Mfg
+                                                    date
+                                                </label>
+                                                <div class="col-sm-7">
+                                                    <label class="wauto">
+                                                        <input type="checkbox"
+                                                               style="margin-left:11px !important"
+                                                               name="isManufacturingDateAvailable"
+                                                               [(ngModel)]="viewItemMaster.isManufacturingDateAvailable"
+                                                               disabled>
+                                                    </label>
+                                                    <input *ngIf="viewItemMaster.isManufacturingDateAvailable"
+                                                           class="form-control number exp-date-inputs w48"
+                                                           type="number" name="manufacturingDays"
+                                                           [(ngModel)]="viewItemMaster.manufacturingDays"
+                                                           disabled>
+                                                    <span *ngIf="viewItemMaster.isManufacturingDateAvailable"
+                                                          style="margin-left: 8px;">Days</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label control-alter col-sm-5">
+                                                    Tag date
+                                                </label>
+                                                <div class="col-sm-7">
+                                                    <label class="wauto">
+                                                        <input type="checkbox" name="exp-date-radio"
+                                                               style="margin-left:11px !important"
+                                                               name="isTagDateAvailable"
+                                                               [(ngModel)]="viewItemMaster.isTagDateAvailable"
+                                                               disabled>
+                                                    </label>
+                                                    <input *ngIf="viewItemMaster.isTagDateAvailable"
+                                                           class="form-control number exp-date-inputs w48"
+                                                           type="number" name="tagDays"
+                                                           [(ngModel)]="viewItemMaster.tagDays" disabled>
+                                                    <span *ngIf="viewItemMaster.isTagDateAvailable"
+                                                          style="margin-left: 8px;">Days</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label control-alter col-sm-5">
+                                                    Open
+                                                    date
+                                                </label>
+                                                <div class="col-sm-7">
+                                                    <label class="wauto">
+                                                        <input type="checkbox"
+                                                               name="isOpenDateAvailable"
+                                                               style="margin-left:11px !important"
+                                                               [(ngModel)]="viewItemMaster.isOpenDateAvailable"
+                                                               disabled>
+                                                    </label>
+                                                    <input *ngIf="viewItemMaster.isOpenDateAvailable"
+                                                           class="form-control number exp-date-inputs w48"
+                                                           type="number" name="openDays"
+                                                           [(ngModel)]="viewItemMaster.openDays" disabled>
+                                                    <span *ngIf="viewItemMaster.isOpenDateAvailable"
+                                                          style="margin-left: 8px;">Days</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label control-alter col-sm-5">
+                                                    Shipped
+                                                    date
+                                                </label>
+                                                <div class="col-sm-7">
+                                                    <label class="wauto">
+                                                        <input type="checkbox"
+                                                               name="isShippedDateAvailable"
+                                                               style="margin-left:11px !important"
+                                                               [(ngModel)]="viewItemMaster.isShippedDateAvailable"
+                                                               disabled>
+                                                    </label>
+                                                    <input *ngIf="viewItemMaster.isShippedDateAvailable"
+                                                           class="form-control number exp-date-inputs w48"
+                                                           type="number" name="shippedDays"
+                                                           [(ngModel)]="viewItemMaster.shippedDays"
+                                                           disabled>
+                                                    <span *ngIf="viewItemMaster.isShippedDateAvailable"
+                                                          style="margin-left: 8px;">Days</span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group col-sm-12">
+                                                <label class="control-label control-alter col-sm-5">
+                                                    Other
+                                                    date
+                                                </label>
+                                                <div class="col-sm-7">
+                                                    <label class="wauto">
+                                                        <input type="checkbox"
+                                                               name="isOtherDateAvailable"
+                                                               style="margin-left:11px !important"
+                                                               [(ngModel)]="viewItemMaster.isOtherDateAvailable"
+                                                               disabled>
+                                                    </label>
+                                                    <input *ngIf="viewItemMaster.isOtherDateAvailable"
+                                                           class="form-control number exp-date-inputs w48"
+                                                           type="number" name="otherDays"
+                                                           [(ngModel)]="viewItemMaster.otherDays" disabled>
+                                                    <span *ngIf="viewItemMaster.isOtherDateAvailable"
+                                                          style="margin-left: 8px;">Days</span>
+                                                </div>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="inline-block display-flex">
+                                    <label class="control-label">Shelf Life</label>
+                                    <input class="form-control new-checkbox" type="checkbox"
+                                           name="shelfLife" [(ngModel)]="viewItemMaster.shelfLife"
+                                           style="margin: 4px 10px 0 20px;" disabled>
+                                    &nbsp;
+                                    <input *ngIf="viewItemMaster.shelfLife"
+                                           class="form-control shelf1 number exp-date-inputs w50"
+                                           type="number" name="shelfLifeAvailable"
+                                           [(ngModel)]="viewItemMaster.shelfLifeAvailable" disabled>
+                                    <strong class="shelf" style="margin-left: 5px;">
+                                        <span *ngIf="viewItemMaster.shelfLife">Days</span>
+                                    </strong>
+                                </div>
+                               
+                                <p>
+                                    <span class="label"><b>Hazardous Material: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isHazardousMaterial" [(ngModel)]="viewItemMaster.isHazardousMaterial" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Manufacturer: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.manufacturerName}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>RFQ Tracking: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="rfqTracking" [(ngModel)]="viewItemMaster.rfqTracking" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Purchase UOM: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.purchaseUnitOfMeasure}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Stock UOM: </b></span><span class="value">{{viewItemMaster.stockUnitOfMeasure ? viewItemMaster.stockUnitOfMeasure : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Consume UOM: </b></span><span class="value">{{viewItemMaster.consumeUnitOfMeasure ? viewItemMaster.consumeUnitOfMeasure : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Schematic: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isSchematic" [(ngModel)]="viewItemMaster.isSchematic" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            GL Acct.: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.glAccount}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Lead Time Days: </b></span><span class="value">{{viewItemMaster.leadTimeDays ? viewItemMaster.leadTimeDays : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Stock Level: </b></span><span class="value">{{viewItemMaster.stockLevel ? viewItemMaster.stockLevel : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Reorder Point: </b></span><span class="value">{{viewItemMaster.reorderPoint ? viewItemMaster.reorderPoint : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Min Order Qty: </b></span><span class="value">{{viewItemMaster.minimumOrderQuantity ? viewItemMaster.minimumOrderQuantity : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Reorder Qty: </b></span><span class="value">{{viewItemMaster.reorderQuantiy ? viewItemMaster.reorderQuantiy : '-'}}</span>
+                                </p>
+                                
+                                <p>
+                                    <span class="label"><b>Priority: </b></span><span class="value">{{viewItemMaster.priority ? viewItemMaster.priority : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Integration With: </b></span><span class="value">{{viewItemMaster.integrationPortal ? viewItemMaster.integrationPortal : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Memo: </b></span><span class="value">
+                                        <p class="p-0 m-0 p_textEditor" [innerHTML]="viewItemMaster.memo"></p>
+                                    </span> 
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Site: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.siteName ? viewItemMaster.siteName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Warehouse: 
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.warehouseName ? viewItemMaster.warehouseName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Location: 
+                                        </b>
+                                    </span><span class="value">{{viewItemMaster.locationName ? viewItemMaster.locationName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Shelf: </b></span><span class="value">{{viewItemMaster.shelfName ? viewItemMaster.shelfName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Bin: </b></span><span class="value">{{viewItemMaster.binName ? viewItemMaster.binName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Hot Item: </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isHotItem" [(ngModel)]="viewItemMaster.isHotItem" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div class="col-sm-12">
+
+                                <p-table #table3 class="rpo-table-cstm  ptable-th-bg  rro-table-cstm"
+                                         [paginator]="allDocumentsList.length > 0"
+                                         [value]="allDocumentsList" [rows]="5" [pageLinks]="3"
+                                         [rowsPerPageOptions]="[10,20,50,100]" [columns]="documentTableColumns" [scrollable]="true" scrollHeight="500px"
+                                         (onPage)="pageIndexChange($event)">
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:130px" />
+                                            <col style="width: 120px; position:sticky" />
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                [pSortableColumn]="col.field">
+                                                <div>
+                                                    {{ col.header }}
+                                                    <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'" [field]="col.field">
+                                                    </p-sortIcon>
+                                                </div>
+                                            </th>
+                                            <th style="width: 120px; position:sticky">Actions</th>
+
+                                        </tr>
+                                        <tr>
+                                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                <input type="text" (input)="table3.filter($event.target.value, col.field,'contains') "
+                                                       *ngIf="col.field !='download' && col.field !='delete' && col.field != 'createdDate' && col.field != 'updatedDate'"
+                                                       pInputText>
+                                                <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                                       name="createdDate"
+                                                       (change)="dateFilterForTable($event.target.value, col.field )">
+                                                <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
+                                                       name="updatedDate"
+                                                       (change)="dateFilterForTable($event.target.value, col.field )">
+                                            </th>
+                                            <th style="width:120px;position:sticky"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                        <tr *ngIf="allDocumentsList.length > 0">
+                                            <td *ngFor="let col of columns">
+                                                    <div *ngIf="col.field !='download' && col.field !='docMemo'" >
+                                                        <span>
+                                                            {{
+                                                        col.field == 'createdDate'
+                                                            ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                                            : rowData[col.field] && col.field == 'updatedDate'
+                                                            ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                                            : rowData[col.field]
+                                                            }}
+                                                        </span>
+                                                    </div>
+                                                    <div *ngIf="col.field =='docMemo'" >
+                                                        <span>
+                                                            <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td style="width: 120px; position:sticky">
+                                                    <a (click)="downloadFileUpload(rowData)" matTooltip="Download"
+                                                       matTooltipPosition="above" class="btn nobg btn-cstm">
+                                                        <span>
+                                                            <i class="fa fa-download"></i>
+                                                        </span>
+                                                    </a>
+                                                    <span data-toggle="modal" data-target="#contentAuditHistDoc">
+                                                        <a class="btn nobg"
+                                                           (click)="openHistoryDoc(rowData)"
+                                                           matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                                    </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
+                                               pInputText type="text" />
+
+                                        &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+
+                                        <input style="width: 5%;" [ngModel]="getPageCount(table3._totalRecords, pageSize)"
+                                               name="page count" disabled pInputText type="text" />
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns
+                                                 *ngIf="allDocumentsList.length == 0">
+                                        <tr>
+                                            <td [attr.colspan]="7" style="color: red; font-weight: bold; text-align: center;">
+                                                No records found
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+
+                            </div>
+
+                            <div class="form-row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="control-label">NTE</label>
+                                        <div>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-custom table-bgm">
+                                                    <thead style="text-align:center;   background-color:   #4298ff !important;">
+                                                        <tr>
+                                                            <th>Overhaul</th>
+                                                            <th>Repair</th>
+                                                            <th>Bench Test</th>
+                                                            <th>Mfg</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <strong>Hours</strong>
+                                                                <br />
+                                                                <input type="number"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       name="overhaulHours"
+                                                                       [(ngModel)]="viewItemMaster.overhaulHours"
+                                                                       disabled>
+                                                            </td>
+                                                            <td>
+                                                                <strong>Hours</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       name=""
+                                                                       [(ngModel)]="viewItemMaster.rpHours"
+                                                                       disabled>
+                                                            </td>
+                                                            <td>
+                                                                <strong>Hours</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       pattern="/^-?\d+\.?\d*$/"
+                                                                       onKeyPress="if(this.value.length==5) return false;"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       [ngModelOptions]="{standalone: true}"
+                                                                       [(ngModel)]="viewItemMaster.testHours"
+                                                                       disabled>
+                                                            </td>
+                                                            <td>
+                                                                <strong>Hours</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       [ngModelOptions]="{standalone: true}"
+                                                                       pattern="/^-?\d+\.?\d*$/"
+                                                                       onKeyPress="if(this.value.length==5) return false;"
+                                                                       [(ngModel)]="viewItemMaster.mfgHours"
+                                                                       disabled>
+                                                            </td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="control-label">Turn Around Time</label>
+                                        <div>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-custom table-bgm">
+                                                    <thead style="text-align:center;   background-color:   #4298ff !important;">
+                                                        <tr>
+                                                            <th>Overhaul</th>
+                                                            <th>Repair</th>
+                                                            <th>Bench Test</th>
+                                                            <th>Mfg</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <strong>Days</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       [ngModelOptions]="{standalone: true}"
+                                                                       pattern="/^-?\d+\.?\d*$/"
+                                                                       onKeyPress="if(this.value.length==5) return false;"
+                                                                       [(ngModel)]="viewItemMaster.turnTimeOverhaulHours"
+                                                                       disabled>
+                                                            </td>
+                                                            <td>
+                                                                <strong>Days</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       [ngModelOptions]="{standalone: true}"
+                                                                       pattern="/^-?\d+\.?\d*$/"
+                                                                       onKeyPress="if(this.value.length==5) return false;"
+                                                                       [(ngModel)]="viewItemMaster.turnTimeRepairHours"
+                                                                       disabled>
+                                                            </td>
+                                                            <td>
+                                                                <strong>Days</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       [ngModelOptions]="{standalone: true}"
+                                                                       pattern="/^-?\d+\.?\d*$/"
+                                                                       onKeyPress="if(this.value.length==5) return false;"
+                                                                       [(ngModel)]="viewItemMaster.turnTimeBenchTest"
+                                                                       disabled>
+                                                            </td>
+                                                            <td>
+                                                                <strong>Days</strong>
+                                                                <br />
+                                                                <input type="number" pKeyFilter="int"
+                                                                       class="form-control w50 time control-bottom"
+                                                                       [ngModelOptions]="{standalone: true}"
+                                                                       pattern="/^-?\d+\.?\d*$/"
+                                                                       onKeyPress="if(this.value.length==5) return false;"
+                                                                       [(ngModel)]="viewItemMaster.turnTimeMfg"
+                                                                       disabled>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step2"
+                       aria-expanded="false">Aircraft Info</a>
+                </h4>
+            </div>            
+            <div id="step2" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
+                  
+                <div class="panel-body">
+                    <div class="modal-content p-1"
+                         style="overflow: hidden;padding-bottom: 60px !important;">
+                         
+                        <p-table #aircraft [value]="aircraftListDataValues"
+                                 class="rpo-table-cstm  ptable-th-bg "
+                                 [rows]="pageSize"
+                                 [columns]="colsaircraftLD"
+                                 [scrollable]="true" [style]="{width:'100%'}"
+                                 [paginator]="true" [rowsPerPageOptions]="[10, 20, 50, 100]"
+                                 [resizableColumns]="true" [reorderableColumns]="true"
+                                 selectionMode="multiple"
+                                 [metaKeySelection]="true">
+                                 <ng-template pTemplate="caption" let-columns>
+                                    <div class="col" style="height: 25px !important;">
+                                        <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
+                                            <label style="width: 120px;">
+                                              <input type="checkbox" name="aircraftListDataValues" (change)="getAircraftMappedDeletdDataByItemMasterId($event)" />
+                                              <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                <p style="font-weight: bold;"> Show Deleted List </p>  
+                                            </label>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" style="width:130px" />
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                        [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th style="width:70px;position:sticky">Action</th>
+                                </tr>
+                                <tr>
+                                    <th style="width:auto" *ngFor="let col of columns"
+                                        [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text"
+                                               (input)="aircraft.filter($event.target.value, col.field, 'contains')" />
+                                    </th>
+                                    <th style="width:70px;position:sticky"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-i="rowIndex" let-rowData
+                                         let-columns="columns">
+                                <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
+                                    pReorderableRowHandle (dblclick)="onViewAircraftonDbl(rowData)">
+                                    <td *ngFor="let col of columns" ResizableColumn pReorderableColumn>
+                                        <div *ngIf="col.field !='createdDate' && col.field !='updatedDate'" >
+                                            {{rowData[col.field]}}
+                                        </div>
+                                        <div *ngIf="col.field =='createdDate' || col.field =='updatedDate'" >
+                                            <span>
+                                                {{  (rowData[col.field] | date: 'dd-MM-yyyy h:mm a ') }}
+                                            </span>
+                                        </div>                                       
+                                    </td>
+                                    <td style="width:70px; text-align: center;"
+                                        *ngIf="colsaircraftLD.length > 0">
+                                        <span>
+                                            <a class="btn btn-info boxed-float-btn nobg"
+                                               data-toggle="modal" data-target="#viewAircraft"
+                                               (click)="onViewAircraft(rowData)" matTooltip="View" matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg" data-toggle="modal"
+                                               data-target="#aircraftHistory" matTooltip="History" matTooltipPosition="above"
+                                               (click)="getAircraftAuditHistory(rowData)">
+                                                <i class="fa fa-history"></i>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns
+                                         *ngIf="aircraftListDataValues?.length == 0">
+                                <tr>
+                                    <td [attr.colspan]="6" class="no-records-cstm">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <label id="footer" class="footer">Total:</label>
+                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                       [(ngModel)]="aircraft._totalRecords" [disabled]="true" pInputText
+                                       type="text" />
+                                &nbsp;&nbsp;
+                                <label id="footer" class="footer1">Pages Count:</label>
+                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                       [ngModel]="getPageCount(aircraft._totalRecords, pageSize)"
+                                       [disabled]="true" pInputText type="text" />
+                            </ng-template>
+                        </p-table>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step3">
+                        ATA
+                        Chapter
+                    </a>
+                </h4>
+            </div>
+            <div id="step3" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="modal-content p-1"
+                         style="overflow: hidden;padding-bottom: 60px !important;">
+                        <p-table #ataDataTable class="rpo-table-cstm  ptable-th-bg "
+                                 [value]="ataMappedList" [rows]="ataPageSize" [columns]="atasub"
+                                 [scrollable]="true" [style]="{width:'100%'}" [paginator]="true"
+                                 [rowsPerPageOptions]="[10, 20, 50, 100]" (onPage)="ataChapterPageIndexChange($event)">
+
+                                 <ng-template pTemplate="caption" let-columns>
+                                    <div class="col" style="height: 25px !important;">
+                                        <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
+                                            <label style="width: 120px;">
+                                              <input type="checkbox" name="ataMappedList" (change)="getDeletedATAMappedDataByItemMasterId($event)" />
+                                              <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                <p style="font-weight: bold;"> Show Deleted List </p>  
+                                            </label>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                            <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" style="width:130px" />
+                                </colgroup>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of atasub" pResizableColumn pReorderableColumn
+                                        [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th style="width:70px;position:sticky">Action</th>
+                                </tr>
+                                <tr>
+                                    <th style="width:auto" *ngFor="let col of columns"
+                                        [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text"
+                                               (input)="ataDataTable.filter($event.target.value, col.field, 'contains')" />
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-i="rowIndex" let-rowData
+                                         let-columns="columns">
+                                <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="onViewATAonDbl(rowData)"> 
+                                    <td *ngFor="let col of atasub" ResizableColumn pReorderableColumn>
+                                        <div *ngIf="col.field !='createdDate' && col.field !='updatedDate'" >
+                                            {{rowData[col.field]}}
+                                        </div>
+                                        <div *ngIf="col.field =='createdDate' || col.field =='updatedDate'" >
+                                            <span>
+                                                {{  (rowData[col.field] | date: 'dd-MM-yyyy h:mm a ') }}
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <td style="width:70px; text-align: center;"
+                                        *ngIf="colsaircraftLD.length > 0">
+                                        <span>
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewATA"
+                                               (click)="onViewATA(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                        </span> 
+                                        <span>
+                                            <a class="btn nobg" data-toggle="modal"
+                                               data-target="#contentATAChapterHist" matTooltip="History" matTooltipPosition="above"
+                                               (click)="getAtaChapterAuditHistory(rowData)">
+                                                <i class="fa fa-history"></i>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns
+                                         *ngIf="ataMappedList?.length == 0">
+                                <tr>
+                                    <td [attr.colspan]="6" class="no-records-cstm">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <label id="footer" class="footer">Total:</label>
+                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                       [(ngModel)]="ataDataTable._totalRecords" [disabled]="true"
+                                       pInputText type="text" />
+                                &nbsp;&nbsp;
+                                <label id="footer" class="footer1">Pages Count:</label>
+                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                       [ngModel]="getPageCount(ataDataTable._totalRecords, ataPageSize)"
+                                       [disabled]="true" pInputText type="text" />
+                            </ng-template>
+                        </p-table>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse"
+                       href="#step4">Capes</a>
+                </h4>
+            </div>
+            <div id="step4" class="panel-collapse collapse">
+                <div style="background-color: #fff !important;" class="panel-body">
+                    <div>
+                        <app-item-master-capabilities-list *ngIf="itemMasterId"
+                                                           [isEnableItemMasterView]="isEnableItemMasterView"
+                                                           [itemMasterId]="itemMasterId"></app-item-master-capabilities-list>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse"
+                       href="#step5">Purchase and Sales</a>
+                </h4>
+            </div>
+            <div id="step5" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="modal-content" style="padding: 8px;">
+                        <div class="table-responsive pandsalesTable">
+                            <div class="col" style="height: 35px !important;">
+                                <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
+                                    <label style="width: 120px;">
+                                      <input type="checkbox" name="currentDeleteStatus" (change)="getPSListOnDeleteStatus($event.target.checked)" />
+                                      <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        <p style="font-weight: bold;"> Show Deleted List </p>  
+                                    </label>
+                                </div>
+                            </div>
+                            <table class="table table-bordered table-striped table-sorting mpn-list-table fixed-column-table column-r1-fixed"
+                                   id="mpn-list-table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="10">Unit Purchase Price</th>
+                                        <th class="bg4" colspan="1"></th>
+                                        <th colspan="13" class="bg1">Unit Sale Price</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="10"></th>
+                                        <th class="bg4" colspan="1"></th>
+                                        <th colspan="5" class="bg2">Use Flat Sale Price</th>
+                                        <th colspan="8" class="bg3">
+                                            Calculate Unit Sale Price Using
+                                            Puchase Price
+                                        </th>
+                                        <th></th>
+
+                                    </tr>
+                                    <tr>
+                                        <th>Cond *</th>
+                                        <th>UOM *</th>
+                                        <th>Currency *</th>
+                                        <th>FX Rate *</th>
+                                        <th>Vendor List Price</th>
+                                        <th>Last List Price Date</th>
+                                        <th>Purchase Disc %</th>
+                                        <th>Purchase Disc Amount</th>
+                                        <th>Last Purchase Disc Date</th>
+                                        <th>Unit Purchase Price</th>
+                                        <th class="bg4">Sale Price *</th>
+                                        <th class="bg2">UOM *</th>
+                                        <th class="bg2">Currency *</th>
+                                        <th class="bg2">FX Rate *</th>
+                                        <th class="bg2">Flat Price Amount</th>
+                                        <th class="bg2">Last Flat Price Date</th>
+                                        <th class="bg3">Mark % on List Price</th>
+                                        <th class="bg3">Mark Up Amount</th>
+                                        <th class="bg3">Last Mark Up Date</th>
+                                        <th class="bg3">Base Sale Price</th>
+                                        <th class="bg3">Sale Disc %</th>
+                                        <th class="bg3">Sale Disc Amount</th>
+                                        <th class="bg3">Last Sales Disc Date</th>
+                                        <th class="bg3">Unit Sale Price</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <tr *ngFor="let field of purchaseSalesInfo">
+                                        <td><p style="width: 100px;"> {{field.conditionName ? field.conditionName : '-'}}</p></td>
+                                        <td><p style="width: 100px;"> {{field.pP_UOMName ? field.pP_UOMName : '-'}}</p></td>
+                                        <td> <p style="width: 100px;"> {{field.pP_CurrencyName ? field.pP_CurrencyName : '-'}}</p></td>
+                                        <td class="text-right"> <p style="width: 100px;"> {{field.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p></td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td> <p style="width: 100px;"> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td> <p style="width: 100px;"> {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td> <p style="width: 100px;"> {{field.salePriceSelectName ? field.salePriceSelectName : '-'}}</p></td>
+                                        <td> <p style="width: 100px;"> {{field.sP_FSP_UOMName ? field.sP_FSP_UOMName : '-'}}</p></td>
+                                        <td> <p style="width: 100px;"> 
+                                            {{field.sP_FSP_CurrencyName ? field.sP_FSP_CurrencyName : '-'}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_FSP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td> <p style="width: 100px;"> {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM-dd-yyyy'}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy'}}</p>
+                                        </td>
+                                        <td class="text-right"> <p style="width: 100px;"> 
+                                            {{field.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                                        </td>
+                                        <td>
+                                            <a class="btn nobg"
+                                            (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)"
+                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                     
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse"
+                       href="#step6">NHA,TLA, Alternate, Equivalency</a>
+                </h4>
+            </div>
+            <div id="step6" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="modal-content p-1">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <app-ntae-alternate *ngIf="itemMasterId" [itemMastId]="itemMasterId"  [partData]="viewItemMaster"
+                                                    [isViewItemMasterNHA]="isViewItemMasterNHA"></app-ntae-alternate>
+                            </div>
+                            <div class="col-md-6">
+                                <app-ntae-alternate *ngIf="itemMasterId" [itemMastId]="itemMasterId"  [partData]="viewItemMaster"
+                                                    [isViewItemMasterTLA]="isViewItemMasterTLA"></app-ntae-alternate>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <app-ntae-alternate *ngIf="itemMasterId" [itemMastId]="itemMasterId" [partData]="viewItemMaster"
+                                                    [isViewItemMasterAlternate]="isViewItemMasterAlternate">
+                                </app-ntae-alternate>
+                            </div>
+                            <div class="col-md-6">
+                                <app-ntae-alternate *ngIf="itemMasterId" [itemMastId]="itemMasterId"  [partData]="viewItemMaster"
+                                                    [isViewItemMasterEquivalency]="isViewItemMasterEquivalency">
+                                </app-ntae-alternate>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse"
+                       href="#step7">Exchange and Loans</a>
+                </h4>
+            </div>
+            <div id="step7" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="modal-content p-1">
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label"><b>Exchange </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isExchange" [(ngModel)]="exchangeLoanInfo.isExchange" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Currency: </b></span><span class="value">{{exchangeLoanInfo.exchangeCurrencyName ? exchangeLoanInfo.exchangeCurrencyName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Exchange List Price: </b></span><span class="value">{{exchangeLoanInfo.exchangeListPrice | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Core Price: </b></span><span class="value">{{exchangeLoanInfo.exchangeCorePrice | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Overhaul Price: </b></span><span class="value">{{exchangeLoanInfo.exchangeOverhaulPrice | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Outright Price: </b></span><span class="value">{{exchangeLoanInfo.exchangeOutrightPrice | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Overhaul Cost: </b></span><span class="value">{{exchangeLoanInfo.exchangeOverhaulCost | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Core Cost: </b></span><span class="value">{{exchangeLoanInfo.exchangeCoreCost | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label"><b>Loan </b></span><span class="value">
+                                        <label class="wauto">
+                                            <input type="checkbox" name="isLoan" [(ngModel)]="exchangeLoanInfo.isLoan" disabled>
+                                        </label>
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Currency: </b></span><span class="value">{{exchangeLoanInfo.loanCurrencyName ? exchangeLoanInfo.loanCurrencyName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Loan Fees: </b></span><span class="value">{{exchangeLoanInfo.loanFees | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Core Price: </b></span><span class="value">{{exchangeLoanInfo.loanCorePrice | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Outright Price: </b></span><span class="value">{{exchangeLoanInfo.loanOutrightPrice | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse"
+                       href="#step8">Export Information</a>
+                </h4>
+            </div>
+            <div id="step8" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div class="modal-content p-1">
+                        <div class="form-row">
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            ECCN: <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">{{exportInfo.exportECCN ? exportInfo.exportECCN : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>ITAR Num: </b></span><span class="value">{{exportInfo.itarNumber ? exportInfo.itarNumber : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Country: </b></span><span class="value">{{exportInfo.exportCountryName ? exportInfo.exportCountryName : '-'}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Value: </b></span><span class="value">{{exportInfo.exportValue | twoDecimalGlobalNumberFormatPipe}}</span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Currency: </b></span><span class="value">{{exportInfo.exportCurrencyName ? exportInfo.exportCurrencyName : '-'}}</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-6 export-info-w">
+                                <div class="form-row">
+                                    <div class="col-sm-4">
+                                        <p>
+                                            <span class="label"><b>Weight: </b></span><span class="value">{{exportInfo.exportWeight ? exportInfo.exportWeight : '-'}}</span>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p>
+                                            <span style="width: 25% !important;" class="label"><b>UOM:<span *ngIf="exportInfo.exportWeight" class="clr-red">*</span> </b></span><span class="value">{{exportInfo.exportWeightUnitName ? exportInfo.exportWeightUnitName : '-'}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-4">
+                                        <p>
+                                            <span class="label"><b>Export UOM: </b></span><span class="value">{{exportInfo.exportUomName ? exportInfo.exportUomName : '-'}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-4">
+                                        <p>
+                                            <span class="label"><b>Size (L,W,H): </b></span><span class="value">
+                                                {{exportInfo.exportSizeLength ? exportInfo.exportSizeLength : '-'}},
+                                                {{exportInfo.exportSizeWidth ? exportInfo.exportSizeWidth : '-'}},
+                                                {{exportInfo.exportSizeHeight ? exportInfo.exportSizeHeight : '-'}}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <p>
+                                            <span style="width: 25% !important;" class="label"><b>UOM:<span *ngIf="exportInfo.exportSizeLength || exportInfo.exportSizeWidth || exportInfo.exportSizeHeight" class="clr-red">*</span> </b></span><span class="value">{{exportInfo.exportSizeUnitOfMeasureName ? exportInfo.exportSizeUnitOfMeasureName : '-'}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-sm-4">
+                                        <p>
+                                            <span class="label">
+                                                <b>
+                                                    Classification:
+                                                </b>
+                                            </span><span class="value">{{exportInfo.exportClassificationIdName ? exportInfo.exportClassificationIdName : '-'}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div id="viewATA" class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Details of ATA Information</h4>
+                <button type="button" class="close" (click)="closeViewATAModel()" >
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body" *ngIf="viewATAData">                
+                <div class="form-row mt-2 aircraft-view-popup" >
+                    <div class="col-sm-5">
+                        <p>
+                            <span class="label"><b>ATA Chapter: </b></span><span class="value">{{ viewATAData.ataChapterName }}</span>
+                        </p>
+    
+                        <p>
+                            <span class="label"><b>ATA Sub Chapter: </b></span><span class="value">{{ viewATAData.ataSubChapterDescription }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Created By: </b></span><span class="value">{{ viewATAData.createdBy }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Created Date: </b></span><span class="value">{{ viewATAData.createdDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Updated By: </b></span><span class="value">{{ viewATAData.updatedBy }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Updated Date: </b></span><span class="value">{{ viewATAData.updatedDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
+                        </p>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger"  (click)="closeViewATAModel()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="viewAircraft" class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Details of Aircraft Information</h4>
+                <button type="button" class="close" (click)="onCloseAircraftView()">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body" *ngIf="viewAircraftData">
+                <div class="col-sm-12">
+                    <p>
+                        <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType }}</span>
+                    </p>
+
+                    <p>
+                        <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><b>Created By: </b></span><span class="value">{{ viewAircraftData.createdBy }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><b>Created Date: </b></span><span class="value">{{ viewAircraftData.createdDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><b>Updated By: </b></span><span class="value">{{ viewAircraftData.updatedBy }}</span>
+                    </p>
+                    <p>
+                        <span class="label"><b>Updated Date: </b></span><span class="value">{{ viewAircraftData.updatedDate | date: 'MM/dd/yyyy, h:mm a' }}</span>
+                    </p>
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="onCloseAircraftView()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="contentAuditHistDoc"
+     class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">History of Documents</h4>
+                <button type="button" class="close" (click)="onCloseAircraftView()">
+                    &times;
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th> Name</th>
+                                <th>Description</th>
+                                <th>Memo</th>
+                                <th>File Name</th>
+                                <th>File Size</th>
+
+                                <th>Updated By</th>
+                                <th>Updated Date</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                            <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
+                                <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'docName', audit.docName)
+                  ? 'black'
+                  : 'red'
+              }">
+                                    {{ audit.docName }}
+                                </td>
+                                <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(
+                  i,
+                  'docDescription',
+                  audit.docDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }">
+                                    {{ audit.docDescription }}
+                                </td>
+                                <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)
+                  ? 'black'
+                  : 'red'
+              }">
+                                    <!-- {{ audit.docMemo }} -->
+                                    <p [innerHTML]="audit.docMemo"></p>
+                                </td>
+                                <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName)
+                  ? 'black'
+                  : 'red'
+              }">
+                                    {{ audit.fileName }}
+                                </td>
+                                <td>{{ audit.fileSize }}</td>
+
+                                <td>{{ audit.updatedBy }}</td>
+                                <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                                <td>{{ audit.createdBy }}</td>
+                                <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="onCloseAircraftView()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="aircraftHistory" class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">History of Aircraft Info</h4>
+                <button type="button" class="close" (click)="onCloseAircraftView()">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Aircraft</th>
+                                <th>Aircraft Model</th>
+                                <th>Dash Numbers</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                                <th>Updated By</th>
+                                <th>Updated Date</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+
+                        <tr *ngFor="let audit of aircraftauditHistory; let i = index">
+                            <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'aircraftType',
+                    audit.aircraftType
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                                {{ audit.aircraftType }}
+                            </td>
+                            <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'aircraftModel',
+                    audit.aircraftModel
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                                {{ audit.aircraftModel }}
+                            </td>
+                            <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'dashNumber',
+                    audit.dashNumber
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                                <span *ngIf="audit.dashNumber != 'Unknown'">{{ audit.dashNumber }}</span>
+                            </td>                            
+                            <td>{{ audit.updatedBy }}</td>
+                            <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                            <td>{{ audit.createdBy }}</td>
+                            <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                            <td style="background-color: #fff !important;"><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="onCloseAircraftView()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="contentATAChapterHist"
+     #contentATAChapterHist
+     class="modal fade"
+     role="dialog"
+     data-backdrop="static"
+     data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeModel('contentATAChapterHist')">
+                    &times;
+                </button>
+                <h4 class="modal-title">History of ATA Chapter</h4>
+            </div>
+            <div class="modal-body" *ngIf="ataChapterAuditHistory">
+                <!-- <app-pn-header [partData]="sourceItemMaster"></app-pn-header> -->
+                <div class="table-responsive mt-2">
+                    <table class="table table-bordered"
+                           *ngIf="ataChapterAuditHistory.length > 0; else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>ATA Chapter Code</th>
+                                <th>ATA Chapter Name</th>
+                                <th>ATA Sub Chapter</th>
+                                <th>ATA Sub Code</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                                <th>Updated By</th>
+                                <th>Updated Date</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="ataChapterAuditHistory.length > 0">
+                            <tr *ngFor="let audit of ataChapterAuditHistory; let i = index">
+
+
+                                <td [ngStyle]="{
+                    color: getColorCodeForHistoryATA(i, 'ataChapterCode', audit.ataChapterCode)
+                      ? 'black'
+                      : 'red'
+                  }">
+                                    {{ audit.ataChapterCode }}
+                                </td>
+
+                                <td [ngStyle]="{
+                    color: getColorCodeForHistoryATA(i, 'ataChapterName', audit.ataChapterName)
+                      ? 'black'
+                      : 'red'
+                  }">
+                                    {{ audit.ataChapterName }}
+                                </td>
+                                <td [ngStyle]="{
+                    color: getColorCodeForHistoryATA(i, 'ataSubChapterDescription', audit.ataSubChapterDescription)
+                      ? 'black'
+                      : 'red'
+                  }">
+                                    {{ audit.ataSubChapterDescription }}
+                                </td>
+                                <td [ngStyle]="{
+                    color: getColorCodeForHistoryATA(i, 'ataSubChapterCode', audit.ataSubChapterCode)
+                      ? 'black'
+                      : 'red'
+                  }">
+                                    {{audit.ataSubChapterCode}}
+                                </td>
+                                <td>{{ audit.createdBy }}</td>
+                                <td><p style="width: 120px;">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+
+                                <td>{{ audit.updatedBy }}</td>
+                                <td><p style="width: 120px;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td style="background-color: #fff;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <h4 style="color: #ff5663;">No History Found</h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closeModel('contentATAChapterHist')">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #contentPurchaseAndSalesHist
+             let-c="close"
+             let-d="dismiss"
+             style="width:auto"
+             data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">History of Purchase and Sales</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive pandsHistoryTable">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th colspan="10">Unit Purchase Price</th>
+                        <th colspan="1" class="bg4"></th>
+                        <th colspan="13" class="bg1">Unit Sale Price</th>
+                        <th colspan="5"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="10"></th>
+                        <th colspan="1" class="bg4"></th>
+                        <th colspan="5" class="bg2">Use Flat Sale Price</th>
+                        <th colspan="8" class="bg3">Calculate Unit Sale Price Using Puchase Price</th>
+                        <th colspan="5"></th>
+                    </tr>
+                    <tr>
+                        <th style="width: 100px;">Cond *</th>
+                        <th style="width: 100px;">UOM *</th>
+                        <th style="width: 100px;">Currency *</th>
+                        <th style="width: 100px;">FX Rate *</th>
+                        <th style="width: 100px;">Vendor List Price</th>
+                        <th style="width: 100px;">Last List Price Date</th>
+                        <th style="width: 100px;">Purchase Disc %</th>
+                        <th style="width: 100px;">Purchase Disc Amount</th>
+                        <th style="width: 100px;">Last Purchase Disc Date</th>
+                        <th style="width: 100px;">Unit Purchase Price</th>
+                        <th style="width: 100px;" class="bg4">Sale Price *</th>
+                        <th style="width: 100px;" class="bg2">UOM *</th>
+                        <th style="width: 100px;" class="bg2">Currency *</th>
+                        <th style="width: 100px;" class="bg2">FX Rate *</th>
+                        <th style="width: 100px;" class="bg2">Flat Price Amount</th>
+                        <th style="width: 100px;" class="bg2">Last Flat Price Date</th>
+                        <th style="width: 100px;" class="bg3">Mark % on List Price</th>
+                        <th style="width: 100px;" class="bg3">Mark Up Amount</th>
+                        <th style="width: 100px;" class="bg3">Last Mark Up Date</th>
+                        <th style="width: 100px;" class="bg3">Base Sale Price</th>
+                        <th style="width: 100px;" class="bg3">Sale Disc %</th>
+                        <th style="width: 100px;" class="bg3">Sale Disc Amount</th>
+                        <th style="width: 100px;" class="bg3">Last Sales Disc Date</th>
+                        <th style="width: 100px;" class="bg3">Unit Sale Price</th>                        
+                        <th style="width: 100px;">Updated By</th>
+                        <th style="width: 100px;">Updated Date</th>
+                        <th style="width: 100px;">Created By</th>
+                        <th style="width: 100px;">Created Date</th>
+                        <th style="width: 100px;">Is Deleted</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let audit of sourceViewforPurchaseandSalesAudit"></tr>
+                    <tr *ngFor="let audit of sourceViewforPurchaseandSalesAudit; let i = index">
+                        <td [ngStyle]="{width: '100px',
+                color: getColorCodeForHistoryForPandS(i, 'conditionName', audit.conditionName)
+                  ? 'black'
+                  : 'red'
+              }">
+                           <p style="width: 100px;"> {{ audit.conditionName }}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                color: getColorCodeForHistoryForPandS(
+                  i,
+                  'pP_UOMName',
+                  audit.pP_UOMName
+                )
+                  ? 'black'
+                  : 'red'
+              }">
+              <p style="width: 100px;"> {{ audit.pP_UOMName }}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                color: getColorCodeForHistoryForPandS(i, 'pP_CurrencyName', audit.pP_CurrencyName)
+                  ? 'black'
+                  : 'red'
+              }">
+              <p style="width: 100px;">  {{ audit.pP_CurrencyName }}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                color: getColorCodeForHistoryForPandS(i, 'pP_FXRatePerc', audit.pP_FXRatePerc)
+                  ? 'black'
+                  : 'red'
+              }">
+              <p style="width: 100px;">  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'pP_VendorListPrice', audit.pP_VendorListPrice)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'pP_LastListPriceDate', audit.pP_LastListPriceDate)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscAmount', audit.pP_PurchaseDiscAmount)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
+                        </td>
+                        
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'pP_LastPurchaseDiscDate', audit.pP_LastPurchaseDiscDate)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'salePriceSelectName', audit.salePriceSelectName)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">  {{ audit.salePriceSelectName }}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_FSP_UOMName', audit.sP_FSP_UOMName)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">     {{ audit.sP_FSP_UOMName }}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_FSP_CurrencyName', audit.sP_FSP_CurrencyName)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">     {{ audit.sP_FSP_CurrencyName }}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FXRatePerc', audit.sP_FSP_FXRatePerc)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">     {{ audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FlatPriceAmount', audit.sP_FSP_FlatPriceAmount)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">     {{ audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_FSP_LastFlatPriceDate', audit.sP_FSP_LastFlatPriceDate)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpAmount', audit.sP_CalSPByPP_MarkUpAmount)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastMarkUpDate', audit.sP_CalSPByPP_LastMarkUpDate)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscPercValue', audit.sP_CalSPByPP_SaleDiscPercValue)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'SP_CalSPByPP_SaleDiscAmount', audit.SP_CalSPByPP_SaleDiscAmount)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                        </td>
+                        <td [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastSalesDiscDate', audit.sP_CalSPByPP_LastSalesDiscDate)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                        </td>
+                        <td class="text-right" [ngStyle]="{width: '100px',
+                            color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
+                              ? 'black'
+                              : 'red'
+                          }">
+                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                        </td>
+                        <td><p style="width: 100px;"> {{ audit.updatedBy }}</p></td>
+                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p style="width: 100px;"> {{ audit.createdBy }}</p></td>
+                        <td><p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            Close
+        </button>
+    </div>
+</ng-template>
+<app-spinner *ngIf="isSpinnerVisible"></app-spinner>

@@ -1,0 +1,99 @@
+﻿label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: 400;
+  }
+  
+  .span-header-red {
+    color: red;
+    font-weight: bold;
+  }
+  
+  .bg4 {
+    background: #dc3545 !important;
+}
+  input[type='text'],
+  input[type='number'],
+  input[type='email'],
+  select,
+  textarea {
+    height: 24px !important;
+    border-radius: 5px !important;
+  }
+  
+  .po-head {
+    font-weight: 700;
+    font-size: 16px !important;
+    color: #295d92 !important;
+  }
+  
+  .fa-plus-circle.fa-lg {
+      color: green !important;
+  }
+  .view-header {
+    padding-top: 2px!important;
+    margin: 0;
+}
+.snumber-block2 {
+  margin: 10px 0px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 5px;
+}
+.table-custom tr td{
+  text-align: center;
+}
+.snumber-block2 label input {
+    margin-top: 6px;
+    margin-right: 10px;
+}
+.purchaseTable thead tr th {
+  font-size: 12px;
+  padding: 4px;
+  text-align: center;
+}
+.bg1 {
+  background: #ff8080 !important;
+}
+.bg2 {
+  background: #83b028 !important;
+}
+.bg3 {
+  background: #1a7171 !important;
+}
+#itemMasterView .po-head {
+  margin-left: 0 !important;
+}
+  
+  @media (min-width: 768px) {
+      .col-md-3 {
+          max-width: 22%;
+          margin-right: 15px;
+      }
+  }
+
+  .pandsalesTable  table.table-bordered thead tr th, .pandsHistoryTable table.table-bordered thead tr th{
+    padding: 5px !important;
+    text-align: center !important;
+  }
+  .pandsalesTable table.table-bordered thead tr th:last-child{
+    position: sticky;
+    background: #4298ff;
+    right: 0;
+    width: 80px;
+  
+  }
+  table.table-bordered tbody tr td {
+    padding: 0px 4px;
+  }
+  .pandsalesTable table.table-bordered tbody tr td:last-child{
+    position: sticky;
+    background: #eaeaea;
+    right: 0;
+    width: 80px;
+  
+  }
+  .export-info-w p .label, .export-info-w p .value {
+    width: 50%;
+  }

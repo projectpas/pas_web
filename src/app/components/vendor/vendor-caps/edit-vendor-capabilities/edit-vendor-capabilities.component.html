@@ -1,0 +1,232 @@
+﻿
+<div class="x_content">
+
+    <h4 class="page-heading clr-green">Edit Vendor Capabilities</h4>
+    <div class="clear"></div>
+
+    <form action="#" method="post" id="" name="" class="form-horizontal ro-grid-form mtop10">
+        <div class="col-sm-4">
+
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Vendor Code<strong class="clr-red">*</strong></label>
+                <div class="col-sm-7">
+                    <p-autoComplete class="autocomp-customer-cstm" (onSelect)="onVendorCodeselected($event)" (onKeyUp)=codeEventHandler($event) [(ngModel)]="sourceVendorCap.vendorCode" [ngModelOptions]="{standalone: true}" [suggestions]="vendorCodes" (completeMethod)="filterVendorCodes($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true">
+                        <ng-template let-vendorCode pTemplate="item">
+                            <div class="ui-helper-clearfix">{{vendorCode}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label for="vendorName" class="control-label col-sm-4">Vendor Name<strong class="clr-red">*</strong></label>
+                <div class="col-sm-7">
+                    <p-autoComplete  class="autocomp-customer-cstm" (onSelect)="onVendorselected($event)" (onKeyUp)=eventHandler($event) [(ngModel)]="sourceVendorCap.vendorName" [ngModelOptions]="{standalone: true}" [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true">
+                        <ng-template let-vendorName pTemplate="item">
+                            <div class="ui-helper-clearfix">{{vendorName}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Vendor Ranking<strong class="clr-red">*</strong></label>
+                <div class="col-sm-7">
+                    <input class="form-control" type="number" id="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.vendorRanking">
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label for="customerName" class="control-label col-sm-4">PN <strong style="color:red">*</strong></label>
+                <div class="inner-addon col-sm-7">
+
+                    <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendorCap.partName" (onKeyUp)=partEventHandler($event) (onSelect)="partnmId($event)" [ngModelOptions]="{standalone: true}" [suggestions]="partCollection" (completeMethod)="filterpartItems($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true">
+                        <ng-template let-partName pTemplate="part">
+                            <div class="ui-helper-clearfix">{{partName}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Alt PN</label>
+                <div class="col-sm-7">
+                    <input [disabled]="true" class="form-control" type="text" autocomplete="off" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.alternatePartId">
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">PN Description<strong style="color:red">*</strong></label>
+
+                <div class="col-sm-7">
+                    <input [disabled]="true" class="form-control" type="text" autocomplete="off" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.partDescription">
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Vendor Capability Type <strong style="color:red">*</strong> </label>
+                <div class="col-sm-7">
+                    <p-multiSelect [options]="capabilityTypeList" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedCapabulityTypesListData" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">PMA/DER <strong style="color:red">*</strong> </label>
+                <div class="col-sm-7">
+                    <select class="autocomp-customer-cstm" [ngModelOptions]="{standalone: true}" (change)="isPMAorDER(sourceVendorCap.PMA_DER)" [(ngModel)]="sourceVendorCap.PMA_DER">
+                        <option>-- Select --</option>
+                        <option value="pma">PMA</option>
+                        <option value="der">DER</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Cap Description<strong class="clr-red">*</strong></label>
+                <div class="col-sm-7">
+                    <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.capabilityDescription">
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Cost<strong class="clr-red">*</strong></label>
+                <div class="col-sm-7">
+                    <input class="form-control" type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.cost">
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">TAT (Days) <strong class="clr-red">*</strong></label>
+
+                <div class="col-sm-7">
+
+                    <input class="form-control" type="text" pKeyFilter="num" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.tat" maxlength="5">
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-4">
+
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">PN Mfg<strong class="clr-red">*</strong></label>
+                <div class="col-sm-7">
+                    <select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.manufacturerId">
+                        <option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Aircraft Manufacturer</label>
+                <div class="col-sm-7">
+                    <div class="input-group">
+                        <p-multiSelect [options]="shiftValues" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAircraftTypes" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Models</label>
+                <div class="col-sm-7" *ngIf="selectedAircraftTypes || enablePlus">
+                    <i class="fa fa-plus clr-blue cpointer" data-toggle="modal" data-target="#platform-block" (click)="openModelPopups(contentModel)"></i>
+                    <table *ngIf="showInput" [style.border]="showInput ? '1px solid gray' : 'none'">
+                        <tr *ngFor="let word of selectedModels; let in=index">
+                            <td>
+                                {{selectedModels[in].modelName}}
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">ATA Chapter </label>
+                <div class="col-sm-7">
+                    <select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.aTAChapterId" (change)="getATASubChapterData(sourceVendorCap.aTAChapterId)">
+                        <option *ngFor="let ataName of allATAMaininfo1" [ngValue]="ataName.ataChapterId">{{ataName.ataChapterName}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">ATA Sub Chapter </label>
+                <div class="col-sm-7">
+                    <select class="autocomp-customer-cstm" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.aTASubchapterId">
+                        <option *ngFor="let condition of allATAMaininfo" [ngValue]="condition.ataSubChapterId">{{condition.description}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group col-sm-12">
+                <label class="control-label col-sm-4">Memo</label>
+                <div class="col-sm-7">
+                    <textarea class="autocomp-customer-cstm" type="text" rows="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceVendorCap.memo"></textarea>
+                </div>
+            </div>
+
+        </div>
+        <div class="clear"></div>
+
+        <button type="submit" class="btn btn-success pull-right submit-btn" (click)="saveVendorCapsclose()">Save</button>
+        <div class="clear"></div>
+    </form>
+    <div class="pull-right"> © 2019 <a href="#">PAS</a> </div>
+</div>
+
+<p-dialog header="Error" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="1850px"
+          [width]="350" [minWidth]="200" [responsive]="true"
+          [minY]="1050" [baseZIndex]="1100000">
+    <p [ngStyle]="{'color':'red'}" *ngIf="vendorCodeError">Please Enter Vendor Code</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="vendorNameError">Please Enter Vendor Name</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="vendorRankingError">Please Enter Vendor Ranking</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="partIdError">Please Enter Part</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="partDescriptionError">Please Enter Part Description</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="capabulityTypeListDataError">Please Enter Capabulity Type</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="pmaDerError">Please Select PMA or DER</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="capabulityDescError">Please Enter Capabulity Description</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="costError">Please Enter Cost</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="tatError">Please Enter TAT</p>
+    <p [ngStyle]="{'color':'red'}" *ngIf="manufacturerdataError">Please Enter Maufacturer</p>
+
+</p-dialog>
+
+
+
+
+<ng-template #contentModel let-c="close" let-d="dismiss" style="width:auto">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" (click)="dismissAircraftModel()">×</button>
+            <h4 class="modal-title"> Models</h4>
+        </div>
+        <div class="modal-body">
+            <form method="post" id="" name="">
+                <div class="table-responsive default-bg clear">
+                    <table class="table table-bordered table-striped table-sorting">
+                        <thead>
+                            <tr align="center">
+                                <th>Aircraft Type</th>
+                                <th>Model</th>
+                                <th>Select Model</th>
+                                <th>Dash Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let col of allAircraftinfo; let i = index;">
+
+                                <td>{{col.description}}</td>
+                                <td>{{col.modelName}}</td>
+
+                                <td>
+                                    <input type="checkbox" class=" wauto" [(ngModel)]="col.checkbox" [ngModelOptions]="{standalone: true}" (change)="saveSelectedModel(col,i)">
+                                </td>
+                                <td>
+                                    <input class="form-control w100" [(ngModel)]="col.priority" [ngModelOptions]="{standalone: true}" (change)="getSelectedItem(col,$event)">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div>
+                        <button class="btn btn-success pull-right submit-btn" (click)="dismissAircraftModel()">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,116 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="col-md-12">
+            <div class="x_panel" style="">
+                <div class="x_content">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a routerLink="/">WO Setup</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add Equipment</li>
+                        </ol>
+                    </nav>
+                    <div class="pheading">
+                        <h4 class="page-heading clr-green">WO Setup - Equipment</h4>
+                        <div class="clear mtop10"></div>
+
+                    </div>
+                    <div class="cdetails-top">
+                        <div class="col-sm-12">
+                            <label>Company</label>
+                            <span>Silverxis</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>BU</label>
+                            <span>Adso</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Division</label>
+                            <span>Development</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Dept</label>
+                            <span>Java</span>
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-12 po-ro-setup">
+            <div class="x_panel">
+                <div class="tab-content">
+
+                    <div class="table-responsive" id="workflow-attributes-block">
+
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th colspan="8">EQUIPMENT &nbsp; &nbsp;<i class="fa fa-plus plus-icon"></i></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="4"></th>
+                                    <th colspan="4">TOLERANCE</th>
+                                </tr>
+                                <tr>
+                                    <th>Equipment #</th>
+                                    <th>Equipment Description</th>
+                                    <th>Item Classification</th>
+                                    <th>Qty</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>Expected</th>
+                                    <th>Findings</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="inner-addon right-addon autosuggesions-add inline-block w100">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control numberids " id="" name="" value="12345" />
+                                        </div>
+                                        <a routerLink="/app-item-master-equipment-setup" target="_blank" class="add-icon"><i class="fa fa-plus"></i></a>
+                                    </td>
+                                    <td>
+                                        <div class="inner-addon right-addon autosuggesions-add inline-block">
+                                            <input type="text" class="form-control numberids" id="" name="" value="Description" />
+                                        </div>
+                                        <a routerLink="/app-item-master-equipment-setup" target="_blank" class="add-icon"><i class="fa fa-plus"></i></a>
+                                    </td>
+                                    <td>
+                                        <select class="form-control w100">
+                                            <option value="Consumables">Consumables</option>
+                                            <option value="CalibratedEquipmemt">Calibrated Equipmemt</option>
+                                            <option value="Equipmemt" selected>Equipmemt</option>
+                                            <option value="Expendables">Expendables</option>
+                                            <option value="Kit">Kit</option>
+                                            <option value="Rotables">Rotables</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" class="form-control w50" value="4"></td>
+                                    <td><input type="number" class="form-control w50" value="1"></td>
+                                    <td><input type="number" class="form-control w50" value="10"></td>
+                                    <td><input type="number" class="form-control w50" name="" value="9"></td>
+                                    <td><textarea placeholder="Findings Memo" class="w250" style="height:50px;padding 3px;"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <a routerLink="/app-work-order-equipment-check-in-out" class="btn btn-info pull-right">Equipment Check In-Out</a>
+
+
+                </div>
+                <div class="clear"></div>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+
+</div>

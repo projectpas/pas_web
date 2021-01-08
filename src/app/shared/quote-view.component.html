@@ -1,0 +1,380 @@
+<div class="card">
+    <div class="card-body">
+        <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="form-row">
+            <div class="col-md-6">
+                <div class="form-group ">
+                <label>Quote Number <span class="clr-red">*</span></label>
+                <input class="form-control" type="text" [(ngModel)]="quoteForm.quoteNumber" name="quotenumber" readonly/>
+                </div>
+                <div class="form-group ">
+                <label>Open Date <span class="clr-red">*</span> </label>
+                <p-calendar [showIcon]="true" (onSelect)="calculateExpiryDate()" [(ngModel)]="quoteForm.openDate" name="openDate" [disabled]="isView"></p-calendar>
+                </div>
+                <div class="form-group ">
+                <label>Quote Due Date <span class="clr-red">*</span></label>
+                <p-calendar [showIcon]="true"  [(ngModel)]="quoteDueDate" name="QuoteDueDate" aria-readonly [disabled]="isView"></p-calendar>
+                </div>
+                <div class="form-group ">
+                <label> Valid For Days <span class="clr-red">*</span></label>
+                <input class="form-control" (change)="calculateExpiryDate()" type="number" [(ngModel)]="validFor" name="ValidForDays" [disabled]="isView"/>
+                </div>
+                <div class="form-group ">
+                <label> Expiration Date <span class="clr-red">*</span></label>
+                <p-calendar [showIcon]="true" [(ngModel)]="expirationDate" name="ExpDate" [disabled]="true"></p-calendar>
+                </div>
+    
+                <div class="form-group">
+                <label> Quote Status <span class="clr-red">*</span></label>
+                <select [(ngModel)]="quoteForm.expirationDateStatus" name="ExpDateStatus" [disabled]="isView">
+                    <option value=1>Open</option>
+                    <option value=2>Closed</option>
+                    <option value=3>Cancelled</option>
+                    <option value=4>Delayed</option>
+                </select>
+                </div>
+                <div class="form-group ">
+                <label>WO Num </label>
+                <input class="form-control" type="text" [(ngModel)]="workOrderNumber" name="WoNumber" readonly/>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                <label for="customerName">Customer Name
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="customerName" name="customerName" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="customerCode">Customer Code
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="customerCode" name="customerCode" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="customerContact">Customer Contact
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="customerContact" name="customerContact" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="customerEmail">Customer email
+                </label>
+                <input class="form-control" type="email" [(ngModel)]="customerEmail" name="customerEmail" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="customerPhone">Customer phone
+                </label>
+                <input class="form-control" type="number" [(ngModel)]="customerPhone" name="customerPhone" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="customerRef">Customer Ref
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="customerRef" name="customerRef" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="accountsReceivableBalance">AR Balance
+                </label>
+                <input class="form-control" type="number" [(ngModel)]="accountsReceivableBalance" name="accountsReceivableBalance" [disabled]="isView"/>
+                </div>
+                
+            </div>
+            </div>
+        </div>
+    
+        <div class="col-md-6">
+            <div class="form-row">
+            <div class="col-md-6">
+    
+                <div class="form-group">
+                <label for="credit">Credit Terms &amp; Limit <span class="clr-red">*</span>
+                </label>
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                    <input type="text" class="form-control" [(ngModel)]="creditLimit" name="creditLimit" readonly/>
+                    </div>
+                    <div class="col-md-6">
+                    <input type="text" class="form-control" [(ngModel)]="creditTerms" name="creditTerms" readonly/>
+                    </div>
+                </div>
+                </div>
+                <div class="form-group ">
+                <label for="salesPerson">Sales Person
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="salesPerson" name="salesPerson" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="csr">CSR
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="csr" name="csr" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="Employee">Employee
+                </label>
+                <input class="form-control" type="text" [(ngModel)]="employeeName" name="Employee" readonly/>
+                </div>
+                <div class="form-group ">
+                <label for="Currency">Currency
+                    <span class="clr-red">*</span>
+                </label>
+                <select [(ngModel)]="currency" name="Currency" [disabled]="isView" *ngIf="!isQuoteListView">
+                    <option value="">Select Currency</option>
+                    <option *ngFor="let cur of currencyList" [value]="cur.value">{{cur.label}}</option>
+                </select>
+                <input class="form-control" type="text" [(ngModel)]="currency" name="Currency" *ngIf="isQuoteListView" [disabled]="isView"/>
+                </div>
+                <div class="form-group ">
+                <label> DSO <span class="clr-red">*</span></label>
+                <input class="form-control" type="text" [(ngModel)]="dso" name="DSO" [disabled]="isView"/>
+                </div>
+                
+            </div>
+            <div class="col-md-6">
+    
+    
+    
+            </div>
+            </div>
+        </div>
+        </div>
+        <div>
+        <div class="col-md-4">
+            <label for="warnings">Warnings
+            </label>
+            <textarea class="form-control" [(ngModel)]="warnings" name="warnings" [disabled]="isView"></textarea>
+        </div>
+        <div class="col-md-4">
+            <label for="memo">Memo
+            </label>
+            <textarea class="form-control" [(ngModel)]="memo" name="memo" disabled></textarea>
+        </div>
+        </div>
+    </div>
+
+    <div class="col-md-3" *ngIf="savedWorkOrderData && !savedWorkOrderData.isSinglePN">
+        <div class="form-group ">
+            <label class="fs12">MPN
+            </label>
+            <select (change)="partNumberSelected()" class="mpn-select" style="width: 100px;" [(ngModel)]="selectedPartNumber">
+            <option value="">Select</option>
+            <option *ngFor="let mpn of mpnPartNumbersList" [value]="mpn.label">{{mpn.label}}</option>
+            </select>
+        </div>
+        <div class="form-group ">
+            <label class="fs12">Part Description:
+            </label>
+            <label>{{selectedPartDescription}}</label>
+        </div>
+        <div class="form-group ">
+            <label class="fs12">Stock Line Number:
+            </label>
+            <label>{{selectedStockLineNumber}}</label>
+        </div>
+    </div>
+
+    <div class="card col-md-12" style="background: #f1f1f1; margin-top: 10px;" *ngIf="selectedPartNumber != ''">
+        <div class="form-group ">
+            <button type="button" class="btn" [ngClass]="gridActiveTab === 'materialList'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('materialList');">Material List</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab === 'labor'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('labor');">Labor</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab === 'charges'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('charges');">Charges</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab === 'exclusions'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('exclusions');">Exclusions</button>
+            <button type="button" class="btn" [ngClass]="gridActiveTab === 'freight'?'btn-primary':'btn-light-cstm'" (click)="gridTabChange('freight');">Freight</button>
+        </div>
+    </div>
+
+    <div class="table-responsive" *ngIf="gridActiveTab === 'exclusions'">
+        <app-work-order-exclusions [workFlowObject]="workFlowObject" 
+        [isWorkOrder]="isWorkOrder"
+            [workOrderExclusionsList]="workOrderExclusionsList" 
+        (saveExclusionsListForWO)="saveWorkOrderExclusionsList($event)"
+        (updateExclusionsListForWO)="updateWorkOrderExclusionsList($event)"
+        [markupList]="markupList"
+        (refreshData)="getExclusionListByWorkOrderId()"
+        isQuote="true"
+        isView="true"
+        [taskList]="taskList"
+        view="true"
+        ></app-work-order-exclusions> 
+    
+    </div>
+    <div class="wf-label-cstm" *ngIf="gridActiveTab === 'freight'">
+        <app-work-order-freight [freightForm]="freight" 
+        isQuote="true"
+        [workOrderFreightList]="workOrderFreightList" 
+        [savedWorkOrderData]="savedWorkOrderData"
+        (saveFreightListForWO)="saveWorkOrderFreightsList($event)"
+        (updateFreightListForWo)="updateWorkOrderFreightsList($event)"
+        (refreshData)="getFreightListByWorkOrderId()"
+        [taskList]="taskList"
+        [markupList]="markupList"
+        ></app-work-order-freight>
+    </div>
+    
+    <div class="table-responsive" *ngIf="gridActiveTab === 'labor'">
+        <app-work-order-labor [taskList]="taskList" [laborForm]="labor" [workOrderLaborList]="workOrderLaborList" [workOrderWorkFlowOriginalData]="workOrderWorkFlowOriginalData" [savedWorkOrderData]="savedWorkOrderData" 
+        (saveworkOrderLabor)="saveworkOrderLabor($event)" isQuote="true" [markupList]="markupList" isView="true" isEdit="false"
+        view="true"
+        ></app-work-order-labor>
+    
+    </div>
+    <div class="table-responsive" *ngIf="gridActiveTab === 'charges'">
+        <app-work-order-charges [workFlowObject]="workFlowObject" 
+        isWorkOrder="false"
+            [workOrderChargesList]="workOrderChargesList" 
+        (saveChargesListForWO)="saveWorkOrderChargesList($event)"
+        (updateChargesListForWO)="updateWorkOrderChargesList($event)"
+        (createQuote)="createChargeQuote($event)"
+        (refreshData)="getChargesListByWorkOrderId()" 
+        isQuote="true"
+        [markupList]="markupList"
+        isView="true"
+        [taskList]="taskList"
+        view="true"
+        ></app-work-order-charges>
+    </div>
+
+    <div *ngIf="gridActiveTab === 'materialList'">
+            <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled" >
+              <thead>
+                <tr style="color: #f1f1f1;">
+                    <td colspan="11">&nbsp;</td>
+                    <td colspan="6">
+      
+                        <div class="form-group" style="text-align: center; display: flex;">
+                          <p-radioButton
+                            class="p-radiobutton-label-horizontal p-radio-custom"
+                            name="costPlusType"
+                            label="T&M - Mark Up"
+                            value="1"
+                            [(ngModel)]="costPlusType"
+                            [disabled]="isView"
+                            (click)="tmchange()"
+                          ></p-radioButton>
+                          <div>
+                            <select class="form-control" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                              <option value="">Select</option>
+                              <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div>
+                          <p-radioButton
+                            class="p-radiobutton-label-horizontal col-width p-radio-custom"
+                            name="costPlusType"
+                            value="2"
+                            label="Actual"
+                            [(ngModel)]="costPlusType"
+                            [disabled]="isView"
+                            (click)="tmchange()"
+                          ></p-radioButton>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                  <th>Task</th>
+                  <th>MC PN</th>
+                  <th>MC Description</th>
+                  <th>QTE/WO/WF/SL/M</th>
+                  <th>REF</th>
+                  <th>Qty</th>
+                  <th>UOM</th>
+                  <th>Cond Type</th>
+                  <th>OEM/PMA/DER</th>
+                  <th>Unit Cost</th>
+                  <th>Total Part Cost</th>
+                  <th>Billing Method</th>
+                  <th>Mark Up</th>
+                  <th>
+                    Billing Rate
+                  </th>
+                  <th>
+                    Billing Amount
+                  </th>
+                  <th *ngIf="!isView"></th>
+                  <th *ngIf="!isView"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let matQuotation of materialListQuotation; let in=index;">
+                  <tr class="mpn-row" *ngIf="!matQuotation['isDeleted']">
+                    <td>
+                      <select class="form-control wf-pub-id select-read-only" [(ngModel)]="matQuotation.taskId" [disabled]="isView" disabled>
+                        <option value="">Select</option>
+                        <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
+                      </select>
+                    </td>
+                    <td>{{matQuotation.partNumber}}</td>
+                    <td>{{matQuotation.partDescription}}</td>
+                    <td>{{matQuotation.partDescription}}</td>
+                    <td>{{matQuotation.partDescription}}</td>
+                    <td>{{matQuotation.quantity}}</td>
+                    <td>{{matQuotation.unitOfMeasureId}}</td>
+                    <td>{{matQuotation.conditionCodeId}}</td>
+                    <td>{{matQuotation.isDeferred}}</td>
+                    <td class="content-to-end">{{matQuotation.unitCost}}</td>
+                    <td class="content-to-end">{{(matQuotation.quantity * matQuotation.unitCost).toFixed(2)}}</td>
+                    <td>
+                      <select class="form-control" [(ngModel)]="matQuotation.billingMethodId" style="width: 130px;">
+                        <option value="">Select</option>
+                        <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]" [value]="bm.value">{{bm.label}}</option>
+                      </select>
+                    </td>
+                    <td>
+                        <select class="form-control wf-pub-id" (change)="markupChanged(matQuotation, 'row')" [(ngModel)]="matQuotation.markupPercentageId" [disabled]="isView || matQuotation.billingMethodId != '1'">
+                          <option value="">Select</option>
+                          <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" [(ngModel)]="matQuotation.billingRate" (change)="matQuotation.billingAmount = (matQuotation.billingRate*matQuotation.quantity).toFixed(2)" [disabled]="isView || matQuotation.billingMethodId != 2"/>
+                    </td>
+                    <td class="content-to-end">{{ matQuotation.billingAmount }}</td>
+                    <td *ngIf="!isView">
+                        <button
+                          class="btn-edit ptable-wo-btns"
+                          mat-icon-button
+                          data-target="#addNewMaterials"
+                          data-toggle="modal"
+                          (click)="editMaterialList(matQuotation)"
+                          matTooltip="Edit"
+                        >
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                    <td *ngIf="!isView">
+                        <button
+                          class="btn-delete ptable-wo-btns"
+                          mat-icon-button
+                          matTooltip="Delete"
+                          (click)="deleteMaterialList(in)"
+                        >
+                          <mat-icon color="warn">delete</mat-icon>
+                        </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td>
+                    Total
+                  </td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>{{getTotalQuantity()}}</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td class="content-to-end">{{ getTotalUnitCost() }}</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td class="content-to-end">{{totalMaterialBillingAmount()}}</td>
+                  <td *ngIf="!isView"></td>
+                  <td *ngIf="!isView"></td>
+                </tr>
+              </tfoot>
+            </table>
+        </div>
+</div>

@@ -1,0 +1,409 @@
+<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+
+<div class="card new-card">
+  <div class="card-header bg-primary new-card-header">
+    <div class="row">
+      <div class="col">
+        <h4 class="new-card-heading">Quote List</h4>
+      </div>
+      <div>
+        <button type="button" class="btn-sm new-btn-primary" matTooltipPosition="above"
+          matTooltip="Create Sales Order Quote" [routerLink]="['/salesmodule/salespages/sales-quote']">
+          Create Sales Order Quote
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body new-card-body">
+    <p-table #dt [value]="sales" class="rpo-table-cstm rro-table-cstm" [first]="0" [rows]="pageSize"
+      [paginator]="showPaginator" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
+      selectionMode="multiple" [metaKeySelection]="true" [(selection)]="selectedColumn" [lazy]="true"
+      (onLazyLoad)="loadData($event)" [resizableColumns]="true" [reorderableColumns]="true"
+      [totalRecords]="totalRecords" [scrollable]="true" [style]="{ width: '100%' }">
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col">
+            <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns" optionLabel="header"
+              selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns"
+              style="float:left"></p-multiSelect>
+          </div>
+          <div class="col">
+            <div style="width: auto !important; float: right;"
+              class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+              <i class="fa fa-search"></i>
+              <input type="text" pInputText size="50" class="form-control" (input)="globalSearch($event.target.value)"
+                placeholder="Filter">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
+              data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
+              data-target="#downloadConfirmation"></button>
+            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+              data-toggle="modal" data-target="#downloadConfirmation"
+              (click)="selectedOnly = true; targetData = dt;"></button>
+            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+              <label class="radio-cstm wauto">
+                <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
+                  (click)="changeOfStatus('','pnview')">
+                <span class="checkmark"></span>PN View
+              </label>
+            </div>
+            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+              <label class="radio-cstm wauto">
+                <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
+                  (click)="changeOfStatus('','soqview')">
+                <span class="checkmark"></span>SOQ View
+              </label>
+            </div>
+          </div>
+          <div class="pull-right" style="padding-left:0px;">
+            <div class="">
+              <div class="col" style="float: right; padding: 3px 0 0;">
+                <div class="form-group">
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of statusList">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="currentStatus" class="form-control" value="{{status.value}}"
+                        [(ngModel)]="currentStatus" (change)="changeOfStatus(status.value, '')">
+                      <span class="checkmark"></span>{{status.label}}
+                    </label>
+                  </div>
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="currentStatusSoq" class="form-control" value="0"
+                        [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}" (change)="changeOfStatus(0, '')">
+                      <span class="checkmark"></span>All
+                    </label>
+                  </div>
+                  <div class="checkbox-cstm pull-right" style="margin-left: 0;">
+                    <label style="width: auto !important;margin-top: 3px;">
+                      <!--  -->
+                      <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
+                        (click)="getDeleteListByStatus($event.target.checked)" />
+                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                      Show Deleted List
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+          <th style="width:100px;position:sticky !important">
+            Actions
+          </th>
+        </tr>
+        <tr>
+          <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input *ngIf="col.field !== 'quoteDate' 
+                  && col.field !== 'createdDate'
+                  && col.field !== 'updatedDate'" [disabled]="col.field == 'status' &&  currentStatus !='0'"
+              style="width:100%;" pInputText type="text"
+              (input)="dt.filter($event.target.value, col.field, 'contains')">
+            <input type="date" *ngIf="col.field == 'quoteDate'" name="quoteDate" style="width:100%;"
+              (change)="dt.filter($event.target.value, col.field, 'contains')">
+            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:100%;"
+              (change)="dt.filter($event.target.value, col.field, 'contains')">
+            <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:100%;"
+              (change)="dt.filter($event.target.value, col.field, 'contains')">
+
+
+          </th>
+          <th style="width:100px;position:sticky !important"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded" let-columns="columns">
+        <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
+          <td *ngFor="let col of columns" style="text-overflow: ellipsis;"
+            [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
+            [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
+            [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
+            <span *ngIf="col.field == 'quoteAmount' || col.field == 'soAmount'" style="float: right !important;">
+              {{convertDate(col.field , rowData) | toDecimal}}
+            </span>
+            <span
+              *ngIf="col.field != 'quoteAmount' && col.field != 'soAmount' && col.field != 'quoteDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
+              {{convertDate(col.field , rowData)}}
+            </span>
+            <span *ngIf="col.field == 'quoteDate' || col.field == 'createdDate' || col.field == 'updatedDate'">
+              {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy h:mm a '}}
+            </span>
+
+          </td>
+          <td style="width: 100px">
+            <div *ngIf="currentDeletedstatus==false">
+              <span>
+                <a class="btn nobg" (click)="viewSelectedRow(viewQuote,rowData)" matTooltip="View"
+                  matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+              </span>
+
+              <span>
+                <a [class.disabled]="rowData.status === 'Closed' || rowData.isNewVersionCreated || rowData.status === 'Expired'"
+                  [ngClass]="{'btn_disabled': rowData.status === 'Closed' || rowData.isNewVersionCreated || rowData.status === 'Expired'}"
+                  class="btn nobg" (click)="openQuoteToEdit(rowData)" matTooltip="Edit" matTooltipPosition="above">
+                  <i class="fa fa-pencil"></i>
+                </a>
+              </span>
+
+              <span>
+                <a [class.disabled]="rowData.status === 'Closed' || rowData.isNewVersionCreated || rowData.status === 'Expired'"
+                  [ngClass]="{'btn_disabled': rowData.status === 'Closed' || rowData.isNewVersionCreated || rowData.status === 'Expired'}"
+                  class="btn nobg" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </span>
+              <span data-toggle="modal" data-target="#soqHistory">
+                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                  matTooltipPosition="above"><i class="fa fa-history"></i></a>
+              </span>
+            </div>
+            <div *ngIf="currentDeletedstatus==true">
+              <span>
+                <a class="btn nobg" (click)="viewSelectedRow(viewQuote,rowData)" matTooltip="View"
+                  matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+              </span>
+              <span data-toggle="modal" data-target="#soqHistory">
+                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                  matTooltipPosition="above"><i class="fa fa-history"></i></a>
+              </span>
+              <span><a class="btn nobg" (click)="restore(restoreIdSoq,rowData);" matTooltip="Restore Record"
+                  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns *ngIf="sales.length == 0">
+        <tr>
+          <td [attr.colspan]="10" style="color: red; font-weight: bold; text-align: center">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer">Total:</label>
+        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+
+        <input style="width: 5%;" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<!-- <div class="preloader loader-position" *ngIf="isSpinnerVisible">
+  <div class="loader-css loader-align">
+    <img src="../../../../assets/images/loader.gif" />
+  </div>
+</div> -->
+<ng-template #restoreIdSoq let-c="close" let-d="dismiss" data-backdrop="static">
+
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="modal-body">SO Quote Number : {{restorerecord.salesOrderQuoteNumber}}</h6>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+  </div>
+</ng-template>
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Are You Sure Want to Download?</h4>
+      </div>
+      <div class="modal-body" *ngIf="targetData">
+        <strong>
+          <span>
+            You are attempting to export {{targetData.totalRecords}} of records.
+          </span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+          (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+        <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <h6 class="modal-body">SO Quote Number : {{selectedQuoteToDelete}}</h6>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="deleteQuote()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+  </div>
+
+</ng-template>
+
+<ng-template #viewQuote let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="dismissModel()">
+      &times;
+    </button>
+    <h4 class="modal-title">Details of Quote</h4>
+  </div>
+
+  <div class="modal-body" *ngIf="salesQuote">
+    <app-sales-quote-view [customerId]="customerId" [salesQuoteId]="salesOrderQuoteId"
+      [salesQuoteView]="salesQuoteView"></app-sales-quote-view>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+  </div>
+
+</ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>
+<div id="soqHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xl">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
+        <h4 class="modal-title">History of Sales Order Quote</h4>
+      </div>
+      <div class="modal-body" *ngIf="auditHistory">
+        <div class="table-responsive">
+          <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+            <thead>
+              <tr>
+                <th>Quote Num</th>
+                <th>Status</th>
+                <th>SO Num</th>
+                <th>Customer Name</th>
+                <th>Customer Type</th>
+                <th>Cust Ref</th>
+                <th>Priority</th>
+                <th>Salesperson</th>
+                <th>Created Date</th>
+                <th>Created By</th>
+                <th>Modified Date</th>
+                <th>Modified By</th>
+                <th>Is Deleted</th>
+              </tr>
+            </thead>
+            <tbody class="audithistory-cstm">
+              <!--*ngIf="auditHistory.length> 0"-->
+              <tr *ngFor="let audit of auditHistory; let i = index;">
+                <!-- auditHistory[i>0 ? i-1 : i] -->
+                <td
+                  [ngStyle]="{'color':  getColorCodeForHistory(i, 'salesOrderQuoteNumber', audit.salesOrderQuoteNumber)  ? 'black' : 'red'  }">
+                  {{audit.salesOrderQuoteNumber}}</td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">
+                  {{audit.status}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'salesOrderNumber', audit.salesOrderNumber)  ? 'black' : 'red'  }">
+                  {{audit.salesOrderNumber}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
+                  {{audit.customerName}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerType', audit.customerType)  ? 'black' : 'red'  }">
+                  {{audit.customerType}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
+                  {{audit.customerReference}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'priorityType', audit.priorityType)  ? 'black' : 'red'  }">
+                  {{audit.priorityType}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'salesPerson', audit.salesPerson)  ? 'black' : 'red'  }">
+                  {{audit.salesPerson}}</td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                  {{audit.createdBy}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                  {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                <td
+                  [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                  {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                  {{audit.updatedBy}}</td>
+                <td>
+                  <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
+                      [(ngModel)]="audit.isDeleted" disabled></p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #noDatavailable>
+            <div class="text-center">
+              <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+              <h4 style="color: #ff5663;">No History Found </h4>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+        <div class="loading">
+          <div class="lds-roller">
+            <div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

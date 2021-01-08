@@ -1,0 +1,209 @@
+﻿<div [@fadeInOut] class="page-content">
+  <div class="card padding-10">
+      <div class="right_col" role="main">
+          <div class="x_panel">
+              <div class="x_content">
+
+                  <div class="col-md-12 shadow-Box">
+                      <div class="col-md-4" >
+                          <p class="fs12">
+                              <label class="control-label labels-font-header" style="width: auto;">Emp First Name: </label>
+                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="firstName"> {{firstName }} </span> </p>
+                      </div>
+                      <div class="col-md-4">
+                          <p class="fs12">
+                              <label class="control-label labels-font-header" style="width: auto;">Emp Last Name: </label>
+                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="lastName"> {{lastName }} </span> </p>
+                      </div>
+                      <div  class="col-md-4">
+                          <p class="fs12">
+                              <label class="control-label labels-font-header" style="width: auto;">Emp Id: </label>
+                              <span class="span-header-red" style="text-transform: capitalize" *ngIf="empId"> {{empcode}} </span></p>
+                      </div>
+                  </div>
+                  <form #empform="ngForm" class="form-horizontal add-custustomer">
+                      <div class="card">
+                          <div class="card-header">                           
+                              <div class="card-header bg-primary">
+                                  <h4 class="new-card-heading">                                     
+                                      Certification Information
+                                  </h4>
+                              </div>
+                              <div class="clear"></div>
+                              <hr />
+                          </div>
+                          <div class="card-body">
+                              <div class="form-row">
+                                  <div class="col-md-3">
+                                      <div class="form-group">
+                                          <label>Certification #</label>
+                                          <input type="text" class="form-control" name="certificationNumber" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.certificationNumber">
+                                      </div>
+                                      <div class="form-group">
+                                          <label>
+                                              Certification Type                                              
+                                          </label>
+                                          <select class="drp-certification-type" name="employeeCertificationTypeId" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.employeeCertificationTypeId">
+                                            <option value="0">-- Select --</option>  
+                                             <ng-container *ngFor="let certificationtype of allCertification">                                               
+                                                <option [ngValue]="certificationtype.employeeCertificationTypeId" *ngIf="certificationtype.isActive">{{certificationtype.description}}</option>
+                                              </ng-container>
+                                          </select>
+                                      </div>
+                                      <div class="form-group">
+                                          <label>Certifying Institution</label>
+                                          <input class="form-control" type="text" name="certifyingInstitution" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.certifyingInstitution">
+                                      </div>
+
+                                  </div>
+                                  <div class="col-md-3">
+                                      <div class="form-group">
+                                          <label>Certification Date</label>
+                                          <p-calendar [showIcon]="true" [maxDate]="today" 
+                                          [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                           name="certificationDate" (ngModelChange)="changeDateEv(sourceEmployee.certificationDate)"
+                                          (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.certificationDate"  ></p-calendar>
+                                      </div>
+                                      <div class="form-group">                                       
+                                          <div>
+                                              <label>
+                                                  <input type="checkbox" name="isCertificationInForce" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.isCertificationInForce">
+                                                   Certification In Force?
+                                              </label>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">                                         
+                                          <div>
+                                              <label>
+                                                  <input type="checkbox" name="isExpirationDate" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.isExpirationDate">
+                                                  Expiration Date
+                                              </label>
+                                          </div>
+                                      </div>
+                                       <div class="form-group" *ngIf="sourceEmployee.isExpirationDate">
+                                        <!-- <div class="form-group"> -->
+                                           <label>Certification Expiration Date</label>                                         
+                                          <p-calendar [showIcon]="true"  name="expirationDate"
+                                          [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                           [(minDate)]="sourceEmployee.certificationDate && sourceEmployee.certificationDate != undefined && sourceEmployee.certificationDate != null  ? sourceEmployee.certificationDate : today"   (ngModelChange)="enableSave()"  [(ngModel)]="sourceEmployee.expirationDate"></p-calendar>
+                                        </div>
+                                  </div>                                
+                              </div>
+                          </div>
+                      </div>
+                      <div class=" form-group" style=" margin-top:1%;">
+                      <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Next')">Next </button>
+                      <button *ngIf="!isEditContent" 
+                       type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()">Save  </button>
+                      <button *ngIf="isEditContent" 
+                       [disabled]="(!empform.touched || !enableSaveBtn )" type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()"> {{!sourceEmployee.employeeCertificationId ? 'Save' : 'Update' }}</button>
+                      <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Previous')">Previous</button>
+                      </div>
+                  </form>
+             </div>
+          </div>
+      </div>    
+    <div class="pull-right"> &copy; 2018 <a>PAS</a> </div>
+</div>
+</div>
+
+
+<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="isEditMode">Edit Certification Type</h4>
+        <h4 class="modal-title" *ngIf="!isEditMode">Add Certification Type</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveCertification()">
+    <div class="modal-body">
+        
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <div class="col-sm-4">
+                        <label class="control-label">Certification Type <span class="clr-red">*</span></label>
+                    </div>
+                    <div class="col-sm-5">
+                            <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="description" [ngModelOptions]="{standalone: true}" (onKeyUp)=certificationHandlerHandler($event) (onSelect)="certificationType($event)" [suggestions]="certificationtypeCollection" (completeMethod)="filtercertificationType($event)" [size]="30"
+                                        [minLength]="1" [dropdown]="true">
+                            <ng-template let-description pTemplate="item">
+                                <div class="ui-helper-clearfix">{{description}}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <div *ngIf="disablesave" class="clr-red">Entry Already Exists</div>                 
+                    </div>
+                </div>
+
+
+                <!-- <label for="name" class="control-label">Certification Type<span class="clr-red">*</span></label>
+
+                <div class="col-sm-7">
+                    <div class="inner-addon right-addon inline-block">
+
+                        <p-autoComplete [(ngModel)]="description" [ngModelOptions]="{standalone: true}" (onKeyUp)=certificationHandlerHandler($event) (onSelect)="certificationType($event)" [suggestions]="certificationtypeCollection" (completeMethod)="filtercertificationType($event)" [size]="30"
+                                        [minLength]="1" [dropdown]="true">
+                            <ng-template let-description pTemplate="item">
+                                <div class="ui-helper-clearfix">{{description}}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <div *ngIf="disablesave" class="clr-red">Entry Already Exists</div>
+                    </div>
+                </div>
+                <div class="clear"></div> -->
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <div class="checkbox-cstm">
+                        <label>
+                                <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceEmployee.isActive">
+                            <span class="cr">
+                                <i class="cr-icon pi pi-check"></i>
+                            </span>
+                            Active
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="form-group">
+                <div class="col-sm-6">
+                    <label class="form-check-label" for="isActive">
+                        <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceEmployee.isActive"> Active
+                    </label>
+                </div>
+                <div class="clear"></div>
+            </div> -->                    
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary pull-right" [disabled]="disablesave" (click)="saveCertification()">Save</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+    </div>
+    </form>
+</ng-template>
+
+
+<ng-template #tabRedirectConfirmationModal2 let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+      <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+      <h6 style="text-align: left;">
+        Do you want to Save changes and Continue ?
+      </h6>
+    </div>
+    <div class="modal-footer">
+  
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="redirectToTabWithoutSave()">No</button>
+      <button type="button" [disabled]="(!empform.touched)" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+    </div>
+  </ng-template>
+ 
+  <div class="preloader"  *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div>			
+        </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
+<app-spinner  *ngIf="isSpinnerVisible"></app-spinner>

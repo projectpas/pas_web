@@ -1,0 +1,745 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="x_panel" style="">
+            <div class="x_content add-customer-work">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">General Ledger</li>
+                        <li class="breadcrumb-item active" aria-current="page">Open/Close Accounting Calendar</li>
+                    </ol>
+                </nav>
+                <div class="pheading">
+                    <h4 class="page-heading clr-green">Open/Close Accounting Calendar</h4>
+                </div>
+                <div class="cdetails-top">
+                    <div class="col-sm-12">
+                        <label>Company</label>
+                        <span>
+                            <select>
+                                <option value="">Adso</option>
+                                <option value="">Aerospace</option>
+                                <option value="">ILS</option>
+                                <option value="">PArts Base</option>
+                                <option value="">PAS</option>
+                                <option value="">Silverxis</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>BU</label>
+                        <span>
+                            <select>
+                                <option value="">Adso</option>
+                                <option value="">Aerospace</option>
+                                <option value="">ILS</option>
+                                <option value="">PArts Base</option>
+                                <option value="">PAS</option>
+                                <option value="">Silverxis</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Division</label>
+                        <span>
+                            <select>
+                                <option value="">Designing</option>
+                                <option value="">Development</option>
+                                <option value="">Repear</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Dept</label>
+                        <span>
+                            <select>
+                                <option value="">.net</option>
+                                <option value="">HTML</option>
+                                <option value="">Java</option>
+                            </select>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+                <form action="#" method="post" id="add-customerwork" name="" class="form-horizontal add-custustomer">
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <div class="tab-content form-bg">
+                            <div class="tab-pane active" id="home">
+                                <div class="col-sm-4">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Fiscal Year</label>
+                                        <div class="col-sm-7">
+                                            <select id="fiscalyear" name="fiscalyear">
+                                                <option>Select Year</option>
+                                                <option value="2018">2018</option>
+                                                <option value="2019">2019</option>
+                                                <option value="2020">2020</option>
+                                                <option value="2021">2021</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Status</label>
+                                        <div class="col-sm-7">
+                                            <label class="wauto"><input type="radio" name="status" /> Open</label>
+                                            <label class="wauto"><input type="radio" name="status" /> Close</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+                <div id="" class="table-responsive default-bg clear table-details col-sm-8">
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Fiscal</th>
+                                <th>Year</th>
+                                <th>Period </th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Period Name</th>
+                                <th>Adjusting Period</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="bg-clr-red">
+                                <td>Closed</td>
+                                <td>ADJ-PD</td>
+                                <td>2018</td>
+                                <td>13</td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" /></td>
+                                <td>ADJ-PD_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Dec</td>
+                                <td>2018</td>
+                                <td>12</td>
+                                <td><input type="text" class="datepicker form-control" value="12/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>Dec_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Nov</td>
+                                <td>2018</td>
+                                <td>11</td>
+                                <td><input type="text" class="datepicker form-control" value="11/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="11/30/2018" disabled="disabled" /></td>
+                                <td>Nov_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Oct</td>
+                                <td>2018</td>
+                                <td>10</td>
+                                <td><input type="text" class="datepicker form-control" value="10/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="10/31/2018" disabled="disabled" /></td>
+                                <td>Oct_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Sep</td>
+                                <td>2018</td>
+                                <td>9</td>
+                                <td><input type="text" class="datepicker form-control" value="9/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="9/30/2018" disabled="disabled" /></td>
+                                <td>Sep_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Aug</td>
+                                <td>2018</td>
+                                <td>8</td>
+                                <td><input type="text" class="datepicker form-control" value="8/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="8/31/2018" disabled="disabled" /></td>
+                                <td>Aug_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jul</td>
+                                <td>2018</td>
+                                <td>7</td>
+                                <td><input type="text" class="datepicker form-control" value="7/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="7/31/2018" disabled="disabled" /></td>
+                                <td>Jul_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jun</td>
+                                <td>2018</td>
+                                <td>6</td>
+                                <td><input type="text" class="datepicker form-control" value="6/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="6/30/2018" disabled="disabled" /></td>
+                                <td>Jun_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>May</td>
+                                <td>2018</td>
+                                <td>5</td>
+                                <td><input type="text" class="datepicker form-control" value="5/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="5/31/2018" disabled="disabled" /></td>
+                                <td>May_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Apr</td>
+                                <td>2018</td>
+                                <td>4</td>
+                                <td><input type="text" class="datepicker form-control" value="4/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="4/30/2018" disabled="disabled" /></td>
+                                <td>Apr_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>3</td>
+                                <td><input type="text" class="datepicker form-control" value="3/1/2018" /></td>
+                                <td><input type="text" class="datepicker form-control" value="3/31/2018" /></td>
+                                <td>Mar_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Feb</td>
+                                <td>2018</td>
+                                <td>2</td>
+                                <td><input type="text" class="datepicker form-control" value="2/1/2018" /></td>
+                                <td><input type="text" class="datepicker form-control" value="2/28/2018" /></td>
+                                <td>Feb_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr class="bg-clr-red">
+                                <td>Closed</td>
+                                <td>Jan</td>
+                                <td>2018</td>
+                                <td>1</td>
+                                <td><input type="text" class="datepicker form-control" value="1/1/2018" /></td>
+                                <td><input type="text" class="datepicker form-control" value="1/31/2018" /></td>
+                                <td>Jan_2018</td>
+                                <td><input type="checkbox" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clear"></div>
+                    <br />
+                    <a class="btn btn-success pull-right">Submit</a>
+                    <div class="clear"></div>
+                    <hr />
+                    <br />
+                </div>
+                <!--Table1 End-->
+                <div id="" class="table-responsive default-bg clear table-details1 col-sm-8">
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Fiscal</th>
+                                <th>Year</th>
+                                <th>Period </th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Period Name</th>
+                                <th>Adjusting Period</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Closed</td>
+                                <td>ADJ-PD</td>
+                                <td>2018</td>
+                                <td>13</td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>ADJ-PD_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Dec</td>
+                                <td>2018</td>
+                                <td>12</td>
+                                <td><input type="text" class="datepicker form-control" value="12/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>Dec_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Nov</td>
+                                <td>2018</td>
+                                <td>11</td>
+                                <td><input type="text" class="datepicker form-control" value="11/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="11/30/2018" disabled="disabled" /></td>
+                                <td>Nov_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Oct</td>
+                                <td>2018</td>
+                                <td>10</td>
+                                <td><input type="text" class="datepicker form-control" value="10/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="10/31/2018" disabled="disabled" /></td>
+                                <td>Oct_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Sep</td>
+                                <td>2018</td>
+                                <td>9</td>
+                                <td><input type="text" class="datepicker form-control" value="9/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="9/30/2018" disabled="disabled" /></td>
+                                <td>Sep_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Aug</td>
+                                <td>2018</td>
+                                <td>8</td>
+                                <td><input type="text" class="datepicker form-control" value="8/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="8/31/2018" disabled="disabled" /></td>
+                                <td>Aug_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jul</td>
+                                <td>2018</td>
+                                <td>7</td>
+                                <td><input type="text" class="datepicker form-control" value="7/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="7/31/2018" disabled="disabled" /></td>
+                                <td>Jul_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jun</td>
+                                <td>2018</td>
+                                <td>6</td>
+                                <td><input type="text" class="datepicker form-control" value="6/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="6/30/2018" disabled="disabled" /></td>
+                                <td>Jun_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>May</td>
+                                <td>2018</td>
+                                <td>5</td>
+                                <td><input type="text" class="datepicker form-control" value="5/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="5/31/2018" disabled="disabled" /></td>
+                                <td>May_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Apr</td>
+                                <td>2018</td>
+                                <td>4</td>
+                                <td><input type="text" class="datepicker form-control" value="4/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="4/30/2018" disabled="disabled" /></td>
+                                <td>Apr_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>3</td>
+                                <td><input type="text" class="datepicker form-control" value="3/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="3/31/2018" disabled="disabled" /></td>
+                                <td>Mar_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Feb</td>
+                                <td>2018</td>
+                                <td>2</td>
+                                <td><input type="text" class="datepicker form-control" value="2/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="2/28/2018" disabled="disabled" /></td>
+                                <td>Feb_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Closed</td>
+                                <td>Jan</td>
+                                <td>2018</td>
+                                <td>1</td>
+                                <td><input type="text" class="datepicker form-control" value="1/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="1/31/2018" disabled="disabled" /></td>
+                                <td>Jan_2018</td>
+                                <td><input type="checkbox" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clear"></div>
+                    <br />
+                    <a class="btn btn-success pull-right">Submit</a>
+                    <div class="clear"></div>
+                    <hr />
+                    <br />
+                </div>
+                <!--Table2 End-->
+                <div id="" class="table-responsive default-bg clear table-details2 col-sm-8">
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Fiscal</th>
+                                <th>Year</th>
+                                <th>Period </th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Period Name</th>
+                                <th>Adjusting Period</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Closed</td>
+                                <td>ADJ-PD</td>
+                                <td>2018</td>
+                                <td>13</td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>ADJ-PD_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Dec</td>
+                                <td>2018</td>
+                                <td>12</td>
+                                <td><input type="text" class="datepicker form-control" value="12/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>Dec_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Nov</td>
+                                <td>2018</td>
+                                <td>11</td>
+                                <td><input type="text" class="datepicker form-control" value="11/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="11/30/2018" disabled="disabled" /></td>
+                                <td>Nov_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Oct</td>
+                                <td>2018</td>
+                                <td>10</td>
+                                <td><input type="text" class="datepicker form-control" value="10/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="10/31/2018" disabled="disabled" /></td>
+                                <td>Oct_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Sep</td>
+                                <td>2018</td>
+                                <td>9</td>
+                                <td><input type="text" class="datepicker form-control" value="9/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="9/30/2018" disabled="disabled" /></td>
+                                <td>Sep_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Aug</td>
+                                <td>2018</td>
+                                <td>8</td>
+                                <td><input type="text" class="datepicker form-control" value="8/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="8/31/2018" disabled="disabled" /></td>
+                                <td>Aug_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jul</td>
+                                <td>2018</td>
+                                <td>7</td>
+                                <td><input type="text" class="datepicker form-control" value="7/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="7/31/2018" disabled="disabled" /></td>
+                                <td>Jul_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jun</td>
+                                <td>2018</td>
+                                <td>6</td>
+                                <td><input type="text" class="datepicker form-control" value="6/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="6/30/2018" disabled="disabled" /></td>
+                                <td>Jun_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>May</td>
+                                <td>2018</td>
+                                <td>5</td>
+                                <td><input type="text" class="datepicker form-control" value="5/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="5/31/2018" disabled="disabled" /></td>
+                                <td>May_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Apr</td>
+                                <td>2018</td>
+                                <td>4</td>
+                                <td><input type="text" class="datepicker form-control" value="4/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="4/30/2018" disabled="disabled" /></td>
+                                <td>Apr_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>3</td>
+                                <td><input type="text" class="datepicker form-control" value="3/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="3/31/2018" disabled="disabled" /></td>
+                                <td>Mar_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Feb</td>
+                                <td>2018</td>
+                                <td>2</td>
+                                <td><input type="text" class="datepicker form-control" value="2/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="2/29/2018" disabled="disabled" /></td>
+                                <td>Feb_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Closed</td>
+                                <td>Jan</td>
+                                <td>2018</td>
+                                <td>1</td>
+                                <td><input type="text" class="datepicker form-control" value="1/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="1/31/2018" disabled="disabled" /></td>
+                                <td>Jan_2018</td>
+                                <td><input type="checkbox" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clear"></div>
+                    <br />
+                    <a class="btn btn-success pull-right">Submit</a>
+                    <div class="clear"></div>
+                    <hr />
+                    <br />
+                </div>
+                <!--Table2 End-->
+                <div id="" class="table-responsive default-bg clear table-details3 col-sm-8">
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Fiscal</th>
+                                <th>Year</th>
+                                <th>Period </th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Period Name</th>
+                                <th>Adjusting Period</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Closed</td>
+                                <td>ADJ-PD</td>
+                                <td>2018</td>
+                                <td>13</td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>ADJ-PD_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Dec</td>
+                                <td>2018</td>
+                                <td>12</td>
+                                <td><input type="text" class="datepicker form-control" value="12/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="12/31/2018" disabled="disabled" /></td>
+                                <td>Dec_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Nov</td>
+                                <td>2018</td>
+                                <td>11</td>
+                                <td><input type="text" class="datepicker form-control" value="11/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="11/30/2018" disabled="disabled" /></td>
+                                <td>Nov_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Oct</td>
+                                <td>2018</td>
+                                <td>10</td>
+                                <td><input type="text" class="datepicker form-control" value="10/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="10/31/2018" disabled="disabled" /></td>
+                                <td>Oct_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Sep</td>
+                                <td>2018</td>
+                                <td>9</td>
+                                <td><input type="text" class="datepicker form-control" value="9/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="9/30/2018" disabled="disabled" /></td>
+                                <td>Sep_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Aug</td>
+                                <td>2018</td>
+                                <td>8</td>
+                                <td><input type="text" class="datepicker form-control" value="8/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="8/31/2018" disabled="disabled" /></td>
+                                <td>Aug_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jul</td>
+                                <td>2018</td>
+                                <td>7</td>
+                                <td><input type="text" class="datepicker form-control" value="7/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="7/31/2018" disabled="disabled" /></td>
+                                <td>Jul_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Jun</td>
+                                <td>2018</td>
+                                <td>6</td>
+                                <td><input type="text" class="datepicker form-control" value="6/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="6/30/2018" disabled="disabled" /></td>
+                                <td>Jun_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>May</td>
+                                <td>2018</td>
+                                <td>5</td>
+                                <td><input type="text" class="datepicker form-control" value="5/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="5/31/2018" disabled="disabled" /></td>
+                                <td>May_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Future-JE</td>
+                                <td>Apr</td>
+                                <td>2018</td>
+                                <td>4</td>
+                                <td><input type="text" class="datepicker form-control" value="4/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="4/30/2018" disabled="disabled" /></td>
+                                <td>Apr_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>3</td>
+                                <td><input type="text" class="datepicker form-control" value="3/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="3/31/2018" disabled="disabled" /></td>
+                                <td>Mar_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Open</td>
+                                <td>Feb</td>
+                                <td>2018</td>
+                                <td>2</td>
+                                <td><input type="text" class="datepicker form-control" value="2/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="2/28/2018" disabled="disabled" /></td>
+                                <td>Feb_2018</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>Closed</td>
+                                <td>Jan</td>
+                                <td>2018</td>
+                                <td>1</td>
+                                <td><input type="text" class="datepicker form-control" value="1/1/2018" disabled="disabled" /></td>
+                                <td><input type="text" class="datepicker form-control" value="1/31/2018" disabled="disabled" /></td>
+                                <td>Jan_2018</td>
+                                <td><input type="checkbox" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clear"></div>
+                    <br />
+                    <a class="btn btn-success pull-right">Submit</a>
+                    <div class="clear"></div>
+                    <hr />
+                    <br />
+                </div>
+                <!--Table2 End-->
+                <div class="pull-right"> &copy; 2018 <a routerLink="/">PAS</a> </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="createwo" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="" name="">&times;</button>
+                    <h4 class="modal-title">Customer Work is saved. Would you like to create Work Order ?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-success cwo-btn" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="myFunction()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

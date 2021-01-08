@@ -1,0 +1,214 @@
+<div class="modal-header">
+  <button type="button" class="close" (click)="onClose($event)">
+    &times;
+  </button>
+  <h4 class="modal-title" *ngIf="!isEdit">Compute Sales Price</h4>
+  <h4 class="modal-title" *ngIf="isEdit">Edit Margin Details</h4>
+
+</div>
+<div class="modal-body">
+  <div class="row margin-row">
+    <div class="col-md-12 col-sm-12 col-12">
+      <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
+        <p class="fs10 wauto no-bg">
+          <label style="width: auto;">PN <span class="clr-red">:</span></label>
+          {{part.partNumber}} </p>
+      </div>
+      <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
+        <p class="fs10 wauto no-bg">
+          <label style="width: auto;">Description <span class="clr-red">:</span></label>
+          {{part.description}} </p>
+      </div>
+      <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
+        <p class="fs10 wauto no-bg">
+          <label style="width: auto;">Cond <span class="clr-red">:</span></label>
+          {{part.conditionDescription}}
+        </p>
+      </div>
+      <div class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
+        <p class="fs10 wauto no-bg">
+          <label style="width: auto;">Classification <span class="clr-red">:</span></label>
+          {{ part.itemClassification  ? part.itemClassification : ''}}</p>
+      </div>
+      <div *ngIf="part.stockLineNumber" class="form-group" style="display: inline-block;margin: 10px 5px 0 5px;">
+        <p class="fs10 wauto no-bg">
+          <label style="width: auto;">Stk Line Number <span class="clr-red">:</span></label>
+          {{ part.stockLineNumber  ? part.stockLineNumber : ''}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="row margin-row">
+    <div class="col-md-12 col-sm-12 col-12">
+      <div class="col-3 column">
+        <div class="form-group">
+          <label>Quantity requested</label>
+          <input type="text" class="form-control quantityTextBox text-right" pInputText pKeyFilter="num"
+            name="quantityRequest" disabled="true" [ngModel]="part.quantityRequested  | globalNmberFormat"
+            (ngModelChange)="part.quantityRequested=formatStringToNumberGlobal($event)" />
+        </div>
+      </div>
+      <div class="col-3 column">
+        <div class="form-group">
+          <label>Quantity already quoted</label>
+          <input type="text" class="form-control quantityTextBox text-right" name="quantityAlreadyQuoted"
+            disabled="true" [ngModel]="part.quantityAlreadyQuoted  | globalNmberFormat"
+            (ngModelChange)="part.quantityAlreadyQuoted=formatStringToNumberGlobal($event)" />
+        </div>
+      </div>
+      <div class="col-3 column">
+        <div class="form-group">
+          <label>Quantity from this <span *ngIf="part.method=='Item Master'">PN</span><span
+              *ngIf="part.method=='Stock Line'">{{part.stockLineNumber}}</span></label>
+          <input type="text" (keyup)="onChangeQuantityFromThis($event)" (blur)="onChangeQuantityFromThis($event)"
+            class="form-control quantityTextBox text-right" name="quantityFromThis"
+            [ngModel]="part.quantityFromThis | globalNmberFormat" [ngModelOptions]="{updateOn:'blur'}"
+            (ngModelChange)="part.quantityFromThis=formatStringToNumberGlobal($event)" (blur)="calculate()"
+            name="quantityRequested" autocomplete="off" />
+          <div class="error" *ngIf="invalidQuantityenteredForQuantityFromThis == true">
+            <span style="color:red">Value cannot be greater than qty to be quoted and qty available</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-3 column">
+        <div class="form-group">
+          <label>Quantity to be quoted</label>
+          <input type="text" class="form-control quantityTextBox text-right" name="quantityToBeQuoted" disabled="true"
+            [ngModel]="part.quantityToBeQuoted  | globalNmberFormat"
+            (ngModelChange)="part.quantityToBeQuoted=formatStringToNumberGlobal($event)" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row margin-row row-table calculation">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:25%"></th>
+          <th style="width:15%"></th>
+          <th style="width:25%"><span>Per Unit</span></th>
+          <th style="width:25%"><span>Extended</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <span>Sales Price</span></td>
+          <td>
+          </td>
+          <td><span><input type="text" class="form-control text-right"
+                [ngModel]="part.salesPricePerUnit  | twoDecimalGlobalNumberFormatPipe"
+                [ngModelOptions]="{updateOn:'blur'}"
+                (ngModelChange)="part.salesPricePerUnit=formatStringToNumberGlobal($event)"
+                (blur)="calculate()" /></span></td>
+          <td><span>{{part.salesPriceExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span>Markup (%)</span>
+          </td>
+          <td>
+            <select style="width:90%" [(ngModel)]="part.markUpPercentage" (change)="calculate()">
+              <option [ngValue]="0">Select</option>
+              <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
+            </select>
+            <span style="padding-left: 5px;">%</span>
+          </td>
+          <td><span><input type="text" class="form-control text-right"
+                [ngModel]="part.markupPerUnit | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}"
+                (ngModelChange)="part.markupPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()" /></span>
+          </td>
+          <td><span>{{part.markupExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span>Sales Disc (%)</span>
+          </td>
+          <td>
+            <select style="width:90%" [(ngModel)]="part.salesDiscount" (change)="calculate()">
+              <option [ngValue]="0">Select</option>
+              <option *ngFor="let p of percentage" [ngValue]="p.label">{{ p.label }}</option>
+            </select>
+            <span style="padding-left: 5px;">%</span>
+
+          </td>
+          <td>
+            <input type="text" class="form-control text-right"
+              [ngModel]="part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe"
+              [ngModelOptions]="{updateOn:'blur'}"
+              (ngModelChange)="part.salesDiscountPerUnit=formatStringToNumberGlobal($event)" (blur)="calculate()" />
+          </td>
+          <td><span>{{part.salesDiscountExtended | twoDecimalGlobalNumberFormatPipe}}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span>Net Sale Price</span>
+          </td>
+          <td>
+          </td>
+          <td>
+            <span>{{part.netSalesPricePerUnit | twoDecimalGlobalNumberFormatPipe}}</span>
+          </td>
+          <td><span>{{part.netSalesPriceExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
+        </tr>
+        <tr>
+          <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+          <td>
+            <span>Unit Cost</span>
+          </td>
+          <td>
+
+          </td>
+          <!--
+                <td>
+                  <span><input type="number" class="form-control" [(ngModel)]="part.unitCostPerUnit" (change)="calculate()" /></span>
+                </td>
+              -->
+          <td><span>{{ part.unitCostPerUnit | twoDecimalGlobalNumberFormatPipe }}</span></td>
+          <td><span>{{ part.unitCostExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span>Margin Amount</span>
+          </td>
+          <td>
+          </td>
+          <!-- <td>
+                    <input type="number" class="form-control" [(ngModel)]="part.marginAmountPerUnit" (change)="calculate()" />
+                </td>
+              -->
+          <td><span>{{ part.marginAmountPerUnit | twoDecimalGlobalNumberFormatPipe }}</span></td>
+          <td><span>{{ part.marginAmountExtended | twoDecimalGlobalNumberFormatPipe }}</span></td>
+        </tr>
+        <tr>
+          <td>
+            <span>Margin (%)</span>
+          </td>
+          <td>
+          </td>
+          <!--
+                <td>
+                  <select [(ngModel)]="part.marginPercentagePerUnit" (change)="calculate()">
+                      <option *ngFor="let p of percentage" [ngValue]="p.value">{{ p.label }}</option> 
+                  </select>
+                </td>
+              -->
+          <td><span>{{ part.marginPercentagePerUnit | twoDecimalGlobalNumberFormatPipe }} % </span></td>
+          <td><span>{{ part.marginPercentageExtended | twoDecimalGlobalNumberFormatPipe }} %</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="submit" class="btn btn-primary" [disabled]="invalidQuantityenteredForQuantityFromThis == true"
+    (click)="onSave($event)">
+    Save
+  </button>
+  <button type="button" (click)="onClose($event)" class="btn btn-danger">
+    Close
+  </button>
+</div>

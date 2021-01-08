@@ -1,0 +1,869 @@
+﻿﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary new-card-header">
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">Legal Entity List</h4>
+            </div>
+            <div>
+                <button type="button"
+                        class="btn-sm new-btn-primary"
+                        (click)="navigateTogeneralInfo()">
+                    Add Legal Entity
+                </button>
+            </div>
+        </div>
+    </div> 
+    <div class="card-body new-card-body">
+        <p-table #dt
+                 class="rpo-table-cstm rro-table-cstm"
+                 [value]="allATAMaininfo"
+                 [metaKeySelection]="true"
+                 [first]="first"
+                 [rows]="10"
+                 [paginator]="true"
+                 [pageLinks]="3"
+                 [rowsPerPageOptions]="[10,20,50,100]"
+                 [columns]="selectedColumns"
+                 [lazy]="true"
+                 (onLazyLoad)="loadDatas($event)"
+                 selectionMode="multiple"
+                 [resizableColumns]="true"
+                 [reorderableColumns]="true"
+                 [scrollable]="true"
+                 [totalRecords]="totalRecords"
+                 scrollHeight="450px">
+            <ng-template pTemplate="caption">
+                <div class="row">
+                    <div class="col">
+                        <p-multiSelect [options]="legalEntityColumns"
+                                       [(ngModel)]="selectedColumns"
+                                       optionLabel="header"
+                                       [maxSelectedLabels]="2"
+                                       [style]="{minWidth: '220px'}"
+                                       style="float:left"
+                                       (onChange)="columnsChanges()">
+                        </p-multiSelect>
+                    </div>
+                    <div class="col">
+                        <div style="width: auto !important; float: right;margin-right: 7%;"
+                             class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            <i class="fa fa-search"></i>
+                            <input type="text"
+                                   pInputText
+                                   size="50"
+                                   class="form-control"
+                                   (input)="globalSearch($event.target.value)"
+                                   placeholder="Filter" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="margin: 0px;"> 
+                    <div class="col">
+                        <button type="button"
+                                class="btn btn-primary new-table-button"
+                                pButton
+                                icon="fa-download"
+                                iconPos="left"
+                                label="Export Data"
+                                matTooltip="Download Data"
+                                matTooltipPosition="above"
+                                style="left:-10px; padding: 5px 10px !important;"
+                                data-toggle="modal"
+                                (click)="selectedOnly = false; targetData = dt;" 
+                                data-target="#export"></button>
+                        <button type="button" class="btn btn-primary new-table-button"
+                                pButton icon="fa-download" iconPos="left"
+                                label="Export Selected Data"
+                                matTooltip="Download Selected Data"
+                                matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"
+                                style="padding: 5px 12px !important;"></button> 
+                    </div>
+                    <ng-template #export let-c="close" let-d="dismiss">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                            <button type="button" class="close" aria-label="Close"
+                                (click)="dismissModel()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <strong>
+                        You are attempting to export {{totalRecords}} of records
+                            </strong>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary"
+                            (click)="exportCSV(dt)">Confirm</button>
+                            <button type="button" class="btn btn-danger"
+                                (click)="dismissModel()">Cancel</button>
+                        </div>
+                    </ng-template>
+                    <div class="col">
+                        <div class="">
+                            <div class="col"
+                                 style="width: auto; float: right; padding-top: 3px;">
+                                <div class="form-group">
+                                    <div class="pull-left"
+                                         style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+
+                                            <input type="radio" name="EmpStatus09j" class="form-control" value="Active" (click)="getStatusForList('Active')" [(ngModel)]="currentStatusForList">
+                                            <span class="checkmark"></span>Active
+                                        </label>
+                                    </div>
+                                    <div class="pull-left"
+                                         style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="EmpStatus09j" class="form-control" value="InActive" (click)="getStatusForList('InActive')" [(ngModel)]="currentStatusForList">
+                                            <span class="checkmark"></span>In-Active
+                                        </label>
+                                    </div>
+                                    <div class="pull-left"
+                                         style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="EmpStatus09j" class="form-control" value="ALL" (click)="getStatusForList('ALL')" [(ngModel)]="currentStatusForList">
+                                            <span class="checkmark"></span>All
+                                        </label>
+                                    </div>
+                                    <div class=" pull-left checkbox-cstm" style="margin-right: 15px;">
+                                        <label style="width: auto !important;margin-top: 3px;">
+                                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent09j" id="cparent09j" (click)="getDeleteListByStatus($event.target.checked)" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Show  Deleted List
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" style="width:130px">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="width:160px"
+                        *ngFor="let col of columns"
+                        pResizableColumn
+                        pReorderableColumn
+                        [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th style="width:200px;position:sticky; border-left: 2px solid #c3c3c3 !important;"
+                        *ngIf="selectedColumns.length > 0">
+                        Actions
+                    </th> 
+                </tr>
+                <tr>
+                    <th style="width:160px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                        name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+     (change)="dateFilterForTable($event.target.value,col.field)" />
+                    </th>
+                    <th style="width:200px;position:sticky;border-left: 2px solid #c3c3c3 !important;"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns"> 
+                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(invView,rowData)">
+                    <td style="width:160px"
+                        *ngFor="let col of columns"
+                        class="ui-resizable-column"
+                        pReorderableRowHandle>
+                        {{
+							col.field == 'createdDate'
+							?  (rowData[col.field] | date: 'MM/dd/yyyy  h:mm a'):rowData[col.field] && col.field == 'updatedDate' 
+							?  (rowData[col.field] | date: 'MM/dd/yyyy  h:mm a'):rowData[col.field]
+                        }}
+                    </td>
+                    <td style="width:200px" *ngIf="selectedColumns.length > 0">
+                        <div *ngIf="currentDeletedstatus==false">
+                         <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            matTooltipPosition="above"  (onChange)="toggleIsActive(rowData,$event)" [disabled]="rowData.isPrimary || isViewMode==true"></p-inputSwitch> 
+                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span> 
+                                <a class="btn nobg"
+                                   (click)="openContentEdit(contentEdit,rowData)" matTooltip="Edit"
+                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                            </span>
+                            <span>
+                                <a class="btn nobg"
+                                   (click)="openDelete(content,rowData)"
+                                   matTooltip="Delete" matTooltipPosition="above">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </span>
+                            <span data-toggle="modal" data-target="#legalEntityHistory">
+                                <a class="btn nobg btn-hist-cstm"
+                                   (click)="getLegalEntityHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+                        </div>
+                        <div *ngIf="currentDeletedstatus==true">
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            matTooltipPosition="above"   [disabled]="true"></p-inputSwitch> 
+                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span data-toggle="modal" data-target="#legalEntityHistory">
+                                <a class="btn nobg btn-hist-cstm"
+                                   (click)="getLegalEntityHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+                            <span><a class="btn nobg" (click)="restore(restoreIdLegalEntity,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns >
+                <tr>
+                    <td colspan="15" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input style="width: 5%;"
+                       [(ngModel)]="totalRecords"
+                       [disabled]="true"
+                       pInputText
+                       type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input style="width: 5%;"
+                       [(ngModel)]="totalPages"
+                       [disabled]="true"
+                       pInputText
+                       type="text" />
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+          [width]="350" [minWidth]="200" [responsive]="true"
+          [minY]="1050" [baseZIndex]="1100000">
+
+    <h5 [ngStyle]="{'color':'red'}">
+        Mandatory fields are not filled.
+    </h5>
+    <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+</p-dialog>
+<p-dialog header="Alert" [(visible)]="displayWarningModal" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+          [width]="350" [minWidth]="200" [responsive]="true"
+          [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{'color':'red'}">
+        Are you sure, You want to close?.
+    </h5>
+    <button type="button" pButton icon="pi pi-check" (click)="displayWarningModal=false;dismissModel()" label="Yes"></button>
+    &nbsp;&nbsp;
+    <button type="button" pButton icon="pi pi-times" (click)="displayWarningModal=false" label="No"></button>
+</p-dialog>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>
+            Legal Entity:
+            <span class="new-label">{{selectedRowforDelete.name}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+
+<div id="legalEntityHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
+                <h4 class="modal-title">History of Legal Entity</h4>
+            </div>
+
+            <div class="modal-body" *ngIf="auditHistory" >
+                <div class="table-responsive history_hg">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <!-- <th>Legal Entity Id</th> -->
+                                <th>Legal Entity  <span class="clr-red">*</span></th>
+                                <th>Company Name  <span class="clr-red">*</span></th>
+                                <th>Company Code  <span class="clr-red">*</span></th>
+                                <th>Phone  <span class="clr-red">*</span></th>
+                                <th>Address1  <span class="clr-red">*</span></th>
+                                <th>Address2</th>
+                                <th>City  <span class="clr-red">*</span></th>
+                                <th>State/Province  <span class="clr-red">*</span></th>
+                                <th>Postal Code  <span class="clr-red">*</span></th>
+                                <th>Country  <span class="clr-red">*</span></th>
+                                <th>D/B/A</th>
+                                <th>Functional Currency  <span class="clr-red">*</span></th>
+                                <th>Reporting Currency  <span class="clr-red">*</span></th>
+                                <th>Ledger Name</th>
+                                <th>Cage Code</th>
+                                <th>Faa Lic</th>
+                                <th>TAX Id</th>
+                                <th>Attachment Name</th>
+                                <th>Is this Address For Billing</th>
+                                <th>Is this Address For Shipping</th>
+                                <th>Balancing Entity</th>
+                                <th>Is Active</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                                <th>Is Deleted</th>
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'legalEntityId', audit.legalEntityId)  ? 'black' : 'red'  }">{{audit.legalEntityId}}</td> -->
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">{{audit.name}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'companyName', audit.companyName)  ? 'black' : 'red'  }">{{audit.companyName}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'companyCode', audit.companyCode)  ? 'black' : 'red'  }">{{audit.companyCode}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'phoneNumber', audit.phoneNumber)  ? 'black' : 'red'  }">{{audit.phoneNumber}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'address1', audit.address1)  ? 'black' : 'red'  }">{{audit.address1}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'address2', audit.address2)  ? 'black' : 'red'  }">{{audit.address2}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'city', audit.city)  ? 'black' : 'red'  }">{{audit.city}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'stateOrProvince', audit.stateOrProvince)  ? 'black' : 'red'  }">{{audit.stateOrProvince}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'postalCode', audit.postalCode)  ? 'black' : 'red'  }">{{audit.postalCode}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'country', audit.country)  ? 'black' : 'red'  }">{{audit.country}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'doingLegalAs', audit.doingLegalAs)  ? 'black' : 'red'  }">{{audit.doingLegalAs}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'functionalCurrencyName', audit.functionalCurrencyName)  ? 'black' : 'red'  }">{{audit.functionalCurrencyName}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'reportingCurrencyName', audit.reportingCurrencyName)  ? 'black' : 'red'  }">{{audit.reportingCurrencyName}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'ledgername', audit.ledgername)  ? 'black' : 'red'  }">{{audit.ledgername}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'cageCode', audit.cageCode)  ? 'black' : 'red'  }">{{audit.cageCode}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'faaLicense', audit.faaLicense)  ? 'black' : 'red'  }">{{audit.faaLicense}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'taxId', audit.taxId)  ? 'black' : 'red'  }">{{audit.taxId}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'attachmentname', audit.attachmentname)  ? 'black' : 'red'  }">{{audit.attachmentname}}</td>
+                                <td style="text-align: center;">
+                                    <input type="checkbox" disabled [checked]="audit.isAddressForBilling === true"
+                                    />
+                                  </td>
+                              <td style="text-align: center;">
+                                <input type="checkbox" disabled [checked]="audit.isAddressForShipping === true"
+                                />
+                              </td>
+                              <td style="text-align: center;">
+                                <input type="checkbox" disabled [checked]="audit.isBalancingEntity === true"
+                                />
+                              </td>
+                              <td style="text-align: center;">
+                                <input type="checkbox" disabled [checked]="audit.isActive === true"
+                                />
+                              </td>
+                                <td>{{audit.createdDate | date: 'MM/dd/yyyy  h:mm a'}}</td>
+                                <td>{{audit.createdBy}}</td>
+                                <td>{{audit.updatedDate | date: 'MM/dd/yyyy  h:mm a'}}</td>
+                                <td>{{audit.updatedBy}}</td>
+                                <td style="text-align: center;">
+                                    <input type="checkbox" disabled [checked]="audit.isDeleted === true"
+                                    />
+                                  </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+                <div class="loading">
+                    <div class="lds-roller">
+                        <div>
+                        </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <app-spinner *ngIf="isSpinnerVisible"></app-spinner> -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #restoreIdLegalEntity let-c="close" let-d="dismiss" data-backdrop="static">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>
+        <h6 style="font-size: 14px;">Legal Entity: <span class="new-label"> {{restorerecord.name}}</span> </h6></strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+<div class="modal" id="invView" role="dialog"  data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+        <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" (click)="onCloseViewEntity()">&times;</button>
+            <div class="col-sm-3">
+                <h4 class="modal-title">Details of Legal Entity </h4>
+            </div>
+            <div class="col-sm-3" style="margin-top: 5px !important;">
+                Legal Entity <span style="color:red">
+                    : {{ viewDataGeneralInformation.name }}
+                </span>
+            </div>
+            <div class="col-sm-3" style="margin-top: 5px !important;">
+                Legal Entity Code<span style="color:red">
+                    : {{ viewDataGeneralInformation.companyCode }}
+                </span>
+            </div>
+      
+            
+        </div>
+  
+        <div class="modal-body" >
+            <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+                <div class="loading">
+                    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
+         <div style="width: 100%;margin-bottom: 32px;">
+            <div class="col-sm-6">
+                <button type="button"
+                        class="btn btn-primary"
+                        (click)="ExpandAllCustomerDetailsModel()">
+                    Open All
+                </button>
+                <button type="button"
+                        class="btn btn-secondary"
+                        (click)="CloseAllCustomerDetailsModel()">
+                    Close All
+                </button>
+            </div>
+            <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+                <button type="button" name="isActive" [ngClass]="viewDataGeneralInformation.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                    <span class="value">{{viewDataGeneralInformation.isActive ? 'Active' : 'In-Active'}}</span>
+                 </button> 
+            </div>
+         </div>
+        
+            <div *ngIf="showViewForTabs" class="panel-group mt-2" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <div></div>
+                            <a data-toggle="collapse" href="#step1">General Info</a>
+                        </h4>
+                         
+                    </div>
+                    <div id="step1" class="panel-collapse collapse in show">
+                        <div class="panel-body">
+                            <div class="modal-content p-1">
+                                <div class="default-bg clear le-modl" style="display: inline-flex;">
+                                    <div class="col-md-4">
+        
+                                        <p>
+                                            <span class="label">
+                                                <b>Legal Entity: <span class="text-danger">*</span></b>
+                                            </span><span class="value">
+                                                {{ viewDataGeneralInformation.name }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label">
+                                                <b>Company Code: <span class="text-danger">*</span></b>
+                                            </span><span class="value">
+                                                {{ viewDataGeneralInformation.companyCode }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label">
+                                                <b>Company Name: <span class="text-danger">*</span></b>
+                                            </span><span class="value">
+                                                {{ viewDataGeneralInformation.companyName }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>D/B/A: </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.doingLegalAs }}
+                                            </span>
+                                        </p>
+                                     
+        
+        
+                                        <p>
+                                            <span class="label"><b>Address 1: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.address1 }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Address 2: </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.address2 }}
+                                            </span>
+                                        </p>
+        
+                                        <p>
+                                            <span class="label"><b>City: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.city }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label">
+                                                <b>
+                                                    Primary State/Province:
+                                                    <span class="text-danger">*</span>
+                                                </b>
+                                            </span><span class="value">
+                                                {{ viewDataGeneralInformation.stateOrProvince }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Postal: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.postalCode }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Country: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.country }}
+                                            </span>
+                                        </p>
+
+                                       
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div>
+                                            <label class=" label " style="width: 35%;font-weight: bold;">Invoice Address Position</label>
+                                            <div class="value">
+                                                <div>
+                                                    <label class="radio-cstm wauto pull-left" style="pointer-events: none;    font-weight: 100;">
+                                                        <input type="radio" name="invoiceAddPosition" 
+                                                            id="invoiceAddPosition" class="form-control" value="1"
+                                                            [checked]="viewDataGeneralInformation.invoiceAddressPositionTop==true">
+                                                        <span class="checkmark"></span>
+                                                        Top
+                                                    </label>
+                                                    <label class="radio-cstm wauto pull-left" style="pointer-events: none;  font-weight: 100;">
+                                                        <input type="radio" name="invoiceAddPosition" id="invoiceAddPosition"
+                                                            class="form-control" value="2"
+                                                            [checked]="viewDataGeneralInformation.invoiceAddressPositionBottom==true">
+                                                        <span class="checkmark"></span>
+                                                        Bottom
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <br>
+                                        <p>
+                                            <span class="label"><b>Fax: </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.faxNumber }}
+                                            </span>
+                                        </p>
+                                        <p style="margin-bottom: 20px;">
+                                            <span class="label"><b>Phone: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.phoneNumber }} -
+                                                {{ viewDataGeneralInformation.phoneExt }}
+                                            </span>
+                                        </p>
+                                        <div class="form-group" style="margin-top: 30px;" style="pointer-events: none;">
+                                            <label class=" label "  style="width: 35%;font-weight: bold;">Invoice Fax/Phone Position</label>
+                                            <div class="value">
+                                                <div>
+                                                    <label class="radio-cstm wauto pull-left " style="font-weight: 100;">
+                                                        <input type="radio" name="invoicefaxPhonePosition"  
+                                                            id="invoicefaxPhonePosition" class="form-control" value="1"
+                                                            [checked]="viewDataGeneralInformation.invoiceFaxPhonePositionTop">
+                                                        <span class="checkmark"></span>
+                                                        Top
+                                                    </label>
+                                                    <label class="radio-cstm wauto pull-left" style="pointer-events: none; font-weight: 100;">
+                                                        <input type="radio" name="invoicefaxPhonePosition" 
+                                                            id="invoicefaxPhonePosition" class="form-control" value="2"
+                                                            [checked]="viewDataGeneralInformation.invoiceFaxPhonePositionBottom">
+                                                        <span class="checkmark"></span>
+                                                        Bottom
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <p style="width: 100%;">
+                                            <span class="label"><b>Functional Currency: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.functionalCurrencyCode }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Reporting Currency: <span class="text-danger">*</span></b></span><span class="value">
+                                                {{ viewDataGeneralInformation.reportingCurrencyCode }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Ledger Name: </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.ledgerName }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Cage Code : </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.cageCode }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>Faa Lic : </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.faaLicense }}
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="label"><b>TAX Id : </b></span><span class="value">
+                                                {{ viewDataGeneralInformation.taxId }}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <p>
+                                            <span class="value">
+                                                <input type="checkbox"
+                                                       name="isIsBillingAddress"
+                                                       [checked]="
+                                viewDataGeneralInformation.isAddressForBilling==true
+                              "
+                                                       disabled /><span><b> Is this Address For Billing </b></span>
+                                            </span>
+                                        </p>
+        
+                                        <p>
+                                            <span class="value">
+                                                <input type="checkbox"
+                                                       name="isIsShippingAddress"
+                                                       [checked]="viewDataGeneralInformation.isAddressForShipping==true"
+                                                       disabled /><span><b> Is this Address For Shipping </b></span>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="value">
+                                                <input type="checkbox"
+                                                       name="isIsShippingAddress" 
+                                                       [checked]="viewDataGeneralInformation.lastLevel==true"
+                                                       disabled /><span><b> Is this Address For Shipping </b></span>
+                                            </span>
+                                        </p>
+        
+                                     
+        
+                                         <p>
+                                            <span class="label"><b>Tag Names:  </b></span><span class="value">
+                                               <span *ngFor="let tagname of viewDataGeneralInformation.tagNames; let last=last">
+                                                   {{tagname}}<span *ngIf="!last">, </span>
+                                               </span>
+                                                
+                                            </span>
+                                        </p>
+        
+        
+        
+                                        <div class="table-responsive table-overflow" *ngIf="sourceViewforDocumentList && sourceViewforDocumentList.length > 0">
+                                            <h4 class="panel-title inssuction_tex" >Attachment Details:</h4>
+                                            <p-table class="table-responsive ptable-cus-pma" [paginator]="sourceViewforDocumentList.length > 0" [value]="sourceViewforDocumentList" [rows]="3" [columns]="sourceViewforDocumentListColumns">
+                                                <ng-template pTemplate="header" let-columns>
+                                                    <tr>
+                                                        <!-- <th *ngFor="let col of columns">
+                                                            {{col.header}}
+                                                        </th> -->
+                                                        <th style="width: 74%;">File Name</th>
+                                                        <th>
+                                                            Download
+                                                        </th>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="body" let-part let-rowData let-columns="columns" let-i="rowIndex">
+                                                    <tr>
+                                                        <td *ngFor="let col of columns">
+                                                            <ng-container *ngIf="col.field=='fileName'">
+                                                                {{part[col.field]}}
+                                                            </ng-container>
+        
+                                                        </td>
+                                                        <td style="text-align: center;">
+                                                            <a (click)="downloadFileUpload(part)" matTooltipPosition="above" matTooltip="Download" class="btn nobg btn-cstm"><span><i class="fa fa-download"></i></span></a>
+                                                           
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template pTemplate="emptymessage" let-columns *ngIf="sourceViewforDocumentList.length == 0">
+                                                    <tr>
+                                                        <td [attr.colspan]="2" style="color: red; font-weight: bold; text-align: center">
+                                                            No records found
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template #content let-c="close" let-d="dismiss">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                                                        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <strong>
+                                                            Delete Logo
+                                                            <!--<span class="new-label">{{selectedRowforDelete.name}}</span>-->
+                                                        </strong>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
+                                                        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+                                                    </div>
+                                                </ng-template>
+                                            </p-table>
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
+                        </h4>
+                    </div>
+                    <div id="step2" class="panel-collapse  collapse">
+                        <div class="panel-body m-lr-7 " *ngIf="viewDataGeneralInformation">
+                            <app-legal-entity-contact  [legalEntityDataFromExternalComponents]="viewDataGeneralInformation">
+                          </app-legal-entity-contact>
+                        </div>
+                    </div>
+                </div>
+        
+        
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
+                        </h4>
+                    </div>
+                    <div id="step3" class="panel-collapse  collapse">
+                        <div class="panel-body m-lr-7">
+                            <div class="col-sm-12">
+                                <!--<app-legal-entity-contact [customerDataFromExternalComponents]="viewDataGeneralInformation"></app-legal-entity-contact>-->
+        
+                                <div >
+                                    <div class="bg-block2">
+                                        <h3>Lockbox</h3>
+                                        <p><span class="label"><b>PO Box <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.poBox}}</span></p>
+                                        <p><span class="label"><b>Bank Street Address line 1 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress1}}</span></p>
+                                        <p><span class="label"><b>Bank Street Address line 2 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress2}}</span></p>
+                                        <p><span class="label"><b>City <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankCity}}</span></p>
+                                        <p><span class="label"><b>State <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankProvince}}</span></p>
+                                        <p><span class="label"><b>Country <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankcountry}}</span></p>
+                                        <p><span class="label"><b>Postal Code <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankpostalCode}}</span></p>
+                                    </div>
+                                    <div class="bg-block2">
+                                        <h3>Domestic Wire</h3>
+                                        <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBankName}}</span></p>
+                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticIntermediateBank}}</span></p>
+                                        <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBenficiaryBankName}}</span></p>
+                                        <p><span class="label"><b>Bank Account Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBankAccountNumber}}</span></p>
+                                        <p><span class="label"><b>ABA Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticABANumber}}</span></p>
+                                    </div>
+                                    <div class="bg-block2">
+                                        <h3>International Wire</h3>
+                                        <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankName}}</span></p>
+                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalIntermediateBank}}</span></p>
+                                        <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
+                                        <p><span class="label"><b>Bank Account Number  <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankAccountNumber}}</span></p>
+                                        <p><span class="label"><b>SWIFT Code <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalSWIFTID}}</span></p>
+                                    </div>
+                                    <div class="bg-block2">
+                                        <h3>ACH</h3>
+                                        <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankName}}</span></p>
+                                        <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achIntermediateBank}}</span></p>
+                                        <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBenficiaryBankName}}</span></p>
+                                        <p><span class="label"><b>Bank Account Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankAccountNumber}}</span></p>
+                                        <p><span class="label"><b>ABA Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achABANumber}}</span></p>
+                                        <p><span class="label"><b>SWIFT Code <span class="clr-red">*</span>: </b></span><span class="value">{{lockboxing.achSWIFTID}}</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="panel panel-default"> 
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
+                        </h4>
+                    </div>
+                    <div id="step6" class="panel-collapse  collapse">
+                        <div class="panel-body m-lr-7" *ngIf="viewDataGeneralInformation">
+                            <app-legal-entity-billing [legalEntityDataFromExternalComponents]="viewDataGeneralInformation"></app-legal-entity-billing>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
+                        </h4>
+                    </div>
+                    <div id="step7" class="panel-collapse  collapse">
+                        <div class="panel-body m-lr-7" *ngIf="viewDataGeneralInformation">
+                            <app-legal-entity-shipping  [legalEntityDataFromExternalComponents]="viewDataGeneralInformation"></app-legal-entity-shipping>
+                        </div>
+                    </div>
+                </div>
+        
+        
+        
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
+                        </h4>
+                    </div>
+                    <div id="step10" class="panel-collapse  collapse" >
+                        <div class="panel-body m-lr-7" *ngIf="viewDataGeneralInformation">
+          <app-legal-entity-documents  [legalEntityDataFromExternalComponents]="viewDataGeneralInformation">
+        </app-legal-entity-documents>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="onCloseViewEntity()">Close</button>
+        </div>
+        </div>
+    </div> 
+    </div>
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+<!-- <app-spinner *ngIf="isSpinnerVisible"></app-spinner> -->

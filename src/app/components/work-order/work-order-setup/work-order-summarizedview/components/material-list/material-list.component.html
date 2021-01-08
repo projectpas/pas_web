@@ -1,0 +1,81 @@
+<div  style="float: right; margin: 3px 0 19px 0px;">
+        <button type="button" class="btn btn-primary" (click)="detailView()">
+            {{(isOpenedAll)?'Summary':'Detail View'}}
+        </button>
+</div>
+<div style="margin-top: 15px;">
+<p-treeTable [value]="gridData" (onNodeExpand)="getMateialListData($event.node)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="background-color: #337ab7; color: white;width: 180px;">PartNumber</th>
+            <th style="background-color: #337ab7; color: white;width: 180px;">Part Description</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Revised PartNo</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Task</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Condition</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Controller Id</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Controller No</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Currency</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Employee</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Extended Cost</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Item Type</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Location</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">PO</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Qty Issued</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Quantity Req</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Quantity Resrved</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Quantity Turn In</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Receiver</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">RO</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">SN</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Shelf</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Site</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Stock Line No</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Stock Type</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Sub WO</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Time Life</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Unit Cost</th>
+            <th style="background-color: #337ab7; color: white;width: 111px;">Warehouse</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+            <td style="width: 111px;">
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{rowData.partNumber}}
+            </td>
+            <td style="width: 111px;">{{rowData.partDescription}}</td>
+            <td style="width: 111px;">{{rowData.revisedPN}}</td>
+            <td style="width: 111px;">{{rowData.task}}</td>
+            <td style="width: 111px;">{{rowData.condition}}</td>
+            <td style="width: 111px;">{{rowData.controllerId}}</td>
+            <td style="width: 111px;">{{rowData.controllerNo}}</td>
+            <td style="width: 111px;">{{(rowData.currency)?rowData.currency.symbol:rowData.currency}}</td>
+            <td style="width: 111px;">{{rowData.employee}}</td>
+            <td style="width: 111px;">{{rowData.extendedCost}}</td>
+            <td style="width: 111px;">{{rowData.itemType}}</td>
+            <td style="width: 111px;">{{rowData.location}}</td>
+            <td style="width: 111px;">{{rowData.po}}</td>
+            <td style="width: 111px;">{{rowData.qtyssued}}</td>
+            <td style="width: 111px;">{{rowData.quantityReq}}</td>
+            <td style="width: 111px;">{{rowData.quantityResrved}}</td>
+            <td style="width: 111px;">{{rowData.quantityTurnIn}}</td>
+            <td style="width: 111px;">{{rowData.receiver}}</td>
+            <td style="width: 111px;">{{rowData.ro}}</td>
+            <td style="width: 111px;">{{rowData.serialNo}}</td>
+            <td style="width: 111px;">{{rowData.shelf}}</td>
+            <td style="width: 111px;">{{rowData.site}}</td>
+            <td style="width: 111px;">{{rowData.stockLineNo}}</td>
+            <td style="width: 111px;">{{rowData.stockType}}</td>
+            <td style="width: 111px;">{{rowData.subWO}}</td>
+            <td style="width: 111px;">{{rowData.timeLife}}</td>
+            <td style="width: 111px;">{{rowData.unitCost}}</td>
+            <td style="width: 111px;">{{rowData.warehouse}}</td>
+        </tr>
+    </ng-template>
+</p-treeTable>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

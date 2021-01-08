@@ -1,0 +1,166 @@
+
+<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary">
+      <div class="row">
+        <div class="col">
+          <h4 class="new-card-heading">Open/Close Ledger</h4>
+        </div>
+      </div>
+    </div>
+    <div class="card-body new-card-body"> 
+    <div class="col-xs-12 x_content">
+        <!-- <h4 class="page-heading">Open/Close Ledger</h4> -->
+        <div class="col-md-12 col-sm-12 col-xs-12 mt8">
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <div class="col-sm-6" style="margin-left: 30px">
+                        <div class="form-group col-sm-12">
+                            <label class="col-sm-3">Ledger Name<strong class="clr-red">*</strong></label>
+                            <div class="col-sm-5 inner-addon right-addon inline-block">
+                                <p-autoComplete class="autocomp-customer-cstm"
+                                                name="name"
+                                                [(ngModel)]="currentCalendarObj.ledgername" [suggestions]="ledgerNameObject"
+                                                field="name" emptyMessage="No results"
+                                                [forceSelection]="true"
+                                                (completeMethod)="loadLedgerNames($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true" required>
+                                </p-autoComplete>
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-group col-sm-12">
+                            <label class="col-sm-3">Fiscal Year<strong class="clr-red">*</strong></label>
+                            <div class="col-sm-5">
+                                <select class="form-control" name="fiscalYear" id="fiscalYear" [(ngModel)]="currentCalendarObj.fiscalYear" required>
+                                    <option value="" selected>Select</option>                                    
+                                    <option value="2018">2018</option>
+                                    <option value="2019">2019</option>                                    
+                                </select>                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    <hr>
+                    <button class="btn btn-success pull-right add-cal-btn" (click)="showCalendar()">Show Calendar</button>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+        <div [@fadeInOut] class="col-md-12 col-sm-12 col-xs-12">
+            <button *ngIf="showManual" (click)="addPeriod()" class="btn btn-warning pull-right add-cal-btn" style="font-size: 12px;padding: 2px 5px;">Add Period <i class="fa fa-plus"></i></button>
+            <div id="" class="accountCalendarTable table-responsive default-bg clear calendar-table-12 col-10 input-85" *ngIf="showTable">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Status</th>
+                            <th>Calendar/Fiscal</th>
+                            <th>Year</th>
+                            <th>Qtr</th>
+                            <th>Period </th>
+                            <th>From Date</th>
+                            <th>To Date</th>
+                            <th>Period Name</th>
+                            <th>Adjusting Period</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="!showManual">
+                        <tr *ngFor="let obj of calendarArray;let row_no = index">
+                            <td>
+                                <select [(ngModel)]="obj.status" (change)="changeStatus(obj,obj.status)" [disabled]="calendarContentDisabled">                                   
+                                    <option *ngFor="let name of calendarStatus" [ngValue]="name">
+                                        {{name}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>{{obj.fiscalName}}</td>
+                            <td>{{obj.fiscalYear}}</td>
+                            <td>{{obj.quater}}</td>
+                            <td>{{obj.period}}</td>
+                            <td>
+                                <p-calendar [(ngModel)]="obj.fromDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"></p-calendar>
+                            </td>
+                            <td>
+                                <p-calendar [(ngModel)]="obj.toDate" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" (onSelect)="setDate(obj,row_no)"></p-calendar>
+                            </td>
+                            <td>{{obj.periodName}}</td>
+                            <td *ngIf="obj.adjusting=='yes' "> <input type="checkbox" [(ngModel)]="obj.isAdjustPeriod" disabled /></td>
+                            <td *ngIf="obj.adjusting!='yes' "></td>
+                        </tr>
+
+
+                    </tbody>
+                    <tbody *ngIf="showManual">
+                        <tr *ngFor="let obj of calendarArray;let row_no = index">
+                            <td>
+                                <select [(ngModel)]="obj.status" (change)="changeStatus(obj,obj.status)">
+                                    <option *ngFor="let name of calendarStatus" [ngValue]="name">
+                                        {{name}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>
+                                <select [(ngModel)]="obj.fiscalName" (change)="addPeriodName(obj,obj.fiscalName)">
+                                    <option *ngFor="let name of obj.fiscalNameData" [ngValue]="name">
+                                        {{name}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>{{obj.fiscalYear}}</td>
+                            <td>
+                                <select [(ngModel)]="obj.quater">
+                                    <option *ngFor="let qtr of obj.quaterData" [ngValue]="qtr">
+                                        {{qtr}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>{{obj.period}}</td>
+                            <td>
+                                <p-calendar [(ngModel)]="obj.fromDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"></p-calendar>
+                            </td>
+                            <td>
+                                <p-calendar [(ngModel)]="obj.toDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true"></p-calendar>
+                            </td>
+                            <td>{{obj.periodName}}</td>
+                            <th *ngIf="row_no>0"><input type="checkbox" [(ngModel)]="obj.isAdjustPeriod" (change)="setAdjustingPeriod(obj,row_no)" /></th>
+                            <th *ngIf="row_no==0"><input type="checkbox" disabled /></th>
+                            <th>
+                                <span class="fa fa-trash-o delete-btn"
+                                      (click)="deleteRow(row_no)"></span>
+                            </th>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="clear"></div>
+                <br>
+                <button class="btn btn-success pull-right" (click)="saveCalendar()">Save</button>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<!--<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+          [width]="350" [minWidth]="200" [responsive]="true"
+          [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{'color':'red'}">
+        Please Enter (*) Mandatory Fields
+    </h5>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+    </p-footer>
+</p-dialog>-->
+
+<p-dialog header="Alert" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+          [width]="350" [minWidth]="200" [responsive]="true"
+          [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{'color':'red'}">
+        Please Enter (*) Mandatory Fields
+    </h5>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Close"></button>
+    </p-footer>
+</p-dialog>

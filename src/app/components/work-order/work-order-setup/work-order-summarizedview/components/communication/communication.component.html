@@ -1,0 +1,35 @@
+<div style="float: right;margin: -41px 0 19px 0px;">
+    <button type="button" class="btn btn-primary" (click)="detailView()">
+        {{(isOpenedAll)?'Summary':'Detail View'}}
+    </button>
+</div>
+<div style="margin-top: 71px;">
+<p-treeTable [value]="gridData" (onNodeExpand)="getShippingData($event)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="background-color: #337ab7; color: white;" *ngFor="let f of fields">{{f.header}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+            <td>
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{rowData.partNumber}}
+            </td>
+            <ng-container *ngFor="let f of fields">
+                <td *ngIf="f.header != 'Part Number' && f.field != 'memo' && f.field != 'emailBody' && f.field != 'notes'">
+                    {{(f.field == 'contactDate')?getDate(rowData[f.field]):(f.field == 'amount')?globalizeAmount(rowData[f.field]):rowData[f.field]}}
+                </td>
+                <td *ngIf="f.header != 'Part Number' && (f.field == 'memo' || f.field == 'emailBody' || f.field == 'notes')">
+                    <p class="p_textEditor" [innerHTML]=rowData[f.field]></p>
+                </td>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-treeTable>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

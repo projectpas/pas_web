@@ -1,0 +1,444 @@
+﻿<div class="x_panel">
+    <div class="x_content">
+        <div class="card" *ngIf="purchaseOrderHeaderData">
+            <div class="card-header">
+                <nav class="pull-left" aria-label="breadcrumb">
+                    <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
+                        <li class="breadcrumb-item active" aria-current="page">Receiving</li>
+                        <!-- <li class="breadcrumb-item " aria-current="page">PO-RO</li> -->
+                        <li class="breadcrumb-item " aria-current="page">Receiving PO Grid</li>
+                    </ol>
+                </nav>
+                <button class="btn btn-primary" (click)="toggle_epo_header=!toggle_epo_header">
+                    {{toggle_epo_header ? 'Collapse' : 'Expand'}}
+                </button>
+            </div>
+            <div class="card-body">
+                <h4 class="po-head">Receiving - PO Grid (Single PO)</h4>
+                <form id="" class="ro-grid-form" name="">
+                    <div class="form-row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
+                                <div>
+                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of poStatus">
+                                        <label class="radio-cstm radio-cstm-d wauto">
+                                            <input type="radio" [checked]="status.value == purchaseOrderHeaderData.statusId" name="poStatus" class="form-control" value="{{status.value}}" disabled>
+                                            <span class="checkmark"></span>
+                                            {{status.label}}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>RO Num</label>
+                                    <input class="form-control" type="text" name="purchaseOrderNumber" [(ngModel)]="purchaseOrderHeaderData.purchaseOrderNumber" disabled >
+                                </div>                        
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Vendor Name</label>
+                                    <input class="form-control" type="text" name="vendorName" [(ngModel)]="purchaseOrderHeaderData.vendorName" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Requisitioner</label>
+                                    <input class="form-control" type="text" name="requestedBy" [(ngModel)]="purchaseOrderHeaderData.requestedBy" disabled>
+                                </div>
+                            </div>
+                            <!-- <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>Approver</label>
+                                    <input class="form-control" type="text" name="approver" [(ngModel)]="purchaseOrderHeaderData.approver" disabled>
+                                </div>
+                            </div> -->
+                        </div> 
+                     </div>
+                    </div>
+                    <hr *ngIf="toggle_epo_header"/>
+               
+                    <div class="form-row" *ngIf="toggle_epo_header">
+                        <div class="col-md-9">
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Open Date</label>
+                                    <p-calendar class="pas-clder" [showIcon]="true" name="openDate" [(ngModel)]="purchaseOrderHeaderData.openDate" [disabled]="true"></p-calendar>
+                                </div>
+                                <div class="form-group">
+                                    <label>Closed/Cancelled Date</label>
+                                    <p-calendar class="pas-clder" [showIcon]="true" name="closedDate" [(ngModel)]="purchaseOrderHeaderData.closedDate" [disabled]="true"></p-calendar>
+                                </div>
+                                <div class="form-group">
+                                    <label>Need By</label>
+                                    <p-calendar class="pas-clder" [showIcon]="true" name="needByDate" [(ngModel)]="purchaseOrderHeaderData.needByDate" [disabled]="true"></p-calendar>  
+                                </div>
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <input class="form-control" type="text" name="priority" [(ngModel)]="purchaseOrderHeaderData.priority" disabled>
+                                </div>                            
+                            </div>                       
+                            <div class="col-md-4">                                
+                                <div class="form-group">
+                                    <label>Vendor Code</label>
+                                    <input class="form-control" type="text" name="vendorCode" [(ngModel)]="purchaseOrderHeaderData.vendorCode" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Vendor Contact</label>
+                                    <input class="form-control" type="text" name="vendorContact" [(ngModel)]="purchaseOrderHeaderData.vendorContact" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Phone</label>
+                                    <input class="form-control" type="text" name="contactPhone" [(ngModel)]="purchaseOrderHeaderData.vendorPhone" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Credit Limit &amp; Terms</label>
+                                    <div class="form-row">
+                                        <div class="col-sm-5">
+                                            <input class="form-control" type="text" name="creditLimit" [(ngModel)]="purchaseOrderHeaderData.creditLimit" disabled>
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="creditTerms" [(ngModel)]="purchaseOrderHeaderData.terms" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+            
+                            </div>
+                            <div class="col-md-4">                                                                
+                                <!-- <div class="form-group">
+                                    <label>Approved Date</label>
+                                    <p-calendar class="pas-clder" [showIcon]="true" name="approvedDate" [(ngModel)]="purchaseOrderHeaderData.dateApproved" [disabled]="true"></p-calendar>
+                                </div> -->
+                                <div class="form-group memo-popup-cstm" style="margin-top: 12px;">
+                                        <label>Memo</label>
+                                        <span   matTooltipPosition="above" matTooltip="{{purchaseOrderHeaderData.memo}}">
+                                            <input type="text" name="memo" pInputText class="form-control" value="{{purchaseOrderHeaderData.memo}}" disabled /></span>
+                                        <i class="fa fa-info-circle fa-lg"   matTooltipPosition="above" matTooltip="{{purchaseOrderHeaderData.memo}}"></i>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-cstm" style="margin-top: 15px;">
+                                        <label>
+                                            <input type="checkbox" name="resale" class="form-control" [(ngModel)]="purchaseOrderHeaderData.resale" disabled>
+                                            <span class="cr" style="opacity: 0.6;"><i class="cr-icon pi pi-check"></i></span>
+                                            Resale
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="checkbox-cstm" style="margin-top: 10px;">
+                                        <label>
+                                            <input type="checkbox" name="deferredReceiver" [(ngModel)]="purchaseOrderHeaderData.deferredReceiver" disabled>
+                                            <span class="cr" style="opacity: 0.6;"><i class="cr-icon pi pi-check"></i></span>
+                                            Deferred Receiver
+                                        </label>
+                                    </div>
+                                </div>                        
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12" style="max-width: 100%;">
+                                <div class="form-group">
+                                    <label>Notes</label>
+                                    <textarea name="ponotes" class="form-control head-notes" rows="2" 
+                                    [(ngModel)]="purchaseOrderHeaderData.notes" disabled></textarea>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                            <div class="col-md-3">
+                                <div class="card" style="margin-top: 20px;">
+                                    <div class="card-header" style="padding: 10px 12px;">
+                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure</h5>
+                                    </div>
+                                    <div class="card-body" style="padding: 4px 12px 6px;">
+                                        <div class="form-group" style="margin-bottom: 2px;">
+                                            <!-- <label>Company</label> -->
+                                            <input class="form-control" type="text" name="companyName" [(ngModel)]="headerManagementStructure.level1" disabled>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 2px;">
+                                            <!-- <label>BU</label> -->
+                                            <input class="form-control" type="text" name="BUName" [(ngModel)]="headerManagementStructure.level2" disabled>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 2px;">
+                                            <!-- <label>Division</label> -->
+                                            <input class="form-control" type="text" name="divisionName" [(ngModel)]="headerManagementStructure.level3" disabled>
+                                        </div>
+                                        <div class="form-group" style="margin-bottom: 2px;">
+                                            <!-- <label>Dept</label> -->
+                                            <input class="form-control" type="text" name="deptName" [(ngModel)]="headerManagementStructure.level4" disabled>
+                                        </div>
+                                    </div>
+                                </div>                                            
+                            </div>
+                        </div>
+                   
+                </form>
+            </div>
+        </div>
+
+        <div class="table-responsive pas-table-cstm ero-table-cstm">
+            <table class="table table-bordered " id="po-table">
+                <thead>
+                    <tr>
+                        <th>Item Num</th>
+                        <th>PN</th>
+                        <th>Alt PN</th>
+                        <th>PN Description</th>
+                        <th>Manufacturer</th>
+                        <th>Stock Type</th>
+                        <th>Qty Ord</th>
+                        <th>Discount</th>
+                        <th>Unit Cost</th>
+                        <th>Extended Cost</th>
+                        <th>WO</th>
+                        <th>SO</th>
+                        <th>Sub-WO</th>
+                        <th colspan="4" style="text-align: center;">Management Structure</th>
+                        <th colspan="43"></th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="purchaseOrderData != undefined">
+                    <ng-container *ngFor="let part of purchaseOrderData;let row_index=index">
+                        <tr *ngIf="part.stockLine != null && part.stockLine.length > 0" class="parent-data">
+                            <td class="text-right">{{row_index + 1}}</td>
+                            <td>{{part.itemMaster.partNumber}}</td>
+                            <td>{{part.altEquiPartNumber}}</td>
+                            <td>{{part.itemMaster.partDescription}}</td>
+                            <td>{{part.itemMaster.manufacturer?.name}}</td>
+                            <!-- <td>{{part.conditionText}}</td>
+                            <td>{{part.uomText}}</td> -->
+                            <td>{{part.itemMaster.isPma ? "PMA," : '' + part.itemMaster.isDer ? "DER" : ''}}</td>
+                            <td class="text-right">{{part.quantityOrdered}}</td>
+                            <td class="text-right">{{part.discountPerUnit}}</td>
+                            <td class="text-right">{{part.unitCost}}</td>
+                            <td class="text-right">{{part.extendedCost}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">Company:</label> -->
+                                {{part.companyText}}
+                            </td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">BU:</label> -->
+                                {{part.businessUnitText}}
+                                
+                            </td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">Division:</label> -->
+                                {{part.divisionText}}
+                                
+                            </td>
+                            <td style="min-width: 130px;">
+                                <!-- <label style="width:90px;">Dept:</label> -->
+                                {{part.departmentText}}
+                            </td>
+                            <th colspan="43"></th>
+                        </tr>
+
+                        <ng-container>
+                            <tr *ngIf="part.stockLine.length > 0"> <!--part.stockLine != null-->
+                                <!--<th>Stock Line</th>-->
+                                <th></th>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Ctrl Num</th>
+                                <th>Ctrl Id</th>
+                                <th>Cond</th>
+                                <th>Serial Num</th>
+                                <th>Qty Received</th>
+                                <th>Back Ord</th>
+                                <th>Receiver No.</th>
+                                <th>Unit Cost</th>
+                                <th>Extended Cost</th>
+                                <th>WO </th>
+                                <th>SO </th>
+                                <th>Sub-WO </th>
+                                <th colspan="4" style="text-align: center;">Management Structure</th>
+                                <th>Site</th>
+                                <th>Warehouse</th>
+                                <th>Location</th>
+                                <th>Shelf</th>
+                                <th>Bin</th>
+                                <th>Owner</th>
+                                <th>Name</th>
+                                <th>Obtain From</th>
+                                <th>Name</th>
+                                <th>Traceable to</th>
+                                <th>Name</th>
+                                <th>Trace</th>
+                                <th>Mfg</th>
+                                <th>Mfg Lot Num</th>
+                                <th>Mfg Date</th>
+                                <th>Mfg Batch Num</th>
+                                <th>Part Cert Num </th>
+                                <th>Certified Date</th>
+                                <th class="date">Certified Due Date</th>
+                                <th>Tagged By </th>
+                                <th class="date">Date Tagged </th>
+                                <th class="date">Tag Exp Date </th>
+                                <th>Shipping Ref#/AWB</th>
+                                <th>Ship Via</th>
+                                <th>Shipping Account</th>
+                                <th>ESN</th>
+                                <th>GL Account</th>
+                                <th>Time Life</th>
+                                <th colspan="5">Cycles</th>
+                                <th colspan="5">Time</th>
+                                <th colspan="5">Last</th>
+                            </tr>
+                            <ng-container *ngFor="let SL of part.stockLine;let stockline_row_index=index">
+                                <tr *ngIf="!SL.isDeleted">
+                                    <!--<td>{{SL.stockLineNumber}}</td>-->
+                                    <td><a class="btn nobg btn-delete-cstm"
+                                        (click)="deleteStockLine(SL)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a></td>
+                                    <td>{{part.itemMaster.partNumber}}</td>
+                                    <td>{{part.itemMaster.partDescription}}</td>
+                                    <td>{{SL.controlNumber}}</td>
+                                    <td>{{SL.idNumber}}</td>
+                                    <td>{{SL.conditionText}}</td>
+                                    <td>{{SL.serialNumber}}</td>
+                                    <td class="text-right">{{SL.quantity}}</td>
+                                    <td class="text-right">{{part.quantityBackOrdered}}</td>
+                                    <td>{{SL.receiverNumber}}</td>
+                                    <td class="text-right">{{SL.purchaseOrderUnitCost}}</td>
+                                    <td class="text-right">{{SL.purchaseOrderExtendedCost}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">Company:</label> -->
+                                        {{SL.companyText}}
+                                    </td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">BU:</label> -->
+                                        {{SL.businessUnitText}}
+                                    </td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">Division:</label> -->
+                                        {{SL.divisionText}}
+                                    </td>
+                                    <td style="min-width: 120px;">
+                                        <!-- <label style="width:90px;">Dept:</label> -->
+                                        {{SL.departmentText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].siteText}}
+                                    </td>
+                                    <td>
+                                        {{part.stockLine[stockline_row_index].warehouseText}}
+                                    </td>
+                                    <td>
+                                            {{part.stockLine[stockline_row_index].locationText}}
+                                    </td>
+                                    <td>
+                                            {{part.stockLine[stockline_row_index].shelfText}}
+                                    </td>
+                                    <td>
+                                            {{part.stockLine[stockline_row_index].binText}}
+                                    </td>
+                                    <!-- <td>{{SL.ownerType == 3 ? 'Vendor' : SL.ownerType == 1 ? 'Customer' : 'Other' }}</td> -->
+                                    <td>{{SL.ownerType == 1 ? 'Customer' : SL.ownerType == 2 ? 'Vendor' : SL.ownerType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.ownerText}}</td>
+                                    <!-- <td>{{SL.obtainFromType == 3 ? 'Vendor' : SL.obtainFromType == 1 ? 'Customer' : 'Other' }}</td> -->
+                                    <td>{{SL.obtainFromType == 1 ? 'Customer' : SL.obtainFromType == 2 ? 'Vendor' : SL.obtainFromType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.obtainFromText}}</td>
+                                    <!-- <td>{{SL.traceableToType == 3 ? 'Vendor' : SL.traceableToType == 1 ? 'Customer' : 'Other' }}</td> -->
+                                    <td>{{SL.traceableToType == 1 ? 'Customer' : SL.traceableToType == 2 ? 'Vendor' : SL.traceableToType == 9 ? 'Company' : 'Other' }}</td>
+                                    <td>{{SL.traceableToText}}</td>
+                                    <td>{{SL.manufacturingTrace}}</td>
+                                    <td>{{SL.manufacturerText}}</td> <!--manufacturerName-->
+                                    <td>{{SL.manufacturerLotNumber}}</td> 
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table"
+                                                    [maxDate]="currentDate"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [showIcon]="true"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [(ngModel)]="SL.manufacturingDate"></p-calendar>
+                                    </td>
+                                    <td>{{SL.manufacturingBatchNumber}}</td> 
+                                    <td>{{SL.partCertificationNumber}}</td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table"
+                                                    [maxDate]="currentDate"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [showIcon]="true"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [(ngModel)]="SL.certifiedDate"></p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table"
+                                                    [maxDate]="currentDate"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [showIcon]="true"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [(ngModel)]="SL.certifiedDueDate"></p-calendar>
+                                    </td>
+                                    <td>{{SL.certifiedBy}}</td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table"
+                                                    [maxDate]="currentDate"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [showIcon]="true"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [(ngModel)]="SL.tagDate"></p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar class="pas-clder pas-clder-po-table"
+                                                    [showIcon]="true"
+                                                    [disabled]="!SL.isEnabled"
+                                                    [ngModelOptions]="{standalone: true}"
+                                                    [(ngModel)]="SL.expirationDate"></p-calendar>
+                                    </td>
+                                    <td>{{SL.shippingReference}}</td>
+                                    <td>{{SL.shippingViaText}}</td>
+                                    <td>{{SL.shippingAccount}}</td>
+                                    <td>{{SL.engineSerialNumber}}</td>
+                                    <td>{{SL.glAccountText}}</td>
+                                    <td>
+                                        <input type="checkbox" disabled [checked]="part.itemMaster.isTimeLife != false" />
+                                    </td>
+                                    <td colspan="13" *ngIf="part.timeLife[stockline_row_index] == undefined "> </td>
+                                    <ng-container *ngIf="part.timeLife[stockline_row_index] != undefined">
+                                        <td style="min-width: 106px;">Remaining {{part.timeLife[stockline_row_index].cyclesRemaining}} hrs</td>
+                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].cyclesSinceNew}} hrs</td>
+                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].cyclesSinceOVH}} hrs</td>
+                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].cyclesSinceInspection}} hrs</td>
+                                        <td style="min-width: 106px;">Since Repair {{part.timeLife[stockline_row_index].cyclesSinceRepair}} hrs</td>
+    
+                                        <td style="min-width: 106px;">Remaining {{part.timeLife[stockline_row_index].timeRemaining}} hrs</td>
+                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].timeSinceNew}} hrs</td>
+                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].timeSinceOVH}} hrs</td>
+                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].timeSinceInspection}} hrs</td>
+                                        <td style="min-width: 106px;">Since Repair {{part.timeLife[stockline_row_index].timeSinceRepair}} hrs</td>
+    
+                                        <td style="min-width: 106px;">Since New {{part.timeLife[stockline_row_index].lastSinceNew}} hrs</td>
+                                        <td style="min-width: 106px;">Since OVH {{part.timeLife[stockline_row_index].lastSinceOVH}} hrs</td>
+                                        <td style="min-width: 106px;">Since Insp {{part.timeLife[stockline_row_index].lastSinceInspection}} hrs</td>
+                                    </ng-container>                                
+                                </tr>
+                            </ng-container>
+                            
+                        </ng-container>
+                    </ng-container>
+
+                </tbody>
+            </table>
+
+        </div>
+
+        <button class="btn btn-primary pull-right" (click)="CreatePurchaseOrderStockline()">Create Stockline</button>
+    </div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

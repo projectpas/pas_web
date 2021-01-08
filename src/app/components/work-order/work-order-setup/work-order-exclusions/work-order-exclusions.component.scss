@@ -1,0 +1,30 @@
+input[type='text'],
+input[type='number'],
+select,
+textarea {
+  height: 24px !important;
+  border-radius: 5px !important;
+}
+.select-read-only{
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    box-shadow: none !important;
+}
+
+.rro-table-cstm th{
+    width: unset !important;
+}
+
+body .ui-radiobutton .ui-radiobutton-box{
+    border: 3px solid #ffffff;
+}
+
+.footer td{
+    background-color: #eaf2fd
+}
+select.select-read-only {
+    background-color: #ffffff !important;
+  }

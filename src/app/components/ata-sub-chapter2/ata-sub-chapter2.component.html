@@ -1,0 +1,256 @@
+﻿<div [@fadeInOut] class="page-content">
+	<div class="right_col" role="main">
+		<div class="x_panel">
+			<div class="x_content">
+				<h4 class="page-heading clr-green">ATA Sub Chapter 2</h4>
+
+				<span class="help-icon" (click)="openHelpText(helpText)" data-original-title="Help" data-toggle="tooltip"><i class="fa fa-info" data-toggle="modal" data-target="#help-popup"></i></span>
+				<p-table #dt [value]="allATAMaininfo" [metaKeySelection]="true" [rows]="20" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[20,50,100]" [columns]="selectedColumns" selectionMode="multiple" [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true">
+					<ng-template pTemplate="caption">
+
+						<div style="text-align: right">
+							<p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+										   selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+
+							<div class="inner-addon right-addon w200 inline-block">
+								<i class="fa fa-search"></i>
+								<input type="text" pInputText size="50" class="form-control ui-autocomplete-input" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Filter">
+							</div>
+							<button type="button" pButton icon="fa-download" iconPos="left" label="ExportAll Data" (click)="dt.exportCSV()"></button>
+							<button type="button" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="dt.exportCSV({selectionOnly:true})"></button>
+							<a (click)="open(contentEdit)" matTooltip="Add" class="btn btn-success nobg"><span><i class="fa fa-plus"></i></span></a>
+							<div class="excel-upload">
+								<input type="file" name="upload[]" id="upload" class="uploaddoc upload-file" data-multiple-caption="{count} files selected" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+								<label for="upload">
+									<span matTooltip="Upload Data (Excel)"><i class="fa fa-upload"></i></span>
+								</label>
+							</div>
+						</div>
+
+
+					</ng-template>
+
+					<ng-template pTemplate="header" let-columns>
+						<tr>
+
+							<th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+								{{col.header}}
+								<p-sortIcon [field]="col.field"></p-sortIcon>
+							</th>
+
+							<th></th>
+
+						</tr>
+					</ng-template>
+
+					<ng-template pTemplate="body" let-rowData let-columns="columns">
+						<tr [pSelectableRow]="rowData">
+
+
+							<td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+								{{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a'):rowData[col.field]}}
+							</td>
+
+							<td>
+								<p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+								<p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+								<p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+								<span data-toggle="modal" data-target="#view"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openView(view,rowData)" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
+								<button class="btn-edit" mat-icon-button (click)="openEdit(contentEdit,rowData)" matTooltip="edit">
+									<mat-icon>edit</mat-icon>
+								</button>
+
+								<button class="btn-delete" mat-icon-button matTooltip="delete" (click)="openDelete(content,rowData)">
+									<mat-icon color="warn">delete</mat-icon>
+								</button>
+
+								<button class="btn-history" mat-icon-button matTooltip="history" (click)="openHist(contentHist,rowData)">
+									<mat-icon color="green">history</mat-icon>
+								</button>
+
+							</td>
+
+						</tr>
+					</ng-template>
+
+
+
+
+
+				</p-table>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Delete Contact Modal -->
+<ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+	<div class="modal-header">
+		<h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-footer">
+		<button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>
+		<button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+	</div>
+</ng-template>
+
+
+<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+	<div class="modal-header">
+		<h4 class="modal-title" *ngIf="isEditMode">Edit ATA Sub Chapter2</h4>
+		<h4 class="modal-title" *ngIf="!isEditMode">Add ATA Sub Chapter2</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form #userForm="ngForm" class="form-horizontal" (ngSubmit)="editItemAndCloseModel()">
+
+			<div class="form-group">
+
+				<label class="control-label col-sm-4">ATA Chapter </label>
+				<div class="inner-addon right-addon autosuggesions-add inline-block">
+					<select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceAction.ataMainId">
+						<option *ngFor="let ataName of allATAMaininfo1" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+					</select>
+
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="ataChapterCategory" class="control-label">ATA SubChapter2<span class="clr-red">*</span></label>
+				<div class="control-data">
+					<input type="text" name="ataChapterCategory" placeholder="" class="form-control" required #ataChapterCategory="ngModel" [(ngModel)]="sourceAction.ataSubChapter2Id" minlength="2" [minLength]="2">
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="form-group">
+				<label for="description" class="control-label">Memo</label>
+				<div class="control-data">
+					<input placeholder="Memo" name="description" #memo="ngModel" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceAction.memo" required minlength="2">
+					<div *ngIf="memo.dirty && memo.errors?.required && memo.errors" class="invalid-form-error-message">
+						Memo is required.
+					</div>
+					<div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors" class="invalid-form-error-message">
+						Memo must be at least 2 characters long.
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-sm-6">
+					<label class="form-check-label" for="isActive">
+						<input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive"> Active
+					</label>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+
+			<div class="modal-footer">
+
+				<button class="btn btn-success" [disabled]="disableSave">Submit</button>
+				<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+			</div>
+		</form>
+	</div>
+
+
+</ng-template>
+
+
+<ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+	<div class="modal-header">
+
+		<h4 class="modal-title">History of ATASubChapter2</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+
+
+	</div>
+	<div class="modal-body">
+
+		<div class="table-responsive">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>AID</th>
+						<th>ATA Main Description</th>
+						<th>Previous Value</th>
+						<th>New Value</th>
+						<th>Last Updated By</th>
+						<th>Last Updated Time</th>
+					</tr>
+				</thead>
+				<tr *ngFor="let audit of auditHisory">
+					<td>{{audit.auditHistoryId}}</td>
+					<td>{{audit.columnName}}</td>
+					<td>{{audit.previousValue}}</td>
+					<td>{{audit.newValue}}</td>
+					<td>{{audit.updatedBy}}</td>
+					<td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+	</div>
+</ng-template>
+
+<ng-template #view class="modal fade " id="view" role="dialog" data-backdrop="static">
+
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+			<h4 class="modal-title">ATA Sub Chapter2</h4>
+		</div>
+		<div class="modal-body viewform">
+			<div class="col-sm-6">
+				<!--<p><span class="label"><b>ATAChapter Name: </b></span><span class="value">{{ ataChapter_Name}}</span></p>
+				<p><span class="label"><b>ATAChapter Category: </b></span><span class="value">{{ ataChapterCategory}}</span></p>-->
+				<p><span class="label"><b>Memo: </b></span><span class="value">{{memo}}</span></p>
+				<p><span class="label"><b>Created By: </b></span><span class="value">{{createdBy}}</span></p>
+				<p><span class="label"><b>Created Date: </b></span><span class="value">{{createdDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span></p>
+				<p><span class="label"><b>Updated By: </b></span><span class="value">{{updatedBy}}</span></p>
+				<p><span class="label"><b>Updated Date: </b></span><span class="value">{{updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span></p>
+			</div>
+
+			<div class="clear"></div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-info" data-dismiss="modal" id="" name="" (click)="dismissModel()">Close</button>
+		</div>
+	</div>
+
+</ng-template>
+
+<ng-template #helpText class="modal fade" id="help-popup" role="dialog" data-backdrop="static">
+
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+			<h4 class="modal-title">Help text about the page</h4>
+		</div>
+		<div class="modal-body">
+			<p>Sample Point 1 about Page Description</p>
+			<p>Sample Point 2 about Page Description</p>
+			<p>Sample Point 3 about Page Description</p>
+			<p>Sample Point 4 about Page Description</p>
+			<p>Sample Point 5 about Page Description</p>
+			<hr />
+			<p><b>Excell format to upload the Data - <a href="documents/action-table-format.xlsx" class="clr-red">Download</a></b></p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-success" data-dismiss="modal" (click)="dismissModel()">Close</button>
+		</div>
+	</div>
+
+</ng-template>
+

@@ -1,0 +1,16 @@
+label {
+  text-align: left;
+  width: 140px;
+  margin-right: 0;
+  font-weight: normal;
+}
+input[type='text'],
+input[type='number'],
+select,
+textarea {
+  height: 24px !important;
+  border-radius: 5px !important;
+}
+.grey-card {
+  background-color: #e7e7e7;
+}

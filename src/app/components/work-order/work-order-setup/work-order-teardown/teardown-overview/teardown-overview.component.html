@@ -1,0 +1,239 @@
+
+<div>
+    <button type="button" class="btn btn-primary" (click)="ExpandAllCustomerDetailsModel()">
+        Open All
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="CloseAllCustomerDetailsModel()">
+        Close All
+    </button> 
+     <!-- {{workFlowWorkOrderId1}} -->
+</div>
+<div class="panel-group mt-2 tear_down_cls work_order_teardown" id="accordion" >
+    <div class="panel panel-default" *ngIf="saveTearDownData.isRemovalReasons">
+        <div class="panel-heading" >
+            <h4 class="panel-title">
+                <div></div>
+                <input type="checkbox"  class="set_cds"
+                [(ngModel)]="saveTearDownData.isRemovalReasons" disabled>
+                <a data-toggle="collapse" class=" ac_cs" href="#step1" >Removal Reasons</a>
+            </h4>
+        </div>
+        <div id="step1" class="panel-collapse collapse in show">
+            <div class="panel-body">
+                <div class="form-row">
+                    <p style="width:100%"><strong> Reason :</strong>  <span *ngIf="saveTearDownData && saveTearDownData.removalReason">{{saveTearDownData.removalReason}}</span></p>
+                    <p><strong>Memo :</strong>  <span *ngIf="saveTearDownData && saveTearDownData.removalReasonsMemo" [innerHTML]="saveTearDownData.removalReasonsMemo"></span></p>
+            </div>
+        </div>
+    </div>
+</div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isPmaDerBulletins">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract2"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isPmaDerBulletins">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step2">PMA/DER & Bulletins</a>
+            </h4>
+        </div>
+        <div id="step2" class="panel-collapse  collapse" >
+            <div class="panel-body m-lr-7">
+               <p><strong>Mandatory Service Bulletins:</strong> <span *ngIf="saveTearDownData && saveTearDownData.mandatoryService">{{saveTearDownData.mandatoryService}}</span></p>
+                <p><strong>Requested Service Bulletins :</strong> <span *ngIf="saveTearDownData && saveTearDownData.requestedService">{{saveTearDownData.requestedService}}</span> </p>
+                <p><strong> Service Letters :</strong>  <span *ngIf="saveTearDownData && saveTearDownData.serviceLetters">{{saveTearDownData.serviceLetters}}</span></p>
+                <p><strong>Pma Parts :</strong><span *ngIf="saveTearDownData && saveTearDownData.pmaParts">{{saveTearDownData.pmaParts}}</span> </p>
+                <p><strong>Der Repairs :</strong> <span *ngIf="saveTearDownData && saveTearDownData.derRepairs">{{saveTearDownData.derRepairs}}</span></p>
+ </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isPreliinaryReview">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract44"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isPreliinaryReview">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step3"> Preliinary Review</a>
+            </h4>
+        </div>
+        <div id="step3" class="panel-collapse  collapse" >
+            <div class="panel-body aircraft-panel">
+              <p><strong>Reason :</strong><span  *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewReason">{{saveTearDownData.preliinaryReviewReason}}</span> </p>
+ <p><strong>Memo :</strong><span  *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewMemo" [innerHTML]="saveTearDownData.preliinaryReviewMemo"></span> </p>
+  <p><strong>Inspector :</strong> <span *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewInspector">{{saveTearDownData.preliinaryReviewInspector}}</span></p>
+ <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.preliinaryReviewInspectorDate">{{saveTearDownData.preliinaryReviewInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
+  </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isPreAssmentResults">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract54"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isPreAssmentResults">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step4">Pre-Assessment Results</a>
+            </h4>
+        </div>
+        <div id="step4" class="panel-collapse collapse" >
+            <div class="panel-body">
+                <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsReason">{{saveTearDownData.assmentResultsReason}}</span> </p>
+                <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsMemo" [innerHTML]="saveTearDownData.assmentResultsMemo"></span> </p>
+                <p><strong>Technician :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsTechnician">{{saveTearDownData.assmentResultsTechnician}}</span> </p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsTechnicianDate">{{saveTearDownData.assmentResultsTechnicianDate | date: 'dd-MM-yyyy'}}</span> </p>
+                <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.assmentResultsInspector">{{saveTearDownData.assmentResultsInspector}}</span></p>
+                <p><strong>Date :</strong> <span *ngIf="saveTearDownData && saveTearDownData.assmentResultsInspectorDate">{{saveTearDownData.assmentResultsInspectorDate | date: 'dd-MM-yyyy'}}</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isDiscovery">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract74"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isDiscovery">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step5">Teardown Discovery</a>
+            </h4>
+        </div>
+        <div id="step5" class="panel-collapse collapse">
+            <div class="panel-body">
+                <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.discoveryReason">{{saveTearDownData.discoveryReason}}</span> </p>
+            
+                <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.discoveryMemo" [innerHTML]="saveTearDownData.discoveryMemo"></span> </p>
+                <p><strong>Technician :</strong> <span *ngIf="saveTearDownData && saveTearDownData.discoveryTechnician">{{saveTearDownData.discoveryTechnician}}</span></p>
+                <p><strong>Date :</strong> <span *ngIf="saveTearDownData && saveTearDownData.discoveryTechnicianDate">{{saveTearDownData.discoveryTechnicianDate | date: 'dd-MM-yyyy'}}</span></p>
+                <p><strong>Inspector :</strong> <span *ngIf="saveTearDownData && saveTearDownData.discoveryInspector">{{saveTearDownData.discoveryInspector}}</span></p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.discoveryInspectorDate">{{saveTearDownData.discoveryInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
+ </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isPreAssemblyInspection">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract85"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isPreAssemblyInspection">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step6">Pre Assembly Inspection</a>
+            </h4>
+        </div>
+        <div id="step6" class="panel-collapse  collapse">
+            <div class="panel-body m-lr-7">
+                <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionReason">{{saveTearDownData.assemblyInspectionReason}}</span> </p>
+                <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionMemo" [innerHTML]="saveTearDownData.assemblyInspectionMemo"></span> </p>
+                <p><strong>Technician :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionTechnician">{{saveTearDownData.assemblyInspectionTechnician}}</span> </p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionTechnicianDate">{{saveTearDownData.assemblyInspectionTechnicianDate | date: 'dd-MM-yyyy'}}</span> </p>
+                <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionInspector">{{saveTearDownData.assemblyInspectionInspector}}</span> </p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.assemblyInspectionInspectorDate">{{saveTearDownData.assemblyInspectionInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isWorkPerformed">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract35"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isWorkPerformed">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step7">Worked Performed</a>
+            </h4>
+        </div>
+        <div id="step7" class="panel-collapse  collapse">
+            <div class="panel-body m-lr-7">
+                <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.workPerformedReason">{{saveTearDownData.workPerformedReason}}</span> </p>
+                <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.workPerformedMemo" [innerHTML]="saveTearDownData.workPerformedMemo"></span> </p>
+                <p><strong>Technician :</strong><span *ngIf="saveTearDownData && saveTearDownData.workPerformedTechnician">{{saveTearDownData.workPerformedTechnician}}</span> </p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.workPerformedTechnicianDate">{{saveTearDownData.workPerformedTechnicianDate | date: 'dd-MM-yyyy'}}</span> </p>
+                <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.workPerformedInspector">{{saveTearDownData.workPerformedInspector}}</span> </p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.workPerformedInspectorDate">{{saveTearDownData.workPerformedInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isTestDataUsed">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract85"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isTestDataUsed">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step8">Test Data Used</a>
+            </h4>
+        </div>
+        <div id="step8" class="panel-collapse collapse">
+            <div class="panel-body">
+                <p><strong>Reason :</strong> <span *ngIf="saveTearDownData && saveTearDownData.datausedReason">{{saveTearDownData.datausedReason}}</span></p>
+                <p><strong>Memo :</strong> <span *ngIf="saveTearDownData && saveTearDownData.dataUsedMemo" [innerHTML]="saveTearDownData.dataUsedMemo" ></span></p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isBulletinsModification">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract345"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isBulletinsModification">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step9">Bulletins And Modifications</a>
+            </h4>
+        </div>
+        <div id="step9" class="panel-collapse  collapse">
+            <div class="panel-body">
+                <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.bulletinsModificationReason">{{saveTearDownData.bulletinsModificationReason}}</span> </p>
+                <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.bulletinsModificationMemo" [innerHTML]="saveTearDownData.bulletinsModificationMemo" ></span> </p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isFinalTest">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract553"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isFinalTest">
+                <a class="collapsed ac_cs " data-toggle="collapse" href="#step10">Final Test</a>
+            </h4>
+        </div>
+        <div id="step10" class="panel-collapse  collapse">
+            <div class="panel-body m-lr-7">
+                <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalTestReason">{{saveTearDownData.finalTestReason}}</span> </p>
+                <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalTestMemo" [innerHTML]="saveTearDownData.finalTestMemo"></span> </p>
+                <p><strong>Technician :</strong> <span *ngIf="saveTearDownData && saveTearDownData.finalTestTechnician">{{saveTearDownData.finalTestTechnician}}</span></p>
+                <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalTestTechnicianDate">{{saveTearDownData.finalTestTechnicianDate | date: 'dd-MM-yyyy'}}</span> </p>
+                <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalTestInspector">{{saveTearDownData.finalTestInspector}}</span> </p>
+                <p><strong>Date :</strong> <span *ngIf="saveTearDownData && saveTearDownData.finalTestInspectorDate">{{saveTearDownData.finalTestInspectorDate | date: 'dd-MM-yyyy'}}</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isFinalInspection">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract866"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isFinalInspection">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step11">Final Inspection</a>
+            </h4>
+        </div>
+        <div id="step11" class="panel-collapse  collapse">
+            <p><strong>Reason :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalInspectionReason">{{saveTearDownData.finalInspectionReason}}</span> </p>
+            <p><strong>Memo :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalInspectionMemo" [innerHTML]="saveTearDownData.finalInspectionMemo"></span> </p>
+            <p><strong>Inspector :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalInspectionInspector">{{saveTearDownData.finalInspectionInspector}}</span> </p>
+            <p><strong>Date :</strong><span *ngIf="saveTearDownData && saveTearDownData.finalInspectionInspectorDate">{{saveTearDownData.finalInspectionInspectorDate | date: 'dd-MM-yyyy'}}</span> </p>
+            <div class="panel-body m-lr-7">
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" *ngIf="saveTearDownData.isAdditionalComments"> 
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <input type="checkbox" name="contract234"  class="set_cds" disabled
+                [(ngModel)]="saveTearDownData.isAdditionalComments">
+                <a class="collapsed ac_cs" data-toggle="collapse" href="#step12">Additional Comments</a>
+            </h4>
+        </div>
+        <div id="step12" class="panel-collapse  collapse">
+            <div class="panel-body m-lr-7">
+                <p><strong>Reason :</strong> <span *ngIf="saveTearDownData && saveTearDownData.additionalCommentsReason">{{saveTearDownData.additionalCommentsReason}}</span></p>
+                <p><strong>Memo :</strong> <span *ngIf="saveTearDownData && saveTearDownData.additionalCommentsMemo" [innerHTML]="saveTearDownData.additionalCommentsMemo"></span></p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

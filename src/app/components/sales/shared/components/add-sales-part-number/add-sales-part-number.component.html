@@ -1,0 +1,33 @@
+<form #addPartNumbers="ngForm" class="form-horizontal" (ngSubmit)="onAddPartNumberSubmit($event)">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="onClose()">
+      &times;
+    </button>
+    <h4 class="modal-title">Add PN</h4>
+  </div>
+  <div class="modal-body">
+    <app-customer-detail [salesQuote]="salesQuote"></app-customer-detail>
+    <app-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfo"
+      [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" (onPartSearch)="onPartSearch($event)"
+      [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)">
+    </app-part-number-filter>
+    <ng-container>
+      <app-part-details [parts]="parts" [query]="query" (select)="onSelect($event)"
+        [isStockLineViewMode]="isStockLineViewMode" (onPartSelect)="onShowModalMargin($event)"></app-part-details>
+    </ng-container>
+    <!--<ng-container *ngIf="searchType === '1'">
+          <app-part-details [parts]="parts" (onPartSelect)="onShowModalMargin($event)"></app-part-details>
+        </ng-container>-->
+    <!--<ng-container *ngIf="searchType === '2'">
+          <app-stockline-part-details [parts]="parts" (select)="onSelect($event)"></app-stockline-part-details>
+        </ng-container>-->
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="submit" (click)="onClose()" class="btn btn-success">
+      Save
+    </button> -->
+    <button type="button" (click)="onClose()" class="btn btn-danger">
+      Close
+    </button>
+  </div>
+</form>

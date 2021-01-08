@@ -1,0 +1,302 @@
+﻿<!--<form   #generalForm="ngForm" method="post" id="" name="" class="form-horizontal add-custustomer">
+    <div class="form-row" >
+        <div class="form-group">
+            <div class="form-group col-sm-12 vendor-details-heading" *ngIf="showalert">
+                <p class="fs10">
+                    Please Enter Mandatory Fields
+                </p>
+            </div>
+        </div>
+        <div  class="col-md-12" >
+            <div class="card">
+                <div>
+                    <h4 class="page-heading clr-green"> General Info</h4>
+                </div>
+                <div class="card-body">
+                    <div class="clear"></div>
+                    <hr />
+                    <div class="clear"></div>
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="entityname">
+                                        Parent Company
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <select class="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceentity.parentId">
+                                        <option *ngFor="let parentEntity of parentLegalEntity" [ngValue]="parentEntity.parentId">{{parentEntity.name}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="entityname">
+                                        Company Code
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <p-autoComplete class="pautocomp-cstm" (onSelect)="onEntityCodeselected($event)" (onKeyUp)="eventEntityHandler($event)"
+                                                    [(ngModel)]="sourceentity.name" name="name"
+                                                    [suggestions]="entityNames" (completeMethod)="filterEntityNames($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true" required>
+                                        <ng-template let-vendorCode pTemplate="item">
+                                            <div class="ui-helper-clearfix">{{ name }}</div>
+                                        </ng-template>
+                                    </p-autoComplete>
+                                    <div *ngIf="disableSaveEntityName" class="clr-red">
+                                        Already Exists
+                                    </div>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="customerref">
+                                        Company
+                                    </label>
+                                    <input type="text" class="form-control" name="description"
+                                           [(ngModel)]="sourceentity.description">
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="customerref">
+                                        D/B/A
+                                    </label>
+                                    <input type="text" class="form-control" name="doingLegalAs"
+                                           [(ngModel)]="sourceentity.doingLegalAs">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address1">
+                                        Address Line 1
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="leaddress1" name="address1"
+                                           [(ngModel)]="sourceentity.address1" required>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address2">
+                                        Address Line 2
+                                    </label>
+                                    <input class="form-control" type="text" id="leaddress2" name="address2"
+                                           [(ngModel)]="sourceentity.address2">
+
+                                </div>
+
+                                <div class="form-group" style="display:none">
+                                    <label for="address3">
+                                        Address Line 3
+                                    </label>
+                                    <input class="form-control" type="text" id="leaddress3" name="address3"
+                                           [(ngModel)]="sourceentity.address3">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city">
+                                        City
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="lecity" name="lecity"
+                                           [(ngModel)]="sourceentity.city" required>
+
+                                </div>
+
+                                <div class="form-group">
+                                    Primary State/Province
+                                    <label for="state">
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="lestate" name="lestate"
+                                           [(ngModel)]="sourceentity.stateOrProvince" required>
+                                </div>
+
+                                <div class="form-group">
+                                    Postal
+                                    <label for="postal">
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="lepostal" name="lepostal"
+                                           [(ngModel)]="sourceentity.postalCode" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="vendorname">
+                                        Country
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <p-autoComplete field="nice_name" class="pautocomp-cstm" (onSelect)="onCountrieselected($event)" (onKeyUp)=eventCountryHandler($event)
+                                                    [(ngModel)]="sourceentity.country" name="country"
+                                                    [forceSelection]="true"
+                                                    [suggestions]="countrycollection" (completeMethod)="filtercountry($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true" required>
+                                    </p-autoComplete>
+                                    <div *ngIf="disablesave" class="clr-red">Please Select From List</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="address1">
+                                        Invoice Address Position
+                                    </label><br />
+                                    <p-radioButton name="groupname" value="1" label="Top" class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+                                                   [(ngModel)]="sourceentity.adressPosition"></p-radioButton>
+                                    <p-radioButton name="groupname" value="2" label="Bottom" class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+                                                   [(ngModel)]="sourceentity.adressPosition"></p-radioButton>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address2">
+                                        Logo
+                                    </label>
+                                    Choose a file: <input class="form-control" type="file" id="entityLogo" name="entityLogo"
+                                                          [(ngModel)]="sourceentity.entityLogo">
+
+                                </div>
+
+                                <div class="form-group">
+                                    Fax
+                                    <label for="postal">
+                                    </label>
+                                    <input class="form-control" type="text" id="lepostal" name="fax"
+                                           [(ngModel)]="sourceentity.fax" required>
+                                </div>
+
+                                <div class="form-group">
+                                    Phone
+                                    <label for="postal">
+                                    </label>
+                                    <input class="form-control" type="text" id="lepostal" name="phone"
+                                           [(ngModel)]="sourceentity.phone" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address1">
+                                        Invoice Fax/Phone Position
+                                    </label><br />
+                                    <p-radioButton name="groupname" value="1" label="Top" class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+                                                   [(ngModel)]="sourceentity.phonePosition"></p-radioButton>
+                                    <p-radioButton name="groupname" value="2" label="Bottom" class="p-radiobutton-label-horizontal p-radiobutton-cstm"
+                                                   [(ngModel)]="sourceentity.phonePosition"></p-radioButton>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address1">
+                                        Functional Currency
+                                        <strong class="clr-red">*</strong>
+                                    </label>
+                                    <select class="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceentity.functionalCurrencyId">
+                                        <option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.currencyId">{{currencyName.symbol}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address1">
+                                        Reporting Currency
+                                        <strong class="clr-red">*</strong>
+                                    </label>
+                                    <select class="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceentity.reportingCurrencyId">
+                                        <option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.currencyId">{{currencyName.symbol}}</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 15px;">
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label>
+                                            <input type="checkbox" name="isBalancingEntity" [(ngModel)]="sourceentity.isBalancingEntity">
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Balancing Entity
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    Cage Code
+                                    <label for="cage">
+                                    </label>
+                                    <input class="form-control" type="text" id="leCage" name="cageCode"
+                                           [(ngModel)]="sourceentity.cageCode" required>
+                                </div>
+
+                                <div class="form-group">
+                                    FAA Lic
+                                    <label for="postal">
+                                    </label>
+                                    <input class="form-control" type="text" id="faaLic" name="faaLic"
+                                           [(ngModel)]="sourceentity.faaLicense" required>
+                                </div>
+
+                                <div class="form-group">
+                                    Tax ID
+                                    <label for="postal">
+                                    </label>
+                                    <input class="form-control" type="text" id="taxId" name="taxId"
+                                           [(ngModel)]="sourceentity.taxId" required>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+
+                                        <div class="form-group" style="margin-top: 15px;">
+                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                                <label>
+                                                    <input type="checkbox" name="isLastLevel" [(ngModel)]="sourceentity.isLastLevel">
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Last Level
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            Tage Name
+                                            <label for="postal">
+                                            </label>
+                                            <input class="form-control" type="text" id="tag1" name="tag1"
+                                                   [(ngModel)]="sourceentity.tag1">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" id="tag2" name="tag2"
+                                                   [(ngModel)]="sourceentity.tag2" >
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" id="tag3" name="tag3"
+                                                   [(ngModel)]="sourceentity.tag3" >
+                                        </div>
+
+                                        <div class="form-group">
+                                            Ledger Name
+                                            <label for="postal">
+                                            </label>
+                                            <input class="form-control" type="text" id="ledgerName" name="ledgerName"
+                                                   [(ngModel)]="sourceentity.ledgerName" required>
+                                        </div>
+                                    </div>
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding-bottom: 7px;">
+                        <button type="button" class="btn btn-primary pull-right " (click)="editItemAndCloseModel('goNext')" [disabled]="!generalForm.valid || disableSaveEntityName">
+                            Save & Next
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px"
+          maximizedTop="140px" [width]="350" [minWidth]="200" [responsive]="true" [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{ color: 'red' }">
+        Please Enter (*) Mandatory Fields
+    </h5>
+</p-dialog>-->

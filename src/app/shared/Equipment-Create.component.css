@@ -1,0 +1,20 @@
+select {
+    background: none;
+   
+}
+    select:disabled {
+         background-color: none !important;
+    }
+/*.workflow-table-equip tr td {
+    padding: 4px;
+}*/
+.workflow-table-equip tr th:first-child {
+    padding: 0 10px !important;
+}
+
+label {
+    width: auto;
+}
+.workflow-table-equip th {
+    width: 120px !important;
+}

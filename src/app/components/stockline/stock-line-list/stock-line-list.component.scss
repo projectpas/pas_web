@@ -1,0 +1,31 @@
+﻿.managementstr input {
+    padding: 4px !important;
+}
+table th {
+    padding: 4px;
+    text-align: center;
+}
+.stockline-audit table th {
+    min-width: 80px;
+}
+table td {
+    padding: 4px;
+}
+.checkbx-stock {
+    padding-bottom: 15px;
+    padding-top: 5px;
+}
+input.hidePlaceHolder {
+    color: transparent !important;
+}
+input.hidePlaceHolder:focus,
+input.hidePlaceHolder:hover,
+input.hidePlaceHolder:active {
+    color: #000 !important;
+}
+.btn-adjhist-cstm i.fa-history {
+    color: #333333;
+}
+.min-w-100 {
+    min-width: 100px;
+}

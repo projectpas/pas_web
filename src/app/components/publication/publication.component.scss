@@ -1,0 +1,33 @@
+﻿.pub-global-filter label {
+    width: auto !important;
+    text-align: left !important;
+}
+.audithistory-cstm tr td {
+    padding: 3px 2px !important;
+}
+.pubHistory-table.table-bordered thead tr th {
+    width: 110px;
+    padding: 8px 5px !important;
+}
+.modal-body p .value{
+    width: 60%;
+}
+.modal-body p .label {
+    width: 40%;
+}
+.aligin_cer{
+    display: inline-flex;
+    width: 72%;
+    text-align: center;
+    padding-left: 8%;
+    .value{
+        color: #ff5663;
+        padding-left: 4px;
+
+    }
+}
+.atv_cv{
+    position: relative;
+    top: -9px;
+    left: 23px;
+}

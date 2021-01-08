@@ -1,0 +1,240 @@
+﻿<div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title"></h4>
+    <button type="button" class="close" data-dismiss="modal" (click)="close()">&times;</button>
+
+</div>
+<div class="modal-content" style="width:90%">
+    <div class="modal-body">
+        <div class="col-sm-12">
+
+            <h5 style="text-align: center;"><b>Sales Order Pick Ticket</b></h5>
+            <div class="clear"></div>
+            <hr />
+            <div class="second-block">
+                <div class="second-block-div">
+                    <label class="col-sm-2 second-block-label"><b><img src="{{this.management.logo}}" /></b>PAS</label>
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>Tagline :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.companyName}}</label>
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>Address-1 :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.address1}}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>Address-2 :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.address2}}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>City :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.city}}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>State :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.stateOrProvince}}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>PostalCode :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.postalCode}}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-3 second-block-label"><b>Country :</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.management.country}}</label>
+
+                </div>
+
+
+            </div>
+            <div class="second-block">
+                <!-- <h5><b>Sales Order Quotation</b></h5> -->
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label"><b>Pick Ticket Num</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>{{this.salesOrder.soPickTicketNumber}}</label>
+                    <img src="{{this.salesOrder.soPickTicketBarcode}}" alt="barcode" class="border" Placeholder="Barcode" style="width:30%" />
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label"><b>Date & Time</b></label>
+                    <label class="col-sm-6 second-block-label" disabled>{{todayDate| date:'medium' }}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label"><b>Page</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:30%" disabled>1 of 1</label>
+
+                </div>
+
+                <div class="clear"></div>
+                <br />
+
+                <div class="second-block-div">
+
+                    <label class="col-sm-4 second-block-label"><b>SO Num</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.salesOrderNumber}}</label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label"><b>Ship Via</b></label>
+                    <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.shipViaName}}</label>
+
+                </div>
+
+                <div class="clear"></div>
+                <br />
+
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label">Num of Items</label>
+                    <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.numberOfItems}} </label>
+
+                </div>
+                <div class="second-block-div">
+                    <label class="col-sm-4 second-block-label">Num of Pieces</label>
+                    <label class="col-sm-4 second-block-label" style="width:60%" disabled>{{this.salesOrder.shipViaName}} </label>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="first-block col-sm-6">
+                    <br /><br />
+                    <h5 style="padding-left:10px"> <b>Sold To</b> </h5>
+                    <div class="col-sm-12 first-block-4">
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Name :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.customerName}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Address 1 :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.custToAddress1}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Address 2 :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.custToAddress2}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>City :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.custToCity}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>State :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.custToState}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Postal Code :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.custToPostalCode}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Country :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.custToCountry}}</label>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="first-block-right col-sm-6">
+                    <br /><br />
+                    <h5 style="padding-left:10px"> <b>Ship To</b> </h5>
+                    <div class="col-sm-12 first-block-4">
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Name :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToContactName}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Address 1 :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToAddress1}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Address 2 :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToAddress2}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>City :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToCity}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>State :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToState}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Postal Code :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToPostalCode}}</label>
+                        </div>
+                        <div class="second-block-div">
+                            <label class="col-sm-5 second-block-label"><b>Country :</b></label>
+                            <label class="col-sm-6 second-block-label" style="width:30%" disabled> {{this.salesOrder.shipToCountry}}</label>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+             <div class="col-sm-12">
+            <div>
+                <table style="width:99%">
+                    <thead>
+                        <tr>
+                            <th>Line Num</th>
+                            <th>PN</th>
+                            <th>PN Description</th>
+                            <th>Serial Num</th>
+                            <th>UOM</th>
+                            <th>Cond</th>
+                            <th>Priority</th>
+                            <th>PO Num</th>
+                            <th>Qty Ordered</th>
+                            <th>Qty to Ship</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let part of this.parts let i=index">
+                            <tr class="border1">
+
+                                <td>{{i+1}}</td>
+                                <td>{{part.partNumber}}</td>
+                                <td>{{part.partDescription}}</td>
+                                <td>{{part.serialNumber}}</td>
+                                <td>{{part.uom}}</td>
+                                <td>{{this.salesOrderpartConditionDescription}}</td>
+                                <td>{{part.priorityName}}</td>
+                                <td>{{part.poNumber}}</td>
+                                <td>{{part.qty}}</td>
+                                <td>{{part.qtyShipped}}</td>
+                            </tr>
+                            <ng-container *ngIf="part">
+                                <tr class="border2">
+                                    <td colspan="2"><b>Site:</b>{{part.siteName}}</td>
+                                    <td colspan="2"> <b>Warehouse:</b>{{part.warehouseName}}</td>
+                                    <td colspan="3"><b>Location:</b>{{part.locationName}}</td>
+                                    <td colspan="1"><b>Shelf:</b>{{part.shelfName}}</td>
+                                    <td colspan="1"><b>Bin:</b>{{part.binName}}</td>
+
+
+                                </tr>
+
+                                <tr class="border3" *ngIf="part">
+                                    <td colspan="3">
+                                        <img src="{{part.partBarcode}}" alt="barcode" class="border" />
+                                    </td>
+
+                                    <td colspan="1"><b>SL Num:</b> {{part.stockLineId}}</td>
+                                    <td colspan="3"><b>Control Id:</b>{{part.controlNumber}}</td>
+                                    <td colspan="4"><b>ID #:</b>{{part.idNumber}}</td>
+
+
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="close()">No</button>
+</div>

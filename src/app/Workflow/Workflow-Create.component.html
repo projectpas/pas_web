@@ -1,0 +1,792 @@
+<div class="card c-workflow" *ngIf="!isQuote">
+    <div class="card-header">
+        <nav class="pull-left" aria-label="breadcrumb">
+            <ol class="breadcrumb c-wf-bcrumb" style="background-color: transparent;">
+                <li class="breadcrumb-item active" aria-current="page">Workflow</li>
+                <li class="breadcrumb-item " aria-current="page">{{typeOfForm}} Workflow</li>
+            </ol>
+        </nav>
+       
+    </div>
+    <div class="card new-card">
+        <div class="card-header bg-primary">
+          <div class="row">
+            <div class="col">
+              <h4 class="new-card-heading">{{typeOfForm}} Workflow </h4>
+             
+            </div>
+            <div class="col-sm-9">
+            <button class="btn-sm new-btn-primary" (click)="toggle_wf_header=!toggle_wf_header">
+                {{toggle_wf_header ? 'Collapse' : 'Expand '}}
+            </button>
+            </div>
+            <div>
+               
+              <button
+                type="button"
+                class="btn-sm new-btn-primary"
+                [routerLink]="[
+                '/workflowmodule/workflowpages/app-workflow-list'
+                ]"
+              >
+                Workflow List
+              </button>
+            </div>
+          </div>
+        </div>
+            <div class="card-body new-card-body">
+        <div *ngIf="toggle_wf_header">
+            <div class="form-row">
+                <div class="col-md-6 wf-h-col">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="workflowid">Workflow ID <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" id="workflowid"
+                                    value="{{ sourceWorkFlow.workflowId != undefined ? sourceWorkFlow.workOrderNumber : 'Generating' }}"
+                                    [disabled]="true">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Part Number">
+                                    PN <span class="clr-red">*</span>
+                                    <!-- <span class="clr-red">*</span> <span style="margin-left:3px;cursor:pointer;"><i
+                                            class="fa fa-plus-circle fa-lg" (click)="AddPage()"></i></span> -->
+                                </label>
+                                <p class="c-workflow-select">
+                                    <p-autoComplete [(ngModel)]="sourceWorkFlow.part" [suggestions]="partCollection"
+                                        (completeMethod)="filterpartItems($event)" (onSelect)="onPartSelect($event)"
+                                        [dropdown]="true" [size]="32" [minLength]="1" field="partName"
+                                        class="wf-header-select" required>
+
+                                    </p-autoComplete>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="description">Workflow Description</label>
+                                <input type="text" class="form-control" id="description"
+                                    [(ngModel)]="sourceWorkFlow.workflowDescription">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="PN Description">PN Description </label>
+                                <input type="text" class="form-control" id="pnDescription"
+                                    [(ngModel)]="sourceWorkFlow.partNumberDescription" [disabled]="true">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="version">Version <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" id="version"
+                                    [(ngModel)]="sourceWorkFlow.version" [disabled]="true" value="{{'V-1'}}">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="changepn">Changed PN</label>
+                                <p class="c-workflow-select">
+                                    <p-autoComplete [(ngModel)]="sourceWorkFlow.changedPart"
+                                        [suggestions]="changedPartCollection"
+                                        (completeMethod)="filterChangedPartItems($event)"
+                                        (onSelect)="onChangedPartSelect($event)" [dropdown]="true" [size]="32"
+                                        [minLength]="1" field="partName" class="wf-header-select">
+                                    </p-autoComplete>
+                                </p>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="createdate">Create Date <span class="clr-red">*</span></label>
+                                <p-calendar class="workflow-clder" [showIcon]="true"
+                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="sourceWorkFlow.workflowCreateDate" required #cDate="ngModel">
+                                </p-calendar>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="work scope">Work Scope <span class="clr-red">*</span></label>
+                                <select [(ngModel)]="sourceWorkFlow.workScopeId" class="form-control">
+                                    <option *ngFor="let workScope of worksScopeCollection"
+                                        [ngValue]="workScope.workScopeId"> {{workScope.description}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="expdate">Expiration Date</label>
+                                <p-calendar class="workflow-clder" [minDate]="sourceWorkFlow.workflowCreateDate"
+                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                                    [(ngModel)]="sourceWorkFlow.workflowExpirationDate" [disabled]="!cDate.valid">
+                                </p-calendar>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="ItemGroup">Item Group </label>
+                                <input type="text" class="form-control" id="itemGroup"
+                                    [(ngModel)]="sourceWorkFlow.itemGroup" [disabled]="true">
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Customer Name">
+                                    Customer Name <span style="margin-left:3px;cursor:pointer;"><a
+                                            class="fa fa-plus-circle fa-lg" target="_blank"
+                                            [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a></span>
+                                </label>
+                                <p class="c-workflow-select">
+                                    <p-autoComplete class="wf-header-select" [(ngModel)]="sourceWorkFlow.customerName"
+                                        (onSelect)="onCustomerNameselected($event)" [suggestions]="customerNames"
+                                        (completeMethod)="filterNames($event)" [size]="32" [minLength]="1"
+                                        [dropdown]="true">
+
+                                        <ng-template let-name pTemplate="item">
+                                            <div class="ui-helper-clearfix">{{name}}</div>
+                                        </ng-template>
+                                    </p-autoComplete>
+                                </p>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="form-row">
+
+                    </div>
+                    <div class="form-row">
+                            <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="currency">Currency <span class="clr-red">*</span></label>
+                                        <select [(ngModel)]="sourceWorkFlow.currencyId" required>
+                                            <option *ngFor="let currencyName of allCurrencyData"
+                                                [ngValue]="currencyName.currencyId"> {{currencyName.code}}</option>
+                                        </select>
+                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="Customer Name">
+                                            Customer Name <span style="margin-left:3px;cursor:pointer;"><a
+                                                    class="fa fa-plus-circle fa-lg" target="_blank"
+                                                    [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a></span>
+                                        </label>
+                                        <p class="c-workflow-select">
+                                            <p-autoComplete class="wf-header-select" [(ngModel)]="sourceWorkFlow.customerName"
+                                                (onSelect)="onCustomerNameselected($event)" [suggestions]="customerNames"
+                                                (completeMethod)="filterNames($event)" [size]="32" [minLength]="1"
+                                                [dropdown]="true">
+            
+                                                <ng-template let-name pTemplate="item">
+                                                    <div class="ui-helper-clearfix">{{name}}</div>
+                                                </ng-template>
+                                            </p-autoComplete>
+                                        </p>
+                                    </div>
+                                </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="form-row">
+                                <div class="col-md-4" >
+                                        <h5 >BER Determination</h5>
+                                </div>
+                                <div class="col-md-8" style="padding-right: 20px;">
+                                        <h5 class="float-right"> BER Thresold : 
+                                                <span style="color: red  ;">{{sourceWorkFlow.berThresholdAmount ? sourceWorkFlow.berThresholdAmount : '0.00'}}</span>  
+                                        </h5>
+                                </div>
+                                   
+                                    
+                            </div>
+
+                        </div>
+                        <div class="card-body" style="padding: 10px 3px;">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="col">
+                                        <div class="checkbox-cstm">
+                                            <label>
+                                                <input type="checkbox" [checked]="sourceWorkFlow.isFixedAmount"
+                                                    name="ber-type" class="trigger2" data-rel="ber-fixed"
+                                                    (click)="isFixedcheck('fixed');isFixedUnchecked($event);berDetermination();"
+                                                    value="1">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Fixed Amount
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div [hidden]="!isFixed" style="padding-left: 36px;margin-top: 8px;">
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                        <div class="col-sm-4">
+                                        <label class="w80">Amount: </label>
+                                        <input class="w70 amount form-control text-right" type="text"
+                                               [(ngModel)]="sourceWorkFlow.fixedAmount" (change)="berDetermination()">
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-md-8">
+                                    <div class="col-md-6" [hidden]="!isFixed">
+                                        <div style="float:left;">
+                                            <label class="w90">Amount:</label>
+                                        </div>
+                                        <div style="float:left;">
+                                            <input class="w70 amount form-control" type="number"
+                                                [(ngModel)]="sourceWorkFlow.fixedAmount" (change)="berDetermination()">
+                                        </div>
+                                    </div> -->
+                                    <!-- <div class="col-sm-6" style="float:right;">
+                                        <div style="float:left;">
+                                            <label class="w90">BER Threshold:</label>
+                                        </div>
+                                        <div style="float:left;">
+                                            <input class="w70 amount form-control wf-ber-thrld"
+                                                style="color: #222 !important;" type="number"
+                                                [(ngModel)]="sourceWorkFlow.berThresholdAmount" disabled>
+                                        </div>
+                                    </div> -->
+                                <!-- </div>\ -->
+                            </div>
+
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-12">
+                                    <div class="col">
+                                        <div class="checkbox-cstm">
+                                            <label style="margin-top:5px;">
+                                                <input type="checkbox" [checked]="sourceWorkFlow.isPercentageOfNew"
+                                                    name="ber-type" class="trigger2" data-rel="ber-new"
+                                                    (click)="isFixedcheck('percentage');isPercentageUnchecked($event); berDetermination();"
+                                                    value="2">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                % of Cost of New
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div [hidden]="!ispercent" style="padding-left: 36px;margin-top: 8px;">
+                                        <div class="col-sm-4">
+                                            <label class="w80">Cost of New:</label>
+                                            <input type="text" [(ngModel)]="sourceWorkFlow.costOfNew"
+                                                class="form-control w70 text-right" id="" name=""
+                                                (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew)">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="w70">Percent:</label>
+                                            <select [(ngModel)]="sourceWorkFlow.percentageOfNew"
+                                                class="form-control w70"
+                                                (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew);">
+                                                <option value="">Select</option>
+                                                <option *ngFor="let percent of totalPercent"
+                                                    [ngValue]="percent.value">{{percent.label}}%</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <label class="w80">Amount: </label>
+                                            <input type="text" class="form-control w70 text-right"
+                                                value="{{sourceWorkFlow.percentOfNew}}" disabled />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-4">
+                                    <div class="col">
+                                        <div class="checkbox-cstm">
+                                            <label style="margin-top:5px;">
+                                                <input type="checkbox"
+                                                    [checked]="sourceWorkFlow.isPercentageOfReplacement" name="ber-type"
+                                                    class="trigger2" data-rel="ber-replace"
+                                                    (click)="isFixedcheck('percentreplace');isPercentreplcaeUnchecked($event); berDetermination();"
+                                                    value="3">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                % of Replacement Cost
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div [hidden]="!percentreplcae" style="padding-left: 36px;margin-top: 8px;">
+                                        <div class="col-sm-4">
+                                            <div>
+                                                <label class="w80">Cost of Replace:</label>
+                                                <input [(ngModel)]="sourceWorkFlow.costOfReplacement"
+                                                    class="form-control w70 amount text-right" type="text"
+                                                    (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement)">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div style="float:left;">
+                                                <label class="w70">Percent:</label>
+                                            </div>
+                                            <div style="float:left;">
+                                                <select [(ngModel)]="sourceWorkFlow.percentageOfReplacement"
+                                                    class="form-control w70"
+                                                    (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement); ">
+                                                    <option value="">Select</option>
+                                                    <option *ngFor="let percent of totalPercent"
+                                                        [ngValue]="percent.value">{{percent.label}}%
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div style="float:left;">
+                                                <label class="w80">Amount:</label>
+                                                <input type="text" class="form-control w70 text-right"
+                                                    value="{{sourceWorkFlow.percentOfReplacement}}" disabled />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top:2px;">
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="description">Memo</label>
+                                <textarea class="form-control text-area-cstm" [(ngModel)]="sourceWorkFlow.memo"
+                                    style="height:24px;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div *ngIf="toggle_wf_header " style="margin-top: 15px;"></div>
+        <h4 class="total-wf-cost">Total Workflow Cost</h4>
+        <div class="form-row mar-top-10 total-wf-cost-form">
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Material Cost</label>
+                    <input type="text" class="form-control text-right" [(ngModel)]="MaterialCost" disabled />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Expertise Cost</label>
+                    <input type="text" class="form-control text-right" [(ngModel)]="TotalExpertiseCost" disabled />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Charges</label>
+                    <input type="text" class="form-control text-right" [(ngModel)]="TotalCharges" disabled />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Other</label>
+                    <input type="text" class="form-control text-right" (change)="onChangeOtherCost()" [(ngModel)]="sourceWorkFlow.otherCost" />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>Total</label>
+                    <input type="text" class="form-control text-right" [(ngModel)]="Total" value="" disabled />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>% of BER Threshold</label> 
+                    <input type="number" class="form-control" [(ngModel)]="PercentBERThreshold" value="" disabled />
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <button class="btn btn-primary total-wf-cost-btn" style="padding: 6px 12px;"
+                        (click)="calculateTotalWorkFlowCost(true)">Calculate Total Workflow Cost</button>
+                </div>
+
+                <!--<div class="form-group">
+                <label>Material Cost</label>
+                <input type="number" class="form-control" [(ngModel)]="sourceWorkFlow.totalMaterialCost" disabled />
+            </div>-->
+            </div>
+        </div>
+
+        <div class="pull-right">
+                <div class="form-row pull-right" *ngIf="!isWorkOrder">
+                        <div class="form-group col-md-4" style="margin-top: 15px;">
+                            <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="!UpdateMode"
+                                (click)="addWorkFlow(true)">Save</button>
+                            <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="UpdateMode"
+                                (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="x_content workflow-page">
+        <div class="card-layout">
+            <div>
+                <div class="pheading">
+                </div>
+
+                <div class="cdetails-top" style="display: none;">
+                    <span class="cdetails-top-close"><i class="fa fa-times"></i></span>
+                    <div class="col-sm-12">
+                        <label>Company</label>
+                        <span>Silverxis</span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>BU</label>
+                        <span>Adso</span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Division</label>
+                        <span>Development</span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Dept</label>
+                        <span>Java</span>
+                    </div>
+                </div>
+
+                <div class="clear"></div>
+                <br />
+                <hr>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="form-group col-sm-6">
+                            <div class="col-sm-1" style="margin-right: 85px;">
+                                <strong> <label> Tasks </label></strong>
+
+                            </div>
+                            <!-- {{workFlow | json}} -->
+ 
+
+
+                            <div class="form-row">
+                                <div class="col-sm-5">
+                                    <div class="inner-addon inline-block display-flex">
+                                        <select class="form-control custom-select" [(ngModel)]="currenttaskId"
+                                            (change)="onActionChange()">
+                                            <option value="0">Select</option>
+                                            <option *ngFor="let action of actions" value={{action.Id}}>
+                                                {{action.Name}}
+                                            </option>
+                                        </select>
+
+
+
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col-md-1">
+                                    <span style="margin-left:3px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg"
+                                            data-toggle="modal" data-target="#myModal"></i></span>
+                                </div> -->
+                            </div>
+
+
+
+
+
+                        </div>
+                        <div class="form-group col-sm-6" [hidden]="!showActionAttribute">
+                            <div class="col-sm-1" style="margin-right: 70px;">
+                                <strong><label>Task Attribute</label></strong>
+                            </div>
+                            <!-- {{tasksData | json }} -->
+                            <div class="col-sm-5">
+                                <div class="inner-addon inline-block display-flex">
+                                    <ng-multiselect-dropdown *ngIf="actionAttributes"
+                                        class="form-control multiple-custom-select" [placeholder]="'Select'"
+                                        [data]="actionAttributes" [(ngModel)]="selectedItems"
+                                        [settings]="dropdownSettings" (onDeSelect)="onDeSelect($event)"
+                                        (onSelect)="onItemSelect($event)" (onDeSelectAll)="onDeSelectAll($event)"
+                                        (onSelectAll)="onSelectAll($event)">
+                                    </ng-multiselect-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div *ngIf="!workFlowList">
+                    <p style="min-height: 200px;"></p>
+                </div>
+
+                <div class="bhoechie-tab-container clearfix"
+                    *ngIf="workFlowList != undefined && workFlowList.length > 0">
+                    <div class="bhoechie-tab-menu">
+                        <div class="list-group">
+                            <a href="javascript:void(0)" class="list-group-item " id='tab_{{workFlow.taskId}}'
+                                (click)="SetCurrectTab(workFlow.taskId , i)"
+                                *ngFor="let workFlow of workFlowList; let i = index"
+                                [class.active]="workFlow.taskId == currenttaskId">
+                                {{workFlow.ActionName}}
+
+                                <i class="fa fa-trash delete-icon" (click)="removeTask(workFlow)"></i>
+                            </a>
+
+                        </div>
+                    </div>
+
+                    <div class="bhoechie-tab">
+                        <!-- flight section -->
+                        <div class="bhoechie-tab-content active">
+                            <!--<h1 class="heading">{{workFlow.ActionName}}</h1>-->
+                            <div class="custom-pill">
+
+                                <ul class="nav nav-pills">
+                                    <li *ngFor="let item of workFlow.selectedItems" (click)="setCurrentPanel(item.Name)"
+                                        [class.active]="item.Id == currentPanelId">
+                                        <a data-toggle="pill" href="#tab{{item.Name}}">{{item.Name}}</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" style="position: relative;">
+                                    <div id="tab_Publications"
+                                        *ngIf="workFlow != undefined && workFlow.publication != undefined"
+                                        class="tab-pane fade pan">
+                                        <grd-publication [UpdateMode]="UpdateMode" [workFlow]='workFlow'
+                                            [itemMasterId]="itemMasterId">
+                                        </grd-publication>
+                                    </div>
+                                    <div id="tab_Charges" *ngIf="workFlow != undefined && workFlow.charges != undefined"
+                                        class="tab-pane fade in active pan">
+                                        <grd-charges [UpdateMode]="UpdateMode" [workFlow]='workFlow' isWorkFlow="true">
+                                        </grd-charges>
+                                    </div>
+                                    <div id="tab_Directions"
+                                        *ngIf="workFlow != undefined && workFlow.directions != undefined"
+                                        class="tab-pane pan">
+                                        <grd-directions [UpdateMode]="UpdateMode" [workFlow]='workFlow'>
+                                        </grd-directions>
+                                    </div>
+
+                                    <div id="tab_Tools"
+                                        *ngIf="workFlow != undefined && workFlow.equipments != undefined"
+                                        class="tab-pane fade pan">
+                                        <grd-equipment [UpdateMode]="UpdateMode" [workFlow]='workFlow'></grd-equipment>
+                                    </div>
+
+
+
+                                    <div id="tab_Exclusions"
+                                        *ngIf="workFlow != undefined && workFlow.exclusions != undefined"
+                                        class="tab-pane fade pan">
+                                        <grd-exclusions [UpdateMode]="UpdateMode" [workFlow]='workFlow'
+                                            isWorkFlow="true"></grd-exclusions>
+                                    </div>
+                                    <div id="tab_Expertise"
+                                        *ngIf="workFlow != undefined && workFlow.expertise != undefined "
+                                        class="tab-pane fade pan">
+                                        <grd-expertise [UpdateMode]="UpdateMode" [workFlow]='workFlow'></grd-expertise>
+                                    </div>
+                                    <div id="tab_Material_List"
+                                        *ngIf="workFlow != undefined && workFlow.materialList != undefined"
+                                        class="tab-pane fade pan">
+                                        <grd-material [UpdateMode]="UpdateMode" [workFlow]='workFlow' isWorkFlow="true">
+                                        </grd-material>
+                                    </div>
+                                    <div id="tab_Measurements"
+                                        *ngIf="workFlow != undefined && workFlow.measurements != undefined"
+                                        class="tab-pane fade pan">
+                                        <grd-measurement [UpdateMode]="UpdateMode" [workFlow]='workFlow'>
+                                        </grd-measurement>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="isWorkOrder" class="wowf-save-btn">
+                        <div class="text-right">
+                            <button class="btn btn-primary" data-target="#saveToWorkFlow"
+                                data-toggle="modal" style="padding: 6px 12px !important;">Save To Work Flow</button>
+                            <button class="btn btn-primary" data-target="#saveToWorkOrder"
+                                data-toggle="modal" style="padding: 6px 12px !important;">Save To Work Order
+                                Only</button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div *ngIf="!isWorkOrder">
+                    <div class="text-right save-work-btn" *ngIf="isQuote">
+                        <button class="btn btn-primary btn-primary" (click)="saveBuildFromScratchData()"
+                            style="padding: 6px 12px !important;">Save</button>
+                    </div>
+                    <div class="text-right save-work-btn"
+                        *ngIf="(showMainPage) && (!UpdateMode) && workFlowList.length > 0 && !isQuote">
+                        <button class="btn btn-primary btn-primary" (click)="addWorkFlow(false)"
+                            style="padding: 6px 12px !important;">Save Work Flow</button>
+                    </div>
+                    <div class="text-right save-work-btn" *ngIf="(showMainPage) && (UpdateMode) ">
+                        <button class="btn btn-primary btn-primary" (click)="isHeaderUpdate = false;showVersionUpdate()"
+                            style="padding: 6px 12px !important;">Update Work Flow Details</button> <!-- add-btn -->
+                    </div>
+                </div>
+
+                <!--</div>-->
+
+            </div>
+            <div class="clear"></div>
+            <div id="myModal" class="modal fade custom-popup" role="dialog" data-backdrop="static">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <i class="fa fa-close"></i>
+                            </button>
+                            <h4 class="modal-title">Add Task</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class=" selection-box ">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-2 col-sm-2 col-xs-10">
+                                        <label>Action Task Name</label>
+                                        <input type="text" class="custom-form-control"
+                                            [(ngModel)]="newAction.Description" />
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-2 col-sm-2 col-xs-10">
+                                        <label>Memo</label>
+                                        <input type="text" class="custom-form-control" [(ngModel)]="newAction.Memo" />
+                                    </div>
+
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-10">
+                                        <button class="btn btn-success" data-dismiss="modal" (click)="addAction()">
+                                            SAVE
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="clear"></div>
+    </div>
+
+
+
+    <ng-template #deleteConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+        <div class="modal-title">
+            <h4>Confirm workflow delete</h4>
+        </div>
+        <div>
+            <p> Are you sure you want to delete Worklflow Task?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" (click)="removeTask()">Yes</button>
+            <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+        </div>
+    </ng-template>
+
+    <div #saveToWorkFlow id="saveToWorkFlow" class="modal fade" role="dialog" data-backdrop="static"
+        data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are You Sure Want to Save to Workflow</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        (click)="saveWorkFlowWorkOrder(true)">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div #saveToWorkOrder id="saveToWorkOrder" class="modal fade" role="dialog" data-backdrop="static"
+        data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Are You Sure Want to Save to WorkOrder Only</h4>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        (click)="saveWorkFlowWorkOrder(false)">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="quoteVer"
+         class="modal fade"
+         role="dialog"
+         data-backdrop="static">
+        <div class="modal-dialog modal-sm" style="text-align: center;">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Do you want to increase the Workflow Version?</h4>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-body table-responsive">
+                    <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="increaseVerConfirmation(true)"
+                            style="padding: 6px 12px !important;">
+                        YES
+                    </button>
+                    <button class="btn btn-primary btn-primary" data-dismiss="modal"
+                            style="padding: 6px 12px !important;" (click)="increaseVerConfirmation(false)">
+                        NO
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>

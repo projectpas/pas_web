@@ -1,0 +1,99 @@
+
+<div class="card-header bg-primary new-card-header" >
+        <div class="row">
+          <div class="col">
+            <h4 class="new-card-heading"> Exchange and Loans</h4>
+          </div>          
+        </div>
+    </div>
+
+<div class="col-sm-12">
+    <form #exchloan>
+        <div class="col-sm-2">
+                <div class="card">
+                        <div class="card-header"  > Exchange <input type="checkbox" name="chkExchange" [(ngModel)]="showExchange"  (change)="handleExchangeCheck()" style="position: relative; top: 3px;"/></div> 
+                        <div class="card-body" *ngIf="showExchange">
+                                <div class="col-md-12">
+                                        <div class="form-group">
+                                                <label for="currencyExchange" class="control-label">Currency</label>
+                                                <p-dropdown class="p-dropdown-100" [options]="exchCurrencyInfo" matTooltip="Exchange - Currency" matTooltipPosition="above" filter="true" [(ngModel)]="currentItem.exchangeCurrencyId" name="exchangeCurrencyId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" (onChange)="updateBtnChange()"></p-dropdown>
+                                        </div>
+                                </div>
+                                
+                                <div class="form-group col-sm-12">                                        
+                                        <label for="exchListPRice" class="control-label" >Exchange List Price</label>                                                                              
+                                        <input type="text" class="form-control text-right" name="exchListPRice" [ngModel]="currentItem.exchangeListPrice | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeListPrice=$event" pInputText pKeyFilter="money"  matTooltip="Exchange List Price"    matTooltipPosition="above" (keyup)="updateBtnChange()">                                                                                
+                                </div>
+                                <div class="form-group">
+                                        <label for="exchCorePrice" class="control-label">Core Price</label>
+                                        <input type="text" class="form-control text-right" name="exchCorePrice" [ngModel]="currentItem.exchangeCorePrice  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeCorePrice=$event" pInputText pKeyFilter="money"  matTooltip="Core Price"    matTooltipPosition="above" (keyup)="updateBtnChange()">
+                                </div>
+                                <div class="form-group">
+                                        <label for="exchOverhaulPrice" class="control-label">Overhaul Price</label>
+                                        <input type="text" class="form-control text-right" name="exchOverhaulPrice" [ngModel]="currentItem.exchangeOverhaulPrice | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeOverhaulPrice=$event" pInputText pKeyFilter="money"  matTooltip="Overhaul Price"    matTooltipPosition="above" (keyup)="updateBtnChange()">
+                                </div>
+                                <div class="form-group">
+                                        <label for="exchOutrightPrice" class="control-label">Outright Price</label>
+                                        <input type="text" class="form-control text-right" name="exchOutrightPrice" [ngModel]="currentItem.exchangeOutrightPrice | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeOutrightPrice=$event" pInputText pKeyFilter="money"  matTooltip="Outright Price"    matTooltipPosition="above" (keyup)="updateBtnChange()" >
+                                </div>
+                                <div class="form-group">
+                                        <label for="exchOverhaulPrice" class="control-label">Overhaul Cost</label>
+                                        <input type="text" class="form-control text-right" name="exchangeOverhaulCost" [ngModel]="currentItem.exchangeOverhaulCost | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeOverhaulCost=$event" pInputText pKeyFilter="money"  matTooltip="Overhaul Cost" matTooltipPosition="above" (keyup)="updateBtnChange()">
+                                </div>
+                                <div class="form-group">
+                                        <label for="exchCoreCost" class="control-label">Core Cost</label>
+                                        <input type="text" class="form-control text-right" name="exchCoreCost" [ngModel]="currentItem.exchangeCoreCost | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeCoreCost=$event" pInputText pKeyFilter="money" matTooltip="Core Cost"    matTooltipPosition="above" (keyup)="updateBtnChange()">
+                                </div>
+                        </div>
+                </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="card">
+                <div class="card-header"> Loan <input type="checkbox" name="chkLoan" [(ngModel)]="showLoan"  (change)="handleLoanCheck()" style="position: relative; top: 3px;"/></div> 
+                <div class="card-body" *ngIf="showLoan">
+                        <div class="form-group">
+                                <label for="currencyLoan" class="control-label">Currency</label>
+                                <p-dropdown class="p-dropdown-100" [options]="loanCurrencyInfo" matTooltip="Loan - Currency" matTooltipPosition="above" filter="true" [(ngModel)]="currentItem.loanCurrencyId" name="loanCurrencyId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" (onChange)="updateBtnChange()"></p-dropdown>
+                        </div>
+                        <div class="form-group">
+                                <label for="loanFees"  class="control-label">Loan Fees</label>
+                                <input type="text" class="form-control text-right" name="loanFees" [ngModel]="currentItem.loanFees  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.loanFees=$event" pInputText pKeyFilter="money" matTooltip="Loan Fees"    matTooltipPosition="above" (keyup)="updateBtnChange()">
+                        </div>
+                        <div class="form-group">
+                                <label for="loanCorePrice"  class="control-label">Core Price</label>
+                                <input type="text" class="form-control text-right" name="loanCorePrice" [ngModel]="currentItem.loanCorePrice  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.loanCorePrice=$event" pInputText pKeyFilter="money" matTooltip="Core Price"    matTooltipPosition="above" (keyup)="updateBtnChange()">
+                        </div>
+
+                        <div class="form-group">
+                                <label for="loanOutrightPrice"  class="control-label">Outright Price</label>
+                                <input type="text" class="form-control text-right" name="loanOutrightPrice" [ngModel]="currentItem.loanOutrightPrice  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.loanOutrightPrice=$event" pInputText pKeyFilter="money" matTooltip="Outright Price"    matTooltipPosition="above" (keyup)="updateBtnChange()">
+                        </div>
+                </div>
+        </div>
+    </div>
+</form>
+</div>
+<div style="margin-top: 10px;">
+    <button class="btn btn-primary pull-right " (click)="nextOrPreviousClick('Next')" type="button" >Next</button> &nbsp;
+        <button class="btn btn-primary pull-right " [disabled]="upateBTn" (click)="saveAndMove()" type="button" >Save</button> &nbsp;
+
+    <button class="btn btn-primary pull-right" type="button"(click)="nextOrPreviousClick('Previous')" >Previous</button> 
+</div>
+
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+          <h4 class="modal-title">Confirmation</h4>
+        </div>
+        <div class="modal-body">
+          <h6 class="text-center">
+            Are you sure you want to go to {{nextOrPreviousTab}} tab? Unsaved changes will be lost.
+          </h6>
+        </div>
+        <div class="modal-footer">
+      
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+        </div>
+      </ng-template>
+      <app-spinner *ngIf="isSpinnerVisible"></app-spinner>

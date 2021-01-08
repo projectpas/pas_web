@@ -1,0 +1,436 @@
+﻿<div class="card new-card" style="padding: 10px;">
+    <!-- <div class="col-md-12">
+        <h4 class="po-head-sm">
+            Direct Labor and OH Cost
+            <a matTooltip="Create Direct Labor" class="plusicon-cstm new-margin" [routerLink]="[
+                '/workordersmodule/workorderspages/app-direct-labour-add'
+            ]">
+                <i class="fa fa-plus-circle fa-lg"></i>
+            </a>
+        </h4>
+        <hr />
+    </div> -->
+    <div class="card-header bg-primary new-card-header">
+        <div class="row">
+          <div class="col">
+            <h4 class="new-card-heading">Direct Labor and OH Cost</h4>
+          </div>
+          <div>
+            <button
+              type="button"
+              class="btn-sm new-btn-primary"
+              [routerLink]="['/workordersmodule/workorderspages/app-direct-labour-add']"
+            >
+            Create Direct Labor
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body new-card-body">
+
+    <p-table class="rpo-table-cstm rro-table-cstm" #dt [value]="directLaborList"
+        [rows]="pageSize" [metaKeySelection]="true" [paginator]="true" [pageLinks]="3"
+        [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" selectionMode="multiple"
+        [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+        scrollHeight="450px">
+        <ng-template pTemplate="caption">
+            <div class="row">
+                <div class="col">
+                <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+                    selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                    defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                </div>
+                <div class="col">
+                  <div
+                    style="width: auto !important; float: right;"
+                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                  >
+                    <i class="fa fa-search"></i>
+                    <input type="text" pInputText size="50"
+                     class="form-control"
+                        (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        placeholder=" Filter">
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+                    label="Export Data" matTooltip="Download Data" matTooltipPosition="above"
+                    style="padding: 5px 12px !important;" (click)="dt.exportCSV()"></button>
+                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+                    label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
+                    style="padding: 5px 12px !important;"
+                    (click)="dt.exportCSV({selectionOnly:true})"></button>
+            </div>
+            </div>
+
+            <div class="clear"></div>
+        </ng-template>
+
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:130px">
+            </colgroup>
+        </ng-template>
+
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <!-- <ng-container *ngFor="let col of columns">
+                    <th class="text-center"
+                        *ngIf="col.field!='levelCode1' && col.field!='levelCode2' && col.field!='levelCode3' && col.field!='levelCode4'"
+                        pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th class="text-center" *ngIf="col.field=='level1'" colspan="4" pResizableColumn pReorderableColumn
+                        [pSortableColumn]="col.field">
+                        Management Structure
+                    </th>
+                </ng-container> -->
+                <ng-container>
+                    <th class="text-center" colspan="4">
+                        Management Structure
+                    </th>
+                    <th class="text-center" colspan="3">
+                        Direct Labor (Technician/Mechanic)
+                    </th>
+                    <th class="text-center" colspan="2">
+                        Overhead Burden Rate
+                    </th>
+                    <th style="width: 120px; position:sticky">Actions</th>
+                </ng-container>
+
+            </tr>
+            <tr>
+                <!-- <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <ng-container *ngIf="col.field!='isVerified'">
+                        <input style="width:100%;" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </ng-container>
+                </th> -->
+                <ng-container *ngFor="let col of columns">
+                    <th *ngIf="col.field=='levelCode1' || col.field=='levelCode2' || col.field=='levelCode3' || col.field=='levelCode4'" [ngSwitch]="col.field">
+                        <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                    </th>
+                </ng-container>  
+                <th class="text-center" colspan="2" style="font-size: 11px !important;">
+                    LR to WO 
+                    <a matTooltipPosition="above" matTooltip="What Labor Rate To Use On Work Orders?">
+                        <i class="fa fa-eye view_icon_adjust"></i>
+                    </a>
+                </th>  <!--What Labor Rate To Use On Work Orders?-->
+                <th class="text-center" style="font-size: 11px !important;">
+                    Hrs to WO 
+                    <a matTooltipPosition="above" matTooltip="How To Apply Hours To Work Orders?">
+                        <i class="fa fa-eye view_icon_adjust"></i>
+                    </a>
+                </th>    <!--How To Apply Hours To Work Orders?-->
+                <th colspan="2"></th>          
+                <th style="width: 120px; position:sticky"></th>
+            </tr>
+            <!--
+            <tr>
+                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+
+                </th>
+            </tr>
+            -->
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
+
+                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                  
+                    <ng-container *ngIf="col.field!='averageRate' && col.field!='flatAmount'">
+                        {{rowData[col.field]}}
+                    </ng-container>
+                    <ng-container *ngIf="col.field=='averageRate' || col.field=='flatAmount'">
+                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                    </ng-container> 
+                </td>
+
+                <td style="width:120px">
+                    <p-inputSwitch
+					[(ngModel)]="rowData['isActive']"
+					name="isActive{{ rowIndex }}"
+					(onChange)="changeStatus(rowData)"
+					matTooltip="{{rowData['isActive']==true ? 'Active' : 'In Active'}}" matTooltipPosition="above"
+				    ></p-inputSwitch>
+                    <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewLabor" (click)="viewSelectedRow(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                    <span><a class="btn nobg" 
+                    (click)="onEdit(rowData)" matTooltip="Edit" 
+                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>                   
+                    <span data-toggle="modal" data-target="#deleteLabor"><a class="btn nobg" (click)="delete(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a></span>
+                    <span data-toggle="modal" data-target="#auditLabor"><a class="btn nobg" matTooltip="History" matTooltipPosition="above" (click)="getAuditHistoryById(rowData)"><i class="fa fa-history"></i></a></span>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns *ngIf="directLaborList?.length == 0">
+            <tr>
+                <td [attr.colspan]="10" class="no-records-cstm">
+                    No records found
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" id="footer">
+            <label id="footer" class="footer">Total:</label>
+            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+            &nbsp;&nbsp;
+            <label id="footer" class="footer1">Pages Count:</label>
+            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
+                pInputText type="text" />
+        </ng-template>
+    </p-table>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteLabor" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteDirectLabor()">Yes</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div id="auditLabor" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">  
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">History of Purchase Order</h4>
+        </div>
+        <div class="modal-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                    <thead>
+                        <tr>
+                            <th colspan="4">Management Structure</th>
+                            <th colspan="3">Direct Labor (Technician/Mechanic)</th>
+                            <th colspan="2">Overhead Burden Rate</th>
+                            <th>IsActive</th>
+                            <th>Created By</th>
+                            <th>Created Date</th>
+                            <th>Updated By</th>
+                            <th>Updated Date</th>
+                        </tr>
+                        <tr>
+                            <th colspan="4"></th>
+                            <th colspan="2">What Labor Rate To Use On Work Orders?</th>
+                            <th>How To Apply Hours To Work Orders?</th>
+                            <th colspan="2"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="audithistory-cstm"> 
+                        <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'levelCode1', audit.levelCode1)  ? 'black' : 'red'  }">{{audit.levelCode1}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'levelCode2', audit.levelCode2)  ? 'black' : 'red'  }">{{audit.levelCode2}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'levelCode3', audit.levelCode3)  ? 'black' : 'red'  }">{{audit.levelCode3}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'levelCode4', audit.levelCode4)  ? 'black' : 'red'  }">{{audit.levelCode4}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'laborRateIdText', audit.laborRateIdText)  ? 'black' : 'red'  }">{{audit.laborRateIdText}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'laborRateId', audit.laborRateId)  ? 'black' : 'red'  }">{{audit.laborRateId}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'laborHoursIdText', audit.laborHoursIdText)  ? 'black' : 'red'  }">{{audit.laborHoursIdText}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'burdenRateIdText', audit.burdenRateIdText)  ? 'black' : 'red'  }">{{audit.burdenRateIdText}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'averageRate', audit.averageRate)  ? 'black' : 'red'  }">{{audit.averageRate}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">{{audit.createdBy}}</td>
+                                <td>{{audit.createdDate | date: 'MM-dd-yyyy'}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">{{audit.updatedBy}}</td>
+                                <td>{{audit.updatedDate | date: 'MM-dd-yyyy'}}</td>
+                            </tr>
+                    </tbody>                        
+                </table>
+                <ng-template #noDatavailable>
+                    <div class="text-center"> 
+                            <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                    </div>
+                </ng-template>  
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+  
+    </div>
+</div>
+
+<div class="modal fade" id="viewLabor" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <div class="col-sm-3">
+            <h4 class="modal-title">Details of Direct Labor</h4>
+          </div>
+        </div>
+        <div class="modal-body modal-body-cstm">
+          <div>
+            <div class="card">
+                <div class="card-body">
+                    <div>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div>
+                                    <h4 class="po-head-sm">Direct Labor (Technician/Mechanic)</h4>
+                                    <hr />
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        <label>
+                                            What Labor Rate to use on Work Orders? <span class="clr-red">*</span>
+                                        </label>
+                                        <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                                <input type="radio" name="laborRateId" class="form-control" value="1" [(ngModel)]="directLaborData.laborRateId" disabled>
+                                                <span class="checkmark"></span>Use Individual Technician/Mechanic Labor Rate</label>
+                                        </div>
+                                        <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                                <input type="radio" name="laborRateId" class="form-control" value="2" [(ngModel)]="directLaborData.laborRateId" disabled>
+                                                <span class="checkmark"></span>Use Average Rate of All Technician/Mechanic</label>
+                                        </div>
+                                        <div>
+                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.averageRate ? directLaborData.averageRate : '-'}}</span></p>
+                                        </div>
+                                    </div>            
+                                </div>
+                                <div class="form-group p-t-10">
+                                    <div>
+                                        <label>
+                                           How to Apply Hours to Work Orders? <span class="clr-red">*</span>
+                                        </label> 
+                                        <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important;margin-top: 7px !important;">
+                                                <input type="radio" name="laborHoursId" class="form-control" value="1" [(ngModel)]="directLaborData.laborHoursId" disabled>
+                                                <span class="checkmark"></span>Assign Hours by Specific Actions</label>
+                                        </div>
+                                        <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                                <input type="radio" name="laborHoursId" class="form-control" value="2" [(ngModel)]="directLaborData.laborHoursId" disabled>
+                                                <span class="checkmark"></span>Assign Total Hours to Work Order</label>
+                                        </div>
+                                    </div>        
+                                </div>
+
+                                <div class="p-t-10" style="clear: both;">
+                                    <h4 class="po-head-sm">Overhead Burden Rate</h4>
+                                    <hr />
+                                </div>
+                                <div class="form-group">
+                                    <div *ngIf="directLaborData.burdenRateId == '1'">
+                                        <!-- <label>
+                                            <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="1" disabled>
+                                            As A% of Technician/Mechanic Hourly Rate 
+                                            <span class="clr-red">*</span>
+                                        </label> -->
+                                        <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                                <input type="radio" name="burdenRateId" class="form-control" value="1" [(ngModel)]="directLaborData.burdenRateId" disabled>
+                                                <span class="checkmark"></span>As A% of Technician/Mechanic Hourly Rate
+                                                <span class="clr-red">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-row m-b-10">
+                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div *ngIf="directLaborData.burdenRateId == '2'">
+                                        <!-- <label>
+                                            <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="2" disabled>
+                                            Flat Amount per Hour
+                                            <span class="clr-red">*</span>
+                                        </label> -->
+                                        <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                                <input type="radio" name="burdenRateId" class="form-control" value="2" [(ngModel)]="directLaborData.burdenRateId" disabled>
+                                                <span class="checkmark"></span>Flat Amount per Hour
+                                                <span class="clr-red">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="form-row m-b-10">
+                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div *ngIf="directLaborData.burdenRateId == '3'">
+                                        <!-- <label>
+                                            <input type="radio" name="burdenRateId" [(ngModel)]="directLaborData.burdenRateId" value="3" disabled>
+                                            Flat Amount per Work Order
+                                            <span class="clr-red">*</span>
+                                        </label> -->
+                                        <!-- <div>
+                                            <label class="radio-cstm wauto" style="font-weight: normal; width: 100% !important; margin-top: 7px !important;">
+                                                <input type="radio" name="burdenRateId" class="form-control" value="3" [(ngModel)]="directLaborData.burdenRateId" disabled>
+                                                <span class="checkmark"></span>Flat Amount per Work Order
+                                                <span class="clr-red">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="m-b-10">
+                                            <p class="full-width"><span class="label"><b>Value: </b></span><span class="value">{{directLaborData.flatAmount ? directLaborData.flatAmount : '-'}}</span></p>
+                                        </div>  -->
+                                    </div>                                                   
+                                </div>
+                                <p><span class="label"><b>Functional Currency: <span class="text-danger">*</span></b></span><span class="value">{{directLaborData.functionalCurrencyCode ? directLaborData.functionalCurrencyCode : '-'}}</span></p>
+                                <p><span class="label"><b>Transactional Currency: <span class="text-danger">*</span></b></span><span class="value">{{directLaborData.transactionalCurrencyCode ? directLaborData.transactionalCurrencyCode : '-'}}</span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="card" style="margin-top: 6px;">
+                                            <div class="card-header" style="padding: 0 10px;">
+                                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
+                                            </div>
+                                            <div class="card-body" style="padding: 8px 12px 6px;">
+                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                    <input class="form-control" type="text" name="companyName"
+                                                        [(ngModel)]="headerManagementStructure.level1" disabled>
+                                                </div>
+                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                    <input class="form-control" type="text" name="BUName"
+                                                        [(ngModel)]="headerManagementStructure.level2" disabled>
+                                                </div>
+                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                    <input class="form-control" type="text" name="divisionName"
+                                                        [(ngModel)]="headerManagementStructure.level3" disabled>
+                                                </div>
+                                                <div class="form-group" style="margin-bottom: 4px;">
+                                                    <input class="form-control" type="text" name="deptName"
+                                                        [(ngModel)]="headerManagementStructure.level4" disabled>
+                                                </div>
+                                            </div>
+                                        </div>	
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>        
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,259 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="x_panel" style="">
+            <div class="x_content add-customer-work">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">General Ledger</li>
+                        <li class="breadcrumb-item active" aria-current="page">Journal-Batch Search</li>
+                    </ol>
+                </nav>
+                <div class="pheading">
+                    <h4 class="page-heading clr-green">Journal-Batch Search</h4>
+                </div>
+                <div class="cdetails-top">
+                    <div class="col-sm-12">
+                        <label>Company</label>
+                        <span>
+                            <select>
+                                <option value="">Adso</option>
+                                <option value="">Aerospace</option>
+                                <option value="">ILS</option>
+                                <option value="">PArts Base</option>
+                                <option value="">PAS</option>
+                                <option value="">Silverxis</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>BU</label>
+                        <span>
+                            <select>
+                                <option value="">Adso</option>
+                                <option value="">Aerospace</option>
+                                <option value="">ILS</option>
+                                <option value="">PArts Base</option>
+                                <option value="">PAS</option>
+                                <option value="">Silverxis</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Division</label>
+                        <span>
+                            <select>
+                                <option value="">Designing</option>
+                                <option value="">Development</option>
+                                <option value="">Repear</option>
+                            </select>
+                        </span>
+                    </div>
+                    <div class="col-sm-12">
+                        <label>Dept</label>
+                        <span>
+                            <select>
+                                <option value="">.net</option>
+                                <option value="">HTML</option>
+                                <option value="">Java</option>
+                            </select>
+                        </span>
+                    </div>
+
+                </div>
+                <div class="clear"></div>
+                <form action="#" method="post" id="add-customerwork" name="" class="form-horizontal add-custustomer">
+                    <div class="col-md-12 col-sm-12 col-12">
+                        <div class="tab-content form-bg">
+                            <div class="tab-pane active" id="home">
+                                <div class="col-sm-6">
+                                    <div class="form-group col-sm-12">
+                                        <div class="col-sm-7">
+                                            <label><input type="radio" name="status" /> Pending</label>
+                                            <label><input type="radio" name="status" /> Posted</label>
+                                            <label><input type="radio" name="status" /> All</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clear"></div>
+                                <hr class="hr-dark" />
+                                <div class="col-sm-3">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Batch Number</label>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control numberids" id="" name="" placeholder="Batch Number" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Description</label>
+                                        <div class="inner-addon right-addon inline-block">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" class="form-control numberids" id="" name="" placeholder="Journal Description" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Year</label>
+                                        <div class="col-sm-7">
+                                            <select class="input-width70" id="" name="">
+                                                <option value="">Select</option>
+                                                <option value="">2015</option>
+                                                <option value="">2016</option>
+                                                <option value="">2017</option>
+                                                <option value="">2018</option>
+                                                <option value="">2019</option>
+                                                <option value="">2020</option>
+                                                <option value="">2021</option>
+                                                <option value="">2022</option>
+                                                <option value="">2023</option>
+                                                <option value="">2024</option>
+                                                <option value="">2025</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Period</label>
+                                        <div class="col-sm-7">
+                                            <select class="input-width100" id="" name="">
+                                                <option value="">Select Period</option>
+                                                <option value="">Period 1</option>
+                                                <option value="">Period 2</option>
+                                                <option value="">Period 3</option>
+                                                <option value="">Period 4</option>
+                                                <option value="">Period 5</option>
+                                                <option value="">Period 6</option>
+                                                <option value="">Period 7</option>
+                                                <option value="">Period 8</option>
+                                                <option value="">Period 9</option>
+                                                <option value="">Period 10</option>
+                                                <option value="">Period 11</option>
+                                                <option value="">Period 12</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="form-group col-sm-12">
+                                        <label class="control-label col-sm-4">Source</label>
+                                        <div class="col-sm-7">
+                                            <select class="input-width100">
+                                                <option value="">Select Source</option>
+                                                <option value="">Budget</option>
+                                                <option value="">Fixed Assets</option>
+                                                <option value="">Manual</option>
+                                                <option value="">PaymentsPayables</option>
+                                                <option value="">Purchasing</option>
+                                                <option value="">Receipts</option>
+                                                <option value="">Receivables</option>
+                                                <option value="">Work Order</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1">
+                                    <button type="button" class="btn btn-default search-btn"><i class="fa fa-search"></i></button>
+                                </div>
+
+                                <div class="clear"></div>
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </form>
+                <div id="" class="table-responsive default-bg clear journal-table">
+
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Batch Status</th>
+                                <th>Batch Name</th>
+                                <th>Source</th>
+                                <th>Period</th>
+                                <th>Year</th>
+                                <th>Journal Description</th>
+                                <th>Currency</th>
+                                <th>Debit</th>
+                                <th>Credit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>Posted</td>
+                                <td>Payroll Accrual</td>
+                                <td>Manual</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>Payroll Accrual</td>
+                                <td>AUD</td>
+                                <td>10,013.00</td>
+                                <td>10,013.00</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>Pending</td>
+                                <td>Cash Receipt</td>
+                                <td>AR Sub Ledger</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>3/3/2018 Lockbox Payment</td>
+                                <td>AUD</td>
+                                <td>1,500.00</td>
+                                <td>1,500.00</td>
+                            </tr>
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>Canceled</td>
+                                <td>Bonus Accrual</td>
+                                <td>Manual</td>
+                                <td>Mar</td>
+                                <td>2018</td>
+                                <td>March Commission Accrual</td>
+                                <td>AUD</td>
+                                <td>1,500.00</td>
+                                <td>1,500.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clear"></div>
+                    <br />
+                    <a class="btn btn-success pull-right">Review Journal</a>
+                    <a class="btn btn-success pull-right">Review Batch</a>
+                    <a class="btn btn-success pull-right">Post</a>
+                    <a class="btn btn-success pull-right">Reverse Journal</a>
+                    <a class="btn btn-success pull-right">Approve</a>
+                    <a class="btn btn-success pull-right">New Batch</a>
+                    <a class="btn btn-success pull-right">New Journal</a>
+                    <a class="btn btn-success pull-right">Reverse Batch</a>
+                    <div class="clear"></div>
+                    <hr />
+                    <br />
+                </div>
+                <div class="pull-right"> &copy; 2018 <a routerLink="/">PAS</a> </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="createwo" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="" name="">&times;</button>
+                    <h4 class="modal-title">Customer Work is saved. Would you like to create Work Order ?</h4>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-success cwo-btn" data-dismiss="modal">Yes</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="myFunction()">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+﻿.x_panel {
+    border: none;
+}
+.rpo-bcrumb {
+    background-color: transparent;
+    color: #295d92;
+}
+.rpo-bcrumb li {
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+.search-box {
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+}
+.search-box .mat-form-field {
+    padding: 0 2em;
+}
+// #footer {
+   
+//     font-size: 11px !important;
+//     font-weight:12px !important;
+// }
+
+

@@ -1,0 +1,91 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="col-md-12">
+            <div class="x_panel" style="">
+                <div class="x_content">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a routerLink="/">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">WO Reserve</li>
+                        </ol>
+                    </nav>
+                    <div class="pheading">
+                        <h4 class="page-heading clr-green">WO Reserve</h4>
+                    </div>
+                    <div class="cdetails-top">
+                        <div class="col-sm-12">
+                            <label>Company</label>
+                            <span>Silverxis</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>BU</label>
+                            <span>Adso</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Division</label>
+                            <span>Development</span>
+                        </div>
+                        <div class="col-sm-12">
+                            <label>Dept</label>
+                            <span>Java</span>
+                        </div>
+
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
+            <div class="x_panel">
+                <div class="tab-content">
+                    <div class="table-responsive default-bg clear ro-grid-table">
+
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" class="form-control wauto" id="checkall" /></th>
+                                    <th>PN</th>
+                                    <th>Description</th>
+                                    <th>Qty Required</th>
+                                    <th>Qty Reserved</th>
+                                    <th>Qty Turn In</th>
+                                    <th>Qty Issued</th>
+                                    <th>Cond</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="checkbox" class="form-control wauto check-single" /></td>
+                                    <td><input type="text" class="form-control w200" placeholder="PN12345" /></td>
+                                    <td><input type="text" class="form-control w200" placeholder="Part Number" /></td>
+                                    <td><input type="number" class="form-control w50" value="5" /></td>
+                                    <td><input type="number" class="form-control w50" value="4" /></td>
+                                    <td><input type="number" class="form-control w50" value="" /></td>
+                                    <td><input type="number" class="form-control w50" value="4" /></td>
+                                    <td>New</td>
+                                    <td>
+                                        <span data-toggle="tooltip" class="status" title="Active" data-placement="right"><input type="checkbox" checked data-toggle="toggle" data-width="30" id="toggle-one" data-on="<i class='fa fa-check'></i>" data-off="<i class='fa fa-times'></i>" data-onstyle="success" data-offstyle="danger"></span>
+                                        <a data-toggle="tooltip" title="Edit" class="btn btn-primary boxed-float-btn nobg"><i class="fa fa-edit"></i></a>
+                                        <span data-toggle="modal" data-target="#">
+                                            <a class="btn btn-success nobg" data-toggle="tooltip" title="Document History"><i class="fa fa-history"></i></a>
+                                        </span>
+                                        <a data-toggle="tooltip" title="Delete" class="btn btn-success boxed-float-btn nobg"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                        <a routerLink="/app-work-order-complete-material-list" class="btn btn-info">Submit</a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <br />
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+</div>

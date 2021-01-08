@@ -1,0 +1,543 @@
+<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+
+<!-- <div class="card">
+    <div class="card-body">
+        <div class="inline-block display-flex">
+            <h3 class="po-head lead">Deal</h3>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a matTooltip="Create Deal"  matTooltipPosition="above"
+               class="plusicon-cstm new-margin"
+               [routerLink]="[
+                '/customersmodule/customerpages/app-deal-setup'
+              ]">
+                <i class="fa fa-plus-circle fa-lg"></i>
+            </a>
+        </div> -->
+
+        <div class="card new-card">
+            <div class="card-header bg-primary new-card-header">
+              <div class="row">
+                <div class="col">
+                  <h4 class="new-card-heading">Deal</h4>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn-sm new-btn-primary"
+                    [routerLink]="['/customersmodule/customerpages/app-deal-setup']"
+                  >
+                  Create Deal
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="card-body new-card-body">
+
+       
+        <p-table #dt
+                 class="rpo-table-cstm  rro-table-cstm"
+                 [value]="data"
+                 [first]="0"
+                 [rows]="pageSize"
+                 [paginator]="true"
+                 [pageLinks]="3"
+                 [rowsPerPageOptions]="[10, 20, 50, 100]"
+                 [columns]="selectedColumns"
+                 selectionMode="multiple"
+                 [metaKeySelection]="true"
+                 [lazy]="true"
+                 (onLazyLoad)="loadData($event)"
+                 [resizableColumns]="true"
+                 [reorderableColumns]="true"
+                 [totalRecords]="totalRecords"
+                 [scrollable]="true" scrollHeight="450px">
+            <ng-template pTemplate="caption">
+                <!-- <div style="text-align: right;margin-left:-6px !important; min-height: 30px;">
+                    <p-multiSelect [maxSelectedLabels]="2"
+                                   [options]="headers"
+                                   optionLabel="header"
+                                   [(ngModel)]="selectedColumns"
+                                   [style]="{ minWidth: '220px' }"
+                                   style="float:left"
+                                   (onChange)="columnsChanges()"></p-multiSelect>
+
+                    <div style=" left: -10px;"
+                         class="inner-addon right-addon w50 inline-block  g-filter-search-cstm">
+                        <i class="fa fa-search"></i>
+                        <input type="text"
+                               pInputText
+                               size="50"
+                               class="form-control ui-autocomplete-input"
+                               (input)="globalSearch($event.target.value)"
+                               placeholder="Filter" />
+                    </div>
+                    <button type="button"
+                            class="btn btn-primary "
+                            matTooltip="Download Data" matTooltipPosition="above"
+                            pButton
+                            icon="fa-download"
+                            iconPos="left"
+                            label="Export Data"
+                            style="left:-10px; padding: 5px 10px !important;"
+                            (click)="dt.exportCSV()"></button>
+                    <button type="button"
+                            class="btn btn-primary "
+                            matTooltip="Download Selected Data" matTooltipPosition="above"
+                            pButton
+                            icon="fa-download"
+                            iconPos="left"
+                            label="Export Selected Data"
+                            style="left:-10px; padding: 5px 10px !important;"
+                            (click)="dt.exportCSV({ selectionOnly: true })"></button>
+    
+                            <div class="form-row status-radio">
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="radiobtn-label">Satge:</label>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="satge" class="form-control" value="All">
+                                                <span class="checkmark"></span>All
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="stage" class="form-control" value="Closed">
+                                                <span class="checkmark"></span>Closed
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="stage" class="form-control" value="NotClosed">
+                                                <span class="checkmark"></span>Not-Closed
+                                            </label>
+                                        </div>
+                    
+                                    </div>
+                                </div>
+                    
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="radiobtn-label">Status:</label>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="EmpStatus" class="form-control" value="Active"  [(ngModel)]="currentstatus">
+                                                <span class="checkmark"></span>Active
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="EmpStatus" class="form-control" value="InActive" [(ngModel)]="currentstatus">
+                                                <span class="checkmark"></span>In-Active
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="EmpStatus" class="form-control" value="ALL"  [(ngModel)]="currentstatus">
+                                                <span class="checkmark"></span>All
+                                            </label>
+                                        </div>
+                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                              <label style="width: auto !important;margin-top: 3px;">
+                                               
+                                                <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
+                                                  />
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                              Show  Deleted List 
+                                              </label>
+                                            </div>
+                    
+                                    </div>
+                                </div>
+                            </div>
+                    
+                </div> -->
+                <div class="row">
+                    <div class="col">
+                        <p-multiSelect [maxSelectedLabels]="2"
+                        [options]="headers"
+                        optionLabel="header"
+                        [(ngModel)]="selectedColumns"
+                        [style]="{ minWidth: '220px' }"
+                        style="float:left"
+                        (onChange)="columnsChanges()">
+                    </p-multiSelect>
+                </div>
+                <div class="col">
+                  <div
+                    style="width: auto !important; float: right;"
+                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                  >
+                    <i class="fa fa-search"></i>
+                    <input type="text"
+                    pInputText
+                    size="50"
+                    class="form-control"
+                    (input)="globalSearch($event.target.value)"
+                    placeholder="Filter" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button type="button"
+            class="btn btn-primary new-table-button"
+            matTooltip="Download Data" matTooltipPosition="above"
+            pButton
+            icon="fa-download"
+            iconPos="left"
+            label="Export Data"
+            style="left:-10px; padding: 5px 10px !important;"
+            (click)="dt.exportCSV()"></button>
+    <button type="button"
+            class="btn btn-primary new-table-button"
+            matTooltip="Download Selected Data" matTooltipPosition="above"
+            pButton
+            icon="fa-download"
+            iconPos="left"
+            label="Export Selected Data"
+            style="left:-10px; padding: 5px 10px !important;"
+            (click)="dt.exportCSV({ selectionOnly: true })">
+        </button>
+    </div>
+    <div class="col">
+      <div class="">
+        <div
+          class="col"
+          style="width: 650px; float: right; padding-top: 3px;"
+        >
+          <div class="form-group">
+            <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
+            <div
+              class="pull-left"
+              style="margin-top: 4px; margin-right: 15px;"
+            >
+            <label class="radio-cstm wauto">
+                <input type="radio" name="satge" class="form-control" value="All">
+                <span class="checkmark"></span>All
+            </label>
+        </div>
+        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <label class="radio-cstm wauto">
+                <input type="radio" name="stage" class="form-control" value="Closed">
+                <span class="checkmark"></span>Closed
+            </label>
+        </div>
+        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <label class="radio-cstm wauto">
+                <input type="radio" name="stage" class="form-control" value="NotClosed">
+                <span class="checkmark"></span>Not-Closed
+            </label>
+        </div>
+
+        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <label class="radio-cstm wauto">
+                <input type="radio" name="EmpStatus" class="form-control" value="Active"  [(ngModel)]="currentstatus">
+                <span class="checkmark"></span>Active
+            </label>
+        </div>
+        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <label class="radio-cstm wauto">
+                <input type="radio" name="EmpStatus" class="form-control" value="InActive" [(ngModel)]="currentstatus">
+                <span class="checkmark"></span>In-Active
+            </label>
+        </div>
+        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <label class="radio-cstm wauto">
+                <input type="radio" name="EmpStatus" class="form-control" value="ALL"  [(ngModel)]="currentstatus">
+                <span class="checkmark"></span>All
+            </label>
+        </div>
+            <div class="checkbox-cstm" style="margin-left: 0;">
+              <label style="width: auto !important;margin-top: 3px;">
+               
+                <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
+                  />
+                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+              Show  Deleted List 
+              </label>
+            </div>
+            </div>
+</div>
+</div>
+</div>
+</div>
+
+
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" style="width:130px">
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+
+                    <th style="width:auto"
+                        *ngFor="let col of columns"
+                        pResizableColumn
+                        pReorderableColumn
+                        [pSortableColumn]="col.field">
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th style="width:200px;position:sticky"
+                        *ngIf="selectedColumns.length > 0">
+                        Actions
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                    </th>
+                    <th style="width:200px;position:sticky"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRow(rowData)">
+                    <td style="width:auto"
+                        *ngFor="let col of columns"
+                        class="ui-resizable-column"
+                        pReorderableRowHandle>
+                        {{
+              col.field == 'createdDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                : rowData[col.field] && col.field == 'updatedDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                : rowData[col.field]
+                        }}
+                    </td>
+                    <td class="action-icons-cstm" style="width:200px" *ngIf="selectedColumns.length > 0">
+                        <div *ngIf="currentDeletedstatus==false">
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']"  name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                            <span><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span><a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"  matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                            <span data-target="#contentHist" data-toggle="modal"><a class="btn nobg" 
+                                (click)="getAuditHistoryById(rowData)"
+                                 matTooltip="History"  matTooltipPosition="above">
+                                 <i class="fa fa-history"></i></a></span>
+                                 <span data-toggle="modal" data-target="#delete"><a class="btn nobg" (click)="delete(content1,rowData);dt.reset();" matTooltip="Delete"  matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+
+                          
+                        </div> 
+                        <div *ngIf="currentDeletedstatus==true">
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                           <span><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                          <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                       </div> 
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input style="width: 5%;"
+                       [(ngModel)]="totalRecords"
+                       [disabled]="true"
+                       pInputText
+                       type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+                <input style="width: 5%;"
+                       [(ngModel)]="totalPages"
+                       [disabled]="true"
+                       pInputText
+                       type="text" />
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+    <ng-template #sitesContent let-c="close" let-d="dismiss" class="modal fade" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+                <h4 class="modal-title"> Sites of {{this.selectedRow['name']}}</h4>
+            </div>
+            <div class="modal-body viewform">
+                <app-customer-shipping-information [customerDataFromExternalComponents]="selectedRow"></app-customer-shipping-information>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #documentsContent let-c="close" let-d="dismiss" class="modal fade" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+                <h4 class="modal-title"> Documents of {{this.selectedRow['name']}}</h4>
+            </div>
+            <div class="modal-body viewform">
+                <app-customer-documents [customerDataFromExternalComponents]="selectedRow"></app-customer-documents>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </ng-template>
+    
+    <ng-template #contentcontact let-c="close" let-d="dismiss" class="modal fade" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+                <h4 class="modal-title"> Contacts of {{this.selectedRow['name']}}</h4>
+            </div>
+            <div class="modal-body viewform">
+                <p-table class="table-responsive" #dt *ngIf="allContacts.length > 0" [value]="allContacts" [metaKeySelection]="true" [rows]="10" [paginator]="true"
+                         [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedContactColumns"
+                         [resizableColumns]="true" [reorderableColumns]="true">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            
+                           <th style="width: 40px;">Flag</th>
+
+                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                [pSortableColumn]="col.field">
+                                {{col.header}}
+                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                        <tr> 
+                            <th></th>                     
+                            <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+                            </th>      
+                            <th></th>                     
+                        </tr>
+                    </ng-template>
+    
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                       
+                        <tr [pSelectableRow]="rowData" (dblclick)="toggledbldisplay(rowData)">
+                          
+                            <td style="width: 40px;"> <span class="flag">
+                                <i  *ngIf="rowData.isDefaultContact == true"     matTooltip="Primary"
+                                matTooltipPosition="above"  [ngStyle]="{'color': rowData.isDefaultContact == true ? 'green' : 'none'}"  
+                                 class="fa fa-flag" aria-hidden="true"></i>
+                                </span>
+                            </td>
+                            
+                            <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+                            </td>
+                            <td style="width:140px">
+                                <span data-toggle="modal" data-target="#ListContactview"> <a class="btn btn-info boxed-float-btn nobg"  matTooltip="Edit" matTooltipPosition="View"   (click)="viewContactSelectedRow(rowData)" ><i class="fa fa-eye"></i></a> </span>
+
+                                </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td colspan="8" style="color: red; font-weight: bold; text-align: center">
+                                No records found
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary" id="footer">
+                        <label id="footer" class="footer">Total:</label>
+                        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                        <label id="footer" class="footer1">Pages Count:</label>
+                       
+                        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
+                    </ng-template>
+                </p-table>
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">Close</button>
+            </div>
+        </div>
+    </ng-template>
+    <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+        <div class="modal-header">
+            <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+    
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <strong>
+                Customer Name:
+                <span class="new-label">{{ restorerecord.name}}</span>
+            </strong>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+            <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+        </div>
+    </ng-template>   
+   
+    <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+          <div class="modal-header">
+    
+            <h4 class="modal-title">History of Customer</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+    
+    
+        </div>
+        <div class="modal-body">
+    
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address1</th>
+                            <th>Address2</th>
+                            <th>City</th>
+                            <th>State</th>
+                            <th>Postal Code</th>
+                            <th>Country</th>
+                            <th>Is Active</th>
+                            <th>Updated By</th>
+                            <th>Last Updated Time</th>
+                            <th>Created By</th>
+                            <th>Created Time</th>
+    
+                        </tr>
+                    </thead>
+    
+    
+                    <tr *ngFor="let audit of customerauditHisory; let i = index;">
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">{{audit.name}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerCode', audit.customerCode)  ? 'black' : 'red'  }">{{audit.customerCode}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerPhone', audit.customerPhone)  ? 'black' : 'red'  }">{{audit.customerPhone}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'email', audit.email)  ? 'black' : 'red'  }">{{audit.email}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'address1', audit.address1)  ? 'black' : 'red'  }">{{audit.address1}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'address2', audit.address2)  ? 'black' : 'red'  }">{{audit.address2}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'city', audit.city)  ? 'black' : 'red'  }">{{audit.city}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'stateOrProvince', audit.stateOrProvince)  ? 'black' : 'red'  }">{{audit.stateOrProvince}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'postalCode', audit.postalCode)  ? 'black' : 'red'  }">{{audit.postalCode}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'countryName', audit.countryName)  ? 'black' : 'red'  }">{{audit.countryName}}</td>
+                        <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+    
+                        <td>{{audit.updatedBy}}</td>
+                        <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                        <td>{{audit.createdBy}}</td>
+                        <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+        </div>
+    </ng-template>
+    
+    
+ 

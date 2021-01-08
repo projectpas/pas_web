@@ -1,0 +1,22 @@
+select {
+    background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
+}
+/*.workflow-table-charges .charge-tr td {
+    padding: 4px;
+}*/
+.workflow-table-charges tr th:first-child {
+    padding: 0 10px !important;
+}
+
+.grd-width{
+    width: 1150px;
+}
+
+.grd-width-quote{
+    width: 1150px;
+}
+@media only screen and (min-width: 1370px) {
+    .table-responsive {
+        overflow-x: hidden;
+    }
+}

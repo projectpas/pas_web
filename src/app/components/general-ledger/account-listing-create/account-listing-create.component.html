@@ -1,0 +1,172 @@
+﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary">
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">
+                    {{editMode ? 'Edit' : 'Create' }} GL Account</h4>
+            </div>
+            <div>
+                <button type="button" class="btn-sm new-btn-primary" [routerLink]="[
+            '/generalledgermodule/generalledgerpage/app-account-listing'
+            ]">
+                    GL Account List
+                </button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="card-body new-card-body">
+
+        <div class="right_col" role="main">
+            <div class="x_content">
+                <form #accountListCreateForm="ngForm">
+                    <div class="tab-pane active" id="home">
+                        <div class="form-row" style="margin-left: 13px;margin-top: 10px;">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="">Ledger Name<span class="clr-red">*</span></label>
+                                    <div class="">
+                                    <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)" [options]="ledgerNameObjectData" filter="true" [(ngModel)]="glAccountObj.ledgerName" name="ledgerName" required [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
+                                    </div>
+                                   
+                                </div>
+                                <div class="form-group" *ngIf="editMode==true">
+                                    <label class="">Old Account Code</label>
+                                    <input name="oldAccountCode" class="form-control" (ngModelChange)="getmemo($event)" type="text" #oldAccountCode="ngModel"
+                                           [(ngModel)]="glAccountObj.oldAccountCode">
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="">Account Code<span class="clr-red">*</span></label>
+
+                                    <div class="inner-addon right-addon inline-block">
+                                        <input type="text"(ngModelChange)="getmemo($event)" name="accountCode" [(ngModel)]="glAccountObj.accountCode"
+                                               required>
+                                             <div *ngIf="isAccountCodeExists" class="clr-red">Entry Already Exists</div>
+                                    </div>
+              
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="">Account Name <span class="clr-red">*</span></label>
+                                    <div class="inner-addon right-addon inline-block">
+                                        <input type="text"(ngModelChange)="getmemo($event)" name="accountName" [(ngModel)]="glAccountObj.accountName"
+                                               required>
+                            
+                                        <div *ngIf="isAccountNameExists" class="clr-red">Entry Already Exists</div>
+                                    </div>
+              
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="">Account Type<span class="clr-red">*</span></label>
+                                    <div class="">
+                                        <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)" [options]="accountTypeObject" filter="true" [(ngModel)]="glAccountObj.glAccountTypeId" name="glAccountTypeId" required [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown> 
+                                    </div>
+
+               
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="">Account Description</label>
+                                    <input name="accountDescription"(ngModelChange)="getmemo($event)" class="form-control" type="text" #accountDescription="ngModel"
+                                           [(ngModel)]="glAccountObj.accountDescription">
+
+                                </div>
+
+            
+
+                                <div class="form-group">
+                                    <label class="">Leaf Node Name</label>
+                                    <div class="">
+                                        <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)" [options]="leafNodeNameObj" filter="true" [(ngModel)]="glAccountObj.glAccountNodeId" name="leafNodeName" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown> 
+                                    </div>
+
+
+                                </div>
+                                <div class="form-group">
+                                    <input name="interCompany" (ngModelChange)="getmemo($event)"type="checkbox" [(ngModel)]="glAccountObj.interCompany">
+                                    <label for="interCompany" class="">Inter Company</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                
+
+                                <div class="form-group">
+                                    <label class="">1099 Category</label>
+                                    <div class="">
+                                        <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)" [options]="miscData" filter="true" [(ngModel)]="glAccountObj.category1099Id" name="category" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown> 
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="">Share with Entities</label>
+                                    <div class="">
+
+                                        <p-multiSelect (ngModelChange)="getmemo($event)" [options]="entitiesObj" name="entities" [(ngModel)]="glAccountObj.shareWithEntityIds" >
+                                    </p-multiSelect>
+
+                                      
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input (ngModelChange)="getmemo($event)"  name="allowManualJE" type="checkbox"
+                                        [(ngModel)]="glAccountObj.allowManualJE">
+
+                                    <label class="">Allow Manual JE </label>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label class="">Cash Flows Classification <span class="clr-red">*</span></label>
+                                    <div class="">
+                                        <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)" required [options]="allGLCashFlowClassInfo" filter="true" [(ngModel)]="glAccountObj.glClassFlowClassificationId" name="classification" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown> 
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="">PO Category</label>
+                                    <div class="">
+                                        <p-dropdown class="p-dropdown-100" (ngModelChange)="getmemo($event)" [options]="poroCategoryList" filter="true" [(ngModel)]="glAccountObj.poroCategoryId" name="poroCategory" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                        <hr>
+                       
+                        <button type="submit" class="btn btn-primary pull-right"
+
+                            [disabled]="!accountListCreateForm.valid || disableSave ||  glAccountObj.ledgerName == 0 || glAccountObj.glAccountTypeId == 0 || glAccountObj.gLClassFlowClassificationId == 0 " (click)="saveglaccount()"
+                            *ngIf="saveUpdateBtn == null">Save</button>
+
+                        <button type="submit" class="btn btn-primary pull-right"
+                         [disabled]="!accountListCreateForm.valid || disableSave ||  glAccountObj.ledgerName == 0 || glAccountObj.glAccountTypeId == 0 || glAccountObj.gLClassFlowClassificationId == 0 "
+
+                         *ngIf="saveUpdateBtn != null" (click)="saveglaccount()">Update</button>
+                      
+                         <button type="button" class="btn btn-danger pull-right submit-btn"
+                         (click)="closeClick()">Close</button>
+                      
+                         <div class="clear"></div>
+                      
+                    </div>
+                   
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div>
+            </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+        </div>
+    </div>
+</div>

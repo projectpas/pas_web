@@ -1,0 +1,106 @@
+button {
+  border-radius: 5px;
+}
+p-table tr th {
+  text-align: left !important;
+}
+
+button:disabled {
+  opacity: 0.5;
+}
+
+.footer-t-rec {
+  margin-left: 65%;
+}
+.footer--count {
+  margin-right: 0px;
+}
+
+.ui-table-scrollable-header-box {
+  margin-right: 17px !important;
+}
+
+.zui-table {
+  border: none;
+  border-right: solid 1px #DDEFEF;
+  border-collapse: separate;
+  border-spacing: 0;
+  font: normal 13px Arial, sans-serif;
+}
+.zui-table tr th {
+  background-color: #DDEFEF;
+  border: none;
+  color: #336B6B;
+  width:100px;
+  padding: 10px;
+  text-align: left;
+  text-shadow: 1px 1px 1px #fff;
+  white-space: nowrap;
+}
+.zui-table tr td {
+  border-bottom: solid 1px #DDEFEF;
+  width:100px;
+  color: #333;
+  padding: 10px;
+  text-shadow: 1px 1px 1px #fff;
+  white-space: nowrap;
+}
+.zui-wrapper {
+  position: relative;
+}
+.zui-scroller {
+  overflow-y: hidden;
+    padding-bottom: 5px;
+    width: 1279px;
+    border: 1px solid rgba(0,0,0,.125);
+}
+.zui-table .zui-sticky-col {
+  border-left: solid 1px #DDEFEF;
+  border-right: solid 1px #DDEFEF;
+  left: 0;
+  position: absolute;
+  top: auto;
+  width: 120px;
+}
+
+.ui-table-scrollable-body {
+  margin-right: 17px !important;
+}
+///// this code below is for width of the scroll bar
+::-webkit-scrollbar {
+  width: 10px;
+}
+.ui-table-scrollable-header {
+  overflow-y: scroll;
+}
+.alternate-part-label{
+  color: #ff5663 !important;
+}
+.row-bg1 {
+  background-color: #ffe4e2 !important;
+}
+.sales-quote-part-search-data tr td:first-child {
+   background: #4298ff;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+.sales-quote-part-search-data tr td:last-child {
+  background: #FFF;
+  position: -webkit-sticky;
+  position: sticky ;
+  right: 0;
+}
+.sales-quote-part-search-data tr th:first-child {
+   background: #4298ff;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+.sales-quote-part-search-data tr th:last-child {
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+}

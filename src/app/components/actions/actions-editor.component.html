@@ -1,0 +1,49 @@
+﻿<div [@fadeInOut] class="page-content" >
+ 
+        <form [formGroup]="employeeForm" [fxLayoutGap]="'1em'" autocomplete="off" (ngSubmit)="save()" #formDir="ngForm" novalidate>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+                <mat-form-field  fxFlex>
+                    <mat-label>Action Name</mat-label>
+                    <input matInput formControlName="name" />
+
+                    <mat-error *ngIf="name.hasError('required')">
+                        Action Name is required
+                    </mat-error>
+                </mat-form-field>
+
+
+            </div>
+
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+
+                <mat-form-field>
+                    <mat-label>Gender</mat-label>
+
+                    <mat-select placeholder="Select" class="form-control" data-val="true" formControlName="gender">
+                        <mat-option value="">-- Select Gender --</mat-option>
+                        <mat-option value="Male">Male</mat-option>
+                        <mat-option value="Female">Female</mat-option>
+                    </mat-select>
+
+                    <mat-error *ngIf="gender.hasError('required')">
+                        Gender required
+                    </mat-error>
+                </mat-form-field>
+
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="1em">
+
+                <div>
+                    <button mat-button   color="accent">Save</button>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+
+
+

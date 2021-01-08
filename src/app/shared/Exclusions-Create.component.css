@@ -1,0 +1,16 @@
+select {
+    background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
+}
+.workflow-table-exclusion tr th:first-child {
+    padding: 0 10px !important;
+}
+.cat-heading {
+    position: absolute;
+    width: 100%;
+}
+.workflow-table-exclusion {
+    margin-top: 30px !important;
+}
+.ci_cls{
+    margin-top: 6px;
+}

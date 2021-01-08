@@ -1,0 +1,307 @@
+﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div class="card new-card">
+  <div class="card-header bg-primary">
+    <div class="row">
+      <div class="col">
+          <h4 class="new-card-heading">
+              {{ editMode ? 'Edit' : 'Create' }} Customer</h4>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="btn-sm new-btn-primary"
+          [routerLink]="['/customersmodule/customerpages/app-customers-list']"
+        >
+          Customers List
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body new-card-body">
+      <!-- <button *ngIf="activeMenuItem === 7" (click)="expandShipping = !expandShipping">{{expandShipping ? 'Collapse' : 'Expand'}}</button> -->
+    <div>
+      <div class="md-stepper-horizontal orange new-stepper-align">
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 1,
+            editable: activeMenuItem === 1
+          }"
+          [class.isDisabled]="!isDisabledSteps"
+          (click)="changeOfTab('General')"
+        >
+          <div class="md-step-circle"><span>1</span></div>
+          <div class="md-step-title">General Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 2,
+            editable: activeMenuItem === 2
+          }"
+          (click)="changeOfTab('Contacts')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>2</span></div>
+          <div class="md-step-title">Contacts</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 3,
+            editable: activeMenuItem === 3
+          }"
+          (click)="changeOfTab('AircraftInfo')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>3</span></div>
+          <div class="md-step-title">Aircraft Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 4,
+            editable: activeMenuItem === 4
+          }"
+          (click)="changeOfTab('Atachapter')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>4</span></div>
+          <div class="md-step-title">ATA Chapter</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 5,
+            editable: activeMenuItem === 5
+          }"
+          (click)="changeOfTab('Financial')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>5</span></div>
+          <div class="md-step-title">Financial Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 6,
+            editable: activeMenuItem === 6
+          }"
+          (click)="changeOfTab('Billing')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>6</span></div>
+          <div class="md-step-title">Billing Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 7,
+            editable: activeMenuItem === 7
+          }"
+          (click)="changeOfTab('Shipping')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>7</span></div>
+          <div class="md-step-title">Shipping Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 8,
+            editable: activeMenuItem === 8
+          }"
+          (click)="changeOfTab('Sales')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>8</span></div>
+          <div class="md-step-title">Sales Person Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 9,
+            editable: activeMenuItem === 9
+          }"
+          (click)="changeOfTab('Warnings')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>9</span></div>
+          <div class="md-step-title">
+            Warnings
+            <div class="md-step-bar-right"></div>
+          </div>
+        </div>
+        <div
+          class="md-step"
+          [ngClass]="{
+            active: activeMenuItem >= 10,
+            editable: activeMenuItem === 10
+          }"
+          (click)="changeOfTab('Documents')"
+          [class.isDisabled]="!isDisabledSteps"
+        >
+          <div class="md-step-circle"><span>10</span></div>
+          <div class="md-step-title">
+            Documents
+            <div class="md-step-bar-right"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div [ngClass]="{ hideTab: currentTab !== 'General' }">
+          <div *ngIf="countryListOriginal">
+            <app-customer-general-information
+              [editMode]="editMode"
+              [editCustomerId]="customerId"
+              [countryListOriginal]="countryListOriginal"
+              (saveGeneralInformationData)="generalInformationData($event)"
+              (editGeneralInformation)="updateInformationData($event)"
+              (tab)="changeOfTab($event)"
+            ></app-customer-general-information>
+          </div>
+          <!-- <ng-template #loader>
+            [customerListOriginal]="customerListOriginal" && customerallListOriginal
+            [customerallListOriginal]="customerallListOriginal"
+            <div class="loader-css">
+              <img src="../../../assets/images/loader.gif" />
+            </div>
+          </ng-template> -->
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Contacts' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-contacts
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              (saveCustomerContactATAMapped)="saveCustomerContactATAMapped($event)"
+              (refreshCustomerATAByCustomerId)="getMappedATAByCustomerId($event)"
+              (refreshCustomerATAMapped)="getMappedATAByCustomerId($event)"
+              (refreshCustomerContactMapped)="getMappedContactByCustomerId($event)"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"  
+            ></app-customer-contacts>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'AircraftInfo' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-aircraft
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"  
+            ></app-customer-aircraft>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Atachapter' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-ata
+              [editMode]="editMode"
+              [search_ataChapterList]="search_ataChapterList"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              [ataListDataValues]="ataListDataValues"
+              (refreshCustomerATAMapped)="getMappedATAByCustomerId($event)"
+              [contactList]="contactList"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"  
+            ></app-customer-ata>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Financial' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-financial-information
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"              
+            >
+            <!-- [creditTermsListOriginal]="creditTermsListOriginal" -->
+            </app-customer-financial-information>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Billing' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-billing-information
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [countryListOriginal]="countryListOriginal"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"
+            ></app-customer-billing-information>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Shipping' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-shipping-information
+              [editMode]="editMode"
+              [collapsed]="expandShipping"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [countryListOriginal]="countryListOriginal"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"
+            ></app-customer-shipping-information>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Sales' }">
+          <div
+            *ngIf="savedGeneralInformationData || editGeneralInformationData"
+          >
+            <app-customer-sales-person
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData"              
+              [jobTitles]="jobTitles"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"
+            ></app-customer-sales-person>
+            <!-- [employeeListOriginal]="employeeListOriginal" -->
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Warnings' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-warnings
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"
+            ></app-customer-warnings>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Documents' }">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-customer-documents
+              [editMode]="editMode"
+              [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              (tab)="changeOfTab($event)"
+              [selectedCustomerTab]="currentTab"
+            ></app-customer-documents>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- <img src="../../../assets/images/loader.gif" /> -->

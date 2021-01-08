@@ -1,0 +1,313 @@
+<form #createROForm="ngForm">
+	<div class="x_content">
+			<!-- <div class="card">
+				<div class="card-header">
+					<div class="pull-left">
+						<h4 class="po-head m-0">
+                            {{isEdit ? 'Edit' : 'New'}} Deal</h4>
+					</div>
+				
+				
+				</div>
+				<div class="card-body"> -->
+                    <div class="card new-card">
+                        <div class="card-header bg-primary">
+                          <div class="row">
+                            <div class="col">
+                              <h4 class="new-card-heading">
+                                {{isEdit ? 'Edit' : 'Create'}} Deal</h4>
+                            </div>
+                            <div>
+                              <button
+                                type="button"
+                                class="btn-sm new-btn-primary"
+                                [routerLink]="['/customersmodule/customerpages/app-deals-list']"
+                              >
+                                Deal List
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-body new-card-body">
+					<div class="form-row">
+						
+						<div class="col-md-3">
+							<div class="form-group">
+                                <label class="control-label col-md-4">Account Name</label>
+                                
+								<div class="inner-addon right-addon inline-block">
+                                  <p-autoComplete
+                                  class="pautocomp-cstm" (onKeyUp)= "checkCustomerNameExist($event.target.value)"
+                                  [(ngModel)]="dealInfo.name" name="customerName" 
+                                  id="customerName" title="Account Name" [suggestions]="customerNames" 
+                                  (completeMethod)="filterCustomerNames($event)" field="name"
+                                 [size]="30" [minLength]="1" [dropdown]="true" (onChange)="checkCustomerNameExist($event.target.value)"
+                                 (onSelect)="selectedCustomerName()"
+                                  errorMessage="Records not found" [forceSelection]="true" #shipVendorName="ngModel"
+                                  >
+                                 </p-autoComplete>
+
+									
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-7">Primary Sales Person</label>
+                               
+								<div class="inner-addon right-addon inline-block">
+                                    <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px"
+                                    name="primarySalesPersonFirstName"
+                                    [(ngModel)]="dealInfo.primarySalesPersonId"                                  
+                                    [forceSelection]="true"
+                                    emptyMessage="No Match Found"
+                                    field="name"                           
+                                    [size]="30"
+                                    [minLength]="1"
+                                    [dropdown]="true">
+                                       
+                                    </p-autoComplete>
+                                
+                                    
+
+                                </div>
+                               
+							</div>
+
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+                                <label class="control-label col-md-4">Account Type</label>
+                                <select [(ngModel)]="dealInfo.customerId" name="customerId" required>
+                                <option *ngFor="let CustomerType of customertypes"
+                                 [ngValue]="CustomerType.customerId">{{ CustomerType.description }}</option>
+                               </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+							<div class="form-group">
+                                <label class="control-label col-md-4">Classification</label>
+                                
+                                <input class="form-control" type="text" name="Classification">
+                            
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+							<div class="form-group">
+                                <label class="control-label col-md-7">Account Contact</label>
+                               
+								<div class="inner-addon right-addon inline-block">
+									<p-autoComplete field="accountContact" name="accountContact" [size]="30" [minLength]="1" [dropdown]="true" 
+                                    errorMessage="Records not found" [forceSelection]="true" required>
+									</p-autoComplete>
+									
+								</div>
+                              </div>
+                        </div>
+					</div>
+					<hr/>
+					
+					<div class="form-row">
+						<div class="col-md-3">	
+                            
+                          
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Deal Num</label>
+                                    <input class="form-control" type="number" id="dealNumber" name="dealNumber"
+                                      [(ngModel)]="dealInfo.dealNumber">
+                               
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Deal Name</label>
+                                   
+                                    <div class="inner-addon right-addon inline-block">
+                                        <p-autoComplete class="pautocomp-cstm" name="dealName"
+                                        [(ngModel)]="dealInfo.dealName"
+                                        [suggestions]="dealNames" field="name" 
+                                        (completeMethod)="filterDealNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                        required>
+                                      </p-autoComplete>
+                                    </div>
+                                   
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Deal Owner </label>
+                                    
+                                    <input class="form-control" type="number" id="dealOwnerId" name="dealOwnerId"
+                                    [(ngModel)]="dealInfo.dealOwnerId">
+                               
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">Deal Source </label>
+                                   
+                                    <input class="form-control" type="text" id="dealSource" name="dealSource"
+                                    [(ngModel)]="dealInfo.dealSource">
+                               
+                                </div>
+                           
+							<div class="form-group">
+                                <label class="control-label">Open Date</label>
+                                    
+                                <p-calendar class="pas-clder"
+                                 [showIcon]="true" formControlName="openDate" [(ngModel)]="dealInfo.openDate" required></p-calendar>
+								
+							</div>
+						
+						</div>
+						<div class="col-md-3">								
+							<div class="form-group">
+                                <label class="control-label">Closing Date </label>
+
+                                 <p-calendar class="pas-clder"
+                                 [showIcon]="true" formControlName="openDate" [(ngModel)]="dealInfo.closingDate" required></p-calendar>
+
+								
+							</div>
+                            <div class="form-group">
+                                <label class="control-label col-md-7">Expected Revenue </label>
+                               
+                                <input class="form-control" type="number" id="expectedRevenue" name="expectedRevenue"
+                                 [(ngModel)]="dealInfo.expectedRevenue">
+                            
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Competitors</label>
+                               
+                                <input class="form-control" type="text" id="expectedRevenue" name="competitors"
+                               [(ngModel)]="dealInfo.competitors">
+                                
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Probability</label>
+                                
+                                <input class="form-control" type="number" id="probability" name="probability"
+                                  [(ngModel)]="dealInfo.probability">
+                                 
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Deal Satge </label>
+                               
+                                <input class="form-control" type="number" id="dealStageId" name="dealStage"
+                                 [(ngModel)]="dealInfo.dealStageId">
+                            		
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="clear"></div>
+                            <h4>Deal Outcome</h4>
+                            <div class="form-group col-md-12">
+                              <div class="col-md-4">
+                              <label class="text-left">
+                              <input type="radio" name="item-category" value="won" id="won" checked="checked">
+                              Won</label> &nbsp; 
+                            
+                            </div>
+                            <div class="deal-won">
+                                <div class="col-md-4">
+                                  <div class="inner-addon right-addon inline-block"> 
+                                    <input class="form-control" type="number" id="outCome" name="outCome"
+                                    [(ngModel)]="dealInfo.outCome">
+                                    </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                    <textarea class="form-control"></textarea>
+                                    </div>
+                                   </div>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                    <div class="col-md-4"> 
+                                  <label class="text-left">
+                                    <input type="radio" name="item-category" value="loss" id="loss">
+                                    Loss</label>
+                                  </div>
+                                  <div class="deal-loss">
+                                    <div class="col-sm-4">
+                                        <select [(ngModel)]="dealInfo.dealLossReasonId" name="dealLossReasonId" required>
+                                            <option *ngFor="let dealLossReasonId of dealLossReasonIds"
+                                             [ngValue]="dealInfo.dealInfo">{{ CustomerType.description }}</option>
+                                           </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                       <textarea class="form-control"></textarea>
+                                       </div>
+                                    </div>
+                                   
+                                  </div>
+                                  <div class="col-sm-12 mtop20">
+                                    <label>Memo </label>
+                                  <textarea class="form-control mw400"></textarea>
+                                  </div>
+                                  
+                                  </div>
+                                  
+                                
+                                  <div class="clear"></div>
+					</div>   
+					<div>
+						<button class="btn btn-primary pull-right" (click)="saveDeal()" style="margin-top: 10px;" >{{isEdit ? 'Update' : 'Save'}}</button>
+					</div>               
+				</div>
+            </div>
+            
+            <div class="ntae-section">
+                <div class="clear"></div>
+                <div class="card" style="margin: 5px">
+                    <div class="md-stepper-horizontal orange">
+                        <div class="md-step"
+                            [ngClass]="{ active: activeNTAEMenuItem >= 1 , editable : activeNTAEMenuItem === 1}"
+                            (click)="changeOfNTAETab('Activities')">
+                            <div class="md-step-title">Activities</div>
+                            <div class="md-step-bar-left"></div>
+                            <div class="md-step-bar-right"></div>
+                        </div>
+                        <div class="md-step"
+                            [ngClass]="{ active: activeNTAEMenuItem >= 2, editable : activeNTAEMenuItem === 2 }"
+                            (click)="changeOfNTAETab('Notes')"
+                            [class.isDisabled]="!isNTAEDisabledSteps">
+                            <div class="md-step-title">Notes</div>
+                            <div class="md-step-bar-left"></div>
+                            <div class="md-step-bar-right"></div>
+                        </div>
+                        <div class="md-step"
+                            [ngClass]="{ active: activeNTAEMenuItem >= 3 , editable : activeNTAEMenuItem === 3 }"
+                            (click)="changeOfNTAETab('Follow Ups')"
+                            [class.isDisabled]="!isNTAEDisabledSteps">
+                            <div class="md-step-title">Follow Ups</div>
+                            <div class="md-step-bar-left"></div>
+                            <div class="md-step-bar-right"></div>
+                        </div>
+
+                    </div>
+                    <div *ngIf="currentNTAETab != ''">
+                        <div style="padding: 5px;">
+                            <app-deal-alternate [selectedTab]="currentNTAETab" (triggeNTAETab)="changeOfNTAETab('Activities')" 
+                            [itemMasterId]="ItemMasterId" [partData]="sourceItemMaster"></app-deal-alternate>                        
+                        </div>
+                    </div>
+                </div>
+           
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <button class="btn btn-primary pull-right"  type="button">Next</button> &nbsp;
+                    <button class="btn btn-primary pull-right" type="button" >Previous</button>
+                </div>
+
+
+            </div>
+	</div>
+</form>
+
+
+
+	
+	
+	
+		
+	
+		
+		
+	   
+
+
+		
+		

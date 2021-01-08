@@ -1,0 +1,1422 @@
+﻿<form #generalForm="ngForm" method="post" class="form-horizontal add-custustomer">
+    <div class="form-row">
+        <div class="form-group">
+            <div class="form-group col-sm-12 vendor-details-heading" *ngIf="showalert">
+                <p class="fs10">
+                    Please Enter Mandatory Fields
+                </p>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+
+                <div class="card-header bg-primary new-card-header" >
+                    <div class="row">
+                      <div class="col">
+                        <h4 class="new-card-heading"> Vendor General Info</h4>
+                      </div>
+                    </div>
+                  </div>
+                <div class="card-body">
+                    <div class="clear"></div>
+                    <div class="clear"></div>
+                    <div class="col-md-12">
+                        <p-radioButton name="groupname" value="2" label="External" (ngModelChange)="enableSave()" 
+                                       class="p-radiobutton-label-horizontal p-radiobutton-cstm" [(ngModel)]="sourceVendor.vendorTypeId">
+                        </p-radioButton>
+                        <p-radioButton name="groupname" value="1" label="Internal" (ngModelChange)="enableSave()" 
+                                       class="p-radiobutton-label-horizontal p-radiobutton-cstm" [(ngModel)]="sourceVendor.vendorTypeId">
+                        </p-radioButton>
+                        <p-radioButton name="groupname" value="3" label="Affiliate" (ngModelChange)="enableSave()" 
+                                       class="p-radiobutton-label-horizontal p-radiobutton-cstm" [(ngModel)]="sourceVendor.vendorTypeId">
+                        </p-radioButton>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="vendorname">
+                                        Vendor Name 
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <p-autoComplete 
+                                        field="vendorName" 
+                                        class="pautocomp-cstm"                             
+                                        (onSelect)="onVendorselected($event)" 
+                                        (onKeyUp)="checkVendorExists('vendorName', $event.target.value)" 
+                                        [(ngModel)]="sourceVendor.vendorName" 
+                                        name="vendorName" 
+                                        [suggestions]="vendorNames"
+                                        (completeMethod)="filterVendorNames($event)" [size]="30" [minLength]="1" 
+                                        (ngModelChange)="enableSave()"
+                                        [dropdown]="true" required>
+                                    </p-autoComplete>
+                                    <div *ngIf="disableSaveVenderName" class="clr-red">
+                                        Already Exists
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="vendorname">
+                                        Code
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input #sourceVendorcode="ngModel" class="form-control" type="text" name="vendorCodeTemp" [(ngModel)]="vendorCodeTemp" disabled>
+                                </div>
+
+                                <div class="form-group ">
+                                    <label for="customerref">
+                                        D/B/A
+                                    </label>
+                                    <input type="text" class="form-control" name="doingBusinessAsName" (ngModelChange)="enableSave()"
+                                           [(ngModel)]="sourceVendor.doingBusinessAsName" />
+                                </div>
+
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <div class="checkbox-cstm">
+                                        <label>
+                                            <input type="checkbox" id="cparent" name="parent" (click)="onClearParent()" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.parent" [disabled]="!sourceVendor.vendorName" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Parent  <span class="clr-red" *ngIf="sourceVendor.parent">*</span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <p style="margin-bottom: 8px;" *ngIf="!sourceVendor.parent"></p>
+                                <div class="form-group" *ngIf="sourceVendor.parent">
+                                    <p-autoComplete 
+                                            field="vendorName" 
+                                            class="pautocomp-cstm" 
+                                            [forceSelection]="true"
+                                            [(ngModel)]="sourceVendor.vendorParentId"
+                                            name="vendorParentName" 
+                                            [suggestions]="vendorParentNames"
+                                            (completeMethod)="filterVendorParentNames($event)" 
+                                            (onSelect)="selectedParentName($event)"
+                                            (onKeyUp)="checkWithName($event.target.value)" 
+                                            (onChange)="checkWithName($event.target.value)"
+                                            [size]="30" [minLength]="1" [dropdown]="true" 
+                                            (ngModelChange)="enableSave()"
+                                            (onClear)="onClearParent()" required>
+                                    </p-autoComplete>
+
+                                    <div *ngIf="disableSaveParentName" style="color:red;font-size: 13px;">
+                                        Parent name can't be same as customer name
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <table>
+                                        <tr>
+                                            <td style="width: 65%; margin-right: 10px !important;">
+                                                <label for="vendorname">
+                                                    Phone
+                                                    <span class="clr-red">*</span>
+                                                </label>
+                                            </td>
+                                            <td style="width: 35%;">
+                                                <label for="vendorname">
+                                                    Ext              
+                                                    <span class="clr-red"></span>                                      
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input class="form-control" type="text" minlength="6" maxlength="14" style="width: 98%;" [pattern]="phonePattern" #vendorPhone="ngModel" 
+                                                   (keypress)="patternMobilevalidationWithSpl($event)" (ngModelChange)="enableSave()" name="vendorPhone" (keyup)="checkVendorExists('vendorPhone', $event.target.value)"
+                                                   [(ngModel)]="sourceVendor.vendorPhone" required />
+                                            </td>
+                                            <td>
+                                                <input type="text" pKeyFilter="pint" name="phoneExt" pInputText maxlength="14" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.vendorPhoneExt"  [disabled]="sourceVendor.vendorPhone == '' || sourceVendor.vendorPhone == undefined "/>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="vendorPhone.errors">
+                                            <td style="width: 65%; margin-right: 10px !important;">
+                                                <div *ngIf="vendorPhone.errors" [ngClass]="'error'">
+                                                    <div *ngIf="vendorPhone.errors.pattern">
+                                                      <span style="color: red;">Please enter atleast 6 digits</span>
+                                                    </div>
+                                                  </div>
+                                            </td>
+                                            <td style="width: 35%;">                                               
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="disableSaveVendorPhone">
+                                            <td colspan="2">
+                                                <div class="clr-red">
+                                                    Already Exists
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="form-group mt-2">
+                                    <label for="vendorname">
+                                        Email
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="email" email name="vendorEmailId" #vendorEmail="ngModel" (keyup)="checkVendorExists('vendorEmail', $event.target.value)"
+                                           [pattern]="emailPattern" [(ngModel)]="sourceVendor.vendorEmail" (ngModelChange)="enableSave()" required />
+                                    <div *ngIf="vendorEmail.errors" [ngClass]="'error'">
+                                        <div *ngIf="vendorEmail.errors.pattern">
+                                            <span style="color:red">User Email not valid</span>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="disableSaveVendorEmail" class="clr-red">
+                                        Already Exists
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vendorname">
+                                        URL to Vendor site
+                                    </label>
+                                    <input class="form-control" type="text" [pattern]="urlPattern"
+                                           [ngModelOptions]="{ standalone: true }" [(ngModel)]="sourceVendor.vendorURL" #url="ngModel" (ngModelChange)="enableSave()"
+                                           (input)="convertUrlToLowerCase($event)" />
+                                    <div *ngIf="url.errors" [ngClass]="'error'">
+                                        <div *ngIf="url.errors.pattern">
+                                            <span style="color:red">URL not valid</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="address1">
+                                        Address Line 1
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="vmaddress1" name="address1" (ngModelChange)="enableSave()"
+                                           [(ngModel)]="sourceVendor.address1" required />
+                                </div>
+                                <div class="form-group">
+                                    <label for="address2">
+                                        Address Line 2
+                                    </label>
+                                    <input class="form-control" type="text" id="vmaddress2" name="address2" (ngModelChange)="enableSave()"
+                                           [(ngModel)]="sourceVendor.address2" />
+                                </div>
+
+                                <div class="form-group" style="display:none">
+                                    <label for="address3">
+                                        Address Line 3
+                                    </label>
+                                    <input class="form-control" type="text" id="vmaddress3" name="address3" (ngModelChange)="enableSave()"
+                                           [(ngModel)]="sourceVendor.address3" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="city">
+                                        City
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="vmcity" name="vmcity" [(ngModel)]="sourceVendor.city" (ngModelChange)="enableSave()"
+                                           required />
+                                </div>
+                                <div class="form-group">
+                                    Primary State/Province
+                                    <label for="state">
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" type="text" id="vmstate" name="vmstate" (ngModelChange)="enableSave()"
+                                           [(ngModel)]="sourceVendor.stateOrProvince" required />
+                                </div>
+
+                                <div class="form-group">
+                                    Postal
+                                    <label for="postal">
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <input class="form-control" pKeyFilter="pint" type="text" id="vmpostal" name="vmpostal" (ngModelChange)="enableSave()"
+                                           [(ngModel)]="sourceVendor.postalCode" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="vendorname">
+                                        Country
+                                        <span class="clr-red">*</span>
+                                    </label>
+                                    <p-autoComplete field="nice_name" class="pautocomp-cstm" (onSelect)="onCountrieselected($event)" (ngModelChange)="enableSave()"
+                                                    (onKeyUp)="eventCountryHandler($event)" [(ngModel)]="sourceVendor.countryId" name="country"
+                                                    [forceSelection]="true" [suggestions]="countrycollection" (completeMethod)="filtercountry($event)"
+                                                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                                        
+                                    </p-autoComplete>
+                                    <div *ngIf="disablesave" class="clr-red">
+                                        Please Select From List
+                                    </div>
+                                </div>
+
+                                <div class="form-group" style="margin-top: 15px;">
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label>
+                                            <input type="checkbox" name="isAddressForBilling" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.isAddressForBilling" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Is this Address For Billing
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="margin-top: 10px;">
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label>
+                                            <input type="checkbox" name="isAddressForShipping" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.isAddressForShipping" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Is this Address For Shipping
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" style="width: 100%; margin-top: 10px;">
+                                    <div class="checkbox-cstm">
+                                        <label>
+                                            <input type="checkbox" style="margin-top: 1px;" (ngModelChange)="enableSave()"
+                                                   [disabled]="sourceVendor.isVendorAlsoCustomer && vendorService.isEditMode"
+                                                   [ngModelOptions]="{ standalone: true }" [(ngModel)]="sourceVendor.isVendorAlsoCustomer" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Is this Vendor also a Customer?
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group" *ngIf="sourceVendor.isVendorAlsoCustomer" style="width: 100%;">
+                                    <div class="checkbox-cstm">
+                                        <label>
+                                            <input type="checkbox" style="margin-top: 1px;" [ngModelOptions]="{ standalone: true }" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.isAllowNettingAPAR" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Allow Netting of AP/AR
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="Vendor Classification">
+                                                Vendor Classification <span class="clr-red">*</span>
+                                            </label>
+                                            <p-multiSelect [options]="allvendorclassificationInfo" [resetFilterOnHide]="true" [ngStyle] = "{'border': '1px solid red'}"
+                                                           [(ngModel)]="sourceVendor.vendorClassificationIds" name="vendorClassificationIds" (ngModelChange)="enableSave()" required>
+                                            </p-multiSelect>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="vendorname">
+                                                Contract Ref
+                                            </label>
+                                            <input class="form-control" type="text" name="vendorContractReference" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.vendorContractReference" />
+                                        </div>
+
+                                        <div class="form-group" style="margin-top: 15px; margin-bottom: 8px;">
+                                            <div class="checkbox-cstm">
+                                                <label>
+                                                    <input type="checkbox" name="isPreferredVendor" [(ngModel)]="sourceVendor.isPreferredVendor"
+                                                    (ngModelChange)="enableSave()" checked="" />
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Preferred Vendor
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>
+                                                <span class="pull-left">Integration With</span>
+                                            </label>
+
+                                            <p-multiSelect [options]="integrationOriginalList" [(ngModel)]="sourceVendor.integrationPortalIds" (ngModelChange)="enableSave()"
+                                                           name="integrationPortalIds" defaultLabel="Choose Columns">
+                                            </p-multiSelect>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="licenseNumber">
+                                                License
+                                            </label>
+                                            <input class="form-control" type="text" name="licenseNumber" (ngModelChange)="enableSave()"
+                                                   [(ngModel)]="sourceVendor.licenseNumber" />
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <div class="form-group" style="width: 100%; margin-top: 15px;">
+                                            <div class="checkbox-cstm">
+                                                <label style="margin-right: 5px;">
+                                                    <input type="checkbox" [ngModelOptions]="{ standalone: true }" (ngModelChange)="enableSave()"
+                                                           [(ngModel)]="sourceVendor.isCertified" class="certified-checkbox" />
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Certified 
+                                                </label>
+                                                <i class="fa fa-eye ml-1" matTooltip="View Attachments" matTooltipPosition="above"  *ngIf="sourceVendor.isCertified == true && sourceViewforDocumentList.length > 0" (ngModelChange)="enableSave()" (click)="viewIsCertifiedModal(isCertifiedAttachmentsModal)"></i>
+                                                <i class="fa fa-plus-circle fa-lg" matTooltip="Add Attachments" matTooltipPosition="above"  *ngIf="sourceVendor.isCertified == true && sourceViewforDocumentList.length == 0" (ngModelChange)="enableSave()" (click)="viewIsCertifiedModal(isCertifiedAttachmentsModal)"></i>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group" style="width: 100%;">
+                                            <div class="checkbox-cstm">
+                                                <label style="margin-right: 5px;">
+                                                    <input type="checkbox" [ngModelOptions]="{ standalone: true }" (ngModelChange)="enableSave()"
+                                                           [(ngModel)]="sourceVendor.vendorAudit" class="audit-checkbox" />
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Vendor Audit
+                                                </label> 
+                                                    <i class="fa fa-eye  ml-1" matTooltip="View Attachments" matTooltipPosition="above" *ngIf="sourceVendor.vendorAudit == true && sourceViewforDocumentListAudit.length > 0" (ngModelChange)="enableSave()" (click)="viewVendorAuditModal(vendorAuditAttachmentsModal)"></i>
+                                                    <i class="fa fa-plus-circle fa-lg" matTooltip="Add Attachments" matTooltipPosition="above" *ngIf="sourceVendor.vendorAudit == true && sourceViewforDocumentListAudit.length == 0" (ngModelChange)="enableSave()" (click)="viewVendorAuditModal(vendorAuditAttachmentsModal)"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="padding-bottom: 7px;">
+                        <button type="button" *ngIf="isvendorEditMode" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')" [disabled]="!allowNextView">Next</button>
+                        <button *ngIf ="!enableUpdate" type="button" class="btn btn-primary pull-right " (click)="saveConformation('goNext')"
+                                [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail || disableSaveVendorCountry">
+                            Save
+                        </button>
+                        <button *ngIf ="enableUpdate" type="button" class="btn btn-primary pull-right " (click)="saveConformation('goNext')"
+                                [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail || disableSaveVendorCountry || disableSaveForEdit">
+                            Update
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title" *ngIf="isEditMode">Edit Vendor Classification</h4>
+        <h4 class="modal-title" *ngIf="!isEditMode">Add Vendor Classification</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <!-- <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveVendorClassificationDetails()"> -->
+        <form #userForm="ngForm" class="form-horizontal" >
+            <div class="form-group  input-icon1">
+                <label for="classificationName" class="control-label">
+                    Classification Name <span class="clr-red">*</span>
+                </label>
+                <div class="col-sm-6">
+                    <div class="inner-addon right-addon inline-block">
+                        <p-autoComplete class="pautocomp-cstm" (onSelect)="onClassificationelected($event)"
+                                        (onKeyUp)="eventClassificationHandler($event)" [(ngModel)]="vendorClassName"
+                                        [ngModelOptions]="{ standalone: true }" [suggestions]="vendorCollection"
+                                        (completeMethod)="filterVendors($event)" [size]="30" [minLength]="1" [dropdown]="true">
+                            <ng-template let-vendorName pTemplate="item">
+                                <div class="ui-helper-clearfix">{{ vendorName }}</div>
+                            </ng-template>
+                        </p-autoComplete>
+                        <div *ngIf="disablesaveForClassification" style="color:red">
+                            Already Exist
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="form-group" style="margin-top: 10px;">
+                <label class="control-label">Memo</label>
+                <div class="inner-addon col-sm-6 right-addon inline-block">
+                    <textarea class="form-control" #memo="ngModel" id="memo" name="memo"
+                              [(ngModel)]="sourceAction.memo"></textarea>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <span class="checkbox-cstm">
+                        <label>
+                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive"
+                                   [(ngModel)]="sourceAction.isActive" />
+                            <span class="cr"><i class="cr-icon pi pi-check"></i></span> Active
+                        </label>
+                    </span>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" [disabled]="disablesaveForClassification">
+                    Save
+                </button>
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">
+                    Close
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px"
+          maximizedTop="140px" [width]="350" [minWidth]="200" [responsive]="true" [minY]="1050" [baseZIndex]="1100000">
+    <h5 [ngStyle]="{ color: 'red' }">
+        Please Enter (*) Mandatory Fields
+    </h5>
+</p-dialog>
+
+<div id="addIntergation" class="modal fade" role="dialog" data-backdrop="static">
+    <form #addIntergation="ngForm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Add Intergation</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label">Intergation <span class="clr-red">*</span></label>
+                        <div class="col-md-6">
+                            <div class="inner-addon right-addon inline-block">
+                                <p-autoComplete class="p-dropdown-custom-2 p-dropdown-custom-gen autocomp-customer-cstm" name="url"
+                                                [(ngModel)]="addNewIntergation.portalURL"
+                                                (onKeyUp)="checkIntergationExists('field', $event.target.value)" (onSelect)="selectedWebSite()"
+                                                [suggestions]="integrationList" field="label" (completeMethod)="filterIntegrations($event)"
+                                                [size]="30" [minLength]="1" [dropdown]="true" required>
+                                </p-autoComplete>
+                                <div *ngIf="isIntegrationAlreadyExists" class="clr-red">
+                                    Entry Already Exists
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-top: 30px;">
+                        <label class="control-label">WebSite url <span class="clr-red">*</span></label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" [(ngModel)]="addNewIntergation.description" name="description"
+                                   [pattern]="urlPattern" #urlIntegration="ngModel" (input)="convertUrlToLowerCase($event)" required />
+                            <div *ngIf="urlIntegration.errors" [ngClass]="'error'">
+                                <div *ngIf="urlIntegration.errors.pattern">
+                                    <span style="color:red">URL not valid</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 60px;">
+                        <label class="control-label">Memo</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" [(ngModel)]="addNewIntergation.memo" name="memo" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <span class="checkbox-cstm">
+                                <label style="margin-top: 12px;" class="form-check-label">
+                                    <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" id="isActive"
+                                           [(ngModel)]="addNewIntergation.isActive" />
+                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                    Active
+                                </label>
+                            </span>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="newIntegrationAdd()"
+                            [disabled]="!addIntergation.valid || isIntegrationAlreadyExists">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="isAlsoaCustomer" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmation </h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you want to create the customer now?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="isCustomerAlsoaVendor('Yes','goNext')" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-danger" (click)="isCustomerAlsoaVendor('No','goNext')" data-dismiss="modal">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade"
+     id="addDocumentDetailsNew" style="z-index: 1070 !important;"
+     role="dialog"
+     data-keyboard="false"
+     data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        (click)="closeMyModel('#addDocumentDetailsNew')">
+                    &times;
+                </button>
+                <h4 class="modal-title">Add Document Details</h4>
+            </div>
+            <form #addDocumentForm="ngForm" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Name <span class="clr-red">*</span></label>
+                                <input class="form-control"
+                                       type="text"
+                                       name="name"
+                                       (ngModelChange)="enableSaveDocument()"
+                                       [(ngModel)]="documentInformation.docName"
+                                       required />
+                            </div>
+                            <div class="form-group">
+                                <label>Description </label>
+                                <textarea class="form-control"
+                                          name="description"
+                                          (ngModelChange)="enableSaveDocument()"
+                                          [(ngModel)]="documentInformation.docDescription"
+                                          ></textarea>
+                            </div>
+                            <div class="form-group memo-popup-cstm">
+                                <span class="label">Memo </span>
+                                <div class="col-sm-11">
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <div name="memo" [innerHTML]="documentInformation.docMemo"
+                                            [matTooltip]="parsedText(documentInformation.docMemo)"
+                                            matTooltipPosition="above"                                              
+                                            style="width: 109%"
+                                                 (ngModelChange)="enableSaveDocument()"
+                                                 class="form-control text_editor_box"></div>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="col-sm-1">
+                                    <span style="margin-left:10px" matTooltip="Add Memo" matTooltipPosition="above">
+                                        <a class="btn nobg btn-edit-cstm"
+                                        data-toggle="modal"
+                                        (ngModelChange)="enableSaveDocument()"
+                                        data-target="#memo-popup"     
+                                        matTooltip="Add Memo"
+                                        matTooltipPosition="above"                                   
+                                        (click)="onClickMemo()">
+                                         <i class="fa fa-pencil"></i>
+                                     </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label style="float: none;">Attachments <span class="clr-red">*</span></label>
+                                <p-fileUpload #fileUploadInput
+                                              name="fileupload[]"
+                                              multiple="multiple"
+                                              [showCancelButton]="false"
+                                              [showUploadButton]="false"
+                                              (ngModelChange)="enableSaveDocument()"
+                                              customUpload="true"
+                                              (onSelect)="fileUploadCertified($event)"
+                                              (onRemove)="removeFile($event)"></p-fileUpload>
+                            </div>
+                        </div>
+                        <div class="table-responsive table-overflow"
+                             *ngIf="isEditButton">
+                            <h4 class="panel-title" style="padding-left: 10px;">
+                                Attachment Details:
+                            </h4>
+                            <p-table class="table-responsive ptable-cus-pma"
+                                     [paginator]="sourceViewforDocument.length > 0"
+                                     [value]="sourceViewforDocument"
+                                     [rows]="3"
+                                     [columns]="sourceViewforDocumentListColumns">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns">
+                                            {{ col.header }}
+                                        </th>
+                                        <th>
+                                            Download
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body"
+                                             let-part
+                                             let-rowData
+                                             let-columns="columns"
+                                             let-i="rowIndex">
+                                    <tr>
+                                        <td *ngFor="let col of columns">
+                                            <ng-container *ngIf="col.field == 'fileName'">
+                                                {{ part[col.field] }}
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <a (click)="downloadFileUpload(part)" *ngIf="part.attachmentDetailId"
+                                               matTooltip="Download" matTooltipPosition="above"
+                                               class="btn nobg btn-cstm">
+                                                <span><i class="fa fa-download"></i></span>
+                                            </a>
+
+                                            <a  [href]="rowData.link" *ngIf="!part.attachmentDetailId"
+                                            download="{{rowData.fileName}}"
+                                            matTooltip="Download" matTooltipPosition="above"
+                                               class="btn nobg btn-cstm text-center">
+                                                <span><i class="fa fa-download" style="color: black;"></i></span>
+                                            </a>
+                                           
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage"
+                                             let-columns
+                                             *ngIf="sourceViewforDocument.length == 0">
+                                    <tr>
+                                        <td [attr.colspan]="2"
+                                            style="color: red; font-weight: bold; text-align: center">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            *ngIf="!isEditButton"
+                            class="btn btn-primary pull-right submit-btn"
+                            style="text-align:center"
+                            (ngModelChange)="enableSave()"
+                            (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation,'add')"
+                            [disabled]="!addDocumentForm.valid ||disableFileAttachmentSubmit==false">
+                        Add
+                    </button>
+                    <button type="button"
+                            *ngIf="isEditButton"
+                            class="btn btn-primary pull-right submit-btn"
+                            style="text-align:center"
+                            (ngModelChange)="enableSave()"
+                            (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation,'edit')"
+                            [disabled]="!addDocumentForm.valid || disableSaveForEditDocument">
+                        Update
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger"
+                            (click)="dismissDocumentPopupModel('#addDocumentDetailsNew'); closeMyModel('#addDocumentDetailsNew')">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade"
+     id="addDocumentDetailsAudit"
+     role="dialog" style="z-index: 1070 !important;"
+     data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close"
+                        (click)="closeMyModel('#addDocumentDetailsAudit')">
+                    &times;
+                </button>
+                <h4 class="modal-title">Add Document Details</h4>
+            </div>
+            <form #addDocumentFormAudit="ngForm" class="form-horizontal">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Name <span class="clr-red">*</span></label>
+                                <input class="form-control"
+                                       type="text"
+                                       name="name"
+                                       (ngModelChange)="enableSaveDocumentAudit()"
+                                       [(ngModel)]="documentInformation.docName"
+                                       required />
+                            </div>
+                            <div class="form-group">
+                                <label>Description </label>
+                                <textarea class="form-control"
+                                          name="description"
+                                          (ngModelChange)="enableSaveDocumentAudit()"
+                                          [(ngModel)]="documentInformation.docDescription"
+                                          ></textarea>
+                            </div>
+                            <div class="form-group">
+                                <span class="label">Memo </span>                                
+                                <div class="col-sm-11">
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <div name="memo" 
+                                            [innerHTML]="documentInformation.docMemo"
+                                            [matTooltip]="parsedText(documentInformation.docMemo)"
+                                           matTooltipPosition="above" class="form-control"  
+                                            (ngModelChange)="enableSaveDocumentAudit()"   
+                                            style="width: 109%;"
+                                                 class="text_editor_box">
+                                                </div>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="col-sm-1">
+                                    <span matTooltip="Edit Memo" matTooltipPosition="above" style="margin-left:10px">
+                                        <a class="btn nobg"
+                                        data-toggle="modal"
+                                        (ngModelChange)="enableSaveDocumentAudit()"
+                                        data-target="#memo-popup"                                                                          
+                                        (click)="onClickMemo()">
+                                         <i class="fa fa-pencil"></i>
+                                     </a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label style="float: none;">Attachments <span class="clr-red">*</span></label>
+                                <p-fileUpload #fileUploadInputAudit
+                                              name="fileuploadAudit[]"
+                                              multiple="multiple"
+                                              [showCancelButton]="false"
+                                              [showUploadButton]="false"
+                                              (ngModelChange)="enableSaveDocumentAudit()"
+                                              customUpload="true"
+                                              (onSelect)="fileUploadVendorAudit($event)"
+                                              (onRemove)="removeFile($event)"></p-fileUpload>
+                            </div>
+                        </div>
+                        <div class="table-responsive table-overflow"
+                             *ngIf="isEditButton">
+                            <h4 class="panel-title" style="padding-left: 10px;">
+                                Attachment Details:
+                            </h4>
+                            <p-table class="table-responsive ptable-cus-pma"
+                                     [paginator]="sourceViewforDocument.length > 0"
+                                     [value]="sourceViewforDocumentVendorAudit"
+                                     [rows]="3"
+                                     [columns]="sourceViewforDocumentListColumns">
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr>
+                                        <th *ngFor="let col of columns">
+                                            {{ col.header }}
+                                        </th>
+                                        <th>
+                                            Download
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body"
+                                             let-part
+                                             let-rowData
+                                             let-columns="columns"
+                                             let-i="rowIndex">
+                                    <tr>
+                                        <td *ngFor="let col of columns">
+                                            <ng-container *ngIf="col.field == 'fileName'">
+                                                {{ part[col.field] }}
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <a  [href]="rowData.link" *ngIf="!part.attachmentDetailId"
+                                            download="{{rowData.fileName}}"
+                                            matTooltip="Download" matTooltipPosition="above"
+                                               class="btn nobg btn-cstm text-center">
+                                                <span><i class="fa fa-download" style="color: black;"></i></span>
+                                            </a>
+                                            <a (click)="downloadFileUpload(part)" *ngIf="part.attachmentDetailId"
+                                               matTooltip="Download" matTooltipPosition="above"
+                                               class="btn nobg btn-cstm">
+                                                <span><i class="fa fa-download"></i></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage"
+                                             let-columns
+                                             *ngIf="sourceViewforDocumentVendorAudit.length == 0">
+                                    <tr>
+                                        <td [attr.colspan]="2"
+                                            style="color: red; font-weight: bold; text-align: center">
+                                            No records found
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            *ngIf="!isEditButton"
+                            class="btn btn-primary pull-right submit-btn"
+                            style="text-align:center"
+                            (ngModelChange)="enableSave()"
+                            (click)="addDocumentInformationVendorAudit('#addDocumentDetailsAudit',documentInformation,'add')"
+                            [disabled]="!addDocumentFormAudit.valid || disableFileAttachmentSubmit==false">
+                        Add
+                    </button>
+                    <button type="button"
+                            *ngIf="isEditButton"
+                            class="btn btn-primary pull-right submit-btn"
+                            style="text-align:center"
+                            (ngModelChange)="enableSave()"
+                            (click)="addDocumentInformationVendorAudit('#addDocumentDetailsAudit',documentInformation,'edit')"
+                            [disabled]="!addDocumentFormAudit.valid || disableSaveForEditDocumentAudit">
+                        Update
+                    </button>
+                    <button type="button"
+                            class="btn btn-danger"
+                            (click)="dismissDocumentPopupModel('#addDocumentDetailsAudit'); closeMyModel('#addDocumentDetailsAudit')">
+                        Close
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ng-template #isCertifiedAttachmentsModal let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeIsCertifiedModal()">&times;</button>
+      <h4 class="modal-title">Certified Attachments  <a class="plusicon-cstm ml-1"
+        href="#"
+        data-toggle="modal"
+        data-target="#addDocumentDetailsNew"
+        (ngModelChange)="enableSave()"
+        (click)="addDocumentDetails()">
+         <i class="fa fa-plus-circle fa-lg"
+            matTooltip="Create Documents" matTooltipPosition="above"></i>
+     </a></h4>
+    </div>
+  <div class="modal-body">
+    <div  style="width: 97%">
+        <div>
+            <p-table #table4 class="rpo-table-cstm lastcol-fix"
+                     [columns]="selectedColumnsCertified"
+                     [value]="sourceViewforDocumentList"
+                     [paginator]="true"
+                     [first]="0"
+                     [rows]="isCertifiedTablePageSize"
+                     [resizableColumns]="true"
+                     [rowsPerPageOptions]="[5,10,15,20]">
+                     <ng-template pTemplate="colgroup" let-columns>
+                        <colgroup>
+                            <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}">
+                            <col [ngStyle]="{'width': '80px'}">
+                        </colgroup>
+                    </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                            [pSortableColumn]="col.field">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>                    
+                    <tr>
+                        <th  *ngFor="let col of columns" [ngSwitch]="col.field">
+                            <input type="text"
+                                   (input)="table4.filter($event.target.value, col.field,'contains') "
+                                   *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                                   style="width:100%;" pInputText>
+                            <input type="date" class="hidePlaceHolder"
+                                   *ngIf="col.field == 'createdDate'" name="createdDate"
+                                   style="width:100%;"
+                                   (change)="dateFilterForTableNew($event.target.value, col.field )">
+
+                            <input type="date" class="hidePlaceHolder"
+                                   *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                   style="width:100%;"
+                                   (change)="dateFilterForTableNew($event.target.value, col.field )">
+                        </th>
+                        <th style="width:140px;position:sticky"></th>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body"
+                             let-rowData
+                             let-columns="columns"
+                             let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="rowData">
+                        <ng-container *ngFor="let col of columns">
+                            <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                                class="ui-resizable-column"
+                                pReorderableRowHandle>
+                                {{
+                                    col.field == 'createdDate'
+                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    : rowData[col.field] && col.field == 'updatedDate'
+                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    : rowData[col.field]
+                                }}
+                            </td>
+                            <td *ngIf="col.field == 'fileName'">
+                                <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData)">
+                                    {{ rowData[col.field] }}
+                                </a>
+                                <a *ngIf="rowData.isFileFromServer == false"
+                                   [href]="rowData.link"
+                                   download="{{rowData.fileName}}"
+                                   matTooltip="Download" matTooltipPosition="above"
+                                   class="filelink">
+                                    {{ rowData[col.field] }}
+
+                                </a>
+                            </td>
+                            <td *ngIf="col.field == 'docMemo'">
+                                <div [innerHTML]="rowData[col.field]"></div>
+                            </td>
+                        </ng-container>
+
+                        <td style="width: 70px; text-align: center !important;">
+                            <span data-toggle="modal"
+                                  data-target="#addDocumentDetailsNew">
+                                <a class="btn nobg"
+                                   (click)="editCustomerDocument(rowData,rowIndex)" matTooltip="Edit"
+                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                            </span>
+
+                            <a class="btn btn-danger nobg" (click)="deleteAttachmentRow(rowData, rowIndex,deleteContent)"
+                               matTooltip="Delete" matTooltipPosition="above" data-target="#delete" data-toggle="modal">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <button [disabled]="!rowData.isFileFromServer" class="btn-edit set_proper_align set_position"
+                                    mat-icon-button (click)="openHistory(contentAuditHist,rowData)"
+                                    matTooltip="History" matTooltipPosition="above">
+                                <i class="fa fa-history" 
+                                   [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage"
+                             let-columns
+                             *ngIf="sourceViewforDocumentList.length == 0">
+                    <tr>
+                        <td [attr.colspan]="10"
+                            style="color: red; font-weight: bold; text-align: center">
+                            No records found
+                        </td>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary" id="footer">
+                    <label id="footer" class="footer">Total:</label>
+                    <input style="width: 5%;" [(ngModel)]="table4.totalRecords" name="no'of records" disabled
+                           pInputText type="text" />
+
+                    &nbsp;&nbsp;
+                    <label id="footer" class="footer1">Pages Count:</label>
+
+                    <input style="width: 5%;" [ngModel]="getPageCount(table4.totalRecords,isCertifiedTablePageSize)"
+                           name="page count" disabled pInputText type="text" />
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+
+  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeIsCertifiedModal()">Close</button>
+  
+</div>
+</ng-template>
+<ng-template #vendorAuditAttachmentsModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeVendorAuditModal()">&times;</button>
+      <h4 class="modal-title">Vendor Audit Attachments<a class="plusicon-cstm ml-1"
+        href="#"
+        data-toggle="modal"
+        data-target="#addDocumentDetailsAudit"
+        (ngModelChange)="enableSave()"
+        (click)="addDocumentDetails()">
+         <i class="fa fa-plus-circle fa-lg"
+            matTooltip="Create Documents" matTooltipPosition="above"></i>
+     </a></h4>
+    </div>
+  <div class="modal-body">
+    <div *ngIf="sourceVendor.vendorAudit" style="width: 97%">       
+        <div>
+            <p-table #table5 class="rpo-table-cstm lastcol-fix"
+                     [columns]="selectedColumnsAudit"
+                     [value]="sourceViewforDocumentListAudit"
+                     [paginator]="true"         
+                     [rows]="vendorAuditTablePageSize"
+                     [resizableColumns]="true"
+                     [rowsPerPageOptions]="[5,10,15,20]" >
+                     <ng-template pTemplate="colgroup" let-columns>
+                        <colgroup>
+                            <col *ngFor="let col of columns" style="width:130px">
+                            <col [ngStyle]="{'width': '80px'}">    
+                        </colgroup>
+                    </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                            [pSortableColumn]="col.field">
+                            {{ col.header }}
+                            <p-sortIcon [field]="col.field">
+                            </p-sortIcon>
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                    <tr>
+                        <th  *ngFor="let col of columns" [ngSwitch]="col.field">
+                            <input type="text"
+                                   (input)="table5.filter($event.target.value, col.field,'contains') "
+                                   *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                                   style="width:100%;" pInputText>
+                            <input type="date" class="hidePlaceHolder"
+                                   *ngIf="col.field == 'createdDate'" name="createdDate"
+                                   style="width:100%;"
+                                   (change)="dateFilterForTableNewAudit($event.target.value, col.field )">
+                            <input type="date" class="hidePlaceHolder"
+                                   *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                   style="width:100%;"
+                                   (change)="dateFilterForTableNewAudit($event.target.value, col.field )">
+                        </th>
+                        <th style="width:140px;position:sticky"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body"
+                             let-rowData
+                             let-columns="columns"
+                             let-rowIndex="rowIndex">
+                    <tr [pSelectableRow]="rowData">
+                        <ng-container *ngFor="let col of columns">
+                            <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                                class="ui-resizable-column"
+                                pReorderableRowHandle>
+                                {{
+                                    col.field == 'createdDate'
+                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    : rowData[col.field] && col.field == 'updatedDate'
+                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                    : rowData[col.field]
+                                }}
+                            </td>
+                            <td *ngIf="col.field == 'fileName'">
+                                <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData)">
+                                    {{ rowData[col.field] }}
+                                </a>
+                                <a *ngIf="rowData.isFileFromServer == false"
+                                   [href]="rowData.link"
+                                   download="{{rowData.fileName}}"
+                                   matTooltip="Download" matTooltipPosition="above"
+                                   class="filelink">
+                                    {{ rowData[col.field] }}
+                                </a>
+                            </td>
+                            <td *ngIf="col.field == 'docMemo'">
+                                <div [innerHTML]="rowData[col.field]"></div>
+                            </td>
+                        </ng-container>
+                        <td style="text-align: center !important;" >
+                            <span data-toggle="modal"
+                                  data-target="#addDocumentDetailsAudit">
+                                <a class="btn nobg"
+                                   (click)="editCustomerDocumentAudit(rowData,rowIndex)" matTooltip="Edit"
+                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                            </span>
+
+                            <a class="btn btn-danger nobg" (click)="deleteAttachmentRowAudit(rowData, rowIndex,deleteContentAudit)"
+                               matTooltip="Delete" matTooltipPosition="above" data-target="#delete" data-toggle="modal">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                            <button [disabled]="!rowData.isFileFromServer" class="btn-edit set_proper_align set_position"
+                                    mat-icon-button (click)="openHistory(contentAuditHist,rowData)"
+                                    matTooltip="History" matTooltipPosition="above">
+                                <i class="fa fa-history"
+                                   [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                </ng-template>
+                <ng-template pTemplate="emptymessage"
+                             let-columns
+                             *ngIf="table5.totalRecords == 0">
+                    <tr>
+                        <td [attr.colspan]="10"
+                            style="color: red; font-weight: bold; text-align: center">
+                            No records found
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="summary" id="footer1"  let-state>
+                    <label id="footer" class="footer">Total:</label>
+                    <input style="width: 5%;" [(ngModel)]="table5.totalRecords" name="records" disabled
+                           pInputText type="text" />
+
+                    &nbsp;&nbsp;
+                    <label id="footer" class="footer1">Pages Count:</label>
+
+                    <input style="width: 5%;" [ngModel]="getPageCount(table5.totalRecords,vendorAuditTablePageSize)"
+                           name="pages" disabled pInputText type="text" />
+                </ng-template>
+
+            </p-table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+
+  <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeVendorAuditModal()">Close</button>
+</div>
+</ng-template>
+
+<ng-template #contentAuditHist
+             let-c="close"
+             let-d="dismiss"
+             style="width:auto; z-index: 1003 ;"
+             data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">History of  Documents</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Document Name</th>
+                        <th>Description</th>
+                        <th>Memo</th>
+                        <th>File Name</th>
+                        <th>Created Date</th>
+                        <th>Created By</th>
+                        <th>Updated Date</th>
+                        <th>Updated By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+                    <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
+                        <td [ngStyle]="{
+                                color: getColorCodeForHistory(i, 'docName', audit.docName)
+                                ? 'black'
+                                : 'red'
+                            }">
+                            {{ audit.docName }}
+                        </td>
+                        <td [ngStyle]="{
+                                color: getColorCodeForHistory(
+                                i,
+                                'docDescription',
+                                audit.docDescription
+                                )
+                                ? 'black'
+                                : 'red'
+                            }">
+                            {{ audit.docDescription }}
+                        </td>
+                        <td
+                            [ngStyle]="{'color': getColorCodeForHistory(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }" [innerHTML]="audit.docMemo">
+                        </td>
+                        <td [ngStyle]="{
+                                color: getColorCodeForHistory(i, 'fileName', audit.fileName)
+                                ? 'black'
+                                : 'red'
+                            }">
+                            {{ audit.fileName }}
+                        </td>
+                        <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                        <td [ngStyle]="{
+                                color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
+                                ? 'black'
+                                : 'red'
+                            }">
+                            {{ audit.createdBy }}
+                        </td>
+                        <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                        <td [ngStyle]="{
+                                color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)
+                                ? 'black'
+                                : 'red'
+                            }">
+                            {{ audit.updatedBy }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            Close
+        </button>
+    </div>
+</ng-template>
+
+<ng-template #deleteContent
+             let-c="close"
+             let-d="dismiss"
+             style="z-index: 1003;"
+             data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <strong>
+            Document Name:
+            <span class="new-label">{{ selectedRowForDelete.docName }}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button"
+                class="btn btn-success"
+                (click)="deleteItemAndCloseModel()">
+            Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            No
+        </button>
+    </div>
+</ng-template>
+<ng-template #deleteContentAudit
+             let-c="close"
+             let-d="dismiss"
+             style="z-index: 1003;"
+             data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button"
+                class="close"
+                aria-label="Close"
+                (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <strong>
+            Document Name:
+            <span class="new-label">{{ selectedRowForDeleteAudit.docName }}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button"
+                class="btn btn-success"
+                (click)="deleteItemAndCloseModelAudit()">
+            Yes
+        </button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            No
+        </button>
+    </div>
+</ng-template>
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+      <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+      <h6 style="padding-left: 2%;">
+        Do you want to Save changes and Continue ?
+      </h6>
+    </div>
+    <div class="modal-footer">
+  
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="redirectToTabWithoutSave()">No</button>
+      <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!generalForm.valid" (click)="redirectToTab()">Yes</button>
+    </div>
+</ng-template>
+
+
+  <div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
+  <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" style="z-index: 1090;">
+      <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                      &times;
+                  </button>
+                  <h4 class="modal-title">Edit Memo</h4>
+              </div>
+              <div class="modal-body">
+                  <table class="table table-bordered table-fixed workflow-table-material">
+                      <thead>
+                      <th style="color: #fff;">Memo</th>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td style="white-space: inherit">
+                                  <p-editor spellcheck="true"
+                                            [(ngModel)]="memoPopupContent"
+                                            [style]="{ height: '320px' }"
+                                            name="memoPopupContent"
+                                            required></p-editor>
+                              </td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  <div style="float: right;">
+                      <button type="button"
+                              class="btn btn-primary"
+                              style="padding: 6px 12px !important; margin-top: 10px;"
+                              data-dismiss="modal"
+                              (click)="onClickPopupSave()">
+                          Save
+                      </button>
+                      <button type="button"
+                              class="btn btn-danger"
+                              style="padding: 6px 12px !important; margin-top: 10px;"
+                              data-dismiss="modal">
+                          Close
+                      </button>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>

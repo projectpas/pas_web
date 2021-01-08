@@ -1,0 +1,1055 @@
+﻿<div class="x_panel">
+    <div class="x_content">
+        <!-- <div class="pheading">
+
+        </div> -->
+        <div class="card new-card">
+            <div class="card-header bg-primary new-card-header">
+                <div class="row">
+                  <div class="col">
+                    <h4 class="new-card-heading">Item Master List</h4>
+                  </div>
+                  <div>
+                    <button
+                      type="button" *ngIf="stockTable"
+                      class="btn-sm new-btn-primary"
+                      (click)="navigateTogeneralInfostock()"
+                    >
+                      Add Item Master Stock
+                    </button>
+                    <button
+                      type="button" *ngIf="nonStockTable"
+                      class="btn-sm new-btn-primary"
+                      (click)="navigateTogeneralInfononstock()"
+                    >
+                      Add Item Master Non-Stock
+                    </button>
+                  </div>
+                </div>
+            </div>
+            <div class="card-body new-card-body">
+                <div class="right_col" role="main" *ngIf="stockTable">
+                    <p-table #dt class="rpo-table-cstm rro-table-cstm"
+                             [value]="allStockInfo"
+                             [(first)]="pageNumber"
+                             [scrollable]="true"
+                             scrollHeight="450px"
+                             [rows]="pageSize"
+                             [paginator]="true"
+                             [pageLinks]="3"
+                             [rowsPerPageOptions]="[10,20,50,100]"
+                             [columns]="stockTableColumns"
+                             selectionMode="multiple"
+                             [metaKeySelection]="true"
+                             [resizableColumns]="true"
+                             [lazy]="true"
+                             [totalRecords]="totalRecords"
+                             (onLazyLoad)="loadStockData($event, dt)" [reorderableColumns]="true">
+                        <ng-template pTemplate="caption">
+                            <div class="row">
+                                <div class="col">
+                                  <p-multiSelect
+                                    [maxSelectedLabels]="2"
+                                    [options]="cols"
+                                    optionLabel="header"
+                                    [(ngModel)]="stockTableColumns"
+                                    [style]="{ minWidth: '200px' }"
+                                    style="float: left;"
+                                  ></p-multiSelect>
+                                  
+                                </div>
+                                <div class="col">
+                                  <div
+                                    style="width: auto !important; float: right;"
+                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                                  >
+                                    <i class="fa fa-search"></i>
+                                    <input
+                                      type="text"
+                                      pInputText
+                                      size="50"
+                                      class="form-control"
+                                      (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                      placeholder="Filter"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div style="display: flow-root;">
+                                <div>
+                                    <button
+                                    type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Data"
+                                    (click)="exportCSV(dt)"
+                                  ></button> 
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Selected Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Selected Data"
+                                    (click)="dt.exportCSV({ selectionOnly: true })"
+                                  ></button>
+                                  <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
+                                    Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
+                                  </button>
+                                  
+                                <div style="width: 650px; float: right; padding: 3px 0 0;">
+
+                                    <!--class="col"-->
+                                      <div class="form-group">
+                                        <div class="pull-left" style="margin: 6px 15px 0 20px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="item-category" class="form-control" value="Stock"
+                                                       checked="checked" (click)="onRadioChange(0)">
+                                                <span class="checkmark"></span>Stock
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 6px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="item-category" class="form-control" value="Non-stock"
+                                                       (click)="onRadioChange(1)" [checked]="radioButtonValue == 'Non-stock'">
+                                                <span class="checkmark"></span>Non-Stock
+                                            </label>
+                                        </div>
+
+                                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+
+
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
+                                                <span class="checkmark"></span>Active
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="EmpStatus" class="form-control" value="inactive" (click)="geListByStatus('inactive')" [(ngModel)]="currentstatus">
+                                                <span class="checkmark"></span>In-Active
+                                            </label>
+                                        </div>
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <label class="radio-cstm wauto">
+                                                <input type="radio" name="EmpStatus" class="form-control" value="all" (click)="geListByStatus('all')" [(ngModel)]="currentstatus">
+                                                <span class="checkmark"></span>All
+                                            </label>
+                                        </div>
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <label style="width: auto !important;margin-top: 3px;">
+                                            <!--  -->
+                                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" 
+                                             (click)="getDeleteListByStatus($event.target.checked)"
+                                                />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Show  Deleted List 
+                                            </label>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    </div>
+                              </div>
+
+                              <ng-template pTemplate="colgroup" let-columns>
+                                <colgroup>
+                                    <col *ngFor="let col of columns" style="width:130px">
+                                </colgroup>
+                            </ng-template>
+                              
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+
+                    <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                        [pSortableColumn]="col.field">
+                        {{col.header}}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th style="width:150px;position:sticky" *ngIf="selectedColumns.length > 0">
+                        Actions
+                    </th>
+                </tr>
+
+                <tr>
+                    <!--(keyup)="dt.filter($event.target.value, col.field, 'contains')"-->
+                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                      <input
+                        style="width: 100%;"
+                        pInputText
+                        type="text"
+                        *ngIf="col.field !== 'startDate'"
+                        (input)="
+                          dt.filter($event.target.value, col.field, 'contains');
+                          activeStatus($event.target.value)
+                        "
+                      />
+                      <input
+                        type="date"
+                        *ngIf="col.field == 'startDate'"
+                        name="StartDate"
+                        style="width: 100%;"
+                        (change)="dt.filter($event.target.value, col.field, 'contains')"
+                      />
+                    </th>
+                    <th style="width: 130px;"></th>
+                  </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle
+                    (dblclick)="viewSelectedRow(rowData)" data-toggle="modal" data-target="#view">
+                    <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+                        pReorderableRowHandle>
+                        {{
+              col.field == 'createdDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                : rowData[col.field] && col.field == 'updatedDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                : rowData[col.field]
+                        }}
+                    </td>
+                    <td class="action-icons-cstm" style="width:150px" *ngIf="selectedColumns.length > 0">
+                        <div *ngIf="currentDeletedstatus==false">
+                            <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active"
+                                matTooltipPosition="above" onLabel="on" offLabel="off"
+                                (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                            <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active"
+                                matTooltipPosition="above" onLabel="on" offLabel="off"
+                                (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                            <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active"
+                                matTooltipPosition="above" onLabel="on" offLabel="off"
+                                (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                           
+                            <span>
+                                <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="viewSelectedRow(rowData)" matTooltip="View" matTooltipPosition="above"
+                                    data-toggle="modal" data-target="#view"><i class="fa fa-eye"></i></a>
+                            </span>
+
+                            <span><a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
+                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                   <span data-toggle="modal" data-target="#contentHist">
+                                <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+                            <span data-toggle="modal" data-target="#delete">
+                                <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
+                                    matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                            </span>
+                        </div>
+                        <div *ngIf="currentDeletedstatus">
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                           <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                          <span data-toggle="modal" data-target="#restore"><a class="btn nobg" (click)="restore(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                         
+                        </div> 
+                    </td>
+                </tr>
+            </ng-template>
+                              <div class="row adv-row">
+                                <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
+                                    <div class="col-md-12 ">
+                                        <div class="col-md-1 col-md-1-cstm">
+                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>PN</label>
+                                                <p-autoComplete [(ngModel)]="searchData.partNo"
+                                                            (onKeyUp)=eventHandler($event) (onSelect)="partnmId($event)"
+                                                            name="partNumber"
+                                                            [suggestions]="partCollection"
+                                                            (completeMethod)="filterpartItems($event)"
+                                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                                            class="p-autoComplete-ctsm p-autoComplete-adv" (onClear)="onClearPN()"
+                                                            required>
+                                                <ng-template let-partName pTemplate="part">
+                                                    <div class="ui-helper-clearfix">{{partName}}</div>
+                                                </ng-template>
+                                                </p-autoComplete>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <input type="text" [(ngModel)]="searchData.description" id="description" name="description" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" *ngIf="nonStockTable">
+                                            <div class="form-group">
+                                                <label>List Price <span class="clr-red">*</span></label>
+                                                <input type="text" [(ngModel)]="searchData.listPrice" id="listPrice" name="listPrice" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>Hazardous Material</label>
+                                                <select id="hazardousMaterial" [(ngModel)]="searchData.hazardousMaterial">
+                                                    <option>---Select---</option>
+                                                    <option>All</option>
+                                                    <option>Yes</option>
+                                                    <option>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2" *ngIf="nonStockTable">
+                                            <div class="form-group">
+                                                <label>Wild card search <span class="clr-red">*</span></label>
+                                                <input type="text" [(ngModel)]="searchData.wildCardSearch" id="wildCardSearch" name="wildCardSearch" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div >
+                                            <div class="form-group adv-search-icons">
+                                                <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)" class="btn btn-primary  height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                    Search 
+                                                 </button> 
+                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" class="btn btn-danger height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                    Clear
+                                                 </button> 
+                                                <!-- <button class="btn btn-default height40 black-search-button btmargin" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"><i class="fa fa-search"></i></button>
+                                                <button class="btn btn-default  height40 black-search-button btmargin" matTooltip="Clear" matTooltipPosition="above" (click)="clearSerchData()"><i class="fa fa-close"></i></button>             -->
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                        </ng-template>
+
+                        <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" style="width:160px">
+                            </colgroup>
+                        </ng-template>
+
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                    [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                                <th style="width:130px; text-align: center;">Actions</th>
+                            </tr>
+                            <tr>
+                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input *ngIf="col.header != 'PN' && col.header != 'PN Description'" style="width:100%;" pInputText type="text"
+                                           (input)="dt.filter($event.target.value, col.field, 'contains')">
+                                    <input *ngIf="col.header == 'PN' || col.header == 'PN Description'" style="width:100%;" pInputText type="text"
+                                           (input)="dt.filter($event.target.value, col.field, 'contains')" [disabled]="isOpenAdvancedSearch">
+
+                                </th>
+                                <th style="width:130px"></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-car let-columns="columns">
+                            <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openViewOnDbl(rowData)">
+                                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                    <ng-container *ngIf="col.field !='isSerialized' && col.field!='isTimeLife' && col.field != 'createdDate' && col.field != 'updatedDate'">
+                                        {{rowData[col.field]}}
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field =='isSerialized' || col.field =='isTimeLife'">
+                                        <input type="checkbox" disabled [checked]="rowData[col.field] == 'true'"
+                                               style="margin: 0px auto; display: block;" />
+                                    </ng-container>
+                                    <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
+                                        {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
+                                    </ng-container>
+                                </td>
+                                <td class="action-icons-cstm" style="width:130px;">
+                                    <div>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']" [disabled]="currentDeletedstatus"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+
+                                        <span data-toggle="modal" data-target="#itemMasterView">
+                                            <a class="btn nobg btn-view-cstm"
+                                               (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                        </span>
+                                        <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-edit-cstm" (click)="openEdit(car)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                        <span *ngIf="!currentDeletedstatus"><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                        <span data-toggle="modal" data-target="#stockHistory"><a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
+                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg" (click)="restore(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage"
+                                     let-columns
+                                     *ngIf="allStockInfo.length == 0 || allStockInfo.length ==''">
+                            <tr>
+                                <td [attr.colspan]="7" class="no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText
+                                   type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText
+                                   type="text" />
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <div class="right_col" role="main" *ngIf="nonStockTable">
+                    <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="allNonstockInfo"
+                            [(first)]="pageNumber" [rows]="nonStockPageSize" [paginator]="true" [pageLinks]="3"
+                             [rowsPerPageOptions]="[10,20,50,100]" [columns]="nonStockTableColumns" selectionMode="multiple"
+                             [resizableColumns]="true" [reorderableColumns]="true" [lazy]="true"
+                             [totalRecords]="totalRecordsNonStock" (onLazyLoad)="loadNonStockData($event)"
+                             [scrollable]="true" scrollHeight="450px">
+                        <ng-template pTemplate="caption">
+                            <div class="row">
+                                <div class="col">
+                                  <p-multiSelect
+                                    [maxSelectedLabels]="2"
+                                    [options]="cols1"
+                                    optionLabel="header"
+                                    [(ngModel)]="nonStockTableColumns"
+                                    [style]="{ minWidth: '200px' }"
+                                    style="float: left;"
+                                  ></p-multiSelect>
+                                </div>
+                                <div class="col">
+                                  <div
+                                    style="width: auto !important; float: right;"
+                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                                  >
+                                    <i class="fa fa-search"></i>
+                                    <input
+                                      type="text"
+                                      pInputText
+                                      size="50"
+                                      class="form-control"
+                                      (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                      placeholder="Filter"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div style="display: flow-root;">
+                                <div>
+                                    <button
+                                    type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Data"
+                                    (click)="dt.exportCSV()"
+                                  ></button>
+                                  <button
+                                    type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Selected Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Selected Data"
+                                    (click)="dt.exportCSV({ selectionOnly: true })"
+                                  ></button>
+                                  <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
+                                    Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
+                                  </button>
+
+                                <div style="width: 650px; float: right; padding: 3px 0 0;"> <!--class="col"-->
+                                      <div class="form-group">
+                                            <div class="pull-left" style="margin: 6px 15px 0 20px;">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" name="item-category" class="form-control" value="Stock"
+                                                           checked="checked" (click)="onRadioChange(0)">
+                                                    <span class="checkmark"></span>Stock
+                                                </label>
+                                            </div>
+                                            <div class="pull-left" style="margin-top: 6px; margin-right: 15px;">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" name="item-category" class="form-control" value="non-stock"
+                                                           (click)="onRadioChange(1)" [checked]="radioButtonValue == 'Non-stock'">
+                                                    <span class="checkmark"></span>Non-Stock
+                                                </label>
+                                            </div>
+                                            <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
+                                                    <span class="checkmark"></span>Active
+                                                </label>
+                                            </div>
+                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" name="EmpStatus" class="form-control" value="inactive" (click)="geListByStatus('inactive')" [(ngModel)]="currentstatus">
+                                                    <span class="checkmark"></span>In-Active
+                                                </label>
+                                            </div>
+                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                <label class="radio-cstm wauto">
+                                                    <input type="radio" name="EmpStatus" class="form-control" value="all" (click)="geListByStatus('all')" [(ngModel)]="currentstatus">
+                                                    <span class="checkmark"></span>All
+                                                </label>
+                                            </div>
+                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                                <label style="width: auto !important;margin-top: 3px;">
+                                                <!--  -->
+                                                <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  
+                                                (click)="getDeleteListByStatus($event.target.checked)"
+                                                    />
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Show  Deleted List 
+                                                </label>
+                                            </div>
+                                      </div>
+                                    </div>
+                                    
+                                    </div>
+                              </div>
+
+                              <div class="row adv-row">
+                                <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
+                                    <div class="col-md-12 ">
+                                        <div class="col-md-1 col-md-1-cstm">
+                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>PN</label>
+                                                <p-autoComplete [(ngModel)]="searchData.partNo"
+                                                            (onKeyUp)=eventHandler($event) (onSelect)="partnmId($event)"
+                                                            name="partNumber"
+                                                            [suggestions]="partCollection"
+                                                            (completeMethod)="filterpartItems($event)"
+                                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                                            class="p-autoComplete-ctsm p-autoComplete-adv" (onClear)="onClearPN()"
+                                                            required>
+                                                <ng-template let-partName pTemplate="part">
+                                                    <div class="ui-helper-clearfix">{{partName}}</div>
+                                                </ng-template>
+                                                </p-autoComplete>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>Description</label>
+                                                <input type="text" [(ngModel)]="searchData.description" id="description" name="description" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" *ngIf="nonStockTable">
+                                            <div class="form-group">
+                                                <label>List Price <span class="clr-red">*</span></label>
+                                                <input type="text" [(ngModel)]="searchData.listPrice" id="listPrice" name="listPrice" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="form-group">
+                                                <label>Hazardous Material</label>
+                                                <select id="hazardousMaterial" [(ngModel)]="searchData.hazardousMaterial">
+                                                    <option>---Select---</option>
+                                                    <option>All</option>
+                                                    <option>Yes</option>
+                                                    <option>No</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" *ngIf="nonStockTable">
+                                            <div class="form-group">
+                                                <label>Wild card search <span class="clr-red">*</span></label>
+                                                <input type="text" [(ngModel)]="searchData.wildCardSearch" id="wildCardSearch" name="wildCardSearch" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="form-group adv-search-icons">
+                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)" class="btn btn-primary  height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                    Search
+                                                 </button> 
+                                                 <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" class="btn btn-danger height40 black-search-button btmargin" style="margin-top: 0.8%;">
+                                                    Clear
+                                                 </button> 
+                                                 <!-- <button class="btn btn-default height40 black-search-button btmargin" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"><i class="fa fa-search"></i></button> 
+                                                <button class="btn btn-default  height40 black-search-button btmargin" matTooltip="Clear" matTooltipPosition="above" (click)="clearSerchData()"><i class="fa fa-close"></i></button>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </ng-template>
+                        <ng-template pTemplate="colgroup" let-columns>
+                            <colgroup>
+                                <col *ngFor="let col of columns" style="width:160px">
+                            </colgroup>
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+
+                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                    [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+
+                                <th style="width:130px; text-align: center;">Actions</th>
+
+                            </tr>
+
+                            <tr>
+                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input style="width:100%;" *ngIf="col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
+                                           (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                                    <input style="width:100%;" *ngIf="col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
+                                           (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" [disabled]="isOpenAdvancedSearch">
+                                </th>
+                                <th style="width:130px"></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-car>
+
+                            <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
+                                (dblclick)="openViewforNonstock(view1,rowData)">
+                                <ng-container *ngFor="let col of columns">
+                                    <td *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
+                                        {{rowData[col.field]}}
+                                    </td>
+                                    <td *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
+                                        <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                                    </td>                                        
+                                    <td *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
+                                        <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}</p>
+                                    </td>    
+                                </ng-container>
+                                
+                                <td class="action-icons-cstm" style="width:130px">
+                                    <div>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
+                                                       onLabel="on" offLabel="off"
+                                                       (onChange)="handleChangeforstock(rowData,$event)"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above"
+                                                       onLabel="on" offLabel="off"
+                                                       (onChange)="handleChangeforstock(rowData,$event)"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above"
+                                                       onLabel="on" offLabel="off"
+                                                       (onChange)="handleChangeforstock(rowData,$event)"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <span>
+                                            <a class="btn nobg btn-view-cstm"
+                                               (click)="openViewforNonstock(view1,rowData)" matTooltip="View" matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)"
+                                               matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)"
+                                               matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#nonStockHistory">
+                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)"
+                                               matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns *ngIf="allNonstockInfo.length == 0">
+                            <tr>
+                                <td [attr.colspan]="7" class="no-records-cstm">
+                                    No records found
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" id="footer">
+                            <label id="footer" class="footer">Total:</label>
+                            <input style="width: 5%;" [(ngModel)]="totalRecordsNonStock" [disabled]="true" pInputText
+                                   type="text" />
+                            &nbsp;&nbsp;
+                            <label id="footer" class="footer1">Pages Count:</label>
+                            <input style="width: 5%;" [(ngModel)]="totalPagesNonStock" [disabled]="true" pInputText
+                                   type="text" />
+                        </ng-template>
+                    </p-table>
+
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div style="padding-top: 0;">
+                
+                <ng-template #view1 class="modal fade " id="view" role="dialog">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
+                                    name="">
+                                ×
+                            </button>
+                            <h4 class="modal-title">Details of Non-Stock</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive default-bg clear">
+                                <div class="col-sm-6">
+                                    <p>
+                                        <span class="label"><b>PN: <span class="text-danger">*</span></b></span><span class="value">{{viewItemMasterNS.partNumber}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>
+                                                PN Description: <span class="text-danger">*</span>
+                                            </b>
+                                        </span><span class="value">{{viewItemMasterNS.partDescription}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>
+                                                Item Classification: <span class="text-danger">*</span>
+                                            </b>
+                                        </span><span class="value">{{viewItemMasterNS.itemNonStockClassification}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>
+                                                Item Group: <span class="text-danger">*</span>
+                                            </b>
+                                        </span><span class="value">{{viewItemMasterNS.itemGroup ? viewItemMasterNS.itemGroup : '-'}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>
+                                                Manufacturer: <span class="text-danger">*</span>
+                                            </b>
+                                        </span><span class="value">{{viewItemMasterNS.manufacturerName}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>Discount (%) on Purchases: </b></span><span class="value">{{viewItemMasterNS.discountPurchasePercent ? viewItemMasterNS.discountPurchasePercent : '-'}}</span>
+                                    </p>
+                                    <div class="inline-block display-flex spacing-label" style="margin-top: 5px;">
+                                        <label class="control-label" style="width: 145px;"><b>Acquired?</b></label>
+                                        <div class="radio-value">
+                                            <label class="radio-inline">
+                                                <input type="radio" [value]="true" name="isAcquiredMethodBuy"
+                                                       [(ngModel)]="viewItemMasterNS.isAcquiredMethodBuy" disabled>
+                                                Buy
+                                            </label>&nbsp;&nbsp;
+                                            <label class="radio-inline">
+                                                <input type="radio" [value]="false" name="isAcquiredMethodBuy"
+                                                       [(ngModel)]="viewItemMasterNS.isAcquiredMethodBuy" disabled>
+                                                Make
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <!-- <p><span class="label"><b>Is Active: </b></span><span class="value">{{isActive}}</span></p> -->
+                                    <p>
+                                        <span class="label">
+                                            <b>
+                                                GL Account: <span class="text-danger">*</span>
+                                            </b>
+                                        </span><span class="value">{{viewItemMasterNS.glAccount}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label">
+                                            <b>
+                                                Purchase UOM: <span class="text-danger">*</span>
+                                            </b>
+                                        </span><span class="value">{{viewItemMasterNS.purchaseUnitOfMeasure}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>Hazardous Material: </b></span><span class="value">
+                                            <label class="wauto">
+                                                <input type="checkbox" name="isHazardousMaterial" [(ngModel)]="viewItemMasterNS.isHazardousMaterial" disabled>
+                                            </label>
+                                        </span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>Currency: </b></span><span class="value">{{viewItemMasterNS.currencyName ? viewItemMasterNS.currencyName : '-'}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>Unit Cost: </b></span><span class="value">{{viewItemMasterNS.unitCost ? viewItemMasterNS.unitCost : '-'}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>List Price: </b></span><span class="value">{{viewItemMasterNS.listPrice ? viewItemMasterNS.listPrice : '-'}}</span>
+                                    </p>
+                                    <p>
+                                        <span class="label"><b>Price Date: </b></span><span class="value">{{viewItemMasterNS.priceDate | date:'MM-dd-yyyy'}}</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                    (click)="dismissModel()">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+
+                </ng-template>
+
+
+
+
+                <div class="right_col" role="main" *ngIf="equipmentTable">
+
+                    <h5>{{radioButtonValue}} List</h5>
+                    <p-table #dt [value]="allEquipmentInfo"
+                             [rows]="10"
+                             [paginator]="true"
+                             [pageLinks]="3"
+                             [rowsPerPageOptions]="[10,20,50,100]"
+                             [columns]="selectedColumns2" [metaKeySelection]="true"
+                             selectionMode="multiple"
+                             [(selection)]="selectedEquipmentColumn"
+                             [resizableColumns]="true"
+                             [reorderableColumns]="true">
+                        <ng-template pTemplate="caption">
+
+                            <div style="text-align: right">
+                                <p-multiSelect [options]="cols2" [(ngModel)]="selectedColumns2" optionLabel="header"
+                                               selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
+                                               defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+
+
+                                <div class="inner-addon right-addon w200 inline-block">
+                                    <i class="fa fa-search"></i>
+
+                                    <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
+                                           (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                           placeholder=" Filter">
+                                </div>
+
+
+                                <button type="button" pButton icon="fa-download" iconPos="left" label="Export All Data"
+                                        *ngIf="selectedstockColumn" (click)="dt.exportCSV()"></button>
+                                <button type="button" pButton icon="fa-download" iconPos="left" label="Export Selected"
+                                        *ngIf="selectedEquipmentColumn"
+                                        (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                <a matTooltip="Add Item Master Equipment" (click)="navigateTogeneralInfoequipment()"
+                                   class="btn btn-success nobg"><span><i class="fa fa-plus"></i></span></a>
+
+                                <div class="excel-upload">
+                                    <input type="file" name="upload[]" id="upload" class="uploaddoc upload-file"
+                                           data-multiple-caption="{count} files selected"
+                                           accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+                                    <label for="upload">
+                                        <span matTooltip="Upload Data (Excel)"><i class="fa fa-upload"></i></span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+
+                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                    [pSortableColumn]="col.field">
+                                    {{col.header}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+
+                                <th></th>
+
+                            </tr>
+
+                            <tr>
+                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input style="width:100%;" pInputText type="text"
+                                           (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+
+                                </th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-car>
+                            <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdited(rowData)">
+                                <td>{{car.partNumber}}</td>
+                                <td>{{car.partDescription}}</td>
+                                <td>
+                                    <div *ngIf="car.certificationRequired==true">
+                                        Yes
+                                    </div>
+                                    <div *ngIf="car.certificationRequired==false">
+                                        No
+                                    </div>
+                                </td>
+                                <td>{{car.equipmentValidationType?.description}}</td>
+                                <td>{{car.manufacturer?.name}}</td>
+                                <td>
+                                    <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on"
+                                                   offLabel="off" (onChange)="handleChangeforstock(rowData,$event)"
+                                                   [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                    <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active"
+                                                   onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)"
+                                                   [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                    <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on"
+                                                   offLabel="off" (onChange)="handleChangeforstock(rowData,$event)"
+                                                   [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+
+                                    <!--<span data-toggle="modal" data-target="#view"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openViewequipment(view,rowData)" matTooltip="View"><i class="fa fa-eye"></i></a> </span>-->
+                                    <button class="btn-edit" mat-icon-button (click)="openEdited(rowData)"
+                                            matTooltip="Edit">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+
+                                    <button class="btn-delete" mat-icon-button matTooltip="Delete"
+                                            (click)="openDelete(content,rowData)">
+                                        <mat-icon color="warn">delete</mat-icon>
+                                    </button>
+
+                                    <button class="btn-history" mat-icon-button matTooltip="History"
+                                            (click)="openHist(contentHist,rowData)">
+                                        <mat-icon color="green">history</mat-icon>
+                                    </button>
+
+                                </td>
+                            </tr>
+                        </ng-template>
+
+                    </p-table>
+
+                </div>
+
+                <div class="right_col" role="main" *ngIf="exchangeTable">
+
+                    <h5>{{radioButtonValue}} List</h5>
+
+
+                </div>
+
+                <div class="right_col" role="main" *ngIf="loanTable">
+
+                    <h5>{{radioButtonValue}} List</h5>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+         <!-- <b>  Part Number :</b> {{deletePartDesc}}  -->
+        <button type="button" class="close" aria-label="Close"
+         (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>
+            Part Number:
+          <span class="new-label">
+            {{deletePartDesc}}
+            </span>
+        </strong>
+      </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+
+<div id="itemMasterView" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" style="padding: 0 !important" (click)="dismissItemMasterModel()">
+                    &times;
+                </button>
+                <div class="col-sm-3">
+                    <h4 class="modal-title">Details of Item Master</h4>
+                </div>
+                
+            </div>
+            <div class="modal-body" *ngIf="isViewOpened == true">
+                <app-item-master-view [itemMasterRowData]="itemMasterRowData"></app-item-master-view>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                        (click)="dismissItemMasterModel()">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="stockHistory" class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">History of Item Master Stock</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <h4 style="color: #ff5663;">No History Found </h4>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="nonStockHistory" class="modal" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">History of Item Master Non-stock</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <h4 style="color: #ff5663;">No History Found </h4>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

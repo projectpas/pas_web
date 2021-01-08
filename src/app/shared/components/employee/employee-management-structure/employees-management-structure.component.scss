@@ -1,0 +1,89 @@
+﻿ng-multiselect-dropdown {
+  width: 65%; //150
+  margin-right: 5px;
+}
+
+.add-icon{
+    height: 100%;
+    width: 10%;
+    text-align: center;
+    padding: 3px;
+    border-radius: 5px;
+}
+.add-icon .fa {
+  padding: 7px 7px !important;
+}
+
+textarea{
+    width: 65%;
+}
+.labels-font-header {
+    font-size: 13px !important;
+    font-weight: normal !important;
+  }
+.span-header-red {
+    color: red;
+    font-weight: bold;
+  }
+  .shadow-Box {
+    padding-bottom: 0px !important;
+}
+label {
+  text-align: left;
+  width: 150px;
+  margin-right: 0;
+  font-weight: normal;
+}
+input[type="text"], input[type="number"], select {
+  height: 24px !important;
+  border-radius: 5px !important;
+}
+textarea {
+  border-radius: 5px !important;
+}
+.inner-addon .ui-autocomplete-input {
+  width: 100% !important;
+}
+.po-head {
+  font-weight: bold;
+  font-size: 16px;
+  color: #295d92;
+}
+.partsList-table-tr th {
+  min-width: 80px;
+}
+.addpn-btn {
+  padding: 5px 10px !important;
+  font-size: 13px;
+}
+a.fa.fa-plus-circle {
+  color: green !important;
+}
+.partsList-modal .form-group {
+  margin-bottom: 6px !important;
+}
+.rpo-table-cstm th {
+  padding: 8px 5px !important;
+}
+.child-add-icon {
+  cursor: pointer;
+  margin: 2px -12px;
+}
+.child-add-icon a:before, .child-add-icon i:before{
+  font-size: 16px;
+}
+
+@media (min-width: 768px) {
+  .col-md-3 {
+      max-width: 22%;
+      margin-right: 15px;
+  }
+}
+.text_editor_box p {
+  margin-bottom: 0px;
+  padding: 0px;
+  overflow: visible;
+  padding-left: 4px;
+  line-height: 2;
+}
+

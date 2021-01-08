@@ -1,0 +1,968 @@
+﻿<div class="modal-header">
+    <button type="button"
+            class="close"
+            style="padding: 0 !important"
+            (click)="dismissModel()">
+        &times;
+    </button>
+    <div class="col-sm-3">
+        <h4 class="modal-title">Details of Legal Entity</h4>
+    </div>
+    <div class="col-sm-3">
+        Legal Entity Name<span style="color:red">
+            : {{ viewDataGeneralInformation.name }}
+        </span>
+    </div>
+    <div class="col-sm-3">
+        Company Code<span style="color:red">
+            : {{ viewDataGeneralInformation.companyCode }}
+        </span>
+    </div>
+</div>
+<div class="modal-body" *ngIf="viewDataGeneralInformation">
+    <div>
+        <button type="button"
+                class="btn btn-primary"
+                (click)="ExpandAllCustomerDetailsModel()">
+            Open All
+        </button>
+        <button type="button"
+                class="btn btn-secondary"
+                (click)="CloseAllCustomerDetailsModel()">
+            Close All
+        </button>
+    </div>
+    <div class="panel-group mt-2" id="accordion">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <div></div>
+                    <a data-toggle="collapse" href="#step1">General Info</a>
+                </h4>
+                 
+            </div>
+            <div id="step1" class="panel-collapse collapse in show">
+                <div class="panel-body">
+                    <div class="modal-content p-1">
+                        <div class="default-bg clear">
+                            <div class="col-sm-6">
+
+                                <p>
+                                    <span class="label">
+                                        <b>Legal Entity Name: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.name }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>Company Code: <span class="text-danger">*</span></b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.companyCode }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b>D/B/A: </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.doingLegalAs }}
+                                    </span>
+                                </p>
+                                <!--<p>
+                                <span class="label"><b>Parent: </b></span><span class="value">
+                                    {{ viewDataGeneralInformation.customerParentName }}
+                                </span>
+                            </p>-->
+                                <p>
+                                    <span class="label"><b>Phone: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.phoneNumber }} -
+                                        {{ viewDataGeneralInformation.phoneExt }}
+                                    </span>
+                                </p>
+
+
+                                <p>
+                                    <span class="label"><b>Address 1: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.address1 }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Address 2: </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.address2 }}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="label"><b>City: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.city }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label">
+                                        <b>
+                                            Primary State/Province:
+                                            <span class="text-danger">*</span>
+                                        </b>
+                                    </span><span class="value">
+                                        {{ viewDataGeneralInformation.stateOrProvince }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Postal: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.postalCode }}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Country: <span class="text-danger">*</span></b></span><span class="value">
+                                        {{ viewDataGeneralInformation.country }}
+                                    </span>
+                                </p>
+                            </div>
+                            <div class="col-sm-6">
+                                <p>
+                                    <span class="value">
+                                        <input type="checkbox"
+                                               name="isIsBillingAddress"
+                                               [(ngModel)]="
+                        viewDataGeneralInformation.isAddressForBilling
+                      "
+                                               disabled /><span><b> Is this Address For Billing </b></span>
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <span class="value">
+                                        <input type="checkbox"
+                                               name="isIsShippingAddress"
+                                               [(ngModel)]="viewDataGeneralInformation.isAddressForShipping"
+                                               disabled /><span><b> Is this Address For Shipping </b></span>
+                                    </span>
+                                </p>
+
+
+                                <p>
+                                    <span class="label"><b>Ledger Name:  </b></span><span class="value">
+                                        {{ viewDataGeneralInformation.ledgerName }}
+                                    </span>
+                                </p>
+
+                                 <p>
+                                    <span class="label"><b>Tag Names:  </b></span><span class="value">
+                                       <span *ngFor="let tagname of viewDataGeneralInformation.tagNames; let last=last">
+                                           {{tagname}}<span *ngIf="!last">, </span>
+                                       </span>
+                                        
+                                    </span>
+                                </p>
+
+
+
+                                <div class="table-responsive table-overflow" *ngIf="sourceViewforDocumentList.length > 0">
+                                    <h4 class="panel-title" style="padding-left: 10px;">Attachment Details:</h4>
+                                    <p-table class="table-responsive ptable-cus-pma" [paginator]="sourceViewforDocumentList.length > 0" [value]="sourceViewforDocumentList" [rows]="3" [columns]="sourceViewforDocumentListColumns">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns">
+                                                    {{col.header}}
+                                                </th>
+                                                <th>
+                                                    Download
+                                                </th>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="body" let-part let-rowData let-columns="columns" let-i="rowIndex">
+                                            <tr>
+                                                <td *ngFor="let col of columns">
+                                                    <ng-container *ngIf="col.field=='fileName'">
+                                                        {{part[col.field]}}
+                                                    </ng-container>
+
+                                                </td>
+                                                <td>
+                                                    <a (click)="downloadFileUpload(part)" matTooltipPosition="above" matTooltip="Download" class="btn nobg btn-cstm"><span><i class="fa fa-download"></i></span></a>
+                                                    <!--<span>
+                                                        <a class="btn nobg"
+                                                           (click)="openDeletes(content,rowData)"
+                                                           matTooltip="Delete" matTooltipPosition="above">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </span>-->
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns *ngIf="sourceViewforDocumentList.length == 0">
+                                            <tr>
+                                                <td [attr.colspan]="2" style="color: red; font-weight: bold; text-align: center">
+                                                    No records found
+                                                </td>
+                                            </tr>
+                                        </ng-template>
+                                        <ng-template #content let-c="close" let-d="dismiss">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                                                <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong>
+                                                    Delete Logo
+                                                    <!--<span class="new-label">{{selectedRowforDelete.name}}</span>-->
+                                                </strong>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>
+                                                <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+                                            </div>
+                                        </ng-template>
+                                    </p-table>
+                                </div>
+                              
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step2">Contact</a>
+                </h4>
+            </div>
+            <div id="step2" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <app-legal-entity-contact [viewMode]="true" [legalEntityMainId]="legalEntityId">
+                  </app-legal-entity-contact>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step3">Banking</a>
+                </h4>
+            </div>
+            <div id="step3" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <div class="col-sm-12">
+                        <!--<app-legal-entity-contact [customerDataFromExternalComponents]="viewDataGeneralInformation"></app-legal-entity-contact>-->
+
+                        <div class="shadow-Box">
+                            <div class="bg-block2">
+                                <h3>Lockbox</h3>
+                                <p><span class="label"><b>PO Box: </b></span><span class="value">{{lockboxing.poBox}}</span></p>
+                                <p><span class="label"><b>Bank Street Address line 1: </b></span><span class="value">{{lockboxing.bankStreetaddress1}}</span></p>
+                                <p><span class="label"><b>Bank Street Address line 2: </b></span><span class="value">{{lockboxing.bankStreetaddress2}}</span></p>
+                                <p><span class="label"><b>City: </b></span><span class="value">{{lockboxing.bankCity}}</span></p>
+                                <p><span class="label"><b>State: </b></span><span class="value">{{lockboxing.bankProvince}}</span></p>
+                                <p><span class="label"><b>Country: </b></span><span class="value">{{lockboxing.bankcountry}}</span></p>
+                                <p><span class="label"><b>Postal Code: </b></span><span class="value">{{lockboxing.bankpostalCode}}</span></p>
+                            </div>
+                            <div class="bg-block2">
+                                <h3>Domestic Wire</h3>
+                                <p><span class="label"><b>Bank Name: </b></span><span class="value">{{lockboxing.domesticBankName}}</span></p>
+                                <p><span class="label"><b>Intermediate Bank: </b></span><span class="value">{{lockboxing.domesticIntermediateBank}}</span></p>
+                                <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{lockboxing.domesticBenficiaryBankName}}</span></p>
+                                <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{lockboxing.domesticBankAccountNumber}}</span></p>
+                                <p><span class="label"><b>ABA Number: </b></span><span class="value">{{lockboxing.domesticABANumber}}</span></p>
+                            </div>
+                            <div class="bg-block2">
+                                <h3>International Wire</h3>
+                                <p><span class="label"><b>Bank Name: </b></span><span class="value">{{lockboxing.internationalBankName}}</span></p>
+                                <p><span class="label"><b>Intermediate Bank: </b></span><span class="value">{{lockboxing.internationalIntermediateBank}}</span></p>
+                                <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
+                                <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{lockboxing.internationalBankAccountNumber}}</span></p>
+                                <p><span class="label"><b>SWIFT ID: </b></span><span class="value">{{lockboxing.internationalSWIFTID}}</span></p>
+                            </div>
+                            <div class="bg-block2">
+                                <h3>ACH</h3>
+                                <p><span class="label"><b>Bank Name: </b></span><span class="value">{{lockboxing.achBankName}}</span></p>
+                                <p><span class="label"><b>Intermediate Bank: </b></span><span class="value">{{lockboxing.achIntermediateBank}}</span></p>
+                                <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{lockboxing.achBenficiaryBankName}}</span></p>
+                                <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{lockboxing.achBankAccountNumber}}</span></p>
+                                <p><span class="label"><b>ABA Number: </b></span><span class="value">{{lockboxing.achABANumber}}</span></p>
+                                <p><span class="label"><b>SWIFT ID: </b></span><span class="value">{{lockboxing.achSWIFTID}}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step6">Billing Information</a>
+                </h4>
+            </div>
+            <div id="step6" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <app-legal-entity-billing [viewMode]="true" [legalEntityMainId]="legalEntityId"></app-legal-entity-billing>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step7">Shipping Information</a>
+                </h4>
+            </div>
+            <div id="step7" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+                    <app-legal-entity-shipping [viewMode]="true" [legalEntityMainId]="legalEntityId"></app-legal-entity-shipping>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#step10">Documents</a>
+                </h4>
+            </div>
+            <div id="step10" class="panel-collapse  collapse">
+                <div class="panel-body m-lr-7">
+  <app-legal-entity-documents [viewMode]="true" [legalEntityMainId]="legalEntityId">
+</app-legal-entity-documents>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+        Close
+    </button>
+</div>
+
+
+
+
+
+<div id="view" #view class="modal fade" role="dialog" *ngIf="sourceViewforContact" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Details of Legal Entity Contact</h4>
+            </div>
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                        <span class="span-header-red"> {{ viewDataGeneralInformation.name }} </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ viewDataGeneralInformation.companyCode }} </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <p><span class="label"><b>Tag: </b></span><span class="value">{{sourceViewforContact.tag}}</span></p>
+                    <p><span class="label"><b>Prefix: </b></span><span class="value">{{sourceViewforContact.prefix}}</span></p>
+                    <p><span class="label"><b>First Name: </b></span><span class="value">{{sourceViewforContact.firstName}}</span></p>
+                    <p><span class="label"><b>Middle Name: </b></span><span class="value">{{sourceViewforContact.middleName}}</span></p>
+                    <p><span class="label"><b>Last Name: </b></span><span class="value">{{sourceViewforContact.lastName}}</span></p>
+                    <p><span class="label"><b>Suffix: </b></span><span class="value">{{sourceViewforContact.suffix}}</span></p>
+                    <p><span class="label"><b>Title: </b></span><span class="value">{{sourceViewforContact.contactTitle}}</span></p>
+                    <p><span class="label"><b>Work Phone: </b></span><span class="value">{{sourceViewforContact.fullContactNo}}</span></p>
+                    <p><span class="label"><b>Primary Contact </b></span><span class="value">{{sourceViewforContact.isDefaultContact}}</span></p>
+
+                    <p><span class="label"><b>Email: </b></span><span class="value">{{sourceViewforContact.email}}</span></p>
+                    <p><span class="label"><b>WebSite: </b></span><span class="value">{{sourceViewforContact.websiteURL}}</span></p>
+                    <p><span class="label"><b>Mobile Phone: </b></span><span class="value">{{sourceViewforContact.mobilePhone}}</span></p>
+                    <p><span class="label"><b>Alternate Phone:</b></span><span class="value">{{sourceViewforContact.alternatePhone}}</span></p>
+
+                    <p><span class="label"><b>Fax: </b></span><span class="value">{{sourceViewforContact.fax}}</span></p>
+                    <p><span class="label"><b>Memo: </b></span><span class="value">{{sourceViewforContact.notes}}</span></p>
+                    <p><span class="label"><b>Active: </b></span><span class="value">{{sourceViewforContact.isActive}}</span></p>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+<!-- history -->
+<div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="col-md-12 shadow-box-cstm">
+                    <div class="col-md-4">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                            <span class="span-header-red"> {{ viewDataGeneralInformation.name }} </span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                            <span class="span-header-red"> {{ viewDataGeneralInformation.companyCode }} </span>
+                        </p>
+                    </div>
+                </div>
+                <h4 class="modal-title">History of Legal Entity Contact</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive rro-table-cstm">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+
+
+                                <th>Tag</th>
+                                <th>Prefix</th>
+                                <th>First Name</th>
+                                <th>Middle Name</th>
+                                <th>Last Name</th>
+                                <th>Suffix</th>
+                                <th>Contact Title</th>
+                                <th>Email</th>
+                                <th>Work Phone</th>
+                                <th>Mobile Phone</th>
+                                <th>Alternate Phone</th>
+                                <th>Fax</th>
+
+                                <th>Website URL</th>
+                                <th>Primary Contact</th>
+                                <th>Memo</th>
+                                <th>Is Active</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                                <th>Updated By</th>
+                                <th>Updated Date</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="auditHistory.length> 0">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'tag', audit.tag)  ? 'black' : 'red'  }">{{audit.tag}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'prefix', audit.prefix)  ? 'black' : 'red'  }">{{audit.prefix}}</td>
+
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'firstName', audit.firstName)  ? 'black' : 'red'  }">{{audit.firstName}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'middleName', audit.middleName)  ? 'black' : 'red'  }">{{audit.middleName}}</td>
+
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'lastName', audit.lastName)  ? 'black' : 'red'  }">{{audit.lastName}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'suffix', audit.suffix)  ? 'black' : 'red'  }">{{audit.suffix}}</td>
+
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'contactTitle', audit.contactTitle)  ? 'black' : 'red'  }">{{audit.contactTitle}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'email', audit.email)  ? 'black' : 'red'  }">{{audit.email}}</td>
+
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'fullContactNo', audit.fullContactNo)  ? 'black' : 'red'  }">{{audit.fullContactNo}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'mobilePhone', audit.mobilePhone)  ? 'black' : 'red'  }">{{audit.mobilePhone}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'alternatePhone', audit.alternatePhone)  ? 'black' : 'red'  }">{{audit.alternatePhone}}</td>
+
+
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'fax', audit.fax)  ? 'black' : 'red'  }">{{audit.fax}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'websiteURL', audit.websiteURL)  ? 'black' : 'red'  }">{{audit.websiteURL}}</td>
+
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isDefaultContact', audit.isDefaultContact)  ? 'black' : 'red'  }">{{audit.isDefaultContact}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'notes', audit.notes)  ? 'black' : 'red'  }">{{audit.notes}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                                <td>{{audit.createdBy}}</td>
+                                <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+
+                                <td>{{audit.updatedBy}}</td>
+                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Billing view -->
+<div id="view1" class="modal" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Details of Legal Entity Billing Information</h4>
+                <button type="button" class="close" data-dismiss="modal"  >&times;</button>
+            </div>
+
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                        <span class="span-header-red"> {{viewDataGeneralInformation.name }} </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                        <span class="span-header-red" > {{ viewDataGeneralInformation.companyCode }} </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="modal-body" *ngIf="viewData">
+                <div class="col-sm-12">
+                    <p><span class="label"><b>Site Name <span class="clr-red">*</span>: </b></span><span class="value">{{viewData.siteName}}</span></p>
+                    <p><span class="label"><b> Primary: </b></span><span class="value">{{viewData.isPrimary === true ? 'Yes' : 'No'}}</span></p>
+                    <p><span class="label"><b>In Active: </b></span><span class="value">{{viewData.isActive === true ? 'Yes' : 'No'}}</span></p>
+                    <p><span class="label"><b>Bill To Address 1 <span class="clr-red">*</span>: </b></span><span class="value">{{viewData.address1}}</span></p>
+                    <p><span class="label"><b>Bill To Address 2: </b></span><span class="value">{{viewData.address2}}</span></p>
+                    <p style="display:none"><span class="label"><b>Bill To Address 3: </b></span><span class="value">{{viewData.address3}}</span></p>
+                    <p><span class="label"><b>Bill To City <span class="clr-red">*</span>: </b></span><span class="value">{{viewData.city}}</span></p>
+                    <p><span class="label"><b>Bill To State / Prov <span class="clr-red">*</span>: </b></span><span class="value">{{viewData.stateOrProvince}}</span></p>
+                    <p><span class="label"><b>Bill To Postal Code <span class="clr-red">*</span> :</b></span><span class="value">{{viewData.postalCode}}</span></p>
+                    <p><span class="label"><b>Bill To Country <span class="clr-red">*</span>: </b></span><span class="value">{{viewData.countryName}}</span></p>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"  >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Billing History modal-->
+<!-- <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static"> -->
+    
+    <div   id="contentHist1" #contentHist1 class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl">
+    
+            <!-- Modal content-->
+            <div class="modal-content">
+                
+                <div class="modal-header">
+
+        <h4 class="modal-title">History of Billing Information</h4>
+        <button type="button" class="close" aria-label="Close"  data-dismiss="modal">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-4">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ viewDataGeneralInformation.name }} </span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> 
+                        {{ viewDataGeneralInformation.companyCode }} </span>
+                </p>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Site Name</th>
+                        <th>Address1</th>
+                        <th>Address2</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Postal Code</th>
+                        <th>Country</th>
+                        <th>Is Primary</th>
+                        <th>Is Active</th>
+                        <th>Created By</th>
+                        <th>Created Time</th>
+                        <th>Updated By</th>
+                        <th>Last Updated Time</th>
+                    </tr>
+                </thead>
+
+
+                <tr *ngFor="let audit of auditHistory; let i = index;">
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">{{audit.siteName}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'address1', audit.address1)  ? 'black' : 'red'  }">{{audit.address1}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'address2', audit.address2)  ? 'black' : 'red'  }">{{audit.address2}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'city', audit.city)  ? 'black' : 'red'  }">{{audit.city}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'stateOrProvince', audit.stateOrProvince)  ? 'black' : 'red'  }">{{audit.stateOrProvince}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'postalCode', audit.postalCode)  ? 'black' : 'red'  }">{{audit.postalCode}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'country', audit.country)  ? 'black' : 'red'  }">{{audit.country}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">{{audit.isPrimary}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory1(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                    <td>{{audit.createdBy}}</td>
+                    <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                    <td>{{audit.updatedBy}}</td>
+                    <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger"  data-dismiss="modal" >Close</button>
+    </div>
+    </div></div></div>
+<!-- </ng-template> -->
+
+
+
+
+
+
+
+
+<!-- shipping view -->
+<div class="modal popup-blur" id="viewShipping"  class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Details of Legal Entity Shipping</h4>
+                <button type="button" class="close" data-dismiss="modal"  >&times;</button>
+            </div>
+
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> 
+                            {{ viewDataGeneralInformation.name }} </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> 
+                            {{ viewDataGeneralInformation.companyCode }} </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- Modal body -->
+            <div class="modal-body" *ngIf="sourceViewforShipping">
+                <div class="col-sm-12">
+                    <p><span class="label"><b> Primary: </b></span><span class="value">{{sourceViewforShipping.isPrimary === true ? 'Yes' : 'No'}}</span></p>
+
+                    <p><span class="label"><b>Site Name<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforShipping.siteName}}</span></p>
+                    <p><span class="label"><b>Address 1<span class="clr-red">*</span> :   </b></span><span class="value">{{sourceViewforShipping.address1}}</span></p>
+                    <p><span class="label"><b>Address 2: </b></span><span class="value">{{sourceViewforShipping.address2}}</span></p>
+                    <p style="display:none"><span class="label"><b>Address 3: </b></span><span class="value">{{sourceViewforShipping.address3}}</span></p>
+                    <p><span class="label"><b>City<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforShipping.city}}</span></p>
+                    <p><span class="label"><b>State / Prov<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforShipping.stateOrProvince}}</span></p>
+                    <p><span class="label"><b>Postal Code <span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforShipping.postalCode}}</span></p>
+                    <p><span class="label"><b>Country<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforShipping.countryName}}</span></p>
+                    <p><span class="label"><b>Is Primary : </b></span><span class="value">{{sourceViewforShipping.isPrimary === true ? 'Yes' : 'No'}}</span></p>
+                    <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforShipping.isActive === true ? 'Yes' : 'No'}}</span></p>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Domestic shipping history -->
+<!-- <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static"> -->
+    <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
+
+ <div   id="contentAuditHistShipping1" #contentAuditHistShipping1 class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">         
+        <div class="modal-content">       
+    <div class="modal-header">
+        <h4 class="modal-title">History of Shipping Info</h4>
+        <button type="button" class="close" aria-label="Close" data-dismiss="modal"  >
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> 
+                        {{ viewDataGeneralInformation.name }} </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> 
+                        {{ viewDataGeneralInformation.companyCode }} </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Site Name</th>
+                        <th>Address1</th>
+                        <th>Address2</th>
+                        <th>City</th>
+                        <th>State</th>
+                        <th>Postal Code</th>
+                        <th>Country</th>
+                        <th>Is Active</th>
+                        <th>Is Primary</th>
+                        <th>Updated By</th>
+                        <th>Last Updated Time</th>
+                        <th>Created By</th>
+                        <th>Created Time</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let audit of shippingauditHisory; let i = index;">
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">{{audit.siteName}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'address1', audit.address1)  ? 'black' : 'red'  }">{{audit.address1}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'address2', audit.address2)  ? 'black' : 'red'  }">{{audit.address2}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'city', audit.city)  ? 'black' : 'red'  }">{{audit.city}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'stateOrProvince', audit.stateOrProvince)  ? 'black' : 'red'  }">{{audit.stateOrProvince}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'postalCode', audit.postalCode)  ? 'black' : 'red'  }">{{audit.postalCode}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'country', audit.country)  ? 'black' : 'red'  }">{{audit.country}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                    <td [ngStyle]="{'color':  openShipaddressHistoryDomestic(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">{{audit.isPrimary}}</td>
+                    <td>{{audit.updatedBy}}</td>
+                    <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                    <td>{{audit.createdBy}}</td>
+                    <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    </div>
+
+</div></div>
+</div> 
+<!-- </ng-template> -->
+
+
+
+
+<!-- International shipping view details -->
+<div class="modal popup-blur" id="viewInter" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Details of Legal Entity Shipping</h4>
+                <button type="button" class="close" data-dismiss="modal"  >&times;</button>
+            </div>
+
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> 
+                            {{ viewDataGeneralInformation.name }} </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> 
+                            {{ viewDataGeneralInformation.companyCode }} </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- Modal body -->
+            <div class="modal-body" *ngIf="sourceViewforInterShipping">
+                <div class="col-sm-12">
+                    <p><span class="label"><b> Primary: </b></span><span class="value">{{sourceViewforInterShipping.isPrimary === true ? 'Yes' : 'No'}}</span></p>
+
+                    <p><span class="label"><b>Export License#: </b></span><span class="value">{{sourceViewforInterShipping.exportLicense}}</span></p>
+                    <p><span class="label"><b>Description: </b></span><span class="value">{{sourceViewforInterShipping.description}}</span></p>
+                    <p><span class="label"><b>Start Date: </b></span><span class="value">{{sourceViewforInterShipping.startDate | date:'dd-MM-yyyy'}}</span></p>
+                    <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{sourceViewforInterShipping.expirationDate | date:'dd-MM-yyyy'}}</span></p>
+                    <p><span class="label"><b>Amount: </b></span><span class="value">{{sourceViewforInterShipping.amount}}</span></p>
+                    <p><span class="label"><b>Country<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforInterShipping.shipToCountry}}</span></p>
+                    <p><span class="label"><b>Is Primary : </b></span><span class="value">{{sourceViewforInterShipping.isPrimary === true ? 'Yes' : 'No'}}</span></p>
+                    <p><span class="label"><b>In Active: </b></span><span class="value">{{sourceViewforInterShipping.isActive === true ? 'Yes' : 'No'}}</span></p>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div *ngIf="sourceViewforInterShipping" class="modal" id="viewInter">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Details of Legal Entity Shipping</h4>
+                <button type="button" class="btn btn-primary-cstm" data-dismiss="modal"  >&times;</button>
+            </div>
+
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-4">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ viewDataGeneralInformation.name }} </span>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ viewDataGeneralInformation.companyCode }} </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    <p><span class="label"><b>Export License#: </b></span><span class="value">{{sourceViewforInterShipping.exportLicense}}</span></p>
+                    <p><span class="label"><b>Description: </b></span><span class="value">{{sourceViewforInterShipping.description}}</span></p>
+                    <p><span class="label"><b>Start Date: </b></span><span class="value">{{sourceViewforInterShipping.startDate | date:'dd-MM-yyyy'}}</span></p>
+                    <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{sourceViewforInterShipping.expirationDate | date:'dd-MM-yyyy'}}</span></p>
+                    <p><span class="label"><b>Amount: </b></span><span class="value">{{sourceViewforInterShipping.amount}}</span></p>
+                    <p><span class="label"><b>Country<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforInterShipping.shipToCountry}}</span></p>
+
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal"  >Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!-- <ng-template #contentAuditHistInter let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static"> -->
+    <!--<div #contentAuditHist id="contentAuditHist" class="modal fade">-->
+
+        <div   id="contentAuditHistInter" #contentAuditHistInter class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-xl">         
+                <div class="modal-content">   
+
+    <div class="modal-header">
+        <h4 class="modal-title">History of International Shipping Info</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <button type="button" class="close" data-dismiss="modal"  >&times;</button>
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-4">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> 
+                        {{ viewDataGeneralInformation.name }} </span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> 
+                        {{ viewDataGeneralInformation.companyCode }} </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Export License</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>Expiration Date</th>
+                        <th>Amount</th>
+                        <th>Country</th>
+                        <th>Is Primary</th>
+                        <th>Is Active</th>
+                        <th>Updated By</th>
+                        <th>Last Updated Time</th>
+                        <th>Created By</th>
+                        <th>Created Time</th>
+                    </tr>
+                </thead>
+                <tr *ngFor="let audit of interShippingauditHisory; let i = index;">
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'exportLicense', audit.exportLicense)  ? 'black' : 'red'  }">{{audit.exportLicense}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">{{audit.description}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'startDate', audit.startDate)  ? 'black' : 'red'  }">{{audit.startDate | date: 'MM/dd/yyyy'}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'expirationDate', audit.expirationDate)  ? 'black' : 'red'  }">{{audit.expirationDate | date: 'MM/dd/yyyy'}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'amount', audit.amount)  ? 'black' : 'red'  }">{{audit.amount}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'countryName', audit.countryName)  ? 'black' : 'red'  }">{{audit.country}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">{{audit.isPrimary}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForInterHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                    <td>{{audit.updatedBy}}</td>
+                    <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                    <td>{{audit.createdBy}}</td>
+                    <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        
+        <button type="button" class="btn btn-danger" data-dismiss="modal"  >Close</button>
+    </div>
+    </div></div>
+</div>
+<!-- </ng-template> -->

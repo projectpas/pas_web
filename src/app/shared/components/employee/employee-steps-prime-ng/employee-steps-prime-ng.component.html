@@ -1,0 +1,40 @@
+﻿<div class="card new-card" *ngIf="showComponentPTab">
+	<div class="card-header bg-primary">
+		<div class="row">
+			<div class="col">
+				<h4 class="new-card-heading">
+					{{ employeeService.isEditMode ? 'Edit' : 'Create' }} Employee
+				</h4>
+			</div>
+			<div>
+				<button type="button"
+						class="btn-sm new-btn-primary"
+						[routerLink]="['/employeesmodule/employeepages/app-employees-list']">
+					Employee List
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+        <div class="md-stepper-horizontal orange new-stepper-align" *ngIf="showComponentPTab">
+				<ng-container *ngFor="let item of items;">
+					<div
+						class="md-step"
+						[ngClass]="{
+						  active: activeIndex >= item.index,
+						  editable: activeIndex === item.index
+						}"
+						[class.isDisabled]="!employeeService.isDisbaleTabs"
+						(click)="item.command(item)"
+					  >
+						<div class="md-step-circle"><span>{{ item.step }}</span></div>
+						<div class="md-step-title">{{ item.label }}</div>
+						<div class="md-step-bar-left"></div>
+						<div class="md-step-bar-right"></div>
+					</div>
+	
+				</ng-container>
+			 
+		  
+			 
+		  </div>

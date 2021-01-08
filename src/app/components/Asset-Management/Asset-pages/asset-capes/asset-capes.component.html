@@ -1,0 +1,839 @@
+﻿<p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="isView==false"></p-breadcrumb>
+<div class="card new-card" >
+    <div class="card-header bg-primary" *ngIf="isView==false">
+      <div class="row">
+        <div class="col">
+          <h4 class="new-card-heading">  {{ assetServices.isEditMode == true ? 'Edit'  : 'Create'}} Asset Caps</h4>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="btn-sm new-btn-primary"
+            [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+            Asset List
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="card-body new-card-body">
+<div class="md-stepper-horizontal orange new-stepper-align" *ngIf="isView==false">
+    <div class="md-step" [ngClass]="{ active: activeIndex >= 0 , editable : activeIndex === 0}"
+         (click)="changeOfTab('General')">
+        <div class="md-step-circle"><span>1</span></div>
+        <div class="md-step-title">General Information</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+    <div class="md-step" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
+         (click)="changeOfTab('Capes')">
+        <div class="md-step-circle"><span>2</span></div>
+        <div class="md-step-title">Capes</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+    <div class="md-step" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
+         (click)="changeOfTab('Calibration')">
+        <div class="md-step-circle"><span>3</span></div>
+        <div class="md-step-title">Calibration</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+    <div class="md-step" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
+         (click)="changeOfTab('Maintenance')">
+        <div class="md-step-circle"><span>4</span></div>
+        <div class="md-step-title">Maintenance & Warranty</div>
+        <div class="md-step-bar-left"></div>
+        <div class="md-step-bar-right"></div>
+    </div>
+</div>
+<div class="card" style="border: none;">
+    <!-- <div class="x_content"> -->
+        <!-- <div action="#" method="post" id="" name="" class="form-horizontal ro-grid-form mtop10"> -->
+            <!-- <ng-template #content id="addShippingInfo" let-c="close" let-d="dismiss">
+                 -->
+            <div class="modal fade" #content id="addShippingInfo" role="dialog" data-backdrop="static">
+                <div class="modal-dialog  modal-xlg" id="addShippingInfo">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" (click)="dismissModelWithAlert()">×</button>
+                            <h4 class="modal-title">Add Capability</h4>
+
+                        </div>
+                        <div class="form-row" style="padding: 12px 20px;">
+                            <div class="col-md-3">
+                                <label class="fs12">Asset ID : </label>
+                                <span class="span-header-red"> {{local?.assetId}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fs12">Asset Name : </label>
+                                <span class="span-header-red"> {{local?.name}}</span>
+
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fs12">Alt Asset ID : </label>
+                                <span class="span-header-red"> {{local?.alternateAssetName}}</span> 
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fs12">Asset Class/Attribute : </label>
+                                <span class="span-header-red"> {{local?.assetAttributeType}}</span> 
+                            </div>
+                        </div>
+                        
+                        <div class="modal-body" style="padding: 12px;">
+                            <form #genForm="ngForm" [formGroup]="capabilitiesForm">
+                                <div formArrayName="mfgForm">
+                                    <div class="form-row">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="popup-plusicon-cstm-caps">Capability Type  <span class="clr-red">*</span></label>
+                                             
+                                                <p-dropdown class="p-dropdown-100"  [ngModelOptions]="{standalone: true}" (input)="onFilterCapability($event.target.value)" (onChange)="onCapabilityTypeSelection($event)"  (ngModelChange)="getmemo($event)" required [options]="capabilityTypeData" filter="true" [(ngModel)]="capabilityForm.CapabilityTypeId" name="CapabilityTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group pop-up-caps-autocomplete">
+                                                <label class="popup-plusicon-cstm-caps">PN  <span class="clr-red">*</span></label>
+                                         
+
+                                                <p-autoComplete  (ngModelChange)="getmemo($event)" class="p-autoComplete-ctsm" field="partNumber" name="Inspector47" [dropdown]="true"
+                                                errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage="No Records Found" [ngModelOptions]="{standalone: true}"
+                                                (completeMethod)="filterPNpartItems($event)"  [size]="30" [minLength]="1" required  (onKeyUp)=partPNentHandler($event) (onSelect)="partnmId($event)"
+                                                [(ngModel)]="capabilityForm.selectedPartId"  #prellRevInsp33="ngModel" >
+                                            </p-autoComplete> 
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="popup-plusicon-cstm-caps text-left">
+                                                    Aircraft Manufacturer <span class="clr-red">*</span>
+                                                </label>
+                                                <p-dropdown class="p-dropdown-100" (input)="onFilteManufacturer($event.target.value)"  [ngModelOptions]="{standalone: true}" (onChange)="manufacturerChange($event,capabilityForm)" required  (ngModelChange)="getmemo($event)"  [options]="manufacturerData" filter="true" [(ngModel)]="capabilityForm.selectedAircraftTypes" name="selectedAircraftTypes" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="">
+                                                <span class="popup-plusicon-cstm-caps text-left">
+                                                    Model
+                                                    <input type="checkbox" [(ngModel)]="modelUnknown"
+                                                           [ngModelOptions]="{standalone: true}" style="width: 20px !important;    position: relative;
+                                                           top: 2px; margin-left: 7px; "
+                                                           (change)="resetAircraftModelsorDashNumbers($event,1);"> Unknown
+                                                </span>
+                                                <p-multiSelect *ngIf="!modelUnknown" [maxSelectedLabels]="2"
+                                                               [disabled]="!selectedAircraftId" class="imstock-pmselect"
+                                                               [options]="capabilityForm.selectedAircraftDataModels"
+                                                               [ngModelOptions]="{standalone: true}" 
+                                                               [(ngModel)]="capabilityForm.selectedAircraftModelTypes"
+                                                               [panelStyle]="{minWidth:'12em'}"
+                                                               (click)="openModelPopups(capabilityForm)"
+                                                               (onChange)="aircraftModalChange($event,capabilityForm)">
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" *ngIf="!modelUnknown">
+                                            <div class="">
+                                                <span class="popup-plusicon-cstm-caps text-left">
+                                                    Dash Number
+                                                    <input type="checkbox" [(ngModel)]="dashNumberUnknown"
+                                                           style="width: 20px !important; margin-left: 7px;  position: relative;
+                                                           top: 2px; "
+                                                           [ngModelOptions]="{standalone: true}" 
+                                                           (change)="resetAircraftModelsorDashNumbers($event,2);">
+                                                    Unknown
+                                                </span>
+
+                                                <p-multiSelect *ngIf=" !modelUnknown && !dashNumberUnknown" class="dashnumber_f"
+                                                               [disabled]="!selectedAircraftId"
+                                                               [options]="search_AircraftDashNumberList"
+                                                               [ngModelOptions]="{standalone: true}"
+                                                               [(ngModel)]="capabilityForm.selectedDashNumbers"
+                                                               [panelStyle]="{minWidth:'12em'}"
+                                                               (onChange)="dashNumberChange($event,capabilityForm)">
+                                                </p-multiSelect>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-md-1">
+                                            <!-- (!modelUnknown && !capabilityForm.selectedAircraftModelTypes)||(!dashNumberUnknown && !capabilityForm.selectedDashNumbers)|| -->
+                                            <button style="margin-top: 20px;" type="button" class="btn btn-primary"
+                                                    (click)="mapAircraftInformation(capabilityForm)"
+                                                    [disabled]="disableCapesSave || !capabilityForm.selectedPartId || !capabilityForm.selectedAircraftTypes  || !capabilityForm.CapabilityTypeId "
+                                                    >
+                                                Add  
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="card"> 
+                                        <p-table class="p-table-cstm" [value]="aircraftData"  [rows]="pageSize1" [paginator]="true" [pageLinks]="3"
+                                        [rowsPerPageOptions]="[10,20,50,100]" [totalRecords]="totalRecords1" (onLazyLoad)="loadData2($event)"
+                                                 [columns]="colaircraft" [scrollable]="true" [style]="{width:'100%'}"
+                                                 [paginator]="true">
+                                            <ng-template pTemplate="header" let-columns>
+                                                <tr>
+                                                    <th *ngFor="let col of columns" style="width:200px">
+                                                        {{col.header}} <span *ngIf="col.star==true" class="clr-red">*</span>
+                                                    </th>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="body" let-i="rowIndex" let-rowData
+                                                         let-columns="columns">
+                                                <tr>
+                                                    <td *ngFor="let col of columns">
+                                                        <!-- {{rowData[col.field]}} -->
+                                                        {{
+                                                            col.field == 'createdDate'
+                                                              ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                                              : rowData[col.field] && col.field == 'updatedDate'
+                                                              ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                                              : rowData[col.field] 
+                                                          }}
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="emptymessage" let-columns>
+                                                <tr>
+                                                    <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                                                        No records found
+                                                    </td>
+                                                </tr>
+                                            </ng-template>
+                                            <ng-template pTemplate="summary" id="footer"> 
+                                                <div style="text-align: right;">
+                                                    <label id="footer" class="footer">Total:</label>
+                                                    <input style="width: 5% !important;"  [ngModelOptions]="{standalone: true}"  [(ngModel)]="totalRecords1" disabled pInputText
+                                                           type="text" /> &nbsp;&nbsp;
+                                                    <label id="footer" class="footer1">Pages Count:</label>
+                                                    <input style="width: 5% !important;margin-right: 12px;"  [ngModelOptions]="{standalone: true}"  [(ngModel)]="totalPages1" disabled pInputText
+                                                           type="text" />
+                                                </div>
+                                            </ng-template>
+                                        </p-table>
+                                    </div>
+
+
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    (click)="saveCapabilities(capabilityForm,'add')" [disabled]="aircraftData && aircraftData.length == 0">
+                                Save
+                            </button>
+                            <button type="button" class="btn btn-danger"
+                                    (click)="dismissModelWithAlert()">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </ng-template> -->
+            <ng-template #tabRedirectConfirmationModal2 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-center">
+                        Are you sure you want to go to {{nextOrPreviousTab}} tab? Unsaved changes will be lost.
+                    </h6>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+                </div>
+            </ng-template>
+            <ng-template #editcontent let-c="close" let-d="dismiss">
+                <div class="modal-dialog modal-xl" style="margin: 0px !important;">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">×</button>
+                            <h4 class="modal-title">Edit Capability</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-row cal_cds">
+                                <div class="col-md-3">
+                                    <label class="fs12">Asset ID : </label>
+                                    <span class="span-header-red"> {{local?.assetId}}</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fs12">Asset Name : </label>
+                                    <span class="span-header-red"> {{local?.name}}</span>
+    
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fs12">Alt Asset ID : </label>
+                                    <span class="span-header-red"> {{local?.alternateAssetName}}</span> 
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fs12">Asset Class/Attribute : </label>
+                                    <span class="span-header-red"> {{local?.assetAttributeType}}</span> 
+                                </div>
+                            </div>
+                            <form [formGroup]="capabilitiesForm">
+                                <div formArrayName="mfgForm">
+                                    <div class="form-row" *ngIf="aircraftDataEdit">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="popup-plusicon-cstm-caps">Capability Type <span class="clr-red">*</span></label>
+                                               
+                                                <p-dropdown class="p-dropdown-100" [ngModelOptions]="{standalone: true}" (input)="onFilterCapability($event.target.value)" (onChange)="onCapabilityTypeSelection($event)"  (ngModelChange)="getmemo($event)" required [options]="capabilityTypeData" filter="true" [(ngModel)]="aircraftDataEdit.capabilityId" name="CapabilityTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group pop-up-caps-autocomplete">
+                                                <label class="popup-plusicon-cstm-caps">PN <span class="clr-red">*</span></label>
+                                     <p-autoComplete  (ngModelChange)="getmemo2($event)" class="p-autoComplete-ctsm" field="partNumber" name="Inspector47" [dropdown]="true"
+                                                errorMessage="Records not found"  [suggestions]="partCollection" emptyMessage="No Records Found" [ngModelOptions]="{standalone: true}"
+                                                (completeMethod)="filterPNpartItems($event)"  [size]="30" [minLength]="1" required  (onKeyUp)=partPNentHandler($event) (onSelect)="partnmId($event)"
+                                                [(ngModel)]="aircraftDataEdit.partNumber"  #prellRevInsp33="ngModel" >
+                                            </p-autoComplete> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="popup-plusicon-cstm-caps text-left">
+                                                    Aircraft Manufacturer <span class="clr-red">*</span>
+                                              </label>
+                                                <p-dropdown class="p-dropdown-100" (input)="onFilteManufacturer($event.target.value)" [ngModelOptions]="{standalone: true}" (onChange)="manufacturerChange($event,capabilityForm)"  (ngModelChange)="getmemo2($event)"  [options]="manufacturerData" filter="true" [(ngModel)]="aircraftDataEdit.aircraftTypeId" name="aircraftTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="">
+                                                <!-- <label class="popup-plusicon-cstm-caps text-left">
+                                                    Model
+                                                </label> -->
+                                                <span class="popup-plusicon-cstm-caps text-left">
+                                                    Model
+                                                    <input type="checkbox" [(ngModel)]="modelUnknown"
+                                                           [ngModelOptions]="{standalone: true}" style="width: 20px !important;position: relative;
+                                                           top: 2px; 
+                                                           margin-left: 7px; "
+                                                           (change)="resetAircraftModelsorDashNumbers($event,1)"> Unknown
+                                                </span>
+                                                <select *ngIf="!modelUnknown" [(ngModel)]="aircraftDataEdit.aircraftModelId" (ngModelChange)="getmemo2($event)" (change)="aircraftModalChange_1($event,aircraftTypeId,'')"
+                                                        [ngModelOptions]="{standalone: true}" id="aircraftDashlId"
+                                                        style="width: 150px !important;">
+                                                        <option value="">--Select--</option>
+                                                    <option *ngFor="let m of capabilityForm.selectedAircraftDataModels" [ngValue]="m.value">
+                                                        {{m.label}}
+                                                    </option>
+                                                </select>
+                                                <!-- <p-dropdown class="p-dropdown-100"  [ngModelOptions]="{standalone: true}" (input)="onFilterCapability($event.target.value)" (onChange)="onCapabilityTypeSelection($event)"  (ngModelChange)="getmemo($event)" required [options]="capabilityTypeData" filter="true" [(ngModel)]="capabilityForm.CapabilityTypeId" name="CapabilityTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown> -->
+                                            </div>
+                                        </div>
+                                     
+                                        <div class="col-md-2" *ngIf="!modelUnknown">
+                                            <div class="">
+                                                <span class="popup-plusicon-cstm-caps text-left">
+                                                    Dash Number
+                                                    <input type="checkbox" [(ngModel)]="dashNumberUnknown"
+                                                           style="width: 20px !important; margin-left: 7px; position: relative;
+                                                           top: 2px; "
+                                                           [ngModelOptions]="{standalone: true}"
+                                                           (change)="resetAircraftModelsorDashNumbers($event,2)">
+                                                    Unknown
+                                                </span>
+                                                <select  *ngIf=" !modelUnknown && !dashNumberUnknown" [(ngModel)]="aircraftDataEdit.aircraftDashNumberId" (ngModelChange)="getmemo2($event)"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        style="width: 150px !important;">
+                                                    <option value="">--Select--</option>
+                                                    <option *ngFor="let m of search_AircraftDashNumberList" [ngValue]="m.value">
+                                                        {{m.label}}
+                                                    </option>
+                                                </select>
+                                                <!-- <p-dropdown class="p-dropdown-100"  [ngModelOptions]="{standalone: true}" (input)="onFilterCapability($event.target.value)" (onChange)="onCapabilityTypeSelection($event)"  (ngModelChange)="getmemo($event)" required [options]="capabilityTypeData" filter="true" [(ngModel)]="capabilityForm.CapabilityTypeId" name="CapabilityTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown> -->
+                                            </div>
+                                        </div>
+
+                                      
+
+                                        <div class="col-md-1">
+                                            <button style="margin-top: 20px;" type="button" class="btn btn-primary"
+                                                    (click)="saveCapabilities(capabilityForm,'edit')" [disabled]="disableSaveForEdit">
+                                                Update
+                                            </button> 
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #content2 let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+                    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                   
+                    <div class="form-row" >
+                        <div class="col-md-3" style="margin-right: 0px !important;">
+                            <label class="fs12">Part Number: </label>
+                            <span class="new-label"> {{assetServices.CapeslistCollection.partNumber}}</span>
+                        </div>
+                        <div class="col-md-4" style="margin-right: 0px !important;">
+                            <label class="fs12"> Capability Type  : </label>
+                            <span class="new-label"> {{assetServices.CapeslistCollection.captypedescription}}</span>
+
+                        </div>
+                        <div class="col-md-2" style="margin-right: 0px !important;">
+                            <label class="fs12">Model : </label>
+                            <span class="new-label"> {{assetServices.CapeslistCollection.modelname}}</span> 
+                        </div>
+                        <div class="col-md-2" style="margin-right: 0px !important;">
+                            <label class="fs12">Dash Number : </label>
+                            <span class="new-label"> {{assetServices.CapeslistCollection.dashnumber}}</span> 
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" (click)="removeAsset()">Yes</button>
+                    <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+                </div>
+
+            </ng-template>
+        <!-- </div> -->
+        <!-- <div class="clear"></div> -->
+        <!-- <hr> -->
+    <!-- </div> -->
+    <div class="card" style="border: none;">
+        <div class="card-body" *ngIf="isView==false" style="padding: 0px !important;">
+            <div class="col-md-3">
+                <label class="fs12">Asset ID : </label>
+                <span class="span-header-red"> {{local?.assetId}}</span>
+            </div>
+            <div class="col-md-3">
+                <label class="fs12">Asset Name : </label>
+                <span class="span-header-red"> {{local?.name}}</span>
+
+            </div>
+            <div class="col-md-3">
+                <label class="fs12">Alt Asset ID : </label>
+                <span class="span-header-red"> {{local?.alternateAssetName}}</span>
+            </div>
+            <div class="col-md-3">
+                <label class="fs12">Asset Class/Attribute : </label>
+                <span class="span-header-red"> {{local?.assetAttributeType}}</span> 
+            </div>
+            <div class="clear"></div>
+            <hr />
+            <div class="clear"></div>
+
+            <!-- <div class="col-md-12" style="margin-bottom: -10px;">
+                <h4 class="float-left">
+                    Capabilities
+                    <a class="plusicon-cstm new-margin" matTooltip="Add Capability" matTooltipPosition="above"
+                       data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
+                  
+                        <i class="fa fa-plus-circle fa-lg"></i>
+                    </a>
+                </h4>
+            </div> -->
+            <div class="card-header bg-primary" *ngIf="isView==false">
+                <div class="row">
+                  <div class="col">
+                    <h4 class="new-card-heading"> Capabilities Info</h4>
+                  </div>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn-sm new-btn-primary"  matTooltip="Add Capability" matTooltipPosition="above"
+                      data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
+                      Add New Capability
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            <div class="clear"></div>
+            <hr />
+        </div>
+       
+
+
+        <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="allCapesInfo" [metaKeySelection]="true"
+        [(first)]="pageNumber" [rows]="pageSize" [paginator]="true" [pageLinks]="3"
+                 [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" selectionMode="multiple" [(selection)]="selectedRows"
+                 [resizableColumns]="true" [reorderableColumns]="true" [lazy]="true" (onLazyLoad)="loadData($event)"
+                 [scrollable]="true" [totalRecords]="totalRecords" scrollHeight="450px">
+            <ng-template pTemplate="caption">
+                <div class="row" *ngIf="isView==false">
+                    <div class="col">
+                    <p-multiSelect [maxSelectedLabels]="2" [options]="cols" optionLabel="header"
+                                   [(ngModel)]="selectedColumns" [style]="{minWidth: '200px'}" style="float:left"
+                                   selectedItemsLabel="{0} columns selected" defaultLabel="Choose Columns">
+                    </p-multiSelect>
+                </div>
+                <div class="col">
+                  <div
+                    style="width: auto !important; float: right;"
+                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                  >
+                        <i class="fa fa-search"></i>
+                        <input type="text" pInputText size="50" 
+                        class="form-control"
+                               (input)="globalSearch($event.target.value)" 
+                               placeholder="Filter">
+                            </div>
+                        </div>
+                      </div>
+                      <div class="row" >
+                        <div class="col">
+                    <button  *ngIf="isView==false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
+                            pButton icon="fa-download" iconPos="left" style="padding: 5px 12px !important;" label="Export All Data"
+                            (click)="exportCSV(dt)"></button>
+                    <button  *ngIf="isView==false" type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+                            matTooltipPosition="above" style="padding: 5px 12px !important;"
+                            pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+                            (click)="dt.exportCSV({selectionOnly:true})"></button>
+                    <div  *ngIf="isView==false" class="excel-upload  excel-upload-cstm">
+                        <button name="download" id="download" type="button" class="btn btn-primary"
+                                matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForCapes()"
+                                style="padding: 5px 10px !important;">
+                            Sample File Download
+                        </button>
+
+                        <input type="file" name="upload3[]" id="upload3" (change)="CapesExcelUpload($event)"
+                               class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
+                        <label for="upload3">
+                            <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                                <i class="fa fa-upload"></i>
+                            </span>
+                        </label>
+                        &nbsp; &nbsp;
+                    </div>
+                    </div>
+                    <div class="col"  >
+                        <div class="">
+                          <div
+                            class="col"
+                            style="width: 370px; float: right; padding-top: 3px;"
+                          >
+                            <div class="form-group">
+                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="getCapesListByStatus('Active')" [checked]="currentstatus2=='Active'">
+                                        <span class="checkmark"></span>Active
+                                    </label>
+                                </div>
+                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="getCapesListByStatus('InActive')" [checked]="currentstatus2=='InActive'">
+                                        <span class="checkmark"></span>In-Active
+                                    </label>
+                                </div>
+                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)="getCapesListByStatus('ALL')" [checked]="currentstatus2=='ALL'">
+                                        <span class="checkmark"></span>All
+                                    </label>
+                                </div>
+                                <div class="checkbox-cstm" style="margin-left: 0;">
+                                    <label style="width: auto !important;margin-top: 3px;">
+                                        <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Show  Deleted List 
+                                    </label>
+                                </div>
+                                </div>
+            
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="checkbox-cstm" style="margin-left: 0;text-align: end;padding-right: 10px;width: 100%;" *ngIf="isView==true">
+                        <label style="width: auto !important;margin-top: 3px;">
+                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
+                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                            Show  Deleted List
+                        </label>
+                    </div> -->
+                </div>
+            </ng-template>
+
+
+
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns"  style="width:140px"/>
+                </colgroup>
+            </ng-template>
+
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+
+                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                        {{ col.header }} <span *ngIf="col.star==true" class="clr-red" >*</span>
+                        <p-sortIcon [field]="col.field"></p-sortIcon> 
+                    </th>
+                    <th style="width:150px;position: sticky;">Actions</th>
+                </tr>
+                <tr>
+
+                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input style="width:100%!important;" pInputText type="text" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                               (input)="dt.filter($event.target.value, col.field,'contains')" />
+                               
+                               <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                               name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+<input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+            (change)="dateFilterForTable($event.target.value,col.field)" />
+                    </th>
+                    <th style="width:150px;position: sticky"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-assetCapes let-rowIndex="rowIndex">
+                <tr [pSelectableRow]="rowData" pReorderableRowHandle>
+                    <td *ngFor="let col of columns" class="ui-resizable-column"
+                        pReorderableRowHandle>
+                        <!-- {{rowData[col.field]}} -->
+
+                        {{
+                            col.field == 'createdDate'
+                              ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                              : rowData[col.field] && col.field == 'updatedDate'
+                              ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                              : rowData[col.field] 
+                          }}
+                    </td>
+
+                    <td class="action-icons-cstm" style="width:150px">
+                        <div *ngIf="currentDeletedstatus==false">
+    <!-- <p-inputSwitch [disabled]="isView==false" *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off"
+                                           (onChange)="toggleActiveStatus(rowData)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                            <p-inputSwitch [disabled]="isView==true" *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                           offLabel="off" (onChange)="toggleActiveStatus(rowData)" [(ngModel)]="rowData['isActive']">
+                            </p-inputSwitch>
+                            <p-inputSwitch [disabled]="isView==true" *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on"
+                                           offLabel="off" (onChange)="toggleActiveStatus(rowData)" [(ngModel)]="rowData['isActive']">
+                            </p-inputSwitch> -->
+
+
+                            <p-inputSwitch [disabled]="isView==true" [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                            matTooltipPosition="above" (onChange)="toggleActiveStatus(rowData)"></p-inputSwitch> 
+
+                             <span *ngIf="isView==false">
+                                <a class="btn nobg" (click)="opencapesToEdit(editcontent,rowData)" matTooltip="Edit"
+                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                            </span>
+                            <span *ngIf="isView==false">
+                                <a class="btn nobg"
+                                   (click)="openDelete(content2,rowData)"
+                                   matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                            </span>
+                               <span data-toggle="modal" data-target="#contentHist">
+                                <a class="btn nobg"
+                                   (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                   matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+
+                        </div>
+                        <div *ngIf="currentDeletedstatus==true"> 
+                            <p-inputSwitch  [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                           matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch>
+                            <span data-toggle="modal" data-target="#contentHist">
+                                <a class="btn nobg" 
+                                   (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                   matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+
+                            <span><a class="btn nobg" *ngIf="isView==false" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                            <!-- <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg" (click)="getAuditHistoryById(contentAuditHist,rowData)" matTooltip="History"  matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
+
+                        </div>
+                        
+
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td colspan="12" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer"> 
+                <div style="text-align: right;">
+                    <label id="footer" class="footer">Total:</label>
+                    <input style="width: 5% !important;" [(ngModel)]="totalRecords" [disabled]="true" pInputText
+                           type="text" /> &nbsp;&nbsp;
+                    <label id="footer" class="footer1">Pages Count:</label>
+                    <input style="width: 5% !important;margin-right: 12px;" [(ngModel)]="totalPages" [disabled]="true" pInputText
+                           type="text" />
+                </div>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<div class="modal-body">
+
+    <!--<div class="form-group col-sm-12">
+            <label for="customerName" class="control-label col-sm-4">
+                PN <strong style="color:red">*</strong>
+                <p-autoComplete [(ngModel)]="assetId" (onKeyUp)=partEventHandler($event)
+                                (onSelect)="onAssetIdselection($event)" [ngModelOptions]="{standalone: true}"
+                                [suggestions]="localCollection" (completeMethod)="filterpartItems($event)" [size]="30"
+                                [minLength]="1" [dropdown]="true">
+                    <ng-template let-assetId pTemplate="part">
+                        <div class="ui-helper-clearfix">{{assetId}}</div>
+                    </ng-template>
+                </p-autoComplete>
+
+            </label>
+        </div>-->
+</div>
+<div *ngIf="isView==false">
+    <!-- <button type="submit" class="btn btn-primary pull-right submit-btn" [disabled]="disableSave"
+            (click)="saveCapes()">
+        Save
+    </button> -->
+    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick()">Next</button>
+    <!--<button type="button" class="btn btn-success pull-right submit-btn" (click)="nextClick()">Next</button>-->
+    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">Previous</button>
+</div>
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="form-row" >
+            <div class="col-md-3" style="margin-right: 0px !important;">
+                <label class="fs12" >Part Number: </label>
+                <span class="new-label"> {{restorerecord.partNumber}}</span>
+            </div>
+            <div class="col-md-4" style="margin-right: 0px !important;">
+                <label class="fs12"> Capability Type  : </label>
+                <span class="new-label"> {{restorerecord.captypedescription}}</span>
+
+            </div>
+            <div class="col-md-2" style="margin-right: 0px !important;">
+                <label class="fs12">Model : </label>
+                <span class="new-label"> {{restorerecord.modelname}}</span> 
+            </div>
+            <div class="col-md-2" style="margin-right: 0px !important;">
+                <label class="fs12">Dash Number : </label>
+                <span class="new-label"> {{restorerecord.dashnumber}}</span> 
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+<div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog" data-backdrop="static"
+     data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeHistory()">&times;</button>
+                <h4 class="modal-title">History of Asset Capes</h4>
+            </div>
+            <div class="modal-body">
+                <div class="preloader" *ngIf="isSpinnerVisibleView">
+                    <div class="loading">
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </div>
+                </div> 
+                <div class="table-responsive rro-table-cstmvt">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>Audit Id</th>
+                                <th>PN  <span class="clr-red">*</span></th>
+                                <th>PN Description </th>
+                                <th>Capability Type <span class="clr-red">*</span></th>
+                                <th>Aircraft Manufacturer  <span class="clr-red">*</span></th>
+                                <th>Model</th>
+                                <th>Dash Number</th>
+                                <th>Is Active</th>
+                                <th>Is Deleted</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th> 
+                                <th>Updated By</th>
+                          
+
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="auditHistory.length> 0">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <td>
+                                    {{audit.assetCapesAuditId}}
+                                </td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
+                                    {{audit.partNumber}}
+                                </td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'partDescription', audit.partDescription)  ? 'black' : 'red'  }">
+                                    {{audit.partDescription}}
+                                </td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'captypedescription', audit.captypedescription)  ? 'black' : 'red'  }">
+                                    {{audit.captypedescription}}
+                                </td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'manufacturer', audit.manufacturer)  ? 'black' : 'red'  }">
+                                    {{audit.manufacturer}}
+                                </td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'modelname', audit.modelname)  ? 'black' : 'red'  }">
+                                    {{audit.modelname}}
+                                </td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'dashNumber', audit.dashNumber)  ? 'black' : 'red'  }">
+                                    {{audit.dashNumber}}
+                                </td>
+                                <td>
+                                    <input type="checkbox" disabled [checked]="audit.isActive == true"
+                                    style="margin: 0px auto; display: block;" />  
+                                </td>
+                                <td>
+                                    <input type="checkbox" disabled [checked]="audit.isDeleted == true"
+                                    style="margin: 0px auto; display: block;" />  
+                                </td>
+                                <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td>{{audit.createdBy}}</td>
+                                <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td>{{audit.updatedBy}}</td>
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <!--<img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;">-->
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="closeHistory()">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div> 

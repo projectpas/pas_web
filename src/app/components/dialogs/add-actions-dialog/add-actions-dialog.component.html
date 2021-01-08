@@ -1,0 +1,78 @@
+﻿<!--<h1 *ngIf="showTitle" mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+
+    <p *ngIf="!isPrompt">{{message}}</p>
+
+    <mat-form-field *ngIf="isPrompt" style="width: 100%;">
+        <mat-label>{{message}}</mat-label>
+        <input matInput [(ngModel)]="result" />
+    </mat-form-field>
+
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="ok()" color="primary">{{okLabel}}</button>
+    <button mat-raised-button (click)="cancel()" color="warn" *ngIf="showCancel">{{cancelLabel}}</button>
+</div>-->
+<!--<h1 *ngIf="showTitle" mat-dialog-title>{{title}}</h1>
+<div mat-dialog-content>
+
+    <p *ngIf="!isPrompt">{{message}}</p>
+
+    <mat-form-field *ngIf="isPrompt" style="width: 100%;">
+        <mat-label>{{message}}</mat-label>
+        <input matInput [(ngModel)]="result" />
+    </mat-form-field>
+
+</div>-->
+<div mat-dialog-actions>
+    <div class="modal-content">
+        <div class="modal-header">
+
+            <h4 class="modal-title" *ngIf="isEditMode">Edit Vendor Classification</h4>
+            <h4 class="modal-title" *ngIf="!isEditMode">Add Vendor Classification</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="editItemAndCloseModel()">
+                <div class="clear"></div>
+                <div class="form-group">
+                    <label for="classificationName" class="control-label">Classification Name<span class="clr-red">*</span></label>
+                    <p-autoComplete [(ngModel)]="vendorName" [ngModelOptions]="{standalone: true}" [suggestions]="localCollection" (completeMethod)="filterVendors($event)" [size]="30"
+                                    [minLength]="1" [dropdown]="true">
+                        <ng-template let-vendorName pTemplate="item">
+                            <div class="ui-helper-clearfix">{{vendorName}}</div>
+                        </ng-template>
+                    </p-autoComplete>
+                </div>
+                <div class="form-group">
+                    <label for="description" class="control-label">Memo</label>
+                    <div class="control-data">
+                        <input placeholder="Memo" #memo="ngModel" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceAction.memo" minlength="2">
+                        <div *ngIf="memo.dirty && memo.errors?.required && memo.errors" class="invalid-form-error-message">
+                            Memo required.
+                        </div>
+                        <div *ngIf="memo.dirty && memo.errors?.minlength && memo.errors" class="invalid-form-error-message">
+                            Memo must be at least 2 characters long.
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-6">
+                        <label class="form-check-label" for="isActive">
+                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive"> Active
+                        </label>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" [disabled]="!userForm.valid">Submit</button>
+                    <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>

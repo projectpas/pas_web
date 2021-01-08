@@ -1,0 +1,254 @@
+﻿<div class="card new-card">
+    <div class="card-header bg-primary new-card-header">
+        <div class="row">
+          <div class="col">
+            <h4 class="new-card-heading">Journal List</h4>
+          </div>
+          <div>
+            <button
+               type="button"
+               class="btn-sm new-btn-primary"
+               (click)="openCreateJournalPage()">
+               Add Entity
+            </button>
+         </div>
+        </div>
+    </div>
+    <div class="card-body new-card-body">
+
+<!-- 
+<div class="card">
+	<div class="card-body">
+        <div class="inline-block display-flex">
+
+            <h3 class="po-head lead">Journal List</h3>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+        
+			<a 
+			(click)="openCreateJournalPage()"
+               matTooltip="Add Entity"
+               class="plusicon-cstm new-margin">
+                <i class="fa fa-plus-circle fa-lg"></i>
+            </a>
+        </div> -->
+
+		<p-table 
+			#dt
+			class="rpo-table-cstm rro-table-cstm" 
+			[value]="journalList" 
+			[metaKeySelection]="true" 
+			[rows]="10" 
+			[paginator]="true" 
+			[pageLinks]="3" 
+			[rowsPerPageOptions]="[10,20,50,100]" 
+			[columns]="selectedColumns" 
+			selectionMode="multiple" 
+			[metaKeySelection]="true"
+			[(selection)]="selectedColumns" 
+			[resizableColumns]="true" 
+			[reorderableColumns]="true" 
+			[scrollable]="true" 
+			scrollHeight="450px"
+			>
+
+			<ng-template pTemplate="caption">
+				<div class="row">
+                    <div class="col">
+						<p-multiSelect 
+						[options]="cols" 
+						[(ngModel)]="selectedColumns" 
+						optionLabel="header"
+						selectedItemsLabel="{0} columns selected" 
+						[style]="{minWidth: '220px'}" 
+						defaultLabel="Choose Columns" 
+						style="float:left"></p-multiSelect>
+					</div>
+					<div class="col">
+					<div style="width: auto !important; float: right;"
+					 class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+					>
+				   <i class="fa fa-search"></i>
+				   <input 
+							type="text" 
+							pInputText 
+							size="50" 
+							class="form-control" 
+							(input)="dt.filterGlobal($event.target.value, 'contains')" 
+							placeholder="Filter" />
+						</div>
+					</div>
+				  </div>
+
+				<!-- <div style="text-align: right;margin-left:-6px !important; min-height: 30px;" >
+					<p-multiSelect 
+						[options]="cols" 
+						[(ngModel)]="selectedColumns" 
+						optionLabel="header"
+						selectedItemsLabel="{0} columns selected" 
+						[style]="{minWidth: '220px'}" 
+						defaultLabel="Choose Columns" 
+						style="float:left"></p-multiSelect>
+
+					<div style=" left: -10px;"
+						class="inner-addon right-addon w50 inline-block  g-filter-search-cstm">
+						<i class="fa fa-search"></i>
+						<input 
+							type="text" 
+							pInputText 
+							size="50" 
+							class="form-control ui-autocomplete-input" 
+							(input)="dt.filterGlobal($event.target.value, 'contains')" 
+							placeholder="Filter">
+					</div>
+
+				</div> -->
+
+
+		</ng-template>
+
+
+		
+			<ng-template pTemplate="header" let-columns>
+				<tr>
+					<th style="width:160px"
+						*ngFor="let col of columns" 
+						pResizableColumn 
+						pReorderableColumn 
+						[pSortableColumn]="col.field">
+						{{col.header}}
+						<p-sortIcon [field]="col.field"></p-sortIcon>
+					</th>
+
+					<th style="width:200px;position:sticky"
+                        *ngIf="selectedColumns.length > 0">
+                        Actions
+                    </th>
+				</tr>
+				<tr>
+                    <th style="width:160px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <!-- <input type="text" style="width:100%;" pInputText   (keyup)="filterData($event)"> -->
+                        <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+                    </th>
+                    <th style="width:200px;position:sticky"></th>
+                </tr>
+				
+			</ng-template>
+
+			<ng-template pTemplate="body" let-rowData let-columns="columns">
+				<tr [pSelectableRow]="rowData" pReorderableRowHandle >
+					<td style="width:160px" 
+						*ngFor="let col of columns" 
+						class="ui-resizable-column" 
+						pReorderableRowHandle>
+						{{
+							col.field == 'createdDate'
+							?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'
+							?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
+					</td>
+
+					<td style="width:200px" *ngIf="selectedColumns.length > 0" >
+						<p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
+						onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+						<p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+						<p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+
+						<span data-toggle="modal" data-target="#view"> <a class="btn btn-info boxed-float-btn nobg" 
+							data-toggle="tooltip" (click)="openView(view,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+						
+							<span><a class="btn nobg" 
+								(click)="openContentEdit(contentEdit,rowData)" matTooltip="Edit" 
+								matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+						
+						
+							<!-- <button class="btn-edit" mat-icon-button
+							 (click)="openContentEdit(contentEdit,rowData)" 
+						matTooltip="Edit" matTooltipPosition="above">
+							<mat-icon>edit</mat-icon>
+						</button> -->
+					
+						<span>
+							<a class="btn nobg" 
+							(click)="openDelete(content,rowData)"
+							matTooltip="Delete"  matTooltipPosition="above">
+							<i class="fa fa-trash"></i></a> </span>
+					
+					
+						<!-- <button class="btn-delete" mat-icon-button matTooltip="delete"
+						 matTooltipPosition="above" (click)="openDelete(content,rowData)">
+							<mat-icon color="warn">delete</mat-icon>
+						</button> -->
+						<!--<a (click)="openHist(content,rowData)" matTooltip="Hist" class="btn btn-success nobg"><span><i class="fa fa-plus"></i></span></a>-->
+						
+						<span><a class="btn nobg" 
+                           
+                             matTooltip="History"  matTooltipPosition="above">
+                             <i class="fa fa-history"></i></a></span>
+						
+						<!-- <button class="btn-history" mat-icon-button matTooltip="history"
+						 matTooltipPosition="above">
+							<mat-icon color="green">history</mat-icon>
+						</button> -->
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>		
+	</div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title">Are you sure you want to delete Journel List</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="removeManualJournel()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+
+</ng-template>
+<ng-template #contentView let-c="close" let-d="dismiss">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" id="" name="" (click)="dismissModel()">×</button>
+            <h4 class="modal-title">Journel List</h4>
+        </div>
+        <div class="modal-body viewform">
+            <div class="panel-body">
+                <div class="col-sm-6">
+                    <p><span class="label"><b>Ledger Name: </b></span><span class="value">{{manualJournelData.glAccountId}}</span></p>
+                    <p><span class="label"><b>Batch Number: </b></span><span class="value">{{manualJournelData.journalManualBatchNumber}}</span></p>
+                    <p><span class="label"><b>Batch Name: </b></span><span class="value">{{manualJournelData.journalManualBatchName}}</span></p>
+                    <p><span class="label"><b>Batch Description: </b></span><span class="value">{{manualJournelData.journalManualBatchDescription}}</span></p>
+                    <p><span class="label"><b>Balance Type: </b></span><span class="value">{{manualJournelData.journalManualBalanceTypeId}}</span></p>
+                    <p><span class="label"><b>Journal Type: </b></span><span class="value">{{manualJournelData.journalManualTypeId}}</span></p>
+                    <p><span class="label"><b>Entry Date: </b></span><span class="value">{{manualJournelData.journalManualEntryDate}}</span></p>
+                    <p><span class="label"><b>Effective Date: </b></span><span class="value">{{manualJournelData.journalManualEffectiveDate}}</span></p>
+                    <p><span class="label"><b>Period Name: </b></span><span class="value">{{manualJournelData.journalManualPeriodName}}</span></p>
+                    <p><span class="label"><b>Employee: </b></span><span class="value">{{manualJournelData.journalManualEmployeeId}}</span></p>
+                    
+                </div>
+                <div class="col-sm-6">
+                    <p><span class="label"><b>Local Currency: </b></span><span class="value">{{manualJournelData.journalManualLocalCurrencyId}}</span></p>
+                    <p><span class="label"><b>Reporting Currency: </b></span><span class="value">{{manualJournelData.journalManualReportingCurrencyId}}</span></p>
+                    <p><span class="label"><b>Currency Date: </b></span><span class="value">{{manualJournelData.journalManualCurrencyDate}}</span></p>
+                    <p><span class="label"><b>Type: </b></span><span class="value">{{manualJournelData.journalManualCurrencyType}}</span></p>
+                    <p><span class="label"><b>Rate: </b></span><span class="value">{{manualJournelData.journalManualCurrencyRate}}</span></p>
+                    <p><span class="label"><b>Reversing: </b></span><span class="value">{{manualJournelData.isReversing}}</span></p>
+                    <p><span class="label"><b>Date: </b></span><span class="value">{{manualJournelData.journalManualReversingDate}}</span></p>
+                    <p><span class="label"><b>Period Name: </b></span><span class="value">{{manualJournelData.reversingPeriodName}}</span></p>
+                    <p><span class="label"><b>Status: </b></span><span class="value"></span></p>
+
+                    <p><span class="label"><b>Recurring: </b></span><span class="value">{{manualJournelData.createdBy}}</span></p>
+                    <p><span class="label"><b>Created Date: </b></span><span class="value">{{manualJournelData.createdDate}}</span></p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal" id="" name="" (click)="dismissModel()">Close</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,834 @@
+﻿<!-- <p>Billing Under Implementation</p> -->
+
+
+<div class="card">
+    <div class="card-body p-t-0">
+        <div class="row">
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <div class="form-group">
+                    <label>SO Num <span class="clr-red">*</span></label>
+                    <input type="text" class="form-control" name="salesOrderNumber"
+                        [(ngModel)]="salesOrder.salesOrderNumber" [disabled]="true" #accountTypeId="ngModel"
+                        id="salesOrderNumber" #salesOrderNumber="ngModel" />
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <div class="form-group">
+                    <label>SO Quote Num</label>
+                    <input type="text" class="form-control" [(ngModel)]="salesOrder.salesOrderQuoteNumber"
+                        name="salesOrderQuoteNumber" [disabled]="true" />
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <label></label>
+                <div class="form-group">
+                    <button type="submit" class="btn submit-btn btn btn-primary">Sales
+                        order</button>
+                </div>
+
+            </div>
+            <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                <label></label>
+                <div class="form-group">
+                    <button type="submit" class="btn  submit-btn btn btn-primary">Invoice</button>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dt [value]="partsForBilling" class="rpo-table-cstm" [first]="0" [rows]="pageSize"
+            [paginator]="showPaginator" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]"
+            [columns]="selectedColumns" [lazy]="true" (onLazyLoad)="loadData($event)" [totalRecords]="totalRecords"
+            [scrollable]="true" [style]="{ width: '100%' }">
+            <!-- <ng-template pTemplate="caption"> -->
+            <!-- <div class="row">
+                    <div class="col">
+                    </div>
+                </div> -->
+            <!-- </ng-template> -->
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th style="width:50px;">Ready?</th>
+                    <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                        {{ col.header }}
+                    </th>
+                    <th>Actions</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-columns="columns">
+                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
+                    <td style="width:50px; text-align: center;">
+                        <input type="checkbox" name="billing" [(ngModel)]="rowData.selected"
+                            [disabled]="!rowData.isApproved || rowData.isBilled" />
+                    </td>
+                    <td *ngFor="let col of columns">
+                        <span *ngIf="col.field == 'totalSales'" class="float-right">
+                            {{convertDate(col.field , rowData) | twoDecimalGlobalNumberFormatPipe}}
+                        </span>
+                        <span *ngIf="col.field != 'totalSales'">
+                            {{convertDate(col.field , rowData)}}
+                        </span>
+                    </td>
+                    <td style="text-align:center">
+                        <button type="submit" class="btn submit-btn btn btn-primary"
+                            (click)="onSelectPartNumber(rowData)" [disabled]="!rowData.selected">Invoice</button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="partsForBilling.length == 0">
+                <tr>
+                    <td [attr.colspan]="10" style="color: red; font-weight: bold; text-align: center">
+                        No records found
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer" class="footer">Total:</label>
+                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                &nbsp;&nbsp;
+                <label id="footer" class="footer1">Pages Count:</label>
+
+                <input style="width: 5%;" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
+            </ng-template>
+        </p-table>
+        <form #billinForm="ngForm">
+            <div class="row">
+                <div class="col-md-5">
+                    <div class="card">
+                        <div class="card-body" *ngIf="billingorInvoiceForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Invoice Type <span class="clr-red">*</span></label>
+                                        <p-dropdown [options]="invoiceTypeList" name="invoiceType"
+                                            #invoiceType="ngModel" placeholder="Select"
+                                            class="p-dropdown-custom-md-Header"
+                                            [(ngModel)]="billingorInvoiceForm.invoiceTypeId" [disabled]="isViewMode"
+                                            required>
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> REV Type </label>
+                                        <input type="number" class="form-control wo-input" name="revType"
+                                            #revType="ngModel" [(ngModel)]="billingorInvoiceForm.revType"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Invoice Number </label>
+                                        <input type="text" class="form-control wo-input" name="invoiceNumber"
+                                            #invoiceNumber="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceNo"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Customer Ref </label>
+                                        <input type="text" class="form-control wo-input" name="customerRef"
+                                            #customerRef="ngModel" disabled [(ngModel)]="salesOrder.customerRef"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Invoice Date <span class="clr-red">*</span></label>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" name="invoiceDate"
+                                            #invoiceDate="ngModel" [(ngModel)]="billingorInvoiceForm.invoiceDate"
+                                            [disabled]="isViewMode" required></p-calendar>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> SO Open Date </label>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" name="woOpenDate"
+                                            #woOpenDate="ngModel" [disabled]=true [(ngModel)]="salesOrder.openDate"
+                                            [disabled]="isViewMode">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Time <span class="clr-red">*</span></label>
+                                        <p-calendar name="invoiceTime" class="billInvoiceTime" #invoiceTime="ngModel"
+                                            [timeOnly]="true" [(ngModel)]="billingorInvoiceForm.invoiceTime"
+                                            showTime="true" hourFormat="24" [disabled]="isViewMode" required>
+                                        </p-calendar>
+                                        <!-- <p-calendar  [(ngModel)]="billingorInvoiceForm.invoiceTime" required [disabled]="isViewMode" showTime="true" hourFormat="24"></p-calendar> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Sales Person </label>
+                                        <input type="text" class="form-control wo-input" name="salesPerson"
+                                            #salesPerson="ngModel" disabled
+                                            [(ngModel)]="salesOrder.salesPersonName.name" [disabled]="isViewMode" />
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Print Date </label>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" name="printDate"
+                                            #printDate="ngModel" [(ngModel)]="billingorInvoiceForm.printDate"
+                                            [disabled]="isViewMode"></p-calendar>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="credit" style="width: 100%;">Currency <span class="clr-red">*</span>
+                                        </label>
+                                        <p-dropdown [options]="currencyList" name="currency" #currency="ngModel"
+                                            required placeholder="Select" class="p-dropdown-custom-md-Header"
+                                            [(ngModel)]="billingorInvoiceForm.currencyId" [disabled]="isViewMode">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Ship Date </label>
+                                        <p-calendar [showIcon]="true" class="calender-cstm" name="shipDate"
+                                            #shipDate="ngModel" [(ngModel)]="billingorInvoiceForm.shipDate"
+                                            [disabled]="isViewMode"></p-calendar>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> Available Credit</label>
+                                        <input type="number" class="form-control wo-input" name="salePerson"
+                                            #salePerson="ngModel" [(ngModel)]="billingorInvoiceForm.availableCredit"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label> No of Pieces </label>
+                                        <input type="number" class="form-control wo-input" name="noofPieces"
+                                            #noofPieces="ngModel" [(ngModel)]="billingorInvoiceForm.noofPieces"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label>Credit Terms </label>
+                                        <input type="text" class="form-control wo-input" name="creditTerms"
+                                            #creditTerms="ngModel" disabled [(ngModel)]="salesOrder.creditLimit"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label for="employee">Employee </label>
+                                        <input type="text" class="form-control wo-input" name="employee"
+                                            #employee="ngModel" disabled [(ngModel)]="billingorInvoiceForm.employeeName"
+                                            [disabled]="isViewMode" />
+
+                                        <!-- <p-autoComplete
+                                          field="label"
+                                          [(ngModel)]="billingorInvoiceForm.employeeId"
+                                          name="employees"
+                                          #employees="ngModel"
+                                          errorMessage="Records not found"
+                                          [forceSelection]="true"
+                                          [dropdown]="true"
+                                          [suggestions]="employeeList"
+                                          (completeMethod)="filterEmployee($event)"
+                                          [size]="30"
+                                          [minLength]="1"
+                                          [dropdown]="true"
+                                          class="p-autoComplete-ctsm"
+                                        >
+                                        </p-autoComplete> -->
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group ">
+                                        <label>Stage Code </label>
+                                        <input type="number" class="form-control wo-input" name="gateStatus"
+                                            #gateStatus="ngModel" [(ngModel)]="billingorInvoiceForm.gateStatus"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="card" *ngIf="billingorInvoiceForm">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-md-4">
+                                    <h5 class="po-heading">Sold To</h5>
+                                    <div class="form-group ">
+                                        <label>Customer
+                                        </label><span class="clr-red">*</span>
+                                        <p-autoComplete field="customerName"
+                                            [(ngModel)]="billingorInvoiceForm.soldToCustomerId" name="soldcustomerName"
+                                            errorMessage="Records not found" [forceSelection]="true"
+                                            (onSelect)="getSiteNamesBySoldCustomerId($event)"
+                                            [suggestions]="customerNamesList"
+                                            (completeMethod)="filterCustomerName($event)"
+                                            (onKeyUp)="clearAddress('SoldTo' , $event.target.value)" [size]="30"
+                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                            class="p-autoComplete-ctsm" [disabled]="isViewMode">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 class="po-heading">Bill To</h5>
+                                    <div class="form-group ">
+                                        <label>Customer
+                                        </label><span class="clr-red">*</span>
+                                        <p-autoComplete field="customerName"
+                                            [(ngModel)]="billingorInvoiceForm.billToCustomerId" name="billcustomerName"
+                                            errorMessage="Records not found" [forceSelection]="true"
+                                            (onSelect)="getSiteNamesByBillCustomerId($event)"
+                                            [suggestions]="customerNamesList"
+                                            (completeMethod)="filterCustomerName($event)"
+                                            (onKeyUp)="clearAddress('BillTo' , $event.target.value)" [size]="30"
+                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                            class="p-autoComplete-ctsm" [disabled]="isViewMode">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <h5 class="po-heading">Ship To</h5>
+                                    <div class="form-group ">
+                                        <label>Customer
+                                        </label><span class="clr-red">*</span>
+                                        <p-autoComplete field="customerName"
+                                            [(ngModel)]="billingorInvoiceForm.shipToCustomerId" name="shipcustomerName"
+                                            errorMessage="Records not found" [forceSelection]="true"
+                                            (onSelect)="getSiteNamesByShipCustomerId($event)"
+                                            [suggestions]="customerNamesList"
+                                            (completeMethod)="filterCustomerName($event)"
+                                            (onKeyUp)="clearAddress('ShipTo', $event.target.value)" [size]="30"
+                                            [minLength]="1" #customerName="ngModel" required [dropdown]="true"
+                                            class="p-autoComplete-ctsm" [disabled]="isViewMode">
+                                        </p-autoComplete>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="credit">Site Name</label><span class="clr-red">*</span>
+                                        <p-dropdown placeholder="Select Site Name" name="scope" #scope="ngModel"
+                                            [options]="soldCustomerSiteList" class="p-dropdown-custom-md-Header"
+                                            (onChange)="changeOfSoldSiteName($event.value)"
+                                            [(ngModel)]="billingorInvoiceForm.soldToSiteId" [disabled]="isViewMode"
+                                            required>
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="credit">Site Name</label><span class="clr-red">*</span>
+                                        <p-dropdown placeholder="Select Site Name" name="scope1bill"
+                                            #scope1bill="ngModel" [options]="billCustomerSiteList"
+                                            class="p-dropdown-custom-md-Header"
+                                            (onChange)="changeOfBillSiteName($event.value)"
+                                            [(ngModel)]="billingorInvoiceForm.billToSiteId" [disabled]="isViewMode"
+                                            required>
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="credit">Site Name</label><span class="clr-red">*</span>
+                                        <p-dropdown placeholder="Select Site Name" name="scope1" #scope1="ngModel"
+                                            [options]="shipCustomerSiteList" class="p-dropdown-custom-md-Header"
+                                            (onChange)="changeOfShipSiteName($event.value)"
+                                            [(ngModel)]="billingorInvoiceForm.shipToSiteId" [disabled]="isViewMode"
+                                            required>
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 1 </label>
+                                        <input type="text" class="form-control wo-input" name="soldAddress1"
+                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line1" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 1 </label>
+                                        <input type="text" class="form-control wo-input" name="billAddress1"
+                                            #billAddress1="ngModel" [(ngModel)]="billCustomerAddress.line1" disabled />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 1 </label>
+                                        <input type="text" class="form-control wo-input" name="shipAddress1"
+                                            #shipAddress1="ngModel" [(ngModel)]="shipCustomerAddress.line1" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 2 </label>
+                                        <input type="text" class="form-control wo-input" name="soldAddress2"
+                                            #soldAddress1="ngModel" [(ngModel)]="soldCustomerAddress.line2" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 2 </label>
+                                        <input type="text" class="form-control wo-input" name="billAddress2"
+                                            #billAddress2="ngModel" [(ngModel)]="billCustomerAddress.line2" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Address 2 </label>
+                                        <input type="text" class="form-control wo-input" name="shipAddress2"
+                                            #shipAddress1="ngModel" [(ngModel)]="shipCustomerAddress.line2" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>City </label>
+                                        <input type="text" class="form-control wo-input" name="soldCity"
+                                            #soldCity="ngModel" [(ngModel)]="soldCustomerAddress.city" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>City </label>
+                                        <input type="text" class="form-control wo-input" name="billCity"
+                                            #billCity="ngModel" [(ngModel)]="billCustomerAddress.city" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>City </label>
+                                        <input type="text" class="form-control wo-input" name="shipCity"
+                                            #shipCity="ngModel" [(ngModel)]="shipCustomerAddress.city" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>StateOrProvince </label>
+                                        <input type="text" class="form-control wo-input" name="soldstateOrProvince"
+                                            #soldstateOrProvince="ngModel"
+                                            [(ngModel)]="soldCustomerAddress.stateOrProvince" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>StateOrProvince </label>
+                                        <input type="text" class="form-control wo-input" name="billstateOrProvince"
+                                            #billstateOrProvince="ngModel"
+                                            [(ngModel)]="billCustomerAddress.stateOrProvince" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>StateOrProvince </label>
+                                        <input type="text" class="form-control wo-input" name="stateOrProvince"
+                                            #shipstateOrProvince="ngModel"
+                                            [(ngModel)]="shipCustomerAddress.stateOrProvince" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Postal Code </label>
+                                        <input type="number" class="form-control wo-input" name="soldpostalCode"
+                                            #soldpostalCode="ngModel" [(ngModel)]="soldCustomerAddress.postalCode"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Postal Code </label>
+                                        <input type="number" class="form-control wo-input" name="billpostalCode"
+                                            #billpostalCode="ngModel" [(ngModel)]="billCustomerAddress.postalCode"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Postal Code </label>
+                                        <input type="number" class="form-control wo-input" name="shippostalCode"
+                                            #shippostalCode="ngModel" [(ngModel)]="shipCustomerAddress.postalCode"
+                                            disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Country </label>
+                                        <input type="text" class="form-control wo-input" name="soldcountry"
+                                            #soldcountry="ngModel" [(ngModel)]="soldCustomerAddress.country" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Country </label>
+                                        <input type="text" class="form-control wo-input" name="billcountry"
+                                            #billcountry="ngModel" [(ngModel)]="billCustomerAddress.country" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Country </label>
+                                        <input type="text" class="form-control wo-input" name="shipcountry"
+                                            #shipcountry="ngModel" [(ngModel)]="shipCustomerAddress.country" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Attention </label>
+                                        <input type="text" class="form-control wo-input" name="billToAttention"
+                                            #billToAttention="ngModel"
+                                            [(ngModel)]="billingorInvoiceForm.shipToAttention"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group ">
+                                        <label>Attention </label>
+                                        <input type="text" class="form-control wo-input" name="shipToAttention"
+                                            #shipToAttention="ngModel"
+                                            [(ngModel)]="billingorInvoiceForm.shipToAttention"
+                                            [disabled]="isViewMode" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 15px;" *ngIf="billingorInvoiceForm">
+                <!-- <div class="col-md-7">
+                    <div class="card">
+
+                        <div class="card-body p-10">
+                            <div>
+                                <div class="col-md-12">
+                                    <div class="col-md-7">
+                                        <div class="form-group" style="margin-left: -8px;">
+                                            <p-radioButton class="p-radiobutton-label-horizontal"
+                                                name="HoursorClockorScan" label="Cost Plus" value="Cost Plus"
+                                                [(ngModel)]="billingorInvoiceForm.costPlusType" [disabled]="isViewMode">
+                                            </p-radioButton>
+                                            <p-radioButton class="p-radiobutton-label-horizontal col-width"
+                                                name="HoursorClockorScan" value="Flat Rate" label="Flat Rate"
+                                                [(ngModel)]="billingorInvoiceForm.costPlusType" [disabled]="isViewMode">
+                                            </p-radioButton>
+
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5"
+                                        style="border-style: groove; border-radius: 10px; margin-top: 7px;padding: 2px 5px;">
+                                        <h4 style="color : #295d92; float: left; margin: 0;"> Grand Total: </h4>
+                                        <span
+                                            style="color: red; float: right;">{{billingorInvoiceForm.grandTotal}}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <h5 class="po-heading">{{billingorInvoiceForm.costPlusType}} Information </h5>
+
+                            <table class="table table-bordered ">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Total Cost</th>
+                                        <th *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">MarkUp</th>
+                                        <th>Cost Plus Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <p-checkbox class="p-checkbox-label-2" name="totalworkOrder"
+                                                    binary="false" label="Total Sales Order"
+                                                    (onChange)="resetOtherOptions(); calculateGrandTotal();"
+                                                    [(ngModel)]="billingorInvoiceForm.totalWorkOrder"
+                                                    [disabled]="isViewMode"></p-checkbox>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            {{billingorInvoiceForm.totalWorkOrderCost}}
+                                        </td>
+                                        <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            <div class="form-group" *ngIf="billingorInvoiceForm.totalWorkOrder">
+                                                <p-dropdown placeholder="Select " name="totalWOMarkup"
+                                                    #totalWOMarkup="ngModel" [options]="markUpList"
+                                                    class="p-dropdown-custom-md"
+                                                    (onChange)="calculateTotalWorkOrderCostPlus($event.value); calculateGrandTotal();"
+                                                    [(ngModel)]="billingorInvoiceForm.totalWorkOrderValue"
+                                                    [disabled]="isViewMode">
+                                                </p-dropdown>
+                                            </div>
+                                        </td>
+
+                                        <td class="text-right"
+                                            *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            {{billingorInvoiceForm.totalWorkOrderCostPlus }}
+                                        </td>
+                                        <td *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus'">
+                                            <input type="number" name="totalWorkOrderCostPlus"
+                                                (change)="onChangeSOCostPlus();" class="form-control wo-input"
+                                                [(ngModel)]="billingorInvoiceForm.totalWorkOrderCostPlus "
+                                                [disabled]="isViewMode" />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <p-checkbox (onChange)="resetMaterial(); calculateGrandTotal();"
+                                                    class="p-checkbox-label-2" name="material" binary="false"
+                                                    label="Material" [(ngModel)]="billingorInvoiceForm.material"
+                                                    [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode">
+                                                </p-checkbox>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            {{billingorInvoiceForm.materialCost}}
+                                        </td>
+                                        <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            <div class="form-group" *ngIf="billingorInvoiceForm.material">
+                                                <p-dropdown placeholder="Select " name="materialValue"
+                                                    #materialValue="ngModel" [options]="markUpList"
+                                                    class="p-dropdown-custom-md"
+                                                    (onChange)="calculateMaterialCostPlus($event.value); calculateGrandTotal();"
+                                                    [(ngModel)]="billingorInvoiceForm.materialValue"
+                                                    [disabled]="isViewMode">
+                                                </p-dropdown>
+                                            </div>
+                                        </td>
+                                        <td class="text-right"
+                                            *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            {{billingorInvoiceForm.materialCostPlus  }}
+                                        </td>
+                                        <td
+                                            *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder">
+                                            <input type="number" name="materialCostPlus"
+                                                (change)="onChangeMaterialCostPlus(); calculateGrandTotal();"
+                                                class="form-control wo-input"
+                                                [(ngModel)]="billingorInvoiceForm.materialCostPlus"
+                                                [disabled]="isViewMode" />
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <p-checkbox class="p-checkbox-label-2" name="laborOverHead"
+                                                    binary="false" label="Labor & Over Head"
+                                                    (onChange)="resetLaborOverHead();  calculateGrandTotal();"
+                                                    [(ngModel)]="billingorInvoiceForm.laborOverHead"
+                                                    [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode">
+                                                </p-checkbox>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            {{billingorInvoiceForm.laborOverHeadCost}}
+                                        </td>
+
+                                        <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            <div class="form-group" *ngIf="billingorInvoiceForm.laborOverHead">
+                                                <p-dropdown placeholder="Select " name="head" #head="ngModel"
+                                                    [options]="markUpList" class="p-dropdown-custom-md"
+                                                    (onChange)="calculateLaborOverHeadCostPlus($event.value);  calculateGrandTotal();"
+                                                    [(ngModel)]="billingorInvoiceForm.laborOverHeadValue"
+                                                    [disabled]="isViewMode">
+                                                </p-dropdown>
+                                            </div>
+                                        </td>
+                                        <td class="text-right"
+                                            *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            {{billingorInvoiceForm.laborOverHeadCostPlus   }}
+                                        </td>
+                                        <td
+                                            *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder">
+                                            <input type="number" name="laborOverHeadCostPlus"
+                                                (change)="onChangeLaborOHCostPlus(); calculateGrandTotal();"
+                                                class="form-control wo-input"
+                                                [(ngModel)]="billingorInvoiceForm.laborOverHeadCostPlus"
+                                                [disabled]="isViewMode" />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <p-checkbox class="p-checkbox-label-2"
+                                                    (onChange)="resetMisCharges(); calculateGrandTotal();"
+                                                    name="miscCharges" binary="false" label="Misc Chargers"
+                                                    [(ngModel)]="billingorInvoiceForm.miscCharges"
+                                                    [disabled]="billingorInvoiceForm.totalWorkOrder || isViewMode">
+                                                </p-checkbox>
+                                            </div>
+                                        </td>
+                                        <td class="text-right">
+                                            {{billingorInvoiceForm.miscChargesCost}}
+                                        </td>
+                                        <td *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            <div class="form-group" *ngIf="billingorInvoiceForm.miscCharges">
+                                                <p-dropdown placeholder="Select " name="misc" #misc="ngModel"
+                                                    [options]="markUpList" class="p-dropdown-custom-md"
+                                                    (onChange)="calculateMiscChargesCostPlus($event.value); calculateGrandTotal();"
+                                                    [(ngModel)]="billingorInvoiceForm.miscChargesValue"
+                                                    [disabled]="isViewMode">
+                                                </p-dropdown>
+                                            </div>
+                                        </td>
+                                        <td class="text-right"
+                                            *ngIf="billingorInvoiceForm.costPlusType === 'Cost Plus'">
+                                            {{billingorInvoiceForm.miscChargesCostPlus}}
+                                        </td>
+                                        <td
+                                            *ngIf="billingorInvoiceForm.costPlusType !== 'Cost Plus' && !billingorInvoiceForm.totalWorkOrder">
+                                            <input type="number" name="miscChargesCostPlus"
+                                                (change)="onChangeMiscChCostPlus(); calculateGrandTotal();"
+                                                class="form-control wo-input"
+                                                [(ngModel)]="billingorInvoiceForm.miscChargesCostPlus"
+                                                [disabled]="isViewMode" />
+                                        </td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <p-checkbox class="p-checkbox-label-2" name="proForma" binary="false"
+                                        label="PRO FOR MA" [(ngModel)]="billingorInvoiceForm.proForma"
+                                        [disabled]="isViewMode"></p-checkbox>
+                                </div>
+                                <!-- <div class="form-group">
+                                    <p-checkbox class="p-checkbox-label-2" name="partialInvoice" binary="false"
+                                        label="Partial Invoice" [(ngModel)]="billingorInvoiceForm.partialInvoice"
+                                        [disabled]="isViewMode"></p-checkbox>
+                                </div>
+                                <div class="form-group">
+                                    <p-checkbox class="p-checkbox-label-2" name="costPlusRateCombo" binary="false"
+                                        label="CostPlus & Flate RateCombo"
+                                        [(ngModel)]="billingorInvoiceForm.costPlusRateCombo" [disabled]="isViewMode">
+                                    </p-checkbox>
+                                </div> -->
+                                <!-- <div class="row">
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label for="credit" style="width: 100%;">Ship Via
+                                            </label>
+                                            <p-dropdown placeholder="Select Site Name" name="shipVia" #shipVia="ngModel"
+                                                [options]="shipViaList" class="p-dropdown-custom-md-Header"
+                                                [(ngModel)]="billingorInvoiceForm.shipViaId"
+                                                (onChange)="changeOfShipVia($event.value)" [disabled]="isViewMode">
+                                            </p-dropdown>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label>Ship Account</label>
+                                            <input type="text" class="form-control wo-input" name="shipAccount"
+                                                #shipAccount="ngModel" disable
+                                                [(ngModel)]="billingorInvoiceForm.shipAccountInfo"
+                                                [disabled]="isViewMode" />
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 col-offset-1">
+                                        <div class="form-group ">
+                                            <label>Way Bill REF</label>
+                                            <input type="text" class="form-control wo-input" name="wayBillRef"
+                                                #wayBillRef="ngModel" [(ngModel)]="billingorInvoiceForm.wayBillRef"
+                                                [disabled]="isViewMode" />
+                                        </div>
+                                        <div class="form-group ">
+                                            <label>Tracking #</label>
+                                            <input type="text" class="form-control wo-input" name="tracking"
+                                                #tracking="ngModel" [(ngModel)]="billingorInvoiceForm.tracking"
+                                                [disabled]="isViewMode" />
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="float: right;" *ngIf="!isViewMode">
+                <!-- [disabled]="!billinForm.valid" -->
+                <button class="btn btn-primary pull-right" *ngIf="!isEditBilling"
+                    (click)="saveSalesOrderBilling()">Save</button>
+                <button class="btn btn-primary pull-right" *ngIf="isEditBilling"
+                    (click)="updateWorkOrderBilling()">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

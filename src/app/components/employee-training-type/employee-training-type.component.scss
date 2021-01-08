@@ -1,0 +1,24 @@
+﻿
+
+.search-box {
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.search-box .mat-form-field {
+    padding: 0 2em;
+}
+
+// #footer {
+//     font-size: 11px !important;
+//     font-weight: 12px !important;
+// }
+
+
+
+.control-label {
+    text-align: left;
+    width: 100% !important;
+    font-weight: 500;
+}

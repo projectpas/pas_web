@@ -1,0 +1,158 @@
+﻿<div></div>
+<!--<div class="x_content add-customer-work">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page">Accounting</li>
+            <li class="breadcrumb-item" aria-current="page">Journals</li>
+            <li class="breadcrumb-item active" aria-current="page">Create Batch</li>
+        </ol>
+    </nav>
+    <div class="pheading">
+        <h4 class="page-heading">Create Batch</h4>
+    </div>
+
+    <div class="clear"></div>
+    <form action="#" method="post" id="add-customerwork" name="" class="form-horizontal add-custustomer">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+            <div class="tab-content form-bg">
+                <div class="tab-pane active" id="home">
+                    <div class="col-sm-3">
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Batch Number <span class="clr-red">*</span></label>
+                            <div class="col-sm-7">
+                                <div class="inner-addon right-addon inline-block">
+                                    <i class="fa fa-search"></i>
+                                    <input type="text" class="form-control numberids ui-autocomplete-input" [(ngModel)]="currentJournelBatch.journalBatchNumber" [ngModelOptions]="{standalone: true}" autocomplete="off">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Batch Name <span class="clr-red">*</span></label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control names ui-autocomplete-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentJournelBatch.journalBatchName" id="" name="" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Batch Description <span class="clr-red">*</span></label>
+                            <div class="col-sm-7">
+
+                                <input type="text" class="form-control names ui-autocomplete-input" [(ngModel)]="currentJournelBatch.journalBatchDescription" [ngModelOptions]="{standalone: true}" autocomplete="off">
+
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Ledger <span class="clr-red">*</span></label>
+                            <div class="col-sm-7">
+                                <div class="inner-addon right-addon autosuggesions-add inline-block">
+                                    <select [(ngModel)]="currentJournelBatch.glAccountId" [ngModelOptions]="{standalone: true}" (change)="getLegalEntityData(currentManualJournel.glAccountId)">
+                                        <option *ngFor="let entity of companyList" [ngValue]="entity.legalEntityId">  {{entity.name}}</option>
+                                    </select>
+                                </div>
+                                <a href="#" class="add-icon"><i class="fa fa-plus"></i></a>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Source <span class="clr-red">*</span></label>
+                            <div class="col-sm-7">
+                                <select class="">
+                                    <option value="">Manual</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Journal Type</label>
+                            <div class="col-sm-7">
+                                <select class="" [(ngModel)]="currentJournelBatch.journalTypeId" [ngModelOptions]="{standalone: true}">
+                                    <option value="">-- Select --</option>
+                                    <option value="1">Standard</option>
+                                    <option value="2">Inter Company</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Period Name <span class="clr-red">*</span></label>
+                            <div class="col-sm-7">
+                                <div class="col-sm-7">
+                                    <input type="text" [(ngModel)]="currentJournelBatch.journalPeriodName" [ngModelOptions]="{standalone: true}" class="form-control wauto" name="" id="">
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 class="form-block-heading">Local Currency</h5>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Currency</label>
+                            <div class="col-sm-7">
+                                <select class="" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentJournelBatch.localCurrencyId">
+                                    <option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.currencyId">{{currencyName.symbol}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Debit</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="" [(ngModel)]="currentJournelBatch.localDebitAmount" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Credit</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="" [(ngModel)]="currentJournelBatch.localCreditAmount" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <h5 class="form-block-heading">Reporting Currency</h5>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Currency</label>
+                            <div class="col-sm-7">
+                                <select class="" [ngModelOptions]="{standalone: true}" [(ngModel)]="currentJournelBatch.reportingCurrencyId">
+                                    <option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.currencyId">{{currencyName.symbol}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Debit</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="" [(ngModel)]="currentJournelBatch.reportingDebitAmount" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Credit</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" name="" [(ngModel)]="currentJournelBatch.reportingCreditAmount" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Reversing</label>
+                            <div class="col-sm-7">
+                                <input type="checkbox" [(ngModel)]="currentJournelBatch.isReversing" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label class="control-label col-sm-4">Recurring</label>
+                            <div class="col-sm-7">
+                                <input type="checkbox" [(ngModel)]="currentJournelBatch.isRecurring" [ngModelOptions]="{standalone: true}">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="clear"></div>
+                    <hr>
+                    <a href="#" class="btn btn-success pull-right" (click)="updateBatch()">Update</a>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+    <div class="clear"></div>
+    <hr>
+    <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
+</div>-->

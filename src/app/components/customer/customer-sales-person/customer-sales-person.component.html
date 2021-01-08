@@ -1,0 +1,148 @@
+﻿<div class="right_col" role="main" style="padding: 2px 6px;">
+  <div style="">
+    <div class="x_content">
+      <div class="col-md-12 shadow-box-cstm">
+        <div class="col-md-4">
+          <p class="fs12">
+            <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+            </label>
+            <span class="span-header-red" style="text-transform: capitalize">
+              {{ customerName }}
+            </span>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <p class="fs12">
+            <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+            </label>
+            <span class="span-header-red" style="text-transform: capitalize">
+              {{ customerCode }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="card" style="padding: 10px;">
+        <div class="card-header bg-primary new-card-header" >
+          <div class="row">
+            <div class="col">
+              <h4 class="new-card-heading"> Sales Information</h4>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
+        <hr />
+        <form #salesPersonForm="ngForm" class="form-horizontal">
+          <div class="col-md-12">
+            <div class="form-row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Primary Sales Person <span class="clr-red">*</span></label>
+
+                  <p-autoComplete class="autocomp-customer-cstm" name="primarySalesPersonName"
+                    [(ngModel)]="salesInfo.primarySalesPersonId" [suggestions]="primarySPList" [forceSelection]="true"
+                    emptyMessage="No Match Found" field="name" (onSelect)="
+                      selectedSalesPerson($event, 'PrimarySalesPerson')
+                    " (completeMethod)="filterPrimary($event)" (ngModelChange)="enableSave()" [size]="30" [minLength]="1" [dropdown]="true" required>
+                  </p-autoComplete>
+                </div>
+                <div class="form-group">
+                  <label>Secondary Sales Person</label>
+                  <p-autoComplete class="autocomp-customer-cstm" name="secondarySalesPersonName" [forceSelection]="true"
+                    emptyMessage="No Match Found" [(ngModel)]="salesInfo.secondarySalesPersonId"
+                    [suggestions]="secondarySPList" field="name" (onSelect)="
+                      selectedSalesPerson($event, 'SecondarySalesPerson')
+                    " (completeMethod)="filterSecondary($event)" (ngModelChange)="enableSave()" [size]="30" [minLength]="1" [dropdown]="true">
+                  </p-autoComplete>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Customer Service Rep</label>
+
+                  <p-autoComplete class="autocomp-customer-cstm" name="name" [(ngModel)]="salesInfo.csrId"
+                    [suggestions]="csrList" [forceSelection]="true" emptyMessage="No Match Found" field="name"
+                    (completeMethod)="filterCSR($event)" (ngModelChange)="enableSave()" [size]="30" [minLength]="1" [dropdown]="true">
+                  </p-autoComplete>
+                </div>
+                <div class="form-group">
+                  <label>Agent</label>
+                  <p-autoComplete class="autocomp-customer-cstm" name="agentName" [(ngModel)]="salesInfo.saId"
+                    [suggestions]="agentList" field="name" [forceSelection]="true" emptyMessage="No Match Found"
+                    (completeMethod)="filterAgents($event)" (ngModelChange)="enableSave()" (onSelect)="checkSameAsSalesPerson($event)" 
+                    [size]="30" [minLength]="1" [dropdown]="true">
+                  </p-autoComplete>
+                  <div *ngIf="isAgentSameAsPSalesPeson" class="clr-red" >  
+                    Cannnot have a primary sales person and an Agent on the same acct. </div>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label>Annual Revenue Potential
+                    <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-info-circle fa-lg"
+                        matTooltip="Format: {{ globalSettings.currencyFormat }}"></a></span>
+                  </label>
+                  <input class="form-control text-right" id="cspostal" type="text" name="annualRevenuePotential"
+                    pInputText pKeyFilter="num"
+                    [ngModel]="salesInfo.annualRevenuePotential | twoDecimalGlobalNumberFormatPipe"
+                    [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="salesInfo.annualRevenuePotential=$event;enableSave()" />
+                </div>
+                <div class="form-group">
+                  <label>Annual Quota
+                    <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-info-circle fa-lg"
+                        matTooltip="Format: {{ globalSettings.currencyFormat }}"></a></span>
+                  </label>
+                  <input class="form-control text-right" id="cspostal" type="text" name="annualQuota" pInputText
+                    pKeyFilter="num" [ngModel]="salesInfo.annualQuota  | twoDecimalGlobalNumberFormatPipe"
+                    [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="salesInfo.annualQuota=$event;enableSave()" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="margin-top: 10px">
+            <button (click)="nextClick('Next')" type="button" class="btn btn-primary pull-right submit-btn">
+              Next
+            </button>
+            <button type="submit" class="btn btn-primary pull-right" [disabled]="!salesPersonForm.valid || disableSave"
+              (click)="saveSalesInformation()">
+              {{isFirstSave ? 'Save' : 'Update'}} 
+            </button>
+            <button (click)="nextClick('Previous')" type="button" class="btn btn-primary pull-right submit-btn">
+              Previous
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+    <h4 class="modal-title">Confirmation</h4>
+  </div>
+  <div class="modal-body">
+    <h6 style="padding-left: 2%;">
+      Do you want to Save changes and Continue ?
+    </h6>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!salesPersonForm.valid" (click)="redirectToTab()">Yes</button>
+  </div>
+</ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

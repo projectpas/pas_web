@@ -1,0 +1,336 @@
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive default-bg clear">
+      <div class="col-md-3">
+        <p><span class="label"><b>Sales Order Type <span class="clr-red">*</span> : </b></span>
+          <span class="value">
+            {{salesOrder.typeName ? salesOrder.typeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>SO Num: </b></span>
+          <span class="value">
+            {{salesOrder.salesOrderNumber ? salesQuote.salesOrderNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Sales Quote Num: </b></span>
+          <span class="value">
+            {{salesOrder.salesOrderQuoteNumber ? salesQuote.salesOrderQuoteNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Version Num: </b></span>
+          <span class="value">
+            {{salesOrder.salesOrderQuoteVersionNumber ? salesQuote.salesOrderQuoteVersionNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>SO Num: </b></span>
+          <span class="value">
+            {{salesOrder.salesOrderNumber ? salesQuote.salesOrderNumber : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Open Date <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesOrder.openDate | date: 'MM/dd/yyyy'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Status: </b></span>
+          <span class="value">{{salesOrder.status}}
+          </span>
+        </p>
+        <p><span class="label"><b>Restrict PMA: </b></span>
+          <span class="value">
+            {{salesOrder.restrictPMA == true ? 'Yes' : "No" }}
+          </span>
+        </p>
+        <p><span class="label"><b>Restrict DER: </b></span>
+          <span class="value">
+            {{salesOrder.restrictDER == true ? 'Yes' : "No" }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <p><span class="label"><b>Account Type <span class="clr-red">*</span>: </b></span>
+          <span class="value">{{salesOrder.accountTypeName ? salesOrder.accountTypeName : '-'}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Name <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesOrder.customerName}}
+          </span>
+        </p>
+        <p><span class="label"><b>Customer Contact <span class="clr-red">*</span>: </b></span>
+          <span class="value">
+            {{salesOrder.customerContactName}}
+          </span>
+        </p>
+        <p><span class="label"><b>Contract: </b></span>
+          <span class="value">
+            {{salesOrder.contractReference}}
+          </span>
+        </p>
+        <p><span class="label"><b>Cust Email: </b></span>
+          <span class="value">
+            {{salesOrder.customerContactEmail}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Limit: </b></span>
+          <span class="value">
+            {{ salesOrder.creditLimit | twoDecimalGlobalNumberFormatPipe}}
+          </span>
+        </p>
+        <p><span class="label"><b>Credit Terms: </b></span>
+          <span class="value">
+            {{salesOrder.creditTerms}}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <!-- <p><span class="label"><b>Customer Hold: </b></span>
+          <span class="value">{{salesOrder.customerHold}}
+          </span>
+        </p> -->
+        <p><span class="label"><b>Salesperson/Agent: </b></span>
+          <span class="value">{{salesOrder.salesPersonName}}
+          </span>
+        </p>
+        <p><span class="label"><b>CSR: </b></span>
+          <span class="value">
+            {{salesOrder.customerSeviceRepName}}
+          </span>
+        </p>
+        <p><span class="label"><b>Employee <span class="clr-red">*</span>:</b></span>
+          <span class="value">
+            {{salesOrder.employeeName}}
+          </span>
+        </p>
+        <p><span class="label"><b>AR Balance: </b></span>
+          <span class="value">
+            {{salesOrder.balanceDue | twoDecimalGlobalNumberFormatPipe}}
+          </span>
+        </p>
+        <p><span class="label"><b>Warnings: </b></span>
+          <span class="value">
+            {{salesOrder.customerWarningMessage}}
+          </span>
+        </p>
+        <p><span class="label"><b>Memo: </b></span>
+          <span class="value">
+            <!-- {{salesOrder.memo}} -->
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.memo"></p>
+          </span>
+        </p>
+        <p><span class="label"><b>Notes: </b></span>
+          <span class="value">
+            <!-- {{salesOrder.notes}} -->
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.notes"></p>
+          </span>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-header" style="padding:.1rem 2rem">
+            <label style="text-align: center">Margin Summary</label>
+          </div>
+          <div style="padding:5px">
+            <p style="padding:0px"><span class="label"><b>Sales</b></span>
+              <span class="value" style="text-align:right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Misc Amt</b></span>
+              <span class="value" style="text-align:right">{{marginSummary.misc |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Net Sales</b></span>
+              <span class="value" style="text-align:right">{{marginSummary.netSales |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Product Cost</b></span>
+              <span class="value"
+                style="text-align:right">{{marginSummary.productCost |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Margin Amt</b></span>
+              <span class="value"
+                style="text-align:right">{{marginSummary.marginAmount |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <p style="padding:0px"><span class="label"><b>Margin %</b></span>
+              <span class="value"
+                style="text-align:right">{{marginSummary.marginPercentage |twoDecimalGlobalNumberFormatPipe}}
+              </span>
+            </p>
+            <!-- <label style="font-weight: normal">Sales<span
+                style="float: right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}</span></label>
+            <label style="font-weight: normal">Misc<span
+                style="float: right">{{marginSummary.misc| twoDecimalGlobalNumberFormatPipe}}</span></label>
+            <label style="font-weight: normal">Net
+              Sales<span
+                style="float: right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+            <label style="font-weight: normal">Product
+              Cost<span
+                style="float: right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
+            <label style="font-weight: normal">Margin
+              Amt<span
+                style="float: right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
+            <label style="font-weight: normal">Margin
+              %<span
+                style="float: right">{{marginSummary.marginpercentage | twoDecimalGlobalNumberFormatPipe}}</span></label> -->
+          </div>
+        </div>
+        <div style="padding-top: 10px"></div>
+        <div class="card">
+          <div class="card-header" style="padding:.1rem 3rem">
+            <label style="text-align: center">Management Structure</label>
+          </div>
+          <div style="padding:5px">
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="companyName" [(ngModel)]="managementStructure.level1"
+                disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="BUName" [(ngModel)]="managementStructure.level2" disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="divisionName" [(ngModel)]="managementStructure.level3"
+                disabled>
+            </div>
+            <div class="form-group" style="margin-bottom: 4px;">
+              <input class="form-control" type="text" name="deptName" [(ngModel)]="managementStructure.level4" disabled>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+    <p-tabPanel header="Parts List">
+      <app-sales-order-part-number [salesQuote]="salesQuote" [salesOrderId]="salesOrder.salesOrderId"
+        [isViewMode]="true" [employeesList]="allEmployeeinfo"></app-sales-order-part-number>
+
+
+    </p-tabPanel>
+    <p-tabPanel header="Internal Approvers">
+      <app-sales-order-approve>
+      </app-sales-order-approve>
+    </p-tabPanel>
+    <p-tabPanel header="Approver Process">
+      <app-sales-order-customer-approval [customer-id]="salesQuote.customerId"
+        [sales-order-id]="salesOrder.salesOrderId" [status]="status" [customer-contacts]="customerContactList"
+        [customerContactList]="customerContactList" (on-part-approved-event)="onPartsApprovedEvent($event)">
+      </app-sales-order-customer-approval>
+    </p-tabPanel>
+    <p-tabPanel header="Address">
+      <div class="table-responsive default-bg clear">
+        <div class="col-sm-4">
+          <h5 class="po-head">Ship To</h5>
+          <p><span class="label"><b>User Type: </b></span><span
+              class="value">{{salesOrder.shipToUserType ? salesOrder.shipToUserType : '-'}}</span></p>
+          <p><span class="label"><b>User: </b></span><span
+              class="value">{{salesOrder.shipToUser ? salesOrder.shipToUser : '-'}}</span></p>
+          <p><span class="label"><b>Site Name: </b></span><span
+              class="value">{{salesOrder.shipToSiteName ? salesOrder.shipToSiteName : '-'}}</span></p>
+          <p><span class="label"><b>Address1: </b></span><span
+              class="value">{{salesOrder.shipToAddress1 ? salesOrder.shipToAddress1 : '-'}}</span></p>
+          <p><span class="label"><b>Address2: </b></span><span
+              class="value">{{salesOrder.shipToAddress2 ? salesOrder.shipToAddress2 : '-'}}</span></p>
+          <p><span class="label"><b>Address3: </b></span><span
+              class="value">{{salesOrder.shipToAddress3 ? salesOrder.shipToAddress3 : '-'}}</span></p>
+          <p><span class="label"><b>City: </b></span><span
+              class="value">{{salesOrder.shipToCity ? salesOrder.shipToCity : '-'}}</span></p>
+          <p><span class="label"><b>Primary State/Province: </b></span><span
+              class="value">{{salesOrder.shipToState ? salesOrder.shipToState : '-'}}</span></p>
+          <p><span class="label"><b>Postal: </b></span><span
+              class="value">{{salesOrder.shipToPostalCode ? salesOrder.shipToPostalCode : '-'}}</span></p>
+          <p><span class="label"><b>Country: </b></span><span
+              class="value">{{salesOrder.shipToCountry ? salesOrder.shipToCountry : '-'}}</span></p>
+          <p><span class="label"><b>Contact Name: </b></span><span
+              class="value">{{salesOrder.shipToContactName ? salesOrder.shipToContactName : '-'}}</span></p>
+          <p><span class="label"><b>Memo: </b></span><span
+              class="value">
+              <!-- {{salesOrder.shipViaMemo ? salesOrder.shipViaMemo : '-'}} -->
+              <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.shipViaMemo"></p>
+            </span></p>
+          <p><span class="label"><b>Ship Via: </b></span><span
+              class="value">{{salesOrder.shipViaName ? salesOrder.shipViaName : '-'}}</span></p>
+          <p><span class="label"><b>Shipping Cost: </b></span><span
+              class="value">{{salesOrder.shippingCost ? salesOrder.shippingCost : '-'}}</span></p>
+          <p><span class="label"><b>Handling Cost: </b></span><span
+              class="value">{{salesOrder.handlingCost ? salesOrder.handlingCost : '-'}}</span></p>
+          <p><span class="label"><b>Shipping Acct Num: </b></span><span
+              class="value">{{salesOrder.shippingAccountNo ? salesOrder.shippingAccountNo : '-'}}</span></p>
+        </div>
+        <div class="col-sm-4">
+          <h5 class="po-head">Bill To</h5>
+          <p><span class="label"><b>User Type: </b></span><span
+              class="value">{{salesOrder.billToUserType ? salesOrder.billToUserType : '-'}}</span></p>
+          <p><span class="label"><b>User: </b></span><span
+              class="value">{{salesOrder.billToUser ? salesOrder.billToUser : '-'}}</span></p>
+          <p><span class="label"><b>Site Name: </b></span><span
+              class="value">{{salesOrder.billToSiteName ? salesOrder.billToSiteName : '-'}}</span></p>
+          <p><span class="label"><b>Address1: </b></span><span
+              class="value">{{salesOrder.billToAddress1 ? salesOrder.billToAddress1 : '-'}}</span></p>
+          <p><span class="label"><b>Address2: </b></span><span
+              class="value">{{salesOrder.billToAddress2 ? salesOrder.billToAddress2 : '-'}}</span></p>
+          <p><span class="label"><b>Address3: </b></span><span
+              class="value">{{salesOrder.billToAddress3 ? salesOrder.billToAddress3 : '-'}}</span></p>
+          <p><span class="label"><b>City: </b></span><span
+              class="value">{{salesOrder.billToCity ? salesOrder.billToCity : '-'}}</span></p>
+          <p><span class="label"><b>Primary State/Province: </b></span><span
+              class="value">{{salesOrder.billToState ? salesOrder.billToState : '-'}}</span></p>
+          <p><span class="label"><b>Postal: </b></span><span
+              class="value">{{salesOrder.billToPostalCode ? salesOrder.billToPostalCode : '-'}}</span></p>
+          <p><span class="label"><b>Country: </b></span><span
+              class="value">{{salesOrder.billToCountry ? salesOrder.billToCountry : '-'}}</span></p>
+          <p><span class="label"><b>Contact Name: </b></span><span
+              class="value">{{salesOrder.billToContactName ? salesOrder.billToContactName : '-'}}</span></p>
+          <p><span class="label"><b>Memo: </b></span><span
+              class="value">
+              <!-- {{salesOrder.billToMemo ? salesOrder.billToMemo : '-'}} -->
+
+              <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.billToMemo"></p>
+            </span></p>
+        </div>
+      </div>
+    </p-tabPanel>
+    <p-tabPanel header="Freight">
+      <app-sales-order-freight [freightForm]="freight" [customerId]="customerId"
+        [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [salesOrderId]="salesQuote.salesOrderId"
+        (saveFreightListForSO)="saveSalesOrderFreightsList($event)"
+        (updateFreightListForSO)="updateSalesOrderFreightsList($event)" (refreshData)="getFreightList()" [isView]="true"
+        [isQuote]="false">
+      </app-sales-order-freight>
+    </p-tabPanel>
+    <p-tabPanel header="Charges">
+      <app-sales-order-charges [chargeForm]="charge" [customerId]="customerId"
+        [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [salesOrderId]="salesQuote.salesOrderId"
+        (saveChargesListForSO)="saveSalesOrderChargesList($event)"
+        (updateChargesListForSO)="updateSalesOrderChargesList($event)" (refreshData)="getChargesList()" [isView]="true"
+        [isQuote]="false">
+      </app-sales-order-charges>
+    </p-tabPanel>
+    <p-tabPanel header="Billing/Invoicing">
+      <!-- <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="id" [salesOrder]="salesQuote">
+      </app-sales-order-billing> -->
+      <p>Billing/Invoicing under implementation</p>
+    </p-tabPanel>
+    <p-tabPanel header="Shipping">
+      <app-sales-order-shipping>
+      </app-sales-order-shipping>
+    </p-tabPanel>
+    <p-tabPanel header="Document">
+      <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">
+      </app-sales-order-document>
+    </p-tabPanel>
+  </p-tabView>
+  <div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+      <div class="lds-roller">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </div>

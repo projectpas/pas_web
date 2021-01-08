@@ -1,0 +1,64 @@
+﻿<!-- <ng-container *ngIf="gridData[0] && gridData[0].data && gridData[0].isCheckboxNotDisable">
+<ul class="tree">
+    <li *ngFor="let structure of gridData">
+        <span class="caret" [innerHTML]="structure.data.name"></span>
+        <input (click)="storeLegalEntity(structure,structure.data.name)" 
+        [checked]="checkLegalEntityExist(structure.data.managementStructureId)" type="checkbox" 
+        class="radio" value="1" [id]="structure.data.managementStructureId" 
+        [name]="structure.data.managementStructureId" />
+        <app-tree-structure *ngIf="structure.children != undefined" 
+        [gridData]="structure.children"></app-tree-structure>
+    </li>
+</ul>
+</ng-container>
+
+<ng-container *ngIf="gridData[0] && gridData[0].data && !gridData[0].isCheckboxNotDisable">
+    <ul class="tree">
+        <li *ngFor="let structure of gridData">
+            <span class="caret" [innerHTML]="structure.data.name"></span>
+            <input (click)="storeLegalEntity(structure,structure.data.name)" 
+            [checked]="checkLegalEntityExist(structure.data.managementStructureId)" 
+            type="checkbox" class="radio" value="1" 
+            [id]="structure.data.managementStructureId" 
+            [name]="structure.data.managementStructureId" disabled/>
+            <app-tree-structure *ngIf="structure.children != undefined" [gridData]="structure.children"></app-tree-structure>
+        </li>
+    </ul>
+</ng-container> -->
+
+<ng-container *ngIf="gridData[0] && gridData[0].data && gridData[0].isCheckboxNotDisable">
+    <ul class="tree">
+        <li *ngFor="let structure of gridData">
+            <span class="caret" [innerHTML]="structure.data.fullName"></span>           
+            &nbsp;
+            <input [disabled]="gridData[0].isCheckboxNotDisable" (click)="storeLegalEntity(structure,structure.data.name)" 
+            [checked]="checkLegalEntityExist(structure.data.managementStructureId)" type="checkbox" 
+            class="radio" value="1" [id]="structure.data.managementStructureId" 
+            [name]="structure.data.managementStructureId" />
+            <app-tree-structure *ngIf="structure.children != undefined" 
+            [gridData]="structure.children"></app-tree-structure>
+        </li>
+    </ul>
+    </ng-container>
+
+    <ng-container *ngIf="gridData[0] && gridData[0].data && !gridData[0].isCheckboxNotDisable">
+        <ul class="tree">
+            <li *ngFor="let structure of gridData">
+                <span class="caret" [innerHTML]="structure.data.fullName"></span>           
+                &nbsp;
+                <input  (click)="storeLegalEntity(structure,structure.data.name)" 
+                [checked]="checkLegalEntityExist(structure.data.managementStructureId)" type="checkbox" 
+                class="radio" value="1" [id]="structure.data.managementStructureId" 
+                [name]="structure.data.managementStructureId" />
+                <app-tree-structure *ngIf="structure.children != undefined" 
+                [gridData]="structure.children"></app-tree-structure>
+            </li>
+        </ul>
+    </ng-container>
+    <div class="preloader"  *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller"><div>			
+            </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+    <app-spinner  *ngIf="isSpinnerVisible"></app-spinner>

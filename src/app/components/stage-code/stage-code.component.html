@@ -1,0 +1,553 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="card">
+                    <!-- <div class="card-body">
+                        <div class="inline-block display-flex">
+                            <h3 class="po-head lead">Stage Code</h3>
+                            &nbsp;&nbsp;
+                            <a class="plusicon-cstm new-margin" matTooltipPosition="above"
+                             matTooltip="Add Stage Code" tooltipPosition="right"
+                            (click)="resetForm()" data-target="#add" data-toggle="modal">
+                                <i class="fa fa-plus-circle fa-lg"></i>
+                            </a>
+                        </div> -->
+                        <div class="card new-card">
+                            <div class="card-header bg-primary new-card-header">
+                              <div class="row">
+                                <div class="col">
+                                  <h4 class="new-card-heading">Stage Code</h4>
+                                </div>
+                                <div>
+                                  <button
+                                    type="button"
+                                    class="btn-sm new-btn-primary"
+                                    (click)="resetForm()" data-target="#add" data-toggle="modal"
+                                  >
+                                  Add Stage Code
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-body new-card-body">
+                       
+                        <p-table #dt class="rpo-table-cstm rro-table-cstm" 
+                        [value]="originalData" 
+                        [first]="0" 
+                        [rows]="pageSize" 
+                        [paginator]="true" 
+                        [pageLinks]="3" 
+                        [rowsPerPageOptions]="[10,20,50,100]" 
+                        [columns]="selectedColumns" 
+                        selectionMode="multiple" 
+                        [metaKeySelection]="true"
+                        (onPage)="changePage($event)" 
+                        [resizableColumns]="true" 
+                        [reorderableColumns]="true" 
+                        [scrollable]="true" 
+                        [totalRecords]="totalRecords" 
+                        scrollHeight="450px">
+                            <ng-template pTemplate="caption">
+                                <div class="row">
+                                    <div class="col">
+                                    <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header" [(ngModel)]="selectedColumns"
+                                                   [style]="{minWidth: '200px'}" style="float:left" (onChange)="columnsChanges()">
+                                                </p-multiSelect>
+                                   
+                                                </div>
+                                                <div class="col">
+                                                  
+                                                      <div
+                                                        style="width: 370px; float: right; padding-top: 3px;"
+                                                      >
+                                                        <div class="form-group">
+                                                          <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
+                                                          <div
+                                                            class="pull-left"
+                                                            style="margin-top: 4px; margin-right: 15px;"
+                                                          >
+                                                                <label class="radio-cstm wauto">
+                                                                    <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="getListByStatus('Active')" [(ngModel)]="currentstatus">
+                                                                    <span class="checkmark"></span>Active
+                                                                </label>
+                                                            </div>
+                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                <label class="radio-cstm wauto">
+                                                                    <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="getListByStatus('InActive')" [(ngModel)]="currentstatus">
+                                                                    <span class="checkmark"></span>In-Active
+                                                                </label>
+                                                            </div>
+                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                <label class="radio-cstm wauto">
+                                                                    <input type="radio" name="EmpStatus" class="form-control" value="ALL" 
+                                                                    (click)="getListByStatus('ALL')" [(ngModel)]="currentstatus">
+                                                                    <span class="checkmark"></span>All
+                                                                </label>
+                                                            </div>
+                                                                <div class="checkbox-cstm" style="margin-left: 0;">
+                                                                  <label style="width: auto !important;margin-top: 3px;">
+                                                                    <!--  -->
+                                                                    <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" 
+                                                                     (click)="getDeleteListByStatus($event.target.checked)"
+                                                                      />
+                                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                                  Show  Deleted List 
+                                                                  </label>
+                                                                </div>
+                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col">
+                                                   <button type="button" class="btn btn-primary new-table-button" matTooltipPosition="above" matTooltip="Download All Data"   pButton icon="fa-download"
+                                            iconPos="left" label="Export All Data"  style="padding: 5px 12px !important;" (click)="dt.exportCSV()"></button>
+                                    <button type="button" class="btn btn-primary new-table-button" matTooltipPosition="above" matTooltip="Download Selected"   pButton icon="fa-download"
+                                            iconPos="left" label="Export Selection Only" style="padding: 5px 12px !important" (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                    <div class="excel-upload  excel-upload-cstm">
+
+                                        <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)" class="uploaddoc upload-file"
+                                               accept=".xlsx, .xls, .csv">
+                                        <label for="upload">
+                                            <span matTooltip="Upload Data (Excel)">
+                                                <i class="fa fa-upload"></i>
+                                            </span>
+                                        </label>
+                                        &nbsp; &nbsp;
+                                        <button class="btn btn-primary" (click)="sampleExcelDownload()"  style="padding: 5px 12px !important;"  matTooltipPosition="above" matTooltip="Download Sample File"   >Sample File Download</button>
+                                    </div>
+                                    </div>
+
+                                </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="colgroup" let-columns>
+                                    <colgroup>
+                                        <col *ngFor="let col of columns" style="width:130px">
+                                    </colgroup>
+                                </ng-template>
+
+                            <ng-template pTemplate="header" let-columns>
+                                <tr> 
+                                        <ng-container *ngFor="let col of columns">
+                                                <th class="text-center" *ngIf="col.field!='levelCode1' && col.field!='levelCode2' && col.field!='levelCode3' && col.field!='levelCode4'"  pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                                        {{col.header}}
+                                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                </th>
+                                                <th class="text-center" *ngIf="col.field=='levelCode1'"  colspan="4"  pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                                   Management Structure
+                                                </th>
+                                            </ng-container>
+                                    <!-- <th style="width:120px" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th> -->
+                                    <th style="width:140px;position:sticky" *ngIf="selectedColumns.length> 0"> Actions</th> 
+                                </tr>
+                                <tr>
+                                    <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                    </th>
+                                    <th style="width:140px;position:sticky"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData" pReorderableRowHandle>
+                                    <td style="width:120px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle
+                                     data-toggle="modal" data-target="#view" (dblclick)="viewSelectedRow(rowData)">
+                                      <span *ngIf="col.field !='stage'">
+                                        {{
+                                            col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?
+                                            (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]
+                                            }}
+                                      </span>
+                                      <span *ngIf="col.field =='stage'"> {{rowData['code']}}-{{rowData[col.field]}}</span>
+                                    </td>
+                                    <td class="action-icons-cstm" style="width:140px;" *ngIf="selectedColumns.length> 0">
+                                       
+                                        <div *ngIf="currentDeletedstatus==false">
+                                        <p-inputSwitch [(ngModel)]="rowData['isActive']"
+                                                       name="isActive{{rowIndex}}" (onChange)="changeStatus(rowData)" matTooltipPosition="above"
+                                                       [matTooltip]="rowData['isActive'] ? 'Active' : 'Inactive' ">
+                                        </p-inputSwitch>
+                                        <!-- <span data-toggle="modal" data-target="#view">
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewSelectedRow(rowData)" data-target="#view" data-toggle="modal">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span> -->
+                                        
+                                        <span  data-target="#add" data-toggle="modal">
+                                            <a class="btn nobg" 
+                                            (click)="edit(rowData)" 
+                                            matTooltip="Edit" 
+                                            matTooltipPosition="above"><i class="fa fa-pencil">
+                      
+                                            </i></a> </span>
+                                        
+                                        
+                                        
+                                        <!-- <button class="btn-edit" mat-icon-button (click)="edit(rowData)"
+                                         data-target="#add"
+                                         data-toggle="modal" matTooltip="Edit" matTooltipPosition="above">
+                                            <mat-icon>edit</mat-icon>
+                                        </button> -->
+
+                                        <span data-target="#delete" data-toggle="modal">
+                                            <a class="btn nobg" 
+                                            (click)="delete(rowData)"
+                                            matTooltip="Delete"  matTooltipPosition="above">
+                                            <i class="fa fa-trash"></i></a> </span>
+                                       
+                                       
+                                        <!-- <button class="btn-delete" mat-icon-button
+                                         matTooltip="Delete" matTooltipPosition="above" 
+                                         data-target="#delete" data-toggle="modal"
+                                          (click)="delete(rowData)">
+                                            <mat-icon color="warn">delete</mat-icon>
+                                        </button> -->
+
+                                        <span data-target="#contentHist" data-toggle="modal"><a class="btn nobg" 
+                                            (click)="showHistory(rowData)"
+                                             matTooltip="History"  matTooltipPosition="above">
+                                             <i class="fa fa-history"></i></a></span>
+
+
+                                        <!-- <button class="btn-history" mat-icon-button matTooltip="History"
+                                         matTooltipPosition="above" data-target="#contentHist" data-toggle="modal"
+                                          (click)="showHistory(rowData)">
+                                            <mat-icon color="green">history</mat-icon>
+                                        </button> -->
+
+                                    </div>
+
+                                    <div *ngIf="currentDeletedstatus==true">
+                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                        matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                                       <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                      <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <!-- <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg" (click)="getAuditHistoryById(contentAuditHist,rowData)" matTooltip="History"  matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
+                                     
+                                    </div> 
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #auditContent let-c="close" let-d="dismiss">
+                                <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+                                    <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns
+										 *ngIf="originalData && originalData.length == 0 || originalData && originalData.length ==null">
+								<tr>
+									<td [attr.colspan]="10" class="no-records-cstm">
+										No records found
+									</td>
+								</tr>
+							</ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <div style="text-align: right;">
+                                    <label id="footer" class="footer1">Total:</label>
+                                    <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                                    <label id="footer" class="footer1">Pages Count:</label>
+                                    <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText type="text" />
+                                </div>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- <ng-template #auditContent let-c="close" let-d="dismiss" data-backdrop="static">
+    <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+        <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+    </div>
+</ng-template> -->
+
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+  
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+       
+    </div>
+    <div class="modal-body">
+        <strong>
+            Stage Code:
+            <span class="new-label">{{restorerecord.stage}}</span>
+        </strong>
+    </div>
+  
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> 
+
+<div *ngIf="selectedRowforDelete" #delete id="delete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    Stage Code
+                    <span class="new-label">{{selectedRowforDelete.stage}}</span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteConformation('Yes')">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteConformation('No')">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">History of Stage Code and Status</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive rro-table-cstm">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                           
+                            <tr>
+                                <!-- <th>UMID</th> -->
+                                <th>Stage Code</th>
+                                <th>Satge Name</th>
+                                <th>Management Structure</th>
+                               
+                                <th>Sequence</th>
+                                <th>Status</th>
+                                <th>Description</th>
+                                <th>Memo</th>
+                                <th>IsActive</th>
+                                <th>Updated By</th>
+                                <th>Updated Time</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="auditHistory.length> 0">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'stageCode', audit.workPerformedCode)  ? 'black' : 'red'  }">
+                                    {{audit.workPerformedCode}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+                                    {{audit.description}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
+                                    {{audit.memo}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">
+                                    {{audit.isActive}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'workPerformedCode', audit.workPerformedCode)  ? 'black' : 'red'  }">
+                                    {{audit.workPerformedCode}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+                                    {{audit.description}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
+                                    {{audit.memo}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">
+                                    {{audit.isActive}}</td>
+                                <td>{{audit.updatedBy}}</td>
+                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div #add id="add" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add' }} Stage Code  </h4>
+            </div>
+            <div class="modal-body">
+                <form #create="ngForm">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">
+                                    Management Structure
+                                    <span class="clr-red">*</span>
+                                </label>
+                            </div>
+                            <p-dropdown placeholder="Select Legal Entity"
+                            name="company"
+                            #wocompanyId="ngModel"
+                            required
+                            [options]="legalEntityList"
+                            class="p-dropdown-custom-stagecode" (ngModelChange)="getmemo()"
+                            (onChange)="selectedLegalEntity($event.value)"
+                            [(ngModel)]="managementStructure.companyId">
+                            </p-dropdown>
+                            
+                            
+                        </div>
+
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+      
+                            </div>
+                            <p-dropdown placeholder="Select "
+                            name="bu"
+                            #wobu="ngModel" (ngModelChange)="getmemo()"
+                            [options]="businessUnitList"
+                            class="p-dropdown-custom-stagecode"
+                            (onChange)="selectedBusinessUnit($event.value)"
+                            [(ngModel)]="managementStructure.buId">
+                             </p-dropdown>
+                            
+                            
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+      
+                            </div>
+                            <p-dropdown placeholder="Select "
+                            name="division"
+                            #wodivision="ngModel" (ngModelChange)="getmemo()"
+                            [options]="divisionList"
+                            class="p-dropdown-custom-stagecode"
+                            (onChange)="selectedDivision($event.value)"
+                            [(ngModel)]="managementStructure.divisionId">
+                            </p-dropdown>
+                            
+                            
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+      
+                            </div>
+                            <p-dropdown placeholder="Select "
+                            name="department"
+                            #wodepartment="ngModel" (ngModelChange)="getmemo()"
+                            [options]="departmentList"
+                            class="p-dropdown-custom-stagecode"
+                            (onChange)="selectedDepartment($event.value)"
+                            [(ngModel)]="managementStructure.departmentId">
+                            </p-dropdown>
+                            
+                            
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">
+                                    Stage Code
+                                    <span class="clr-red">*</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" name="code" (ngModelChange)="getmemo()" class="form-control" #code="ngModel" [(ngModel)]="addNew.code" required (input)="checkStageCodeExistOrNot($event.target.value)">
+                                <div *ngIf="disableSaveForCode" class="clr-red">Already Exists</div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">
+                                   Stage Name  <span class="clr-red">*</span>
+                                
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" name="stageDescription" (ngModelChange)="getmemo()" class="form-control" #stageDescription="ngModel" [(ngModel)]="addNew.stage" required>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">
+                                 Sequence
+                                 <span class="clr-red">*</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="number" name="sequence" (ngModelChange)="getmemo()" class="form-control" #sequence="ngModel" [(ngModel)]="addNew.sequence" required (input)="checkSequenceExistOrNot($event.target.valueAsNumber)">
+                                <div *ngIf="disableSaveForSequence" class="clr-red">Already Exists</div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">
+                                   Status
+                                    <span class="clr-red">*</span>
+                                </label>
+                            </div>
+                            <p-dropdown [options]="workOrderStatusList" name="workOrderStatus" #workOrderStatus="ngModel" placeholder="Select Status" 
+                            class="p-dropdown-custom-stagecode" (ngModelChange)="getmemo()"
+                            [(ngModel)]="addNew.statusId" required>
+                            </p-dropdown>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">Description</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <textarea class="text-item" (ngModelChange)="getmemo()" #description="ngModel" name="description" 
+                                          [(ngModel)]="addNew.description" minlength="2"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="description" class="control-label">Memo</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <textarea class="text-item" #memo="ngModel" name="memo" (ngModelChange)="getmemo()"
+                                          [(ngModel)]="addNew.memo" minlength="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal" [disabled]="create.invalid || disableSaveForCode || disableSaveForSequence || disableSaveForEdit" (click)="save();"> {{isEdit ? 'Update' : 'Save' }}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetForm()">Close</button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+

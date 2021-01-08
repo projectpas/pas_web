@@ -1,0 +1,133 @@
+
+import { Injectable, Injector } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import {catchError} from 'rxjs/operators'
+
+import { EndpointFactory } from './endpoint-factory.service';
+import { ConfigurationService } from './configuration.service';
+
+@Injectable()
+export class ATAMainEndpoint extends EndpointFactory {
+
+
+    private readonly _actionsUrl: string = "/api/ATAMain/Get";
+    private readonly _actionsUrlNew: string = "/api/ATAMain/actions";
+	private readonly _actionsUrlAuditHistory: string = "/api/ATAMain/ataauditHistoryById";
+    private readonly getAtaChapterDataAuditById: string = "/api/ATAMain/audits";
+    private readonly getATAUrl: string = "/api/ATAMain/GetATASUBS_BY_ATAMain_ID";
+    private readonly getMultiATAUrl: string = "/api/ATAMain/GetMultiATASUBSBYATAMainID";
+    private readonly deleteATAURL: string = "/api/ATAMain/deleteATAMAIN";
+    private readonly excelUpload: string = "/api/ATAMain/UploadataChapterCustomData";
+    private readonly _actionsUrlAll: string = "/api/ATAMain/GetAll";
+    private readonly getMultiAircraftUrl: string = "/api/Aircraft/GetMultiAirCraftModelByAircraftID";
+
+    
+    get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
+    get actionsUrlAll() { return this.configurations.baseUrl + this._actionsUrlAll; }
+
+    constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
+
+        super(http, configurations, injector);
+    }
+
+    getATAMainEndpoint<T>(): Observable<T> {
+
+        return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getATAMainEndpoint());
+            }));
+    }
+
+    getAllATAMainEndpoint<T>(): Observable<T> {
+
+        return this.http.get<any>(this.actionsUrlAll, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getAllATAMainEndpoint());
+            }));
+    }
+    getNewATAMainEndpoint<T>(userObject: any): Observable<T> {
+
+        return this.http.post<any>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getNewATAMainEndpoint(userObject));
+            }));
+    }
+        getHistoryATAMainEndpoint<T>(ataChapterId: number): Observable<T> {
+        let endpointUrl = `${this._actionsUrlAuditHistory}/${ataChapterId}`;
+
+        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getHistoryATAMainEndpoint(ataChapterId));
+            }));
+    }
+
+    getEditATAMainEndpoint<T>(ataChapterId?: number): Observable<T> {
+        let endpointUrl = ataChapterId ? `${this._actionsUrlNew}/${ataChapterId}` : this._actionsUrlNew;
+
+        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getEditATAMainEndpoint(ataChapterId));
+            }));
+    }
+
+    getUpdateATAMainEndpoint<T>(roleObject: any, ataChapterId: number): Observable<T> {
+        let endpointUrl = `${this._actionsUrlNew}/${ataChapterId}`;
+
+        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getUpdateATAMainEndpoint(roleObject, ataChapterId));
+            }));
+    }
+
+    getDeleteATAMainEndpoint<T>(ataChapterId: number): Observable<T> {
+        let endpointUrl = `${this.deleteATAURL}/${ataChapterId}`;
+
+        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getDeleteATAMainEndpoint(ataChapterId));
+            }));
+    }
+
+    
+    getAtaChapterAuditById<T>(ataChapterId: number): Observable<T> {
+        let endpointUrl = `${this.getAtaChapterDataAuditById}/${ataChapterId}`;
+
+        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getAtaChapterAuditById(ataChapterId));
+            }));
+    }
+
+    getATASubByID<T>(Chid: number): Observable<T> {
+        let endpointUrl = `${this.getATAUrl}/${Chid}`;
+        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getATASubByID(Chid));
+            }));
+    }
+
+    getMultiATASubByID<T>(Chapterids: string): Observable<T> {
+        let endpointUrl = `${this.getMultiATAUrl}/${Chapterids}`;
+        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getMultiATASubByID(Chapterids));
+            }));
+    }
+    getMultiAirCraftSubDesc<T>(AircraftTypeids: string): Observable<T> {
+        let endpointUrl = `${this.getMultiAircraftUrl}/${AircraftTypeids}`;
+        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
+            .pipe(catchError(error => {
+                return this.handleError(error, () => this.getMultiAirCraftSubDesc(AircraftTypeids));
+            }));
+    }
+    
+    ataChapterCustomUpload(file) {
+        return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}`, file)
+
+    }
+    getATAMainDropdownList(){
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/ATAMain/getdropdownlist`)
+    }
+   
+}

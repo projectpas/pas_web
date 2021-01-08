@@ -1,0 +1,313 @@
+<div *ngIf="!isView && !isQuote">
+  <button data-target="#addNewExclusions" data-toggle="modal" (click)="createNew()" class="btn btn-primary btn-primary"
+    style="padding: 6px 12px !important;margin-left: 6px;">
+    Add Exclusions 
+  </button>
+</div>
+ <!-- {{addNewExclusion}} -->
+<div id="addNewExclusions" class="modal fade" role="dialog" data-backdrop="static" *ngIf="!view">
+  <div class="modal-dialog modal-xlg">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeAddNew()">
+          &times;
+        </button>
+        <h4 class="modal-title"> {{isEdit ? 'Edit' : 'Add'}} Exclusions </h4>
+      </div>
+      <div class="modal-body">
+        <!-- && addNewExclusion -->
+<!-- && addNewExclusion -->
+        <div *ngIf="!isEdit ">
+          <grd-exclusions [isQuote]="isQuote" [workFlow]="workFlowObject" [isWorkOrder]="isWorkOrder"
+            [markupList]="markupList" [taskList]="taskList" (saveExclusionsListForWO)="saveExclusionsList($event)">
+          </grd-exclusions>
+        </div>
+
+        <div *ngIf="isEdit && editData ">
+          <grd-exclusions [isQuote]="isQuote" [isEdit]="isEdit" [editData]="editData" [workFlow]="workFlowObject"
+            [isWorkOrder]="isWorkOrder" [markupList]="markupList" [taskList]="taskList"
+            (updateExclusionsListForWO)="updateExclusionsList($event)">
+          </grd-exclusions>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <!-- <table class="table table-bordered table-striped table-sorting mpn-list-table table-disabled">
+      <thead>
+          <tr style="color: #f1f1f1;">
+              <td colspan="10" style="width: 500px;">&nbsp;</td>
+              <td colspan="3" style="display: flex;">
+                  <div class="form-group" style="text-align: center;">
+                    <p-radioButton
+                      class="p-radiobutton-label-horizontal"
+                      name="costPlusType"
+                      label="T&M"
+                      value="Mark Up"
+                      [(ngModel)]="costPlusType"
+                      [disabled]="isView"
+                    ></p-radioButton>
+                    <div style="display: flex;">
+                      <label>Mat Mark Up %</label>
+                      <select class="form-control wf-pub-id" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 'Mark Up'">
+                        <option value="">Select</option>
+                        <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+              </td>
+              <td colspan="4">
+                <div>
+                  <p-radioButton
+                    class="p-radiobutton-label-horizontal col-width"
+                    name="costPlusType"
+                    value="Fixed Mat Price"
+                    label="Fixed Mat Price"
+                    [(ngModel)]="costPlusType"
+                    [disabled]="isView"
+                  ></p-radioButton>
+                </div>
+              </td>
+          </tr>
+      </thead>
+    </table> -->
+  <p-table class="rpo-table-cstm rro-table-cstm pub-ptable-cstm ptable-f10" [columns]="cols" [lazy]="false"
+    [value]="workOrderExclusionsList" [paginator]="true" [rows]="10">
+    <ng-template pTemplate="header" let-columns>
+      <tr *ngIf="isQuote">
+        <th colspan="7" style="background: #fff; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">&nbsp;</th>
+        <ng-container *ngIf="isView">
+            <th colspan="3"  style="background: #fff; border: 1px solid #e7ecf1;padding: 0;">
+              <div class="display-flex">
+                <div class="form-group" style="text-align: center; display: flex;margin-bottom: 0px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                    label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                  </p-radioButton>
+                  <div>
+                    <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                      [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                      <option value="">Select</option>
+                      <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="float: left; margin-bottom: 7px; margin-left: 30px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
+                    label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                </div>
+              </div>
+            </th>
+        </ng-container>
+        <ng-container *ngIf="!isView">
+            <th colspan="4"  style="background: #fff; border: 1px solid #e7ecf1;padding: 0;">
+              <div class="display-flex">
+                <div class="form-group" style="text-align: center; display: flex;margin-bottom: 0px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                    label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                  </p-radioButton>
+                  <div>
+                    <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
+                      [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                      <option value="">Select</option>
+                      <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="float: left; margin-bottom: 7px; margin-left: 30px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2"
+                    label="Actual" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                </div>
+              </div>
+            </th>
+        </ng-container>
+        <th style="background: #fff; border: 1px solid #fff;"></th>
+      </tr>
+      <tr>
+        <th>Task</th>
+        <th *ngFor="let col of columns">
+          {{ col.header }}
+        </th>
+        <ng-container *ngIf="isQuote">
+          <th>Billing Method</th>
+          <th>Mark Up %</th>
+          <th tooltip="Time & Materials">Billing Rate</th>
+          <th>Billing Amount</th>
+
+        </ng-container>
+        <th *ngIf="!isView">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+      <ng-container *ngFor="let dt of rowData; let subIndex = index">
+        <tr *ngIf="!dt['isDeleted']">
+          <td class="vd_cls">
+            <select class="form-control select-read-only select_view" [(ngModel)]="dt.taskId" disabled>
+              <option value="">Select</option>
+              <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
+            </select>
+          </td>
+          <td *ngFor="let col of columns" [ngClass]="{ ' content-to-end': (col.field=='quantity' || col.field=='unitCost' ||col.field=='extendedCost')}">
+           <!-- {{ dt[col.field]}} -->
+            <!-- {{col |json}} -->
+            <!-- <span *ngIf="dt[col.field] !='memo'" >{{ dt[col.field] }} </span> -->
+            <span [innerHTML]=dt[col.field] class="p_textEditor"> </span>
+            <!-- <span  *ngIf="dt[col.field] =='memo'">
+            
+              {{dt[col.field]|json}}
+            </span> -->
+          </td>
+          <ng-container *ngIf="isQuote">
+            <td>
+              <select class="form-control" [(ngModel)]="dt.billingMethodId" [disabled]="isView" (change)="dt.markUpPercentageId = '';dt.billingRate = 0;(dt.billingMethodId == '2')?dt.billingAmount = dt.extendedCost:'';">
+                <option value="">Select</option>
+                <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
+                  [value]="bm.value">{{bm.label}}</option>
+              </select>
+            </td>
+            <td>
+              <select class="form-control select-markup" (change)="markupChanged(dt, 'row')"
+                [(ngModel)]="dt.markUpPercentageId" [disabled]="isView || dt.billingMethodId != '1'">
+                <option value="">Select</option>
+                <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
+              </select>
+            </td>
+            <td class="content-to-end">{{ dt.billingRate }}</td>
+            <td>
+              <input type="number" class="form-control" (change)="dt.billingAmount = (dt.billingAmount).toFixed(2)" [(ngModel)]="dt.billingAmount"
+                [disabled]="isView || dt.billingMethodId != '2'" />
+            </td>
+          </ng-container>
+          <td *ngIf="!isView">
+
+            <span data-target="#addNewExclusions" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
+              (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit"><i class="fa fa-pencil"></i></a> </span>
+          <span><a class="btn nobg btn-delete-cstm" (click)="delete(dt, rowIndex)" matTooltip="Delete"><i
+                class="fa fa-trash"></i></a> </span>
+
+
+            <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button
+               data-target="#addNewExclusions" data-toggle="modal"
+              (click)="edit(dt, rowIndex, subIndex)" matTooltip="Edit">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button class="btn-delete ptable-wo-btns buton_back_bordernon" mat-icon-button
+             matTooltip="Delete"
+              (click)="delete(dt, rowIndex)">
+              <mat-icon color="warn">delete</mat-icon>
+            </button> -->
+          </td>
+        </tr>
+      </ng-container>
+      <tr *ngIf="rowData && rowData[0]" class="task-total">
+        <td>Total ({{rowData[0]['taskName']}})</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td class=" content-to-end">{{ getTotalTaskQuantity(rowData) }}</td>
+        <td>&nbsp;</td>
+        <td class=" content-to-end">{{ getTotalTaskUnitCost(rowData) }}</td>
+        <td *ngIf="isQuote">&nbsp;</td>
+        <td>&nbsp;</td>
+        <ng-container *ngIf="isQuote">
+          <td>&nbsp;</td>
+          <td></td>
+          <td class=" content-to-end">{{ getTotalTaskBillingAmount(rowData) }}</td>
+        </ng-container>
+        <td *ngIf="!isView">&nbsp;</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer" *ngIf="isQuote">
+      <tr class="footer">
+        <td>Total</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td class=" content-to-end">{{ getTotalQuantity() }}</td>
+        <td>&nbsp;</td>
+        <td class=" content-to-end">{{ getTotalUnitCost() }}</td>
+        <td *ngIf="isQuote">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td >&nbsp;</td>
+        <td></td>
+        <td class="content-to-end">{{getTotalBillingAmount()}}</td>
+        <td *ngIf="!isView">&nbsp;</td>
+      </tr>
+    </ng-template>
+  </p-table>
+  <button class="btn btn-primary pull-right" (click)="saveQuotation()" *ngIf="isQuote && !isView">
+    Save Exclusions
+  </button>
+</div>
+
+<!-- <div class="equipment-tab-content" >
+     <div class="x_panel" *ngIf="workOrderExclusionsList">
+                                                    <div class="tab-content">
+                                                        <div class="table-responsive table-overflow" id="workflow-attributes-block">
+                                                            <table class="table table-bordered ">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="text-center">EPN</th>
+                                                                        <th class="text-center">EPN Description</th>
+                                                                        <th class="text-center">Quantity</th>
+                                                                        <th class="text-center">Unit Cost</th>
+                                                                        <th class="text-center">Extended Cost</th>
+                                                                        <th class="text-center">Memo</th>
+                                                                        <th colspan="4" class="text-center" *ngIf="!isView"></th>
+                                                                    </tr> 
+                                                                </thead>
+                                                            
+                                                                <tbody>
+                                                                  <ng-container *ngFor="let w  of workOrderExclusionsList; let i=index;">
+                                                                    <tr *ngIf="!w['isDeleted']">
+                                                                      <td>{{w.epn}}</td>
+                                                                      <td>{{w.epnDescription}}</td>
+                                                                      <td>{{w.quantity}}</td>
+                                                                      <td>{{w.unitCost}}</td>
+                                                                      <td>{{w.extendedCost}}</td>
+                                                                      <td>{{w.memo}}</td>
+
+                                                                      <td *ngIf="!isView">
+                                                                        <button
+                                                                          class="btn-edit ptable-wo-btns"
+                                                                          mat-icon-button
+                                                                          data-target="#addNewExclusions"
+                                                                          data-toggle="modal"
+                                                                          (click)="edit(w, i)"
+                                                                          matTooltip="Edit"
+                                                                        >
+                                                                          <mat-icon>edit</mat-icon>
+                                                                        </button>
+                                                                      </td>
+                                                                      <td *ngIf="!isView">
+                                                                        <button
+                                                                          class="btn-delete ptable-wo-btns"
+                                                                          mat-icon-button
+                                                                          matTooltip="Delete"
+                                                                          (click)="delete(w, i)"
+                                                                        >
+                                                                          <mat-icon color="warn">delete</mat-icon>
+                                                                        </button>
+                                                                      </td>
+
+                                                                    </tr> 
+                                                                  </ng-container>
+                                                                </tbody>
+                                                            </table>
+                                                            <button
+                                                              class="btn btn-primary pull-right"
+                                                              (click)="saveQuotation()"
+                                                              *ngIf = "isQuote && !isView"
+                                                            >
+                                                              Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <br />
+                                                    <br />
+                                                    <br />
+                                                    <br />
+                                                </div>
+</div> -->

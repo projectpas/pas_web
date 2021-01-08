@@ -1,0 +1,1067 @@
+﻿<!--<app-item-master-setup></app-item-master-setup>-->
+<div class="x_content add-customer-work">
+	<div class="form-group row form-bg">
+		<!--<label class="control-label col-sm-2">Item Type </label>-->
+		<div class="col-sm-8 mleft25">
+			<label class="radio-inline">
+				<input type="radio" name="stock" (click)="stock()"> Stock
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="stock" (click)="nonStock()"> Non-Stock
+			</label>
+			<label class="radio-inline" style="color: #fd6428; font-weight: bold;">
+				<input type="radio" name="stock" (click)="equipment()" [checked]="true"> Equipment
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="stock" (click)="exchange()"> Exchange
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="stock" (click)="loan()"> Loan
+			</label>
+		</div>
+	</div>
+	<div class="pheading">
+		<h4 class="page-heading clr-green">Equipment Setup</h4>
+	</div>
+	
+	<div class="clear"></div>
+	<br>
+	<form *ngIf="EquipmentAdd" action="#" method="post" id="add-customerwork" name="" class="form-horizontal add-custustomer">
+		<div class="form-group row form-bg">
+		</div>
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<div class="tab-content form-bg">
+				<div class="tab-pane active">
+					<div class="col-sm-4">
+						<div class="form-group col-sm-12">
+
+							<div class="col-sm-7" *ngIf="EquipmentAdd">
+								<label class="radio-inline">
+									<input type="radio" [value]="true" id="standalone" name="equipment" [(ngModel)]="sourceItemMaster.standAloneEquipment" [ngModelOptions]="{standalone: true}" (click)="setValue('standalone')" value="" checked="checked">
+									Stand Alone
+								</label>
+								<label class="radio-inline">
+									<input type="radio" id="component" [value]="false" name="equipment" [(ngModel)]="sourceItemMaster.standAloneEquipment" [ngModelOptions]="{standalone: true}" (click)="setValue('component')">
+									Component
+								</label>
+							</div>
+						</div>
+						<div class="form-group col-sm-12 input-icon1" *ngIf="component">
+
+							<label class="control-label col-sm-4">PN <strong class="clr-red">*</strong> </label>
+							<div class="col-sm-7">
+								<div class="inner-addon right-addon inline-block">
+									<p-autoComplete [(ngModel)]="sourceItemMaster.parentPartId" [ngModelOptions]="{standalone: true}" [suggestions]="partCollection" (completeMethod)="filterpartItems($event)" [size]="30"
+													[minLength]="1" [dropdown]="true">
+										<ng-template let-partName pTemplate="part">
+											<div class="ui-helper-clearfix">{{partName}}</div>
+										</ng-template>
+									</p-autoComplete>
+									<!-- <input type="text" [(ngModel)]="sourceItemMaster.partDescription" [ngModelOptions]="{standalone: true}" />-->
+								</div>
+							</div>
+
+						</div>
+						<div class="form-group col-sm-12 input-icon1">
+
+							<label class="control-label col-sm-4">Equipment ID<strong class="clr-red">*</strong> </label>
+
+							<div class="col-sm-7">
+								<input class="form-control" type="text" [(ngModel)]="sourceItemMaster.partNumber" [ngModelOptions]="{standalone: true}" />
+
+							</div>
+
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Equipment Description <strong class="clr-red">*</strong>  </label>
+							<div class="col-sm-7">
+								<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.partdescription">
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Asset ID <strong class="clr-red">*</strong> </label>
+							<div class="col-sm-7">
+								<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.assetId">
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Calibration Required</label>
+							<div class="col-sm-7">
+								<input class="form-control" type="checkbox" id="snumber-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.calibrationRequired">
+							</div>
+						</div>
+						<div class="snumber-block" *ngIf="sourceItemMaster.calibrationRequired">
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Frequency Type</label>
+								<div class="col-sm-7">
+									<label class="radio-inline">
+										<input type="radio" name="months" [value]="true" id="month" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.frequencyTypeMonths">
+										Months
+									</label>
+									<label class="radio-inline">
+										<input type="radio" name="days" [value]="false" id="days" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.frequencyTypeMonths">
+										Days
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="snumber-block" *ngIf="sourceItemMaster.calibrationRequired">
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Cert Frequency</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" id="" name="" placeholder="Cert Frequency" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.certificationFrequency">
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Certification Required</label>
+							<div class="col-sm-7">
+								<input class="form-control" type="checkbox" id="snumber-input1" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.certificationRequired">
+							</div>
+						</div>
+
+
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Equipment Validation Type</label>
+							<div class="col-sm-7">
+								<label class="radio-inline">
+									<input type="radio" name="validationtype" [value]="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.equipmentValidationTypeId">
+									Calibration
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="validationtype" [value]="2" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.equipmentValidationTypeId">
+									Inspection
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="validationtype" [value]="3" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.equipmentValidationTypeId">
+									Verification
+								</label>
+								<label class="radio-inline">
+									<input type="radio" name="validationtype" [value]="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.equipmentValidationTypeId">
+									Un-calibrated
+								</label>
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Serialized</label>
+							<div class="col-sm-7">
+								<input class="form-control" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isSerialized">
+							</div>
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Acquired?</label>
+							<div class="col-sm-7">
+								<label class="radio-inline"><input type="radio" [value]="true" name="optradio" id="buy" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isAcquiredMethodBuy"> Buy</label>
+								<label class="radio-inline"><input type="radio" [value]="false" name="optradio" id="make" checked="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isAcquiredMethodBuy"> Make</label>
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Expiration Date</label>
+							<div class="col-sm-7">
+
+								<input class="form-control" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isExpirationDateAvailable">
+							</div>
+							<div class="col-sm-7 expdate-input" *ngIf="sourceItemMaster.isExpirationDateAvailable">
+								<p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.expirationDate"></p-calendar>
+								<!-- <input class="form-control datepicker hasDatepicker" type="text" id="snumber-input2">-->
+							</div>
+						</div>
+						<div class="snumber-block2" *ngIf="sourceItemMaster.isExpirationDateAvailable">
+							<hr class="hr-dark">
+
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Rec'd date</label>
+								<div class="col-sm-7">
+									<label class="wauto"><input type="checkbox" name="exp-date-radio" id="exp-rec-date-radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isReceivedDateAvailable"></label>
+									<input *ngIf="sourceItemMaster.isReceivedDateAvailable" class="form-control number exp-date-inputs w50" type="text" id="exp-rec-date-input" name="" placeholder="Days" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.daysReceived">
+								</div>
+							</div>
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Mfg date</label>
+								<div class="col-sm-7">
+
+									<label class="wauto"><input type="checkbox" name="exp-date-radio" id="exp-rec-date-radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isManufacturingDateAvailable"></label>
+									<input *ngIf="sourceItemMaster.isManufacturingDateAvailable" class="form-control number exp-date-inputs w50" type="text" id="exp-rec-date-input" name="" placeholder="Days" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.manufacturingDays">
+								</div>
+							</div>
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Tag date</label>
+								<div class="col-sm-7">
+									<label class="wauto"><input type="checkbox" name="exp-date-radio" id="exp-tag-date-radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isTagDateAvailable"></label>
+									<input *ngIf="sourceItemMaster.isTagDateAvailable" class="form-control number exp-date-inputs w50" type="text" id="exp-tag-date-input" name="" placeholder="Days" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.tagDays">
+								</div>
+							</div>
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Open date</label>
+								<div class="col-sm-7">
+									<label class="wauto"><input type="checkbox" name="exp-date-radio" id="exp-open-date-radio" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isOpenDateAvailable"></label>
+									<input *ngIf="sourceItemMaster.isOpenDateAvailable" class="form-control number exp-date-inputs w50" type="text" id="exp-open-date-input" name="" placeholder="Days" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.openDays">
+								</div>
+							</div>
+							<div class="clear"></div>
+						</div>
+
+
+
+
+
+
+					</div><!--Block1 End-->
+					<div class="col-sm-4">
+						<!--<div class="form-group col-sm-12">
+		<label class="control-label col-sm-4">Active</label>
+		<div class="col-sm-7">
+			<input class="form-control" type="checkbox" checked="">
+		</div>
+	</div>-->
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Manufacturer</label>
+							<div class="inner-addon col-sm-7 inline-block display-flex">
+								<select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.manufacturerId">
+									<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+								</select>
+
+								<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Manufacturer(modelEdits)"><i class="fa fa-plus"></i></a>
+							</div>
+						</div>
+							<div class="form-group col-sm-12 input-icon1">
+								<label class="control-label col-sm-4">GL Acct.<strong class="clr-red">*</strong> </label>
+								<div class="col-sm-7">
+									<div class="inner-addon right-addon inline-block">
+
+										<p-autoComplete [(ngModel)]="sourceItemMaster.glAccountId" (onKeyUp)=glAccountHandler($event) (onSelect)="glAccountId($event)" [ngModelOptions]="{standalone: true}" [suggestions]="glAccountCollection" (completeMethod)="filterglAccount($event)" [size]="30"
+														[minLength]="1" [dropdown]="true">
+											<ng-template let-glAccountId pTemplate="glAccount">
+												<div class="ui-helper-clearfix">{{glAccountId}}</div>
+											</ng-template>
+										</p-autoComplete>
+									</div>
+								</div>
+
+							</div>
+						
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Aircraft Manufacturer</label>
+							<div class="col-sm-7">
+								<div class="input-group">
+									<p-multiSelect [options]="shiftValues" [ngModelOptions]="{standalone: true}" [(ngModel)]="selectedAircraftTypes" [panelStyle]="{minWidth:'12em'}"></p-multiSelect>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Models</label>
+							<div class="col-sm-7" *ngIf="selectedAircraftTypes || enablePlus">
+								<i class="fa fa-plus clr-blue cpointer" data-toggle="modal" data-target="#platform-block" (click)="openModelPopups(contentModel)"></i>
+
+								<table *ngIf="showInput" [style.border]="showInput ? '1px solid gray' : 'none'">
+									<tr *ngFor="let word of selectedModels; let in=index">
+										<td>
+											{{selectedModels[in].modelName}}
+
+										</td>
+									</tr>
+								</table>
+
+
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Capes</label>
+							<div class="col-sm-7" *ngIf="selectedAircraftTypes || enablePlus">
+								<input class="form-control inline-block" type="checkbox" id="capes-checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="isEnabeCapes">
+								<i class="fa fa-eye capes-view-btn clr-blue" data-toggle="modal" title="View" *ngIf="isEnabeCapes" (click)="ViewFunction()"></i>
+								<i class="fa fa-edit capes-view-btn clr-blue" data-toggle="modal" title="Edit" data-target="#capes-block-edit" (click)="openCapes(contentCapes)" *ngIf="isEnabeCapes"></i>
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Schematic</label>
+							<div class="col-sm-7">
+								<input class="" type="checkbox" id="timelife-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.isSchematicId">
+							</div>
+						</div>
+						<div class="timelife-block" *ngIf="sourceItemMaster.isSchematicId">
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Attach Drawing</label>
+								<div class="col-sm-7 upload">
+									<input type="file" name="upload[]" id="upload" class="inputfile upload-file" data-multiple-caption="{count} files selected" multiple="">
+									<label for="upload"><figure><i class="fa fa-upload"></i></figure> <span>Choose a file…</span></label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Currency <strong class="clr-red">*</strong> </label>
+							<div class="col-sm-7">
+								<select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.currencyId">
+									<option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.currencyId"><!--{{currencyName.code}}--> {{currencyName.symbol}}</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Unit Price</label>
+							<div class="col-sm-7">
+								<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.unitCost">
+							</div>
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4"> UOM  <strong class="clr-red">*</strong> </label>
+							<div class="col-sm-7">
+								<select [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.equipmentUOMId">
+									<option *ngFor="let unitName of allUnitOfMeasureinfo" [ngValue]="unitName.unitOfMeasureId">{{unitName.shortName}}</option>
+								</select>
+								<!--<a data-toggle="modal" data-target="#addPurchaseUom" class="add-icon" (click)="unitmeasure(conEdit)"><i class="fa fa-plus"></i></a>--> <!--<ul class="es-list"><li class="es-visible">Each</li><li class="es-visible">Gals</li><li class="es-visible">Inch</li><li class="es-visible">Lbs</li><li class="es-visible">Ozs</li><li class="es-visible">Feet</li><li class="es-visible">Yards</li><li class="es-visible">Litre</li><li class="es-visible">Meter</li><li class="es-visible">Kilograms</li><li class="es-visible">Grams</li><li class="es-visible">Centimeters</li></ul>-->
+							</div>
+						</div>
+
+						<div class="form-group col-sm-12">
+							<label class="control-label col-sm-4">Memo</label>
+							<div class="col-sm-7">
+								<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.memo">
+							</div>
+						</div>
+
+					</div><!--Block2 End-->
+					<div class="col-sm-4">
+
+						<div class="form-group col-sm-12">
+							<div class="control-label col-sm-6">	<h4>Tolerance</h4>	</div>
+
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Min</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.toleranceMinimum">
+								</div>
+							</div>
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Max</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.toleranceMaximum">
+								</div>
+							</div>
+							<div class="form-group col-sm-12">
+								<label class="control-label col-sm-4">Expected</label>
+								<div class="col-sm-7">
+									<input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.toleranceExpected">
+								</div>
+							</div>
+							<div class="form-group col-sm-12">
+
+								<label class="control-label col-sm-4">Findings</label>
+								<div class="col-sm-7">
+									<textarea class="form-control" id="" name="" rows="4" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceItemMaster.findings"></textarea>
+								</div>
+							</div>
+
+						</div>
+					</div><!--Block3 End-->
+					<div class="clear"></div>
+					<hr>
+					<button type="submit" class="btn btn-success pull-right submit-btn" (click)="saveitemMasterclose()">Save</button>
+				</div>
+			</div>
+
+			<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+					  [width]="350" [minWidth]="200" [responsive]="true"
+					  [minY]="1050" [baseZIndex]="1100000">
+
+
+				<h5 [ngStyle]="{'color':'red'}">
+					Please Enter (*) Mandatory Fields
+				</h5>
+				<p-footer>
+					<button type="button" pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+				</p-footer>
+
+			</p-dialog>
+
+			<div class="clearfix"></div>
+		</div>
+	</form>
+	<div class="pull-right"> © 2018 <a href="#">PAS</a> </div>
+</div>
+<ng-template #contentCapes let-c="close" let-d="dismiss" style="width:auto">
+
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" (click)="dismissCapesModel()">×</button>
+		<h4 class="modal-title"> Capes</h4>
+	</div>
+	<div class="modal-body">
+		<form method="post" id="" name="">
+
+			<div id="" class="table-responsive default-bg clear">
+				<table class="table table-bordered table-striped table-sorting">
+					<thead>
+						<tr>
+							<th>Capability Types</th>
+							<th>Comapny</th>
+							<th>BU</th>
+							<th>Department</th>
+							<th>Divison</th>
+							<th>Manufacturer</th>
+							<th>Aircraft Manufacturer</th>
+							<th>Model</th>
+							<th>Description</th>
+							<th>ATA Chapter</th>
+							<th>Entry Date</th>
+							<th>CMM Exist</th>
+							<th>Verified</th>
+							<th>Verified By</th>
+							<th>Date Verified</th>
+							<th>Memo</th>
+							<th></th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="background: #a5a5a5;">
+							<td>MFG</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+
+
+						</tr>
+						<tr *ngFor="let item6 of manfacturerAircraftmodelsarray;let homeFormIndex=index">
+							<td></td>
+							<td>
+								<select class="w70" [(ngModel)]="item6.masterComapnyId1" [ngModelOptions]="{standalone: true}" (change)="getBUList(item6, item6.masterComapnyId1)">
+									<option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item6.buid1" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlist(item6 ,item6.buid1)">
+									<option *ngFor="let ataName of item6.bulist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item6.depid1" [ngModelOptions]="{standalone: true}" (change)="getDivisionlist(item6, item6.depid1)">
+									<option *ngFor="let ataName of item6.departmentList" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item6.divid1" [ngModelOptions]="{standalone: true}">
+									<option *ngFor="let ataName of item6.divisionlist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<div class="input-group">
+									<select [ngModelOptions]="{standalone: true}" [(ngModel)]="item6.manufacturerId">
+										<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+									</select>
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Mfacturer(modeledt)"><i class="fa fa-plus"></i></a>
+								</div>
+							</td>
+							<td>{{item6.description}}</td>
+							<td>{{item6.modelName}}</td>
+							<td><input class="w80" type="text" [(ngModel)]="item6.modelname1" [ngModelOptions]="{standalone: true}" /></td>
+							<td>
+								<div class="input-group">
+									<select class="w70" [(ngModel)]="item6.atcChapterId1" [ngModelOptions]="{standalone: true}">
+										<option *ngFor="let ataName of allATAMaininfo" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+									</select>
+
+
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="atamai(model)"><i class="fa fa-plus"></i></a>
+								</div>
+
+
+
+							</td>
+							<td><input class="w80" type="date" [(ngModel)]="item6.entrydate1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item6.isCMMExist1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item6.isVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item6.verifiedBy1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="date" [(ngModel)]="item6.dateVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item6.memo1" [ngModelOptions]="{standalone: true}" /></td>
+							<td *ngIf="this.itemser.isEditMode == false">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+							</td>
+							<td *ngIf="this.itemser.isEditMode == true">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+								<button type="button" class="close" data-dismiss="modal" (click)="deletehomeFormIndex(homeFormIndex)">×</button>
+							</td>
+						</tr>
+						<tr style="background: #a5a5a5;">
+							<td>Overhaul</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr *ngFor="let item5 of overhaulAircraftmodelsarray;let ovhindex=index">
+							<td></td>
+							<td>
+								<select class="w70" [(ngModel)]="item5.masterComapnyId1" [ngModelOptions]="{standalone: true}" (change)="getBUListovh(item5,item5.masterComapnyId1)">
+									<option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item5.buid1" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlistovh(item5,item5.buid1)">
+									<option *ngFor="let ataName of item5.bulistovh" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item5.depid1" [ngModelOptions]="{standalone: true}" (change)="getDivisionlistovh(item5,item5.depid1)">
+									<option *ngFor="let ataName of item5.departmentListovh" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item5.divid1" [ngModelOptions]="{standalone: true}">
+									<option *ngFor="let ataName of item5.divisionlistovh" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<div class="input-group">
+									<select [ngModelOptions]="{standalone: true}" [(ngModel)]="item5.manufacturerId">
+										<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+									</select>
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Mfacturer(modeledt)"><i class="fa fa-plus"></i></a>
+								</div>
+							</td>
+							<td>{{item5.description}}</td>
+							<td>{{item5.modelName}}</td>
+							<td><input class="w80" type="text" [(ngModel)]="item5.modelname1" [ngModelOptions]="{standalone: true}" /></td>
+							<td>
+								<div class="input-group">
+									<select class="w70" [(ngModel)]="item5.atcChapterId1" [ngModelOptions]="{standalone: true}">
+										<option *ngFor="let ataName of allATAMaininfo" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+									</select>
+
+
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="atamai(model)"><i class="fa fa-plus"></i></a>
+								</div>
+
+
+
+							</td>
+							<td><input class="w80" type="date" [(ngModel)]="item5.entrydate1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item5.isCMMExist1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item5.isVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item5.verifiedBy1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="date" [(ngModel)]="item5.dateVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item5.memo1" [ngModelOptions]="{standalone: true}" /></td>
+							<td *ngIf="this.itemser.isEditMode == false">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+							</td>
+							<td *ngIf="this.itemser.isEditMode == true">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+								<button type="button" class="close" data-dismiss="modal" (click)="deleteovhindex(ovhindex)">×</button>
+							</td>
+						</tr>
+						<tr style="background: #a5a5a5;">
+							<td>Distribution</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr *ngFor="let item4 of distributionAircraftmodelsarray;let disindex=index">
+							<td></td>
+							<td>
+								<select class="w70" [(ngModel)]="item4.masterComapnyId1" [ngModelOptions]="{standalone: true}" (change)="getBUListDistribution(item4,item4.masterComapnyId1)">
+									<option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item4.buid1" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlistdistribution(item4,item4.buid1)">
+									<option *ngFor="let ataName of item4.bulistdistribution" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item4.depid1" [ngModelOptions]="{standalone: true}" (change)="getDivisionlistdistrubution(item4,item4.depid1)">
+									<option *ngFor="let ataName of item4.departmentListdistribution" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item4.divid1" [ngModelOptions]="{standalone: true}">
+									<option *ngFor="let ataName of item4.divisionlistdistribution" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<div class="input-group">
+									<select [ngModelOptions]="{standalone: true}" [(ngModel)]="item4.manufacturerId">
+										<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+									</select>
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Mfacturer(modeledt)"><i class="fa fa-plus"></i></a>
+								</div>
+							</td>
+							<td>{{item4.description}}</td>
+							<td>{{item4.modelName}}</td>
+							<td><input class="w80" type="text" [(ngModel)]="item4.modelname1" [ngModelOptions]="{standalone: true}" /></td>
+							<td>
+								<div class="input-group">
+									<select class="w70" [(ngModel)]="item4.atcChapterId1" [ngModelOptions]="{standalone: true}">
+										<option *ngFor="let ataName of allATAMaininfo" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+									</select>
+
+
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="atamai(model)"><i class="fa fa-plus"></i></a>
+								</div>
+
+
+
+							</td>
+							<td><input class="w80" type="date" [(ngModel)]="item4.entrydate1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item4.isCMMExist1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item4.isVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item4.verifiedBy1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="date" [(ngModel)]="item4.dateVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item4.memo1" [ngModelOptions]="{standalone: true}" /></td>
+							<td *ngIf="this.itemser.isEditMode == false">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+							</td>
+							<td *ngIf="this.itemser.isEditMode == true">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+								<button type="button" class="close" data-dismiss="modal" (click)="deletedisindex(disindex)">×</button>
+							</td>
+						</tr>
+						<tr style="background: #a5a5a5;">
+							<td>Certification</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr *ngFor="let item3 of certificationarrayAircraftmodelsarray;let certificateindex=index">
+							<td></td>
+							<td>
+								<select class="w70" [(ngModel)]="item3.masterComapnyId1" [ngModelOptions]="{standalone: true}" (change)="getBUListcertificate(item3,item3.masterComapnyId1)">
+									<option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item3.buid1" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlistcertificate(item3,item3.buid1)">
+									<option *ngFor="let ataName of item3.bulistcertificate" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item3.depid1" [ngModelOptions]="{standalone: true}" (change)="getDivisionlistcertificate(item3,item3.depid1)">
+									<option *ngFor="let ataName of item3.departmentListcertificate" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item3.divid1" [ngModelOptions]="{standalone: true}">
+									<option *ngFor="let ataName of item3.divisionlistcertificate" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<div class="input-group">
+									<select [ngModelOptions]="{standalone: true}" [(ngModel)]="item3.manufacturerId">
+										<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+									</select>
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Mfacturer(modeledt)"><i class="fa fa-plus"></i></a>
+								</div>
+							</td>
+							<td>{{item3.description}}</td>
+							<td>{{item3.modelName}}</td>
+							<td><input class="w80" type="text" [(ngModel)]="item3.modelname1" [ngModelOptions]="{standalone: true}" /></td>
+							<td>
+								<div class="input-group">
+									<select class="w70" [(ngModel)]="item3.atcChapterId1" [ngModelOptions]="{standalone: true}">
+										<option *ngFor="let ataName of allATAMaininfo" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+									</select>
+
+
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="atamai(model)"><i class="fa fa-plus"></i></a>
+								</div>
+
+
+
+							</td>
+							<td><input class="w80" type="date" [(ngModel)]="item3.entrydate1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item3.isCMMExist1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item3.isVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item3.verifiedBy1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="date" [(ngModel)]="item3.dateVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item3.memo1" [ngModelOptions]="{standalone: true}" /></td>
+							<td *ngIf="this.itemser.isEditMode == false">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+							</td>
+							<td *ngIf="this.itemser.isEditMode == true">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+								<button type="button" class="close" data-dismiss="modal" (click)="deletecertificateindex(certificateindex)">×</button>
+							</td>
+						</tr>
+
+						<tr style="background: #a5a5a5;">
+							<td>Repair</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr *ngFor="let item2 of repairAircraftmodelsarray;let repairindex=index">
+							<td></td>
+							<td>
+								<select class="w70" [(ngModel)]="item2.masterComapnyId1" [ngModelOptions]="{standalone: true}" (change)="getBUListrepair(item2,item2.masterComapnyId1)">
+									<option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item2.buid1" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlistrepair(item2,item2.buid1)">
+									<option *ngFor="let ataName of item2.bulistrepair" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item2.depid1" [ngModelOptions]="{standalone: true}" (change)="getDivisionlistrepair(item2,item2.depid1)">
+									<option *ngFor="let ataName of item2.departmentListrepair" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item2.divid1" [ngModelOptions]="{standalone: true}">
+									<option *ngFor="let ataName of item2.divisionlistrepair" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<div class="input-group">
+									<select [ngModelOptions]="{standalone: true}" [(ngModel)]="item2.manufacturerId">
+										<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+									</select>
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Mfacturer(modeledt)"><i class="fa fa-plus"></i></a>
+								</div>
+							</td>
+							<td>{{item2.description}}</td>
+							<td>{{item2.modelName}}</td>
+							<td><input class="w80" type="text" [(ngModel)]="item2.modelname1" [ngModelOptions]="{standalone: true}" /></td>
+							<td>
+								<div class="input-group">
+									<select class="w70" [(ngModel)]="item2.atcChapterId1" [ngModelOptions]="{standalone: true}">
+										<option *ngFor="let ataName of allATAMaininfo" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+									</select>
+
+
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="atamai(model)"><i class="fa fa-plus"></i></a>
+								</div>
+
+
+
+							</td>
+							<td><input class="w80" type="date" [(ngModel)]="item2.entrydate1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item2.isCMMExist1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item2.isVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item2.verifiedBy1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="date" [(ngModel)]="item2.dateVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item2.memo1" [ngModelOptions]="{standalone: true}" /></td>
+							<td *ngIf="this.itemser.isEditMode == false">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+							</td>
+							<td *ngIf="this.itemser.isEditMode == true">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+								<button type="button" class="close" data-dismiss="modal" (click)="deleterepairindex(repairindex)">×</button>
+							</td>
+						</tr>
+
+						<tr style="background: #a5a5a5;">
+							<td>Exchange</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td></td>
+						</tr>
+
+						<tr *ngFor="let item1 of exchangeAircraftmodelsarray;let excahngeindex=index">
+							<td></td>
+							<td>
+								<select class="w70" [(ngModel)]="item1.masterComapnyId1" [ngModelOptions]="{standalone: true}" (change)="getBUListexcahnge(item1,item1.masterComapnyId1)">
+									<option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item1.buid1" [ngModelOptions]="{standalone: true}" (change)="getDepartmentlistexcahnge(item1,item1.buid1)">
+									<option *ngFor="let ataName of item1.bulistexcahnge" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item1.depid1" [ngModelOptions]="{standalone: true}" (change)="getDivisionlistexcahnge(item1,item1.depid1)">
+									<option *ngFor="let ataName of item1.departmentListexcahnge" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<select class="w70" [(ngModel)]="item1.divid1" [ngModelOptions]="{standalone: true}">
+									<option *ngFor="let ataName of item1.divisionlistexcahnge" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
+								</select>
+							</td>
+							<td>
+								<div class="input-group">
+									<select [ngModelOptions]="{standalone: true}" [(ngModel)]="item1.manufacturerId">
+										<option *ngFor="let name of allManufacturerInfo" [ngValue]="name.manufacturerId">{{name.name}}</option>
+									</select>
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="Mfacturer(modeledt)"><i class="fa fa-plus"></i></a>
+								</div>
+							</td>
+							<td>{{item1.description}}</td>
+							<td>{{item1.modelName}}</td>
+							<td><input class="w80" type="text" [(ngModel)]="item1.modelname1" [ngModelOptions]="{standalone: true}" /></td>
+							<td>
+								<div class="input-group">
+									<select class="w70" [(ngModel)]="item1.atcChapterId1" [ngModelOptions]="{standalone: true}">
+										<option *ngFor="let ataName of allATAMaininfo" [ngValue]="ataName.ataMainId">{{ataName.ataChapterName}}</option>
+									</select>
+
+
+									<a href="#" data-toggle="modal" data-target="#addCustomerClass" class="add-icon" (click)="atamai(model)"><i class="fa fa-plus"></i></a>
+								</div>
+
+
+
+							</td>
+							<td><input class="w80" type="date" [(ngModel)]="item1.entrydate1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item1.isCMMExist1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input type="checkbox" class="w80" [(ngModel)]="item1.isVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item1.verifiedBy1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="date" [(ngModel)]="item1.dateVerified1" [ngModelOptions]="{standalone: true}" /></td>
+							<td><input class="w80" type="text" [(ngModel)]="item1.memo1" [ngModelOptions]="{standalone: true}" /></td>
+							<td *ngIf="this.itemser.isEditMode == false">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+							</td>
+							<td *ngIf="this.itemser.isEditMode == true">
+								<p-inputSwitch matTooltip="Active" onLabel="on" offLabel="off"></p-inputSwitch>
+								<button type="button" class="close" data-dismiss="modal" (click)="deleteexcahngeindex(excahngeindex)">×</button>
+							</td>
+						</tr>
+
+					</tbody>
+
+				</table>
+				<!--<button (click)="Savecapes(item)"></button>-->
+				<div class="clear"></div>
+				<br>
+			</div>
+		</form>
+	</div>
+	<div class="modal-footer">
+
+
+		<button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissCapesModel()">Save</button>
+	</div>
+
+</ng-template>
+<ng-template #contentModel let-c="close" let-d="dismiss" style="width:auto">
+
+	<div class="modal-content">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" (click)="dismissAircraftModels()">×</button>
+			<h4 class="modal-title"> Models</h4>
+		</div>
+		<div class="modal-body">
+			<form method="post" id="" name="">
+
+
+
+				<div class="table-responsive default-bg clear">
+					<table class="table table-bordered table-striped table-sorting">
+						<thead>
+							<tr align="center">
+								<th>Aircraft Type</th>
+								<th>Model</th>
+								<th>Select Model</th>
+								<th>Priority</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let col of allAircraftinfo; let i = index;">
+
+								<td>{{col.description}}</td>
+								<td>{{col.modelName}}</td>
+
+								<td>
+									<input type="checkbox" class=" wauto" [(ngModel)]="col.checkbox" [ngModelOptions]="{standalone: true}" (click)="saveSelectedModel(col,i)">
+								</td>
+								<td>
+									<input class="form-control w100" [(ngModel)]="col.priority" [ngModelOptions]="{standalone: true}" (change)="getSelectedItem(col,$event)">
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div>
+						<button class="btn btn-success pull-right submit-btn" (click)="dismissAircraftModels()">Save</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+
+</ng-template>
+
+<ng-template #modelEdits let-c="close" let-d="dismiss" style="width:auto">
+	<div class="modal-header">
+		<h4 class="modal-title" *ngIf="isEditMode">Edit Manufacturer</h4>
+		<h4 class="modal-title" *ngIf="!isEditMode">Add Manufacturer</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveManufacturer()">
+			<div class="form-group">
+				<label for="description" class="control-label">Manufacturer Name<strong class="clr-red">*</strong></label>
+
+				<p-autoComplete [(ngModel)]="sourcemanufacturer.name" [ngModelOptions]="{standalone: true}" (onKeyUp)=ManufacturerHandler($event) (onSelect)="Manufacturerdescription($event)" [suggestions]="localmanufacturer" (completeMethod)="filtermanufacturer($event)" [size]="30"
+								[minLength]="1" [dropdown]="true">
+					<ng-template let-name pTemplate="item">
+						<div class="ui-helper-clearfix">{{name}}</div>
+					</ng-template>
+				</p-autoComplete>
+				<div *ngIf="disableSaveManufacturer" class="clr-red">Already Exists</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="modal-footer">
+
+				<button class="btn btn-success pull-right submit-btn" [disabled]="disableSaveManufacturer" (click)="saveManufacturer()">Submit</button>
+				<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+			</div>
+		</form>
+	</div>
+
+
+</ng-template>
+
+<!--<ng-template #modelupdate let-c="close" let-d="dismiss" style="width:auto">
+	<div class="modal-header">
+		<h4 class="modal-title" *ngIf="isEditMode">Edit EquipmentID</h4>
+		<h4 class="modal-title" *ngIf="!isEditMode">Add EquipmentID</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveequipment()">
+			<div class="form-group">
+				<label for="description" class="control-label">EquipmentID Name<strong class="clr-red">*</strong></label>
+
+				<p-autoComplete [(ngModel)]="equipmentName" [ngModelOptions]="{standalone: true}" [suggestions]="localmanufacturer" (completeMethod)="filtermanufacturer($event)" [size]="30"
+								[minLength]="1" [dropdown]="true">
+					<ng-template let-equipmentName pTemplate="item">
+						<div class="ui-helper-clearfix">{{equipmentName}}</div>
+					</ng-template>
+				</p-autoComplete>
+				<div class="clear"></div>
+			</div>
+
+			<div class="modal-footer">
+
+				<button class="btn btn-success" [disabled]="!userForm.valid">Submit</button>
+				<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+			</div>
+		</form>
+	</div>
+
+
+</ng-template>-->
+
+<ng-template #modeledt let-c="close" let-d="dismiss" style="width:auto">
+	<div class="modal-header">
+		<h4 class="modal-title" *ngIf="isEditMode">Edit Manufacturer</h4>
+		<h4 class="modal-title" *ngIf="!isEditMode">Add Manufacturer</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveManufacturer()">
+			<div class="form-group">
+				<label for="description" class="control-label">Manufacturer Name<strong class="clr-red">*</strong></label>
+
+				<p-autoComplete [(ngModel)]="sourcemanufacturer.name" [ngModelOptions]="{standalone: true}" (onKeyUp)=ManufacturerHandler($event) (onSelect)="Manufacturerdescription($event)" [suggestions]="localmanufacturer" (completeMethod)="filtermanufacturer($event)" [size]="30"
+								[minLength]="1" [dropdown]="true">
+					<ng-template let-name pTemplate="item">
+						<div class="ui-helper-clearfix">{{name}}</div>
+					</ng-template>
+				</p-autoComplete>
+				<div *ngIf="disableSaveManufacturer" class="clr-red">Already Exists</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="modal-footer">
+
+				<button class="btn btn-success pull-right submit-btn" [disabled]="disableSaveManufacturer" (click)="saveManufacturer()">Submit</button>
+				<button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+			</div>
+		</form>
+	</div>
+
+
+</ng-template>

@@ -1,0 +1,96 @@
+﻿label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+}
+input[type="text"], input[type="number"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+}
+.inner-addon .ui-autocomplete-input {
+    width: 100% !important;
+}
+.partsList-table-tr th {
+    min-width: 80px;
+}
+.addpn-btn {
+    padding: 5px 10px !important;
+    font-size: 13px;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}
+.partsList-modal .form-group {
+    margin-bottom: 6px !important;
+}
+.rpo-table-cstm th {
+    padding: 8px 5px !important;
+}
+.child-add-icon {
+    cursor: pointer;
+    margin: 2px -12px;
+}
+.child-add-icon a:before, .child-add-icon i:before{
+    font-size: 16px;
+}
+table th {
+    padding: 4px;
+}
+table td {
+    padding: 4px;
+}
+.card-timelife {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.card-timelife .card-body {
+    padding: 4px 10px 0px !important;
+}
+.card-body {
+   padding: 12px !important;
+}
+// .card-timelife .m-t-10 {
+//     margin-top: 15px;
+// }
+.customer_stock_styel{
+    margin-top: 22px;
+    margin-bottom: 12.2px;
+}
+.disabled_color{
+    background-color: #e9ecef;
+}
+@media (min-width: 768px) {
+    .col-md-3 {
+        // max-width: 22%;
+        margin-right: 0px;
+    }
+    .main_facture{
+        // min-width: 40%;
+        padding-right: 0px;
+        padding-left: 4px;
+    
+    }
+    .col-md-6 .col-md-6 {
+        max-width: 47%;
+        margin-right: 15px;
+    }
+    .col-md-5 {
+        -ms-flex: 0 0 41.666667%;
+        flex: 0 0 44.666667%;
+        max-width: 44.666667%;
+    }
+    .col-md-7 {
+        -ms-flex: 0 0 58.333333%;
+        flex: 0 0 58.333333%;
+        max-width: 55.333333%;
+    }   
+
+}
+
+.grayColor {
+    color: gray;
+}

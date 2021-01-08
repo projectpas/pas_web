@@ -1,0 +1,144 @@
+﻿.table-overflow {
+  overflow: auto !important;
+}
+.table > thead > tr > th {
+  font-size: 10px !important;
+  padding: 5px !important;
+}
+
+//  work flow css
+.dtHorizontalExampleWrapper {
+  max-width: 150px;
+  margin: 0 auto;
+}
+.grn_clr{
+  color:green;
+}
+table {
+  display: block;
+  overflow: scroll;
+  overflow: auto;
+}
+.ptable-wo-btns{
+  background-color: transparent !important;
+  border: none !important;
+}
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:after,
+table.dataTable thead .sorting_desc_disabled:before {
+  bottom: 0.5em;
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  margin: 0;
+}
+
+:host ::ng-deep button {
+  margin-right: 0.25em;
+}
+
+:host ::ng-deep .custom-toast .ui-toast-message {
+  color: #ffffff;
+  background: #fc466b;
+  background: -webkit-linear-gradient(to right, #3f5efb, #fc466b);
+  background: linear-gradient(to right, #3f5efb, #fc466b);
+}
+
+:host ::ng-deep .custom-toast .ui-toast-close-icon {
+  color: #ffffff;
+}
+
+.add-charges {
+  background-color: #295d92;
+}
+
+.clr-red {
+  color: red;
+}
+
+.text-align {
+  width: 93%;
+  margin-left: 6px;
+}
+
+.dropdown-select {
+  background: none;
+  background-color: none !important;
+}
+
+.dropdown-select select:disabled {
+  background-color: none !important;
+}
+
+.workflow-table-material {
+  height: 250px;
+}
+.workflow-table-material .material-tr td {
+  padding: 4px;
+}
+.workflow-table-material tr th:first-child {
+  padding: 0 10px !important;
+}
+.fixed-column-table {
+  max-width: 100%;
+  max-height: 500px;
+  overflow: scroll;
+  position: relative;
+  padding: 0;
+}
+.fixed-column-table table {
+  position: relative;
+  border-collapse: collapse;
+}
+.fixed-column-table thead th {
+  position: -webkit-sticky;
+  position: sticky;
+  top: -1px;
+  background: #0d57b0;
+}
+.column-r1-fixed thead th:last-child {
+  right: 0;
+  z-index: 1;
+  text-align: center;
+  margin: auto;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+}
+.column-r1-fixed tbody td:last-child,
+.column-r1-fixed tfoot td:last-child {
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+  background: #fff;
+  border-right: 1px solid #ccc;
+  padding-left: 5px;
+  text-align: center;
+}
+
+.btn-spaces > button {
+  margin-right: 13px !important;
+}
+.materiallist-action .btn {
+  font-size: 13px !important;
+}
+
+.width-50{
+  width: 50px;
+}
+
+.rro-table-cstm th {
+  width: 110px !important;
+  padding: 5px 5px !important;
+  //padding: 8px 5px !important;
+}
+.ex-gray{
+  background: #b7b7b7;
+}

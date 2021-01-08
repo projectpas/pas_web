@@ -1,0 +1,80 @@
+.coustomTable tr th {
+    font-weight: 600 !important;
+    font-size: 10.5px !important;
+    color: #fff !important;
+    background-color: #4298ff;
+    border: 1px solid #3a7fd2;
+    letter-spacing: 0.3px;
+    line-height: 25px;
+    text-align: center;
+}
+.align_center{
+    text-align: center;
+}
+.coustomTable  tr  td {
+    padding: 5px 2px !important;
+    white-space: nowrap;
+    color: #222;
+    background: inherit;
+    border: 1px solid #c8c8c8;
+    font-size: 11px !important;
+}
+td {
+    padding: 5px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+th {
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+// :host ::ng-deep .ui-widget{
+// padding: 0px !important;
+// }
+
+// :host ::ng-deep .ui-table-summary {
+//     margin-right: 0px !important;
+//     background: transparent !important
+// }
+.display-none {
+    visibility: hidden !important
+}
+.total_records_section {
+    float: right;
+}
+.total_records_section label{
+    width: 100%;
+    right: 10px;
+    text-align: right;
+    position: relative;
+    bottom: 34px;
+}
+.panel {
+    padding-top: 10px;
+}
+.panel-title {
+    margin: 0
+}
+.panel-body {
+    margin-top: 5px
+}
+.total_records_section  input {
+    width: 30px !important;
+    border: #e2e2e2 solid 1px;
+    text-align: center
+}
+.m-lr-7 {
+    margin-left: -7px;
+    margin-right: -7px;
+}
+.aircraft-panel {
+    margin-left: -7px;
+    margin-right: -7px;
+    margin-top: -12px;
+}
+
+input{
+    border: 1px solid #cacaca;
+}

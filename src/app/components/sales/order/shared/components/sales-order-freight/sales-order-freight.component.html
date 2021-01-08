@@ -1,0 +1,386 @@
+<div class="form-group">
+  <div class="row" *ngIf="!isView" style="padding:8px">
+    <button data-target="#addNewFreight" data-toggle="modal" (click)="createNew()" class="btn btn-primary"
+      style="margin-left: 10px;">
+      Add Freight
+    </button>
+  </div>
+  <div class="row">
+    <p-table [columns]="cols" [value]="salesOrderFreightList" [lazy]="false" [paginator]="true" [rows]="10"
+      class="rpo-table-cstm ptable-f10" [paginator]="true">
+      <!--freightss-->
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th colspan="8" style="background: #fff; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
+            &nbsp;
+          </th>
+          <ng-container *ngIf="isView">
+            <th colspan="5" style="background: #fff; border: 1px solid #e7ecf1;padding-left: 5px;">
+              <div class="display-flex">
+                <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusTypeSOQ"
+                    label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                  </p-radioButton>
+                  <div>
+                    <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
+                      [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                      <option value="" selected>Select</option>
+                      <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="2" label="Actual"
+                    [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
+                </div>
+                <div>
+                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="3"
+                    label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                  </p-radioButton>
+                </div>
+              </div>
+            </th>
+          </ng-container>
+          <ng-container *ngIf="!isView">
+            <th colspan="5" style="background: #fff; border: 1px solid #e7ecf1;padding: 0;">
+              <div class="display-flex">
+                <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusTypeSOQ"
+                    label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                  </p-radioButton>
+                  <div>
+                    <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
+                      [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                      <option value="" selected>Select</option>
+                      <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
+                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="2" label="Actual"
+                    [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                </div>
+                <div>
+                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="3"
+                    label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                  </p-radioButton>
+                </div>
+              </div>
+            </th>
+            <!-- <th style="background: #fff; border: 1px solid #fff;"></th> -->
+          </ng-container>
+        </tr>
+        <tr>
+          <!-- <th rowspan="2">Task</th> -->
+          <!-- <th *ngFor="let col of columns" rowspan="2">
+            {{ col.header }}
+          </th> -->
+          <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
+          <th rowspan="2">Weight</th>
+          <th rowspan="2">UOM</th>
+          <th colspan="3">Dimensions</th>
+          <th rowspan="2">UOM</th>
+          <th rowspan="2">Currency</th>
+          <th rowspan="2">Amount<span class="clr-red">*</span></th>
+          <th rowspan="2">Memo</th>
+          <ng-container>
+            <th rowspan="2">Billing Method</th>
+            <th rowspan="2">Mark Up</th>
+            <!-- <th tooltip="Time & Materials">Billing Rate</th> -->
+            <th rowspan="2">Billing Amount</th>
+            <!-- <th tooltip="Time & Materials">T&M Amount</th>
+            <th>Fixed Amount</th> -->
+          </ng-container>
+          <th rowspan="2" *ngIf="!isView">Actions</th>
+        </tr>
+        <tr>
+          <th>L</th>
+          <th>H</th>
+          <th>W</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-freight let-columns="columns" let-rowIndex="rowIndex">
+        <!-- <ng-container *ngFor="let dt of salesOrderFreightList;"> -->
+        <tr *ngIf="!freight['isDeleted']">
+          <td>
+            <select class="form-control select-read-only" [(ngModel)]="freight.shipViaId" disabled>
+              <option value="">Select</option>
+              <option *ngFor="let sv of shipViaList" [value]="sv.value">{{sv.label}}</option>
+            </select>
+          </td>
+          <td class="content-to-end">{{freight.weight}}</td>
+          <td>{{freight.uom}}</td>
+          <td class="content-to-end">{{freight.length}}</td>
+          <td class="content-to-end">{{freight.height}}</td>
+          <td class="content-to-end">{{freight.width}}</td>
+          <td>{{freight.dimensionUOM}}</td>
+          <td>{{freight.currency}}</td>
+          <td class="content-to-end"><span *ngIf="freight.amount">{{formateCurrency(freight.amount)}}</span></td>
+          <td [innerHTML]="freight.memo"></td>
+          <ng-container>
+            <td>
+              <select class="form-control" [(ngModel)]="freight.billingMethodId"
+                [disabled]="isView || costPlusType == 3"
+                (change)="freight.markupPercentageId = '';freight.billingAmount = 0;(freight.billingMethodId == '2')?freight.billingAmount = freight.amount:'';">
+                <option value="" selected>Select</option>
+                <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
+                  [value]="bm.value">{{bm.label}}</option>
+              </select>
+            </td>
+            <td>
+              <select class="form-control select-markup" (change)="markupChanged(freight, 'row')"
+                [(ngModel)]="freight.markupPercentageId" [disabled]="isView || freight.billingMethodId != '1'">
+                <option value="" selected>Select</option>
+                <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
+              </select>
+            </td>
+            <td>
+              <input type="text" pInputText pKeyFilter="money" class="form-control text_right"
+                value="{{ formateCurrency(freight.billingAmount) }}"
+                (change)="freight.billingAmount = formateCurrency(freight.billingAmount)"
+                [(ngModel)]="freight.billingAmount" [disabled]="isView || freight.billingMethodId != '2'" />
+            </td>
+          </ng-container>
+          <td class="btn-spaces text-center" *ngIf="!isView">
+            <span data-target="#addNewFreight" data-toggle="modal">
+              <a class="btn nobg btn-edit-cstm" (click)="edit(freight, rowIndex)" matTooltip="Edit">
+                <i class="fa fa-pencil"></i>
+              </a>
+            </span>
+            <span>
+              <a class="btn nobg btn-delete-cstm" (click)="delete(freight, rowIndex)" matTooltip="Delete">
+                <i class="fa fa-trash"></i>
+              </a>
+            </span>
+          </td>
+        </tr>
+        <!-- </ng-container> -->
+        <!-- <tr *ngIf="freight" class="task-total">
+          <td>Total</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td class="content-to-end">{{formateCurrency(getTotalTaskAmount(freight))}}</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <ng-container>
+            <td>&nbsp;</td>
+            <td class="content-to-end">{{formateCurrency(getTotalTaskBillingAmount(freight))}}</td>
+            <td *ngIf="!isView">&nbsp;</td>
+          </ng-container>
+        </tr> -->
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr class="footer">
+          <td>Total</td>
+          <!-- <td>&nbsp;</td> -->
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td class="content-to-end">{{formateCurrency(getTotalAmount())}}</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <!-- <td>{{getTotalBillingRate()}}</td> -->
+          <ng-container *ngIf="costPlusType != 3">
+            <td class="content-to-end">{{formateCurrency(getTotalBillingAmount())}}</td>
+          </ng-container>
+          <ng-container *ngIf="costPlusType == 3">
+            <td>
+              <input type="text" pInputText pKeyFilter="money" style="text-align: right;"
+                [ngModel]="freightFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
+                [ngModelOptions]="{updateOn:'blur'}"
+                (ngModelChange)="freightFlatBillingAmount=formatStringToNumberGlobal($event)"
+                (blur)="freightFlatBillingAmount = (freightFlatBillingAmount)?formateCurrency(freightFlatBillingAmount):'0.00'"
+                [disabled]="isView" />
+            </td>
+          </ng-container>
+          <td *ngIf="!isView">&nbsp;</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div *ngIf="!isView" style="padding: 10px;">
+    <button class="btn btn-primary pull-right side" (click)="createFreightsQuote()">
+      Save
+    </button>
+  </div>
+
+</div>
+
+
+
+<div id="addNewFreight" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xl">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title"> {{isEdit ? 'Edit' : 'Add'}} Freight</h4>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="!isEdit">
+          <span class="cat-heading cat4 ng-star-inserted">
+            Add Freight
+            <i class="fa fa-plus" (click)="addNewRow()"></i>
+          </span>
+        </div>
+        <div class="tab-content">
+          <div class="table-responsive table-overflow" style="height: 300px;">
+            <form #frieghtsCreateForm="ngForm">
+              <table class="table table-bordered ">
+                <thead>
+                  <tr>
+                    <!-- <th rowspan="2">Task *</th> -->
+                    <!-- <th>Carrier *</th> -->
+                    <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
+                    <!-- <th>Dimensions *</th> -->
+                    <th rowspan="2">Weight</th>
+                    <th rowspan="2">UOM</th>
+                    <th colspan="3">Dimensions</th>
+                    <th rowspan="2">UOM</th>
+                    <th rowspan="2">Currency</th>
+                    <th rowspan="2">Amount<span class="clr-red">*</span></th>
+                    <th rowspan="2">Memo</th>
+                  </tr>
+                  <tr>
+                    <th>L</th>
+                    <th>H</th>
+                    <th>W</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let f of freightForm; let i = index">
+                    <!-- <td>
+                      <select class="form-control" [(ngModel)]="f.taskId" [disabled]="isView" name="task_{{i}}"
+                        style="width:100px;">
+                        <option value="">Select</option>
+                        <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
+                      </select>
+                    </td> -->
+                    <td>
+                      <p-dropdown placeholder="Select Site Name" name="shipVia{{ i }}" #shipVia="ngModel"
+                        [options]="shipViaList" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
+                      </p-dropdown>
+                    </td>
+                    <td>
+                      <input type="number" name="weight{{ i }}" #weight="ngModel" [(ngModel)]="f.weight"
+                        class="form-control w50" />
+                    </td>
+                    <td>
+                      <p-dropdown placeholder="Select UOM" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
+                        class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
+                      </p-dropdown>
+                    </td>
+                    <td><input type="number" name="length{{ i }}" [(ngModel)]="f.length" #length="ngModel"
+                        class="form-control w50" /></td>
+                    <td><input type="number" name="height{{ i }}" #height="ngModel" [(ngModel)]="f.height"
+                        class="form-control w50" /></td>
+                    <td><input type="number" name="width{{ i }}" #width="ngModel" [(ngModel)]="f.width"
+                        class="form-control w50" /></td>
+                    <td>
+                      <p-dropdown placeholder="Select UOM" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
+                        class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
+                      </p-dropdown>
+                    </td>
+                    <td>
+                      <p-dropdown placeholder="Select Currency" name="currencyId{{ i }}" [options]="currencyList"
+                        class="p-dropdown-custom-md" [(ngModel)]="f.currencyId">
+                      </p-dropdown>
+                    </td>
+                    <td>
+                      <input type="text" InputText pKeyFilter="money" name="amount{{ i }}" #amount="ngModel"
+                        [(ngModel)]="f.amount" class="form-control w50 text_right"
+                        (change)="f.amount = formateCurrency(f.amount);" required />
+                    </td>
+                    <td>
+                      <div class="form-group memo-popup-cstm mat_emo"
+                        style="width: 120px;    display: inline-flex;    margin-bottom: 0;">
+                        <div [innerHTML]="f.memo" [matTooltip]="parsedText(f.memo)" matTooltipPosition="above"
+                          class="text_editor_box"></div>
+                        <i class="fa fa-pencil ci_cls" data-toggle="modal" style="position: relative;top: 6px;"
+                          data-target="#textarea-popupFreight" matTooltip="Memo" matTooltipPosition="above"
+                          (click)="onAddTextAreaInfo(f,i)"></i>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+            <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
+              data-keyboard="false">
+              <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                    <h4 class="modal-title">Edit {{"Memo"}}</h4>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table table-bordered table-fixed workflow-table-material">
+                      <thead>
+                        <th style="color: #fff;">{{"Memo"}}</th>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                              required>
+                            </p-editor>
+
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div style="float:right">
+                      <button type="button" class="btn btn-primary"
+                        style="padding: 6px 12px !important;margin-top: 10px;"
+                        (click)="onSaveTextAreaInfo(textAreaInfo)">
+                        Save
+                      </button>
+                      <button type="button" class="btn btn-danger"
+                        style="padding: 6px 12px !important;margin-top: 10px;" (click)="onCloseTextAreaInfo()">
+                        Close
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary pull-right " (click)="saveFreightList()" [disabled]="!frieghtsCreateForm.valid">
+          {{ isEdit ? 'Update' : (isQuote)?'Save Freights':'Save' }}
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

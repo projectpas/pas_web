@@ -1,0 +1,2350 @@
+﻿﻿<div *ngIf="isVendorList && !isCreatePO && !isCreateRO">
+  <p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+</div>
+<div class="card new-card">
+  <div class="card-header bg-primary new-card-header">
+    <div class="row">
+      <div class="col">
+        <h4 class="new-card-heading">Vendor List</h4>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="btn-sm new-btn-primary"
+          (click)="navigateTogeneralInfo()"
+        >
+          Add Vendor
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body new-card-body">
+    <p-table
+      #dt
+      class="rpo-table-cstm rro-table-cstm"
+      [value]="allVendorList"
+      [first]="0"
+      [rows]="pageSize"
+      [paginator]="true"
+      [pageLinks]="3"
+      [lazy]="true"
+      (onLazyLoad)="loadData($event)"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [columns]="selectedColumns"
+      [metaKeySelection]="true"
+      selectionMode="multiple"
+      [(selection)]="selectedColumn"
+      [resizableColumns]="true"
+      [reorderableColumns]="true"
+      [scrollable]="true"
+      scrollHeight="450px"
+      [totalRecords]="totalRecords"
+    >
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col">
+            <p-multiSelect
+              [options]="cols"
+              [(ngModel)]="selectedColumns"
+              optionLabel="header"
+              selectedItemsLabel="{0} columns selected"
+              [style]="{ minWidth: '200px' }"
+              defaultLabel="Choose Columns"
+              style="float: left;"
+            ></p-multiSelect>
+          </div>
+          <div class="col">
+            <div
+              style="width: auto !important; float: right;"
+              class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+            >
+              <i class="fa fa-search"></i>
+              <input
+                type="text"
+                pInputText
+                size="50"
+                class="form-control"
+                (input)="globalSearch($event.target.value)"
+                placeholder="Filter"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button
+              type="button"
+              class="btn btn-primary new-table-button"
+              matTooltip="Download Data"
+              matTooltipPosition="above"
+              pButton
+              icon="fa-download"
+              iconPos="left"
+              label="Export Data"
+              (click)="selectedOnly = false; targetData = dt;" 
+              data-toggle="modal" data-target="#downloadConfirmation"
+            ></button>
+            <button
+              type="button"
+              class="btn btn-primary new-table-button"
+              matTooltip="Download Selected Data"
+              matTooltipPosition="above"
+              pButton
+              icon="fa-download"
+              iconPos="left"
+              label="Export Selected Data"
+              data-toggle="modal" data-target="#downloadConfirmation"
+              (click)="selectedOnly = true; targetData = dt;" 
+            ></button>
+          </div>
+          <div class="col">
+            <div class="">
+              <div
+                class="col"
+                style="width: 395px; float: right; padding-top: 3px;"
+              >
+                <div class="form-group">
+                  <div
+                    class="pull-left"
+                    style="margin-top: 4px; margin-right: 15px;"
+                  >
+                    <label class="radio-cstm wauto">
+                      <input
+                        type="radio"
+                        name="vendorStatus"
+                        class="form-control"
+                        value="active"
+                        (click)="getVenListByStatus('active')"
+                        checked
+                      />
+                      <span class="checkmark"></span>Active</label
+                    >
+                  </div>
+                  <div
+                    class="pull-left"
+                    style="margin-top: 4px; margin-right: 15px;"
+                  >
+                    <label class="radio-cstm wauto">
+                      <input
+                        type="radio"
+                        name="vendorStatus"
+                        class="form-control"
+                        value="inactive"
+                        (click)="getVenListByStatus('inactive')"
+                      />
+                      <span class="checkmark"></span>In-Active</label
+                    >
+                  </div>
+                  <div
+                    class="pull-left"
+                    style="margin-top: 4px; margin-right: 15px;"
+                  >
+                    <label class="radio-cstm wauto">
+                      <input
+                        type="radio"
+                        name="vendorStatus"
+                        class="form-control"
+                        value="all"
+                        (click)="getVenListByStatus('all')"
+                      />
+                      <span class="checkmark"></span>All</label
+                    >
+                  </div>
+                  <div class="checkbox-cstm" style="margin-left: 0;">
+                    <label style="width: auto !important; margin-top: 3px;">
+                      <input
+                        type="checkbox"
+                        [(ngModel)]="currentDeletedstatus"
+                        name="cparent"
+                        id="cparent"
+                        (click)="getDeleteListByStatus($event.target.checked)"
+                      />
+                      <span class="cr"
+                        ><i class="cr-icon pi pi-check"></i
+                      ></span>
+                      Show Deleted List
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" style="width: 160px;" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            pResizableColumn
+            pReorderableColumn
+            [pSortableColumn]="col.field"
+            style="text-align: center;"
+          >
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+          <th style="width: 200px; text-align: center;">Actions</th>
+        </tr>
+        <tr>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" style="width: 100%;"
+                       pInputText
+                       type="text"
+                       (keyup)=" dt.filter($event.target.value, col.field, 'contains'); resetGlobalFilter() " />
+                <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+                <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+            </th>
+          <th style="width: 200px;"></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr
+          [pSelectableRow]="rowData"
+          [pSelectableRowDblClick]="rowData"
+          pReorderableRowHandle
+          (dblclick)="openView(view, rowData)" >
+            <td
+                *ngFor="let col of columns"
+                class="ui-resizable-column"
+                pReorderableRowHandle
+                >
+                {{
+                col.field == 'vendorPhone'
+                ? rowData['t']['vendorPhone']
+                : rowData[col.field] && col.field == 'createdDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy, h:mm a')
+                : rowData[col.field] && col.field == 'updatedDate'
+                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                : rowData[col.field]
+                }}
+            </td>
+
+          <td class="action-icons-cstm" style="width: 200px;">
+            <div *ngIf="currentDeletedstatus == false">
+              <ng-container *ngIf="!isCreatePO && !isCreateRO">
+                <p-inputSwitch
+                  [(ngModel)]="rowData['isActive']"
+                  name="isActive{{ rowIndex }}"
+                  matTooltip="{{
+                    rowData['isActive'] ? 'Active' : 'In Active'
+                  }}"
+                  matTooltipPosition="above"
+                  (onChange)="handleChanges(rowData, $event)"
+                ></p-inputSwitch>
+              </ng-container>
+              <span data-toggle="modal" data-target="#view"
+                ><a
+                  class="btn nobg btn-view-cstm"
+                  (click)="openView(view, rowData)"
+                  matTooltip="View"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-eye"></i
+                ></a>
+              </span>
+              <span *ngIf="!isCreatePO && !isCreateRO"
+                ><a
+                  class="btn nobg btn-edit-cstm"
+                  (click)="openEdit(rowData)"
+                  matTooltip="Edit"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-pencil"></i
+                ></a>
+              </span>
+              <!-- <span
+                ><a
+                  class="btn nobg btn-users-cstm"
+                  (click)="openContactList(contentcontact, rowData)"
+                  matTooltip="Contacts"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i
+                ></a>
+              </span> -->
+              <span *ngIf="!isCreatePO && !isCreateRO"
+                ><a
+                  class="btn nobg btn-delete-cstm"
+                  (click)="openDelete(content1, rowData);"
+                  matTooltip="Delete"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-trash"></i
+                ></a>
+              </span>
+              <span data-toggle="modal" data-target="#contentAuditHist"
+                ><a
+                  class="btn nobg btn-hist-cstm"
+                  (click)="openHist(contentHist, rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i></a
+              ></span>
+              <span
+                data-toggle="modal"
+                data-target="#purchaseOrderList"
+                *ngIf="
+                  (isVendorList && isCreatePO) || (!isCreatePO && !isCreateRO)
+                "
+              >
+                <a
+                  class="btn nobg btn-po-cstm"
+                  (click)="getVendorPOId(rowData)"
+                  matTooltip="PO's"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-list-ul"></i></a
+              ></span>
+              <span
+                data-toggle="modal"
+                data-target="#repairOrderList"
+                *ngIf="
+                  (isVendorList && isCreateRO) || (!isCreatePO && !isCreateRO)
+                "
+              >
+                <a
+                  class="btn nobg btn-ro-cstm"
+                  (click)="getVendorROId(rowData)"
+                  matTooltip="RO's"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-list"></i></a
+              ></span>
+              <span *ngIf="isCreatePO"
+                ><a
+                  class="btn nobg btn-pluspo-cstm"
+                  (click)="gotoCreatePO(rowData)"
+                  matTooltip="Create PO"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-plus"></i
+                ></a>
+              </span>
+              <span *ngIf="isCreateRO"
+                ><a
+                  class="btn nobg btn-plusro-cstm"
+                  (click)="gotoCreateRO(rowData)"
+                  matTooltip="Create RO"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-plus" style="color: #259e08;"></i
+                ></a>
+              </span>
+            </div>
+            <div *ngIf="currentDeletedstatus == true">
+              <p-inputSwitch
+                [(ngModel)]="rowData['isActive']"
+                name="isActive{{ rowIndex }}"
+                matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
+                matTooltipPosition="above"
+                (onChange)="handleChanges(rowData, $event)"
+                [disabled]="true"
+              ></p-inputSwitch>
+              <span data-toggle="modal" data-target="#view"
+                ><a
+                  class="btn nobg btn-view-cstm"
+                  (click)="openView(view, rowData)"
+                  matTooltip="View"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-eye"></i
+                ></a>
+              </span>
+              <span
+                ><a
+                  class="btn nobg"
+                  (click)="restore(restoreId, rowData)"
+                  matTooltip="Restore Record"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-undo" aria-hidden="true"></i
+                ></a>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="emptymessage"
+        let-columns
+        *ngIf="allVendorList?.length == 0">
+        <tr>
+          <td
+            [attr.colspan]="13"
+            style="color: red; font-weight: bold; text-align: center;">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" id="footer">
+        <div style="text-align: right;">
+          <label id="footer" class="footer">Total:</label>
+          <input
+            style="width: 5%;"
+            [(ngModel)]="totalRecords"
+            [disabled]="true"
+            pInputText
+            type="text"
+          />
+          &nbsp;&nbsp;
+          <label id="footer" class="footer1">Pages Count:</label>
+          <input
+            style="width: 5%;"
+            [(ngModel)]="totalPages"
+            [disabled]="true"
+            pInputText
+            type="text"
+          />
+        </div>
+      </ng-template>
+    </p-table>
+    <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+            <h4 class="modal-title">Are You Sure Want to Download?</h4>
+          </div>
+          <div class="modal-body" *ngIf="targetData">
+            <strong>
+              <span *ngIf="!selectedOnly">
+                You are attempting to export {{targetData.totalRecords}} of records. 
+              </span> 
+            </strong>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+            <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <ng-template
+      #contentHist
+      let-c="close"
+      let-d="dismiss"
+      style="width: auto;"
+    >
+      <div class="modal-header">
+        <h4 class="modal-title">
+          History of Vendor: <span>"{{ this.selectedRow['vendorName'] }}"</span>
+        </h4>
+        <button
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="dismissModel()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" *ngIf="auditHisory">
+        <div class="table-responsive ptable-custom">
+          <table
+            class="table table-bordered"
+            *ngIf="auditHisory.length > 0; else noDatavailable"
+          >
+            <thead>
+              <tr>
+                <th>Vendor Name</th>
+                <th>Vendor Code</th>
+                <th>Vendor Type</th>
+                <th>Vendor Classification</th>
+                <th>Email</th>
+                <th>Vendor City</th>
+                <th>Vendor State</th>
+                <th>Vendor Contact</th>
+                <th>Is Active</th>
+                <th>Created Date</th>
+                <th>Created By</th>
+                <th>Updated Date</th>
+                <th>Updated By</th>
+                <th>Is Deleted</th>                
+              </tr>
+            </thead>
+            <tbody class="audithistory-cstm">
+              <tr *ngFor="let audit of auditHisory; let i = index">
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'vendorName',
+                      audit.vendorName
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.vendorName }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'vendorCode',
+                      audit.vendorCode
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.vendorCode }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'description',
+                      audit.description
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.description }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'vendorClassificationName',
+                      audit.vendorClassificationName
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.vendorClassificationName }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'vendorEmail',
+                      audit.vendorEmail
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.vendorEmail }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(i, 'city', audit.city)
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.city }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'stateOrProvince',
+                      audit.stateOrProvince
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.stateOrProvince }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistory(
+                      i,
+                      'vendorPhoneContact',
+                      audit.vendorPhoneContact
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.vendorPhoneContact }}
+                </td>
+                <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled></p></td>
+                <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td
+                  [ngStyle]="{
+                      color: getColorCodeForHistory(i, 'createdBy', audit.createdBy)
+                        ? 'black'
+                        : 'red'
+                    }"
+                  >
+                    {{ audit.createdBy }}
+                </td>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td
+                    [ngStyle]="{
+                        color: getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)
+                          ? 'black'
+                          : 'red'
+                      }"
+                    >
+                      {{ audit.updatedBy }}
+                </td>
+                <td style="background-color: #fff !important; text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+              </tr>
+            </tbody>
+          </table>
+          <ng-template #noDatavailable>
+            <div class="text-center">
+              <img
+                src="../../../assets/images/binoculars.png"
+                style="height: 100px; width: 100px;"
+              />
+              <h4 style="color: #ff5663;">No History Found</h4>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">
+          Close
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<ng-template #view class="modal fade" id="view">
+  <div class="modal-header">
+    <button
+      type="button"
+      class="close"
+      style="padding: 0 !important;"
+      (click)="dismissModel()"
+    >
+      &times;
+    </button>
+    <div class="col-sm-3">
+      <h4 class="modal-title">Details of Vendor</h4>
+    </div>
+    <div class="col-sm-3">
+      <p class="view-header">
+        Vendor Name:
+        <span class="text-danger">{{ vendorData.vendorName }}</span>
+      </p>
+    </div>
+    <div class="col-sm-3">
+      <p class="view-header">
+        Vendor Code:
+        <span class="text-danger">{{ vendorData.vendorCode }}</span>
+      </p>
+    </div>
+  </div>
+  <div class="modal-body viewform">
+    <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
+        <div class="col-sm-12">
+            <div class="col-sm-6">
+                <button
+                        type="button"
+                        class="btn btn-primary"
+                        (click)="ExpandAllVenodrDetailsModel()"
+                        >
+                    Open All
+                </button>
+                <button
+                        type="button"
+                        class="btn btn-secondary"
+                        (click)="CloseAllVenodrDetailsModel()"
+                        >
+                    Close All
+                </button>
+            </div>
+            <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+                <button type="button" name="isActive" [ngClass]="vendorData.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                    <span class="value">{{vendorData.isActive ? 'Active' : 'In-Active'}}</span>
+                </button>
+            </div>
+        </div>
+        
+      <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                data-toggle="collapse"
+                href="#step1"
+                aria-expanded="false"
+                aria-controls="receive"
+                class="collapsed">
+                General Info
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step1"
+            class="panel-collapse collapse"
+            aria-expanded="false"
+            style="height: 0px;">
+            <div *ngIf="vendorData">
+              <div class="modal-content p-1">
+                <div class="table-responsive default-bg clear">
+                  <div class="col-sm-6">
+                    <p>
+                      <span class="label"
+                        ><b>Internal / External / Affiliate: </b></span
+                      ><span class="value">{{
+                        vendorData.description ? vendorData.description : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Vendor Name: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{ vendorData.vendorName }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Code: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{ vendorData.vendorCode }}</span>
+                    </p>
+                    <p>
+                      <span class="label"><b>D/B/A: </b></span
+                      ><span class="value">{{
+                        vendorData.doingBusinessAsName
+                          ? vendorData.doingBusinessAsName
+                          : '-'
+                      }}</span>
+                    </p>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label style="width: 28%;">
+                          <input
+                            type="checkbox"
+                            name="parent"
+                            [(ngModel)]="vendorData.parent"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Parent :
+                        </label>
+                      </div>
+                      <p *ngIf="vendorData.parent">
+                        <span class="vendor_Name">{{
+                          vendorData.vendorParentName
+                            ? vendorData.vendorParentName
+                            : '-'
+                        }}</span>
+                      </p>
+                    </div>
+                    <br />
+                    <p>
+                      <span class="label">
+                        <b>
+                          Phone No: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">
+                        {{ vendorData.vendorPhone }},
+                        {{
+                          vendorData.vendorPhoneExt
+                            ? vendorData.vendorPhoneExt
+                            : '-'
+                        }}
+                      </span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Email: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorData.vendorEmail ? vendorData.vendorEmail : '-'
+                      }}</span>
+                    </p>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isAddressForBilling"
+                            [(ngModel)]="vendorData.isAddressForBilling"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Is this Address For Billing
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isAddressForShipping"
+                            [(ngModel)]="vendorData.isAddressForShipping"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Is this Address For Shipping
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isVendorAlsoCustomer"
+                            [(ngModel)]="vendorData.isVendorAlsoCustomer"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Is this Vendor also a Customer
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isPreferredVendor"
+                            [(ngModel)]="vendorData.isPreferredVendor"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Preferred Vendor
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isCertified"
+                            [(ngModel)]="vendorData.isCertified"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Certified </label
+                        ><i
+                          class="fa fa-eye ml-1"
+                          matTooltip="Attachments"
+                          matTooltipPosition="above"
+                          *ngIf="vendorData.isCertified == true"
+                          (click)="
+                            viewIsCertifiedModal(isCertifiedAttachmentsModal)
+                          "
+                        ></i>
+                      </div>
+                    </div>
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="isVendorAudit"
+                            [(ngModel)]="vendorData.vendorAudit"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          Vendor Audit </label><i
+                          class="fa fa-eye ml-1"
+                          matTooltip="Attachments"
+                          matTooltipPosition="above"
+                          *ngIf="vendorData.vendorAudit == true"
+                          (click)="
+                            viewVendorAuditModal(vendorAuditAttachmentsModal)
+                          "
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+                    <p>
+                      <span class="label">
+                        <b>
+                          Address1: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorData.address1 ? vendorData.address1 : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label"><b>Address2: </b></span
+                      ><span class="value">{{
+                        vendorData.address2 ? vendorData.address2 : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b> City: <span class="text-danger">*</span> </b> </span
+                      ><span class="value">{{
+                        vendorData.city ? vendorData.city : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Primary State/Province: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorData.stateOrProvince
+                          ? vendorData.stateOrProvince
+                          : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Postal: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorData.postalCode ? vendorData.postalCode : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Country: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorData.country ? vendorData.country : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Vendor Classification:
+                          <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value common_white-space_down">{{
+                        vendorData.vendorClassificationName
+                          ? vendorData.vendorClassificationName
+                          : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label"><b>Contract Ref: </b></span
+                      ><span class="value">{{
+                        vendorData.vendorContractReference
+                          ? vendorData.vendorContractReference
+                          : '-'
+                      }}</span>
+                    </p>
+                    
+                    <p>
+                      <span class="label"><b>Integration With: </b></span
+                      ><span class="value common_white-space_down">{{
+                        vendorData.integrationPortalNames
+                          ? vendorData.integrationPortalNames
+                          : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label"><b>License #:</b></span
+                      ><span class="value">{{
+                        vendorData.licenseNumber
+                          ? vendorData.licenseNumber
+                          : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label"><b>URL to Vendor site: </b></span
+                      ><span class="value">{{
+                        vendorData.vendorURL ? vendorData.vendorURL : '-'
+                      }}</span>
+                    </p>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                class="collapsed"
+                data-toggle="collapse"
+                href="#step11"
+                aria-expanded="false"
+              >
+                Vendor Capabilities
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step11"
+            class="panel-collapse collapse"
+            aria-expanded="false"
+            style="height: 0px;"
+          >
+            <div>
+              <app-vendor-capes
+                *ngIf="vendorId"    
+                [vendorId]= "vendorId"            
+                [isViewMode]="isViewMode">
+              </app-vendor-capes>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                data-toggle="collapse"
+                href="#step2"
+                aria-expanded="false"
+                class="collapsed"
+              >
+                Contact
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step2"
+            class="panel-collapse collapse in"
+            aria-expanded="true"
+          >
+            <div>
+              <app-vendor-contacts
+                *ngIf="vendorId"
+                [vendorId]="vendorId"
+                [isViewMode]="isViewMode"
+              >
+              </app-vendor-contacts>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                data-toggle="collapse"
+                href="#step12"
+                aria-expanded="false"
+                class="collapsed">
+                ATA Chapters
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step12"
+            class="panel-collapse collapse in"
+            aria-expanded="true">
+            <div>
+              <app-vendor-ata
+                *ngIf="vendorId"
+                [vendorId]="vendorId"
+                [isViewMode]="isViewMode"
+              >
+              </app-vendor-ata>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                class="collapsed"
+                data-toggle="collapse"
+                href="#step3"
+                aria-expanded="false"
+              >
+                Financial Info
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step3"
+            class="panel-collapse collapse"
+            aria-expanded="false"
+            style="height: 0px;"
+          >
+            <div class="panel-body">
+              <div class="shadow-Box">
+                <div class="form-row">
+                  <div class="col-sm-6">
+                    <p>
+                      <span class="label">
+                        <b>
+                          Credit Limit: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorFinData.creditLimit
+                          | twoDecimalGlobalNumberFormatPipe
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Credit Terms: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorFinData.creditTerms ? vendorFinData.creditTerms : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label">
+                        <b>
+                          Currency: <span class="text-danger">*</span>
+                        </b> </span
+                      ><span class="value">{{
+                        vendorFinData.currency ? vendorFinData.currency : '-'
+                      }}</span>
+                    </p>
+                    <p>
+                      <span class="label"><b>Discount %: </b></span
+                      ><span class="value">{{
+                        vendorFinData.discontValue | twoDecimalGlobalNumberFormatPipe
+                      }}</span>
+                    </p>
+                  </div>
+                  <div class="col-sm-6">
+                    <div class="form-group p-t-10">
+                      <div class="checkbox-cstm">
+                        <label>
+                          <input
+                            type="checkbox"
+                            name="is1099Required"
+                            [(ngModel)]="vendorFinData.is1099Required"
+                            disabled
+                          />
+                          <span class="cr"
+                            ><i class="cr-icon pi pi-check"></i
+                          ></span>
+                          1099 Required
+                        </label>
+                      </div>
+                    </div>
+                    <div
+                      class="finc-info form-group col-sm-12"
+                      *ngIf="vendorFinData.is1099Required"
+                    >
+                      <div class="col-sm-12">
+                        <table class="table table-bordered table-cstm">
+                          <thead>
+                            <tr>
+                              <th>&nbsp;</th>
+                              <th>&nbsp;</th>
+                              <th>Default</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr
+                              *ngFor="
+                                let proces of vendorProcess1099Data;
+                                let i = index
+                              "
+                            >
+                              <td>
+                                <input
+                                  type="checkbox"
+                                  class="form-control"
+                                  [value]="proces.description"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  [(ngModel)]="proces.isDefaultCheck"
+                                  (change)="changeCheck1099Required($event, i)"
+                                  disabled
+                                />
+                              </td>
+
+                              <td>{{ proces.description }}</td>
+                              <td>
+                                <input
+                                  type="radio"
+                                  name="isDefaultRadio"
+                                  [attr.disabled]="proces.isDefaultCheck == false || null"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  [value]="proces.description"
+                                  [(ngModel)]="proces.isDefaultRadio"
+                                  disabled
+                                  class="radio-inline"
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" href="#step6">
+                Billing Info
+              </a>
+            </h4>
+          </div>
+          <div id="step6" class="panel-collapse collapse">
+            <div>
+              <app-vendor-billing-information
+                *ngIf="vendorId"
+                [vendorId]="vendorId"
+                [isViewMode]="isViewMode"
+              ></app-vendor-billing-information>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                class="collapsed"
+                data-toggle="collapse"
+                href="#step4"
+                aria-expanded="false"
+              >
+                Payment Info
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step4"
+            class="panel-collapse collapse"
+            aria-expanded="false"
+            style="height: 0px;"
+          >
+            <div class="panel-body">
+              <div class="shadow-Box">
+                <div class="form-row">
+                  <div class="col-sm-6">
+                    <div class="=col-sm-12">
+                      <p>
+                        <span class="label"><b>Default Payment Mode: </b></span
+                        ><span class="value">{{ paymentTypeName }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <app-vendor-payment-information
+                    *ngIf="vendorId"
+                    [vendorId]="vendorId"
+                    [isViewMode]="isViewMode"
+                  ></app-vendor-payment-information>
+                </div>
+                <div class="form-row m-t-10">
+                  <div class="col-sm-6">
+                    <div class="=col-sm-12">
+                      <h4 class="po-head">Domestic Wire</h4>
+                      <p>
+                        <span class="label">
+                          <b>
+                            ABA: <span class="text-danger">*</span>
+                          </b> </span
+                        ><span class="value">{{ domesticSaveObj.aba }}</span>
+                      </p>
+                      <p>
+                        <span class="label">
+                          <b>
+                            Account: <span class="text-danger">*</span>
+                          </b> </span
+                        ><span class="value">{{
+                          domesticSaveObj.accountNumber
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label">
+                          <b>
+                            Bank Name: <span class="text-danger">*</span>
+                          </b> </span
+                        ><span class="value">{{
+                          domesticSaveObj.bankName
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank Address 1: </b></span
+                        ><span class="value">{{
+                          domesticSaveObj.address1
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank Address 2: </b></span
+                        ><span class="value">{{
+                          domesticSaveObj.address2
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank City: </b></span
+                        ><span class="value">{{ domesticSaveObj.city }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank State/Prov: </b></span
+                        ><span class="value">{{
+                          domesticSaveObj.stateOrProvince
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank Postal Code: </b></span
+                        ><span class="value">{{
+                          domesticSaveObj.postalCode
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank Country: </b></span
+                        ><span class="value">{{
+                          domesticSaveObj.countryName
+                        }}</span>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <div class="=col-sm-12">
+                      <h4 class="po-head">International Wire</h4>
+                      <p>
+                        <span class="label">
+                          <b>
+                            Bank SWIFT: <span class="text-danger">*</span>
+                          </b> </span
+                        ><span class="value">{{
+                          internationalSaveObj.swiftCode
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"
+                          ><b>Beneficiary Bank Account: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.beneficiaryBankAccount
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Beneficiary Bank: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.beneficiaryBank
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank City: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.city
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank State/Prov: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.stateOrProvince
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank Postal Code: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.postalCode
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Bank Country: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.countryName
+                        }}</span>
+                      </p>
+                      <p>
+                        <span class="label"><b>Beneficiary Customer: </b></span
+                        ><span class="value">{{
+                          internationalSaveObj.beneficiaryCustomer
+                        }}</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a
+                class="collapsed"
+                data-toggle="collapse"
+                href="#step5"
+                aria-expanded="false"
+              >
+                Shipping Info
+              </a>
+            </h4>
+          </div>
+          <div
+            id="step5"
+            class="panel-collapse collapse"
+            aria-expanded="false"
+            style="height: 0px;"
+          >
+            <div>
+              <app-vendor-shipping-information
+                *ngIf="vendorId"
+                [vendorId]="vendorId"
+                [isViewMode]="isViewMode"
+              ></app-vendor-shipping-information>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" href="#step7">
+                Warnings</a
+              >
+            </h4>
+          </div>
+          <div id="step7" class="panel-collapse collapse">
+            <div class="panel-body">
+              <div>
+                <app-vendor-warnings
+                  *ngIf="vendorId"
+                  [vendorId]="vendorId"
+                  [isViewMode]="isViewMode"
+                ></app-vendor-warnings>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" href="#step9">
+                Memos</a
+              >
+            </h4>
+          </div>
+          <div id="step9" class="panel-collapse collapse">
+            <div class="panel-body">
+              <div class="col-sm-12">
+                <div class="shadow-Box">
+                  <p-table
+                    #vMemo
+                    class="rpo-table-cstm"
+                    [value]="allVendorPOROList"
+                    [metaKeySelection]="true"
+                    [rows]="10"
+                    [paginator]="true"
+                    [pageLinks]="3"
+                    [rowsPerPageOptions]="[10, 20, 50, 100]"
+                    [columns]="memoCols"
+                    [resizableColumns]="true"
+                    [reorderableColumns]="true"
+                    [scrollable]="true"
+                    scrollHeight="450px"
+                  >
+                    <ng-template pTemplate="colgroup" let-columns>
+                      <colgroup>
+                        <col
+                          *ngFor="let col of columns"
+                          style="width: 130px;"
+                        />
+                      </colgroup>
+                    </ng-template>
+
+                    <ng-template pTemplate="header" let-columns>
+                      <tr>
+                        <th
+                          *ngFor="let col of columns"
+                          pResizableColumn
+                          pReorderableColumn
+                          [pSortableColumn]="col.field"
+                        >
+                          {{ col.header }}
+                          <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                      </tr>
+                      <tr>
+                        <th
+                          style="width: auto;"
+                          *ngFor="let col of columns"
+                          [ngSwitch]="col.field">
+                          <input style="width: 100%;" pInputText type="text" (input)=" vMemo.filter($event.target.value, col.field, 'contains')"/>
+                        </th>
+                      </tr>
+                    </ng-template>
+                    <ng-template
+                      pTemplate="body"
+                      let-rowData
+                      let-columns="columns"
+                      let-rowIndex="rowIndex">
+                      <tr>
+                        <td *ngFor="let col of columns">
+                          <ng-container *ngIf="col.field != 'notes'">
+                            {{ rowData[col.field] }}
+                          </ng-container>
+                          <ng-container *ngIf="col.field == 'notes'">
+                            <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                          </ng-container>
+
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                      <tr *ngIf="allVendorPOROList.length == 0">
+                        <td colspan="11"  style="color: red; font-weight: bold; text-align: center;">
+                          No records found
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template
+                      pTemplate="emptymessage"
+                      let-columns
+                      *ngIf="allVendorPOROList.length == 0"
+                    >
+                      <tr>
+                        <td
+                          colspan="11"
+                          style="
+                            color: red;
+                            font-weight: bold;
+                            text-align: center;
+                          "
+                        >
+                          No records found
+                        </td>
+                      </tr>
+                    </ng-template>
+                    <ng-template pTemplate="summary" id="footer">
+                      <label id="footer" class="footer">Total:</label>
+                      <input
+                        style="width: 5%;"
+                        [(ngModel)]="vMemo._totalRecords"
+                        [disabled]="true"
+                        pInputText
+                        type="text"
+                      />
+                      &nbsp;&nbsp;
+                      <label id="footer" class="footer1">Pages Count:</label>
+                      <input
+                        style="width: 5%;"
+                        [ngModel]="
+                          getPageCount(vMemo._totalRecords, viewPageSize)
+                        "
+                        [disabled]="true"
+                        pInputText
+                        type="text"
+                      />
+                    </ng-template>
+                  </p-table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="collapsed" data-toggle="collapse" href="#step10">
+                Documents
+              </a>
+            </h4>
+          </div>
+          <div id="step10" class="panel-collapse collapse">
+            <div>
+              <app-vendor-documents
+                *ngIf="vendorId"
+                [vendorId]="vendorId"
+                [viewMode]="isViewMode"
+              >
+              </app-vendor-documents>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-dismiss="modal"
+      (click)="dismissModel()"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<div
+  class="modal popup-blur"
+  id="contentAuditHistDoc"
+  style="z-index: 10699 !important;"
+  data-backdrop="static"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">History of Documents</h4>
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Memo</th>
+                <th>File Name</th>
+                <th>File Size</th>
+                <th>Created Date</th>
+                <th>Created By</th>
+                <th>Updated Date</th>
+                <th>Updated By</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+              <tr
+                *ngFor="let audit of sourceViewforDocumentAudit; let i = index"
+              >
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistoryDoc(
+                      i,
+                      'docName',
+                      audit.docName
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.docName }}
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistoryDoc(
+                      i,
+                      'docDescription',
+                      audit.docDescription
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.docDescription }}
+                </td>
+                <td
+                    [ngStyle]="{'color': getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)  ? 'black' : 'red'  }" [innerHTML]="audit.docMemo">
+                </td>
+                <td
+                  [ngStyle]="{
+                    color: getColorCodeForHistoryDoc(
+                      i,
+                      'fileName',
+                      audit.fileName
+                    )
+                      ? 'black'
+                      : 'red'
+                  }"
+                >
+                  {{ audit.fileName }}
+                </td>
+                <td>{{ audit.fileSize }}</td>
+
+                <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                <td
+                    [ngStyle]="{'color': getColorCodeForHistoryDoc(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }" >
+                    {{ audit.createdBy }}
+                </td>
+                <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                <td
+                    [ngStyle]="{'color': getColorCodeForHistoryDoc(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }" >
+                    {{ audit.updatedBy }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content1 let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <strong>
+      Vendor Name:
+      <span class="new-label">{{ sourceVendor.vendorName }} - {{sourceVendor.vendorCode}}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="deleteItemAndCloseModel()"
+    >
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+
+<ng-template
+  #contentcontact
+  let-c="close"
+  let-d="dismiss"
+  class="modal fade"
+  role="dialog"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="close"
+        (click)="dismissModel()"
+        data-dismiss="modal"
+        id=""
+        name=""
+      >
+        ×
+      </button>
+
+      <h4 class="modal-title">
+        Details of : {{ this.selectedRow['vendorName'] }}
+      </h4>
+    </div>
+
+    <div class="modal-body">
+      <div>
+        <app-vendor-contacts
+          *ngIf="vendorId"
+          [vendorId]="vendorId"
+          [isViewMode]="isViewMode"
+        >
+        </app-vendor-contacts>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        data-dismiss="modal"
+        (click)="dismissModel()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+<div
+  class="modal fade"
+  id="purchaseOrderList"
+  role="dialog"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="resetVendorId()"
+        >
+          &times;
+        </button>
+        <h4 class="modal-title">
+          Purchase Orders
+          <a
+            matTooltip="Create PO"
+            (click)="navigateToCreatePO()"
+            class="plusicon-cstm"
+          >
+            <i
+              class="fa fa-plus-circle fa-lg"
+              matTooltip="Create Purchase Orders"
+            ></i>
+          </a>
+        </h4>
+      </div>
+      <div class="modal-body" *ngIf="vendorId && isEnablePOList">
+        <app-polist
+          [isEnablePOList]="isEnablePOList"
+          [vendorId]="vendorId"
+        ></app-polist>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="resetVendorId()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="repairOrderList"
+  role="dialog"
+  data-backdrop="static"
+  data-keyboard="false"
+>
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          (click)="resetVendorId()"
+        >
+          &times;
+        </button>
+        <h4 class="modal-title">
+          Repair Orders
+          <a
+            matTooltip="Create RO"
+            (click)="navigateToCreateRO()"
+            class="plusicon-cstm"
+          >
+            <i
+              class="fa fa-plus-circle fa-lg"
+              matTooltip="Create Repair Orders"
+            ></i>
+          </a>
+        </h4>
+      </div>
+      <div class="modal-body" *ngIf="vendorId && isEnableROList">
+        <app-ro-list
+          [isEnableROList]="isEnableROList"
+          [vendorId]="vendorId"
+        ></app-ro-list>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          (click)="resetVendorId()"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  id="fileDocview"
+  class="modal fade popup-blur"
+  role="dialog"
+  data-backdrop="static"
+  data-keyboard="false"
+  style="z-index: 10000;"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Details of Vendor Documents</h4>
+      </div>
+      <div class="modal-body" *ngIf="sourceViewforDocument">
+        <div class="col-sm-12">
+          <p>
+            <span class="label"
+              ><b>Name: <span class="text-danger">*</span> </b></span
+            ><span class="value">{{ sourceViewforDocument.docName }}</span>
+          </p>
+          <p>
+            <span class="label"
+              ><b>Description: <span class="text-danger">*</span> </b></span
+            ><span class="value">{{
+              sourceViewforDocument.docDescription
+            }}</span>
+          </p>
+          <p>
+            <span class="label"><b>Memo: </b></span
+            ><span class="value">{{ sourceViewforDocument.docMemo }}</span>
+          </p>
+
+          <div class="table-responsive table-overflow">
+            <h4 class="po-head">Attachment Details:</h4>
+            <table class="table table-bordered table-cstm">
+              <thead>
+                <tr>
+                  <th>File Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let f of sourceViewforDocumentList">
+                  <td>{{ f.fileName }}</td>
+                  <td>
+                    <a
+                      (click)="downloadFileUpload(f)"
+                      matTooltip="Download"
+                      class="btn nobg btn-cstm"
+                      ><span><i class="fa fa-download"></i></span
+                    ></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="clear"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template
+  #isCertifiedAttachmentsModal
+  let-c="close"
+  let-d="dismiss"
+  style="z-index: 1001;"
+>
+  <div class="modal-header">
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      (click)="closeIsCertifiedModal()"
+    >
+      &times;
+    </button>
+    <h4 class="modal-title">Certified Attachment Details</h4>
+  </div>
+  <div class="modal-body">
+    <p-table
+      #table3
+      class="table-responsive1 rpo-table-cstm"
+      [paginator]="allVendorCertifiedocumentsList.length > 0"
+      [value]="allVendorCertifiedocumentsList"
+      [rows]="5"
+      [pageLinks]="3"
+      [rowsPerPageOptions]="[5, 10, 15, 20]"
+      [columns]="documentTableColumns"
+      [scrollable]="true"
+      scrollHeight="500px"
+      (onPage)="pageIndexChange($event)"
+    >
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" style="width: 130px;" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            pResizableColumn
+            pReorderableColumn
+            [pSortableColumn]="col.field"
+          >
+            <div>
+              {{ col.header }}
+              <p-sortIcon
+                *ngIf="col.field != 'download' && col.field != 'delete'"
+                [field]="col.field"
+              >
+              </p-sortIcon>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input
+              type="text"
+              (input)="
+                table3.filter($event.target.value, col.field, 'contains')
+              "
+              *ngIf="
+                col.field != 'download' &&
+                col.field != 'delete' &&
+                col.field != 'createdDate' &&
+                col.field != 'updatedDate'
+              "
+              pInputText
+            />
+            <input
+              type="date"
+              class="hidePlaceHolder"
+              *ngIf="col.field == 'createdDate'"
+              name="createdDate"
+              (change)="dateFilterForTable($event.target.value, col.field)"
+            />
+            <input
+              type="date"
+              class="hidePlaceHolder"
+              *ngIf="col.field == 'updatedDate'"
+              name="updatedDate"
+              (change)="dateFilterForTable($event.target.value, col.field)"
+            />
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-i="rowIndex"
+      >
+        <tr *ngIf="allVendorCertifiedocumentsList.length > 0">
+          <td *ngFor="let col of columns">
+            <div *ngIf="col.field != 'download' && col.field !== 'docMemo'">
+              <span>
+                {{
+                  col.field == 'createdDate'
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                    : rowData[col.field] && col.field == 'updatedDate'
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                    : rowData[col.field]
+                }}
+              </span>
+            </div>
+            <div *ngIf="col.field == 'docMemo'">
+              <div [innerHTML]="rowData[col.field]"></div>
+            </div>
+            <div *ngIf="col.field == 'download'" class="align_center">
+              <a
+                (click)="downloadFileUpload(rowData)"
+                matTooltip="Download"
+                matTooltipPosition="above"
+                class="btn nobg btn-cstm"
+              >
+                <span>
+                  <i class="fa fa-download"></i>
+                </span>
+              </a>
+              <span data-toggle="modal" data-target="#contentAuditHistDoc">
+                <a
+                  class="btn nobg"
+                  (click)="openHistoryDoc(rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i
+                ></a>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer">Total:</label>
+        <input
+          style="width: 5%;"
+          [(ngModel)]="table3._totalRecords"
+          name="no'of records"
+          disabled
+          pInputText
+          type="text"
+        />
+
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+
+        <input
+          style="width: 5%;"
+          [ngModel]="getPageCount(table3._totalRecords, pageSize)"
+          name="page count"
+          disabled
+          pInputText
+          type="text"
+        />
+      </ng-template>
+      <ng-template
+        pTemplate="emptymessage"
+        let-columns
+        *ngIf="allVendorCertifiedocumentsList.length == 0"
+      >
+        <tr>
+          <td
+            [attr.colspan]="10"
+            style="color: red; font-weight: bold; text-align: center;"
+          >
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-dismiss="modal"
+      (click)="closeIsCertifiedModal()"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<ng-template
+  #vendorAuditAttachmentsModal
+  let-c="close"
+  let-d="dismiss"
+  style="z-index: 1001;"
+>
+  <div class="modal-header">
+    <button
+      type="button"
+      class="close"
+      data-dismiss="modal"
+      (click)="closeVendorAuditModal()"
+    >
+      &times;
+    </button>
+    <h4 class="modal-title">Vendor Audit Attachment Details</h4>
+  </div>
+  <div class="modal-body">
+    <p-table
+      #table4
+      class="table-responsive1 rpo-table-cstm"
+      [paginator]="allVendorAuditdocumentsList.length > 0"
+      [value]="allVendorAuditdocumentsList"
+      [rows]="5"
+      [pageLinks]="3"
+      [rowsPerPageOptions]="[5, 10, 15, 20]"
+      [columns]="documentTableColumns"
+      [scrollable]="true"
+      scrollHeight="500px"
+      (onPage)="pageIndexChange($event)"
+    >
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" style="width: 130px;" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th
+            *ngFor="let col of columns"
+            pResizableColumn
+            pReorderableColumn
+            [pSortableColumn]="col.field"
+          >
+            <div>
+              {{ col.header }}
+              <p-sortIcon
+                *ngIf="col.field != 'download' && col.field != 'delete'"
+                [field]="col.field"
+              >
+              </p-sortIcon>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input
+              type="text"
+              (input)="
+                table4.filter($event.target.value, col.field, 'contains')
+              "
+              *ngIf="
+                col.field != 'download' &&
+                col.field != 'delete' &&
+                col.field != 'createdDate' &&
+                col.field != 'updatedDate'
+              "
+              pInputText
+            />
+            <input
+              type="date"
+              class="hidePlaceHolder"
+              *ngIf="col.field == 'createdDate'"
+              name="createdDate"
+              (change)="
+                dateFilterForTableVendorAudit($event.target.value, col.field)
+              "
+            />
+            <input
+              type="date"
+              class="hidePlaceHolder"
+              *ngIf="col.field == 'updatedDate'"
+              name="updatedDate"
+              (change)="
+                dateFilterForTableVendorAudit($event.target.value, col.field)
+              "
+            />
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template
+        pTemplate="body"
+        let-rowData
+        let-columns="columns"
+        let-i="rowIndex"
+      >
+        <tr *ngIf="allVendorAuditdocumentsList.length > 0">
+          <td *ngFor="let col of columns">
+            <div *ngIf="col.field != 'download' && col.field !== 'docMemo'">
+              <span>
+                {{
+                  col.field == 'createdDate'
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                    : rowData[col.field] && col.field == 'updatedDate'
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                    : rowData[col.field]
+                }}
+              </span>
+            </div>
+            <div *ngIf="col.field == 'docMemo'">
+              <div [innerHTML]="rowData[col.field]"></div>
+            </div>
+            <div *ngIf="col.field == 'download'" class="align_center">
+              <a
+                (click)="downloadFileUpload(rowData)"
+                matTooltip="Download"
+                matTooltipPosition="above"
+                class="btn nobg btn-cstm"
+              >
+                <span>
+                  <i class="fa fa-download"></i>
+                </span>
+              </a>
+              <span data-toggle="modal" data-target="#contentAuditHistDoc">
+                <a
+                  class="btn nobg"
+                  (click)="openHistoryDoc(rowData)"
+                  matTooltip="History"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-history"></i
+                ></a>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer">Total:</label>
+        <input
+          style="width: 5%;"
+          [(ngModel)]="table4._totalRecords"
+          name="no'of records"
+          disabled
+          pInputText
+          type="text"
+        />
+
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+
+        <input
+          style="width: 5%;"
+          [ngModel]="getPageCount(table4._totalRecords, pageSize)"
+          name="page count"
+          disabled
+          pInputText
+          type="text"
+        />
+      </ng-template>
+      <ng-template
+        pTemplate="emptymessage"
+        let-columns
+        *ngIf="allVendorAuditdocumentsList.length == 0"
+      >
+        <tr>
+          <td
+            [attr.colspan]="10"
+            style="color: red; font-weight: bold; text-align: center;"
+          >
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-danger"
+      data-dismiss="modal"
+      (click)="closeVendorAuditModal()"
+    >
+      Close
+    </button>
+  </div>
+</ng-template>
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="dismissModel()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <strong>
+      Vendor Name:
+      <span class="new-label">{{ restorerecord.vendorName }} - {{restorerecord.vendorCode}}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="restoreRecord()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

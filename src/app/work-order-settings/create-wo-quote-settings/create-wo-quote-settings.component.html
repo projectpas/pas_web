@@ -1,0 +1,62 @@
+﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div class="card">
+    <div class="card-header">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
+                <li class="breadcrumb-item active" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} WO Quote settings
+                </li>
+            </ol>
+        </nav>
+    </div>
+    <div class="card-body">
+        <form #woQuoteSettingsForm="ngForm">
+            <div class="form-row">
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="form-label"> WO Type</label>
+                            <select [(ngModel)]="receivingForm.workOrderTypeId" name="workOrderTypesId" [disabled]="isEditMode" required>
+                                <option value="0">-- Select --</option>
+                                <option *ngFor="let workOrder of workOrderTypes" [ngValue]="workOrder.id">
+                                    {{workOrder.description}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Prefix</label>
+                            <input type="text" name="prefix" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.prefix" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Sufix</label>
+                            <input type="text" name="sufix" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.sufix">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label> Start Code</label>
+                            <input type="text" name="startCode" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.startCode" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label> Valid Days</label>
+                            <input type="number" name="validDays" class="form-control ui-autocomplete-input" [(ngModel)]="receivingForm.validDays" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="form-row pull-right m-t-10">
+                <button type="submit" class="btn btn-primary" (click)="saveOrUpdateWOQuoteSetting()"
+                    [disabled]="!woQuoteSettingsForm.valid">{{isEditMode ? 'Update' : 'Save'}}</button>
+            </div>
+        </form>
+    </div>
+
+</div>

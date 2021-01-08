@@ -1,0 +1,488 @@
+﻿<div>
+    <div>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-4">
+                <p class="fs12">
+                    <label  class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{companyName }} </span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <p class="fs12">
+                    <label  class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{companyCode }} </span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card new-card" style="padding: 10px;">
+        <div>
+          <div class="card-header bg-primary new-card-header">
+            <div class="row">
+              <div class="col">
+                <h4 class="new-card-heading"> Banking Information</h4>
+              </div>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <hr />
+        </div>   
+    <!-- <h4 class="page-heading clr-green">Banking Information</h4> -->
+    <div>
+        <div class="right_col" role="main">
+            <div>
+                <div class="x_content payment-info">
+                    <div class="mt-2">
+                        <ul class="nav nav-pills">
+                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="Lockbox()" [class.extraclass]="LockboxStyle">Lockbox</button></li>
+                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="DomesticWire()" [class.extraclass]="domesticWireStyle">Domestic Wire</button></li>
+                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="InternationalWire()" [class.extraclass]="internationalStyle">International Wire</button></li>
+                            <li><button class="btn" style="margin-right: 3px; border: 1px solid #cccccc;" (click)="ACH()" [class.extraclass]="ACHStyle">ACH</button></li>
+                        </ul>
+                    </div>
+                    <div class="clear"></div>
+                    <form action="#" method="post" class="form-horizontal add-charges">
+                        <div class="tab-content  margin0 padding0">
+                            <div class="" id="menu3">
+                                <div class="clear"></div>
+                                <div class="payment-info">
+                                    <div class="clear"></div>
+                                    <hr class="hr-light-grey">
+                                    <div class="tab-content padding0" id="new-data-form">
+                                        <div *ngIf="LockboxValue" class="tab-pane active">
+                                            <div class="clear"></div>
+                                            <div class="col-sm-12">
+                                                <div class="form-row">
+                                                    <div class="col-md-3 col-lg-3  ">
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">PO Box <span class="clr-red">*</span></label>
+                                                            <input type="text" class="form-control"   (ngModelChange)="getmemo()" required name="poBox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.poBox">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust" >Street Address Line 1 <span class="clr-red">*</span></label>
+                                                            <input type="text" class="form-control"   required name=" Line 1" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankStreetaddress1">
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust"  >Street Address Line 2  <span class="clr-red">*</span></label>
+                                                             <input type="text" class="form-control"   name=" Line 2" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankStreetaddress2">
+                                                        </div>
+                                                    
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">City <span class="clr-red">*</span></label>
+                                                            <input type="text" class="form-control"   name="City" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankCity">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust" >Province/State <span class="clr-red">*</span></label>
+                                                            <input type="text" class="form-control"   name="Province" required (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankProvince">
+                                                        </div>
+                                                     
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">Country <span class="clr-red">*</span></label>
+                                                            <div class="inner-addon right-addon inline-block">
+                                                                <p-dropdown (input)="onFilterCountry($event.target.value)" [showClear]="true"  
+                                                                    class="p-dropdown-100 form-control border_nne" (ngModelChange)="getmemo()"
+                                                                    [options]="countrycollection" filter="true" field="label" required
+                                                                    [(ngModel)]="sourceLegalEntity.bankcountryId" name="bankcountry"
+                                                                    [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                                            </div> 
+
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label class="lable-Adjust">Postal Code <span class="clr-red">*</span></label>
+                                                            <input type="text" class="form-control" (keypress)="numberonly($event)" required   name="Postal" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <button type="submit" class="btn btn-primary" [disabled]="!locksave"
+                                                             (click)="savebanklockingbox()">
+                                                             {{ !isLockBox ? 'Update' : 'Save' }}</button>
+                                                        </div>
+                                                    </div> 
+
+
+                                                   
+
+                                                </div>
+                                                <div class="clear"></div>
+                                                <!-- <hr class="hr-light-grey">
+                                                <div class="form-group col-sm-12">
+                                                    <button type="submit" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next','domesticWireValue')">Next</button>
+                                                    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="backClick()">Previous</button>
+                                                </div> -->
+
+                                            </div>
+                                        </div>
+                                        <div *ngIf="domesticWireValue" class="tab-pane active">
+                                            <div class="clear"></div>
+                                            <div class="col-sm-12">
+                                                <div class="form-row"> 
+                                                    <div class="col-md-3 col-lg-3  "> 
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
+                                                   
+                                                    <input type="text" (ngModelChange)="domesticval()" #bankbiff="ngModel"  [pattern]="titlePattern"  class="form-control"   name="Bank" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBankName" required>  
+                                                    <div *ngIf="bankbiff.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankbiff.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="form-group">
+                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
+                                                     <input type="text"  (ngModelChange)="domesticval()"  class="form-control"   name="Intermediate" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticIntermediateBank" required>  
+                                                </div> -->
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Intermediate Bank<span class="clr-red">*</span></label>
+                                                     <input type="text"  (ngModelChange)="domesticval()"  #bankbibbkkf="ngModel"  [pattern]="titlePattern" class="form-control"   name="Address" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticIntermediateBank" required>  
+                                                     <div *ngIf="bankbibbkkf.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankbibbkkf.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust" >Benficiary Bank Name <span class="clr-red">*</span></label>
+                                                    <input type="text" (ngModelChange)="domesticval()"  #bankbiengd="ngModel"  [pattern]="titlePattern" class="form-control"   name="Account" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBenficiaryBankName" required> 
+                                                    <div *ngIf="bankbiengd.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankbiengd.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
+                                                   <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="domesticval()"   class="form-control"   name="Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticBankAccountNumber" required> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
+                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="domesticval()"   class="form-control"   name="ABA" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.domesticABANumber" required> 
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <span ></span>
+                                                    
+                                                        <button type="submit" class="btn btn-primary" [disabled]="!domesticvalid"
+                                                         (click)="savebankdomesticwire()">
+                                                         {{ !isDomesticWire ? 'Update' : 'Save' }}
+                                                        </button>
+                                                   
+                                                </div>
+                                            </div>
+                                                </div>
+
+
+
+                                                <!--<div class="form-group col-sm-12">
+                                                    <button type="submit" class="btn btn-primary pull-right" (click)="savebankdomesticwire()">Save</button>
+                                                </div>-->
+                                            </div>
+                                            <div class="clear"></div>
+                                            <!-- <hr class="hr-light-grey">
+                                            <div class="form-group col-sm-12">
+                                                <button type="submit" class="btn btn-primary pull-right" (click)="nextClick('Next','internationalValue')">Next</button>
+                                                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next','LockboxValue')">Previous</button>
+                                            </div> -->
+                                        </div>
+
+                                        <div *ngIf="internationalValue" class="tab-pane active">
+                                            <div class="clear"></div>
+                                            <div class="col-sm-12">
+                                                <div class="form-row">
+                                                    <div class="col-md-3 col-lg-3  ">
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
+                                                     <input type="text" (ngModelChange)="internationalval()" #bankbibb="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Bank Name" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankName" required> 
+                                                     <div *ngIf="bankbibb.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankbibb.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                <!-- <div class="form-group">
+                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
+                                                    <input type="text" (ngModelChange)="internationalval()"   class="form-control"   name="" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalIntermediateBank" required>
+                                                </div> -->
+
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
+                                                    <input type="text" (ngModelChange)="internationalval()"  #bankintb="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Bank Address" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalIntermediateBank" required>
+                                                    <div *ngIf="bankintb.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankintb.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Benficiary<span class="clr-red">*</span></label>
+                                                     <input type="text" (ngModelChange)="internationalval()" #bankbenf="ngModel"  [pattern]="titlePattern"   class="form-control"   name="Benficiary" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBenficiaryBankName" required>  
+                                                     <div *ngIf="bankbenf.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankbenf.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Account Number <span class="clr-red">*</span></label>
+                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="internationalval()"  class="form-control"   name="Account Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalBankAccountNumber" required> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
+                                                <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" style="text-align: end;" (ngModelChange)="internationalval()"   class="form-control"   name="ABA Number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.aba" required> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
+                                                   <input type="text" (ngModelChange)="internationalval()"  class="form-control"   name="SWIFT Code" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.internationalSWIFTID" required>  
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button type="submit" class="btn btn-primary" [disabled]="!internationalvalid" (click)="savebankinternationalwire()">
+                                                        {{ !isInternationalWire ? 'Update' : 'Save' }}</button>
+                                                    
+                                                </div>
+                                                </div>
+
+
+                                                <!--<div class="form-group col-sm-12">
+                                                    <button type="submit" class="btn btn-primary pull-right" (click)="savebankinternationalwire()">Save</button>
+                                                </div>-->
+                                            </div>
+                                            </div>
+                                            <div class="clear"></div>
+                                            <!-- <hr class="hr-light-grey"> -->
+                                            <!-- <div class="form-group col-sm-12">
+                                                <button type="submit" class="btn btn-primary pull-right" (click)="nextClick('Next','ACHValue')">Next</button>
+                                                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next','domesticWireValue')">Previous</button>
+                                            </div> -->
+                                        </div>
+
+                                        <div *ngIf="ACHValue" class="tab-pane active">
+                                            <div class="clear"></div>
+                                            <div class="col-sm-12">
+                                                <div class="form-row"> 
+                                                 <div class="col-md-3 col-lg-3  ">
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Name <span class="clr-red">*</span></label>
+                                                    <input type="text"  (ngModelChange)="achval()" #bankNmae="ngModel"  [pattern]="titlePattern" class="form-control"    name="Bank n" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankName" required> 
+                                                    <div *ngIf="bankNmae.errors" [ngClass]="'error'">
+                                                        <div *ngIf="bankNmae.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Intermediate Bank <span class="clr-red">*</span></label>
+                                                   <input type="text" (ngModelChange)="achval()" #interbankNmae="ngModel"  [pattern]="titlePattern" class="form-control"   name="Intermediate b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achIntermediateBank" required>  
+                                                   <div *ngIf="interbankNmae.errors" [ngClass]="'error'">
+                                                    <div *ngIf="interbankNmae.errors.pattern">
+                                                      <span style="color:red">At least One Alphabet is Required.</span>
+                                                    </div> 
+                                                </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Benficiary Bank Name <span class="clr-red">*</span></label>
+                                                      <input type="text"  (ngModelChange)="achval()"  #ibenfbankNmae="ngModel"  [pattern]="titlePattern" class="form-control"   name="Benficiary b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBenficiaryBankName" required> 
+                                                      <div *ngIf="ibenfbankNmae.errors" [ngClass]="'error'">
+                                                        <div *ngIf="ibenfbankNmae.errors.pattern">
+                                                          <span style="color:red">At least One Alphabet is Required.</span>
+                                                        </div>
+                                                    </div> 
+                                                    </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">Bank Account Number <span class="clr-red">*</span></label>
+                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control"  name="Account Nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achBankAccountNumber" required  (ngModelChange)="achval()" style="text-align: end;"> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">ABA Number <span class="clr-red">*</span></label>
+                                                    <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control"   name="ABA nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" required  (ngModelChange)="achval()" style="text-align: end;">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="lable-Adjust">SWIFT Id <span class="clr-red">*</span></label>
+                                                     <input type="text" class="form-control"   name="SWIFT b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achSWIFTID" required  (ngModelChange)="achval()">  
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button type="submit" *ngIf="isAch" class="btn btn-primary" (click)="savebankACH()" [disabled]="!achvalid">
+                                                   Save
+                                                    </button>
+                                                    <button type="submit" *ngIf="!isAch" class="btn btn-primary" (click)="savebankACH()" [disabled]="isAchValueUpdate">
+                                                       Update 
+                                                    </button>
+                                                </div>
+
+                                                <!--<div class="form-group col-sm-12">
+                                                    <button type="submit" class="btn btn-primary pull-right" (click)="savebankACH()">Save</button>
+                                                </div>-->
+                                            </div></div></div>
+                                            <div class="clear"></div>
+                                            <!-- <hr class="hr-light-grey"> -->
+                                            <!-- <div class="form-group col-sm-12">
+                                                <button type="submit" class="btn btn-primary pull-right" (click)="nextClick('Next' , 'NewTab')">Next</button>
+                                                <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next','internationalValue')">Previous</button>
+
+                                            </div>  -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="hr-light-grey">
+                        <div class="form-group col-sm-12">
+                            <button type="submit" class="btn btn-primary pull-right" (click)="next()">Next</button>
+                            <button type="button" class="btn btn-primary pull-right submit-btn"(click)="backClick()">Previous</button>
+
+                        </div> 
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    </div>
+</div>
+
+<p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+		  [width]="350" [minWidth]="200" [responsive]="true"
+		  [minY]="1050" [baseZIndex]="1100000">
+
+	<h5 [ngStyle]="{'color':'red'}">
+		Mandatory fields are not filled.
+	</h5>
+		<button type="button" pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+</p-dialog>
+
+<p-dialog header="Alert" [(visible)]="displayWarningModal" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+		  [width]="350" [minWidth]="200" [responsive]="true"
+		  [minY]="1050" [baseZIndex]="1100000">
+
+	<h5 [ngStyle]="{'color':'red'}">
+		Are you sure, You want to close?.
+	</h5>
+		<button type="button" pButton icon="pi pi-check" (click)="displayWarningModal=false;dismissModel()" label="Yes"></button>
+		&nbsp;&nbsp;
+		<button type="button" pButton icon="pi pi-times" (click)="displayWarningModal=false" label="No"></button>
+</p-dialog>
+
+<ng-template #content let-c="close" let-d="dismiss">
+	<div class="modal-header">
+		<h4 class="modal-title">Are You Sure Want to Delete 'Receive' Action ?</h4>
+		<button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+
+	<div class="modal-footer">
+		<button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>
+		<button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+	</div>
+</ng-template>
+
+<ng-template #view let-c="close" let-d="dismiss">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"   (click)="dismissModel()">×</button>
+            <h4 class="modal-title">Details of Entity {{entityViewFeilds.name}}</h4>
+        </div>
+        <div class="modal-body viewform">
+            <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
+                <div class="col-sm-6">
+                    <p><span class="label"><b>Company Code: </b></span><span class="value">{{entityViewFeilds.name}}</span></p>
+                    <p><span class="label"><b>Company: </b></span><span class="value">{{entityViewFeilds.description}}</span></p>
+                    <p><span class="label"><b>d/b/a: </b></span><span class="value">{{entityViewFeilds.doingLegalAs}}</span></p>
+                    <p><span class="label"><b>Address 1: </b></span><span class="value">{{entityViewFeilds.address1}}</span></p>
+                    <p><span class="label"><b>Address 2: </b></span><span class="value">{{entityViewFeilds.address2}}</span></p>
+                    <p><span class="label"><b>City: </b></span><span class="value">{{entityViewFeilds.city}}</span></p>
+                    <p><span class="label"><b>State: </b></span><span class="value">{{entityViewFeilds.stateOrProvince}}</span></p>
+                    <p><span class="label"><b>Zip: </b></span><span class="value">{{entityViewFeilds.postalCode}}</span></p>
+                    <p><span class="label"><b>Country: </b></span><span class="value">{{entityViewFeilds.country}}</span></p>
+                    <p><span class="label"><b>Fax: </b></span><span class="value">{{entityViewFeilds.faxNumber}}</span></p>
+                    <p><span class="label"><b>Phone: </b></span><span class="value">{{entityViewFeilds.phoneNumber1}}</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <p><span class="label"><b>Functional Currency: </b></span><span class="value">{{entityViewFeilds.functionalCurrencyId}}</span></p>
+                    <p><span class="label"><b>Reporting Currency: </b></span><span class="value">{{entityViewFeilds.reportingCurrencyId}}</span></p>
+                    <p><span class="label"><b>Balancing Entity: </b></span><span class="value">{{entityViewFeilds.isBalancingEntity}}</span></p>
+                    <p><span class="label"><b>Cage Code: </b></span><span class="value">{{entityViewFeilds.cageCode}}</span></p>
+                    <p><span class="label"><b>FAA Lic: </b></span><span class="value">{{entityViewFeilds.faaLicense}}</span></p>
+                    <p><span class="label"><b>Tax ID: </b></span><span class="value">{{entityViewFeilds.taxId}}</span></p>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="col-sm-12">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="bg-block2">
+                            <h3>Lockbox</h3>
+                            <p><span class="label"><b>PO Box: </b></span><span class="value">{{entityViewFeilds.poBox}}</span></p>
+                            <p><span class="label"><b>Bank Street Address line 1: </b></span><span class="value">{{entityViewFeilds.bankStreetaddress1}}</span></p>
+                            <p><span class="label"><b>Bank Street Address line 2: </b></span><span class="value">{{entityViewFeilds.bankStreetaddress2}}</span></p>
+                            <p><span class="label"><b>City: </b></span><span class="value">{{entityViewFeilds.bankCity}}</span></p>
+                            <p><span class="label"><b>Province/State: </b></span><span class="value">{{entityViewFeilds.bankProvince}}</span></p>
+                            <p><span class="label"><b>Country: </b></span><span class="value">{{entityViewFeilds.bankcountry}}</span></p>
+                            <p><span class="label"><b>Postal Code: </b></span><span class="value">{{entityViewFeilds.bankpostalCode}}</span></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="bg-block2">
+                            <h3>Domestic Wire</h3>
+                            <p><span class="label"><b>Bank Name: </b></span><span class="value">{{entityViewFeilds.domesticBankName}}</span></p>
+                            <p><span class="label"><b>Intermediate Bank: </b></span><span class="value">{{entityViewFeilds.domesticIntermediateBank}}</span></p>
+                            <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{entityViewFeilds.domesticBenficiaryBankName}}</span></p>
+                            <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{entityViewFeilds.domesticBankAccountNumber}}</span></p>
+                            <p><span class="label"><b>ABA Number: </b></span><span class="value">{{entityViewFeilds.domesticABANumber}}</span></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="bg-block2">
+                            <h3>International Wire</h3>
+                            <p><span class="label"><b>Bank Name: </b></span><span class="value">{{entityViewFeilds.internationalBankName}}</span></p>
+                            <p><span class="label"><b>Intermediate Bank: </b></span><span class="value">{{entityViewFeilds.internationalIntermediateBank}}</span></p>
+                            <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{entityViewFeilds.internationalBenficiaryBankName}}</span></p>
+                            <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{entityViewFeilds.internationalBankAccountNumber}}</span></p>
+                            <p><span class="label"><b>ABA Number: </b></span><span class="value">{{entityViewFeilds.internationalABANumber}}</span></p>
+                            <p><span class="label"><b>SWIFT ID: </b></span><span class="value">{{entityViewFeilds.internationalSWIFTID}}</span></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="bg-block2">
+                            <h3>ACH</h3>
+                            <p><span class="label"><b>Bank Name: </b></span><span class="value">{{entityViewFeilds.achBankName}}</span></p>
+                            <p><span class="label"><b>Intermediate Bank: </b></span><span class="value">{{entityViewFeilds.achIntermediateBank}}</span></p>
+                            <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{entityViewFeilds.achBenficiaryBankName}}</span></p>
+                            <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{entityViewFeilds.achBankAccountNumber}}</span></p>
+                            <p><span class="label"><b>ABA Number: </b></span><span class="value">{{entityViewFeilds.achABANumber}}</span></p>
+                            <p><span class="label"><b>SWIFT ID: </b></span><span class="value">{{entityViewFeilds.achSWIFTID}}</span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" data-dismiss="modal"   (click)="dismissModel()">Close</button>
+        </div>
+    </div>
+    </ng-template>
+
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h6 class="text-center">
+            Are you sure you want to go to {{nextOrPreviousTab}} tab? Unsaved changes will be lost.
+        </h6>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+    </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div> 

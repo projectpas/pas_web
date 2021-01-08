@@ -1,0 +1,38 @@
+
+<app-page-header title="Dashboard" icon="dashboard"></app-page-header>
+<div>
+    <div [@fadeInOut]>
+        <div class="top_tiles">
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                <div class="tile-stats tile-white bg-blue-sky">
+                    <a (click)="itemMasterModule()"><p>Item Master's List</p><h3>20</h3></a>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                <div class="tile-stats tile-white bg-purple">
+                    <a (click)="customerModule()"><p>Customer's List</p><h3>20</h3></a>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                <div class="tile-stats tile-white bg-red">
+                    <a (click)="vendorModule()"><p>Vendor's List</p><h3>15</h3></a>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                <div class="tile-stats tile-white bg-blue">
+                    <a (click)="employeeModule()"><p>Employee's List</p><h3>10</h3></a>
+                </div>
+            </div>
+            <div class="animated flipInY col-lg-2 col-md-2 col-sm-6 col-xs-12">
+                <div class="tile-stats tile-white bg-orange">
+                    <a (click)="stocklineModule()"><p>StockLine List</p><h3>15</h3></a>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+
+</div>
+<div>
+    <img style="width:100%;" src="../../assets/images/SampleReport.png" alt="Report" />
+</div>

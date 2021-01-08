@@ -1,0 +1,54 @@
+label {
+    text-align: left;
+    width: 140px;
+    margin-right: 0;
+    font-weight: normal;
+  }
+  input[type='text'],
+  input[type='number'],
+  select,
+  textarea {
+    height: 100px;
+    border-radius: 5px !important;
+  }
+  .form-control[readonly] {
+    background-color: #e9ecef !important;
+  }
+  @media (min-width: 768px) {
+    .col-md-6 .col-md-6 {
+      max-width: 44%;
+      margin-right: 15px;
+    }
+    .col-md-3 {
+      max-width: 22%;
+      margin-right: 15px;
+    }
+  }
+  // #accordion h4 a.collapsed {
+  //   font-size: 12px !important;
+  // }
+  // #accordion h4 a {
+  //   font-size: 12px !important; 
+  // }
+  .p-radiobutton-label-horizontal .ui-radiobutton-label{
+    color: white;
+  }
+  select:disabled{
+    background-color: #e9ecef !important;
+  }
+  .select-read-only{
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+    box-shadow: none !important;
+  }
+  
+  body .ui-radiobutton .ui-radiobutton-box{
+    border: 3px solid #ffffff;
+  }
+  
+  .ui-radiobutton .ui-radiobutton-box.ui-state-active .ui-radiobutton-icon{
+    background-color:#212121 !important;
+  }

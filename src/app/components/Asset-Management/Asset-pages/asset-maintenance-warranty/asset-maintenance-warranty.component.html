@@ -1,0 +1,329 @@
+﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary">
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">{{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset Maintenance
+                    & Warranty</h4>
+            </div>
+            <div>
+                <button type="button" class="btn-sm new-btn-primary"
+                    [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+                    Asset List
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body new-card-body">
+        <div class="md-stepper-horizontal orange new-stepper-align">
+            <div class="md-step" [ngClass]="{ active: activeIndex >= 0 , editable : activeIndex === 0}"
+                (click)="changeOfTab('General')">
+                <div class="md-step-circle"><span>1</span></div>
+                <div class="md-step-title">General Information</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
+                (click)="changeOfTab('Capes')">
+                <div class="md-step-circle"><span>2</span></div>
+                <div class="md-step-title">Capes</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
+                (click)="changeOfTab('Calibration')">
+                <div class="md-step-circle"><span>3</span></div>
+                <div class="md-step-title">Calibration</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
+                (click)="changeOfTab('Maintenance')">
+                <div class="md-step-circle"><span>4</span></div>
+                <div class="md-step-title">Maintenance & Warranty</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="col-md-12">
+                <div class="card new-card">
+
+                    <div class="card-header bg-primary">
+                        <h4 class="new-card-heading"> Maintenance & Warranty</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form #generalForm="ngForm" method="post" id="" name="" class="form-horizontal add-custustomer">
+            <div class="form-row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-md-3">
+                                <label class="fs12">Asset ID : </label>
+                                <span class="span-header-red"> {{assetService.listCollection?.assetId}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fs12">Asset Name : </label>
+                                <span class="span-header-red"> {{assetService.listCollection?.name}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fs12">Alt Asset ID : </label>
+                                <span class="span-header-red">
+                                    {{assetService.listCollection?.alternateAssetName}}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fs12">Asset Class/Attribute : </label>
+                                <span class="span-header-red">
+                                    {{assetService.listCollection?.assetAttributeType}}</span>
+                            </div>
+                            <div class="clear"></div>
+                            <hr />
+                            <div class="clear"></div>
+                            <div class="col-md-12">
+                                <div class="form-row">
+                                    <div class="col-sm-3 asset_border">
+                                        <!-- <div class="col-sm-12">
+                                            <h5 class="heading">Maintenance</h5>
+                                        </div> -->
+                                        <div class="form-group">
+                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                                <label>
+                                                    <input (ngModelChange)="getmemo($event)" type="checkbox"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (change)="maintannaceCheckBoxHndl(currentMaintenance.assetIsMaintenanceReqd)"
+                                                        [(ngModel)]="currentMaintenance.assetIsMaintenanceReqd">
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Maintenance Required
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="maintenance-block"
+                                            *ngIf="currentMaintenance.assetIsMaintenanceReqd">
+                                            <div class="form-group">
+                                                <div class="checkbox-cstm" style="margin-left: 0;display:none;">
+                                                    <label>
+                                                        <input type="checkbox"
+                                                            (change)="maintannaceCheckBoxHndl(currentMaintenance.assetMaintenanceIsContract)"
+                                                            (ngModelChange)="getmemo($event)"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [(ngModel)]="currentMaintenance.assetMaintenanceIsContract">
+                                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                        Maintenance Contract
+                                                    </label>
+                                                </div>
+                                                <div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Maintenance Frequency  <span class="clr-red">*</span></label>
+                                                <div class="col-md-12">
+                                                    <div class="col-sm-6">
+                                                        <label>Mths</label>
+                                                        <input type="number" class="form-control"
+                                                            (ngModelChange)="getmemo($event)"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [(ngModel)]="currentMaintenance.maintenanceFrequencyMonths"
+                                                            min="0" max="12">
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label> Days</label>
+                                                        <input type="number" class="form-control"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            (input)="validateDates($event.target.value,currentMaintenance)"
+                                                            (ngModelChange)="getmemo($event)"
+                                                            [(ngModel)]="currentMaintenance.maintenanceFrequencyDays"
+                                                            min="0" max="31">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="padding: 8px;">
+                                                <label style="    margin-top: 12px;">Default Vendor</label>
+                                                <p-autoComplete (ngModelChange)="getmemo($event)"
+                                                    class="p-autoComplete-ctsm" field="name" name="vendorName2"
+                                                    [dropdown]="true" errorMessage="Records not found"
+                                                    [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                                                    (completeMethod)="filterWarentyVendor2($event)" [size]="30"
+                                                    [minLength]="1"
+                                                    [(ngModel)]="currentMaintenance.maintenanceDefaultVendorId"
+                                                    #prellRevInsp="ngModel">
+                                                </p-autoComplete>
+                                            </div>
+                                            <div style="padding: 8px;">
+                                                <label>GL Account <span
+                                                        *ngIf="currentMaintenance.assetIsMaintenanceReqd">*</span></label>
+                                                <p-autoComplete class="p-autoComplete-ctsm"
+                                                    (ngModelChange)="getmemo($event)" field="name" name="Inspector2"
+                                                    [dropdown]="true" errorMessage="Records not found"
+                                                    [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
+                                                    (completeMethod)="filterWarentyGl2($event)" [size]="30"
+                                                    [minLength]="1" required
+                                                    [(ngModel)]="currentMaintenance.maintenanceGLAccountId"
+                                                    #prellRevInsp367="ngModel">
+                                                </p-autoComplete>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Maintenance Memo</label>
+                                                <div class="align_adh">
+                                                    <div [innerHTML]="currentMaintenance.maintenanceMemo"
+                                                        matTooltipPosition="above"
+                                                        [matTooltip]="parsedText(currentMaintenance.maintenanceMemo)"
+                                                        class="text_editor_box" style="width: 100% !important;"></div>
+                                                    <i class="fa fa-pencil contoel_v" data-toggle="modal"
+                                                        data-target="#textarea-popup" matTooltip="Memo"
+                                                        matTooltipPosition="above"
+                                                        (click)="onAddTextAreaInfo(currentMaintenance.maintenanceMemo)"></i>
+                                                </div>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 asset_border" style="margin-left: 1%;">
+                                        <div class="form-group">
+                                            <div class="checkbox-cstm" style="margin-left: 0;">
+                                                <label>
+                                                    <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentMaintenance.isWarrantyRequired"
+                                                        (change)="warrentyCheckBoxHndl(currentMaintenance.isWarrantyRequired)">
+                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                    Warranty Required
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <div class="warranty-block" *ngIf="currentMaintenance.isWarrantyRequired">
+
+                                            <div class="form-group">
+                                                <label>Warranty Company</label>
+                                                <div>
+                                                    <div
+                                                        class="inner-addon right-addon autosuggesions-add inline-block">
+                                                        <input (ngModelChange)="getmemo($event)" type="text"
+                                                            class="form-control names ui-autocomplete-input"
+                                                            [ngModelOptions]="{standalone: true}"
+                                                            [(ngModel)]="currentMaintenance.warrantyCompany">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="padding: 8px;">
+                                                <label>Default Vendor</label>
+                                                <p-autoComplete (ngModelChange)="getmemo($event)"
+                                                    class="p-autoComplete-ctsm" field="name" name="vendorName"
+                                                    [dropdown]="true" errorMessage="Records not found"
+                                                    [suggestions]="allVendorInfoFilter" emptyMessage="No Records Found"
+                                                    (completeMethod)="filterWarentyVendor($event)" [size]="30"
+                                                    [minLength]="1"
+                                                    [(ngModel)]="currentMaintenance.warrantyDefaultVendorId"
+                                                    #prellRevInsp="ngModel">
+                                                </p-autoComplete>
+                                            </div>
+                                            <div style="padding: 8px;">
+                                                <label>GL Account <span
+                                                        *ngIf="currentMaintenance.isWarrantyRequired">*</span></label>
+                                                <p-autoComplete class="p-autoComplete-ctsm"
+                                                    (ngModelChange)="getmemo($event)" field="name" name="Inspector12"
+                                                    [dropdown]="true" errorMessage="Records not found"
+                                                    [suggestions]="allGlInfoFilter" emptyMessage="No Records Found"
+                                                    (completeMethod)="filterWarentyGl($event)" [size]="30"
+                                                    [minLength]="1" [required]="currentMaintenance.isWarrantyRequired"
+                                                    [(ngModel)]="currentMaintenance.warrantyGLAccountId"
+                                                    #prellRevInsp3="ngModel">
+                                                </p-autoComplete>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="margintop">
+                                            <button type="submit" class="btn btn-primary pull-right submit-btn"
+                                                (click)="addNew()">
+                                                Add New
+                                            </button>
+                                            <button
+                                                [disabled]="!generalForm.valid || currentMaintenance.isIntangible || disableSaveForEdit "
+                                                type="submit" class="btn btn-primary pull-right submit-btn"
+                                                (click)="saveWarrenty()">
+                                                {{currentMaintenance.assetMain==true ? 'Update' : 'Save'}}
+                                            </button>
+                                            <button type="button" class="btn btn-primary pull-right submit-btn"
+                                                (click)="backClick('Previous')">
+                                                Previous
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <ng-template #tabRedirectConfirmationModal4 let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+                <h4 class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h6>
+                    Do you want to Save changes and Continue ?
+                </h6>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="redirectdismissModel()">No</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="redirectToTab()">Yes</button>
+            </div>
+        </ng-template>
+        <div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                        <h4 class="modal-title">Edit Memo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-fixed workflow-table-material">
+                            <thead>
+                                <th style="color: #fff;">Memo</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}"
+                                            (ngModelChange)="editorgetmemo($event)" name="textAreaInfo" required>
+                                        </p-editor>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="float:right;margin-top: 12px;">
+                            <button type="button" class="btn btn-primary" (ngModelChange)="getmemo($event)"
+                                (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                            <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>

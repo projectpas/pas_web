@@ -1,0 +1,60 @@
+
+<div class="card">
+    <div class="card-body">
+        <div class="inline-block display-flex" >
+            <h4 class="page-heading">Global Settings</h4>
+        </div>
+        <div class="form-row mt-3">
+            <div class="col-md-3">
+                <div class="form-group ">
+                    <label for="countryItem">Select Country</label>
+                    <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="countriesListFiltered" filter="true"  [(ngModel)]="countryItem" name="countryItem" id="countryItem" title="Country" required  placeholder="Select Country" [showClear]="true" (onChange)="getCountrySpecificData()"></p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="form-row mt-3">
+            <div class="col-md-2">
+                <div class="form-group ">
+                    <label for="currencyFormat">Currency Format</label>
+                    <input type="text" disabled class="form-control" name="currencyFormat"
+                           [(ngModel)]="countryData.currencyFormat">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group ">
+                    <label for="numberFormat">Number Format</label>
+                    <input type="text" disabled class="form-control" name="numberFormat"
+                           [(ngModel)]="countryData.numberFormat">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group ">
+                    <label for="dateFormat">Date Format</label>
+                    <input type="text" disabled class="form-control" name="dateFormat"
+                           [(ngModel)]="countryData.dateFormat">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group ">
+                    <label for="percentFormat">Percent Format</label>
+                    <input type="text" disabled class="form-control" name="percentFormat"
+                           [(ngModel)]="countryData.percentFormat">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group ">
+                    <label for="creditLimtFormat">Credit Limt Format</label>
+                    <input type="text" disabled class="form-control" name="creditLimtFormat"
+                           [(ngModel)]="countryData.creditLimtFormat">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary pull-right " (click)="saveSettings()" [disabled]="!countryItem">
+            Save
+        </button>
+    </div>
+</div>
+
+
+
+      

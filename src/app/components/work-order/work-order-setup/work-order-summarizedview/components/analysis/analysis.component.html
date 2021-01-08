@@ -1,0 +1,22 @@
+<p-treeTable [value]="gridData">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="background-color: #337ab7; color: white; width: 111px;" *ngFor="let f of fields">{{f.header}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+            <td style="width: 111px;">
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{rowData.partNumber}}
+            </td>
+            <ng-container *ngFor="let f of fields" >
+                <td *ngIf="f.header != 'Part Number'" style="width: 111px;" >
+                    <div [ngClass]="(f.field == 'adjustedHours' || f.field == 'hours' || f.field == 'directCost' || f.field == 'directCostRevenuePercentage' || f.field == 'freightCost' || f.field == 'chargesCost' || f.field == 'laborCost' || f.field == 'laborRevenuePercentage' || f.field == 'margin' || f.field == 'marginPercentage' || f.field == 'materialCost' || f.field == 'materialRevenue' || f.field == 'materialRevenuePercentage' || f.field == 'otherCost' || f.field == 'overHeadCost' || f.field == 'overHeadCostRevenuePercentage' || f.field == 'revenue' || f.field == 'totalLaborCost' || f.field == 'margin' || f.field == 'marginPercentage')?'float-right':''">
+                        {{(f.field == 'contactDate')?getDate(rowData[f.field]):globalizeAmount(rowData[f.field], f.field)}}
+                    </div>
+                </td>
+            </ng-container>
+        </tr>
+    </ng-template>
+</p-treeTable>

@@ -1,0 +1,364 @@
+<div>
+        <!-- <div class="inline-block display-flex">
+            <h3 class="po-head lead">Approval Rule</h3>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a matTooltip="Create Approval Rule" class="plusicon-cstm new-margin"
+             href="#" data-toggle="modal"
+              data-target="#addNewPOApproval"
+               (click)="addNewApproval()" *ngIf="!isView">
+                <i class="fa fa-plus-circle fa-lg"></i>
+            </a>
+        </div> -->
+
+        <div class="card new-card">
+            <div class="card-header bg-primary new-card-header">
+                <div class="row">
+                  <div class="col">
+                    <h4 class="new-card-heading">Approval Rule</h4>
+                  </div>
+                  <div>
+                    <button
+                       type="button"
+                       class="btn-sm new-btn-primary"
+                       data-toggle="modal"
+              data-target="#addNewPOApproval"
+               (click)="addNewApproval()" *ngIf="!isView">
+                       Create Approval Rule
+                    </button>
+                 </div>
+            
+                </div>
+            </div>
+            <div class="card-body new-card-body">
+        
+
+        <p-table #dt
+        class="rpo-table-cstm rro-table-cstm ptable-f10"
+        [value]="poApprovalData"
+        [metaKeySelection]="true"
+        [first]="0"
+        (onPage)="pageIndexChange($event)"
+        [rows]="pageSize"
+        [paginator]="true"
+        [pageLinks]="3"
+        [rowsPerPageOptions]="[10, 20, 50, 100]"
+        [columns]="selectedColumns"
+        selectionMode="multiple"
+        [resizableColumns]="true"
+        [reorderableColumns]="true"
+        [totalRecords]="totalRecords"
+        [scrollable]="true" scrollHeight="450px">
+
+            <ng-template pTemplate="caption">
+                <!-- <div style="text-align: right; min-height: 30px;"> -->
+                    <div class="row">
+                        <div class="col">
+                   
+                    <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
+                    [ngModelOptions]="{ standalone: true }" optionLabel="header" 
+                    selectedItemsLabel="{0} columns selected"
+                    [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                </div>
+                <div class="col">
+                <div style="width: auto !important; float: right;"
+                 class="inner-addon right-addon w50 inline-block g-filter-search-cstm">        
+                <i class="fa fa-search"></i>
+                        <input type="text" pInputText size="50" class="form-control"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
+                            style="height: 28px !important;" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="button"
+                     class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
+                    pButton icon="fa-download" iconPos="left" label="Export Data" (click)="dt.exportCSV()"
+                    style="padding:5px 10px !important;"></button>
+                    <!-- <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
+                    matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+                    (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button> -->
+
+                    <!-- <div class="excel-upload excel-upload-cstm">
+                    <button type="button" class="btn btn-primary" matTooltip="Download Sample File"
+                        matTooltipPosition="above" (click)="sampleExcelDownload()" style="padding: 5px 10px !important;">
+                        Sample File Download
+                    </button>
+
+                    <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
+                        class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
+                    <label for="upload">
+                        <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                        <i class="fa fa-upload"></i>
+                        </span>
+                    </label>
+                    </div> -->
+                </div>
+            </div>
+            </ng-template>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" style="width:130px">
+                </colgroup>
+            </ng-template>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+
+                    <th style="width:auto"
+                        *ngFor="let col of columns"
+                        pResizableColumn
+                        pReorderableColumn
+                        [pSortableColumn]="col.field">
+                        {{ col.header }}
+                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                    </th>
+                    <th style="width:50px;position:sticky"
+                        *ngIf="selectedColumns.length > 0 && !isView">
+                        Actions
+                    </th>
+                </tr>
+                <tr>
+                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input style="width:100%;" pInputText type="text" (input)="
+                            dt.filter($event.target.value, col.field, 'contains')
+                        " />
+                    </th>
+                    <th style="width: 50px;" *ngIf="!isView"></th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
+                        <ng-container *ngFor="let col of columns" >
+                                <td  style="width:auto"
+                                *ngIf="col.field == 'SERIAL_NO'"
+                                class="ui-resizable-column"
+                                pReorderableRowHandle>
+                                <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                                <span> </span>
+                                </td>
+                                <td style="width:auto"
+                                *ngIf="col.field !== 'SERIAL_NO'"
+                                class="ui-resizable-column"
+                                pReorderableRowHandle>
+                                    <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
+                                </td>
+                        </ng-container>
+                        <td style="width:50px;position:sticky" class="ui-resizable-column" *ngIf="!isView">
+                            <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
+                            (click)="edit(rowData, i)" matTooltip="Edit">
+                                <mat-icon>edit</mat-icon>
+                            </button> -->
+                            <!-- <button class="btn btn-danger nobg" (click)="deleteMemo(rowData)">
+                                <i class="fa fa-trash" style="font-size: 14px;"></i>
+                            </button> -->
+                            <span data-toggle="modal" data-target="#addNewPOApproval"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData)" matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a> </span>
+                            <span><a class="btn nobg btn-delete-cstm" (click)="delete(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                        </td>
+                    </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns *ngIf="poApprovalData && poApprovalData.length == 0">
+                <tr>
+                    <td colspan="3" style="color: red; font-weight: bold; text-align: center">
+                    No records found
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="summary" id="footer">
+                <label id="footer">Total:</label>
+                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                &nbsp;&nbsp;
+                <label id="footer">Pages Count:</label>    
+                <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText type="text" />
+                </ng-template>
+        </p-table>
+
+</div>
+</div>
+<div id="addNewPOApproval" class="modal fade" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-xmd ">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" (click)="isEdit = false;">&times;</button>
+                <h4 class="modal-title">{{ isEdit ? 'Edit' : 'Add'  }} Approval Rule</h4>
+            </div>
+            <div class="modal-body" style="line-height: 30px;">
+                <form #poApprovalForm="ngForm">
+                    <div class="col-6">
+                        <div class="col-12">
+                            <div class="col-5">
+                                <label>Task Name *</label>
+                            </div>
+                            <div class="col-7">
+                                <select [(ngModel)]="creatingData.approvalTaskId" name="taskName" required>
+                                    <option value="null">Select</option>
+                                    <option *ngFor="let task of taskNameList" [value]="task.value">{{task.label}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="col-5">
+                                <label>Auto Approved*</label>
+                            </div>
+                            <div  class="col-7">
+                                <select [(ngModel)]="creatingData.autoApproveId" name="autoApproval" required>
+                                    <option value="null">Select</option>
+                                    <option value="1">Yes</option>
+                                    <option value="2">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="col-5">
+                                <label>Action *</label>
+                            </div>
+                            <div class="col-7">
+                                <select [(ngModel)]="creatingData.actionId" name="action" required>
+                                    <option value="null">Select</option>
+                                    <option value="1">Approve</option>
+                                    <option value="2">None</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <label>Memo</label>
+                            <textarea [(ngModel)]="creatingData.memo" name="memo"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="col-12">
+                            <div *ngIf="creatingData.autoApproveId == 2">
+                                <div class="col-5">
+                                    <label>Rule Number *</label>
+                                </div>
+                                <div  class="col-7">
+                                    <select [(ngModel)]="creatingData.ruleNumberId" name="ruleNum" required>
+                                        <option value="null">Select</option>
+                                        <option *ngFor="let rule of ruleNumList" [value]="rule.value">{{rule.label}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div *ngIf="creatingData.autoApproveId != 2">&nbsp;</div>
+                        </div>
+                        <div class="col-12">
+                            <div *ngIf="creatingData.autoApproveId == 2">
+                                <div class="col-5">
+                                    <label>If Entity *</label>
+                                </div>
+                                <div class="col-7">
+                                    <!-- <select [(ngModel)]="creatingData.entityId" name="entity" required (change)="getEntity(creatingData.entityId)">
+                                        <option value="null">Select</option>
+                                        <option *ngFor="let legalEntity of legalEntityList" [value]="legalEntity.legalEntityId">{{legalEntity.companyName}}</option>
+                                    </select> -->
+                                    <p-autoComplete   field="label" class="autocomp-customer-cstm"
+                                    (onSelect)="onEntitySelect()"
+                                    [(ngModel)]="creatingData.entityId" name="entity"
+                                    [suggestions]="legalEntityList"
+                                    (completeMethod)="filterlegalEntityList($event)"
+                                    [size]="30"
+                                    [minLength]="1"
+                                    [dropdown]="true"
+                                    errorMessage="Records not found"
+                                    [forceSelection]="true"                                   
+                                    title="Entity Name" required>
+                                    </p-autoComplete>
+
+                                    
+
+                                </div>
+                            </div>
+                            <div *ngIf="creatingData.autoApproveId != 2">&nbsp;</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div *ngIf="creatingData.autoApproveId == 2">
+                                <div class="col-5">
+                                    <label>Operator *</label>
+                                </div>
+                                <div class="col-7">
+                                    <select [(ngModel)]="creatingData.operatorId" name="operator" required>
+                                        <option value="null">Select</option>
+                                        <option value="1">And</option>
+                                        <option value="2">Or</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div *ngIf="creatingData.autoApproveId != 2">&nbsp;</div>
+                        </div>
+                        
+                        <div class="col-12">
+                            <div *ngIf="creatingData.autoApproveId == 2">
+                                <div class="col-12">
+                                    <div class="col-5">
+                                        <label>Amount *</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <select [(ngModel)]="creatingData.amountId" name="amount" required>
+                                            <option value="null">Select</option>
+                                            <option *ngFor="let approvalAmount of approvalAmountList" [value]="approvalAmount.value">{{approvalAmount.label}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-12" *ngIf="creatingData.amountId == 5">
+                                    <div class="col-5">
+                                        <label>Lower Value *</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="text" class="form-control text-right"  pKeyFilter="money" [(ngModel)]="creatingData.lowerValue" (change)="onChangevalue('lowerValue');" name="lowerValue" required/>
+                                    </div>
+                                </div>
+                                <div class="col-12" *ngIf="creatingData.amountId == 5">
+                                    <div class="col-5">
+                                        <label>Upper Value *</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="text" class="form-control text-right"  pKeyFilter="money" [(ngModel)]="creatingData.upperValue" (change)="onChangevalue('upperValue');" name="upperValue" required/>
+                                    </div>
+                                </div>
+                                <div class="col-12" *ngIf="creatingData.amountId && creatingData.amountId != 5">
+                                    <div class="col-5">
+                                        <label>Value *</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input type="text" class="form-control text-right"  pKeyFilter="money" [(ngModel)]="creatingData.value" name="value" (change)="onChangevalue('value');" required/>
+                                    </div>
+                                </div>
+                                <div class="col-12" style="    display: inline-flex;">
+                                    <div class="col-5">
+                                        <label>Then Approver*</label>
+                                    </div>
+                                    <div class="col-7 form-group">
+                                        <select [(ngModel)]="creatingData.approverId" name="approver" required>
+                                            <option value="null">Select</option>
+                                            <option *ngFor="let approver of approverList" [value]="approver.value">{{approver.label}}</option>
+                                        </select>
+                                        <!-- <ng-multiselect-dropdown
+                                        class="form-control multiple-custom-select" [placeholder]="Select"
+                                        [data]="approverList" [(ngModel)]="creatingData.approverIds"
+                                        [settings]="dropdownSettings" name="approverList">
+                                    </ng-multiselect-dropdown> -->
+                                    <!-- (onChange)="columnsChanges() -->
+                                    
+
+                                    <!-- <p-multiSelect  [options]="approverList" [ngModelOptions]="{standalone: true}" optionLabel="label" [(ngModel)]="creatingData.approverIds" [style]="{minWidth: '200px'}"
+                                         ></p-multiSelect> -->
+                                </div>
+                                </div>
+                            </div>
+                            <div *ngIf="creatingData.autoApproveId != 2">&nbsp;</div>
+                        </div>
+                    </div>
+                    <div style="float:right">
+                        <button class="btn btn-primary btn-primary" (click)="savePoApproval()"
+                            style="padding: 6px 12px !important;margin-top: 10px;" data-dismiss="modal" [disabled]="!poApprovalForm.valid">
+                            {{(isEdit)?'Update':'Save'}}
+                        </button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" style="padding: 6px 12px !important;margin-top: 10px;" (click)="isEdit = false;">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>

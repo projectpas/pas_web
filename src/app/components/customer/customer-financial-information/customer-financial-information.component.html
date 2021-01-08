@@ -1,0 +1,1433 @@
+﻿<div class="right_col" role="main">
+  <div>
+    <div class="x_content">
+      <div class="col-md-12 shadow-box-cstm">
+        <div class="col-md-4">
+          <p class="fs12">
+            <label class="control-label labels-font-header" style="width: auto;">
+              Customer Name:
+            </label>
+            <span class="span-header-red" style="text-transform: capitalize;">
+              {{ customerName }}
+            </span>
+          </p>
+        </div>
+        <div class="col-md-4">
+          <p class="fs12">
+            <label class="control-label labels-font-header" style="width: auto;">
+              Customer Code:
+            </label>
+            <span class="span-header-red" style="text-transform: capitalize;">
+              {{ customerCode }}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="card" style="padding: 10px;">
+        <div class="card-header bg-primary new-card-header" >
+          <div class="row">
+            <div class="col">
+              <h4 class="new-card-heading"> Financial Information</h4>
+            </div>            
+          </div>
+        </div>
+        <div class="clear"></div>
+        <hr />
+        <form #financialInfoForm="ngForm" class="form-horizontal">
+          <div class="col-md-12 col-sm-12 col-12">
+            <div class="tab-content" style="padding-bottom: 8px;">
+              <div class="tab-pane active" id="menu2">
+                <div class="form-row">
+                  <div class="col-md-1">
+                    <div class="form-group">
+                      <label>
+                        <span class="pull-left">Mark Up %</span>
+                      </label>
+                      <select style="text-align: left;" name="markUpPercentageId" (ngModelChange)="enableSave()"
+                        [(ngModel)]="savedGeneralInformationData.markUpPercentageId">
+                        <option *ngFor="let Percentlist of percentageList" [ngValue]="Percentlist.value">
+                          {{ Percentlist.label }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        <span class="pull-left">Discount % </span>
+                      </label>
+                      <select name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
+                        <option style="text-align: right;" *ngFor="let discontValue of discountList1"
+                          [ngValue]="discontValue.value">
+                          {{ discontValue.label }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label>
+                        Credit Limit<span class="clr-red">*</span>
+                        <span style="margin-left: 3px; cursor: pointer;">
+                          <a class="fa fa-info-circle fa-lg" matTooltip="Format: {{
+                              globalSettings.currencyFormat
+                            }}" matTooltipPosition="above"></a>
+                        </span>
+                      </label>
+                      <input class="form-control text-left" type="text" style="text-align: right !important;" id=""
+                        name="creditLimit" [ngModel]="savedGeneralInformationData.creditLimit | twoDecimalGlobalNumberFormatPipe" 
+                        [ngModelOptions]="{ updateOn: 'blur' }" (ngModelChange)="savedGeneralInformationData.creditLimit = $event;enableSave()" required />
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        <span class="pull-left">Credit Terms </span><span class="clr-red">*</span>
+                      </label>
+                      <div class="inner-addon right-addon inline-block">
+                        <p-autoComplete 
+                        class="p-autoComplete-ctsm pautocomp-right" 
+                        name="creditTermsName"
+                        id="creditTermsId" 
+                        (ngModelChange)="enableSave()"
+                        [(ngModel)]="savedGeneralInformationData.creditTermsId" 
+                        field="label"                          
+                        [suggestions]="_creditTermsList" 
+                        [forceSelection]="true" 
+                        emptyMessage="No Match Found"
+                        (completeMethod)="filterCreditTerm($event)" 
+                        [size]="30" [minLength]="1" 
+                        [dropdown]="true"
+                        required>
+                        </p-autoComplete>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label>Currency <span class="clr-red">*</span></label>
+                      <select name="currencyId" [(ngModel)]="savedGeneralInformationData.currencyId" (ngModelChange)="enableSave()" required>
+                        <!-- <option>--Select--</option> [ngModelOptions]="{standalone: true}" -->
+                        <option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
+                          [ngValue]="currencyName.currencyId">
+                          {{ currencyName.code }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-md-2">
+                    <div class="form-group" style="margin-top: 15px;" *ngIf="showAllowNettingOfAPAR == true">
+                      <span class="checkbox-cstm">
+                        <label>
+                          <input type="checkbox" name="allowNettingOfAPAR" (ngModelChange)="enableSave()" [(ngModel)]="
+                              savedGeneralInformationData.allowNettingOfAPAR
+                            " />
+                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                          Allow Netting of AP/AR
+                        </label>
+                      </span>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px; margin-left: 0px;">
+                      <span class="checkbox-cstm">
+                        <label>
+                          <input type="checkbox" name="allowPartialBilling" (ngModelChange)="enableSave()" [(ngModel)]="
+                              savedGeneralInformationData.allowPartialBilling
+                            " />
+                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                          Allow Partial Billing
+                        </label>
+                      </span>
+                    </div>
+                    <div class="form-group" style="margin-top: 15px;">
+                      <span class="checkbox-cstm">
+                        <label>
+                          <input type="checkbox" name="allowProformaBilling" (ngModelChange)="enableSave()" [(ngModel)]="
+                              savedGeneralInformationData.allowProformaBilling
+                            " />
+                          <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                          Allow ProForma Billing
+                        </label>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="col-md-9">
+                    <div class="card">
+                      <div class="form-group" style="margin-top: 15px;">
+                        <span class="checkbox-cstm" style="margin-left: 0px;">
+                          <label>
+                            <input type="checkbox" name="isTaxExempt"
+                              (ngModelChange)="enableSave()"
+                              [(ngModel)]="savedGeneralInformationData.isTaxExempt"
+                              [checked]="savedGeneralInformationData.isTaxExempt" />
+                            <span class="cr">
+                              <i class="cr-icon pi pi-check"></i>
+                            </span>
+                            Tax Exempt
+                          </label>
+                        </span>
+                      </div>
+                      <div class="form-group tax-certificate" *ngIf="savedGeneralInformationData.isTaxExempt">
+                        <label>Attach Certificate</label>
+                        <a class="plusicon-cstm" style="margin-left: 10px;" href="#" data-toggle="modal"
+                          data-target="#addDocumentDetailsNew" (ngModelChange)="enableSave()" (click)="addDocumentDetails()">
+                          <i class="fa fa-plus-circle fa-lg" matTooltip="Create Documents"
+                            matTooltipPosition="above"></i>
+                        </a>
+                        <div class="table-responsive table-overflow">
+                          <h6 class="panel-title" style="margin-top: 10px;">
+                            Attachment Details:
+                          </h6>
+                          <p-table #doc class="rpo-table-cstm" [columns]="taxExemptTableColumns"
+                            [value]="allCustomerFinanceDocumentsList" [paginator]="true" [resizableColumns]="true"
+                            [first]="0" [reorderableColumns]="true" (onPage)="pageIndexChangeForDoc($event)" name="doc"
+                            [rows]="pageSizeDoc" [rowsPerPageOptions]="[3, 6, 9, 15]">
+                            <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                <th *ngFor="let col of columns" style="width: 100px;">
+                                  {{ col.header }}
+                                </th>
+                                <th style="width: 100px;">Action</th>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                              <tr>
+                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                  [pSortableColumn]="col.field">
+                                  {{ col.header }}
+                                  <p-sortIcon [field]="col.field"> </p-sortIcon>
+                                </th>
+                                <th>Actions</th>
+                              </tr>
+                              <tr>
+                                <th style="width: 120px;" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                  <input type="text" (input)="
+                                      doc.filter(
+                                        $event.target.value,
+                                        col.field,
+                                        'contains'
+                                      )
+                                    " *ngIf="
+                                      col.field != 'createdDate' &&
+                                      col.field != 'updatedDate'
+                                    " style="width: 100%;" pInputText />
+                                  <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                    name="createdDate" style="width: 100%;" (change)="
+                                      dateFilterForTableNew(
+                                        $event.target.value,
+                                        col.field
+                                      )
+                                    " />
+                                  <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
+                                    name="updatedDate" style="width: 100%;" (change)="
+                                      dateFilterForTableNew(
+                                        $event.target.value,
+                                        col.field
+                                      )
+                                    " />
+                                </th>
+                                <th style="width: 140px; position: sticky;"></th>
+                              </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                              <tr [pSelectableRow]="rowData">
+                                <ng-container *ngFor="let col of columns">
+                                  <td *ngIf="col.field != 'fileName'" class="ui-resizable-column" pReorderableRowHandle>
+                                    {{
+                                      col.field == 'createdDate'
+                                        ? (rowData[col.field]
+                                          | date: 'MM/dd/yyyy')
+                                        : rowData[col.field] &&
+                                          col.field == 'updatedDate'
+                                        ? (rowData[col.field]
+                                          | date: 'MM/dd/yyyy')
+                                        : rowData[col.field]
+                                    }}
+                                  </td>
+                                  <td *ngIf="col.field == 'fileName'">
+                                    <a class="filelink" *ngIf="rowData.isFileFromServer == true"
+                                      (click)="downloadFileUpload(rowData)">
+                                      {{ rowData[col.field] }}
+                                    </a>
+                                    <a *ngIf="rowData.isFileFromServer == false" [href]="rowData.link"
+                                      download="{{ rowData.fileName }}" matTooltip="Download" matTooltipPosition="above"
+                                      class="filelink">
+                                      {{ rowData[col.field] }}
+                                    </a>
+                                  </td>
+                                </ng-container>
+
+                                <td style="width: 70px; text-align: center;">
+                                  <span data-toggle="modal" data-target="#addDocumentDetailsNew">
+                                    <a class="btn nobg" (click)="
+                                        editCustomerDocument(rowData, rowIndex)
+                                      " matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                  </span>
+
+                                  <a class="btn btn-danger nobg" (click)="
+                                      deleteAttachmentRow(
+                                        rowData,
+                                        rowIndex,
+                                        deleteContentDoc
+                                      )
+                                    " matTooltip="Delete" matTooltipPosition="above" data-target="#delete"
+                                    data-toggle="modal">
+                                    <i class="fa fa-trash"></i>
+                                  </a>
+                                  <button [disabled]="!rowData.isFileFromServer"
+                                    class="btn-edit set_proper_align set_position" mat-icon-button (click)="
+                                      openHistory(contentAuditHistDoc, rowData)
+                                    " matTooltip="History" matTooltipPosition="above">
+                                    <i class="fa fa-history" [ngClass]="{
+                                        grayColor: !rowData.isFileFromServer
+                                      }"></i>
+                                  </button>
+                                </td>
+                              </tr>
+                            </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                              <label id="footer" class="footer">Total: </label>
+                              <input style="width: 5%;" [value]="doc._totalRecords" name="totalRecords" disabled
+                                pInputText type="text" />
+
+                              &nbsp;&nbsp;
+                              <label id="footer" class="footer1">Pages Count:
+                              </label>
+
+                              <input style="width: 5%;" [ngModel]="
+                                  getPageCount(doc._totalRecords, pageSizeDoc)
+                                " name="page count" disabled pInputText type="text" />
+                            </ng-template>
+                          </p-table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card">
+                      <table>
+                        <tr>
+                          <td style="width: 85%;">
+                            <div class="form-row">
+                              <div class="col-md-4" style="margin-top: 10px;">
+                                <div class="form-group tax-type option">
+                                  <div>
+                                    <label class="fs12" style="padding-right: 5px;">
+                                      Tax Type
+                                    </label>
+                                    <select style="width:75% !important;" name="taxType" (ngModelChange)="enableSave()" [(ngModel)]="selectedTaxType">
+                                      <option value="">-- Select --</option>
+                                      <option *ngFor="let Percentlist of taxTypeList" [ngValue]="Percentlist.value">
+                                        {{ Percentlist.label }}
+                                      </option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-4" style="margin-top: 10px;">
+                                <div class="form-group">
+                                  <label class="fs12" style="padding-right: 5px;">
+                                    Tax Rate
+                                  </label>
+                                  <select style="width:75% !important;" name="taxRates" (ngModelChange)="enableSave()" [(ngModel)]="selectedTaxRates">
+                                    <option value="">-- Select --</option>
+                                    <option *ngFor="let Percentlist of taxRatesList" [ngValue]="Percentlist.value">
+                                      {{ Percentlist.label }}
+                                    </option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="col-md-3">
+                                <div class="form-group">
+                                  <button class="btn btn-primary" style="margin-top: 10px !important;" [disabled]="currentDeletedstatus" (ngModelChange)="enableSave()" (click)="mapTaxTypeandRate()">
+                                    Add
+                                  </button>
+                                </div>
+                              </div>                            
+                          </div>
+                        </td>
+                        <td style="text-align: right !important; width: 120px !important;">
+                            <div class="col" >
+                              <div class="checkbox-cstm" style="margin-left: 0;">
+                                <label style="width: auto !important;margin-top: 3px;">
+                                  <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
+                                    />
+                                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                    Show Deleted List 
+                                </label>
+                              </div>
+                            </div>
+                        </td>
+                        </tr>
+                      </table>
+                      <!-- *ngIf="taxTypeRateMapping.length > 0" -->
+                      <p-table #taxTable class="rpo-table-cstm" [value]="taxTypeRateMapping" [first]="0"
+                        [rows]="pageSizeTax" [paginator]="true" [rowsPerPageOptions]="[3, 6, 9, 15]"
+                        [columns]="taxInfoTableColumns" (onPage)="pageIndexChangeForTax($event)"
+                        [resizableColumns]="true" [reorderableColumns]="true" 
+                        name="taxTable">
+                        <ng-template pTemplate="header" let-columns>
+                          <tr>
+                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                              [pSortableColumn]="col.field">
+                              {{ col.header }}
+                              <p-sortIcon [field]="col.field"></p-sortIcon>
+                            </th>
+                            <th width="20%">Action</th>
+                          </tr>
+                          <tr>
+                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                              <input style="width: 100%;" pInputText type="text" (input)="
+                                  taxTable.filter(
+                                    $event.target.value,
+                                    col.field,
+                                    'contains'
+                                  )
+                                " />
+                            </th>
+                            <th></th>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                          <tr>
+                            <td *ngFor="let col of columns">
+                              {{ rowData[col.field] }}
+                            </td>
+
+                            <td style="text-align: center;">
+                              <div *ngIf="currentDeletedstatus==false">
+                                <span data-toggle="modal" data-target="#editTarget">
+                                  <a class="btn nobg" (click)="editTaxtRate(rowData)" matTooltip="Edit" 
+                                  matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                </span>
+  
+                                <a class="btn btn-danger nobg" (click)="deleteTaxTypeRate(deleteContent1,rowData,rowIndex)" 
+                                    matTooltip="Delete" matTooltipPosition="above" >
+                                      <i class="fa fa-trash"></i>
+                                    </a>
+                                  
+                                <button [disabled]="rowData.isDisable"
+                                    class="btn-edit set_proper_align set_position" mat-icon-button (click)="
+                                    getAuditHistoryById(contentAuditHist, rowData)
+                                    " matTooltip="History" matTooltipPosition="above">
+                                    <i class="fa fa-history" [ngClass]="{
+                                        grayColor: rowData.isDisable
+                                      }"></i>
+                                  </button>
+                              </div>
+
+                              <div *ngIf="currentDeletedstatus==true">
+                                    <button style="margin-right: 5px;" [disabled]="rowData.isDisable"
+                                    class="btn-edit set_proper_align set_position" mat-icon-button (click)="
+                                    getAuditHistoryById(contentAuditHist, rowData)
+                                    " matTooltip="History" matTooltipPosition="above">
+                                    <i class="fa fa-history" [ngClass]="{
+                                        grayColor: rowData.isDisable
+                                      }"></i>
+                                  </button>
+                                  <span ><a class="btn nobg" (click)="restoreTaxTypeRate(restpreContent,rowData,rowIndex);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                              </div>
+                            </td>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" *ngIf="totalRecords == 0">
+                          <tr>
+                            <td [attr.colspan]="3" class="no-records-cstm">
+                                    No records found
+                            </td>
+                          </tr>
+                        </ng-template>
+                        <ng-template pTemplate="summary" id="footer">
+                          <label id="footer" class="footer">Total: </label>
+                          <input style="width: 5%;" [value]="taxTypeRateMapping.length" name="totalRecords" disabled
+                            pInputText type="text" />
+
+                          &nbsp;&nbsp;
+                          <label id="footer" class="footer1">Pages Count:</label>
+
+                          <input style="width: 5%;" [ngModel]="
+                              getTaxPageCount(
+                                taxTypeRateMapping.length,
+                                pageSizeTax
+                              )
+                            " name="page count tax" disabled pInputText type="text" />
+                        </ng-template>
+                      </p-table>
+                    </div>
+                    <!--Card of Tax Types-->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">
+              Next
+            </button>
+            <button type="button" class="btn btn-primary pull-right submit-btn" [disabled]="!financialInfoForm.valid || disableSave"
+              (click)="saveFinancialInformation()">
+              {{editModeFinance ? 'Update' : 'Save' }}
+            </button>
+            <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Previous')">
+              Previous
+            </button>
+          </div>
+        </form>
+      </div>
+      <!--/Card-->
+    </div>
+  </div>
+</div>
+
+<div id="editTarget" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Edit Tax Type & Tax Rate</h4>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize;">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize;">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body" *ngIf="taxRateEditData">
+        <div class="card">
+          <div class="form-row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="fs12">
+                  Tax Type
+                </label>
+
+                <select name="taxType" [(ngModel)]="taxRateEditData.taxTypeId" disabled>
+                  <option value="">select</option>
+                  <option *ngFor="let Percentlist of taxTypeList" [ngValue]="Percentlist.value">
+                    {{ Percentlist.label }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <label class="fs12">
+                  Tax Rate
+                </label>
+
+                <select name="taxRates" [(ngModel)]="taxRateEditData.taxRateId" (change)="taxAndRateUpdateFlag = false">
+                  <option value="">select</option>
+                  <option *ngFor="let Percentlist of taxRatesList" [ngValue]="Percentlist.value">
+                    {{ Percentlist.label }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-group">
+                <button class="btn btn-primary mrt_18" [disabled]="taxAndRateUpdateFlag"
+                  (click)="updateTaxTypeandRate()" data-dismiss="modal">
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="dismissModel()">
+      &times;
+    </button>
+    <h4 class="modal-title">History For Tax</h4>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body" *ngIf="auditDataForTaxData.length > 0">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Tax Type</th>
+          <th>Tax Rate</th>
+          <th>Is Deleted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let x of auditDataForTaxData; let i = index">
+          <td [ngStyle]="{
+              color: getColorCodeForHistory(i, 'taxType', x.taxType)
+                ? 'black'
+                : 'red'
+            }">
+            {{ x.taxType }}
+          </td>
+          <td [ngStyle]="{
+              color: getColorCodeForHistory(i, 'taxRate', x.taxRate)
+                ? 'black'
+                : 'red'
+            }">
+            {{ x.taxRate }}
+          </td>
+          <td style="background-color: #fff !important; text-align: center;"><input type="checkbox" name="isDeleted" [(ngModel)]="x.isDeleted" disabled></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<div *ngIf="selectedRowFileForDelete" #delete id="delete" class="modal fade" role="dialog" data-backdrop="static"
+  data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize;">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize;">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-body">
+        <strong>
+          File:
+          <span class="new-label">{{ selectedRowFileForDelete.fileName }}</span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteConformationForFile('Yes')">
+          Yes
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteConformationForFile('No')">
+          No
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade success-msg" id="success-popup" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-sm popup-timeout">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4><i class="fa fa-check"></i>&nbsp; You Added Successfully !</h4>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #deleteContent1 let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <strong>
+      Tax Type:
+      <span class="new-label">{{ selectedRowForDelete.taxType }}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+<ng-template #restpreContent let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <strong>
+      Tax Type:
+      <span class="new-label">{{ selectedRowForDelete.taxType }}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="restoreItemAndCloseModel()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModel()">
+      No
+    </button>
+  </div>
+</ng-template>
+<!-- Modal -->
+<div id="addMarkUp" class="modal fade" role="dialog" data-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="restMarkUpPopUp()">
+          &times;
+        </button>
+        <h4 class="modal-title">Add Mark Up Percent</h4>
+      </div>
+      <div class="modal-body">
+        <div class="modal-body" style="padding-bottom: 30px;">
+          <div class="form-group">
+            <label for="name" class="control-label">Mark Up Percentage <span class="clr-red">*</span></label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" name="markUpValue" pKeyFilter="pnum"
+                [(ngModel)]="addNewIntergration.markUpValue" required />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" data-dismiss="modal" (click)="saveMarkUpPercentage()"
+          [disabled]="addNewIntergration.markUpValue! == ''">
+          Submit
+        </button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="restMarkUpPopUp()">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="addcredit" class="modal fade" role="dialog" data-backdrop="static">
+  <form #addCredit="ngForm">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <h4 class="modal-title">Add CreditTerm</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Credit Term <span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <div class="inner-addon right-addon inline-block">
+                  <p-autoComplete class="p-autoComplete-ctsm" name="classificationName"
+                    [(ngModel)]="addNewCreditTerms.name" (onSelect)="selectedCreditTerm()" (onKeyUp)="
+                      checkCreditTermsExists('field', $event.target.value)
+                    " [suggestions]="_creditTermList" field="label" (completeMethod)="filterCreditTerms($event)"
+                    [size]="30" [minLength]="1" [dropdown]="true" required>
+                  </p-autoComplete>
+                  <div *ngIf="isCreditTermsExists" class="clr-red">
+                    Entry Already Exists
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Percentage <span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <div class="inner-addon right-addon inline-block">
+                  <select name="percentage" [(ngModel)]="addNewCreditTerms.percentage">
+                    <option value="">Select Percentage</option>
+                    <option *ngFor="let Percentlist of percentageList" [ngValue]="Percentlist.label">
+                      {{ Percentlist.label }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Days <span class="clr-red">*</span></label>
+              </div>
+
+              <div class="col-sm-5">
+                <input type="text" id="" class="form-control" pInputText pKeyFilter="num" name="days"
+                  [(ngModel)]="addNewCreditTerms.days" required maxlength="3" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>NetDays <span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <input type="text" id="" class="form-control" pInputText pKeyFilter="num" name="netDays"
+                  [(ngModel)]="addNewCreditTerms.netDays" required maxlength="3" />
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label for="description" class="control-label w100">Memo</label>
+              </div>
+              <div class="col-sm-5">
+                <div class="control-data">
+                  <textarea #memo="ngModel" name="memo" [(ngModel)]="addNewCreditTerms.memo"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-6">
+              <span class="checkbox-cstm">
+                <label style="margin-top: 12px;" class="form-check-label" for="isActive">
+                  <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked
+                    id="isActive" [(ngModel)]="creditTermsNew.isActive" />
+                  <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                  Active
+                </label>
+              </span>
+            </div>
+            <div class="clear"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" (click)="newCreditTermAdd()"
+            [disabled]="!addCredit.valid || isCreditTermsExists">
+            Submit
+          </button>
+
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetCreditTermsPopUp()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="addDiscount" class="modal fade" role="dialog" data-backdrop="static">
+  <form #discount="ngForm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" (click)="restDiscount()">
+            &times;
+          </button>
+          <h4 class="modal-title">Add Discount Percent</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Discount Percentage<span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <div class="inner-addon right-addon inline-block">
+                  <p-autoComplete class="p-dropdown-custom-2" name="discontValue" [(ngModel)]="discontValue"
+                    pKeyFilter="num" (onSelect)="selectedDiscount()" (keyup)="checkDiscountExists($event)"
+                    [suggestions]="_discountListForDropdown" field="label" (completeMethod)="filterDiscount($event)"
+                    [size]="30" [minLength]="1" [dropdown]="true">
+                  </p-autoComplete>
+                  <div *ngIf="isDiscountExists" class="clr-red">
+                    Entry Already Exists
+                  </div>
+                  <div *ngIf="isCountdisable" class="clr-red vin_aing">
+                    Discount range should be 0 to 100
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" (click)="newDiscountAdd()"
+            [disabled]="!discount.valid || isDiscountExists || isCountdisable">
+            Submit
+          </button>
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="restDiscount()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="addTaxType" class="modal fade" role="dialog" data-backdrop="static">
+  <form #addTaxTypes="ngForm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <h4 class="modal-title">Add Tax Type</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Description <span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <div class="inner-addon right-addon inline-block">
+                  <p-autoComplete class="p-dropdown-custom-2" name="description" [(ngModel)]="addNewTaxType.description"
+                    (onSelect)="selectedTaxTypes($event)" (onKeyUp)="checkTaxTypeExists('label', $event.target.value)"
+                    [suggestions]="_TaxTypeList" field="label" (completeMethod)="filterTaxType($event)" [size]="30"
+                    [minLength]="1" [dropdown]="true" required>
+                  </p-autoComplete>
+                  <div *ngIf="isTaxTypeExists" class="clr-red">
+                    Tax Type Already Exists
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label for="description">Memo</label>
+              </div>
+              <div class="col-sm-5">
+                <div class="control-data">
+                  <textarea #memo="ngModel" name="memo" [(ngModel)]="addNewTaxType.memo"></textarea>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" (click)="newTaxTypeAdd()"
+            [disabled]="!addTaxTypes.valid || isTaxTypeExists">
+            Submit
+          </button>
+
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetTaxType()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="addTaxRate" class="modal fade" role="dialog" data-backdrop="static">
+  <form #addTaxRates="ngForm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <h4 class="modal-title">Add Tax Rate</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Tax Rate <span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <input type="number" class="form-control" [(ngModel)]="addNewTaxRate.taxRate" name="taxRate" required />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" (click)="newTaxRateAdd()"
+            [disabled]="!addTaxRates.valid || isTaxRateExists">
+            Submit
+          </button>
+
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetTaxRate()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div id="addmarkup" class="modal fade" role="dialog" data-backdrop="static">
+  <form #admarkup="ngForm">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <h4 class="modal-title">Add Percentage</h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label for="description" class="control-label" style="margin-top: 7px;">
+                  Percentage
+                  <span class="clr-red">*</span>
+                </label>
+              </div>
+              <div class="col-sm-5">
+                <p-autoComplete class="p-dropdown-custom-2" name="taxratenew" [(ngModel)]="addNewTaxRate.taxRate"
+                  (onSelect)="selectedTaxRate()" (onKeyUp)="checkPercentExists($event.target.value)"
+                  [suggestions]="_TaxRateList" field="label" (completeMethod)="filterTaxRate($event)" [size]="30"
+                  [minLength]="1" [dropdown]="true" required>
+                </p-autoComplete>
+                <div *ngIf="isTaxRateExists" class="clr-red">
+                  Already Exists
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" data-dismiss="modal" (click)="newTaxRateAdd()"
+            [disabled]="!admarkup.valid || isTaxRateExists">
+            Submit
+          </button>
+
+          <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetTaxRate()">
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">
+      &times;
+    </button>
+    <h4 class="modal-title">Confirmation</h4>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <h6 style="padding-left: 2%;">
+      <!-- Are you sure you want to go to {{ nextOrPreviousTab }} tab? Unsaved
+      changes will be lost. -->
+      Do you want to Save changes and Continue ?
+    </h6>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">
+      No
+    </button>
+    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!financialInfoForm.valid" (click)="redirectToTab()">
+      Yes
+    </button>
+  </div>
+</ng-template>
+
+<div class="modal fade" id="addDocumentDetailsNew" role="dialog" data-backdrop="static">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closeMyModel('#addDocumentDetailsNew')">
+          &times;
+        </button>
+        <h4 class="modal-title">Add Document Details</h4>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize;">
+                {{ customerName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-6">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize;">
+                {{ customerCode }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+      <form #addDocumentForm="ngForm" class="form-horizontal">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Name <span class="clr-red">*</span></label>
+                <input class="form-control" type="text" name="name" [(ngModel)]="documentInformation.docName" required
+                  (change)="attachCertificateUpdateFlag = false" />
+              </div>
+              <div class="form-group">
+                <label>Description </label>
+                <textarea class="form-control" name="description" [(ngModel)]="documentInformation.docDescription"
+                  (change)="attachCertificateUpdateFlag = false"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Memo </label>
+                <textarea class="form-control" name="memo" [(ngModel)]="documentInformation.docMemo"
+                  (change)="attachCertificateUpdateFlag = false"></textarea>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-group">
+                <label style="float: none;">Attachments <span class="clr-red">*</span></label>
+                <p-fileUpload #taxExemptFileUploadInput name="fileupload[]" multiple="multiple"
+                  [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
+                  (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"></p-fileUpload>
+              </div>
+            </div>
+            <div class="table-responsive table-overflow" *ngIf="isEditButton">
+              <h6 class="panel-title" style="padding-left: 10px;">
+                Attachment Details:
+              </h6>
+
+              <table class="table-responsive ptable-cus-pma">
+                <tr>
+                  <th>File Name</th>
+                  <th>Download</th>
+                </tr>
+                <tr>
+                  <td>{{ sourceViewforDocument.fileName }}</td>
+                  <td>
+                    <a *ngIf="sourceViewforDocument.attachmentDetailId > 0"
+                      (click)="downloadFileUpload(sourceViewforDocument)" matTooltip="Download"
+                      matTooltipPosition="above" class="btn nobg btn-cstm">
+                      <span><i class="fa fa-download"></i></span>
+                    </a>
+                    <a *ngIf="sourceViewforDocument.attachmentDetailId == 0" [href]="sourceViewforDocument.link"
+                      download="{{ sourceViewforDocument.fileName }}" matTooltip="Download" matTooltipPosition="above"
+                      class="filelink">
+                      <span><i class="fa fa-download"></i></span>
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
+            style="text-align: center;" (click)="
+              addDocumentInformation(
+                '#addDocumentDetailsNew',
+                documentInformation
+              )
+            " [disabled]="
+              !addDocumentForm.valid || disableFileAttachmentSubmit == false
+            ">
+            Add
+          </button>
+          <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"
+            style="text-align: center;" (click)="
+              addDocumentInformation(
+                '#addDocumentDetailsNew',
+                documentInformation
+              )
+            " [disabled]="!addDocumentForm.valid || attachCertificateUpdateFlag">
+            Update
+          </button>
+          <button type="button" class="btn btn-danger" (click)="
+              dismissDocumentPopupModel('#addDocumentDetailsNew');
+              closeMyModel('#addDocumentDetailsNew')
+            ">
+            Close
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #contentAuditHistDoc let-c="close" let-d="dismiss" style="width: auto;" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">History of Documents</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModelNew()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Document Name</th>
+            <th>Description</th>
+            <th>Memo</th>
+            <th>File Name</th>
+            <th>Created Date</th>
+            <th>Created By</th>
+            <th>Updated Date</th>
+            <th>Updated By</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
+          <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
+            <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'docName', audit.docName)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.docName }}
+            </td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(
+                  i,
+                  'docDescription',
+                  audit.docDescription
+                )
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.docDescription }}
+            </td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.docMemo }}
+            </td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.fileName }}
+            </td>
+            <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'createdBy', audit.createdBy)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.createdBy }}
+            </td>
+            <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+            <td [ngStyle]="{
+                color: getColorCodeForHistoryDoc(i, 'updatedBy', audit.updatedBy)
+                  ? 'black'
+                  : 'red'
+              }">
+              {{ audit.updatedBy }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="dismissModelNew()">
+      Close
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #deleteContentDoc let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModelNew()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="col-md-12 shadow-box-cstm">
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Name:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerName }}
+          </span>
+        </p>
+      </div>
+      <div class="col-md-6">
+        <p class="fs12">
+          <label class="control-label labels-font-header" style="width: auto;">Customer Code:
+          </label>
+          <span class="span-header-red" style="text-transform: capitalize;">
+            {{ customerCode }}
+          </span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <strong>
+      Document Name:
+      <span class="new-label">{{ selectedRowForDelete.docName }}</span>
+    </strong>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModelNew()">
+      Yes
+    </button>
+    <button type="button" class="btn btn-danger" (click)="dismissModelNew()">
+      No
+    </button>
+  </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+</div>

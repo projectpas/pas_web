@@ -1,0 +1,107 @@
+.dtHorizontalExampleWrapper {
+    max-width: 150px;
+    margin: 0 auto;
+}
+
+table {
+    display: block;
+    overflow: scroll;
+    overflow: auto;
+ 
+}
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_asc_disabled:before,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:before {
+        bottom: .5em;
+    }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {   
+    margin: 0;
+}
+
+:host ::ng-deep button {
+    margin-right: .25em;
+}
+
+:host ::ng-deep .custom-toast .ui-toast-message {
+    color: #ffffff;
+    background: #FC466B;
+    background: -webkit-linear-gradient(to right, #3F5EFB, #FC466B);
+    background: linear-gradient(to right, #3F5EFB, #FC466B);
+}
+
+:host ::ng-deep .custom-toast .ui-toast-close-icon {
+    color: #ffffff;
+}
+.add-charges {
+    background-color: #295d92;
+}
+.clr-red {
+    color: red;
+}
+.text-align {
+    width: 93%;
+    margin-left: 6px;
+}
+select {
+    background: none;
+}
+td{
+    width: 10%
+}
+select:disabled {
+   background-color: none !important; 
+}
+.dropdown-select {
+    background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
+}
+/*.workflow-table-pub tr td {
+    padding: 4px;
+}*/
+.workflow-table-pub tr th:first-child {
+    padding: 0 10px !important;
+}
+.workflow-table-pub {
+    height: 350px;
+}
+.fixed-column-table {
+    max-width: 100%;
+    max-height: 500px;
+    overflow: scroll;
+    position: relative;
+    padding: 0;
+}
+.fixed-column-table table {
+    position: relative;
+    border-collapse: collapse;
+}
+.fixed-column-table thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: -1px;
+    background: #0d57b0;
+}
+.column-r1-fixed thead th:last-child {
+    right: 0;
+    z-index: 1;
+    text-align: center;
+    margin: auto;
+}
+.column-r1-fixed tbody td:last-child {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 0;
+    background: #FFF;
+    border-right: 1px solid #CCC;
+    padding-left: 5px;
+    text-align: center;
+}

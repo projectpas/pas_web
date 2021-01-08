@@ -1,0 +1,137 @@
+﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div class="card new-card">
+  <div class="card-header bg-primary">
+    <div class="row">
+      <div class="col">
+        <h4 class="new-card-heading">
+          {{ editMode ? 'Edit' : 'Create' }} Legal Entity</h4>
+      </div>
+      <div>
+        <button type="button" class="btn-sm new-btn-primary"
+          [routerLink]="['/generalledgermodule/generalledgerpage/app-legal-entity-list']">
+          Legal Entity List
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body new-card-body">
+      <div class="md-stepper-horizontal orange new-stepper-align">
+        <div class="md-step" [ngClass]="{
+        active: activeMenuItem >= 1,
+        editable: activeMenuItem === 1
+      }" [class.isDisabled]="!isDisabledSteps" (click)="changeOfTab('General')">
+          <div class="md-step-circle"><span>1</span></div>
+          <div class="md-step-title">General Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step" [ngClass]="{
+        active: activeMenuItem >= 2,
+        editable: activeMenuItem === 2
+      }" (click)="changeOfTab('Contacts')" [class.isDisabled]="!isDisabledSteps">
+          <div class="md-step-circle"><span>2</span></div>
+          <div class="md-step-title">Contacts</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step" [ngClass]="{
+         active: activeMenuItem >= 3,
+         editable: activeMenuItem === 3
+        }" (click)="changeOfTab('Banking')" [class.isDisabled]="!isDisabledSteps">
+          <div class="md-step-circle"><span>3</span></div>
+          <div class="md-step-title">Banking Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step" [ngClass]="{
+        active: activeMenuItem >= 4,
+        editable: activeMenuItem === 4
+      }" (click)="changeOfTab('Billing')" [class.isDisabled]="!isDisabledSteps">
+          <div class="md-step-circle"><span>4</span></div>
+          <div class="md-step-title">Billing Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step" [ngClass]="{
+        active: activeMenuItem >= 5,
+        editable: activeMenuItem === 5
+      }" (click)="changeOfTab('Shipping')" [class.isDisabled]="!isDisabledSteps">
+          <div class="md-step-circle"><span>5</span></div>
+          <div class="md-step-title">Shipping Info</div>
+          <div class="md-step-bar-left"></div>
+          <div class="md-step-bar-right"></div>
+        </div>
+        <div class="md-step" [ngClass]="{
+        active: activeMenuItem >= 6,
+        editable: activeMenuItem === 6
+      }" (click)="changeOfTab('Documents')" [class.isDisabled]="!isDisabledSteps">
+          <div class="md-step-circle"><span>6</span></div>
+          <div class="md-step-title">
+            Documents
+            <div class="md-step-bar-right"></div>
+          </div>
+        </div>
+        <!-- <div class="md-step" [ngClass]="{
+          active: activeMenuItem >= 7,
+          editable: activeMenuItem === 7
+        }" (click)="changeOfTab('CommonDocuments')" [class.isDisabled]="!isDisabledSteps">
+            <div class="md-step-circle"><span>7</span></div>
+            <div class="md-step-title">
+             All Documents 
+              <div class="md-step-bar-right"></div>
+            </div>
+          </div> -->
+      </div>
+      
+      <div class="card">
+        <div [ngClass]="{ hideTab: currentTab !== 'General' }" *ngIf=" currentTab == 'General'"> 
+          <app-legal-entity-add (savedGeneralInformationData)="generalInformationData($event)" [GeneralInformationData]="editGeneralInformationData" [editMode]="editMode"
+            (editGeneralInformationData)="updateInformationData($event)" (tab)="changeOfTab($event)">
+          </app-legal-entity-add>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Contacts' }" *ngIf=" currentTab == 'Contacts'">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-legal-entity-contact [savedGeneralInformationData]="savedGeneralInformationData" [editMode]="editMode"
+              [add_ataChapterList]="add_ataChapterList" [editGeneralInformationData]="editGeneralInformationData"
+              (saveCustomerContactATAMapped)="saveCustomerContactATAMapped($event)"
+              (tab)="changeOfTab($event)">
+            </app-legal-entity-contact>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Banking' }" *ngIf=" currentTab == 'Banking'">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-legal-entity-banking [editMode]="editMode" [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData" (tab)="changeOfTab($event)">
+            </app-legal-entity-banking>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Billing' }" *ngIf=" currentTab == 'Billing'">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-legal-entity-billing [editMode]="editMode" [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData"
+              (tab)="changeOfTab($event)" [selectedlegalEntityTab]="currentTab"></app-legal-entity-billing>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Shipping' }" *ngIf=" currentTab == 'Shipping'">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-legal-entity-shipping [editMode]="editMode" [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData" (tab)="changeOfTab($event)"
+              [selectedlegalEntityTab]="currentTab"></app-legal-entity-shipping>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'Documents' }" *ngIf=" currentTab == 'Documents'">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+            <app-legal-entity-documents [editMode]="editMode" [editGeneralInformationData]="editGeneralInformationData"
+              [savedGeneralInformationData]="savedGeneralInformationData" (tab)="changeOfTab($event)">
+            </app-legal-entity-documents>
+          </div>
+        </div>
+        <div [ngClass]="{ hideTab: currentTab !== 'CommonDocuments' }" *ngIf=" currentTab == 'CommonDocuments'">
+          <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
+          
+            <app-common-documents [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>

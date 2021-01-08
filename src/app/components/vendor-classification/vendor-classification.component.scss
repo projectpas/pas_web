@@ -1,0 +1,17 @@
+﻿
+
+.search-box {
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+}
+
+.search-box .mat-form-field {
+    padding: 0 2em;
+}
+
+.modal-body .form-group .control-label {
+    float: left;
+    width: 131px;
+}
+

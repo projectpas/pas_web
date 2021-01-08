@@ -1,0 +1,262 @@
+﻿
+<div class="card general">
+    <div class="card-header">
+        <nav class="pull-left" aria-label="breadcrumb">
+            <ol class="breadcrumb c-wf-bcrumb" style="background-color: transparent;">
+                <li class="breadcrumb-item active" aria-current="page">General Ledger</li>
+                <li class="breadcrumb-item " aria-current="page">Create GL Account</li>
+            </ol>
+        </nav>       
+    </div>
+    <div class="card-body">
+        <div class="form-row">
+            <div class="col-md-8 wf-h-col">
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="oldaccountCode" class="control-label">Old Account Code</label>
+                            <input type="text" class="form-control input-value" id="oldaccount">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="oldaccountCode" class="control-label">Node Name <strong class="clr-red">*</strong></label>
+                            <select [(ngModel)]="currentGLAccount.glAccountNodeId" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let nodeType of nodeSetupList" [ngValue]="nodeType.glAccountNodeId">{{nodeType.nodeName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="accountcode" class="control-label">Account Code <strong class="clr-red">*</strong></label>
+                            <input type="text" class="form-control input-value" id="accountcode">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="accountcode" class="control-label">Balance Type <strong class="clr-red">*</strong></label>                            
+                            <div class="inline-block display-flex">
+                                <label class="wauto">
+                                    <input name="test7" type="checkbox" id="" [(ngModel)]="currentGLAccount.balanceTypeActual" [ngModelOptions]="{standalone: true}">
+                                    Actual
+                                </label>
+                                <label class="wauto">
+                                    <input name="test8" type="checkbox" id="" [(ngModel)]="currentGLAccount.balanceTypeBudget" [ngModelOptions]="{standalone: true}">
+                                    Budget
+                                </label>
+                                <label class="wauto">
+                                    <input name="test9" type="checkbox" id="" [(ngModel)]="currentGLAccount.balanceTypeForecast" [ngModelOptions]="{standalone: true}">
+                                    Forecast
+                                </label>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="accountname" class="control-label">Account Name<strong class="clr-red">*</strong></label>
+                            <input type="text" class="form-control input-value" id="accountname">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="accountname" class="control-label">Account Type<strong class="clr-red">*</strong></label>
+                            <select [(ngModel)]="currentGLAccount.glAccountTypeId" [ngModelOptions]="{standalone: true}">
+                                <option *ngFor="let accounttype of allGLAccountClassInfo" [ngValue]="accounttype.glAccountClassId">{{accounttype.glAccountClassName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="accountname" class="control-label">Account Description</label>
+                            <input type="text" class="form-control input-value" id="description">
+                        </div>
+                    </div>
+                </div>
+            </div>
+           </div>
+        </div>
+</div>
+
+<br/>
+<br/>
+
+
+    <div class="x_panel" style="">
+        <div class="x_content add-customer-work">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item" aria-current="page">General Ledger</li>
+                    <li class="breadcrumb-item active" aria-current="page">Create GL Account</li>
+                </ol>
+            </nav>
+            <div class="pheading">
+                <h4 class="page-heading">Create GL Account</h4>
+            </div>
+
+            <div class="clear"></div>
+
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="tab-content form-bg">
+                    <div class="tab-pane active" id="home">
+                        <div class="col-sm-4">
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Old Account Code</label>
+                                <div class="col-sm-7">
+                                    <input type="text" name="test" value="" [(ngModel)]="currentGLAccount.oldAccountCode" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Account Code<strong class="clr-red">*</strong></label>
+                                <div class="col-sm-7">
+                                    <input type="text" name="test" value="" [(ngModel)]="currentGLAccount.accountCode" [ngModelOptions]="{standalone: true}" ngDefaultControl>
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Account Name<strong class="clr-red">*</strong></label>
+                                <div class="col-sm-7">
+                                    <input name="test1" class="form-control" type="text" [(ngModel)]="currentGLAccount.accountName" [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-12 input-icon1">
+                                <label class="control-label col-sm-4">Account Type<strong class="clr-red">*</strong></label>
+                                <div class="col-sm-7">
+                                    <select [(ngModel)]="currentGLAccount.glAccountTypeId" [ngModelOptions]="{standalone: true}">
+                                        <option *ngFor="let accounttype of allGLAccountClassInfo" [ngValue]="accounttype.glAccountClassId">  {{accounttype.glAccountClassName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Account Description</label>
+                                <div class="col-sm-7">
+                                    <input name="test2" class="form-control" type="text" [(ngModel)]="currentGLAccount.accountDescription" [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+
+                            <div class=" col-sm-12 summary-account-block">
+                                <label class="control-label col-sm-4">Active</label>
+                                <div class="col-sm-7">
+                                    <input name="test3" type="checkbox" value="true" [(ngModel)]="currentGLAccount.activeFlag" [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Node Name<strong class="clr-red">*</strong></label>
+                                <div class="col-sm-7">
+
+                                    <select [(ngModel)]="currentGLAccount.glAccountNodeId" [ngModelOptions]="{standalone: true}">
+                                        <option *ngFor="let nodeType of nodeSetupList" [ngValue]="nodeType.glAccountNodeId">  {{nodeType.nodeName}}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="col-sm-4">
+
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">Balance Type<strong class="clr-red">*</strong></label>
+                                <div class="col-sm-7">
+                                    <label class="wauto">
+                                        <input name="test7" type="checkbox" id="" [(ngModel)]="currentGLAccount.balanceTypeActual" [ngModelOptions]="{standalone: true}">
+                                        Actual
+                                    </label>
+                                    <label class="wauto">
+                                        <input name="test8" type="checkbox" id="" [(ngModel)]="currentGLAccount.balanceTypeBudget" [ngModelOptions]="{standalone: true}">
+                                        Budget
+                                    </label>
+                                    <label class="wauto">
+                                        <input name="test9" type="checkbox" id="" [(ngModel)]="currentGLAccount.balanceTypeForecast" [ngModelOptions]="{standalone: true}">
+                                        Forecast
+                                    </label>
+                                </div>
+                            </div>
+                            <div class=" col-sm-12 allow-manual-je-block">
+                                <label class="control-label col-sm-4">Allow Manual JE</label>
+                                <div class="col-sm-7">
+                                    <input value="true" type="checkbox" [(ngModel)]="currentGLAccount.allowManualJE" [ngModelOptions]="{standalone: true}">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="control-label col-sm-4">C-Flows Classification<strong class="clr-red">*</strong></label>
+                                <div class="inner-addon col-sm-7 inline-block display-flex">
+                                    <select [(ngModel)]="currentGLAccount.glClassFlowClassificationId" [ngModelOptions]="{standalone: true}">
+                                        <option *ngFor="let classType of allGLCashFlowClassInfo" [ngValue]="classType.glClassFlowClassificationId">  {{classType.glClassFlowClassificationName}}</option>
+                                    </select>
+                                    <a href="#" data-toggle="modal" data-target="#addGl" class="add-icon" (click)="open(contentEdit)"><i class="fa fa-plus"></i></a>
+
+                                </div>
+                            </div>
+                            <div class=" col-sm-12">
+                                <label class="control-label col-sm-4">PO Category<strong class="clr-red">*</strong></label>
+                                <div class="col-sm-7">
+
+                                    <select [(ngModel)]="currentGLAccount.poroCategoryId">
+                                        <option *ngFor="let poCategory of poroCategoryList" [ngValue]="poCategory.poroCategoryId">  {{poCategory.categoryName}}</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                        <div class="clear"></div>
+                        <hr>
+                        <button href="#" class="btn btn-success pull-right" (click)="addGLAccount()">Save</button>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="clear"></div>
+            <hr>
+            <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
+        </div>
+    </div>
+    <ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
+        <div class="modal-header">
+            <h4 class="modal-title" *ngIf="isEditMode">Edit GL Cahs Flow Classification</h4>
+            <h4 class="modal-title" *ngIf="!isEditMode">Add  GL Cahs Flow Classification</h4>
+            <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="saveGlcahsFlow()">
+
+                <div class="form-group">
+                    <label for="netdays" class="control-label">Gl Cahs Flow Classification Name<span class="clr-red">*</span></label>
+                    <input type="text" id="glClassFlowClassificationName" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceglcashflowclassification.glClassFlowClassificationName">
+                </div>
+                <div class="modal-footer">
+
+                    <button class="btn btn-success" [disabled]="disableSave">Submit</button>
+                    <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </ng-template>
+    <p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
+              [width]="350" [minWidth]="200" [responsive]="true"
+              [minY]="1050" [baseZIndex]="1100000">
+
+
+        <h5 [ngStyle]="{'color':'red'}">
+            Please Enter (*) Mandatory Fields
+        </h5>
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="display=false" label="Close"></button>
+        </p-footer>
+    </p-dialog>

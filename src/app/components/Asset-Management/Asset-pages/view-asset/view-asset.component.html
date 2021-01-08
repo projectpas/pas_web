@@ -1,0 +1,356 @@
+﻿<div class="modal-body viewform">
+    <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div>
+                    <button type="button" class="btn btn-primary" data-toggle="collapse" (click)="openAllCollapse()">Open All</button>
+                    <button type="button" class="btn btn-primary collapsed" data-toggle="collapse" (click)="closeAllCollapse()">Close All</button>
+                    <hr />
+                </div>
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" href="#step1">General Information</a>
+                    </h4>
+                </div>
+                <div id="step1" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div class="col-sm-6">
+                            <p>
+                                <span class="label"><b>Entry Date: </b></span><span class="value">{{assetViewList.entryDate}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Asset ID: </b></span><span class="value">{{assetViewList.assetId}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Alt Asset ID: </b></span><span class="value">{{assetViewList.alternateAssetId}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Asset Name: </b></span><span class="value">
+                                    {{assetViewList.name}}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Asset Description: </b></span><span class="value">{{assetViewList.description}}</span>
+                            </p>
+                            <div class="ms-block">
+                                <p>
+                                    <span class="label"><b>Management Structure: </b></span>
+                                </p>
+                                <p>
+                                    <span class="label"><b>Entity: </b></span><span class="value">
+                                        {{assetViewList.companyName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b> </b></span><span class="value">
+                                        {{assetViewList.buName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b> </b></span><span class="value">
+                                        {{assetViewList.deptName}}
+                                    </span>
+                                </p>
+                                <p>
+                                    <span class="label"><b> </b></span><span class="value">
+                                        {{assetViewList.divName}}
+                                    </span>
+                                </p>
+                            </div>
+                            <p>
+                                <span class="label"><b>Intangible/Depreciable: </b></span><span class="value">{{assetViewList.depreOrIntang}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Acquisition Type: </b></span><span class="value">{{assetViewList.assetAcquisitionTypeId}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Manufacturer: </b></span><span class="value">
+                                    {{assetViewList.manufacturerName}}
+                                </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Manufactured Date: </b></span><span class="value">{{assetViewList.manufacturedDate}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Model Num: </b></span><span class="value">{{assetViewList.model}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Serialized?: </b></span>
+                                <span class="value">{{assetViewList.isSerialized}}</span>
+                            </p>
+                            <p><span class="label"><b>UOM: </b></span><span class="value">{{assetViewList.unitOfMeasureId}}</span></p>
+                            <p><span class="label"><b>Currency: </b></span><span class="value">{{assetViewList.currencyId}}</span></p>
+                            <p>
+                                <span class="label"><b>Unit Cost: </b></span><span class="value">{{assetViewList.unitCost}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Expiration Date: </b></span><span class="value">{{assetViewList.expirationDate}}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p>
+                                <span class="label"><b>Asset Location: </b></span><span class="value">{{assetViewList.asset_Location}}</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Memo: </b></span><span class="value">{{assetViewList.memo}} </span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Asset Parent: </b></span><span class="value">{{assetViewList.assetParentId}}</span>
+                            </p>
+                            <p><span class="label"><b>Asset Class: </b></span><span class="value">{{assetViewList.assetTypeId}}</span></p>
+                            <p><span class="label"><b>Depreciation Method: </b></span><span class="value">{{assetViewList.depreciationMethodObj}}</span></p>
+                            <p><span class="label"><b>Residual %: </b></span><span class="value">{{assetViewList.residualPercentage}}</span></p>
+                            <p><span class="label"><b>Asset Life: </b></span><span class="value">{{assetViewList.assetLife}}</span></p>
+                            <p><span class="label"><b>Depr Frequency: </b></span><span class="value">{{assetViewList.depreciationFrequencyObj}}</span></p>
+                            <p><span class="label"><b>Acquired GL: </b></span><span class="value">{{assetViewList.acquiredGLAccountObj}}</span></p>
+                            <p><span class="label"><b>Depr Expense GL: </b></span><span class="value">{{assetViewList.deprExpenseGLAccountObj}}</span></p>
+                            <p><span class="label"><b>AD Depr GL: </b></span><span class="value">{{assetViewList.adDepsGLAccountId}}</span></p>
+                            <p><span class="label"><b>Sale GL: </b></span><span class="value">{{assetViewList.assetSaleObj}}</span></p>
+                            <p><span class="label"><b>Write Off GL: </b></span><span class="value">{{assetViewList.assetWriteOffObj}}</span></p>
+                            <p><span class="label"><b>Write Down GL: </b></span><span class="value">{{assetViewList.assetWriteDownObj}}</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" href="#step2">Capes</a>
+                    </h4>
+                </div>
+                <div id="step2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="col-sm-12">
+                            <div class="table-responsive">
+                                <!--<table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>S.no</th>
+                                            <th>PN</th>
+                                            <th>PN Description</th>
+                                            <th>Capability type</th>
+                                            <th>Aircraft maufacturer</th>
+                                            <th>Models</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{assetViewList.assetTypeId}}</td>
+                                            <td>PN123</td>
+                                            <td>Engine toll</td>
+                                            <td>MFG</td>
+                                            <td>Airbus</td>
+                                            <td>AB123</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>PN123</td>
+                                            <td>Engine toll</td>
+                                            <td>Overhaul</td>
+                                            <td>Boeing</td>
+                                            <td>AB125</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>PN123</td>
+                                            <td>Engine toll</td>
+                                            <td>Exchange</td>
+                                            <td>Airbus</td>
+                                            <td>AB124</td>
+                                        </tr>
+                                    </tbody>
+                                </table>-->
+                                <p-table>
+
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th>PN</th>
+                                            <th>PN Description</th>
+                                            <th>Capability type</th>
+                                            <th>Aircraft maufacturer</th>
+                                            <th>Models</th>
+                                            <th>Dash Number</th>
+                                        </tr>
+                                    </ng-template>
+
+
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset>
+                                        <tr [pSelectableRow]="rowData" pReorderableRowHandle>
+
+                                            <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                                {{rowData[col.field]}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                                <p class="clr-red">Number of rows in the table are all the possible combinations of the PN, Capability Type, Aircraft Manufacturer and Model selected.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" href="#step3">Calibration</a>
+                    </h4>
+                </div>
+                <div id="step3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="col-sm-6" *ngIf="assetViewList.calibrationRequired">
+                            <p>
+                                <span class="label"><b>Calibration Frequency: </b></span><span class="value">{{assetViewList.calibrationFrequencyMonths}}Months{{assetViewList.calibrationFrequencyDays}}Days</span>
+                            </p>
+                            <p><span class="label"><b>Default Vendor: </b></span><span class="value">{{assetViewList.calibrationDefaultVendorId}} </span></p>
+                            <p>
+                                <span class="label"><b>Dafault Cost: </b></span><span class="value">{{assetViewList.calibrationDefaultCost}}</span>
+                            </p>
+                            <p><span class="label"><b>GL Account: </b></span><span class="value">{{assetViewList.calibrationGlAccountId}}</span></p>
+                            <p>
+                                <span class="label"><b>Calibration Memo: </b></span><span class="value">{{assetViewList.calibrationMemo}}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-6" *ngIf="assetViewList.certificationRequired">
+                            <p>
+                                <span class="label"><b>Certification Frequency: </b></span><span class="value">{{assetViewList.certificationFrequencyMonths}}Months{{assetViewList.certificationFrequencyDays}}Days</span>
+                            </p>
+                            <p><span class="label"><b>Default Vendor: </b></span><span class="value">{{assetViewList.certificationDefaultVendorId}} </span></p>
+                            <p>
+                                <span class="label"><b>Dafault Cost: </b></span><span class="value">{{assetViewList.certificationDefaultCost}}</span>
+                            </p>
+                            <p><span class="label"><b>GL Account: </b></span><span class="value">{{assetViewList.certificationGlAccountId}}</span></p>
+                            <p>
+                                <span class="label"><b>Certification Memo: </b></span><span class="value">{{assetViewList.certificationMemo}}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-6" *ngIf="assetViewList.inspectionRequired">
+                            <p>
+                                <span class="label"><b>Inspection Frequency: </b></span><span class="value">{{assetViewList.inspectionFrequencyMonths}}Months{{assetViewList.inspectionFrequencyDays}}Days</span>
+                            </p>
+                            <p><span class="label"><b>Default Vendor: </b></span><span class="value">{{assetViewList.inspectionDefaultVendorId}} </span></p>
+                            <p>
+                                <span class="label"><b>Dafault Cost: </b></span><span class="value">{{assetViewList.inspectionDefaultCost}}</span>
+                            </p>
+                            <p><span class="label"><b>GL Account: </b></span><span class="value">{{assetViewList.inspectionGlAccountId}}</span></p>
+                            <p>
+                                <span class="label"><b>Inspection Memo: </b></span><span class="value">{{assetViewList.inspectionMemo}}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-6" *ngIf="assetViewList.verificationRequired">
+                            <p>
+                                <span class="label"><b>Verification Frequency: </b></span><span class="value">{{assetViewList.verificationFrequencyMonths}}Months{{assetViewList.verificationFrequencyDays}}Days</span>
+                            </p>
+                            <p><span class="label"><b>Default Vendor: </b></span><span class="value">{{assetViewList.verificationDefaultVendorId}} </span></p>
+                            <p>
+                                <span class="label"><b>Dafault Cost: </b></span><span class="value">{{assetViewList.verificationDefaultCost}}</span>
+                            </p>
+                            <p><span class="label"><b>GL Account: </b></span><span class="value">{{assetViewList.verificationGlAccountId}}</span></p>
+                            <p>
+                                <span class="label"><b>Verification Memo: </b></span><span class="value">{{assetViewList.verificationMemo}}</span>
+                            </p>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="form-group col-sm-12 calibration-block w400" *ngIf="assetViewList.calibrationRequired || assetViewList.certificationRequired || assetViewList.inspectionRequired || assetViewList.verificationRequired">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th colspan="2">Tolerance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Min</td>
+                                                <td>
+                                                    <span class="value">{{assetViewList.assetCalibrationMin}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="value">{{assetViewList.assetCalibrationMinTolerance}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Max</td>
+                                                <td>
+                                                    <span class="value">{{assetViewList.assetCalibratonMax}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="value">{{assetViewList.assetCalibrationMaxTolerance}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Expected</td>
+                                                <td>
+                                                    <span class="value">{{assetViewList.assetCalibrationExpected}}</span>
+                                                </td>
+                                                <td>
+                                                    <span class="value">{{assetViewList.assetCalibrationExpectedTolerance}}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td colspan="2">
+                                                    <span class="value">{{assetViewList.assetCalibrationMemo}}</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" href="#step4">
+                            Maintenance &amp;
+                            Warranty
+                        </a>
+                    </h4>
+                </div>
+                <div id="step4" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="col-sm-6">
+                            <p>
+                                <span class="label"><b>Maintenance Required: </b></span>
+                                <span class="value">{{assetViewList.assetIsMaintenanceReqd}}</span>
+                                <!--<input type="checkbox"
+                                       [disabled]="true" [checked]="assetViewList.assetIsMaintenanceReqd" />-->
+                            </p>
+                            <p>
+                                <span class="label"><b>Maintenance Contract: </b></span>
+                                <span class="value">{{assetViewList.assetMaintenanceIsContract}}</span>
+                                <!--<input type="checkbox"
+                                       [disabled]="true" [checked]="assetViewList.assetMaintenanceIsContract" />-->
+                            </p>
+
+                            <p>
+                                <span class="label"><b>Maintenance Frequency: </b></span><span class="value">{{assetViewList.maintenanceFrequencyMonths}}Months</span>
+                            </p>
+                            <p>
+                                <span class="label"><b>Default Vendor: </b></span><span class="value">{{assetViewList.defaultVendorId}}</span>
+                            </p>
+                            <p><span class="label"><b>GL Account: </b></span><span class="value">{{assetViewList.glAccountId}}</span></p>
+                            <p>
+                                <span class="label"><b>Maintenance Memo: </b></span><span class="value">{{assetViewList.maintenanceMemo}}</span>
+                            </p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p>
+                                <span class="label"><b>Warranty Required: </b></span>
+                                <span class="value">{{assetViewList.isWarrantyRequired}}</span>
+                                <!--<input type="checkbox" [disabled]="true"
+                                       [checked]="assetViewList.isWarrantyRequired" />-->
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

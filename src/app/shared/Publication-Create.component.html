@@ -1,0 +1,550 @@
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed">
+    <div>
+        <span class="cat-heading cat4">Add New Publication<i (click)="addRow()" class="fa fa-plus"></i></span>
+    </div>
+    <table class="table table-bordered table-fixed workflow-table-pub">
+        <thead class="thead-light">
+            <tr>
+                <!-- <th> S.No </th> -->
+                <th> Pub ID* </th>
+
+                <th> Pub Desc </th>
+                <th> Pub Type </th>
+                <th> Revision Date </th>
+                <th> Sequence </th>
+                <th> Source </th>
+                <th> Aircraft </th>
+                <th> Model </th>
+                <th> Dash Number </th>
+                <th> Location </th>
+                <th> Verified By </th>
+                <th> Verified Date </th>
+                <th> Status </th>
+                <th> File Name </th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr [hidden]="publ.isDeleted" *ngFor="let publ of workFlow.publication;let i = index">
+                <!-- <td>{{(currentPage - 1) * itemsPerPage + i + 1}}</td> -->
+                <td>
+                    <div style="display: inline-flex;">
+                        <select class="form-control custom-select dropdown-select wf-pub-id"
+                        [(ngModel)]="publ.publicationId"
+                        (change)="onPublicationChange($event, publ); getAircraftByPublicationId($event.target.value, i)">
+                        <option [value]="0">Select</option>
+                        <option *ngFor="let dropdown of publicationDropdown" [value]="dropdown.publicationRecordId">
+                            {{ dropdown.publicationId}}</option>
+                    </select>
+                    <a *ngIf="publ.publicationId !== '0' && publ.publicationId !== '' && publ.publicationId !== undefined" (click)="viewPublicationDetails(publ)" style="margin-top: 4px; margin-left: 4px;">
+                        <i class="fa fa-eye view_icon_adjust"></i>
+                    </a>
+                    </div>
+                </td>
+                <td>
+                    {{publ.publicationDescription}}
+                    <!-- <input type="text" class="form-control w250" [(ngModel)]="publ.publicationDescription"
+                        [disabled]="true"> -->
+                </td>
+                <td>
+                    <select class="form-control custom-select" id="ddlPublicationTypes"
+                        [(ngModel)]="publ.publicationType" disabled="disabled">
+                        <option value="0">select</option>
+                        <option *ngFor="let type of publicationTypes" value={{type.publicationTypeId}}>
+                            {{type.name}}
+                        </option>
+                    </select>
+
+                </td>
+                <td>
+                    {{publ.revisionDate}}
+                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.revisionDate"
+                        value="{{publ.revisionDate}}" [disabled]="true"> -->
+                </td>
+                <td class="text-right">
+                    {{publ.sequence}}
+                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.sequence" value="{{publ.sequence}}"
+                        [disabled]="true"> -->
+                </td>
+                <td>
+                    {{publ.source}}
+                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.source" value="{{publ.source}}"
+                        [disabled]="true"> -->
+                </td>
+                <td>
+                    <select class="form-control custom-select dropdown-select wf-pub-id" id="ddlAircraftManufacturer"
+                        [(ngModel)]="publ.aircraftManufacturer"
+                        (change)="getModelByAircraftId(publ.publicationId, publ.aircraftManufacturer,i)">
+                        <option value="0">select</option>
+                        <option *ngFor="let manufact of getDynamicVariableData('aircraftListByPubId',i) "
+                            value="{{manufact.aircraftTypeId}}">
+                            {{manufact.description}}
+                        </option>
+                    </select>
+                </td>
+
+                <td>
+                    <select class="form-control custom-select dropdown-select wf-pub-id" id="ddlModel"
+                        [(ngModel)]="publ.model"
+                        (change)="getDashNumberByModelandAircraftIds(publ.publicationId, publ.aircraftManufacturer,publ.model, i)">
+                        <option value="0">select</option>
+                        <option *ngFor="let model of getDynamicVariableData('aircraftModelListByPubId',i)"
+                            value="{{model.aircraftModelId}}">
+                            {{model.modelName}}
+                        </option>
+                    </select>
+
+                </td>
+
+                <td>
+                    <ng-multiselect-dropdown class="form-control multiple-custom-select multi-w150 "
+                        [placeholder]="'Select'" [data]="getDynamicVariableData('dashNumberListByModelId',i)"
+                        [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings"
+                        (onDeSelect)="onDeSelect(publ,$event)" (onSelect)="onItemSelect(publ,$event)"
+                        (onSelectAll)="onSelectAll(publ,$event)">
+                    </ng-multiselect-dropdown>
+                </td>
+                <td>
+                    {{publ.location}}
+                    <!-- <input type="text" class="form-control" value="{{publ.location}}" [disabled]="true"> -->
+                </td>
+
+                <td>
+                    {{publ.verifiedBy}}
+                    <!-- <input type="text" class="form-control" value="{{publ.verifiedBy}}" [disabled]="true"> -->
+                </td>
+                <td>
+                    {{publ.verifiedDate}}
+                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.verifiedDate"
+                        value="{{publ.verifiedDate}}" [disabled]="true"> -->
+                </td>
+                <td>
+                    <select class="form-control custom-select dropdown-select wf-pub-id" disabled="disabled"
+                        [(ngModel)]="publ.status">
+                        <option value="0">Select</option>
+                        <option value="true">Active</option>
+                        <option value="false">In Active</option>
+                    </select>
+                </td>
+                <td>
+                    <a (click)="downloadFileUpload(publ)" class="btn nobg btn-cstm">
+                        <span class="blue-href" *ngFor="let x of publ.attachmentDetails"
+                            (click)="downloadFileUpload(x)">{{x.fileName}},</span>
+
+                    </a>
+                    <!-- <a (click)="downloadFileUpload(publ)" class="btn nobg btn-cstm"><span><i
+                                class="fa fa-download"></i></span></a> -->
+                    <!--<input type="file" id="myFile" value="{{publ.image}}" [(ngModel)]="publ.image">-->
+                </td>
+                <td>
+                    <button class="btn btn-danger nobg" (click)="deleteRow(i)">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+<div id="view1" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">×</button>
+                <h4 class="modal-title">Publication Details</h4>
+            </div>
+            <div class="modal-body">
+                <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
+
+
+                    <!--<a href="#" class="btn btn-primary openall">open all</a> <a href="#" class="btn btn-warning closeall">close all</a>-->
+                    <div class="panel-group" id="accordion">
+                        <div class="panel panel-default">
+                            <div>
+                                <button type="button" class="btn btn-primary" data-toggle="collapse"
+                                    (click)="openAllCollapse()">Open
+                                    All</button>
+                                <button type="button" class="btn btn-primary collapsed" data-toggle="collapse"
+                                    (click)="closeAllCollapse()">Close All</button>
+                                <hr />
+                            </div>
+                            <div class="panel-heading">
+                                <h4 class="panel-title"> <a class="collapsed" data-toggle="collapse"
+                                        href="#step1">General Info</a>
+                                </h4>
+                            </div>
+                            <div id="step1" class="panel-collapse  collapse in show" *ngIf="generalInfo">
+                                <div class="panel-body">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div>
+                                                <div class="table-responsive default-bg clear">
+                                                    <div class="col-sm-4">
+                                                        <p><span class="label"><b>Entry Date: </b></span><span
+                                                                class="value">{{generalInfo.entryDate | date: 'dd/MM/yyyy'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Publication ID: </b></span><span
+                                                                class="value">{{generalInfo.publicationId ? generalInfo.publicationId : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Publication Description:
+                                                                </b></span><span
+                                                                class="value">{{generalInfo.description ? generalInfo.description : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Publication Type: </b></span><span
+                                                                class="value">{{generalInfo.publicationType ? generalInfo.publicationType : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Author / Source / Directive:
+                                                                </b></span><span
+                                                                class="value">{{generalInfo.asd ? generalInfo.asd : '-'}}</span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p><span class="label"><b>Sequence: </b></span><span
+                                                                class="value">{{generalInfo.sequence ? generalInfo.sequence : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Published By: </b></span><span
+                                                                class="value">{{generalInfo.publishby ? generalInfo.publishby : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Location: </b></span><span
+                                                                class="value">{{generalInfo.location ? generalInfo.location : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Revision Date: </b></span><span
+                                                                class="value">{{generalInfo.revisionDate | date: 'dd/MM/yyyy'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Revision Number: </b></span><span
+                                                                class="value">{{generalInfo.revisionNum ? generalInfo.revisionNum : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Expiration Date: </b></span><span
+                                                                class="value">{{generalInfo.expirationDate | date: 'dd/MM/yyyy'}}</span>
+                                                        </p>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <p><span class="label"><b>Next Review Date: </b></span><span
+                                                                class="value">{{generalInfo.nextReviewDate | date: 'dd/MM/yyyy'}}</span>
+                                                        </p>
+                                                        <!-- <p><span class="label"><b>Employee: </b></span><span class="value">{{generalInfo.employeeName ? generalInfo.employeeName : '-'}}</span></p> -->
+                                                        <p><span class="label"><b>Verified By: </b></span><span
+                                                                class="value">{{generalInfo.verifiedBy ? generalInfo.verifiedBy : '-'}}</span>
+                                                        </p>
+                                                        <p><span class="label"><b>Status: </b></span><span
+                                                                class="value">{{isActive}}</span></p>
+
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h4 class="panel-title" style="padding-left: 10px;">Attachment
+                                                        Details:</h4>
+                                                    <div class="col-sm-6">
+                                                        <p-table #dt class="rpo-table-cstm rro-table-cstm ptable-th-bg"
+                                                            [columns]="headersforAttachment" [value]="attachmentList"
+                                                            [paginator]="true" [rows]="attachmentsPageSize"
+                                                            [first]="first" [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                                            <ng-template pTemplate="header" let-columns>
+                                                                <tr>
+                                                                    <th *ngFor="let col of columns"
+                                                                        [pSortableColumn]="col.field">
+                                                                        {{ col.header }}
+                                                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                                    </th>
+                                                                    <th style="width: 200px;">File(s)</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th *ngFor="let col of columns"
+                                                                        [ngSwitch]="col.field">
+                                                                        <input style="width:100%;" pInputText
+                                                                            type="text" (input)="
+                                                                        dt.filter($event.target.value, col.field, 'contains')
+                                                                        " />
+                                                                    </th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="body" let-rowData
+                                                                let-columns="columns" let-rowIndex="rowIndex">
+                                                                <tr>
+                                                                    <td *ngFor="let col of columns"
+                                                                        style="text-align: center;">
+                                                                        {{ rowData[col.field] }}
+                                                                    </td>
+                                                                    <td>
+                                                                        <ng-container
+                                                                            *ngFor="let fileItem of rowData.attachmentDetails">
+                                                                            <a (click)="downloadFileUpload(fileItem)"
+                                                                                matTooltip="Download"
+                                                                                matTooltipPosition="above"
+                                                                                class="filelink"
+                                                                                style="padding-right: 5px;">{{fileItem.fileName}}</a>
+
+                                                                        </ng-container>
+                                                                    </td>
+                                                                </tr>
+
+                                                            </ng-template>
+                                                            <ng-template pTemplate="emptymessage" let-columns
+                                                                *ngIf="attachmentList.length == 0">
+                                                                <tr>
+                                                                    <td [attr.colspan]="2"
+                                                                        style="color: red; font-weight: bold; text-align: center">
+                                                                        No records found
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="summary" id="footer">
+                                                                <label id="footer" class="footer">Total:</label>
+                                                                <input style="width: 5%;" [(ngModel)]="dt._totalRecords"
+                                                                    [disabled]="true" pInputText type="text" />
+                                                                &nbsp;&nbsp;
+                                                                <label id="footer" class="footer1">Pages Count:</label>
+
+                                                                <input style="width: 5%;" [ngModel]="
+                              getPageCount(dt._totalRecords, attachmentsPageSize)
+                            " [disabled]="true" pInputText type="text" />
+                                                            </ng-template>
+                                                        </p-table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"> <a class="collapsed" data-toggle="collapse"
+                                            href="#step2">PN Mapping</a>
+                                    </h4>
+                                </div>
+                                <div id="step2" class="panel-collapse  collapse">
+                                    <div class="panel-body">
+                                        <div class="col-sm-12">
+                                            <div class="shadow-Box">
+                                                <p-table #pnTable class="rpo-table-cstm ptable-th-bg"
+                                                    [columns]="headersforPNMapping" [value]="pnMappingList"
+                                                    [paginator]="true" [rows]="pnMappingPageSize" [first]="first"
+                                                    [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                                    <ng-template pTemplate="header" let-columns>
+                                                        <tr>
+                                                            <!-- <th>Sl.No</th> -->
+                                                            <th style="padding: 8px 5px !important;"
+                                                                *ngFor="let col of columns"
+                                                                [pSortableColumn]="col.field">
+                                                                {{ col.header }}
+                                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                                <input style="width:100%;" pInputText type="text"
+                                                                    (input)="
+                                                                  pnTable.filter($event.target.value, col.field, 'contains')
+                                                                  " />
+                                                            </th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                                        let-rowIndex="rowIndex">
+                                                        <tr>
+                                                            <!-- <td>{{ rowIndex + 1 }}</td> -->
+                                                            <td *ngFor="let col of columns">
+                                                                {{ rowData[col.field] }}
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="emptymessage" let-columns
+                                                        *ngIf="pnMappingList.length == 0">
+                                                        <tr>
+                                                            <td [attr.colspan]="4"
+                                                                style="color: red; font-weight: bold; text-align: center">
+                                                                No records found
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="summary" id="footer">
+                                                        <label id="footer" class="footer">Total:</label>
+                                                        <input style="width: 5%;" [(ngModel)]="pnTable._totalRecords"
+                                                            [disabled]="true" pInputText type="text" />
+                                                        &nbsp;&nbsp;
+                                                        <label id="footer" class="footer1">Pages Count:</label>
+
+                                                        <input style="width: 5%;" [ngModel]="
+                              getPageCount(pnTable._totalRecords, pnMappingPageSize)
+                            " [disabled]="true" pInputText type="text" />
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a class="collapsed" data-toggle="collapse"
+                                            href="#step3">Aircraft Info</a>
+                                    </h4>
+                                </div>
+                                <div id="step3" class="panel-collapse  collapse">
+                                    <div class="panel-body">
+                                        <div class="col-sm-12">
+                                            <div class="shadow-Box">
+                                                <p-table #aircraftTable class="rpo-table-cstm ptable-th-bg"
+                                                    [columns]="aircraftInformationCols" [value]="aircraftList"
+                                                    [paginator]="true" [rows]="aircraftPageSize" [first]="first"
+                                                    [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                                    <ng-template pTemplate="header" let-columns>
+                                                        <tr>
+                                                            <!-- <th>ID</th> -->
+                                                            <th style="padding: 8px 5px !important;"
+                                                                *ngFor="let col of columns"
+                                                                [pSortableColumn]="col.field">
+                                                                {{ col.header }}
+                                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                                <input style="width:100%;" pInputText type="text"
+                                                                    (input)="
+                                                                    aircraftTable.filter($event.target.value, col.field, 'contains')
+                                                                    " />
+                                                            </th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                                        let-rowIndex="rowIndex">
+                                                        <tr>
+                                                            <!-- <td>{{ rowIndex + 1 }}</td> -->
+                                                            <td *ngFor="let col of columns">
+                                                                {{ rowData[col.field] }}
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="emptymessage" let-columns
+                                                        *ngIf="aircraftList.length == 0">
+                                                        <tr>
+                                                            <td [attr.colspan]="3"
+                                                                style="color: red; font-weight: bold; text-align: center">
+                                                                No records found
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="summary" id="footer">
+                                                        <label id="footer" class="footer">Total:</label>
+                                                        <input style="width: 5%;"
+                                                            [(ngModel)]="aircraftTable._totalRecords" [disabled]="true"
+                                                            pInputText type="text" />
+                                                        &nbsp;&nbsp;
+                                                        <label id="footer" class="footer1">Pages Count:</label>
+
+                                                        <input style="width: 5%;" [ngModel]="
+                                                                getPageCount(aircraftTable._totalRecords, aircraftPageSize)
+                                                              " [disabled]="true" pInputText type="text" />
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title"><a class="collapsed" data-toggle="collapse"
+                                            href="#step4">ATA Chapter</a></h4>
+                                </div>
+                                <div id="step4" class="panel-collapse  collapse">
+                                    <div class="panel-body">
+                                        <div class="col-sm-12">
+                                            <div class="shadow-Box">
+                                                <p-table #ataTable class="rpo-table-cstm ptable-th-bg"
+                                                    [columns]="atacols" [value]="ataList" [paginator]="true"
+                                                    [rows]="ataPageSize" [first]="first"
+                                                    [rowsPerPageOptions]="[10, 20, 50, 100]">
+                                                    <ng-template pTemplate="header" let-columns>
+                                                        <tr>
+                                                            <!-- <th>ID</th> -->
+                                                            <th style="padding: 8px 5px !important;"
+                                                                *ngFor="let col of columns"
+                                                                [pSortableColumn]="col.field">
+                                                                {{ col.header }}
+                                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                                <input style="width:100%;" pInputText type="text"
+                                                                    (input)="
+                                                                    ataTable.filter($event.target.value, col.field, 'contains')
+                                                                    " />
+                                                            </th>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                                        let-rowIndex="rowIndex">
+                                                        <tr>
+                                                            <!-- <td>{{ rowIndex + 1 }}</td> -->
+                                                            <td *ngFor="let col of columns">
+                                                                {{ rowData[col.field] }}
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="emptymessage" let-columns
+                                                        *ngIf="ataList.length == 0">
+                                                        <tr>
+                                                            <td [attr.colspan]="2"
+                                                                style="color: red; font-weight: bold; text-align: center">
+                                                                No records found
+                                                            </td>
+                                                        </tr>
+                                                    </ng-template>
+                                                    <ng-template pTemplate="summary" id="footer">
+                                                        <label id="footer" class="footer">Total:</label>
+                                                        <input style="width: 5%;" [(ngModel)]="ataTable._totalRecords"
+                                                            [disabled]="true" pInputText type="text" />
+                                                        &nbsp;&nbsp;
+                                                        <label id="footer" class="footer1">Pages Count:</label>
+
+                                                        <input style="width: 5%;" [ngModel]="
+                                                                getPageCount(ataTable._totalRecords, ataPageSize)
+                                                              " [disabled]="true" pInputText type="text" />
+                                                    </ng-template>
+                                                </p-table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="panel panel-default">
+                                          <div class="panel-heading">
+                                              <h4 class="panel-title"> <a class="collapsed" data-toggle="collapse" href="#step3">Export Information</a> </h4>
+                                          </div>
+                                          <div id="step3" class="panel-collapse collapse">
+                                              <div class="panel-body">
+                                                  <div class="col-sm-4">
+                                                      <p><span class="label"><b>CountryId: </b></span><span class="value">{{viewItemMaster.exportCountryId}}</span></p>
+                                                      <p><span class="label"><b>Value: </b></span><span class="value">{{viewItemMaster.exportValue}}</span></p>
+                                                      <p><span class="label"><b>Weight: </b></span><span class="value">{{viewItemMaster.exportWeight}}</span></p>
+                                                      <p><span class="label"><b>Size(L,W,H): </b></span><span class="value">{{viewItemMaster.exportSizeLength}} , {{viewItemMaster.exportSizeWidth}} , {{viewItemMaster.exportSizeHeight}}</span></p>
+                                                      <p><span class="label"><b>Classification: </b></span><span class="value">{{viewItemMaster.exportClassificationId}}</span></p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

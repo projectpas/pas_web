@@ -1,0 +1,30 @@
+﻿label {
+    text-align: left;
+    width: auto;
+    margin-right: 0;
+    font-weight: normal;
+}
+input[type="text"], input[type="number"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+textarea {
+    border-radius: 5px !important;
+}
+.currency, .credit{
+    display: flex;
+}
+.credit{
+    width: 100px;
+}
+.table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
+    padding: 0 3px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    font-size: 12px;
+    vertical-align: middle;
+    border-top: 1px solid #e7ecf1;
+}
+a.fa.fa-plus-circle {
+    color: green !important;
+}

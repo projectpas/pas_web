@@ -1,0 +1,45 @@
+﻿.x_panel {
+    border: none;
+}
+label {
+    text-align: left;
+    width: 140px;
+    margin-right: 0;
+    font-weight: normal;
+}
+input[type="text"], input[type="number"], select {
+    height: 24px !important;
+    border-radius: 5px !important;
+}
+// .form-control:disabled {
+//     background-color: #e9ecef !important;
+// }
+.child-data td, .parent-data td {
+    background: #fff !important;
+    padding: 3px;
+}
+.child-header {
+    background: #fafafa !important;
+}
+textarea {
+    border-radius: 5px !important;
+}
+.head-notes {
+    height: 28px !important;
+}
+.pas-table-cstm select, .pas-table-cstm input {
+    min-width: 90px;
+}
+.parent-data {
+    background: #fff !important;
+}
+.pas-table-cstm tr th {
+    min-width: 110px;
+    text-align: center;
+}
+@media (min-width: 768px) {
+    .col-md-3 {
+        max-width: 22%;
+        margin-right: 15px;
+    }
+}

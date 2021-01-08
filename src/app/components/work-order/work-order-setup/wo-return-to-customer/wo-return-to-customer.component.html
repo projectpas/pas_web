@@ -1,0 +1,135 @@
+<div>
+    <p-table #dt
+    class="rpo-table-cstm rro-table-cstm ptable-f10"
+    [value]="partNumbersList"
+    [metaKeySelection]="true"
+    [first]="0"
+    (onPage)="pageIndexChange($event)"
+    [rows]="pageSize"
+    [paginator]="true"
+    [pageLinks]="3"
+    [rowsPerPageOptions]="[10, 20, 50, 100]"
+    [columns]="selectedColumns"
+    selectionMode="multiple"
+    [resizableColumns]="true"
+    [reorderableColumns]="true"
+    [totalRecords]="totalRecords"
+    [scrollable]="true" scrollHeight="450px">
+
+        <ng-template pTemplate="caption">
+            <div style="text-align: right; min-height: 30px;">
+                <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
+                [ngModelOptions]="{ standalone: true }" optionLabel="header" 
+                selectedItemsLabel="{0} columns selected"
+                [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
+                    <i class="fa fa-search"></i>
+                    <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
+                        (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
+                        style="height: 28px !important;" />
+                </div>
+                <button type="button" class="btn btn-primary" matTooltip="Download Data" matTooltipPosition="above"
+                pButton icon="fa-download" iconPos="left" label="Export Data" (click)="dt.exportCSV()"
+                style="padding:5px 10px !important;"></button>
+                <button type="button" class="btn btn-primary" matTooltip="Download Selected Data"
+                matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+                (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
+
+                <!-- <div class="excel-upload excel-upload-cstm">
+                <button type="button" class="btn btn-primary" matTooltip="Download Sample File"
+                    matTooltipPosition="above" (click)="sampleExcelDownload()" style="padding: 5px 10px !important;">
+                    Sample File Download
+                </button>
+
+                <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)"
+                    class="uploaddoc upload-file" accept=".xlsx, .xls, .csv" />
+                <label for="upload">
+                    <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                    <i class="fa fa-upload"></i>
+                    </span>
+                </label>
+                </div> -->
+            </div>
+        </ng-template>
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" style="width:130px">
+            </colgroup>
+        </ng-template>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+
+                <th style="width:auto"
+                    *ngFor="let col of columns"
+                    pResizableColumn
+                    pReorderableColumn
+                    [pSortableColumn]="col.field">
+                    {{ col.header }}
+                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                </th>
+                <th style="width:50px;position:sticky"
+                    *ngIf="selectedColumns.length > 0 && !isView">
+                    Actions
+                </th>
+            </tr>
+            <tr>
+                <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input style="width:100%;" pInputText type="text" (input)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                    " />
+                </th>
+                <th style="width: 50px;" *ngIf="!isView"></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
+                    <ng-container *ngFor="let col of columns" >
+                            <td  style="width:auto"
+                            *ngIf="col.field == 'SERIAL_NO'"
+                            class="ui-resizable-column"
+                            pReorderableRowHandle>
+                            <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
+                            <span> </span>
+                            </td>
+                            <td style="width:auto"
+                            *ngIf="col.field !== 'SERIAL_NO'"
+                            class="ui-resizable-column"
+                            pReorderableRowHandle>
+                                <p class="p_textEditor" [innerHTML]=rowData[col.field]></p>
+                            </td>
+                    </ng-container>
+                    <td style="width:50px;position:sticky" class="ui-resizable-column" *ngIf="!isView">
+                        <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
+                        (click)="edit(rowData, i)" matTooltip="Edit">
+                            <mat-icon>edit</mat-icon>
+                        </button> -->
+                        <!-- <button class="btn btn-danger nobg" (click)="deleteMemo(rowData)">
+                            <i class="fa fa-trash" style="font-size: 14px;"></i>
+                        </button> -->
+                        <span data-toggle="modal" data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, i)" matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a> </span>
+                        <span><a class="btn nobg btn-delete-cstm" (click)="deleteMemo(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                    </td>
+                </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns *ngIf="partNumbersList.length == 0">
+            <tr>
+                <td colspan="10" style="color: red; font-weight: bold; text-align: center">
+                No records found
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary" id="footer">
+            <label id="footer">Total:</label>
+            <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+            &nbsp;&nbsp;
+            <label id="footer">Pages Count:</label>    
+            <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText type="text" />
+        </ng-template>
+    </p-table>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+﻿table th {
+    padding: 4px;
+}
+table td {
+    padding: 4px;
+}
+.managementstr input {
+    padding: 4px !important;
+}
+.status-radio label {
+    text-align: left;
+    width: 140px;
+    margin-right: 0;
+    font-weight: normal;
+}
+
+input.hidePlaceHolder {
+    color: transparent !important;
+}
+.managementstr{
+    width: 100%;
+}
+.mantstr{
+    width: 100%;
+}
+input.hidePlaceHolder:focus,
+input.hidePlaceHolder:hover,
+input.hidePlaceHolder:active {
+    color: #000 !important;
+}
+.ui-table{
+padding: 0px !important;
+}
+.ui-table-wrapper {
+    padding: 0px 0px !important;
+    // clear: both;
+}

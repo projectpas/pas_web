@@ -1,0 +1,69 @@
+button {
+  border-radius: 5px;
+}
+
+.form-group > label {
+  width: 100%;
+}
+
+div.row {
+  padding: 10px;
+}
+
+// #footer {
+//   display: inline-flex;
+//   font-size: 11px !important;
+// }
+.footer-t-rec {
+  margin-left: 65%;
+}
+.footer--count {
+  margin-right: 0px;
+}
+
+.ui-table-scrollable-header-box {
+  margin-right: 17px !important;
+}
+
+.ui-table-scrollable-body {
+  margin-right: 17px !important;
+}
+///// this code below is for width of the scroll bar
+::-webkit-scrollbar {
+  width: 10px;
+}
+.ui-table-scrollable-header {
+  overflow-y: scroll;
+}
+.alternate-part-label{
+  color: #ff5663 !important;
+}
+.row-bg1 {
+  background-color: #ffe4e2 !important;
+}
+.sales-quote-part-search-data tr td:first-child {
+  background: #4298ff;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+.sales-quote-part-search-data tr td:last-child {
+  background: #FFF;
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+}
+.sales-quote-part-search-data tr th:first-child {
+  background: #4298ff;
+  color: #fff;
+  position: -webkit-sticky;
+  position: sticky;
+  left: 0;
+}
+.sales-quote-part-search-data tr th:last-child {
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+}
+

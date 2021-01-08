@@ -1,0 +1,517 @@
+﻿<div [@fadeInOut] class="page-content">
+    <div class="right_col" role="main">
+        <div class="x_panel">
+            <div class="x_content">
+                <h3 class="page-heading clr-green"> GL Account Class Type</h3>
+                <!-- <div class="card">
+                    <div class="card-body">
+                        <div class="inline-block display-flex">
+                            <h3 class="po-head lead"> GL Account Type</h3>
+                            &nbsp;&nbsp;
+                            <a class="plusicon-cstm new-margin" 
+                            matTooltipPosition="above" 
+                            matTooltip="Add  GL Account Type" 
+                            tooltipPosition="right"
+                             data-target="#addglaccount" data-toggle="modal"
+                              (click)="resetForm()">
+                                <i class="fa fa-plus-circle fa-lg"></i>
+                            </a>
+                        </div> -->
+
+                        <div class="card new-card">
+                            <div class="card-header bg-primary new-card-header">
+                              <div class="row">
+                                <div class="col">
+                                  <h4 class="new-card-heading">GL Account Type</h4>
+                                </div>
+                                <div>
+                                  <button
+                                    type="button"
+                                    class="btn-sm new-btn-primary"
+                                    data-target="#addglaccount" data-toggle="modal"
+                                    (click)="resetForm()"
+                                  >
+                                  Add  GL Account Type
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-body new-card-body">
+                        <!-- <div class="form-row col-row col-row1">
+                            <div class="col-md-4 display-flex inline-block" style="margin-top: 25px;">
+                                <div>
+                                </div>
+                            </div>
+                        </div> -->
+                       
+                        <p-table #dt class="rpo-table-cstm rro-table-cstm" 
+                        [value]="GLAccountTypeList" [metaKeySelection]="true" [totalRecords]="totalRecords" [rows]="10" [paginator]="true" [pageLinks]="3"
+                                 [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" (onPage)="changePage($event)" selectionMode="multiple"
+                                 [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true" scrollHeight="450px">
+                            <ng-template pTemplate="caption">
+
+                                <div class="row">
+                                    <div class="col">
+                                    <p-multiSelect [maxSelectedLabels]="2" [options]="selectedData" optionLabel="header" [(ngModel)]="selectedColumns"
+                                                   [style]="{minWidth: '200px'}" style="float:left"></p-multiSelect>
+                                   
+                                                </div>
+                                                <div class="col">
+                                                  
+                                                      <div
+                                                        style="width: 370px; float: right; padding-top: 3px;"
+                                                      >
+                                                        <div class="form-group">
+                                                          <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
+                                                          <div
+                                                            class="pull-left"
+                                                            style="margin-top: 4px; margin-right: 15px;"
+                                                          >
+                                                                <label class="radio-cstm wauto">
+                                                                    <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)="getListByStatus('Active')" [(ngModel)]="currentstatus">
+                                                                    <span class="checkmark"></span>Active
+                                                                </label>
+                                                            </div>
+                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                <label class="radio-cstm wauto">
+                                                                    <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)="getListByStatus('InActive')" [(ngModel)]="currentstatus">
+                                                                    <span class="checkmark"></span>In-Active
+                                                                </label>
+                                                            </div>
+                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                                <label class="radio-cstm wauto">
+                                                                    <input type="radio" name="EmpStatus" class="form-control" value="ALL" 
+                                                                    (click)="getListByStatus('ALL')" [(ngModel)]="currentstatus">
+                                                                    <span class="checkmark"></span>All
+                                                                </label>
+                                                            </div>
+                                                                <div class="checkbox-cstm" style="margin-left: 0;">
+                                                                  <label style="width: auto !important;margin-top: 3px;">
+                                                                   
+                                                                    <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" 
+                                                                     (click)="getDeleteListByStatus($event.target.checked)"
+                                                                      />
+                                                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                                  Show  Deleted List 
+                                                                  </label>
+                                                                </div>
+                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                              <div class="col">
+                        
+                                    <button type="button" class="btn btn-primary " matTooltip="Download All Data" matTooltipPosition="above"   pButton icon="fa-download"
+                                            iconPos="left" label="Export All Data"  style="padding: 5px 12px !important;" (click)="dt.exportCSV()"></button>
+                                    <button type="button" class="btn btn-primary " matTooltip="Download Selected" matTooltipPosition="above"   pButton icon="fa-download"
+                                            iconPos="left" label="Export Selection Only"  style="padding: 5px 12px !important;" (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                    <div class="excel-upload  excel-upload-cstm">
+
+                                        <input type="file" name="upload[]" id="upload" (change)="customExcelUpload($event)" class="uploaddoc upload-file"
+                                               accept=".xlsx, .xls, .csv">
+                                        <label for="upload">
+                                            <span matTooltip="Upload Data (Excel)" matTooltipPosition="above"  >
+                                                <i class="fa fa-upload"></i>
+                                            </span>
+                                        </label>
+                                        &nbsp; &nbsp;
+                                        <button class="btn btn-primary"  style="padding: 5px 12px !important;" (click)="sampleExcelDownload()"  matTooltipPosition="above" matTooltip="Download Sample File"  >Sample File Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                            </ng-template>
+
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width:200px" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                        {{col.header}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th style="width:200px;position:sticky" *ngIf="selectedColumns.length> 0"> Actions</th>
+                                </tr>
+                                <tr>
+                                    <th style="width:200px" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
+                                    </th>
+                                    <th style="width:200px;position:sticky"></th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
+                                    <td style="width:200px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                        {{
+col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?
+                                        (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]
+                                        }}
+                                    </td>
+                                    <td class="action-icons-cstm" style="width:200px" >
+
+                                        <div *ngIf="currentDeletedstatus==false">
+                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChange(rowData)"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChange(rowData)"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChange(rowData)"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <span data-toggle="modal" data-target="#view">
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" 
+                                            (click)="openView(rowData)" 
+                                            data-target="#view" matTooltip="View" matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                        <!-- <button class="btn-edit" mat-icon-button (click)="openEdit(rowData)" 
+                                        matTooltip="Edit" data-target="#addglaccount" data-toggle="modal"
+                                         matTooltipPosition="above">
+                                            <mat-icon>edit</mat-icon>
+                                        </button> -->
+
+
+                                        <span data-target="#addglaccount" data-toggle="modal">
+                                            <a class="btn nobg" 
+                                            (click)="openEdit(rowData)" 
+                                            matTooltip="Edit" 
+                                            matTooltipPosition="above"><i class="fa fa-pencil">                          
+                                            </i></a> </span>
+
+                                            <span data-target="#delete" data-toggle="modal">
+                                                <a class="btn nobg" 
+                                                (click)="openDelete(content,rowData)" 
+                                                matTooltip="Delete"  matTooltipPosition="above">
+                                                <i class="fa fa-trash"></i></a> </span>
+
+
+                                        <!-- <button class="btn-delete" mat-icon-button 
+                                        matTooltip="Delete" 
+                                        (click)="openDelete(content,rowData)" 
+                                        matTooltipPosition="above">
+                                            <mat-icon color="warn">delete</mat-icon>
+                                        </button> -->
+                                        <span data-target="#contentHist" data-toggle="modal"><a class="btn nobg" 
+                                            (click)="getAuditHistoryById(rowData)"
+                                             matTooltip="History"  matTooltipPosition="above">
+                                             <i class="fa fa-history"></i></a></span>
+
+
+                                        <!-- <button class="btn-history" mat-icon-button matTooltip="History"
+                                         data-target="#contentHist" data-toggle="modal" 
+                                         (click)="getAuditHistoryById(rowData)" matTooltipPosition="above">
+                                            <mat-icon color="green">history</mat-icon>
+                                        </button> -->
+                                    </div>
+
+                                    <div *ngIf="currentDeletedstatus==true">
+                                        <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
+                                        matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                                       <span data-toggle="modal" data-target="#view"><a class="btn nobg"
+                                         (click)="openView(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                      <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <!-- <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg" (click)="getAuditHistoryById(contentAuditHist,rowData)" matTooltip="History"  matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
+                                     
+                                    </div> 
+
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #auditContent let-c="close" let-d="dismiss">
+                                <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+                                    <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns
+                            *ngIf="GLAccountTypeList && GLAccountTypeList.length == 0 || GLAccountTypeList && GLAccountTypeList.length ==null">
+                   <tr>
+                       <td [attr.colspan]="7" class="no-records-cstm">
+                           No records found
+                       </td>
+                   </tr>
+               </ng-template>
+                            <ng-template pTemplate="summary" id="footer">
+                                <label id="footer" class="footer1">Total:</label> 
+                                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                                &nbsp;&nbsp;
+                                <label id="footer" class="footer1">Pages Count:</label>
+                                <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText type="text" />
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
+    
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+  
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+       
+    </div>
+    <div class="modal-body">
+        <strong>
+           GL Account Class:
+            <span class="new-label">{{restorerecord.glAccountClassName}}</span>
+        </strong>
+    </div>
+  
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template> 
+
+<div *ngIf="viewRowData" #view class="modal fade" id="view" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+                <h4 class="modal-title"> GL Account Class Type Details</h4>
+            </div>
+            <div class="modal-body viewform">
+                <div class="col-sm-12">
+                    <!--<p>
+                        <span class="label">
+                            <b> Gl Account Id: </b>
+                        </span>
+                        <span class="value">{{viewRowData.GLCID}}</span>
+                    </p>-->
+                    <p>
+                        <span class="label">
+                            <b> GL Account Class Name: </b>
+                        </span>
+                        <span class="value">{{viewRowData.glAccountClassName}}</span>
+                    </p>
+
+                    <p>
+                        <span class="label">
+                            <b> GL Account Class  Memo: </b>
+                        </span>
+                        <span class="value">{{viewRowData.glAccountClassMemo}}</span>
+                    </p>
+                    <p>
+                        <span class="label">
+                            <b>Created By: </b>
+                        </span>
+                        <span class="value">{{viewRowData.createdBy}}</span>
+                    </p>
+                    <p>
+                        <span class="label">
+                            <b>Created Date: </b>
+                        </span>
+                        <span class="value">{{viewRowData.createdDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+                    </p>
+                    <p>
+                        <span class="label">
+                            <b>Updated By: </b>
+                        </span>
+                        <span class="value">{{viewRowData.updatedBy}}</span>
+                    </p>
+                    <p>
+                        <span class="label">
+                            <b>Updated Date: </b>
+                        </span>
+                        <span class="value">{{viewRowData.updatedDate | date: 'MM/dd/yyyy h:mm:ss a'}}</span>
+                    </p>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="" name="" (click)="dismissModel()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div #content id="delete" class="modal fade" role="dialog" data-backdrop="static"
+ data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+            </div>
+            <div class="modal-body">
+                <strong>
+                    GL Account Type:
+                    <span class="new-label">{{code_Name}}</span>
+                </strong>  
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                 (click)="deleteItemAndCloseModel()">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                (click)="dismissModel()">No</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- <div #delete id="delete" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <strong>
+            GL Account Type:
+            <span class="new-label">{{code_Name}}</span>
+        </strong>   
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+    </div>
+</div>
+</div> -->
+
+<!--<ng-template #auditContent  data-backdrop="static">
+    <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+        <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
+    </div>
+</ng-template>-->
+
+<div #addglaccount id="addglaccount" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">{{isEdit ? 'Edit' : 'Add' }} GL Account Class  </h4>
+     
+            </div>
+            <div class="modal-body">
+                <!--// <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="editItemAndCloseModel()">-->
+                <form #userForm="ngForm">
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="name" class="control-label">
+                                    GL Account Type Name
+                                    <span class="clr-red">*</span>
+                                </label>
+                            </div>
+                            <div class="col-sm-5">
+                                <p-autoComplete [(ngModel)]="addnewGLAccountClassType.glAccountClassName" field="glAccountClassName" name="glAccountClassName" 
+                                                (onSelect)="partnmId($event)" (onKeyUp)="eventHandler('glAccountClassName',$event.target.value)" 
+                                                (onBlur)="onBlur($event)"
+                                                [suggestions]="GLAccountClassTypeList" (completeMethod)="filterGlAccountclass($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" required>
+                                </p-autoComplete>
+                                <div *ngIf="disableSaveMsg" class="clr-red">Already Exists</div>
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+
+                        <!--<div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="GLCID" class="control-label">GLCID</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <textarea class="text-item" #memo="ngModel" id="gLCID" [ngModelOptions]="{standalone: true}" [(ngModel)]="addnewGLAccountClassType.gLCID" minlength="2"></textarea>
+                            </div>
+                            <div class="clear"></div>
+                        </div>-->
+
+                        <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                <label for="GLAccountClassMemo" class="control-label">Memo</label>
+                            </div>
+                            <div class="col-sm-5">
+                                <textarea class="text-item" #memo="ngModel" id="memo" [ngModelOptions]="{standalone: true}" [(ngModel)]="addnewGLAccountClassType.glAccountClassMemo" minlength="2" (ngModelChange)="getChange()"></textarea>
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="checkbox-cstm check-value">
+                                <label>
+                                    <input type="checkbox" name="isActive" (ngModelChange)="getChange()" #isActive="ngModel" class="form-check-input trigger2" checked id="isActive" [(ngModel)]="addnewGLAccountClassType.isActive" [ngModelOptions]="{standalone: true}">
+                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                    Active
+                                </label>
+                            </div>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" [disabled]="!userForm.valid || disableSave" data-dismiss="modal" (click)="editItemAndCloseModel()">{{isEdit ? 'Update' : 'Save' }}</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">History of Gl Account Type</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive rro-table-cstm">
+                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <!-- <th>UMID</th> -->
+                                <th>GLCID</th>
+                                <th>GLAccount Type</th>
+                                <th>Memo</th>
+                                <th>IsActive</th>
+                                <th>Updated By</th>
+                                <th>Updated Time</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="auditHistory.length> 0">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'glcid', audit.glcid)  ? 'black' : 'red'  }">{{audit.glcid}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'glAccountClassName', audit.glAccountClassName)  ? 'black' : 'red'  }">{{audit.glAccountClassName}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'glAccountClassMemo', audit.glAccountClassMemo)  ? 'black' : 'red'  }">{{audit.glAccountClassMemo}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">{{audit.isActive}}</td>
+                                <td>{{audit.updatedBy}}</td>
+                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                            </tr>
+                        </tbody>
+
+
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                            <h4 style="color: #ff5663;">No History Found </h4>
+                        </div>
+
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+

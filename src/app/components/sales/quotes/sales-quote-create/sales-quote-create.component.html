@@ -1,0 +1,878 @@
+<div class="right_col" role="main">
+    <div class="x_content">
+        <div class="card new-card">
+            <div class="card-header bg-primary new-card-header">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="new-card-heading">{{id ? 'Edit' : 'Create'}} Sales Order Quote</h4>
+                    </div>
+                    <div class="col-md-8">
+                        <button class="btn-sm new-btn-primary pull-left" (click)="expandHeader()">
+                            {{toggle_po_header ? 'Collapse' : 'Expand'}}
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-sm new-btn-primary pull-right" matTooltipPosition="above"
+                            matTooltip=" SO Quote List" [routerLink]="['/salesmodule/salespages/sales-quote-list']">
+                            SO Quote List
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card" style="padding: 5px; margin: 5px;" *ngIf="!toggle_po_header">
+                <div class="form-row">
+                    <div class="form-row">
+                        <div class="col-md-3" style="padding-left:15px;">
+                            <div class="form-group">
+                                <label>Customer Name
+                                    <span class="clr-red">*</span>
+                                    <span style="color:blue" class="ng-star-inserted">
+                                        <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
+                                            matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                    </span>
+                                </label>
+                                <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
+                                    class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
+                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
+                                    class="alert alert-danger alert-danger-cstm">
+                                    <div *ngIf="customerName.errors.required">
+                                        <small>Customer Name is required </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                            <div class="form-group">
+                                <label>Customer Code</label>
+                                <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
+                                    class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                            <div class="form-group">
+                                <label>SO Quote Num</label>
+                                <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
+                                    name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
+                                    id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                            <div class="form-group" *ngIf="isEdit">
+                                <label>Version Num</label>
+                                <input type="text" [(ngModel)]="salesQuote.versionNumber" name="versionNumber"
+                                    class="form-control" [disabled]="true" id="versionNumber"
+                                    #versionNumber="ngModel" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-controls">
+                <form #newSalesQuoteForm="ngForm" class="form-horizontal">
+                    <div class="card" style="padding: 5px; margin: 5px;" *ngIf="toggle_po_header">
+                        <div class="form-row">
+                            <div class="col-md-6 main_ar">
+                                <div class="form-row">
+                                    <div class="col-md-6" style="padding:10px;">
+                                        <div class="form-group">
+                                            <label>Quote Type <span class="clr-red">*</span></label>
+                                            <select name="quoteTypeId" required [(ngModel)]="salesQuote.quoteTypeId"
+                                                [disabled]="true" id="quoteTypeId" #quoteTypeId="ngModel">
+                                                <option *ngFor="let type of salesQuote.salesQuoteTypes"
+                                                    [ngValue]="type.id">
+                                                    {{ type.name }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="quoteTypeId.invalid && (quoteTypeId.dirty || quoteTypeId.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="quoteTypeId.errors.required">
+                                                    <small> Quote Type is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding-top:5px;">
+                                            <label>SO Quote Num</label>
+                                            <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
+                                                name="salesOrderQuoteNumber" class="form-control" [disabled]="true"
+                                                id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
+                                        </div>
+                                        <div class="form-group" *ngIf="isEdit">
+                                            <label>Version Num</label>
+                                            <input type="text" [(ngModel)]="salesQuote.versionNumber"
+                                                name="versionNumber" class="form-control" [disabled]="true"
+                                                id="versionNumber" #versionNumber="ngModel" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Open Date<span class="clr-red">*</span></label>
+                                            <p-calendar name="openDate" [(ngModel)]="salesQuote.openDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                [showIcon]="true" id="openDate" #openDate="ngModel" required
+                                                (onSelect)="onChangeOpenDate()">
+                                            </p-calendar>
+                                            <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="openDate.errors.required">
+                                                    <small> Open Date is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Customer Ref<span class="clr-red">*</span></label>
+                                            <input type="text" required name="customerReferenceName"
+                                                id="customerReferenceName" #customerReferenceName="ngModel"
+                                                class="form-control" [(ngModel)]="salesQuote.customerReferenceName"
+                                                (change)="onChangeInput()" autocomplete=" off" />
+                                            <div *ngIf="customerReferenceName.invalid && (customerReferenceName.dirty || customerReferenceName.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="customerReferenceName.errors.required">
+                                                    <small>Customer Ref is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Quote Exp Date<span class="clr-red">*</span></label>
+                                            <p-calendar name="quoteExpiryDate" [(ngModel)]="salesQuote.quoteExpiryDate"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                [showIcon]="true" id="quoteExpiryDate" #quoteExpiryDate="ngModel"
+                                                required [disabled]="true" (onSelect)="onChangeQuoteExpiryDate()">
+                                            </p-calendar>
+                                            <div *ngIf="quoteExpiryDate.invalid && (quoteExpiryDate.dirty || quoteExpiryDate.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="quoteExpiryDate.errors.required">
+                                                    <small>Quote Exp Date is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Employee<span class="clr-red">*</span></label>
+                                            <p-autoComplete class="autocomp-customer-cstm" name="employeeName"
+                                                id="employeeName" #employeeName="ngModel"
+                                                [(ngModel)]="salesQuote.employeeName" [suggestions]="firstCollection"
+                                                [forceSelection]="true" emptyMessage="No Match Found" field="label"
+                                                (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
+                                                [dropdown]="true" required>
+                                            </p-autoComplete>
+                                            <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="employeeName.errors.required">
+                                                    <small>Employee is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="padding:10px">
+                                        <div class="form-group">
+                                            <label>Account Type <span class="clr-red">*</span></label>
+                                            <select name="accountTypeId" required [(ngModel)]="salesQuote.accountTypeId"
+                                                [disabled]="true" id="accountTypeId" #accountTypeId="ngModel">
+                                                <option *ngFor="let accountType of accountTypes"
+                                                    [ngValue]="accountType.value">
+                                                    {{ accountType.label }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="accountTypeId.invalid && (accountTypeId.dirty || accountTypeId.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="accountTypeId.errors.required">
+                                                    <small> Account Type is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Customer Name
+                                                <span class="clr-red">*</span>
+                                                <span style="color:blue" class="ng-star-inserted">
+                                                    <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
+                                                        matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                                </span>
+                                            </label>
+                                            <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
+                                                class="form-control" [disabled]="true" id="customerName"
+                                                #customerName="ngModel" />
+                                            <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="customerName.errors.required">
+                                                    <small>Customer Name is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Customer Contact<span class="clr-red">*</span></label>
+                                            <select [(ngModel)]="salesQuote.customerContactId" required
+                                                [ngModelOptions]="{standalone: true}" name="customerContactId"
+                                                (change)="onChangeInput()" id="customerContactId"
+                                                #customerContactId="ngModel">
+                                                <option value='0' selected>--Select</option>
+                                                <option *ngFor="let contact of customerContactList"
+                                                    [ngValue]="contact.contactId">
+                                                    {{contact.firstName}} {{contact.lastName}} -
+                                                    {{ contact.workPhone }}
+                                                </option>
+                                            </select>
+                                            <div *ngIf="customerContactId.invalid && (customerContactId.dirty || customerContactId.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="customerContactId.errors.required">
+                                                    <small>Customer Contact is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cust Email </label>
+                                            <input type="text" [(ngModel)]="salesQuote.customerEmail"
+                                                name="customerEmail" class="form-control" [disabled]="true"
+                                                id="customerEmail" #customerEmail="ngModel" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contract Ref</label>
+                                            <input type="text" class="form-control" name="contractReferenceName"
+                                                [(ngModel)]="salesQuote.contractReferenceName"
+                                                (change)="onChangeInput()" [disabled]="true" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Credit Limit &amp; terms</label>
+                                            <div class="col-md-5">
+                                                <input type="text" class="form-control" style="text-align:right;"
+                                                    name="creditLimit"
+                                                    [ngModel]="salesQuote.creditLimit | twoDecimalGlobalNumberFormatPipe"
+                                                    (ngModelChange)="salesQuote.creditLimit=$event" [disabled]="true" />
+                                            </div>
+                                            <div class="col-md-7">
+                                                <select name="creditLimitTermsId" class="form-control"
+                                                    [(ngModel)]="salesQuote.creditLimitTermsId" [disabled]="true">
+                                                    <option value='0'>--Select</option>
+                                                    <option *ngFor="let ct of creditTerms" [ngValue]="ct.value">
+                                                        {{ ct.label }}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding-top: 24px">
+                                            <label>Valid For (Days)<span class="clr-red">*</span></label>
+                                            <input type="number" name="validForDays"
+                                                [(ngModel)]="salesQuote.validForDays"
+                                                style="text-align:right; width:112px" id="validForDays"
+                                                #validForDays="ngModel" required (change)="onChangeValidForDays()"
+                                                class="form-control" />
+                                            <div *ngIf="validForDays.invalid && (validForDays.dirty || validForDays.touched)"
+                                                class="alert alert-danger alert-danger-cstm">
+                                                <div *ngIf="validForDays.errors.required">
+                                                    <small> Valid For (Days) is required </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 main_ar">
+                                <div class="form-row">
+                                    <div class="col-md-6" style="padding:10px; padding-top:5px">
+                                        <div class="form-group" style="padding:12px">
+                                            <label></label>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <input type="checkbox" [(ngModel)]="salesQuote.restrictPMA"
+                                                        name="restrictPMA" id="restrictPMA" [disabled]="true" />
+                                                    Restrict PMA
+                                                </label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label>
+                                                    <input type="checkbox" [(ngModel)]="salesQuote.restrictDER"
+                                                        name="restrictDER" id="restrictDER" [disabled]="true" />
+                                                    Restrict DER
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="padding-top: 10px">
+                                            <label>Sales Person/Agent</label>
+                                            <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
+                                                [(ngModel)]="salesQuote.salesPersonName"
+                                                [ngModelOptions]="{standalone: true}"
+                                                [suggestions]="salesFirstCollection" [forceSelection]="true"
+                                                emptyMessage="No Match Found" field="name"
+                                                (completeMethod)="filterSalesFirstName($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="form-group" style="padding-top:4px;">
+                                            <label>CSR</label>
+                                            <p-autoComplete class=" autocomp-customer-cstm"
+                                                name="customerServiceRepName"
+                                                [(ngModel)]="salesQuote.customerServiceRepName"
+                                                [suggestions]="csrFirstCollection" [forceSelection]="true"
+                                                emptyMessage="No Match Found" field="name"
+                                                (completeMethod)="filtercsrFirstName($event)" [size]="30"
+                                                [minLength]="1" [dropdown]="true">
+                                            </p-autoComplete>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Lead Source</label>
+                                            <select name="leadSource" [(ngModel)]="salesQuote.leadSourceId"
+                                                (change)="onChangeInput()">
+                                                <option value="null" selected>--Select</option>
+                                                <option *ngFor="let ls of leadSources" [ngValue]="ls.value">
+                                                    {{ ls.label }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Probability (%)</label>
+                                            <select name="probability" [(ngModel)]="salesQuote.probabilityId"
+                                                (change)="onChangeInput()">
+                                                <option value="null" selected>--Select</option>
+                                                <option *ngFor="let p of percents" [ngValue]="p.value">
+                                                    {{ p.label }}</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>SO Quote Status<span class="clr-red">*</span></label>
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control"
+                                                    [ngModel]="salesQuote.statusName" name="salesQuoteStatus"
+                                                    [disabled]="true" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p-calendar name="statusChangeDate" [yearNavigator]="true"
+                                                    [monthNavigator]="true" yearRange="1900:2100"
+                                                    [(ngModel)]="salesQuote.statusChangeDate" [showIcon]="true"
+                                                    id="statusChangeDate" #statusChangeDate="ngModel" required
+                                                    [disabled]="true">
+                                                </p-calendar>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6" style="padding:10px">
+                                        <div class="card">
+                                            <div class="card-header" style="padding:.3rem 1rem">
+                                                <label style="text-align: center">Margin Summary</label>
+                                            </div>
+                                            <div>
+                                                <label
+                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Sales<span
+                                                        style="float: right">{{marginSummary.sales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                <label
+                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Misc
+                                                    Amt<span
+                                                        style="float: right">{{marginSummary.misc | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                <label
+                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Net
+                                                    Sales<span
+                                                        style="float: right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                <label
+                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Product
+                                                    Cost<span
+                                                        style="float: right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                <label
+                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Margin
+                                                    Amt<span
+                                                        style="float: right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                <label
+                                                    style="padding-left: 5px; padding-right:5px; font-weight: normal">Margin
+                                                    %<span
+                                                        style="float: right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 10px"></div>
+                                        <div>
+                                            <!-- <app-management-structure [salesQuote]="salesQuote"
+                                                [managementStructureId]="currentUserManagementStructureId">
+                                            </app-management-structure> -->
+                                            <div class="card" style="margin-top: 20px;">
+                                                <div class="card-header" style="padding: 10px 12px;">
+                                                    <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure
+                                                        <span class="clr-red">*</span></h5>
+
+                                                </div>
+                                                <div class="card-body" style="padding: 12px 12px 4px;">
+                                                    <div class="form-group">
+                                                        <select
+                                                            [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''"
+                                                            class="form-control" name="primaryCompany"
+                                                            [(ngModel)]="salesQuote.companyId"
+                                                            (change)="getBUList(salesQuote.companyId); checkValidOnChange(salesQuote.companyId, 'companyId');"
+                                                            #mCompanyName (ngModelChange)="enableHeaderSave()" required>
+                                                            <option value="0">Select</option>
+                                                            <option *ngFor="let name of maincompanylist"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                        <div *ngIf="mCompanyName.invalid && (mCompanyName.dirty || mCompanyName.touched)"
+                                                            class="alert alert-danger alert-danger-cstm">
+                                                            <div *ngIf="mCompanyName.errors.required">
+                                                                <small> Company Name is required </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select [(ngModel)]="salesQuote.buId" name="primaryBU"
+                                                            (change)="getDivisionlist(salesQuote.buId)"
+                                                            class="form-control" (ngModelChange)="enableHeaderSave()">
+                                                            <option value="0">Select</option>
+                                                            <option *ngFor="let name of bulist" [ngValue]="name.value">
+                                                                {{name.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="form-control" [(ngModel)]="salesQuote.divisionId"
+                                                            name="primaryDivision"
+                                                            (change)="getDepartmentlist(salesQuote.divisionId)"
+                                                            (ngModelChange)="enableHeaderSave()">
+                                                            <option value="0">Select</option>
+                                                            <option *ngFor="let name of divisionlist"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <select class="form-control"
+                                                            [(ngModel)]="salesQuote.departmentId" name="primaryDept"
+                                                            (change)="getDepartmentId(salesQuote.departmentId)"
+                                                            (ngModelChange)="enableHeaderSave()">
+                                                            <option value="0">Select</option>
+                                                            <option *ngFor="let name of departmentList"
+                                                                [ngValue]="name.value">{{name.label}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md-4 main_ar">
+                                <div class="form-group" style="padding-left: 5px;">
+                                    <label>Customer Warning</label>
+                                    <textarea name="warningId" class="form-control"
+                                        style="height: 100px !important; width:90% !important; color: #d42c2c !important;"
+                                        disabled
+                                        value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4 main_ar">
+                                <div class="form-group memo-popup-cstm">
+                                    <label>
+                                        Notes<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                            matTooltipPosition="above" matTooltip="Notes"
+                                            (click)="onAddDescription('notes')"></i>
+                                    </label>
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <div [innerHTML]="salesQuote.notes"
+                                                [matTooltip]="parsedText(salesQuote.notes)" class="form-control"
+                                                style="height: 100px !important; width:90% !important"
+                                                class="text_editor_box">
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 main_ar">
+                                <div class="form-group memo-popup-cstm">
+                                    <label>
+                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                            matTooltipPosition="above" matTooltip="Memo"
+                                            (click)="onAddDescription('memo')"></i>
+                                    </label>
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <div [innerHTML]="salesQuote.memo"
+                                                [matTooltip]="parsedText(salesQuote.memo)" class="form-control"
+                                                style="height: 100px !important;width:90%" class="text_editor_box">
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" *ngIf="!isEdit && !isCreateModeHeader" (click)="onSubmit(true)"
+                                [disabled]="!newSalesQuoteForm.form.valid"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Submit
+                            </button>
+                            <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
+                                (click)="openConfirmationModal(true)" [disabled]="enableUpdateButton"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
+                        <div class="x_panel">
+                            <button type="button" (click)="initiateSalesOrderCoversion()"
+                                [disabled]="verifySalesOrderQuoteObj.canCovertToSalesOrder == false"
+                                class="btn btn-primary">
+                                Create SO
+                            </button>
+                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()">
+                                Email Quote
+                            </button>
+                            <button type="button" class="btn btn-primary" (click)="initiateQuoteCopying()">
+                                Make Duplicate
+                            </button>
+                            <a class="btn btn-primary" (click)="initiatePrintProcess()">Print Quote </a>
+                            <a class="btn btn-primary" (click)="initiateCreatingNewQuote()">New Quote</a>
+                            <span class="btn btn-primary" (click)="initiateClosingSalesOrderQuote()">Close</span>
+                            <p-splitButton label="Communication" class="btn btn-primary btn"
+                                [model]="communicationItems">
+                            </p-splitButton>
+                        </div>
+                    </div>
+                    <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
+                        <button type="button" (click)="isEmailTabEnabled = false"
+                            class="btn pull-right submit-btn btn btn-danger">
+                            Close
+                        </button>
+                        <div class="clearfix mb-1"></div>
+                    </ng-container>
+                    <ng-container *ngIf="((isCreateModeHeader||isEdit) && !isEmailTabEnabled)">
+                        <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+                            <p-tabPanel header="Parts List" [selected]="true">
+                                <app-sales-part-number [salesQuote]="salesQuote" [salesQuoteView]="salesQuoteView"
+                                    [isViewMode]="false" (on-parts-save)="onPartsSaveEvent($event)"
+                                    [customer]="customerDetails" [totalFreights]="totalFreights"
+                                    [totalCharges]="totalCharges" [defaultSettingPriority]="defaultSettingPriority">
+                                </app-sales-part-number>
+                            </p-tabPanel>
+                            <p-tabPanel header="Internal Approvers">
+                                <app-sales-approve>
+                                </app-sales-approve>
+                            </p-tabPanel>
+                            <p-tabPanel header="Approver Process">
+
+                                <app-sales-customer-approvals *ngIf="isEdit == true" [salesQuoteView]="salesQuoteView"
+                                    [isViewMode]="false" [customerContactList]="customerContactList"
+                                    [marginSummary]="marginSummary" (quoteApprovedCheck)="verifySalesQuoteConversion()"
+                                    (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
+                                </app-sales-customer-approvals>
+
+                            </p-tabPanel>
+                            <p-tabPanel header="Address">
+                                <!--<app-address-component [addressType]="addressType" [id]="id">
+
+                                </app-address-component>-->
+                                <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
+                                    [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address>
+                            </p-tabPanel>
+                            <p-tabPanel header="Freight">
+                                <app-sales-order-quote-freight [freightForm]="freight" [customerId]="customerId"
+                                    [salesOrderQuoteId]="salesQuote.salesOrderQuoteId"
+                                    (saveFreightListForSO)="saveSalesOrderFreightsList($event)"
+                                    (updateFreightListForSO)="updateSalesOrderFreightsList($event)"
+                                    (refreshData)="getFreightList()" [markupList]="markupList" [isView]="false"
+                                    [isQuote]="true" [buildMethodDetails]="buildMethodDetails">
+                                </app-sales-order-quote-freight>
+                            </p-tabPanel>
+                            <p-tabPanel header="Charges">
+                                <app-sales-order-quote-charges [chargeForm]="charge" [customerId]="customerId"
+                                    [salesOrderQuoteId]="salesQuote.salesOrderQuoteId"
+                                    (saveChargesListForSO)="saveSalesOrderChargesList($event)"
+                                    (updateChargesListForSO)="updateSalesOrderChargesList($event)"
+                                    (refreshData)="getChargesList()" [markupList]="markupList" [isView]="false"
+                                    [isQuote]="true">
+                                </app-sales-order-quote-charges>
+                            </p-tabPanel>
+                            <p-tabPanel header="Document">
+                                <app-salesQuote-documents [viewMode]="false" [salesOrderQuoteId]="id"
+                                    [isEditMode]="true">
+                                </app-salesQuote-documents>
+                            </p-tabPanel>
+                            <p-tabPanel header="Analysis">
+                                <app-sales-quote-analysis>
+                                </app-sales-quote-analysis>
+                            </p-tabPanel>
+                        </p-tabView>
+                    </ng-container>
+
+                    <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
+
+                        <div *ngIf="(selectedCommunicationTab == 'memo')">
+                            <app-m-memo [salesQuoteId]="id" [selectedParts]="selectedParts"
+                                [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-m-memo>
+                        </div>
+
+                        <div *ngIf="(selectedCommunicationTab == 'text')">
+                            <app-text [salesQuoteId]="id" [selectedParts]="selectedParts"
+                                [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-text>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'phone')">
+                            <app-phone [salesQuoteId]="id" [selectedParts]="selectedParts"
+                                [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-phone>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'email')">
+                            <app-e-email [salesQuoteId]="id" [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-e-email>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'Quotemail')">
+                            <app-email [salesQuoteId]="id" [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-email>
+                        </div>
+                        <div class="clearfix mb-1"></div>
+                    </ng-container>
+
+                    <div class="card-footer" style="text-align: right;">
+                        <div class="col-md-1 col-sm-1 col-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-11 col-sm-11 col-11">
+
+
+                            <button type="submit" *ngIf="!isEdit && isCreateModeHeader" (click)="onSubmit(false)"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Submit
+                            </button>
+                            <!-- <button type="submit" *ngIf="isEdit && !isCreateModeHeader"
+                                (click)="openConfirmationModal(false)"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Update
+                            </button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
+            </div>
+
+            <div class="modal-body">
+                <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                        <th style="color: #fff;">{{tempMemoLabel}}</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
+                                </p-editor>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="float:right">
+
+
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 10px;"
+                        (click)="onSaveDescription()">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger" style="margin-top: 10px;" data-dismiss="modal">
+                        Close
+                    </button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #errorMessagePop let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
+        <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
+    </div>
+    <div class="modal-body">
+        <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
+    </div>
+</ng-template>
+
+<ng-template #emailQuotePopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h6 class="text-center">
+            Are you sure you want to send this Quote to Customer?
+        </h6>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="sendQuoteToCustomer()">Yes</button>
+    </div>
+</ng-template>
+
+<ng-template #closeQuotePopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h6 class="text-center">
+            Are you sure you want to Close this Quote?
+        </h6>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="closeSalesOrderQuote()">Yes</button>
+    </div>
+</ng-template>
+
+<ng-template #newQuoteCreatePopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h6 class="text-center">
+            Are you sure you want to create new Quote? Unsaved changes will be lost.
+        </h6>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="newQuoteEvent()">Yes</button>
+    </div>
+</ng-template>
+
+<ng-template #copyQuotePopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Are you sure you want to copy this Quote?</h4>
+    </div>
+    <div class="modal-body">
+        <h6> If yes, please select below considerations.</h6>
+
+        <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+            <p-checkbox name="isPartsAllowForCopy" [(ngModel)]="copyConsiderations.isPartsAllowForCopy" binary="true"
+                label="Parts">
+            </p-checkbox>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="copySalesOrderQuote()">Yes</button>
+    </div>
+</ng-template>
+
+
+<ng-template #salesQuoteConvertPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Creating Sales Order From Quote</h4>
+    </div>
+    <form #quoteConversionForm="ngForm" class="form-horizontal">
+
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Enter Customer Refrence<span class="clr-red">*</span></label>
+                <input type="text" required class="form-control" name="customerReference" style="max-width: 60%;"
+                    [(ngModel)]="salesOrderConversionCriteriaObj.customerReference" (change)="onChangeValidForDays()" />
+            </div>
+
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="selectAllForConversion"
+                    (onChange)="onActionSelectAllforconvversion(selectAllForConversion)"
+                    [(ngModel)]="selectAllForConversion" binary="true" label="Select all">
+                </p-checkbox>
+            </div>
+
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="transferStockline" [(ngModel)]="salesOrderConversionCriteriaObj.transferStockline"
+                    binary="true" label="Transfer Stockline">
+                </p-checkbox>
+            </div>
+
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="reserveStockline" [(ngModel)]="salesOrderConversionCriteriaObj.reserveStockline"
+                    binary="true" label="Reserve Stockline">
+                </p-checkbox>
+            </div>
+
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="transferNotes" [(ngModel)]="salesOrderConversionCriteriaObj.transferNotes"
+                    binary="true" label="Transfer Notes">
+                </p-checkbox>
+            </div>
+
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="transferMemos" [(ngModel)]="salesOrderConversionCriteriaObj.transferMemos"
+                    binary="true" label="Transfer Memo">
+                </p-checkbox>
+            </div>
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="transferFreight" [(ngModel)]="salesOrderConversionCriteriaObj.transferFreight"
+                    binary="true" label="Transfer Freights">
+                </p-checkbox>
+            </div>
+            <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
+                <p-checkbox name="transferCharges" [(ngModel)]="salesOrderConversionCriteriaObj.transferCharges"
+                    binary="true" label="Transfer Charges">
+                </p-checkbox>
+            </div>
+        </div>
+        <div class="modal-footer">
+
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                [disabled]="conversionStarted || !quoteConversionForm.valid" (click)="convertSalesOrderQuote()">
+                Convert
+            </button>
+        </div>
+    </form>
+</ng-template>
+<ng-template #updateConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
+        <h4 class="modal-title">Do you want to create new version or update existing sales order quote ?</h4>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+            (click)="closeConfirmationModal()">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            (click)="createNewSalesOrderQuoteVersion()">
+            Create New Version
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="updateSalesOrderQuote()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #salesQuotePrintPopup let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModal()">&times;</button>
+        <h4 class="modal-title">Print Quote</h4>
+    </div>
+    <div class="modal-body">
+        <div class="x_panel" id="quote_print_content">
+            <app-sales-quote-print-template [salesQuoteView]="salesQuoteView"></app-sales-quote-print-template>
+        </div>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="print()">Yes</button>
+    </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,68 @@
+﻿.x_panel {
+  padding: 0 10px;
+  background-color: #fff;
+}
+label {
+  text-align: left;
+  width: auto;
+  margin-right: 0;
+  font-weight: normal;
+}
+.form-control:disabled {
+  background-color: #e9ecef !important;
+}
+input[type='text'],
+input[type='number'],
+input[type='email'],
+select {
+  height: 24px !important;
+  border-radius: 5px !important;
+}
+textarea {
+  border-radius: 5px !important;
+  height: 24px !important;
+}
+a.fa.fa-plus-circle {
+  color: green !important;
+}
+.checkbox-cstm {
+  margin-left: 10px;
+}
+.viewform-cstm .label {
+  width: 130px !important;
+  //text-align: right;
+}
+.viewform-cstm .value {
+  margin-left: 10px;
+  width: 200px;
+}
+.cus-contact-table tr th {
+  padding: 7px;
+}
+.cus-contact-table tr td {
+  padding: 4px;
+}
+@media (min-width: 768px) {
+  .col-md-3 {
+    max-width: 22%;
+    margin-right: 15px;
+  }
+
+  .col-md-6 {
+    max-width: 44%;
+    margin-right: 15px;
+  }
+}
+:host ::ng-deep .ui-table-summary {
+  margin-right: 0px !important;
+}
+.ui-table .ui-paginator-bottom {
+  padding-top: 20px !important;
+}
+p-multiselect {
+    padding: 0px;
+    height: 28px !important;
+    line-height: 1;
+}
+
+.shiping-via-buttons-area{min-height:27px}

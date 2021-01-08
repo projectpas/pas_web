@@ -1,0 +1,113 @@
+.dropdown-submenu .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -1px;
+}
+
+label {
+  text-align: left;
+  width: 140px;
+  margin-right: 0;
+  font-weight: normal;
+}
+input[type='text'],
+input[type='number'],
+select,
+textarea {
+  height: 24px !important;
+  border-radius: 5px !important;
+}
+table.table-bordered td .start-btn {
+  font-size: 10.5px !important;
+  padding: 5px !important;
+}
+.width-label-radiobtn {
+  width: 111px !important;
+}
+table.table-bordered tr td {
+  color: #333;
+  font-size: 10.5px !important;
+  letter-spacing: 0.1px;
+  font-weight: normal;
+  padding: 4px;
+}
+.float-right i.fa.fa-plus-circle.fa-lg {
+  float: right;
+}
+.margintop {
+  margin-top: 6px !important;
+}
+.padding-td {
+  padding: 8px 51px !important;
+}
+select:disabled{
+  background-color: #e9ecef !important;
+}
+
+p-radioButton label{
+  width: unset;
+}
+
+.emp-labour-cstm p-autocomplete .ui-autocomplete {
+  width: calc(100% - 17px) !important;
+  padding-right: 3px;
+  float: left;
+}
+.delt_btn{
+  background-color: transparent !important;
+  border: none;
+}
+.task-detail{
+  display: grid;
+  p-checkbox {
+    width: 240px;
+    label{
+      margin-left: 13px;
+    }
+  }
+}
+
+
+.task-hours-type {
+  display: grid;
+  .p-radiobutton-label-horizontal label{
+    width: 80%;
+  }
+}
+
+.text-area-cstm{
+  height: 90px !important;
+}
+.width-unset{
+  width: unset !important;
+}
+
+.full-width{
+  width: 100%;
+}
+
+.footer{
+  background-color: #eaf2fd
+}
+
+.ui-calendar .ui-datepicker {
+  top: 0px !important;
+}
+.table-header-col1 {
+  border-top: 1px solid #fff !important;
+    border-bottom: 1px solid #fff !important;
+    border-left: 1px solid #fff !important;
+}
+.table-header-col2 {
+  border-top: 1px solid #fff !important;
+    border-bottom: 1px solid #fff !important;
+    border-left: 1px solid #fff !important;
+    border-right: 1px solid #fff !important;
+}
+.table select.select-read-only {
+  background-color: #ffffff !important;
+}
+table thead tr th {
+  text-align: center;
+  min-width: 0px;
+}

@@ -1,0 +1,215 @@
+
+
+
+<table cellpadding=0  class="t1" style="font-family: Arial; font-size: 14px; 
+border-spacing: 0 1em;">
+    <tr>
+        <td colspan="2">
+            <table>
+                <tr>
+                    <td><strong>Quotation for:</strong></td>
+                </tr>
+                <tr>
+                    <td>{{salesQuote.customerName}}</td>
+                </tr>
+                <tr>
+                    <td><strong>Address:</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>{{customerAddress.address1}}, {{customerAddress.address1}}</strong></td>
+                </tr>
+                <tr>
+                    <td>{{customerAddress.city}}, {{customerAddress.stateOrProvince}}</td>
+                </tr>
+                <tr>
+                    <td>{{customerAddress.countryName}}, {{customerAddress.postalCode}}</td>
+                </tr>
+            </table>
+        </td>
+        <td colspan="2">
+            <table class="t3" align="right">
+              <tr>
+                  <th colspan="2">SALES ORDER QUOTATION	</th>
+              </tr>
+                <tr>
+                    <td>Quote Date</td>
+                    <td class="td2">{{salesQuote.createdOn  | date: 'MM/dd/yyyy'}}</td>
+                </tr>
+                <tr>
+                    <td>Quotation ID</td>
+                    <td class="td2">{{salesQuote.salesOrderQuoteNumber}}</td>
+                </tr>
+                <tr>
+                    <td>Valid Until</td>
+                    <td class="td2">{{salesQuote.validForDays}} Days</td>
+                </tr>
+                <tr>
+                    <td>Prepared By</td>
+                    <td class="td2">{{salesQuote.createdBy}}</td>
+                </tr>
+                <tr>
+                    <td>Date Printed</td>
+                    <td class="td2">{{todayDate | date: 'MM/dd/yyyy'}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr></tr>
+    
+    <tr>
+        <td class="tr0 td1"><strong>Quote Type</strong></td>
+        <td class="tr0 td2">{{salesQuote.quoteTypeName}}</td>
+        <td  class="tr0 td3"><strong>Account Type</strong></td>
+        <td class="tr0 td4">{{salesQuote.accountTypeName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Sales Quote No</strong></td>
+        <td class="tr2 td2" >{{salesQuote.salesOrderQuoteNumber}}</td>
+        <td   class="tr2 td3"><strong>Customer Name</strong></td>
+        <td class="tr2 td24">{{salesQuote.customerName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Open Date</strong></td>
+        <td class="tr2 td2" >{{salesQuote.openDate | date: 'MM/dd/yyyy'}}</td>
+        <td   class="tr2 td3"><strong>Customer Code</strong></td>
+        <td class="tr2 td24">{{salesQuote.customerName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Valid For</strong></td>
+        <td class="tr2 td2" >{{salesQuote.validForDays}} Days</td>
+        <td   class="tr2 td3"><strong>Customer Contact</strong></td>
+        <td class="tr2 td24">{{salesQuote.customerContactName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Quote Exp Date</strong></td>
+        <td class="tr2 td2" >{{salesQuote.quoteExpireDate | date: 'MM/dd/yyyy'}}</td>
+        <td   class="tr2 td3" ><strong>Customer Ref</strong></td>
+        <td class="tr2 td24">{{salesQuote.customerReference}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Cust Request Date</strong></td>
+        <td class="tr2 td2" >{{salesQuote.customerRequestDate | date: 'MM/dd/yyyy'}}</td>
+        <td   class="tr2 td3"><strong>Priority</strong></td>
+        <td class="tr2 td24">{{salesQuote.priorityName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Promised Date</strong></td>
+        <td  class="tr2 td2" >{{salesQuote.promisedDate | date: 'MM/dd/yyyy'}}</td>
+        <td    class="tr2 td3"><strong>Sales Person</strong></td>
+        <td class="tr2 td24">{{salesQuote.salesPersonName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Estimated Ship Date</strong></td>
+        <td  class="tr2 td2" >{{salesQuote.estimatedShipDate | date: 'MM/dd/yyyy'}}</td>
+        <td    class="tr2 td3" ><strong>Customer Service Rep</strong></td>
+        <td class="tr2 td24">{{salesQuote.customerSeviceRepName}}</td>
+    </tr>
+    <tr>
+        <td class="tr2 td1"><strong>Employee</strong></td>
+        <td  class="tr2 td2" >{{salesQuote.employeeName}}</td>
+        <td   class="tr2 td3" ><strong>Status</strong></td>
+        <td class="tr2 td24">{{salesQuote.status}}</td>
+    </tr>
+</table>
+
+        <table cellpadding=2 cellspacing=0 class="t4"  style="font-family: Arial; font-size: 14px;   ">
+            <thead>
+                <tr>
+                    <th>QUOTE NUMBER</th>
+                    <th>SALES PERSON</th>
+                    <th>SHIP DATE</th>
+                    <th>SHIP VIA</th>
+                    <th>F.O.B. POINT</th>
+                    <th>TERMS</th>
+                    <th>CURRENCY</th>
+                    <th>UOM</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="td8">{{salesQuote.salesOrderQuoteNumber}}</td>
+                    <td  class="td46">{{salesQuote.salesPersonName}}</td>
+                    <td  class="td47">{{salesQuote.estimatedShipDate | date: 'MM/dd/yyyy'}}</td>
+                    <td class="td14">{{salesQuote.shipViaName}}</td>
+                    <td class="td48"></td>
+                    <td class="td16">{{salesQuote.creditTerms}}</td>
+                    <td class="td17">{{salesQuote.currencyName}}</td>
+                    <td class="td17"></td>
+                </tr>
+            </tbody>
+        </table>
+<table cellpadding=2 cellspacing=0 class="t2"  style="font-family: Arial; font-size: 14px;   ">
+    <thead>
+    <tr>
+        <th>ITEM</th>
+        <th class="th2">PN & DESCRIPTION</th>
+        <th>COND</th>
+        <th>QTY</th>
+        <th>UNIT PRICE</th>
+        <th>DISCOUNT</th>
+        <th>AMOUNT</th>
+    </tr>
+</thead>
+<tbody>
+    <tr *ngFor="let part of parts; let i = index">
+        <td class="td8">{{i+1}}</td>
+        <td class="td2">{{part.partNumber}} & {{part.partDescription}}</td>
+        <td  class="td47">{{part.conditionDescription}}</td>
+        <td class="td14"  style="text-align: right;">{{part.qtyQuoted}}</td>
+        <td class="td48" style="text-align: right;">{{part.unitSalePrice | twoDecimalGlobalNumberFormatPipe}}</td>
+        <td class="td16"  style="text-align: right;">{{part.discountAmount | twoDecimalGlobalNumberFormatPipe}}</td>
+        <td class="td17" style="text-align: right;">{{part.totalSales | twoDecimalGlobalNumberFormatPipe}}</td>
+    </tr>
+    
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+  
+    <tr>
+        <td colspan="5" class="blank"> </td>
+        <td colspan="1" class="total-line">Subtotal</td>
+        <td class="total-value" style="text-align: right;"><div id="subtotal">{{subtotal | twoDecimalGlobalNumberFormatPipe}}</div></td>
+    </tr>
+    <tr>
+        <td colspan="5" class="blank"> </td>
+        <td colspan="1" class="total-line">Tax Rate</td>
+        <td class="total-value"><div id="total"></div></td>
+    </tr>
+    <tr>
+        <td colspan="5" class="blank"> </td>
+        <td colspan="1" class="total-line">Sales Tax</td>
+        <td class="total-value"><div id="total"></div></td>
+    </tr>
+    <tr>
+        <td colspan="5" class="blank"> </td>
+        <td colspan="1" class="total-line">Other Tax(es)</td>
+        <td class="total-value"><div id="total"></div></td>
+    </tr>
+    <tr>
+        <td colspan="5" class="blank"> </td>
+        <td colspan="1" class="total-line">Misc Charges</td>
+        <td class="total-value"><div id="total"></div></td>
+    </tr>
+    <tr>
+        <td colspan="5" class="blank"> </td>
+        <td colspan="1" class="total-line"><strong>Total</strong></td>
+        <td class="total-value" style="text-align: right;"><strong>{{totalAmount | twoDecimalGlobalNumberFormatPipe}}</strong></td>
+    </tr>
+
+</tbody>
+</table>

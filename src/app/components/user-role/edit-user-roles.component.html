@@ -1,0 +1,165 @@
+﻿<style type="text/css">
+    .level1 td {
+        background-color: #7cb5d2;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
+    }
+
+    .level2 td {
+        background-color: #bc94b7;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
+    }
+
+    .level3 td {
+        background-color: #fde05e;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
+    }
+
+    .level4 td {
+        background-color: #f68e51;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
+    }
+
+    .level5 td {
+        background-color: #bcd74a;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
+    }
+
+    .level6 td {
+        background-color: #f8e0c8;
+        padding-top: 3px !important;
+        padding-bottom: 3px !important;
+        font-weight: bold;
+    }
+
+    .level1 {
+    }
+
+    .level2 td:first-child {
+        padding-left: 25px;
+    }
+
+    .level3 td:first-child {
+        padding-left: 50px;
+    }
+
+    .level4 td:first-child {
+        padding-left: 75px;
+    }
+
+    .level5 td:first-child {
+        padding-left: 100px;
+    }
+
+    .level6 td:first-child {
+        padding-left: 125px;
+    }
+
+    
+</style>
+<div>
+    <div class="col-md-12">
+        <div class="x_panel" style="">
+            <div class="x_content">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item" aria-current="page">Admin</li>
+                        <li class="breadcrumb-item" aria-current="page">Roles</li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit Role</li>
+                    </ol>
+                </nav>
+                <div class="pheading">
+                    <h4 class="page-heading">Edit User Role</h4>
+                    <!--<form id="" class="lgrey-bg div8 filters" name="" action="#" method="post" onsubmit="return false;">-->
+                        <div class="col-sm-3 emp-filter">
+                            <label>Edit User Role</label>
+                            <br>
+                            <select [(ngModel)]="currentUserRole.id" (change)="userRoleChanged($event)">
+                                <option value="0">Select</option>
+                                <option *ngFor="let role of userRoles"  [value]="role.id">{{role.name}}</option>
+                            </select>
+                        </div>
+                        
+                    <!--</form>-->
+                </div>
+                <div class="clear"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
+        <div class="x_panel">
+            <div class="tab-content">
+                <div id="" class="table-responsive default-bg clear">
+                    <table class="table table-bordered table-striped role-setup-table">
+                        <thead>
+                            <tr>
+                                <th>Modules</th>
+                                <th>View</th>
+                                <th>Add</th>
+                                <th>Delete</th>
+                                <th>Update</th>
+                                <th>Reports</th>
+                                <th>Excell Upload</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let module of sortedHierarchy;index as i">
+                                <tr class="level{{module.level}}" [hidden]="!module.visible">
+                                    <td (click)="showChildModules(module,$event)" style="cursor:pointer;">
+                                        {{module.name}}
+
+                                        <i  *ngIf="!module.isPage"  class="fa fa-caret-right"></i>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canView == true" (change)="permissionChecked($event,module,'canView')"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canAdd == true" (change)="permissionChecked($event,module,'canAdd')"  />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canDelete == true" (change)="permissionChecked($event,module,'canDelete')"  />
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" [checked]="module.rolePermission.canUpdate == true" (change)="permissionChecked($event,module,'canUpdate')"  />
+                                    </td>
+                                    <td>
+                                        <input *ngIf="!module.isPage" type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <input *ngIf="!module.isPage" type="checkbox" />
+                                    </td>
+                                    <td>
+                                        <input *ngIf="!module.isPage" type="checkbox" />
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <div class="clear"></div>
+                    <div style="margin-top: 10px;"></div>
+                    <button class="btn btn-success pull-right" (click)="UpdateUserRole()">Save Changes</button>
+                    <div class="clear"></div>
+                    <br>
+                    <div class="padding5">
+                        <div class="pull-right"> © <span class="currentyear">2019</span> <a href="#">PAS</a> </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+</div>

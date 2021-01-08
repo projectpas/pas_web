@@ -1,0 +1,247 @@
+﻿
+<div>
+
+    <div class="page-content">
+
+        <div class="right_col" role="main">
+            <div class="x_content">
+                <!-- <div class="card">
+                    <div class="card-header">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
+                                <li class="breadcrumb-item active" aria-current="page">Work order quote settngs</li>
+                                <li class="breadcrumb-item" aria-current="page">Work order quote settngs List</li>
+                            </ol>
+                        </nav>
+                    </div> -->
+                    <!-- <div class="card-body">
+                        <div class="inline-block display-flex">
+                            <h4 class="po-head" style="padding: 0px 10px;">List of Work Order Quote settings </h4>
+                            <a (click)="AddPage()" matTooltipPosition="above"
+                             matTooltip="Create New Setting"
+                              class="plusicon-cstm ">
+                                <i class="fa fa-plus-circle fa-lg"></i>
+                            </a>
+                        </div>
+                        <div class="card-body" style="padding-top: 0;">
+                            <div class="right_col" role="main"> -->
+
+
+                                <div class="card new-card">
+                                    <div class="card-header bg-primary new-card-header">
+                                        <div class="row">
+                                          <div class="col">
+                                            <h4 class="new-card-heading">List of Work Order Quote settings</h4>
+                                          </div>
+                                          <div>
+                                            <button
+                                               type="button"
+                                               class="btn-sm new-btn-primary"
+                                               (click)="AddPage()">
+                                               Create New Setting
+                                            </button>
+                                         </div>
+                                    
+                                        </div>
+                                    </div>
+                                    <div class="card-body new-card-body">
+
+                                <p-table #dt 
+                                [value]="workflowList" 
+                                class="rpo-table-cstm rro-table-cstm" 
+                                [rows]="10" 
+                                [paginator]="true" 
+                                [pageLinks]="3" 
+                                [rowsPerPageOptions]="[10,20,50,100]" 
+                                [columns]="selectedGridColumns" 
+                                [metaKeySelection]="true" 
+                                selectionMode="multiple" 
+                                [metaKeySelection]="true"
+                                [scrollable]="true" 
+                                scrollHeight="450px"  
+                                [(selection)]="selectedGridColumn" 
+                                [resizableColumns]="true" 
+                                [reorderableColumns]="true">
+                                    <ng-template pTemplate="caption">
+                                        <!-- <div style="text-align: right"> -->
+                                            <div class="row">
+                                                <div class="col">
+                                          
+                                            <p-multiSelect [maxSelectedLabels]="2"
+                                            [options]="gridColumns"
+                                            optionLabel="header"
+                                            [(ngModel)]="selectedGridColumns"
+                                            [style]="{ minWidth: '220px' }"
+                                            style="float:left"
+                                            (onChange)="columnsChanges()">
+                                        </p-multiSelect>
+                                    </div>
+                                    <div class="col">
+                                    <div style="width: auto !important; float: right;"
+                                     class="inner-addon right-addon w50 inline-block g-filter-search-cstm">        
+                                    <i class="fa fa-search"></i>
+                                                <input type="text"
+                                                    pInputText
+                                                    size="50"
+                                                    class="form-control"
+                                                    (input)="globalSearch($event.target.value)"
+                                                    placeholder="Filter"
+                                                    style="height: 28px !important;" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                   
+                                    <div class="col">
+                                      <div class="col">
+                                            <button type="button" class="btn btn-primary new-table-button"
+                                             pButton icon="fa-download" 
+                                                iconPos="left" style="left:-10px;padding: 5px 12px !important;"
+                                                label="Export Data" matTooltip="Download Data"
+                                                 matTooltipPosition="above"
+                                                (click)="dt.exportCSV()"></button>
+                                            <button type="button" class="btn btn-primary new-table-button"
+                                             pButton icon="fa-download" iconPos="left"
+                                                label="Export Selected Data"
+                                                 style="padding: 5px 12px !important;"
+                                                  matTooltip="Download Selected Data"
+                                                   matTooltipPosition="above"
+                                                (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                            <!--<button type="button" class="btn btn-primary" pButton icon="fa-download" iconPos="left" label="Export Data" matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()" style="padding: 5px 12px !important;"></button>
+                    <button type="button" class="btn btn-primary" pButton icon="fa-download" iconPos="left" label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 12px !important;"></button>-->
+
+                                       
+                                        </div>
+                                    </div>
+                               
+                               
+                                    </ng-template>
+                                    <ng-template pTemplate="colgroup" let-columns>
+                                        <colgroup>
+                                            <col *ngFor="let col of columns" style="width:130px">
+                                        </colgroup>
+                                    </ng-template>
+                                    <ng-template pTemplate="header" let-columns>
+                                        <tr>
+                                            <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                                {{col.header}}
+                                                <p-sortIcon [field]="col.field"></p-sortIcon>
+                                            </th>
+                                            <th style="width:200px;position:sticky">Actions</th>
+                                            <!--<th></th>-->
+                                        </tr>
+                                        <tr>
+                                            <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                                <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
+                                            </th>
+                                            <th style="width:200px;position:sticky"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                        <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
+                                            <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                                {{rowData[col.field]}}
+                                            </td>
+
+                                            <td class="action-icons-cstm" style="width:200px">
+                                                <div>
+                                                    <button class="btn-edit"
+                                                            mat-icon-button
+                                                            (click)="edit(rowData)"
+                                                            matTooltip="Edit"
+                                                            data-dismiss="modal">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                    <button class="btn-history" mat-icon-button matTooltip="History" data-toggle="tooltip" matTooltipPosition="above" data-target="#history" data-toggle="modal" (click)="getAuditHistoryById(rowData)">
+                                                        <mat-icon color="green">history</mat-icon>
+                                                    </button>
+                                                </div>
+                                                <!--<span data-toggle="modal" data-target="#history">
+                            <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History" (click)="getAuditHistoryById(rowData)" tooltipPosition="bottom" title="" class="btn btn-success nobg" data-original-title="History">
+                                <i class="fa fa-history"></i>
+                            </a>
+                        </span>-->
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary" id="footer">
+                                        <label id="footer" class="footer">Total:</label>
+                                        <input style="width: 5%;"
+                                               [(ngModel)]="totalRecords"
+                                               [disabled]="true"
+                                               pInputText
+                                               type="text" />
+                                        &nbsp;&nbsp;
+                                        <label id="footer" class="footer1">Pages Count:</label>
+                                        <input style="width: 5%;"
+                                               [(ngModel)]="totalPages"
+                                               [disabled]="true"
+                                               pInputText
+                                               type="text" />
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                         </div>
+                        <!-- </div> -->
+               
+            </div>
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    <div class="modal fade bd-example-modal-xl" tabindex="-1" id="history" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">×</button>
+                    <h4 class="modal-title">History of Work order quote settings</h4>
+                </div>
+                <div class="modal-body" *ngIf="auditHistory">
+                    
+                    <table class="table table-bordered table-fixed wfl-table-popup-cstm" *ngIf="auditHistory.length> 0 else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th>Work Order Type</th>
+                                <th>Prefix</th>
+                                <th>Sufix</th>
+                                <th>Start code</th>
+                                <th>Valid Days</th>
+                                <th>Last Updated By</th>
+                                <th>Last Updated Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="audithistory-cstm">
+                            <!--*ngIf="auditHistory.length> 0"-->
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
+                                <!-- auditHistory[i>0 ? i-1 : i] -->
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'workOrderType', audit.workOrderType)  ? 'black' : 'red'  }">{{audit.workOrderType}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'prefix', audit.prefix)  ? 'black' : 'red'  }">{{audit.prefix}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'sufix', audit.sufix)  ? 'black' : 'red'  }">{{audit.sufix}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'startCode', audit.startCode)  ? 'black' : 'red'  }">{{audit.startCode}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'validDays', audit.validDays)  ? 'black' : 'red'  }">{{audit.validDays}}</td>
+                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">{{audit.updatedBy}}</td>
+
+                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal" id="" name="" (click)="dismissModel()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+
+

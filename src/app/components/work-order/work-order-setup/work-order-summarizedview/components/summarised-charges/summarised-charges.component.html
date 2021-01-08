@@ -1,0 +1,50 @@
+
+<div style="float: right; margin: 3px 0 19px 0px;">
+    <button type="button" class="btn btn-primary" (click)="detailView()">
+        {{(isOpenedAll)?'Summary':'Detail View'}}
+    </button>
+</div>
+<div style="margin-top: 15px;">
+<p-treeTable [value]="gridData" (onNodeExpand)="getShippingData($event.node)">
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="background-color: #337ab7; color: white;">PartNumber</th>
+            <th style="background-color: #337ab7; color: white">Part Description</th>
+            <th style="background-color: #337ab7; color: white">Revised PartNo</th>
+            <th style="background-color: #337ab7; color: white">Charge Type</th>
+            <th style="background-color: #337ab7; color: white">Vendor</th>
+            <th style="background-color: #337ab7; color: white">Quantity</th>
+            <th style="background-color: #337ab7; color: white">Ref Num</th>
+            <th style="background-color: #337ab7; color: white">Task</th>
+            <th style="background-color: #337ab7; color: white">Unit Cost</th>
+            <th style="background-color: #337ab7; color: white">Unit Price</th>
+            <th style="background-color: #337ab7; color: white">Extended Cost</th>
+            <th style="background-color: #337ab7; color: white">Extended Unit Price</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+        <tr>
+            <td>
+                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                {{rowData.partNumber}}
+            </td>
+            <td>{{rowData.partDescription}}</td>
+            <td>{{rowData.revisedPartNo}}</td>
+            <td>{{rowData.chargeType}}</td>
+            <td>{{rowData.vendor}}</td>
+            <td><div class="float-right">{{rowData.quantity}}</div></td>
+            <td>{{rowData.refNum}}</td>
+            <td>{{rowData.task}}</td>
+            <td><div class="float-right">{{globalizeAmount(rowData.unitCost)}}</div></td>
+            <td><div class="float-right">{{globalizeAmount(rowData.unitPrice)}}</div></td>
+            <td><div class="float-right">{{globalizeAmount(rowData.extendedCost)}}</div></td>
+            <td><div class="float-right">{{globalizeAmount(rowData.extendedUnitPrice)}}</div></td>
+        </tr>
+    </ng-template>
+</p-treeTable>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>

@@ -1,0 +1,741 @@
+<div class="right_col" role="main">
+    <div class="x_content">
+        <div class="card new-card">
+            <div class="card-header bg-primary new-card-header">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="new-card-heading">{{id ? 'Edit' : 'Create'}} Sales Order</h4>
+                    </div>
+                    <div class="col-md-9">
+                        <button class="btn-sm new-btn-primary pull-left" (click)="toggle_po_header=!toggle_po_header">
+                            {{toggle_po_header ? 'Collapse' : 'Expand'}}
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-sm new-btn-primary pull-right" matTooltipPosition="above"
+                            matTooltip="SO List" [routerLink]="['/salesmodule/salespages/sales-order-list']">
+                            SO List
+                        </button>
+                    </div>
+                </div>
+                <!-- <div class="pull-left">
+                    <h4 class="po-head m-0">{{id ? 'Edit' : 'Create'}} Sales Order</h4>
+                </div>
+                 <button class="btn btn-primary pull-right" (click)="toggle_po_header=!toggle_po_header">
+                    {{toggle_po_header ? 'See Less' : 'See More...'}}
+                </button> 
+                <button class="btn btn-primary" (click)="toggle_po_header=!toggle_po_header" style="margin-left: 20px;">
+                    {{toggle_po_header ? 'Collapse' : 'Expand'}}
+                </button>
+                <button type="button" class="btn btn-primary pull-right" matTooltipPosition="above" matTooltip="SO List"
+                    [routerLink]="['/salesmodule/salespages/sales-order-list']">
+                    SO List
+                </button> -->
+            </div>
+            <div class="card" style="padding: 5px; margin: 5px;" *ngIf="!toggle_po_header">
+                <div class="form-row">
+                    <div class="form-row">
+                        <div class="col-md-3" style="padding-left:15px;">
+                            <div class="form-group">
+                                <label>Customer Name
+                                    <span class="clr-red">*</span>
+                                    <span style="color:blue" class="ng-star-inserted">
+                                        <a class="btn nobg" (click)="viewSelectedRow()" matTooltip="View"
+                                            matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                    </span>
+                                </label>
+                                <input type="text" [(ngModel)]="salesQuote.customerName" name="customerName"
+                                    class="form-control" [disabled]="true" id="customerName" #customerName="ngModel" />
+                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
+                                    class="alert alert-danger alert-danger-cstm">
+                                    <div *ngIf="customerName.errors.required">
+                                        <small>Customer Name is required </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                            <div class="form-group">
+                                <label>Customer Code</label>
+                                <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
+                                    class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                            <div class="form-group">
+                                <label>SO Num <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control" name="salesOrderNumber"
+                                    [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true" #accountTypeId="ngModel"
+                                    id="salesOrderNumber" #salesOrderNumber="ngModel" />
+                                <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
+                                    class="alert alert-danger alert-danger-cstm">
+                                    <div *ngIf="salesOrderNumber.errors.required">
+                                        <small> SO Num is required </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                            <div class="form-group">
+                                <label>SO Quote Num</label>
+                                <input type="text" class="form-control" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
+                                    name="salesOrderQuoteNumber" [disabled]="true" />
+                            </div>
+                        </div>
+                        <!-- <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
+                            <label>Version Num</label>
+                            <input type="text" [(ngModel)]="salesQuote.versionNumber" name="versionNumber"
+                                class="form-control" [disabled]="true" id="versionNumber" #versionNumber="ngModel" />
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div class="form-controls">
+                <form #newSalesQuoteForm="ngForm" class="form-horizontal">
+                    <div class="card" style="padding: 5px; margin: 5px;" *ngIf="toggle_po_header">
+                        <div class="form-row  mb-2">
+                            <div class="form-row">
+                                <div class="col-md-6 main_ar">
+                                    <div class="form-row">
+                                        <div class="col-md-6" style="padding:10px;">
+                                            <div class=" form-group">
+                                                <label for="quoteTypeId">Sales Order Type <span
+                                                        class="clr-red">*</span></label>
+                                                <select name="quoteTypeId" [(ngModel)]="salesQuote.quoteTypeId" required
+                                                    id="quoteTypeId" #quoteTypeId="ngModel" [disabled]="isEdit">
+                                                    <option *ngFor="let type of salesQuote.salesQuoteTypes"
+                                                        [ngValue]="type.id">
+                                                        {{ type.name }}</option>
+                                                </select>
+                                                <div *ngIf="quoteTypeId.invalid && (quoteTypeId.dirty || quoteTypeId.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="quoteTypeId.errors.required">
+                                                        <small> So Type is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="padding-top: 5px;">
+                                                <label>SO Num <span class="clr-red">*</span></label>
+                                                <input type="text" class="form-control" name="salesOrderNumber"
+                                                    [(ngModel)]="salesQuote.salesOrderNumber" [disabled]="true"
+                                                    #accountTypeId="ngModel" id="salesOrderNumber"
+                                                    #salesOrderNumber="ngModel" />
+                                                <div *ngIf="salesOrderNumber.invalid && (salesOrderNumber.dirty || salesOrderNumber.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="salesOrderNumber.errors.required">
+                                                        <small> SO Num is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>SO Quote Num</label>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="salesQuote.salesOrderQuoteNumber"
+                                                    name="salesOrderQuoteNumber" [disabled]="true" />
+                                            </div>
+                                            <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
+                                                <label>Version Num</label>
+                                                <input type="text" [(ngModel)]="salesQuote.versionNumber"
+                                                    name="versionNumber" class="form-control" [disabled]="true"
+                                                    id="versionNumber" #versionNumber="ngModel" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Open Date<span class="clr-red">*</span></label>
+                                                <p-calendar name="openDate" [yearNavigator]="true"
+                                                    [monthNavigator]="true" yearRange="1900:2100"
+                                                    [(ngModel)]="salesQuote.openDate" [showIcon]="true" id="openDate"
+                                                    #openDate="ngModel" required (onSelect)="onChangeOpenDate()">
+                                                </p-calendar>
+                                                <div *ngIf="openDate.invalid && (openDate.dirty || openDate.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="openDate.errors.required">
+                                                        <small> Open Date is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" *ngIf="!salesQuote.salesOrderQuoteNumber">
+                                                <label>SO Status</label>
+                                                <select name="status" [(ngModel)]="salesQuote.statusId"
+                                                    [disabled]="true">
+                                                    <option value='-1'>--Select</option>
+                                                    <ng-container *ngFor="let s of salesQuote.status">
+                                                        <option *ngIf="s.displayInDropdown" [ngValue]="s.id">
+                                                            {{ s.name }}</option>
+                                                    </ng-container>
+
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label></label>
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        <input type="checkbox" [(ngModel)]="salesQuote.restrictPMA"
+                                                            name="restrictPMA" id="restrictPMA" [disabled]="true" />
+                                                        Restrict PMA
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label>
+                                                        <input type="checkbox" [(ngModel)]="salesQuote.restrictDER"
+                                                            name="restrictDER" id="restrictDER" [disabled]="true" />
+                                                        Restrict DER
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="padding:10px">
+                                            <div class="form-group">
+                                                <label for="accountTypeId">Account Type <span
+                                                        class="clr-red">*</span></label>
+                                                <select name="accountTypeId" required
+                                                    [(ngModel)]="salesQuote.accountTypeId" id="accountTypeId"
+                                                    #accountTypeId="ngModel" [disabled]="isEdit">
+                                                    <option *ngFor="let accountType of accountTypes"
+                                                        [ngValue]="accountType.value">
+                                                        {{ accountType.label }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="accountTypeId.invalid && (accountTypeId.dirty || accountTypeId.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="accountTypeId.errors.required">
+                                                        <small> Account Type is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Customer Name
+                                                    <span class="clr-red">*</span>
+                                                    <span style="color:blue" class="ng-star-inserted">
+                                                        <a class="btn nobg" (click)="viewSelectedRow()"
+                                                            matTooltip="View" matTooltipPosition="above"><i
+                                                                class="fa fa-eye"></i></a>
+                                                    </span>
+                                                </label>
+                                                <input type="text" [(ngModel)]="salesQuote.customerName"
+                                                    name="customerName" class="form-control" [disabled]="true"
+                                                    id="customerName" #customerName="ngModel" />
+                                                <div *ngIf="customerName.invalid && (customerName.dirty || customerName.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="customerName.errors.required">
+                                                        <small>Customer Name is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Customer Contact<span class="clr-red">*</span></label>
+                                                <select [(ngModel)]="salesQuote.customerContactId" required
+                                                    (change)="onChangeInput()" [ngModelOptions]="{standalone: true}"
+                                                    name="customerContactId" id="customerContactId"
+                                                    #customerContactId="ngModel">
+                                                    <option value='-1'>--Select</option>
+                                                    <option *ngFor="let contact of customerContactList"
+                                                        [ngValue]="contact.contactId">
+                                                        {{contact.firstName}} {{contact.lastName}} -
+                                                        {{ contact.workPhone }}
+                                                    </option>
+                                                </select>
+                                                <div *ngIf="customerContactId.invalid && (customerContactId.dirty || customerContactId.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="customerContactId.errors.required">
+                                                        <small> Customer Contact is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Email</label>
+                                                <input type="text" class="form-control"
+                                                    [(ngModel)]="salesQuote.customerEmail" name="customerEmail"
+                                                    [disabled]="true" />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Credit Limit &amp; terms<span class="clr-red">*</span></label>
+                                                <div class="col-md-5">
+                                                    <input type="text" class="form-control" style="text-align:right;"
+                                                        name=" creditLimit"
+                                                        [ngModel]="salesQuote.creditLimit | twoDecimalGlobalNumberFormatPipe"
+                                                        (ngModelChange)="salesQuote.creditLimit=$event" required
+                                                        [disabled]="true" />
+                                                </div>
+                                                <div class="col-md-7">
+                                                    <select name="creditLimitTermsId"
+                                                        [(ngModel)]="salesQuote.creditLimitTermsId" [disabled]="true"
+                                                        required>
+                                                        <option value='-1'>--Select</option>
+                                                        <option *ngFor="let ct of creditTerms" [ngValue]="ct.value">
+                                                            {{ ct.label }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" style="padding-top:24px;">
+                                                <label>AR Balance </label>
+                                                <input type="text" class="form-control" style="text-align:right;"
+                                                    name="balanceDue"
+                                                    [ngModel]="salesQuote.balanceDue | twoDecimalGlobalNumberFormatPipe"
+                                                    (ngModelChange)="salesQuote.balanceDue=$event" [disabled]="true" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 main_ar">
+                                    <div class="form-row">
+                                        <div class="col-md-6" style="padding:10px;">
+                                            <!-- <div class="form-group">
+                                                <label>Customer Hold</label>
+                                                <input type="text" class="form-control" name="customerHold"
+                                                    [(ngModel)]="salesQuote.customerHold" />
+                                            </div> -->
+                                            <div class="form-group">
+                                                <label>Salesperson/Agent</label>
+                                                <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
+                                                    [(ngModel)]="salesQuote.salesPersonName"
+                                                    [suggestions]="salesFirstCollection" [forceSelection]="true"
+                                                    emptyMessage="No Match Found" field="name"
+                                                    (completeMethod)="filterSalesFirstName($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true">
+                                                </p-autoComplete>
+                                            </div>
+                                            <div class="form-group" style="padding-top: 5px;">
+                                                <label>CSR</label>
+                                                <p-autoComplete class=" autocomp-customer-cstm"
+                                                    name="customerServiceRepName" id="customerServiceRepName"
+                                                    #customerServiceRepName="ngModel"
+                                                    [(ngModel)]="salesQuote.customerServiceRepName"
+                                                    [suggestions]="csrFirstCollection" [forceSelection]="true"
+                                                    emptyMessage="No Match Found" field="name"
+                                                    (completeMethod)="filtercsrFirstName($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true">
+                                                </p-autoComplete>
+                                                <div *ngIf="customerServiceRepName.invalid && (customerServiceRepName.dirty || customerServiceRepName.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="customerServiceRepName.errors.required">
+                                                        <small> CSR is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Employee<span class="clr-red">*</span></label>
+                                                <p-autoComplete class="autocomp-customer-cstm" name="employeeName"
+                                                    [(ngModel)]="salesQuote.employeeName"
+                                                    [suggestions]="firstCollection" [forceSelection]="true"
+                                                    id="employeeName" #employeeName="ngModel"
+                                                    emptyMessage="No Match Found" field="firstName"
+                                                    (completeMethod)="filterfirstName($event)" [size]="30"
+                                                    [minLength]="1" [dropdown]="true" required>
+                                                </p-autoComplete>
+                                                <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="employeeName.errors.required">
+                                                        <small> Employee is required </small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Contract Ref</label>
+                                                <input type="text" class="form-control" name="contractReferenceName"
+                                                    [(ngModel)]="salesQuote.contractReferenceName" [disabled]="true"
+                                                    (change)="onChangeInput()" />
+                                            </div>
+                                            <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
+                                                <label>SO Status</label>
+                                                <select name="status" [(ngModel)]="salesQuote.statusId"
+                                                    (change)="onChangeInput()" [disabled]="true">
+                                                    <option value='-1'>--Select</option>
+                                                    <ng-container *ngFor="let s of salesQuote.status">
+                                                        <option *ngIf="s.displayInDropdown" [ngValue]="s.id">
+                                                            {{ s.name }}</option>
+                                                    </ng-container>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="padding:10px; padding-right:20px">
+                                            <div class="card">
+                                                <div class="card-header" style="padding:.3rem 1rem">
+                                                    <label style="text-align: center">Margin Summary</label>
+                                                </div>
+                                                <div>
+                                                    <label
+                                                        style="padding-left: 5px; padding-right:5px; font-weight: normal">Sales<span
+                                                            style="float: right">{{marginSummary.sales |twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                        style="padding-left: 5px; padding-right:5px; font-weight: normal">Misc
+                                                        Amt<span
+                                                            style="float: right">{{marginSummary.misc| twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                        style="padding-left: 5px; padding-right:5px; font-weight: normal">Net
+                                                        Sales<span
+                                                            style="float: right">{{marginSummary.netSales | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                        style="padding-left: 5px; padding-right:5px; font-weight: normal">Product
+                                                        Cost<span
+                                                            style="float: right">{{marginSummary.productCost | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                        style="padding-left: 5px; padding-right:5px; font-weight: normal">Margin
+                                                        Amt<span
+                                                            style="float: right">{{marginSummary.marginAmount | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                    <label
+                                                        style="padding-left: 5px; padding-right:5px; font-weight: normal">Margin
+                                                        %<span
+                                                            style="float: right">{{marginSummary.marginPercentage | twoDecimalGlobalNumberFormatPipe}}</span></label>
+                                                </div>
+                                            </div>
+                                            <div style="padding-top: 10px"></div>
+                                            <div>
+                                                <!-- <app-management-structure [salesQuote]="salesQuote"
+                                                    [managementStructureId]="managementStructureId">
+                                                </app-management-structure> -->
+                                                <div class="card" style="margin-top: 20px;">
+                                                    <div class="card-header" style="padding: 10px 12px;">
+                                                        <h5 style="margin-bottom: 0; font-size: 12px;">Management
+                                                            Structure <span class="clr-red">*</span></h5>
+
+                                                    </div>
+                                                    <div class="card-body" style="padding: 12px 12px 4px;">
+                                                        <div class="form-group">
+                                                            <select
+                                                                [ngClass]="managementValidCheck ? 'select-validate-cstm' : ''"
+                                                                class="form-control" name="primaryCompany"
+                                                                [(ngModel)]="salesQuote.companyId"
+                                                                (change)="getBUList(salesQuote.companyId); checkValidOnChange(salesQuote.companyId, 'companyId');"
+                                                                #mCompanyName (ngModelChange)="enableHeaderSave()"
+                                                                required>
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of maincompanylist"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                            <div *ngIf="mCompanyName.invalid && (mCompanyName.dirty || mCompanyName.touched)"
+                                                                class="alert alert-danger alert-danger-cstm">
+                                                                <div *ngIf="mCompanyName.errors.required">
+                                                                    <small> Company Name is required </small>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select [(ngModel)]="salesQuote.buId" name="primaryBU"
+                                                                (change)="getDivisionlist(salesQuote.buId)"
+                                                                class="form-control"
+                                                                (ngModelChange)="enableHeaderSave()">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of bulist"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select class="form-control"
+                                                                [(ngModel)]="salesQuote.divisionId"
+                                                                name="primaryDivision"
+                                                                (change)="getDepartmentlist(salesQuote.divisionId)"
+                                                                (ngModelChange)="enableHeaderSave()">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of divisionlist"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <select class="form-control"
+                                                                [(ngModel)]="salesQuote.departmentId" name="primaryDept"
+                                                                (change)="getDepartmentId(salesQuote.departmentId)"
+                                                                (ngModelChange)="enableHeaderSave()">
+                                                                <option value="0">Select</option>
+                                                                <option *ngFor="let name of departmentList"
+                                                                    [ngValue]="name.value">{{name.label}}</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row mb-2">
+                            <div class="col-md-4 main_ar">
+                                <div class="form-group" style="padding-left: 5px;">
+                                    <label>Customer Warning</label>
+                                    <textarea name="warningId" class="form-control"
+                                        style="height: 100px !important; width:90% !important; color: #d42c2c !important;"
+                                        disabled
+                                        value="{{customerWarning.warningMessage}}">{{customerWarning.warningMessage}}</textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-4 main_ar">
+                                <div class="form-group memo-popup-cstm">
+                                    <label>
+
+                                        Notes<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                            matTooltipPosition="above" matTooltip="Notes"
+                                            (click)="onAddDescription('notes')"></i>
+                                    </label>
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+
+                                            <div [innerHTML]="salesQuote.notes"
+                                                [matTooltip]="parsedText(salesQuote.notes)" matTooltipPosition="above"
+                                                class="form-control"
+                                                style="height: 100px !important; width:90% !important"
+                                                class="text_editor_box">
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 main_ar">
+                                <div class="form-group memo-popup-cstm">
+                                    <label>
+
+                                        Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                            matTooltipPosition="above" matTooltip="Memo"
+                                            (click)="onAddDescription('memo')"></i>
+                                    </label>
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <div [innerHTML]="salesQuote.memo"
+                                                [matTooltip]="parsedText(salesQuote.memo)" matTooltipPosition="above"
+                                                class="form-control" style="height: 100px !important;width:90%"
+                                                class="text_editor_box">
+                                            </div>
+                                        </div>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button type="submit" *ngIf="((!isEdit && !isCreateModeHeader))" (click)="onSubmit(true)"
+                                [disabled]="!newSalesQuoteForm.form.valid"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Submit
+                            </button>
+                            <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
+                                [disabled]="enableUpdateButton" (click)="openConfirmationModal(true)"
+                                class="btn pull-right submit-btn btn btn-primary">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card" style="padding: 5px; margin: 5px;" *ngIf="isEdit">
+                        <div class="x_panel">
+                            <ng-container *ngIf="((isCreateModeHeader||isEdit))">
+                                <app-sales-order-actions [is-edit-mode]="isEdit" [control-settings]="controlSettings"
+                                    [customer-id]="customerId" [sales-order-id]="id" [router]="router"
+                                    (on-click)="onSalesOrderActionClick($event)">
+                                </app-sales-order-actions>
+                            </ng-container>
+                        </div>
+
+                    </div>
+                    <ng-container *ngIf="isEmailTabEnabled ">
+                        <button type="button" (click)="isEmailTabEnabled = false"
+                            class="btn pull-right submit-btn btn btn-danger">
+                            Close
+                        </button>
+                        <div class="clearfix mb-1"></div>
+                    </ng-container>
+                    <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled )">
+                        <div *ngIf="(selectedCommunicationTab == 'memo')">
+                            <app-m-memo [SalesOrderId]="id" [selectedParts]="selectedParts"
+                                [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-m-memo>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'email')">
+                            <app-e-email [SalesOrderId]="id" [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-e-email>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'text')">
+                            <app-text [SalesOrderId]="id" [selectedParts]="selectedParts"
+                                [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-text>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'phone')">
+                            <app-phone [SalesOrderId]="id" [selectedParts]="selectedParts"
+                                [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-phone>
+                        </div>
+                        <div *ngIf="(selectedCommunicationTab == 'Quotemail')">
+                            <app-email [SalesOrderId]="id" [customerInfoFromSalesQuote]="customerInfoFromSalesQuote"
+                                [customerContactList]="customerContactList"></app-email>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="((isCreateModeHeader||isEdit) && !isEmailTabEnabled)">
+                        <p-tabView class="pas-tabview" (onChange)="onTabChange($event)">
+                            <p-tabPanel header="Parts List" [selected]="true">
+                                <app-sales-order-part-number [salesQuote]="salesQuote" [salesOrderId]="id"
+                                    [employeesList]="employeesList" [isViewMode]="false" [customer]="customerDetails"
+                                    [salesOrderView]="salesOrderView" (on-parts-save)="onPartsSaveEvent($event)"
+                                    [totalCharges]="totalCharges" [totalFreights]="totalFreights"
+                                    [defaultSettingPriority]="defaultSettingPriority">
+                                </app-sales-order-part-number>
+                            </p-tabPanel>
+                            <p-tabPanel header="Internal Approvers">
+                                <app-sales-order-approve>
+                                </app-sales-order-approve>
+                            </p-tabPanel>
+                            <p-tabPanel header="Approver Process">
+                                <app-sales-order-customer-approval *ngIf="isEdit" [customer-id]="customerId"
+                                    [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
+                                    [customerContactList]="customerContactList"
+                                    (on-part-approved-event)="onPartsApprovedEvent()">
+                                </app-sales-order-customer-approval>
+                            </p-tabPanel>
+                            <p-tabPanel header="Address">
+                                <app-sales-address [customerId]="customerId" [salesQuote]="salesQuote"
+                                    [salesOrderView]="salesOrderView" [salesOrderQuote]="salesOrderQuote">
+                                </app-sales-address>
+                            </p-tabPanel>
+                            <p-tabPanel header="Freight">
+                                <app-sales-order-freight [freightForm]="freight" [customerId]="customerId"
+                                    [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [salesOrderId]="id"
+                                    (saveFreightListForSO)="saveSalesOrderFreightsList($event)"
+                                    (updateFreightListForSO)="updateSalesOrderFreightsList($event)"
+                                    (refreshData)="getFreightList()" [isView]="false" [isQuote]="false">
+                                </app-sales-order-freight>
+                            </p-tabPanel>
+                            <p-tabPanel header="Charges">
+                                <app-sales-order-charges [chargeForm]="charge" [customerId]="customerId"
+                                    [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [salesOrderId]="id"
+                                    (saveChargesListForSO)="saveSalesOrderChargesList($event)"
+                                    (updateChargesListForSO)="updateSalesOrderChargesList($event)"
+                                    (refreshData)="getChargesList()" [isView]="false" [isQuote]="false">
+                                </app-sales-order-charges>
+                            </p-tabPanel>
+                            <p-tabPanel header="Shipping">
+                                <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="id"
+                                    [customerDetails]="customerDetails" [salesOrder]="salesQuote"
+                                    [managementStructureId]="managementStructureId">
+                                </app-sales-order-shipping>
+                            </p-tabPanel>
+                            <p-tabPanel header="Billing/Invoicing">
+                                <app-sales-order-billing [parts]="selectedParts" [salesOrderId]="id"
+                                    [salesOrder]="salesQuote">
+                                </app-sales-order-billing>
+                            </p-tabPanel>
+                            <p-tabPanel header="Document">
+                                <app-sales-order-document [viewMode]="false" [salesOrderId]="id" [isEditMode]="true">
+                                </app-sales-order-document>
+                            </p-tabPanel>
+                            <p-tabPanel header="Analysis">
+                                <app-sales-order-analysis></app-sales-order-analysis>
+                            </p-tabPanel>
+                        </p-tabView>
+
+                    </ng-container>
+
+
+                    <div class="card-footer" style="text-align: right;" *ngIf="((isCreateModeHeader||isEdit))">
+                        <div class="col-md-1 col-sm-1 col-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-11 col-sm-11 col-11">
+                            <button type="submit" *ngIf="!isEdit" class="btn pull-right submit-btn btn btn-primary"
+                                (click)="onSubmit(false)" [disabled]="!newSalesQuoteForm.form.valid">Submit</button>
+                            <!-- <button type="submit" *ngIf="isEdit" class="btn pull-right submit-btn btn btn-primary"
+                                (click)="openConfirmationModal(false)">Update</button> -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                        <th style="color: #fff;">{{tempMemoLabel}}</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
+                                </p-editor>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="float:right">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                        style="padding: 6px 12px !important;margin-top: 10px;" (click)="onSaveDescription()">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                        data-dismiss="modal">
+                        Close
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #updateConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
+        <h4 class="modal-title">Do you want to create new version or update existing sales order ?</h4>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal"
+            (click)="closeConfirmationModal()">Cancel</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            (click)="createNewSalesOrderQuoteVersion()">
+            Create New Version
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            (click)="updateSalesOrderQuote()">Update</button>
+    </div>
+</ng-template>
+
+<ng-template #errorMessagePop let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
+        <h4 class="modal-title"> Please Enter (*) Mandatory Fields</h4>
+    </div>
+    <div class="modal-body">
+        <p *ngFor="let error of errorMessages" [ngStyle]="{'color':'red'}"> {{ error }} </p>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeErrorMessage()">Close</button>
+    </div>
+</ng-template>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>
+<ng-template #viewQuote let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" (click)="dismissModel()">
+            &times;
+        </button>
+        <h4 class="modal-title">Details of Quote</h4>
+    </div>
+
+    <div class="modal-body" *ngIf="salesQuote">
+        <app-sales-quote-view [customerId]="customerId" [salesQuoteId]="salesOrderQuote.salesOrderQuoteId"
+            [salesQuoteView]="salesQuoteView"></app-sales-quote-view>
+    </div>
+
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+    </div>
+
+</ng-template>

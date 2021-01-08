@@ -1,0 +1,537 @@
+﻿<div class="x_content">
+    <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
+<div class="card new-card">
+    <div class="card-header bg-primary">
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">
+                   {{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset</h4>
+            </div>
+            <div>
+                <button type="button" class="btn-sm new-btn-primary"
+                    [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
+                    Asset List
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body new-card-body">
+        <div class="md-stepper-horizontal orange new-stepper-align">
+            <div class="md-step" *ngIf="active0" [ngClass]="{ active: activeIndex >= 0 , editable : activeIndex === 0}"
+                (click)="changeOfTab('General')">
+                <div class="md-step-circle"><span>1</span></div>
+                <div class="md-step-title">General Information</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step" *ngIf="active1" [ngClass]="{ active: activeIndex >= 1, editable : activeIndex === 1 }"
+                (click)="changeOfTab('Capes')">
+                <div class="md-step-circle"><span>2</span></div>
+                <div class="md-step-title">Capes</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step" *ngIf="active2" [ngClass]="{ active: activeIndex >= 2 , editable : activeIndex === 2 }"
+                (click)="changeOfTab('Calibration')">
+                <div class="md-step-circle"><span>3</span></div>
+                <div class="md-step-title">Calibration</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+            <div class="md-step" *ngIf="active3" [ngClass]="{ active: activeIndex >= 3 , editable : activeIndex === 3 }"
+                (click)="changeOfTab('Maintenance')">
+                <div class="md-step-circle"><span>4</span></div>
+                <div class="md-step-title">Maintenance & Warranty</div>
+                <div class="md-step-bar-left"></div>
+                <div class="md-step-bar-right"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<form #generalForm="ngForm" #formData="ngForm" method="post" id="" name="" class="form-horizontal add-custustomer">
+    <div class="form-row">
+        <div class="col-md-12">
+            <div class="card new-card">
+                <div class="card-header bg-primary">
+                    <h4 class="new-card-heading"> General Information</h4>
+                </div>
+                <div class="card-body">
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                                <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                    [checked]="currentAsset.isTangible == true" [disabled]="isEditMode==true"
+                                    (change)="onDepreciable('html')">
+                                Tangible
+                            </label>
+                            <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                                <input type="radio" value="2" name="assetRadio" (change)="onIntangible('html')" [disabled]="isEditMode==true"
+                                    [checked]="currentAsset.isIntangible == true">
+                                Intangible
+                            </label>
+                        </div>
+                        <div class="col-md-4" *ngIf="currentAsset && currentAsset.isTangible == true">
+                            <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                                <input type="radio" value="1" name="assetisDepreciable" [disabled]="isEditMode==true"
+                                    [checked]="currentAsset.isdepreciable == true" class="form-check-inline"
+                                    (change)="onIsDepreciable()">
+                                Depreciable
+                            </label>
+                            <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                                <input type="radio" value="2" name="assetisDepreciable" [disabled]="isEditMode==true"
+                                    [checked]="currentAsset.isNonDepreciable == true" (change)="onIsNonDepreciable()">
+                                Non-Depreciable
+                            </label>
+                        </div>
+                        <div class="col-md-4" *ngIf="currentAsset && currentAsset.isIntangible == true">
+                            <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                                <input type="radio" value="1" name="assetisAmortizable" class="form-check-inline" [disabled]="isEditMode==true"
+                                    (change)="onIsAmortizable()" [checked]="currentAsset.isAmortizable == true">
+                                Amortizable
+                            </label>
+                            <label class="radio-inline" [ngClass]="{ pointerEv: isEditMode==true}">
+                                <input type="radio" value="2" name="assetisAmortizable" (change)="onIsNonAmortizable()" [disabled]="isEditMode==true"
+                                    [checked]="currentAsset.isNonAmortizable == true">
+                                Non-Amortizable
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label>Entry Date</label>
+                                    <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                        [maxDate]="currentDate" (ngModelChange)="getmemo($event)"
+                                        [(ngModel)]="currentAsset.entryDate"></p-calendar>
+                                </div>
+                                <div class="form-group"> 
+                                    <label>Asset Id <span class="clr-red">*</span></label>
+                                    <p-autoComplete field="label" class="pautocomp-cstm" (ngModelChange)="getmemo($event)" (onKeyUp)=assetIdHandler($event)
+                                    (onSelect)="onAssetIdselection($event)"  [(ngModel)]="currentAsset.assetId" name="assetIdl"
+                                     [suggestions]="localCollection" (completeMethod)="filterAssetId($event)" [size]="30" [minLength]="1"
+                                      [dropdown]="true" errorMessage="Records not found"  required></p-autoComplete>
+           
+                                   <div *ngIf="showExistMsg" class="clr-red">Already Exists</div>
+                              
+                                </div>
+                                <div class="form-group">
+                                    <label>Asset Name <span class="clr-red">*</span></label>
+                                    <input type="text"  (ngModelChange)="getmemo($event)"
+                                        [ngModelOptions]="{standalone: true}" required [(ngModel)]="currentAsset.name">
+                                </div>
+                                <div class="form-group">
+                                    <label>Asset Description</label>
+                                    <textarea class="text-item" style="height: 50px !important;resize: none"
+                                        [ngModelOptions]="{standalone: true}" (ngModelChange)="getmemo($event)"
+                                        [(ngModel)]="currentAsset.description"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Alternate Asset ID</label>
+                                    <p-autoComplete (ngModelChange)="getmemo($event)" class="p-autoComplete-ctsm"
+                                        field="assetId" name="Inspe" [dropdown]="true" errorMessage="Records not found"
+                                        [suggestions]="localCollectionExcAlter" emptyMessage="No Records Found" (onSelect)="onAssetParentAlt($event,1)"
+                                        (completeMethod)="filterExcAltAssetId($event)" [size]="30" [minLength]="1"
+                                        [forceSelection]="true" [(ngModel)]="currentAsset.alternateAssetRecordId"
+                                        #prellRevInsp3="ngModel" (onClear)="onClearAltId()">
+                                    </p-autoComplete>
+                                    <div *ngIf="showExistMsgForAsset" class="clr-red">Asset Parent and Alternate Asset can't be same</div>
+                                </div>
+                                <div>
+                                    <div class="card" style="margin-top: 20px;">
+                                        <div class="card-header" style="padding: 10px 12px;">
+                                            <h5 style="margin-bottom: 0; font-size: 12px;">
+                                                Management Structure<span class="clr-red">*</span>
+                                            </h5>
+                                        </div>
+                                        <div class="card-body" style="padding: 12px 12px 4px;">
+                                            <div class="form-group">
+                                                <p-dropdown  [showClear]="true" class="p-dropdown-100"  (onChange)="selectedLegalEntity(currentAsset.companyId);" required  (ngModelChange)="getmemo($event)"  [options]="maincompanylist" filter="true" [(ngModel)]="currentAsset.companyId" name="companyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                            <div class="form-group">
+                                                <p-dropdown  [showClear]="true" class="p-dropdown-100" (onChange)="selectedBusinessUnit(currentAsset.buisinessUnitId)"  (ngModelChange)="getmemo($event)"  [options]="bulist" filter="true" [(ngModel)]="currentAsset.buisinessUnitId" name="buisinessUnitId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                            <div class="form-group">
+                                                <p-dropdown  [showClear]="true" class="p-dropdown-100"  (onChange)="selectedDivision(currentAsset.divisionId)" (ngModelChange)="getmemo($event)"  [options]="divisionlist" filter="true" [(ngModel)]="currentAsset.divisionId" name="divisionId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                            <div class="form-group">
+                                                <p-dropdown  [showClear]="true" class="p-dropdown-100"  (onChange)="selectedDepartment(currentAsset.departmentId )"  (ngModelChange)="getmemo($event)"  [options]="departmentList" filter="true" [(ngModel)]="currentAsset.departmentId" name="departmentId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div *ngIf="currentAsset && currentAsset.isTangible " class="depreciation-block">
+                                    <div class="form-group">
+                                        <label>
+                                            Acquisition Type <span class="clr-red">*</span> <span
+                                                style="margin-left:3px;cursor:pointer;">
+                                            </span>
+                                        </label>
+                                    
+                                        <p-dropdown  [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)" (input)="onFilterAcqution($event.target.value)" required [options]="AssetAcquisitionTypeList" filter="true" [(ngModel)]="currentAsset.assetAcquisitionTypeId" name="assetAcquisitionTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Manufacturer
+                                        </label>
+                                     
+                                        <p-dropdown  [showClear]="true" class="p-dropdown-100" (input)="onFilterManufacturer($event.target.value)"  (ngModelChange)="getmemo($event)"  [options]="allManufacturerInfo" filter="true" [(ngModel)]="currentAsset.manufacturerId" name="manufacturerId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Manufactured Date</label>
+                                        <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}"
+                                            (ngModelChange)="getmemo($event)" [maxDate]="currentDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="currentAsset.manufacturedDate"></p-calendar>
+                                    </div> 
+                                    <div class="form-group">
+                                        <label>Expiration Date</label>
+                                       <p-calendar [showIcon]="true" (ngModelChange)="getmemo($event)"
+                                            [ngModelOptions]="{standalone: true}" [minDate]="currentDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="currentAsset.expirationDate"
+                                            [disabled]="!currentAsset.manufacturedDate"></p-calendar>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Model Number</label>
+                                        <input class="form-control" type="text" (ngModelChange)="getmemo($event)"
+                                            [ngModelOptions]="{standalone: true}" (keypress)="omit_special_char($event)" [(ngModel)]="currentAsset.model">
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="checkbox-cstm" style="margin-left: 0;">
+                                            <label>
+                                                <input type="checkbox" [ngModelOptions]="{standalone: true}"
+                                                    (ngModelChange)="getmemo($event)"
+                                                    [(ngModel)]="currentAsset.isSerialized">
+                                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                                Serialized?
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="depreciation-block" *ngIf="currentAsset && currentAsset.isTangible  ">
+                                    
+                                        <div class="form-group">
+                                            <label>UOM <span class="clr-red">*</span></label>
+                                         
+                                            <p-dropdown  [showClear]="true" class="p-dropdown-100" (input)="onFilterUom($event.target.value)" (ngModelChange)="getmemo($event)" required [options]="allUnitOfMeasureinfo" filter="true" [(ngModel)]="currentAsset.unitOfMeasureId" name="unitOfMeasureId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label>Currency<span class="clr-red">*</span></label>
+                                         
+                                            <p-dropdown  [showClear]="true" class="p-dropdown-100"  (input)="onFilterCurrency($event.target.value)" (ngModelChange)="getmemo($event)" required [options]="allCurrencyInfo" filter="true" [(ngModel)]="currentAsset.currencyId" name="currencyId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Unit Cost</label>
+                                            <input class="form-control text-right" type="text" (ngModelChange)="getmemo($event)"
+                                                [ngModelOptions]="{standalone: true}"
+                                                (change)="formatToGlobal(currentAsset)"
+                                                [(ngModel)]="currentAsset.unitCost" >
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label>
+                                                Asset Location <span style="margin-left:3px;cursor:pointer;">
+                                                </span>
+                                            </label>
+                                         
+                                            <p-dropdown  [showClear]="true" class="p-dropdown-100"  (input)="onFilterLocation($event.target.value)" (ngModelChange)="getmemo($event)"  [options]="allAssetLocations" filter="true" [(ngModel)]="currentAsset.assetLocationId" name="assetLocationId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                        </div>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <label>
+                                                Memo
+                                            </label>
+                                            <div class="align_adh">
+                                                <div [innerHTML]="currentAsset.memo" class="text_editor_box"  [matTooltip]="parsedText(currentAsset.memo)"
+                                                    style="width: 100% !important;"></div>
+                                                <i class="fa  fa fa-pencil contoel_v" data-toggle="modal"   matTooltipPosition="above"
+                                                    data-target="#textarea-popup" matTooltip="Memo"
+                                                    matTooltipPosition="above"
+                                                    (click)="onAddTextAreaInfo(currentAsset)"></i> 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="card" style="margin-top: 20px;"
+                                    *ngIf="currentAsset && currentAsset.isIntangible">
+                                    <div>
+                                        <div *ngIf="currentAsset && currentAsset.isIntangible" class="intangible-block">
+
+                                            <div class="card-header" style="padding: 10px 12px;">
+                                                <div class="form-group">
+                                                    <label>Intangible Class <span class="clr-red">*</span></label>
+                                                   
+                                                    <p-dropdown  [showClear]="true" class="p-dropdown-100" (input)="onFilterIntangible($event.target.value)" (onChange)="showItemEdit(currentAsset.assetIntangibleTypeId)"  (ngModelChange)="getmemo($event)" required [options]="allIntangibleInfo" filter="true" [(ngModel)]="currentAsset.assetIntangibleTypeId" name="assetIntangibleTypeId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                                </div>
+                                            </div>
+                                            <div class="clear"></div>
+                                        </div>
+                                        <div *ngIf="currentAsset && currentAsset.isIntangible"
+                                            class="intangible-block block-bg2">
+                                            <div class="form-group">
+                                            </div>
+                                            <div class="card-body" style="padding: 12px 12px 4px;">
+                                                <div class="form-group">
+                                                    <label>Depreciation Method </label>
+                                                    <input disabled class="form-control" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.amortizationMethod">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Intangible Life  </label>
+                                                    <input disabled class="form-control amount" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.intangibleLife"> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Amort Frequency</label>
+                                                    <input disabled class="form-control" type="text"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.amortFrequency"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Amort Expense GL Account</label>
+                                                    <input disabled class="form-control" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.amortExpenseGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Acc Amort Depr GL Account</label>
+                                                    <input disabled class="form-control" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.accAmortDeprGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Intangible GL Account</label>
+                                                    <input disabled class="form-control" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.intangibleGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Intangible Write Off GL Account </label>  
+                                                    <input disabled class="form-control" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.intangibleWriteOffGL"> 
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Intangible Write Down GL Account</label>
+                                                    <input disabled class="form-control" type="text"
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedIntangibleAssetType.intangibleWriteDownGL">
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clear"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4" *ngIf="currentAsset && currentAsset.isTangible ">
+                                <div class="form-group">
+                                    <label>Asset Parent</label>
+                                    <p-autoComplete (ngModelChange)="getmemo($event)" class="p-autoComplete-ctsm"
+                                        field="assetId" name="assetId" [dropdown]="true"
+                                        errorMessage="Records not found" [suggestions]="localCollectionExcParent"
+                                        emptyMessage="No Records Found" [forceSelection]="true"  (onSelect)="onAssetParentAlt($event,2)"
+                                        (completeMethod)="filterExcParentAssetId($event)" [size]="30" [minLength]="1"
+                                        (onKeyUp)=assetIdHandler($event) [(ngModel)]="currentAsset.assetParentRecordId"
+                                        #pre1llRevInsp3="ngModel" (onClear)="onClearParentId()">
+                                    </p-autoComplete>
+                                    <div *ngIf="showExistMsgForAssetParent" class="clr-red">Asset Parent and Alternate Asset can't be same</div>
+                                </div>
+                                <div>
+                                    <div class="card" style="margin-top: 20px;">
+                                        <div class="card-header" style="padding: 10px 12px;">
+                                            <div class="form-group">
+                                                <label>Asset Class/Attribute <span class="clr-red">*</span></label>
+                                    
+                                                <p-dropdown  [showClear]="true" class="p-dropdown-100" (input)="onFilterTangible($event)" (onChange)="showItemEdit(currentAsset.tangibleClassId)"  (ngModelChange)="getmemo($event)" required [options]="allAssetTypeInfo" filter="true" [(ngModel)]="currentAsset.tangibleClassId" name="tangibleClassId" [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
+                                            </div>
+                                        </div>
+                                        <div class="depreciation-asset-block block-bg1">
+                                            <div class="card-body" style="padding: 12px 12px 4px;">
+                                                <div class="form-group">
+                                                    <label>Depreciation Method</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.depreciationMethodName">
+                                                </div>
+                                                <div class="form-group"> 
+                                                    <label>Residual %</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.residualPercentage">
+                                                </div>
+                                                 <div class="form-group">
+                                                    <label>Asset Life</label>
+                                                    <input class="form-control amount" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.assetLife">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Depr Frequency</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.deprFrequency">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Acquired GL Account</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.acquiredGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Depr Expense GL Account</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.deprExpenseGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Accum Depr GL Account</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.adDeprGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Sale GL Account</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.saleGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Write Off GL Account</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.writeOffGL">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Write Down GL Account</label>
+                                                    <input class="form-control" type="text" disabled=""
+                                                        [ngModelOptions]="{standalone: true}"
+                                                        (ngModelChange)="getmemo($event)"
+                                                        [(ngModel)]="currentSelectedAssetAttributeType.writeDownGL">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="clear"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="margin-bottom: 20px;padding-right: 16px;">
+                    <div class="margintop">
+                        <button
+                        *ngIf="currentAsset && currentAsset.isTangible != true && isEditMode==true"          
+                        type="submit" class="btn btn-primary pull-right submit-btn"
+                        (click)="addNew()">
+                       Add New
+                    </button> 
+                        <button type="button" [disabled]="!allowNextTab"
+                            *ngIf="currentAsset && currentAsset.isTangible == true"
+                            class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
+                       
+                            <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && currentAsset.isTangible"
+                            [disabled]="!currentAsset.assetId || !currentAsset.name || !currentAsset.assetAcquisitionTypeId || !currentAsset.tangibleClassId || !currentAsset.unitOfMeasureId || !currentAsset.currencyId || !currentAsset.companyId || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
+                            Save
+                        </button>
+                        <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && !currentAsset.isTangible"
+                        [disabled]=" !currentAsset.assetId || !currentAsset.name  || !currentAsset.assetIntangibleTypeId || showExistMsg" (click)="saveAsset()">
+                        Save
+                    </button>
+                        <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==true && currentAsset.isTangible"
+                            [disabled]="!currentAsset.assetId || !currentAsset.name || !currentAsset.assetAcquisitionTypeId || !currentAsset.tangibleClassId || !currentAsset.unitOfMeasureId || !currentAsset.currencyId || !currentAsset.companyId || !generalForm.valid || disableSaveForEdit || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
+                           Update
+                         </button>
+                         <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==true && !currentAsset.isTangible"
+                         [disabled]=" !currentAsset.assetId || !currentAsset.name  || !currentAsset.assetIntangibleTypeId || !currentAsset.companyId || !generalForm.valid || disableSaveForEdit || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
+                        Update
+                      </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+        <h4 class="modal-title">Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <h6 >
+            Do you want to Save changes and Continue ?
+        </h6>
+    </div>
+    <div class="modal-footer">
+
+        <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModelRedirect()">No</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+    </div>
+</ng-template>
+<div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+       
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
+                <h4 class="modal-title">Edit Memo</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                        <th style="color: #fff;">Memo</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+                            </td>
+                        </tr>
+                    </tbody> 
+                </table>
+                <div style="float:right;margin-top: 15px;">
+                    <button type="button" class="btn btn-primary" (ngModelChange)="getmemo($event)" (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                    <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+               </div> 
+            </div>
+        </div>        
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerEnable">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+</div>

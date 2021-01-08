@@ -1,0 +1,906 @@
+﻿<div class="bg-white">
+		<div class="card new-card">
+            <div class="card-header bg-primary">
+              <div class="row">
+                <div class="col">
+                  <h4 class="new-card-heading">Stock Line Adjustment</h4>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    class="btn-sm new-btn-primary"
+                    [routerLink]="[
+                    '/stocklinemodule/stocklinepages/app-stock-line-list'
+                    ]"
+                  >
+                    Stock List
+                  </button>
+                </div>
+              </div>
+            </div>
+
+		<div class="card-body new-card-body">
+			<form #stockLineAdjForm="ngForm"> <!--*ngIf="disableLoading; else loader"-->
+				<div class="form-row">
+					<div class="col-md-3">
+						<span><b class="clr-red">PN:</b> {{sourceStockLineSetup.partNumber}}</span>
+					</div>
+					<div class="col-md-3">
+						<span><b class="clr-red">PN Description:</b> {{sourceStockLineSetup.partDescription}}</span>
+					</div>
+					<div class="col-md-3">
+						<span><b class="clr-red">SL#:</b> {{sourceStockLineSetup.stockLineNumber}}</span>
+					</div>
+					<div class="col-md-3">
+						<span><b class="clr-red">Is Serialized:</b> {{sourceStockLineSetup.isSerialized ? sourceStockLineSetup.isSerialized : false}}</span>
+					</div>
+				</div>
+				<div class="table-responsive mtop10" id="smovement">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Field Name</th>
+								<th>Existing Value</th>
+								<th>New Value</th>
+								<th>Adjustment Reason</th>
+								<th>Memo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let item of stocklineAdjustmentData; let i = index" >
+								<ng-container *ngIf="item.adjustmentDataTypeId == 1">
+									<tr>
+										<td colspan="6" class="text-center bg-blue" style="color: #fff;"><strong>Organization</strong></td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isCompanyEnable" [(ngModel)]="companyAllow" (change)="isCompanyEnable(item)"></td>
+										<!-- <td>Management Structure</td> -->
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td>
+											{{existingMgmentStuc.level1 ? existingMgmentStuc.level1 : ''}}									
+										</td>
+										<td>
+											<div *ngIf="showCompany" class="col-md-8">
+												<select class="form-control" name="companyId" [(ngModel)]="managementStructure.companyId" 
+													(change)="selectedLegalEntity(managementStructure.companyId, item);" required>
+													<option value="0">--Select--</option>
+													<option *ngFor="let name of legalEntityList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td rowspan="4" style="vertical-align: top;">
+											<textarea *ngIf="companyAllow || businessAllow || divisionAllow || deptAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="MgmtStructureReason" required></textarea>
+										</td>
+										<td rowspan="4" style="vertical-align: top;">
+											<textarea *ngIf="companyAllow || businessAllow || 
+											divisionAllow || deptAllow" class="form-control"
+											 [(ngModel)]="item.adjustmentMemo"
+											  name="ManagementStructureMemo"></textarea>
+
+											  <!-- <div class="col-sm-12" *ngIf="companyAllow || businessAllow || 
+											 	divisionAllow || deptAllow">
+												<div class="form-group memo-popup-cstm col-sm-12" style="margin-bottom:10px">
+													<div class="col-sm-11" style="margin-top:-8px">
+													<span>
+													<div [innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)" class="form-control"
+														style="width:100%;" class="text_editor_box"></div> 
+													</span>
+													</div>
+													<div class="col-sm-1" style="margin-top:-4px">
+													<i class="fa fa-pencil" style="margin-top:-3px" data-toggle="modal"
+													data-target="#textarea-popup" 
+													matTooltip="Add Memo" (ngModelChange)="enableSave()"
+													matTooltipPosition="above" (click)="onAddTextAreaInfo('memo')"></i>
+													</div>
+												</div>
+											  </div> -->
+											  
+
+                                             <!-- <div class="col-sm-12" *ngIf="companyAllow || businessAllow || 
+											 divisionAllow || deptAllow">
+											  <div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												<div 
+												  [innerHTML]="item.adjustmentMemo"
+												  name="ManagementStructureMemo"												  
+												  [matTooltip]="parsedText(item.adjustmentMemo)"
+												  matTooltipPosition="above"
+												  [(ngModel)]="item.adjustmentMemo"
+												  class="form-control"
+												  style="width: 100%;"
+												  class="text_editor_box"
+												></div>
+											  </div>
+											  <div class="col-sm-1">
+												<span>
+												  <a
+												  class="btn nobg"
+												  data-toggle="modal"
+												  data-target="#memo-popup-Doc"												 
+												  (click)="onClickMemo('adjustmentMemo',i, item.adjustmentMemo)"
+												  matTooltip="Add Memo"
+												  matTooltipPosition="above"><i class="fa fa-pencil"></i>
+												  </a>
+												</span>
+											  </div>
+											</div> -->
+										</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isBusinessEnable" [(ngModel)]="businessAllow" [disabled]="!existingMgmentStuc.level2 || companyAllow" (change)="isBusinessEnable(item)"></td>
+										<td></td>
+										<td>
+											{{existingMgmentStuc.level2 ? existingMgmentStuc.level2 : ''}}										
+										</td>
+										<td>
+											<div *ngIf="showBusiness" class="col-md-8">
+												<select class="form-control" [(ngModel)]="managementStructure.buId" name="buId" (change)="selectedBusinessUnit(managementStructure.buId, item)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of businessUnitList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isDivisionEnable" [(ngModel)]="divisionAllow" [disabled]="!existingMgmentStuc.level3 || businessAllow" (change)="isDivisionEnable(item)"></td>
+										<td></td>
+										<td>
+											{{existingMgmentStuc.level3 ? existingMgmentStuc.level3 : ''}}	
+										</td>
+										<td>
+											<div *ngIf="showDivision" class="col-md-8">
+												<select class="form-control" [(ngModel)]="managementStructure.divisionId" name="divisionId" (change)="selectedDivision(managementStructure.divisionId, item)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of divisionList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isDeptEnable" [(ngModel)]="deptAllow" [disabled]="!existingMgmentStuc.level4 || divisionAllow" (change)="isDeptEnable(item)"></td>
+										<td></td>
+										<td>
+											{{existingMgmentStuc.level4 ? existingMgmentStuc.level4 : ''}}	
+										</td>
+										<td>
+											<div *ngIf="showDepartment" class="col-md-8">
+												<select class="form-control" [(ngModel)]="managementStructure.departmentId" name="departmentId" (change)="selectedDepartment(managementStructure.departmentId, item)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of departmentList" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+									</tr>
+								</ng-container>
+								
+			
+								<ng-container *ngIf="item.adjustmentDataTypeId == 2">
+								<tr>
+									<td colspan="6">&nbsp;</td>
+								</tr>
+								<tr>
+									<td colspan="6" class="text-center bg-blue" style="color: #fff;"><strong>Inventory</strong></td>
+								</tr>						
+								<tr>
+									<td><input type="checkbox" name="isSiteEnable" [(ngModel)]="siteAllow" (change)="isSiteEnable(item)"></td>
+									<td>{{item.stocklineAdjustmentDataType}}</td>
+									<td>{{sourceStockLineSetup.siteName ? sourceStockLineSetup.siteName : ''}}</td>
+									<td>
+										<div *ngIf="showSite" class="col-md-8">
+											<select [(ngModel)]="item.afterValue" name="siteId" (change)="getWareHouseList(item.afterValue)" required>
+												<option value="0">-- Select --</option>
+												<option *ngFor="let site of allSites" [ngValue]="site.value">{{site.label}}</option>
+											</select>
+										</div>
+									</td>
+									<td rowspan="5" style="vertical-align: top;">
+										<textarea *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="siteAdjustmentReason" required></textarea>
+									</td>
+									<td rowspan="5" style="vertical-align: top;">
+										<textarea *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow"
+										 class="form-control" [(ngModel)]="item.adjustmentMemo"
+										  name="siteAdjustmentMemo"></textarea>
+										  <!-- <div class="col-sm-12" *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow">
+										   <div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+											 <div 
+											   [innerHTML]="item.adjustmentMemo"
+											   [matTooltip]="parsedText(item.adjustmentMemo)"
+											   matTooltipPosition="above"
+											   name="siteAdjustmentMemo{{i}}"
+											   [(ngModel)]="item.adjustmentMemo"
+											   class="form-control"
+											   style="width: 100%;"
+											   class="text_editor_box"
+											 ></div>
+										   </div>
+										   <div class="col-sm-1">
+											 <span>
+											   <a
+											   class="btn nobg"
+											   data-toggle="modal"
+											   data-target="#memo-popup-Doc"
+											   (click)="onClickMemo()"
+											   matTooltip="Add Memo"
+											   matTooltipPosition="above"><i class="fa fa-pencil"></i>
+											   </a>
+											 </span>
+										   </div>
+										   </div> -->
+									</td>
+								</tr>
+								</ng-container>
+								<!-- WareHouse Start -->
+								<ng-container *ngIf="item.adjustmentDataTypeId == 3">
+								<tr>
+									<td><input type="checkbox" name="iswarehouseEnable" [(ngModel)]="warehouseAllow" [disabled]="!sourceStockLineSetup.warehouse || siteAllow" (change)="iswarehouseEnable(item)"></td>
+									<td>{{item.stocklineAdjustmentDataType}}</td>
+									<td>{{sourceStockLineSetup.warehouse ? sourceStockLineSetup.warehouse : ''}}</td>
+									<td>
+										<div *ngIf="showWarehouse" class="col-md-8">
+											<select [(ngModel)]="item.afterValue" name="warehouseId" (change)="getLocationList(item.afterValue)">
+												<option value="0">-- Select --</option>
+												<option *ngFor="let site of allWareHouses" [ngValue]="site.value">{{site.label}}</option>
+											</select>
+										</div>
+									</td>
+								</tr>
+								</ng-container>
+								<!-- LOcation Start -->
+								<ng-container *ngIf="item.adjustmentDataTypeId == 4">
+								<tr>
+									<td><input type="checkbox" name="isLocationEnable" [(ngModel)]="locationAllow" [disabled]="!sourceStockLineSetup.location || warehouseAllow" (change)="isLocationEnable(item)"></td>
+									<td>{{item.stocklineAdjustmentDataType}}</td>
+									<td>{{sourceStockLineSetup.location ? sourceStockLineSetup.location : ''}}</td>
+									<td>
+										<div *ngIf="showLocation" class="col-md-8">
+											<select [(ngModel)]="item.afterValue" name="locationId" (change)="getShelfList(item.afterValue)">
+												<option value="0">-- Select --</option>
+												<option *ngFor="let site of allLocations" [ngValue]="site.value">{{site.label}}</option>
+											</select>
+										</div>
+									</td>
+								</tr>
+								</ng-container>
+								<!-- Shelf Start -->
+								<ng-container *ngIf="item.adjustmentDataTypeId == 5">
+								<tr>
+									<td><input type="checkbox" name="isShelfEnable" [(ngModel)]="shelfAllow" [disabled]="!sourceStockLineSetup.shelfName || locationAllow" (change)="isShelfEnable(item)"></td>
+									<td>{{item.stocklineAdjustmentDataType}}</td>
+									<td>{{sourceStockLineSetup.shelfName ? sourceStockLineSetup.shelfName : ''}}</td>
+									<td>
+										<div *ngIf="showShelf" class="col-md-8">
+											<select [(ngModel)]="item.afterValue" name="shelfId" (change)="getBinList(item.afterValue)">
+												<option value="0">-- Select --</option>
+												<option *ngFor="let site of allShelfs" [ngValue]="site.value">{{site.label}}</option>
+											</select>
+										</div>
+									</td>
+								</tr>
+								</ng-container>
+								<!-- Bin Start -->
+								<ng-container *ngIf="item.adjustmentDataTypeId == 6">
+								<tr>
+									<td><input type="checkbox" name="isBinEnable" [(ngModel)]="binAllow" [disabled]="!sourceStockLineSetup.binName || shelfAllow" (change)="isBinEnable(item)"></td>
+									<td>{{item.stocklineAdjustmentDataType}}</td>
+									<td>{{sourceStockLineSetup.binName ? sourceStockLineSetup.binName : ''}}</td>
+									<td>
+										<div *ngIf="showBin" class="col-md-8">
+											<select [(ngModel)]="item.afterValue" name="binId" (change)="onChangeBin(item.afterValue)">
+												<option value="0">-- Select --</option>
+												<option *ngFor="let site of allBins" [ngValue]="site.value">{{site.label}}</option>
+											</select>
+										</div>
+									</td>
+								</tr>
+								</ng-container>
+
+								<ng-container *ngIf="item.adjustmentDataTypeId == 7">
+									<!-- Category Start -->
+									<tr>
+										<td colspan="6">&nbsp;</td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="isCategoryEnable" [(ngModel)]="categoryAllow" (change)="onChangeCategory(item)"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td>{{sourceStockLineSetup.itemCategory ? sourceStockLineSetup.itemCategory : ''}}</td>
+										<td>
+											<div *ngIf="categoryAllow" class="col-md-8">
+												<select [(ngModel)]="item.afterValue" name="itemCategory" (change)="onChangeCategorySelect(item.afterValue)" required>
+													<option value="0">-- Select --</option>
+													<option *ngFor="let itemType of itemTypesList" [ngValue]="itemType.value">{{itemType.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="categoryAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="categoryAdjustmentReason" required></textarea>
+										</td>
+										<td>
+											<textarea *ngIf="categoryAllow" class="form-control"
+											 [(ngModel)]="item.adjustmentMemo"
+											  name="categoryAdjustmentMemo"></textarea>
+
+											  <!-- <div class="col-sm-12" *ngIf="categoryAllow">
+												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="categoryAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above"><i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div>-->
+										</td>
+									</tr>
+								</ng-container>		
+								
+								<ng-container *ngIf="item.adjustmentDataTypeId == 8">
+									<tr>
+										<td><input type="checkbox" name="partNumberAllow" [(ngModel)]="partNumberAllow" (change)="onChangePartNum(item)" [disabled]="categoryAllow"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td>{{sourceStockLineSetup.partNumber ? sourceStockLineSetup.partNumber : ''}}</td>
+										<td>
+											<div *ngIf="partNumberAllow" class="col-md-8">
+												<p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="item.afterValue" name="partNumber" [suggestions]="partNumbersCollection" (completeMethod)="filterPartNumbers($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required></p-autoComplete>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="partNumberAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="partNumAdjustmentReason" required></textarea>
+										</td>
+										<td>
+											<textarea *ngIf="partNumberAllow"
+											 class="form-control" [(ngModel)]="item.adjustmentMemo" 
+											 name="partNumAdjustmentMemo"></textarea>
+
+											 <!-- <div class="col-sm-12" *ngIf="partNumberAllow">
+												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="partNumAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above"><i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div> -->
+										</td>
+									</tr>
+								</ng-container>							
+	
+								<ng-container *ngIf="item.adjustmentDataTypeId == 9">
+									<tr>
+										<td><input type="checkbox" name="serialNumAllow" [(ngModel)]="serialNumAllow" (change)="onChangeSerialNum(item)"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td>{{sourceStockLineSetup.serialNumber ? sourceStockLineSetup.serialNumber : ''}}</td>
+										<td>
+											<div *ngIf="serialNumAllow" class="col-md-8">
+												<input type="text" class="form-control" name="serialnumber" [(ngModel)]="item.afterValue" required />
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="serialNumAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="serialNumAdjustmentReason" required></textarea>
+										</td>
+										<td>
+											<textarea *ngIf="serialNumAllow" class="form-control" 
+											[(ngModel)]="item.adjustmentMemo" 
+											name="serialNumAdjustmentMemo"></textarea>
+											<!-- <div class="col-sm-12" *ngIf="serialNumAllow">
+												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="serialNumAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above"><i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div>											 -->
+										</td>
+									</tr>
+								</ng-container>	
+							</ng-container>							
+						</tbody>
+					</table>
+
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th></th>
+								<th>Field Name</th>
+								<th>Existing Value</th>
+								<th>Adjustment</th>
+								<th>New Value</th>
+								<th>CURR</th>
+								<th>Adjustment Reason</th>
+								<th>Memo</th>
+							</tr>
+						</thead>
+						<tbody>
+							<ng-container *ngFor="let item of stocklineAdjustmentData">
+								<ng-container *ngIf="item.adjustmentDataTypeId == 10">
+									<tr>
+										<td><input type="checkbox" name="quantityOnHandAllow" [(ngModel)]="quantityOnHandAllow" (change)="onChangePrices(item); onChangeQtyOnHand(item)"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td class="text-right">{{sourceStockLineSetup.quantityOnHand}}</td>
+										<td>
+											<div *ngIf="quantityOnHandAllow" class="col-md-8 pull-right">
+												<input type="text" pKeyFilter="num" class="form-control text-right" name="onHandAdjustmentValue" [(ngModel)]="item.adjustmentValue" (change)="onChangeQtyOnHandAdj(item)" required />
+											</div>
+										</td>
+										<td class="text-right">{{item.afterValue}}</td>
+										<td></td>
+										<td>
+											<div *ngIf="quantityOnHandAllow" class="col-md-8">
+												<select class="form-control" name="onHandNumAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeQtyOnHandAdjReason(item.adjustmentReasonId)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="quantityOnHandAllow"
+											 class="form-control" [(ngModel)]="item.adjustmentMemo" 
+											 name="onHandAdjustmentMemo"></textarea>
+
+											 <!-- <div class="col-sm-12" *ngIf="quantityOnHandAllow">
+												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="onHandAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above"><i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div> -->
+										</td>
+									</tr>
+								</ng-container>
+
+								<ng-container *ngIf="item.adjustmentDataTypeId == 11">
+									<tr>
+										<td><input type="checkbox" name="unitCostAllow" [(ngModel)]="unitCostAllow" (change)="onChangePrices(item); onChangeUnitCost(item);"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td class="text-right">{{sourceStockLineSetup.coreUnitCost}}</td>
+										<td>
+											<div *ngIf="unitCostAllow" class="col-md-8 pull-right">
+												<input type="text" pKeyFilter="num" class="form-control text-right" name="unitCostAdjustmentValue" [(ngModel)]="item.adjustmentValue" (change)="onChangeUnitCostAdj(item)" required />
+											</div>
+										</td>
+										<td class="text-right">{{item.afterValue}}</td>
+										<td>
+											<div *ngIf="unitCostAllow" class="col-md-8">
+												<select [(ngModel)]="item.currencyId" name="unitCostCurrencyId" required>
+													<option value="">Select Currency</option>
+													<option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
+															[ngValue]="currencyName.value">
+														{{currencyName.label}}
+													</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<div *ngIf="unitCostAllow" class="col-md-8">
+												<select class="form-control" name="unitCostNumAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeUnitCostAdjReason(item.adjustmentReasonId)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="unitCostAllow" 
+											class="form-control" [(ngModel)]="item.adjustmentMemo"
+											 name="unitCostAdjustmentMemo"></textarea>
+											 <!-- <div class="col-sm-12" *ngIf="unitCostAllow">
+												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="unitCostAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above"><i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div> -->
+										</td>
+									</tr>
+								</ng-container>
+
+								<ng-container *ngIf="item.adjustmentDataTypeId == 12">
+									<tr>
+										<td><input type="checkbox" name="unitSalesPriceAllow" [(ngModel)]="unitSalesPriceAllow" (change)="onChangePrices(item); onChangeSalesPrice(item);"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td class="text-right">{{sourceStockLineSetup.unitSalesPrice}}</td>
+										<td></td>
+										<td>
+											<div *ngIf="unitSalesPriceAllow" class="col-md-8 pull-right">
+												<input type="text" pKeyFilter="pint" class="form-control text-right" name="unitSalesPrice" [(ngModel)]="item.afterValue" (change)="onChangeUnitSalesPriceAdj(item)" required />
+											</div>
+										</td>										
+										<td>
+											<div *ngIf="unitSalesPriceAllow" class="col-md-8">
+												<select [(ngModel)]="item.currencyId" name="unitSalesPriceCurrencyId" required>
+													<option value="">Select Currency</option>
+													<option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
+															[ngValue]="currencyName.value">
+														{{currencyName.label}}
+													</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<div *ngIf="unitSalesPriceAllow" class="col-md-8">
+												<select class="form-control" name="unitSalesPriceAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeSalesPriceAdjReason(item.adjustmentReasonId)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="unitSalesPriceAllow"
+											 class="form-control" [(ngModel)]="item.adjustmentMemo"
+											 name="unitSalesPriceAdjustmentMemo"></textarea>
+
+											 <!-- <div class="col-sm-12" *ngIf="unitSalesPriceAllow">
+												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="unitSalesPriceAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above">
+													<i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div> -->
+										</td>
+									</tr>
+								</ng-container>
+
+								<ng-container *ngIf="item.adjustmentDataTypeId == 13">
+									<tr>
+										<td><input type="checkbox" name="lotCostAllow" [(ngModel)]="lotCostAllow" (change)="onChangePrices(item); onChangelotCost(item);"></td>
+										<td>{{item.stocklineAdjustmentDataType}}</td>
+										<td class="text-right">{{sourceStockLineSetup.lotCost ? sourceStockLineSetup.lotCost : ''}}</td>
+										<td>
+											<div *ngIf="lotCostAllow" class="col-md-8 pull-right">
+												<input type="text" pKeyFilter="num" class="form-control text-right" name="lotCostAdjustmentValue" [(ngModel)]="item.adjustmentValue" (change)="onChangeLotCostAdj(item)" required />
+											</div>
+										</td>
+										<td class="text-right">{{item.afterValue}}</td>
+										<td>
+											<div *ngIf="lotCostAllow" class="col-md-8">
+												<select [(ngModel)]="item.currencyId" name="lotCostCurrencyId" required>
+													<option value="">Select Currency</option>
+													<option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
+															[ngValue]="currencyName.value">
+														{{currencyName.label}}
+													</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<div *ngIf="lotCostAllow" class="col-md-8">
+												<select class="form-control" name="lotCostAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangelotCostAdjReason(item.adjustmentReasonId)">
+													<option value="0">-- Select --</option>
+													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
+												</select>
+											</div>
+										</td>
+										<td>
+											<textarea *ngIf="lotCostAllow"
+											 class="form-control" [(ngModel)]="item.adjustmentMemo" 
+											name="lotCostAdjustmentMemo"></textarea>
+
+											<!-- <div class="col-sm-12" *ngIf="lotCostAllow">
+												<div class="col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="lotCostAdjustmentMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above">
+													<i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div> -->
+										</td>
+									</tr>
+								</ng-container>								
+							</ng-container>
+						</tbody>
+					</table>
+				</div>
+				<div class="clear"></div>
+				<br>
+				<ng-container *ngFor="let item of stocklineAdjustmentData">
+					<ng-container *ngIf="item.adjustmentDataTypeId == 14">
+							<table class="table table-bordered" *ngIf="sourceStockLineSetup.isTimeLife">
+								<thead>
+									<tr>
+										<th colspan="15" class="text-center" style="position: relative;">
+											<input type="checkbox" style="top: 6px !important; position: absolute;" name="isTimeLifeEnable" [(ngModel)]="timeLifeAllow" (change)="onCheckTimeLife(item)">
+											<strong style="margin-left: 20px;"> {{item.stocklineAdjustmentDataType}} (Hours Per Minute)</strong></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<th></th>
+										<th class="text-center">Cycles</th>
+										<th class="text-center">Time</th>
+										<th class="text-center">Last</th>
+										<th class="text-center">Adjustment Reason</th>
+										<th class="text-center">Memo</th>
+									</tr>
+									<tr>
+										<td>Remaining</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesRemaining" name="cyclesRemaining" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeRemaining" name="timeRemaining" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td></td>
+										<td rowspan="5" style="vertical-align: top;">
+											<textarea *ngIf="timeLifeAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="timeLifeReason" required></textarea>
+										</td>
+										<td rowspan="5" style="vertical-align: top;">
+											<textarea *ngIf="timeLifeAllow" 
+												class="form-control"
+											 [(ngModel)]="item.adjustmentMemo"
+											  name="timeLifeMemo"></textarea>
+
+											  <!-- <div class="col-sm-12" *ngIf="timeLifeAllow" >
+												<div class="col-sm-9 form-group memo-popup-cstm mat_emo">
+												  <div 
+													[innerHTML]="item.adjustmentMemo"
+													[matTooltip]="parsedText(item.adjustmentMemo)"
+													[(ngModel)]="item.adjustmentMemo"
+													name="timeLifeMemo{{i}}"
+													matTooltipPosition="above"
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"
+												  ></div>
+												</div>
+												<div class="col-sm-1">
+												  <span>
+													<a
+													class="btn nobg"
+													data-toggle="modal"
+													data-target="#memo-popup-Doc"
+													(click)="onClickMemo()"
+													matTooltip="Add Memo"
+													matTooltipPosition="above">
+													<i class="fa fa-pencil"></i>
+													</a>
+												  </span>
+												</div>
+												</div> -->
+										</td>
+									</tr>
+									<tr>
+										<td>Since New</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceNew" name="cyclesSinceNew" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceNew" name="timeSinceNew" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.lastSinceNew" name="lastSinceNew" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+									</tr>
+									<tr>
+										<td>Since Ovh</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceOVH" name="cyclesSinceOVH" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceOVH" name="timeSinceOVH" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.lastSinceOVH" name="lastSinceOVH" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+									</tr>
+									<tr>
+										<td>Since Insp</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceInspection" name="cyclesSinceInspection" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceInspection" name="timeSinceInspection" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.lastSinceInspection" name="lastSinceInspection" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+									</tr>
+									<tr>
+										<td>Since Repair</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceRepair" name="cyclesSinceRepair" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td class="clr2">
+											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceRepair" name="timeSinceRepair" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
+										</td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							
+					</ng-container>
+				</ng-container>
+				<div class="clear"></div>
+				<br>
+				<button class="btn btn-primary pull-right" (click)="onSaveStockLineAdj()" [disabled]="!stockLineAdjForm.valid || disableLevel1 || disableLevel2 || disableLevel3 || disableLevel4 || disableSite || disableWarehouse || disableLocation || disableShelf || disableBin || disableCategory || disableQtyOnHandAdj || disableUnitCostAdj || disableSalesPriceAdj || disablelotCostAdj">Save</button>
+			</form>
+
+			<ng-template #loader>
+				<div class="loader-css">
+				  <img src="../../../assets/images/loader.gif">
+				</div>
+			  </ng-template>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <button type="button" class="close">
+			&times;
+		  </button>
+		  <h4 class="modal-title">Edit Memo</h4>
+		</div>
+		<div class="modal-body">
+		  <table class="table table-bordered table-fixed workflow-table-material">
+			<thead>
+			  <th style="color: #fff;">Memo</th>
+			</thead>
+			<tbody>
+			  <tr>
+				<td style="white-space: inherit">
+				  <p-editor
+				   spellcheck="true"
+					[(ngModel)]="memoPopupContent"
+					[style]="{ height: '320px' }"
+					name="memoPopupContent"
+					required
+				  ></p-editor>
+				</td>
+			  </tr>
+			</tbody>
+		  </table>
+		  <div style="float: right;">
+			<button
+			  type="button"
+			  class="btn btn-primary"
+			  style="padding: 6px 12px !important; margin-top: 10px;"
+			  (click)="onClickPopupSave()">
+			  Save
+			</button>
+			<button
+			  type="button"
+			  class="btn btn-danger"
+			  style="padding: 6px 12px !important; margin-top: 10px;"
+			  (click)="closeMemoModel()" >
+			  Close
+			</button>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </div>
+  
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
+</div>
