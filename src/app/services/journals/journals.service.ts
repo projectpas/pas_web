@@ -1,11 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Observable ,  Subject,forkJoin } from 'rxjs';
-
-
-
+﻿import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { JournelsEndpointService } from './journals-endpoint.service';
 import { JournalBatch } from '../../models/JournalBatch';
 import { AssetStatus } from '../../models/asset-status.model';
+import { Subject } from 'rxjs';
 import { JournalManual } from '../../models/journal-manual';
 
 @Injectable()
@@ -26,12 +27,12 @@ export class JournelService {
     }
 
     getAllBatch() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.journelsEndpoint.getAllBatch<JournalBatch[]>());
     }
 
     getBatchById(batchId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.journelsEndpoint.getBatchById<JournalBatch>(batchId)
         );
     }
@@ -57,12 +58,12 @@ export class JournelService {
     //Journel manual Service methods Start
 
     getAllJournel() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.journelsEndpoint.getAllJournel<JournalManual[]>());
     }
 
     getJournelById(journelId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.journelsEndpoint.getJournelById<JournalManual>(journelId)
         );
     }

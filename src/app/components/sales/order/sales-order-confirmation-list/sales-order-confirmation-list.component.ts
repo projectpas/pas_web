@@ -2,39 +2,22 @@ import { Component, ViewChild } from "@angular/core";
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { SalesOrderService } from "../../../../services/salesorder.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
-import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
 import {
   AlertService,
-  DialogType,
   MessageSeverity
 } from "../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
-import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
-import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
-import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
 import { ISalesOrder } from "../../../../models/sales/ISalesOrder.model";
-import { SalesOrder } from "../../../../models/sales/SalesOrder.model";
-import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
 import { ISalesOrderView } from "../../../../models/sales/ISalesOrderView";
-import { SalesOrderView } from "../../../../models/sales/SalesOrderView";
-import { Currency } from "../../../../models/currency.model";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { CustomerService } from "../../../../services/customer.service";
 import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
-import { PartDetail } from "../../shared/models/part-detail";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
-import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
-import {
-  getValueFromObjectByKey,
-  getObjectById,
-  editValueAssignByCondition,
-  getObjectByValue
-} from "../../../../generic/autocomplete";
 import { MenuItem } from "primeng/api";
 
 @Component({
@@ -113,7 +96,9 @@ export class SalesOrderConfirmationListComponent {
         this.isSpinnerVisible = false;
         this.sales = response[0];
 
-      }, error => this.onDataLoadFailed(error));
+      },error => {
+        this.isSpinnerVisible =false;
+      });
 
 
   }
@@ -194,7 +179,9 @@ export class SalesOrderConfirmationListComponent {
         this.showPaginator = this.totalRecords > 0;
         this.isSpinnerVisible = false;
         //this.alertService.stopLoadingMessage();
-      }, error => this.onDataLoadFailed(error));
+      },error => {
+        this.isSpinnerVisible =false;
+      });
   }
   globalSearch(val) {
     this.searchParameters.globalFilter = val
@@ -210,7 +197,9 @@ export class SalesOrderConfirmationListComponent {
         this.showPaginator = this.totalRecords > 0;
         this.isSpinnerVisible = false;
         //this.alertService.stopLoadingMessage();
-      }, error => this.onDataLoadFailed(error));
+      },error => {
+        this.isSpinnerVisible =false;
+      });
 
   }
 
@@ -233,7 +222,9 @@ export class SalesOrderConfirmationListComponent {
       );
       this.isSpinnerVisible = false;
       //this.alertService.stopLoadingMessage();
-    }, error => this.onDataLoadFailed(error));
+    },error => {
+      this.isSpinnerVisible =false;
+    });
   }
 
 

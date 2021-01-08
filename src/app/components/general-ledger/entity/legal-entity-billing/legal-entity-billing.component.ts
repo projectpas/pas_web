@@ -3,8 +3,8 @@ import { AlertService, MessageSeverity } from '../../../../services/alert.servic
 import { legalEntityBillingAddressModel } from '../../../../models/legalEntity-billing-address.model';
 import { AuthService } from '../../../../services/auth.service';
 import {  listSearchFilterObjectCreation, editValueAssignByCondition } from '../../../../generic/autocomplete';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
- 
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import * as $ from 'jquery';
 import { ConfigurationService } from '../../../../services/configuration.service';
@@ -70,9 +70,6 @@ export class EntityBillingComponent {
 
 
 	ngOnInit(): void {
-        // console.log("reload1",this.editGeneralInformationData);
-        // console.log("reload1",this.savedGeneralInformationData);
-        // console.log("reload1",);
 if(this.isViewMode==false){
     if (this.editMode) {
         this.id = this.editGeneralInformationData.legalEntityId;
@@ -134,7 +131,10 @@ if(this.isViewMode==false){
                 this.isViewMode = true;
                 this.currentStatusEmp='Active';
                 this.billingStatus='Active';
-                this.geListByStatusForBillingList(this.billingStatus);
+                // if(!this.isViewMode){
+
+                    this.geListByStatusForBillingList(this.billingStatus);
+                // }
               }, 1200);
                 }
             }
@@ -201,6 +201,7 @@ if(this.isViewMode==false){
             $("#view").modal("hide");
         }
     addBillingIfo() {
+      this.editisPrimary=false;
         this.isEditMode = false;
         this.billingInfo = new legalEntityBillingAddressModel();
         this.CountryData('');
@@ -213,9 +214,13 @@ if(this.isViewMode==false){
         this.pageSize = event.rows;
     }
 
-
+    isSpinnerVisibleView:boolean=false;
 	openBillingView(data) {
+        this.isSpinnerVisibleView=true;
         this.viewData = data;
+        setTimeout(() => {
+            this.isSpinnerVisibleView=false;
+        }, 1000);
     }
     toggledbldisplay(data) {
         this.viewData = data;
@@ -226,8 +231,10 @@ if(this.isViewMode==false){
 	}
 	backClick() {
 		this.tab.emit('Banking');
-	}
+    }
+    editisPrimary:boolean=false
     openEdit(rowData) {
+        this.editisPrimary=rowData.isPrimary;
         this.showExistMsg=false;
       	this.isEditMode = true;
         this.billingInfo = { ...rowData, stateOrProvince :rowData.state
@@ -422,13 +429,13 @@ const status=rowData.isActive==true? 'Active' :'InActive';
 			status: this.billingStatus ? this.billingStatus : 'Active',
 		}
 
-	if(this.isViewMode==false){
+	// if(this.isViewMode==false){
         if (this.filterText == '') {
 			this.getList(this.lazyLoadEventDataInput);
 		} else {
 			this.globalSearch(this.filterText);
 		}
-    }
+    // }
 	}
     first:any=0;
     billingStatus:any='Active'
@@ -511,7 +518,7 @@ const status=rowData.isActive==true? 'Active' :'InActive';
 	exportCSV(dt) {
 		this.isSpinnerVisible = true;
 		const isdelete = this.currentDeletedstatusBilling ? true : false;
-		let PagingData = {   "legalEntityId":this.id,"first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.billingStatus, "isDeleted": isdelete }, "globalFilter": "" }
+		let PagingData = {"legalEntityId":this.id,"first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.billingStatus, "isDeleted": isdelete }, "globalFilter": "" }
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x => {
 			PagingData.filters[x] = dt.filters[x].value;
@@ -524,8 +531,8 @@ const status=rowData.isActive==true? 'Active' :'InActive';
 			const vList = res[0]['results'].map(x => {
 				return {
 					...x,
-					createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '', 
-					updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+					createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '', 
+					updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
 				}
             });
             dt._value = vList;
@@ -617,7 +624,8 @@ countrycollection:any=[]
         this.setEditArray.push(0);
     }
     const strText = value ? value : '';
-    this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+    this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+    // this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
         this.countrycollection = res;
     }, err => {
         const errorLog = err;

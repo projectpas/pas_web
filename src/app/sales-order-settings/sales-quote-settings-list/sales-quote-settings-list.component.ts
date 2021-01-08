@@ -7,6 +7,9 @@ import { SalesQuoteService } from '../../services/salesquote.service';
 import { takeUntil } from 'rxjs/operators';
 import { AlertService, MessageSeverity } from "../../services/alert.service";
 import { AuthService } from "../../services/auth.service";
+import * as $ from "jquery";
+import { DatePipe } from "@angular/common";
+import { SOQSettingsModel } from "../../components/sales/quotes/models/verify-sales-quote-model";
 @Component({
     selector: 'app-sales-quote-settings-list',
     templateUrl: './sales-quote-settings-list.component.html',
@@ -17,27 +20,29 @@ import { AuthService } from "../../services/auth.service";
 export class SalesQuoteSettingsListComponent {
     title: string = "SO Quote settings";
     soqSettingsList: any = [];
+    targetData: any;
     auditHistory: any = [];
     modal: NgbModalRef;
     isSpinnerVisible = false;
     private onDestroy$: Subject<void> = new Subject<void>();
     selectedGridColumn: any[];
     disableCreateNewSettings = false;
+    selectedOnly: boolean = false;
     selectedGridColumns: any[] = [
-        { field: 'quoteTypeName', header: 'SO Type' },
+        { field: 'quoteTypeName', header: 'SOQ Type' },
         { field: 'prefix', header: 'Prefix' },
         { field: 'sufix', header: 'Suffix' },
         { field: 'startCode', header: 'Start Code' },
-        { field: 'defaultStatusName', header: 'Status' },
+        { field: 'defaultStatusName', header: 'SOQ Status' },
         { field: 'defaultPriorityName', header: 'Priority' },
         { field: 'validDays', header: 'Valid Days' }
     ];
     gridColumns = [
-        { field: 'quoteTypeName', header: 'SO Type' },
+        { field: 'quoteTypeName', header: 'SOQ Type' },
         { field: 'prefix', header: 'Prefix' },
         { field: 'sufix', header: 'Suffix' },
         { field: 'startCode', header: 'Start Code' },
-        { field: 'defaultStatusName', header: 'Status' },
+        { field: 'defaultStatusName', header: 'SOQ Status' },
         { field: 'defaultPriorityName', header: 'Priority' },
         { field: 'validDays', header: 'Valid Days' }
     ];
@@ -56,7 +61,8 @@ export class SalesQuoteSettingsListComponent {
         public alertService: AlertService,
         public authService: AuthService,
         public modalService: NgbModal,
-        private route: Router) {
+        private route: Router,
+        private datePipe: DatePipe) {
     }
 
     ngOnInit() {
@@ -82,7 +88,9 @@ export class SalesQuoteSettingsListComponent {
             }
         })
     }
-
+    closeModal() {
+        $("#downloadConfirmation").modal("hide");
+    }
     getAuditHistoryById(rowData) {
         this.isSpinnerVisible = true;
         this.salesQuoteService.getSOQuoteSettingHistory(rowData.salesOrderQuoteSettingId)
@@ -115,6 +123,7 @@ export class SalesQuoteSettingsListComponent {
             this.isSpinnerVisible = false;
             this.dismissModel();
             this.getAllSOQuoteSettings();
+            this.salesQuoteService.soQuoteSettingsData = new SOQSettingsModel();
             this.alertService.showMessage(
                 'SO Quote Settings',
                 `Succesfully deleted setting`,
@@ -189,4 +198,55 @@ export class SalesQuoteSettingsListComponent {
             }
         );
     }
+
+    exportCSV(dt) {
+        this.isSpinnerVisible = true;
+        this.salesQuoteService
+            .getAllSalesOrderQuoteSettings().subscribe(res => {
+                let response: any = res;
+                const vList = response.map(x => {
+                    return {
+                        ...x,
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    }
+                });
+
+                dt._value = vList;
+                dt.exportCSV();
+                dt.value = this.soqSettingsList;
+                this.isSpinnerVisible = false;
+            }, err => {
+                this.isSpinnerVisible = false;
+                const errorLog = err;
+                this.onDataLoadFailed(errorLog);
+            });
+
+    }
+
+    onDataLoadFailed(log) {
+        // this.isSpinnerVisible = false;
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
+    }
+
+
 }

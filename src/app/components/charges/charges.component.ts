@@ -18,8 +18,8 @@ import { LegalEntityService } from '../../services/legalentity.service';
 import { Table } from 'primeng/table';
 import { validateRecordExistsOrNot, getObjectById,  selectedValueValidate, editValueAssignByCondition } from '../../generic/autocomplete';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

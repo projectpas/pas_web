@@ -503,7 +503,7 @@
                 <div class="modal-footer">
                     <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
                         style="text-align:center" data-dismiss="modal" (click)="saveDocumentInformation()"
-                        [disabled]="!addDocumentForm.valid || disableSave">
+                        [disabled]="!addDocumentForm.valid">
                         Save
                     </button>
                     <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"

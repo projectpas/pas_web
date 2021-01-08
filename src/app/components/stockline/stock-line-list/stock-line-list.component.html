@@ -8,18 +8,30 @@
 			<button
 			type="button"
 			class="btn-sm new-btn-primary"
-			[routerLink]="['/stocklinemodule/stocklinepages/app-stock-line-setup']"
-			>
+			[routerLink]="['/stocklinemodule/stocklinepages/app-stock-line-setup']">
 			Add New Stock Line
 			</button>
 		  </div>
 		</div>
   </div>
   <div class="card-body new-card-body">
-    <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="data" [first]="0" [rows]="pageSize"
-            [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
-            selectionMode="multiple" [lazy]="true" (onLazyLoad)="loadData($event)" [resizableColumns]="true"
-            [reorderableColumns]="true" [totalRecords]="totalRecords" [metaKeySelection]="true" [scrollable]="true"
+    <p-table #dt 
+            class="rpo-table-cstm rro-table-cstm" 
+            [value]="data" 
+            [first]="0" 
+            [rows]="pageSize"
+            [paginator]="true" 
+            [pageLinks]="3" 
+            [rowsPerPageOptions]="[10, 20, 50, 100]" 
+            [columns]="selectedGridColumns"
+            selectionMode="multiple"             
+            [lazy]="true" 
+            (onLazyLoad)="loadData($event)" 
+            [resizableColumns]="true"
+            [reorderableColumns]="true" 
+            [totalRecords]="totalRecords" 
+            [metaKeySelection]="true" 
+            [scrollable]="true"
             scrollHeight="450px">
             <ng-template pTemplate="caption">
               <div class="row">
@@ -28,7 +40,7 @@
                   [maxSelectedLabels]="2"
                   [options]="headers"
                   optionLabel="header"
-                  [(ngModel)]="selectedColumns"
+                  [(ngModel)]="selectedGridColumns"
                   [style]="{ minWidth: '200px' }"
                   style="float: left;"
                   (onChange)="columnsChanges()"
@@ -51,33 +63,30 @@
                   </div>
                 </div>
               </div>
-
                 <div class="row">
                   <div class="col">
-                    <button
-                    type="button"
-                    class="btn btn-primary new-table-button"
-                    matTooltip="Download Data"
-                    matTooltipPosition="above"
-                    pButton
-                    icon="fa-download"
-                    iconPos="left"
-                    label="Export All Data"
-                    data-toggle="modal" (click)="selectedOnly = false; targetData = dt;" data-target="#downloadConfirmation"
-                    ></button>
-                    <button
-                    type="button"
-                    class="btn btn-primary new-table-button"
-                    matTooltip="Download Selected Data"
-                    matTooltipPosition="above"
-                    pButton
-                    icon="fa-download"
-                    iconPos="left"
-                    label="Export Selected Data"
-                    data-toggle="modal"
-                    data-target="#downloadConfirmation"
-                    (click)="selectedOnly = true; targetData = dt;" 
-                    ></button>
+                    <button type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export All Data"
+                                    data-toggle="modal" 
+                                    (click)="selectedOnly = false; targetData = dt;"
+                                     data-target="#downloadConfirmation">
+                            </button> 
+                            <button type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Selected Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Selected Data"
+                                    (click)="dt.exportCSV({selectionOnly:true})">
+                            </button>
                   </div>
                   <div class="col">
                     <div class="">
@@ -118,7 +127,6 @@
 
             <ng-template pTemplate="header" let-columns>
                 <tr>
-
                     <ng-container *ngFor="let col of columns">
                         <th class="text-center"
                             *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='divName' && col.field!='deptName'"
@@ -131,7 +139,7 @@
                             Management Structure
                         </th>
                     </ng-container>
-                    <th style="width:150px;position:sticky" *ngIf="selectedColumns.length > 0">
+                    <th style="width:150px;position:sticky" *ngIf="selectedGridColumns.length > 0">
                         Actions
                     </th>
                 </tr>
@@ -167,7 +175,7 @@
                                             : rowData[col.field]
                         }}
                     </td>
-                    <td style="width:150px" *ngIf="selectedColumns.length > 0">
+                    <td style="width:150px" *ngIf="selectedGridColumns.length > 0">
                         <span data-toggle="modal"><a class="btn nobg btn-view-cstm" (click)="openView(rowData)"
                                 matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                         <span><a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit"
@@ -207,7 +215,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
-				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4> 
 			</div>
 			<div class="modal-body" *ngIf="targetData">
 				<strong>
@@ -519,11 +527,11 @@
                 <th>Changed To</th>
                 <th>Adjustment Reason</th>
                 <th>Adjustment Memo</th>
-                <th>Currency</th>                
+                <th>Currency</th>   
+                <th>Created Date</th>             
                 <th>Created By</th>
-                <th>Created Date</th>
-                <th>Updated By</th>
                 <th>Updated Date</th>
+                <th>Updated By</th>               
                 <!-- <th>Action</th> -->
               </tr>
             </thead>
@@ -535,10 +543,11 @@
                 <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'adjustmentReason', audit.adjustmentReason) ? 'black' : 'red'}">{{ audit.adjustmentReason }}</td>
                 <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'adjustmentMemo', audit.adjustmentMemo) ? 'black' : 'red'}">{{ audit.adjustmentMemo }}</td>
                 <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'currencyName', audit.currencyName) ? 'black' : 'red'}">{{ audit.currencyName }}</td>
-                <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'createdBy', audit.createdBy) ? 'black' : 'red'}">{{ audit.createdBy }}</td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
-                <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red'}">{{ audit.updatedBy }}</td>
+                <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'createdBy', audit.createdBy) ? 'black' : 'red'}">{{ audit.createdBy }}</td>
                 <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                <td [ngStyle]="{color: getColorCodeForStockLineAdjHistory(i, 'updatedBy', audit.updatedBy) ? 'black' : 'red'}">{{ audit.updatedBy }}</td>
+                
                 <!-- <td style="text-align: center;"><span data-toggle="modal" data-target="#stockAdjAuditData"><a class="btn nobg btn-view-cstm" (click)="openStocklineAdjData(audit)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span></td> -->
               </tr>
             </tbody>

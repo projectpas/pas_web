@@ -24,8 +24,8 @@ import { ItemMasterService } from '../../services/itemMaster.service';
 import { ItemGroupService } from '../../services/item-group.service';
 import { DBkeys } from '../../services/db-Keys';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

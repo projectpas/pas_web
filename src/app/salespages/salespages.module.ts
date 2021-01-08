@@ -107,7 +107,12 @@ import { SalesOrderBillingComponent } from "../components/sales/order/shared/com
 import { SalesOrderShippingComponent } from "../components/sales/order/shared/components/sales-order-shipping/sales-order-shipping.component";
 import { SalesQuoteAnalysisComponent } from "../components/sales/quotes/sales-quote-analysis/sales-quote-analysis.component";
 import { SalesOrderAnalysisComponent } from "../components/sales/order/sales-order-analysis/sales-order-analysis.component";
+import { SOQApprovalRuleComponent } from "../components/sales/quotes/shared/components/soq-approval-rule/soq-approval-rule.component";
 import { AddressModel } from "../models/address.model";
+import { CommonModulesModule } from "../common-modules/common-modules.module";
+import { CommonCommunicationModule } from "../components/common-components/common-communication/common-communiation.module";
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
+import { SOApprovalRuleComponent } from "../components/sales/order/shared/components/so-approval-rule/so-approval-rule.component";
 //import { AddressComponentComponent } from "../components/address-component/address-component.component";
 // import { AddressComponentComponent } from "../components/address-component/address-component.component";
 
@@ -149,8 +154,10 @@ import { AddressModel } from "../models/address.model";
     // VendorPagesModule,
     EditorModule,
     SplitButtonModule,
-        ItemmasterpagesModule,
-     
+    ItemmasterpagesModule,
+    CommonModulesModule,
+        CommonCommunicationModule,
+        CommonDocumentsModule
   ],
   declarations: [
     SalesPagesComponent,
@@ -200,8 +207,10 @@ import { AddressModel } from "../models/address.model";
     SalesOrderBillingComponent,
     SalesOrderShippingComponent,
     SalesQuoteAnalysisComponent,
-      SalesOrderAnalysisComponent,
-      //AddressComponentComponent
+    SalesOrderAnalysisComponent,
+    SOQApprovalRuleComponent,
+    SOApprovalRuleComponent
+    //AddressComponentComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],
   entryComponents: [SalesQuoteViewComponent, SalesOrderViewComponent, SalesOrderConfirmationModalComponent, SalesOrderCopyComponent, SalesOrderpickTicketComponent, SalesStockLineDetailsViewComponent]

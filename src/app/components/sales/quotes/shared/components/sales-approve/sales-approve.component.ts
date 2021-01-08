@@ -12,6 +12,8 @@ import { Component, Input, ViewChild, ElementRef } from "@angular/core";
 // import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView";
 // import { SalesOrderService } from "../../../../../../services/salesorder.service";
 import { WorkOrderQuoteService } from "../../../../../../services/work-order/work-order-quote.service";
+import { SalesQuoteService } from "../../../../../../services/salesquote.service";
+import { CommonService } from "../../../../../../services/common.service";
 // import { ActivatedRoute } from "@angular/router";
 // import { WorkOrderService } from "../../../../../../services/work-order/work-order.service";
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
@@ -25,16 +27,55 @@ import { SOQuoteMarginSummary } from "../../../../../../models/sales/SoQuoteMarg
 })
 export class SalesApproveComponent {
   approvers: any[] = [];
-  constructor(public workOrderService: WorkOrderQuoteService) {
+  isSpinnerVisible: boolean= false;
+  internalApproversList: any = [];
+  apporoverEmailList: string;
+  apporoverNamesList: any = [];
+  poApprovaltaskId = 6;
+  constructor(public salesQuoteService: SalesQuoteService
+    ,private commonService: CommonService) {
 
   }
 
   refresh(marginSummary: SOQuoteMarginSummary) {
-    this.workOrderService.getInternalApproversList(6, marginSummary.netSales)
-      .subscribe(
-        (res) => {
-          this.approvers = res;
-        }
-      )
+        this.getApproversListById(marginSummary.salesOrderQuoteId);
   }
+
+  getApproversListById(poId) {	
+		this.isSpinnerVisible = true;
+		if(this.poApprovaltaskId == 0) {
+		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
+		if(response) {					
+            response.forEach(x => {
+                if (x.label.toUpperCase() == "Sales Quote Approval") {
+                    this.poApprovaltaskId = x.value;
+                }              
+			});
+			this.getApproversByTask(poId)
+		}
+		},err => {
+			this.isSpinnerVisible = false;
+			const errorLog = err;
+			//this.errorMessageHandler(errorLog);		
+		});
+		}
+		else {
+			this.getApproversByTask(poId)
+		}
+		
+	}
+	getApproversByTask(poId) {		
+		this.isSpinnerVisible = true;
+		this.salesQuoteService.approverslistbyTaskId(this.poApprovaltaskId, poId).subscribe(res => {
+						 this.internalApproversList = res;
+						 this.internalApproversList.map(x => {
+							this.apporoverEmailList = x.approverEmails;
+							this.apporoverNamesList.push(x.approverName);
+						})
+						 this.isSpinnerVisible = false;
+						},
+						err =>{
+							 this.isSpinnerVisible = false;
+						 });
+	}
 }

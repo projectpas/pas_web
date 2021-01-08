@@ -34,11 +34,11 @@
           <span class="value">{{salesQuote.quoteExpireDate | date: 'MM/dd/yyyy'}}
           </span>
         </p>
-        <p><span class="label"><b>SO Status: </b></span>
+        <p><span class="label"><b>SO Quote Status: </b></span>
           <span class="value">{{salesQuote.status ? salesQuote.status :'-'}}
           </span>
         </p>
-        <p><span class="label"><b>Warnings: </b></span>
+        <p><span class="label"><b>Customer Warning: </b></span>
           <span class="value">
             {{salesQuote.customerWarningMessage ? salesQuote.customerWarningMessage : '-'}}
           </span>
@@ -114,9 +114,11 @@
             {{salesQuote.leadSource ? salesQuote.leadSource : '-'}}
           </span>
         </p>
-        <p><span class="label"><b>Probability : </b></span>
+        <p><span class="label"><b>Probability (%) : </b></span>
           <span class="value">
-            {{salesQuote.probability ? salesQuote.probability : '-'}}
+            <!-- {{salesQuote.ProbabilityName ? (salesQuote.ProbabilityName | twoDecimalGlobalNumberFormatPipe) : '-'}} -->
+            {{salesQuote.probabilityName ? (salesQuote.probabilityName) : '-'}} 
+
           </span>
         </p>
         <p><span class="label"><b>Memo: </b></span>
@@ -171,7 +173,7 @@
         </div>
         <div style="padding-top: 10px"></div>
         <div class="card">
-          <div class="card-header" style="padding:.1rem 3rem">
+          <div class="card-header">
             <label style="text-align: center; width:100%">Management Structure</label>
           </div>
           <div style="padding:5px">
@@ -215,16 +217,16 @@
         <h5 class="po-head">Ship To</h5>
         <p><span class="label"><b>User Type: </b></span><span
             class="value">{{salesQuote.shipToUserType ? salesQuote.shipToUserType : '-'}}</span></p>
-        <p><span class="label"><b>User: </b></span><span
+        <p><span class="label"><b>{{salesQuote.shipToUserType}} Name: </b></span><span
             class="value">{{salesQuote.shipToUser ? salesQuote.shipToUser : '-'}}</span></p>
         <p><span class="label"><b>Site Name: </b></span><span
             class="value">{{salesQuote.shipToSiteName ? salesQuote.shipToSiteName : '-'}}</span></p>
-        <p><span class="label"><b>Address1: </b></span><span
+        <p><span class="label"><b>Address: </b></span><span
             class="value">{{salesQuote.shipToAddress1 ? salesQuote.shipToAddress1 : '-'}}</span></p>
-        <p><span class="label"><b>Address2: </b></span><span
+        <!-- <p><span class="label"><b>Address2: </b></span><span
             class="value">{{salesQuote.shipToAddress2 ? salesQuote.shipToAddress2 : '-'}}</span></p>
         <p><span class="label"><b>Address3: </b></span><span
-            class="value">{{salesQuote.shipToAddress3 ? salesQuote.shipToAddress3 : '-'}}</span></p>
+            class="value">{{salesQuote.shipToAddress3 ? salesQuote.shipToAddress3 : '-'}}</span></p> -->
         <p><span class="label"><b>City: </b></span><span
             class="value">{{salesQuote.shipToCity ? salesQuote.shipToCity : '-'}}</span></p>
         <p><span class="label"><b>Primary State/Province: </b></span><span
@@ -250,16 +252,16 @@
         <h5 class="po-head">Bill To</h5>
         <p><span class="label"><b>User Type: </b></span><span
             class="value">{{salesQuote.billToUserType ? salesQuote.billToUserType : '-'}}</span></p>
-        <p><span class="label"><b>User: </b></span><span
+        <p><span class="label"><b>{{salesQuote.billToUserType}} Name: </b></span><span
             class="value">{{salesQuote.billToUser ? salesQuote.billToUser : '-'}}</span></p>
         <p><span class="label"><b>Site Name: </b></span><span
             class="value">{{salesQuote.billToSiteName ? salesQuote.billToSiteName : '-'}}</span></p>
-        <p><span class="label"><b>Address1: </b></span><span
+        <p><span class="label"><b>Address: </b></span><span
             class="value">{{salesQuote.billToAddress1 ? salesQuote.billToAddress1 : '-'}}</span></p>
-        <p><span class="label"><b>Address2: </b></span><span
+        <!-- <p><span class="label"><b>Address2: </b></span><span
             class="value">{{salesQuote.billToAddress2 ? salesQuote.billToAddress2 : '-'}}</span></p>
         <p><span class="label"><b>Address3: </b></span><span
-            class="value">{{salesQuote.billToAddress3 ? salesQuote.billToAddress3 : '-'}}</span></p>
+            class="value">{{salesQuote.billToAddress3 ? salesQuote.billToAddress3 : '-'}}</span></p> -->
         <p><span class="label"><b>City: </b></span><span
             class="value">{{salesQuote.billToCity ? salesQuote.billToCity : '-'}}</span></p>
         <p><span class="label"><b>Primary State/Province: </b></span><span
@@ -292,8 +294,18 @@
     </app-sales-order-quote-charges>
   </p-tabPanel>
   <p-tabPanel header="Document">
-    <app-salesQuote-documents [isEditMode]="false" [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [viewMode]="true">
-    </app-salesQuote-documents>
+    <!-- <app-salesQuote-documents [isEditMode]="false" [salesOrderQuoteId]="salesQuote.salesOrderQuoteId" [viewMode]="true">
+    </app-salesQuote-documents> -->
+    <app-common-documents [moduleName]="moduleName" [referenceId]="salesQuote.salesOrderQuoteId" [isViewMode]="true"
+      [offLineUpload]="false"></app-common-documents>
+  </p-tabPanel>
+  <p-tabPanel header="Analysis">
+    <app-sales-quote-analysis>
+    </app-sales-quote-analysis>
+  </p-tabPanel>
+  <p-tabPanel header="Communication">
+    <app-communication [moduleName]="moduleName" [idForContact]="customerId" [isViewMode]="true" [type]="1"
+      [referenceId]="salesQuote.salesOrderQuoteId"></app-communication>
   </p-tabPanel>
 </p-tabView>
 <div class="preloader" *ngIf="isSpinnerVisible">

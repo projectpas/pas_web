@@ -24,10 +24,10 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a class="" data-toggle="collapse" href="#step1">Domestic Shipping Info</a>
+                                <a class="collapsed" data-toggle="collapse" href="#step1">Domestic Shipping Info</a>
                             </h4>
                         </div>
-                        <div id="step1" class="panel-collapse collapse in show">
+                        <div id="step1" class="panel-collapse collapse">
                             <div class="panel-body m-lr-7">
                                 <div class="col-sm-12">
                                     <div style="text-align: right;">
@@ -79,8 +79,12 @@
                                                     <div class="col">
                                                         <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
                                                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
-                                                                label="Export Data" (click)="domesticShipInfo.exportCSV()"
+                                                                label="Export Data"
+                                                                data-toggle="modal" (click)="selectedOnly = false; targetData = domesticShipInfo;"
+                                                               data-target="#downloadDomesticConfirmation"
+                                                               
                                                                 style="padding:5px 10px !important;"></button>
+                                                                <!-- (click)="domesticShipInfo.exportCSV()" -->
                                                         <button type="button" class="btn btn-primary new-table-button"
                                                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                                                 icon="fa-download" iconPos="left" label="Export Selected Data"
@@ -306,6 +310,29 @@
                                                     </div>
                                                     <div class="col-sm-12">
                                                         <div class="col-sm-4">
+                                                            <label>Tag <span class="clr-red">*</span></label>
+                                                          </div>
+                                                        <div class="col-sm-5">
+                                                            <div class="inner-addon right-addon inline-block" style="width: 100%">
+                                                              <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.tagName"
+                                                                (ngModelChange)="enableSaveDomestic()" name="tagName" field="tagName" [suggestions]="tagNamesList"
+                                                                (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                                                [inputStyle]="{ width: '100%' }" required>
+                                                              </p-autoComplete>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="col-sm-12">
+                                                          <div class="col-sm-4">
+                                                            <label>Attention </label>
+                                                          </div>
+                                                          <div class="col-sm-5">
+                                                            <input class="form-control" type="text" name="attention" (ngModelChange)="enableSaveDomestic()"
+                                                              [(ngModel)]="sourceVendor.attention" />
+                                                          </div>
+                                                        </div>
+                                                    <div class="col-sm-12">
+                                                        <div class="col-sm-4">
                                                             <label>Site Name <span class="clr-red">*</span></label>
                                                         </div>
                                                         <div class="col-sm-5">
@@ -392,13 +419,13 @@
                                             <div class="modal-footer">
                                                 <!-- [disabled]="!addShippingForm.valid || disableSaveShippingCountry" -->
                                                 <button type="button" *ngIf="sourceVendor.vendorId == undefined" class="btn btn-primary pull-right"
-                                                        (click)="editItemAndCloseModel()" [disabled]="!addShippingForm.valid || disableSaveShippingCountry"
+                                                        (click)="editItemAndCloseModel()" [disabled]="!addShippingForm.valid"
                                                         data-dismiss="modal">
                                                     Save
                                                 </button>
                                                 <button type="button" *ngIf="sourceVendor.vendorId != undefined && sourceVendor.vendorId !=0"
                                                         class="btn btn-primary pull-right" (click)="editItemAndCloseModel()"
-                                                        [disabled]="!addShippingForm.valid || disableSaveDomesticSite || disableSaveShippingCountry" data-dismiss="modal">
+                                                        [disabled]="!addShippingForm.valid || disableSaveDomesticSite" data-dismiss="modal">
                                                     Update
                                                 </button>
                                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
@@ -407,6 +434,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="modal fade" id="downloadDomesticConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" (click)="closeDomesticDeleteModal()">&times;</button>
+                                            <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                                        </div>
+                                        <div class="modal-body" *ngIf="targetData">
+                                            <strong>
+                                                <span>
+                                                    You are attempting to export {{targetData.totalRecords}} of records. 
+                                                </span> 
+                                            </strong>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDomesticDeleteModal();">Confirm</button>
+                                            <button type="button" class="btn btn-danger" (click)="closeDomesticDeleteModal()">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div id="domesticShippingHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
                                 <div class="modal-dialog modal-xl">
 
@@ -452,6 +501,8 @@
                                                 <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                     <thead>
                                                         <tr>
+                                                            <th>TagName</th>
+                                                            <th>Attention</th>
                                                             <th>Site Name</th>
                                                             <th>Address1</th>
                                                             <th>Address2</th>
@@ -470,6 +521,12 @@
                                                     </thead>
                                                     <tbody class="audithistory-cstm">
                                                         <tr *ngFor="let audit of auditHistory; let i = index;">
+                                                            <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'tagName', audit.tagName)  ? 'black' : 'red'  }">
+                                                                {{audit.tagName}}
+                                                            </td>
+                                                            <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'attention', audit.attention)  ? 'black' : 'red'  }">
+                                                                {{audit.attention}}
+                                                            </td>
                                                             <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">
                                                                 {{audit.siteName}}
                                                             </td>
@@ -623,9 +680,17 @@
                                                     <div class="col-md-2" *ngIf="!isViewMode">
                                                         <div class="form-group">
                                                             <label>Memo</label>
-                                                            <textarea class="form-control" name="memoDomesticshipvia" rows="2" (ngModelChange)="enableSaveDomeSticShipVia()"
-                                                                      [(ngModel)]="shipViaObj.memo"></textarea>
-                                                        </div>
+                                                                      <div class="align_adh">
+                                                                        <div [innerHTML]="shipViaObj.memo" 
+                                                                         matTooltipPosition="above"
+                                                                          [matTooltip]="parsedText(shipViaObj.memo)" class="text_editor_box"
+                                                                            style="width: 96% !important;"></div>
+                                                                        <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
+                                                                            data-target="#textarea-popup1" matTooltip="Memo"
+                                                                            matTooltipPosition="above"
+                                                                            (click)="onAddDomesticMemo()"></i>
+                                                                    </div>
+                                                                    </div>
                                                     </div>
                                                     <div class="col-md-2" *ngIf="!isViewMode">
                                                         <div class="form-group">
@@ -644,6 +709,38 @@
                                                 <div class="clear"></div>
                                                 <hr *ngIf="!isViewMode">
                                                 <div class="clear"></div>
+                                                <div class="modal fade" id="textarea-popup1" role="dialog" data-backdrop="static" data-keyboard="false">
+                                                    <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+                                                  <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" (click)="onCloseTextAreaInfo(1)">&times;</button>
+                                                                <h4 class="modal-title">Edit Memo</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <table class="table table-bordered table-fixed workflow-table-material">
+                                                                    <thead>
+                                                                        <th style="color: #fff;">Memo</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>
+                                                                                <p-editor [(ngModel)]="textDomesticMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                                                                name="textDomesticMemo"></p-editor>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody> 
+                                                                </table>
+                                                                <div style="float:right;margin-top: 12px;">
+                                                                    <button type="button" class="btn btn-primary"
+                                                                     (ngModelChange)="enableSaveDomestic()" (click)="onSaveDomesticMemo()" [disabled]="disableEditor">Save</button>
+                                                                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(1)">Close</button>
+                                                               </div> 
+                                                            </div>
+                                                        </div>
+                                        
+                                                    </div>
+                                                </div>
+                                        
                                                 <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important; padding-right: 10px;">
                                                     <label style="width: auto !important;margin-top: 3px; text-align: right !important;">
                                                         <input type="checkbox" [(ngModel)]="currentDeletedstatusShipVia" name="showDeleted" id="showDeleted" (click)="getDeleteListByStatusDomesticShipVia($event.target.checked)" />
@@ -688,10 +785,21 @@
                                                                        class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                                                 </span>
                                                             </td>
-
-                                                            <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                                                {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
-                                                            </td>
+                                                            <ng-container *ngFor="let col of columns">
+                                                                <td class="ui-resizable-column" *ngIf="col.field != 'memo'"
+                                                                pReorderableRowHandle>
+                                                                {{
+                                                                  col.field == 'createdDate'
+                                                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                                                    : rowData[col.field] && col.field == 'updatedDate'
+                                                                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                                                    : rowData[col.field]
+                                                                }}
+                                                              </td>
+                                                              <td *ngIf="col.field == 'memo'">
+                                                                  <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                                              </td>
+                                                              </ng-container>
 
                                                             <td style="text-align: center;">
                                                                 <div *ngIf="currentDeletedstatusShipVia == false">
@@ -932,12 +1040,10 @@
                                                         }}
                                                     </span>
                                                 </p>
-                                                <p>
-                                                    <span class="label"><b>Memo: </b></span><span class="value">
-                                                        {{
-                                                            domesticShippingViaView.memo
-                                                        }}
-                                                    </span>
+                                                <p style="vertical-align: top;">
+                                                    <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
+                                                    <span class="value">
+                                                  <p class="p-0 m-0 p_textEditor" [innerHTML]="domesticShippingViaView.memo"></p></span>
                                                 </p>
                                                 <p>
                                                     <span class="label"><b>Is Active : </b></span>
@@ -970,7 +1076,7 @@
 
                             <!-- The Modal -->
                             <div class="modal popup-blur" id="contentAuditHistShipVia" data-backdrop="static">
-                                <div class="modal-dialog modal-xl">
+                                <div class="modal-dialog modal-xlg">
                                     <div class="modal-content">
                                         <!-- Modal Header -->
                                         <div class="modal-header">
@@ -1028,7 +1134,7 @@
                                                             {{audit.shippingAccountinfo}}
                                                         </td>
                                                         <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
-                                                            {{audit.memo}}
+                                                            <p [innerHTML]="audit.memo"></p>
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <span class="value">
@@ -1125,12 +1231,17 @@
                                                     <div class="col">
                                                         <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
                                                                 matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
-                                                                label="Export Data" (click)="interShipInfo.exportCSV()"
+                                                                label="Export Data" 
+                                                                data-toggle="modal" 
+                                                                (click)="selectedOnly = false; targetData = interShipInfo;"
+                                                                 data-target="#downloadInternConfirmation"
+                                                               
                                                                 style="padding:5px 10px !important;"></button>
+                                                                <!-- (click)="interShipInfo.exportCSV()" -->
                                                         <button type="button" class="btn btn-primary new-table-button"
                                                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                                                 icon="fa-download" iconPos="left" label="Export Selected Data"
-                                                                (click)="interShipInfo.exportCSV({selectionOnly:true})"
+                                                                (click)="interShipInfo.exportInternCSV({selectionOnly:true})"
                                                                 style="padding:5px 10px !important;"></button>
                                                         <div class="col"
                                                              style="width: 370px; float: right; padding-top: 3px;">
@@ -1496,6 +1607,8 @@
                     </div>
                 </span>
             </p>
+            <p><span class="label"><b>Tag: </b><span class="clr-red">*</span> </span><span class="value">{{sourceVendor.tagName}}</span></p>
+            <p><span class="label"><b>Attention: </b> </span><span class="value">{{sourceVendor.attention}}</span></p>
             <p><span class="label"><b>Site Name: </b>  <span class="clr-red">*</span></span><span class="value">{{siteName}}</span></p>
             <p><span class="label"><b> Address 1: </b>  <span class="clr-red">*</span></span><span class="value">{{address1}}</span></p>
             <p><span class="label"><b> Address 2: </b></span><span class="value">{{address2}}</span></p>
@@ -1938,8 +2051,31 @@
 
 </div>
 
+<div class="modal fade" id="downloadInternConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeInternDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportInternCSV({ selectionOnly: true }):exportInternCSV(targetData); closeInternDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeInternDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <div id="contentAuditHistInterShip" class="modal fade" role="dialog" data-backdrop="static">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">History of International Shipping Info</h4>
@@ -2181,8 +2317,16 @@
                         <div class="col-md-2" *ngIf="!isViewMode">
                             <div class="form-group">
                                 <label>Memo</label>
-                                <textarea class="form-control" name="memoIntershipvia" rows="2" (ngModelChange)="enableSaveInternationalShipVia()"
-                                          [(ngModel)]="shipViaInterObj.memo"></textarea>
+                                          <div class="align_adh">
+                                            <div [innerHTML]="shipViaInterObj.memo" 
+                                             matTooltipPosition="above"
+                                              [matTooltip]="parsedText(shipViaInterObj.memo)" class="text_editor_box"
+                                                style="width: 96% !important;"></div>
+                                            <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
+                                                data-target="#textarea-popup2" matTooltip="Memo"
+                                                matTooltipPosition="above"
+                                                (click)="onAddDomesticMemo()"></i>
+                                        </div>
                             </div>
                         </div>
                         <div class="col-md-2" *ngIf="!isViewMode">
@@ -2199,6 +2343,37 @@
                     <div class="clear"></div>
                     <hr *ngIf="!isViewMode">
                     <div class="clear"></div>
+                    <div class="modal fade" id="textarea-popup2" role="dialog" data-backdrop="static" data-keyboard="false">
+                        <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+                      <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" (click)="onCloseTextAreaInfo(2)">&times;</button>
+                                    <h4 class="modal-title">Edit Memo</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered table-fixed workflow-table-material">
+                                        <thead>
+                                            <th style="color: #fff;">Memo</th>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <p-editor [(ngModel)]="textInternationalMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                                    name="textAreaInf2o"></p-editor>
+                                                </td>
+                                            </tr>
+                                        </tbody> 
+                                    </table>
+                                    <div style="float:right;margin-top: 12px;">
+                                        <button type="button" class="btn btn-primary" (ngModelChange)="enableSaveInternationalShipVia()"
+                                        (click)="onSaveInternationalMemo()" [disabled]="disableEditor">Save</button>
+                                    <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(2)">Close</button>
+                                   </div> 
+                                </div>
+                            </div>
+            
+                        </div>
+                      </div>
                     <div class="checkbox-cstm" style="margin-right: 10px; text-align: right !important;">
                         <label style="width: auto !important;margin-top: 3px;">
                             <input type="checkbox" [(ngModel)]="currentDeletedstatusInternationalShipVia" name="cparent" id="cparent" (click)="getDeleteListByStatusInternationalShipVia($event.target.checked)" />
@@ -2244,9 +2419,21 @@
                                            class="fa fa-flag" aria-hidden="true" matTooltip="Primary" matTooltipPosition="above"></i>
                                     </span>
                                 </td>
-                                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                    {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
-                                </td>
+                                <ng-container *ngFor="let col of columns">
+                                    <td class="ui-resizable-column" *ngIf="col.field != 'memo'"
+                                    pReorderableRowHandle>
+                                    {{
+                                      col.field == 'createdDate'
+                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        : rowData[col.field] && col.field == 'updatedDate'
+                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        : rowData[col.field]
+                                    }}
+                                  </td>
+                                  <td *ngIf="col.field == 'memo'">
+                                      <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                  </td>
+                                  </ng-container>
 
                                 <td style="text-align: center;">                                    
                                     <div *ngIf="!currentDeletedstatusInternationalShipVia">
@@ -2490,8 +2677,13 @@
                             <td [ngStyle]="{'color':  getColorCodeForInternnationalShipViaHistory(i, 'shippingAccountInfo', audit.shippingAccountInfo)  ? 'black' : 'red'  }">
                                 {{audit.shippingAccountInfo}}
                             </td>
-                            <td [ngStyle]="{'color':  getColorCodeForInternnationalShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
-                                {{audit.memo}}
+                            <td
+                                [ngStyle]="{
+                                color: getColorCodeForInternnationalShipViaHistory(i, 'memo', audit.memo)
+                                    ? 'black'
+                                    : 'red'
+                                }">
+                            <p [innerHTML]="audit.memo"></p>
                             </td>
                             <td style="text-align: center;">
                                 <span class="value">
@@ -2570,25 +2762,21 @@
                 <div class="col-sm-12">
                     <p>
                         <span class="label"><b>Ship Via <span class="clr-red">*</span> : </b></span><span class="value">
-                            {{
-                                                                    interShippingViaView.shipViaName
-                            }}
+                            {{interShippingViaView.shipViaName}}
                         </span>
                     </p>
                     <p>
                         <span class="label"><b>Shipping Account Info <span class="clr-red">*</span>: </b></span><span class="value">
-                            {{
-                                                                    interShippingViaView.shippingAccountInfo
-                            }}
+                            {{interShippingViaView.shippingAccountInfo}}
                         </span>
                     </p>
-                    <p>
-                        <span class="label"><b>Memo: </b></span><span class="value">
-                            {{
-                                                                    interShippingViaView.memo
-                            }}
+                   
+                    <p style="vertical-align: top;">
+                        <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
+                        <span class="value">
+                          <p class="p-0 m-0 p_textEditor" [innerHTML]="interShippingViaView.memo"></p>
                         </span>
-                    </p>
+                      </p>
                     <p>
                         <span class="label"><b>Is Active : </b></span>
                         <span class="value">

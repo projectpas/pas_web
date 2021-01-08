@@ -50,6 +50,7 @@
                                         [suggestions]="vendorNames"
                                         (completeMethod)="filterVendorNames($event)" [size]="30" [minLength]="1" 
                                         (ngModelChange)="enableSave()"
+                                        (keypress)="patternVendorNamevalidation($event)"  
                                         [dropdown]="true" required>
                                     </p-autoComplete>
                                     <div *ngIf="disableSaveVenderName" class="clr-red">
@@ -99,10 +100,10 @@
                                             (onKeyUp)="checkWithName($event.target.value)" 
                                             (onChange)="checkWithName($event.target.value)"
                                             [size]="30" [minLength]="1" [dropdown]="true" 
-                                            (ngModelChange)="enableSave()"
+                                            (ngModelChange)="enableSave()"                                                                                                                             
                                             (onClear)="onClearParent()" required>
                                     </p-autoComplete>
-
+                                    <!-- [namePattern]="namePattern" -->
                                     <div *ngIf="disableSaveParentName" style="color:red;font-size: 13px;">
                                         Parent name can't be same as customer name
                                     </div>
@@ -242,7 +243,7 @@
                                         <span class="clr-red">*</span>
                                     </label>
                                     <p-autoComplete field="nice_name" class="pautocomp-cstm" (onSelect)="onCountrieselected($event)" (ngModelChange)="enableSave()"
-                                                    (onKeyUp)="eventCountryHandler($event)" [(ngModel)]="sourceVendor.countryId" name="country"
+                                                    (onKeyUp)="eventCountryHandler($event)" [(ngModel)]="sourceVendor.countryId" name="country" 
                                                     [forceSelection]="true" [suggestions]="countrycollection" (completeMethod)="filtercountry($event)"
                                                     [size]="30" [minLength]="1" [dropdown]="true" required>
                                         
@@ -330,7 +331,7 @@
                                             </label>
 
                                             <p-multiSelect [options]="integrationOriginalList" [(ngModel)]="sourceVendor.integrationPortalIds" (ngModelChange)="enableSave()"
-                                                           name="integrationPortalIds" defaultLabel="Choose Columns">
+                                                           name="integrationPortalIds" defaultLabel="Choose">
                                             </p-multiSelect>
                                         </div>
 
@@ -376,15 +377,15 @@
                             </div>
                         </div>
                     </div>
-
+                    <!-- disableSaveVendorCountry -->
                     <div style="padding-bottom: 7px;">
                         <button type="button" *ngIf="isvendorEditMode" class="btn btn-primary pull-right submit-btn" (click)="previousOrNextTab('Next')" [disabled]="!allowNextView">Next</button>
                         <button *ngIf ="!enableUpdate" type="button" class="btn btn-primary pull-right " (click)="saveConformation('goNext')"
-                                [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail || disableSaveVendorCountry">
+                                [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail ">
                             Save
                         </button>
                         <button *ngIf ="enableUpdate" type="button" class="btn btn-primary pull-right " (click)="saveConformation('goNext')"
-                                [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail || disableSaveVendorCountry || disableSaveForEdit">
+                                [disabled]="!generalForm.valid || disableSaveVenderName || disableSaveVendorPhone || disableSaveVendorEmail || disableSaveForEdit">
                             Update
                         </button>
                     </div>
@@ -793,7 +794,7 @@
                                         (ngModelChange)="enableSaveDocumentAudit()"
                                         data-target="#memo-popup"                                                                          
                                         (click)="onClickMemo()">
-                                         <i class="fa fa-pencil"></i>
+                                         <i style="color: #337ab7" class="fa fa-pencil"></i>
                                      </a>
                                     </span>
                                 </div>
@@ -1393,6 +1394,7 @@
                           <tr>
                               <td style="white-space: inherit">
                                   <p-editor spellcheck="true"
+                                  (ngModelChange)="enableSaveMemo()"
                                             [(ngModel)]="memoPopupContent"
                                             [style]="{ height: '320px' }"
                                             name="memoPopupContent"
@@ -1405,7 +1407,7 @@
                       <button type="button"
                               class="btn btn-primary"
                               style="padding: 6px 12px !important; margin-top: 10px;"
-                              data-dismiss="modal"
+                              data-dismiss="modal" [disabled]="disableSaveMemo"
                               (click)="onClickPopupSave()">
                           Save
                       </button>

@@ -1,8 +1,7 @@
-﻿import { Component, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, OnInit, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
 import { Router } from '@angular/router';
 import { CustomerService } from '../../../services/customer.service';
-import { OnInit, SimpleChanges } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CommonService } from '../../../services/common.service';

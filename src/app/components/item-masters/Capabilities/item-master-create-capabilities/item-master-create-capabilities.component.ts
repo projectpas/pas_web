@@ -6,8 +6,8 @@ import { MessageSeverity, AlertService } from '../../../../services/alert.servic
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';
@@ -66,9 +66,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     textAreaInfo: string;
     isAdd: boolean = false;
     addrawNo:number = 0;
-    colaircraft: any[] = [
-
-    ];
+    colaircraft: any[] = [];
     cols: any[] = [
         {field: 'addedDate', header: 'Date Added', width: "150px"},
         {field: 'isVerified', header: 'Verified', width: "100px"},
@@ -89,6 +87,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     itemMastersList: any[] = [];
     private onDestroy$: Subject<void> = new Subject<void>();
     selectedColums: any[];
+    arrayEmplsit:any[] = [];
 
     constructor(public itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
@@ -101,25 +100,23 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
         private atasubchapter1service: AtaSubChapter1Service,
         private activatedRoute: ActivatedRoute,
         private _router: Router,
-        private datePipe: DatePipe
-
-    ) {
+        private datePipe: DatePipe) {
         this.itemser.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-create-capabilities';
             this.itemser.bredcrumbObj.next(this.itemser.currentUrl);//Bread Crumb
      }
+
     ngOnInit() {
         this.getCapabilityTypesList();
         this.getAircraftTypesList();
         this.getItemMasterList();
         this.resetFormData();
+        this.getAllEmployees();
         this.selectedColums = this.cols;
-
     }
-    getItemMasterList() {
 
-this.isSpinnerVisible = true;
+    getItemMasterList() {
+        this.isSpinnerVisible = true;
         this.itemser.getItemStockList("Stock").subscribe(res => {
-            
             let resData = res[0];
             this.itemMastersList = resData;
             if (resData) {
@@ -136,8 +133,7 @@ this.isSpinnerVisible = true;
                                 itemClassification: resData[i].itemClassfication[0].description
                             }
                         }
-                    }
-                   
+                    }                   
                 }
             }
             this.isSpinnerVisible = false;
@@ -157,8 +153,6 @@ this.isSpinnerVisible = true;
     getAircraftTypesList() {
         this.itemser.getAircraft().subscribe(res => {
             const allaircraftInfo = res[0];
-
-
             if (allaircraftInfo) {
                 if (allaircraftInfo.length > 0) {
                     for (let i = 0; i < allaircraftInfo.length; i++)
@@ -174,7 +168,6 @@ this.isSpinnerVisible = true;
         let airtCraftObject = this.manufacturerData.find(element => element.value == this.selectedAircraftId);
         this.selectedAircraftName = airtCraftObject.label;
         this.aircraftModelService.getAircraftModelListByManufactureId(this.selectedAircraftId).subscribe(models => {
-
             const responseValue = models[0];
             this.LoadValues = responseValue.map(models => {
                 return {
@@ -182,7 +175,6 @@ this.isSpinnerVisible = true;
                     value: models
                 }
             });
-
         });
         this.selectedModelId = undefined;
         this.selectedDashnumber = undefined;
@@ -191,7 +183,6 @@ this.isSpinnerVisible = true;
     getDashNumberByTypeandModel(value) {
         this.newModelValue = value.originalEvent.target.textContent;
         this.dashNumberUrl = this.selectedModelId.reduce((acc, obj) => {
-
             return `${acc},${obj.aircraftModelId}`
         }, '')
         this.dashNumberUrl = this.dashNumberUrl.substr(1);
@@ -204,7 +195,6 @@ this.isSpinnerVisible = true;
                 }
             });
             this.filterDashNumberDropdown(this.aircraftData)
-
         });
     }
 
@@ -212,25 +202,32 @@ this.isSpinnerVisible = true;
         this.newDashnumValue = value.originalEvent.target.textContent;
     }
 
-
     resetAircraftModelsorDashNumbers() {
         if (this.modelUnknown) {
             this.selectedModelId = undefined;
             this.selectedDashnumber = undefined;
-
         }
         if (this.dashNumberUnknown) {
-
             this.selectedDashnumber = undefined;
-
         }
-
     }
+
     get currentUserManagementStructureId(): number {
         return this.authService.currentUser
           ? this.authService.currentUser.managementStructureId
           : null;
-      }
+    }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+    }
+
+    get employeeId() {
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+    }
+
     mapAircraftInformation(){
         this.viewTable = true;
         this.commonService
@@ -247,8 +244,8 @@ this.isSpinnerVisible = true;
                     
                     entryDate: new Date(),                   
                     isVerified: false,
-                    verifiedById: null,
-                    verifiedDate: null,
+                    verifiedById: this.employeeId,
+                    verifiedDate: new Date(),
                     addedDate: new Date(),
                     memo: '',
                     companyId: res.Level1,
@@ -258,19 +255,18 @@ this.isSpinnerVisible = true;
                 }
             })
             this.aircraftData = mappedAircraftData;
-            for(let i=0; i<this.aircraftData.length; i++){
-               
+            for(let i=0; i<this.aircraftData.length; i++){               
                 this.selectedLegalEntity(res.Level1, i);
                 this.selectedBusinessUnit(res.Level2, i);
-            this.selectedDivision(res.Level3, i);
-            this.selectedDepartment(res.Level4, i);
+                this.selectedDivision(res.Level3, i);
+                this.selectedDepartment(res.Level4, i);
             }
             this.capabilityTypeId = null;
         });
             this.getLegalEntity();
-            this.getAllEmployees();            
-            
+            this.getAllEmployees();
     }
+
     loadManagementStructure(managementStructureId) {
         this.commonService
           .getManagementStructureDetails(managementStructureId)
@@ -297,8 +293,6 @@ this.isSpinnerVisible = true;
                     AircraftModelId: x.modelid,
                     DashNumberId: x.dashNumberId,
                     IsChecked: false,
-                    // ...this.capes
-
                     capabilityTypeId: this.capabilityTypeId,
                     capailityTypeName: getValueFromArrayOfObjectById('label', 'value', this.capabilityTypeId, this.capabalityTypeList),
                     managementStructureId: null,
@@ -335,7 +329,6 @@ this.isSpinnerVisible = true;
             AircraftModelId: 0,
             DashNumberId: 0,
             IsChecked: false,
-            // ...this.capes
             capabilityTypeId: this.capabilityTypeId,
             capailityTypeName: getValueFromArrayOfObjectById('label', 'value', this.capabilityTypeId, this.capabalityTypeList),
             managementStructureId: null,
@@ -400,15 +393,11 @@ this.isSpinnerVisible = true;
     this.getIntergationWithList();
     this.getAllEmployees();
     this.getLegalEntity();
-
     }
-
 
     getDynamicVariableData(variable, index) {
         return this[variable + index]
     }
-
-
 
     async getPartPublicationByItemMasterId(itemMasterId) {
         this.capabilityTypeId = [];
@@ -438,12 +427,14 @@ this.isSpinnerVisible = true;
             return decodedString;
         }
     }
+
     resetVerified(rowData, value) {
         if (value === false) {
             rowData.verifiedById = null;
             rowData.verifiedDate = null;
         } if(value == true){
             rowData.verifiedDate = new Date();
+            rowData.verifiedById = this.employeeId;
         }
     }
 
@@ -452,31 +443,26 @@ this.isSpinnerVisible = true;
             this.ataChapters = res;
         })
     }
+
     getIntergationWithList() {
         this.commonService.smartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description').subscribe(res => {
             this.intergationList = res;
         })
     }
-    async getAllEmployees() {
-        await this.commonService.getCertifiedEmpList(this.currentUserManagementStructureId).subscribe(res => {
-            if(res) {
-                this.employeeList = res.map(x => {
-                    return {
-                        value: x.employeeId,
-                        label: x.name
-                    }
-                });
-            }
-        })
-    }
 
+    async getAllEmployees() {
+		if(this.arrayEmplsit.length == 0) {			
+		this.arrayEmplsit.push(0); }	
+        await this.commonService.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
+            this.employeeList = res;   
+        }, error => error => this.saveFailedHelper(error))
+	}
 
     getLegalEntity() {
         this.commonService.getLegalEntityList().subscribe(res => {
             this.legalEntityList = res;
         })
     }
-
 
     selectedLegalEntity(legalEntityId, index) {
         if(index == null){
@@ -486,11 +472,12 @@ this.isSpinnerVisible = true;
             this.aircraftData[index].managementStructureId = legalEntityId;
             this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).subscribe(res => {
                 this['businessUnitList' + index] = res;
-
+                this['divisionList' + index] = [];
+                this['departmentList' + index] = [];
             })
         }
-
     }
+
     selectedBusinessUnit(businessUnitId, index) {
         if(index == null){
             index = this.aircraftData.length -1;
@@ -498,12 +485,12 @@ this.isSpinnerVisible = true;
         if (businessUnitId) {
             this.aircraftData[index].managementStructureId = businessUnitId;
             this.commonService.getDivisionListByBU(businessUnitId).subscribe(res => {
-
                 this['divisionList' + index] = res;
+                this['departmentList' + index] = [];
             })
         }
-
     }
+
     selectedDivision(divisionUnitId, index) {
         if(index == null){
             index = this.aircraftData.length -1;
@@ -514,8 +501,8 @@ this.isSpinnerVisible = true;
                 this['departmentList' + index] = res;
             })
         }
-
     }
+
     selectedDepartment(departmentId, index) {
         if(index == null){
             index = this.aircraftData.length -1;
@@ -527,8 +514,6 @@ this.isSpinnerVisible = true;
 
     // get subchapter by Id in the add ATA Mapping
     getATASubChapterByATAChapter(value, index) {
-
-
         this.atasubchapter1service.getATASubChapterListByATAChapterId(value).subscribe(atasubchapter => {
             const responseData = atasubchapter[0];
             this["ataSubChapaters" + index] = responseData.map(x => {
@@ -550,7 +535,6 @@ this.isSpinnerVisible = true;
             iMid = this.itemMasterId
         }
 
-
         const capesData = [
             ...this.aircraftData.map(x => {
                 if(x.verifiedDate  || x.addedDate){
@@ -561,7 +545,7 @@ this.isSpinnerVisible = true;
                     ...x,
                     aircraftDashNumberId: x.DashNumberId,
                     itemMasterId: parseInt(iMid),
-                    masterCompanyId: 1,
+                    masterCompanyId: this.currentUserMasterCompanyId,
                     createdBy: this.userName,
                     updatedBy: this.userName,
                     createdDate: new Date(),
@@ -570,8 +554,8 @@ this.isSpinnerVisible = true;
                     isDeleted: false
                 }
             }),
-
         ]
+
         this.itemser.saveItemMasterCapes(capesData).subscribe(res => {
             this.aircraftData = [];
             this.resetFormData();
@@ -614,9 +598,11 @@ this.isSpinnerVisible = true;
         this.aircraftData  = [];
         this.viewTable = false;
     }
+
     onCloseCapes() {
         this.closeCapesPopup.emit(true);
     }
+
     filterDashNumberDropdown (aircraft){        
         var props =  ['label', 'value'];
         var result = this.LoadDashnumber.filter(function(o1){
@@ -655,6 +641,7 @@ this.isSpinnerVisible = true;
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
         setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
     }
+
     onAddTextAreaInfo(value,row_no) {
 		if(value == 'memo') {
 			this.textAreaLabel = 'Memo';
@@ -679,4 +666,137 @@ this.isSpinnerVisible = true;
     {
         $('#capes-memo').modal('hide');
     }
+
+    // mapAircraftInformationOld() {
+    // this.viewTable = true;
+    // if (this.selectedAircraftId !== undefined && this.selectedModelId !== undefined && this.selectedDashnumber !== undefined) {
+    //     this.Dashnumservice.getAllDashModels(this.dashNumberUrl, this.selectedAircraftId, this.selectedDashnumber).subscribe(aircraftdata => {
+    //         const responseValue = aircraftdata;
+    //         let mappedAircraftData = responseValue.map(x => {
+    //             return {
+    //                 AircraftType: x.aircraft,
+    //                 aircraftTypeId: this.selectedAircraftId,
+    //                 AircraftModel: x.model,
+    //                 DashNumber: x.dashNumber,
+    //                 AircraftModelId: x.modelid,
+    //                 DashNumberId: x.dashNumberId,
+    //                 IsChecked: false,
+    //                 // ...this.capes
+
+    //                 capabilityTypeId: this.capabilityTypeId,
+    //                 capailityTypeName: getValueFromArrayOfObjectById('label', 'value', this.capabilityTypeId, this.capabalityTypeList),
+    //                 managementStructureId: null,
+    //                 description: '',
+    //                 ataChapterId: null,
+    //                 ataSubChapterId: null,
+    //                 entryDate: new Date(),
+    //                 cmmId: null,
+    //                 integrateWithId: null,
+    //                 isVerified: false,
+    //                 verifiedById: null,
+    //                 verifiedDate: new Date(),
+    //                 addedDate: new Date(),
+    //                 memo: '',
+    //                 companyId: null,
+    //                 buId: null,
+    //                 divisionId: null,
+    //                 departmentId: null,
+    //             }
+    //         })
+    //         for(let i=0; i<mappedAircraftData.length; i++){
+    //             this.aircraftData = [...this.aircraftData, mappedAircraftData[i]]
+    //         }
+    //         this.filterDashNumberDropdown(this.aircraftData);
+
+    //     })
+    // }
+    // if (this.selectedAircraftId !== undefined && this.modelUnknown) {
+    //     let mappedAircraftData  = [{
+    //         AircraftType: this.newValue,
+    //         aircraftTypeId: this.selectedAircraftId,
+    //         AircraftModel: 'Unknown',
+    //         DashNumber: 'Unknown',
+    //         AircraftModelId: 0,
+    //         DashNumberId: 0,
+    //         IsChecked: false,
+    //         // ...this.capes
+    //         capabilityTypeId: this.capabilityTypeId,
+    //         capailityTypeName: getValueFromArrayOfObjectById('label', 'value', this.capabilityTypeId, this.capabalityTypeList),
+    //         managementStructureId: null,
+    //         description: '',
+    //         ataChapterId: null,
+    //         ataSubChapterId: null,
+    //         entryDate: new Date(),
+    //         cmmId: null,
+    //         integrateWithId: null,
+    //         isVerified: false,
+    //         verifiedById: null,
+    //         verifiedDate: new Date(),
+    //         addedDate: new Date(),
+    //         memo: '',
+    //         companyId: null,
+    //         buId: null,
+    //         divisionId: null,
+    //         departmentId: null,
+    //     }]
+    //     for(let i=0; i<mappedAircraftData.length; i++){
+    //         this.aircraftData = [...this.aircraftData, mappedAircraftData[i]]
+    //     }
+    // }
+
+    // if (this.selectedAircraftId !== undefined && this.selectedModelId !== undefined && this.dashNumberUnknown) {
+    //     let mappedAircraftData = this.selectedModelId.map(x => {
+    //         return {
+    //             AircraftType: this.newValue,
+    //             aircraftTypeId: this.selectedAircraftId,
+    //             AircraftModel: x.modelName,
+    //             DashNumber: 'Unknown',
+    //             AircraftModelId: x.aircraftModelId,
+    //             DashNumberId: 0,
+    //             IsChecked: false,
+    //             // ...this.capes,
+    //             capabilityTypeId: this.capabilityTypeId,
+    //             capailityTypeName: getValueFromArrayOfObjectById('label', 'value', this.capabilityTypeId, this.capabalityTypeList),
+    //             managementStructureId: null,
+    //             description: '',
+    //             ataChapterId: null,
+    //             ataSubChapterId: null,
+    //             entryDate: new Date(),
+    //             cmmId: null,
+    //             integrateWithId: null,
+    //             isVerified: false,
+    //             verifiedById: null,
+    //             verifiedDate: new Date(),
+    //             addedDate: new Date(),
+    //             memo: '',
+    //             companyId: null,
+    //             buId: null,
+    //             divisionId: null,
+    //             departmentId: null,
+    //         }
+    //     })
+    //     for(let i=0; i<mappedAircraftData.length; i++){
+    //         this.aircraftData = [...this.aircraftData, mappedAircraftData[i]]
+    //     }
+    // }
+    // this.getPartPublicationByItemMasterId(this.itemMasterId);
+    // this.getAtAChapters();
+    // this.getIntergationWithList();
+    // this.getAllEmployees();
+    // this.getLegalEntity();
+
+    // }
+
+        // async getAllEmployeesOld() {
+    //     await this.commonService.getCertifiedEmpList(this.currentUserManagementStructureId).subscribe(res => {
+    //         if(res) {
+    //             this.employeeList = res.map(x => {
+    //                 return {
+    //                     value: x.employeeId,
+    //                     label: x.name
+    //                 }
+    //             });
+    //         }
+    //     })
+    // }
 }

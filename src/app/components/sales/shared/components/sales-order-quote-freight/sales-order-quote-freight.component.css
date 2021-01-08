@@ -23,6 +23,11 @@ textarea {
   text-align: center;
 }
 
+.sales-analysis-header th{
+  background: #4298ff !important;
+  color:#fff !important;
+}
+
 /* p-radiobutton .ui-radiobutton .ui-radiobutton-box{
   border: 3px solid #ffffff !important;
 } */
@@ -44,8 +49,8 @@ select.select-read-only {
 .sales-quote-radio .ui-radiobutton-label {
   width: unset !important;
   margin-right: 10px;
+  color:#fff !important;
 }
-
 
 .sales-quote-radio .ui-radiobutton-label {
   margin-left: 10px;

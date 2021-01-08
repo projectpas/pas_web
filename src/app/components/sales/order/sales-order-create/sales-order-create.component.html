@@ -82,11 +82,6 @@
                                     name="salesOrderQuoteNumber" [disabled]="true" />
                             </div>
                         </div>
-                        <!-- <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
-                            <label>Version Num</label>
-                            <input type="text" [(ngModel)]="salesQuote.versionNumber" name="versionNumber"
-                                class="form-control" [disabled]="true" id="versionNumber" #versionNumber="ngModel" />
-                        </div> -->
                     </div>
                 </div>
             </div>
@@ -103,9 +98,11 @@
                                                         class="clr-red">*</span></label>
                                                 <select name="quoteTypeId" [(ngModel)]="salesQuote.quoteTypeId" required
                                                     id="quoteTypeId" #quoteTypeId="ngModel" [disabled]="isEdit">
-                                                    <option *ngFor="let type of salesQuote.salesQuoteTypes"
+                                                    <!-- <option *ngFor="let type of salesQuote.salesQuoteTypes"
                                                         [ngValue]="type.id">
-                                                        {{ type.name }}</option>
+                                                        {{ type.name }}</option> -->
+                                                        <option *ngFor="let item of soTypeList" [ngValue]="item.value">
+                                                            {{ item.label }}</option>
                                                 </select>
                                                 <div *ngIf="quoteTypeId.invalid && (quoteTypeId.dirty || quoteTypeId.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
@@ -156,14 +153,17 @@
                                             <div class="form-group" *ngIf="!salesQuote.salesOrderQuoteNumber">
                                                 <label>SO Status</label>
                                                 <select name="status" [(ngModel)]="salesQuote.statusId"
-                                                    [disabled]="true">
+                                                    [disabled]="true" #statusId="ngModel">
                                                     <option value='-1'>--Select</option>
-                                                    <ng-container *ngFor="let s of salesQuote.status">
-                                                        <option *ngIf="s.displayInDropdown" [ngValue]="s.id">
-                                                            {{ s.name }}</option>
-                                                    </ng-container>
-
+                                                    <option *ngFor="let item of soStatusList" [ngValue]="item.value">
+                                                        {{ item.label }}</option>
                                                 </select>
+                                                <div *ngIf="statusId.invalid && (statusId.dirty || statusId.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="statusId.errors.required">
+                                                        <small> Status is required </small>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <label></label>
@@ -279,11 +279,6 @@
                                 <div class="col-md-6 main_ar">
                                     <div class="form-row">
                                         <div class="col-md-6" style="padding:10px;">
-                                            <!-- <div class="form-group">
-                                                <label>Customer Hold</label>
-                                                <input type="text" class="form-control" name="customerHold"
-                                                    [(ngModel)]="salesQuote.customerHold" />
-                                            </div> -->
                                             <div class="form-group">
                                                 <label>Salesperson/Agent</label>
                                                 <p-autoComplete class="autocomp-customer-cstm" name="salesPersonName"
@@ -314,17 +309,16 @@
                                             </div>
                                             <div class="form-group">
                                                 <label>Employee<span class="clr-red">*</span></label>
-                                                <p-autoComplete class="autocomp-customer-cstm" name="employeeName"
-                                                    [(ngModel)]="salesQuote.employeeName"
+                                                <p-autoComplete class="autocomp-customer-cstm" name="employeeId"
+                                                    [(ngModel)]="salesQuote.employeeId"
                                                     [suggestions]="firstCollection" [forceSelection]="true"
-                                                    id="employeeName" #employeeName="ngModel"
-                                                    emptyMessage="No Match Found" field="firstName"
+                                                    #employeeId="ngModel" emptyMessage="No Match Found" field="label"
                                                     (completeMethod)="filterfirstName($event)" [size]="30"
                                                     [minLength]="1" [dropdown]="true" required>
                                                 </p-autoComplete>
-                                                <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
+                                                <div *ngIf="employeeId.invalid && (employeeId.dirty || employeeId.touched)"
                                                     class="alert alert-danger alert-danger-cstm">
-                                                    <div *ngIf="employeeName.errors.required">
+                                                    <div *ngIf="employeeId.errors.required">
                                                         <small> Employee is required </small>
                                                     </div>
                                                 </div>
@@ -338,14 +332,21 @@
                                             <div class="form-group" *ngIf="salesQuote.salesOrderQuoteNumber">
                                                 <label>SO Status</label>
                                                 <select name="status" [(ngModel)]="salesQuote.statusId"
-                                                    (change)="onChangeInput()" [disabled]="true">
+                                                    (change)="onChangeInput()" [disabled]="true" #statusIds="ngModel">
                                                     <option value='-1'>--Select</option>
-                                                    <ng-container *ngFor="let s of salesQuote.status">
+                                                    <!-- <ng-container *ngFor="let s of salesQuote.status">
                                                         <option *ngIf="s.displayInDropdown" [ngValue]="s.id">
                                                             {{ s.name }}</option>
-                                                    </ng-container>
-
+                                                    </ng-container> -->
+                                                    <option *ngFor="let item of soStatusList" [ngValue]="item.value">
+                                                        {{ item.label }}</option>
                                                 </select>
+                                                <div *ngIf="statusIds.invalid && (statusIds.dirty || statusIds.touched)"
+                                                    class="alert alert-danger alert-danger-cstm">
+                                                    <div *ngIf="statusIds.errors.required">
+                                                        <small> Status is required </small>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6" style="padding:10px; padding-right:20px">
@@ -464,7 +465,7 @@
                                     <label>
 
                                         Notes<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                            matTooltipPosition="above" matTooltip="Notes"
+                                            matTooltipPosition="above" matTooltip="Add Notes"
                                             (click)="onAddDescription('notes')"></i>
                                     </label>
                                     <span>
@@ -485,7 +486,7 @@
                                     <label>
 
                                         Memo<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                            matTooltipPosition="above" matTooltip="Memo"
+                                            matTooltipPosition="above" matTooltip="Add Memo"
                                             (click)="onAddDescription('memo')"></i>
                                     </label>
                                     <span>
@@ -579,9 +580,12 @@
                                 </app-sales-order-customer-approval>
                             </p-tabPanel>
                             <p-tabPanel header="Address">
-                                <app-sales-address [customerId]="customerId" [salesQuote]="salesQuote"
+                                <app-address-component [addressType]="addressType" [id]="SalesOrderId">
+
+                                </app-address-component>
+                                <!-- <app-sales-address [customerId]="customerId" [salesQuote]="salesQuote"
                                     [salesOrderView]="salesOrderView" [salesOrderQuote]="salesOrderQuote">
-                                </app-sales-address>
+                                </app-sales-address> -->
                             </p-tabPanel>
                             <p-tabPanel header="Freight">
                                 <app-sales-order-freight [freightForm]="freight" [customerId]="customerId"
@@ -611,11 +615,19 @@
                                 </app-sales-order-billing>
                             </p-tabPanel>
                             <p-tabPanel header="Document">
-                                <app-sales-order-document [viewMode]="false" [salesOrderId]="id" [isEditMode]="true">
-                                </app-sales-order-document>
+                                <!-- <app-sales-order-document [viewMode]="false" [salesOrderId]="id" [isEditMode]="true">
+                                </app-sales-order-document> 
+                            [generalInformtionData]="savedGeneralInformationData ? savedGeneralInformationData : editGeneralInformationData"-->
+                                <app-common-documents [moduleName]="moduleName" [referenceId]="id" [isViewMode]="false"
+                                    [offLineUpload]="true"></app-common-documents>
                             </p-tabPanel>
                             <p-tabPanel header="Analysis">
                                 <app-sales-order-analysis></app-sales-order-analysis>
+                            </p-tabPanel>
+                            <p-tabPanel header="Communication">
+                                <!-- [ContactList]="customerContactList" -->
+                                <app-communication [moduleName]="moduleName" [idForContact]="customerId" [type]="1"
+                                    [referenceId]="id"></app-communication>
                             </p-tabPanel>
                         </p-tabView>
 
@@ -629,8 +641,6 @@
                         <div class="col-md-11 col-sm-11 col-11">
                             <button type="submit" *ngIf="!isEdit" class="btn pull-right submit-btn btn btn-primary"
                                 (click)="onSubmit(false)" [disabled]="!newSalesQuoteForm.form.valid">Submit</button>
-                            <!-- <button type="submit" *ngIf="isEdit" class="btn pull-right submit-btn btn btn-primary"
-                                (click)="openConfirmationModal(false)">Update</button> -->
                         </div>
                     </div>
                 </form>

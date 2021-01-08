@@ -4,21 +4,27 @@ import { AtaMainService } from '../../../services/atamain.service';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
 import { AuthService } from '../../../services/auth.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-  
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { VendorService } from '../../../services/vendor.service';
 import { CommonService } from '../../../services/common.service';
+import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+// import { DTCheckbox } from 'primeng/datatable';
 @Component({
     selector: 'app-vendor-ata',
     templateUrl: './vendor-ata.component.html',
     styleUrls: ['./vendor-ata.component.scss'],
-
+    providers: [DatePipe]
 })
 export class VendorATAInformationComponent implements OnInit {
     @Input() isViewMode: boolean = false;
     @Input() vendorId: number;
     ataChapter: any;
+    currentstatus: string = 'Active';
+    selectedOnly: boolean = false;
+    targetData: any;
     atasubchapterValues: any;
     ataChapterList: { value: any; label: string; }[];
     search_SelectedATA = [];
@@ -78,6 +84,7 @@ export class VendorATAInformationComponent implements OnInit {
         public vendorService: VendorService,
         private commonService: CommonService,
         private router: ActivatedRoute,
+        private datePipe: DatePipe
     ) {
         if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -130,13 +137,16 @@ export class VendorATAInformationComponent implements OnInit {
 
     getVendorCodeandNameByVendorId()
     {
-        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-            res => {
-                    this.vendorCodeandName = res[0];
-            },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+        if(this.vendorId > 0)
+        {
+            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                res => {
+                        this.vendorCodeandName = res[0];
+                },err => {
+                    const errorLog = err;
+                    this.saveFailedHelper(errorLog);
             });
+        }        
     }
 
     get userName(): string {
@@ -146,6 +156,44 @@ export class VendorATAInformationComponent implements OnInit {
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+    }
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+    }
+    // exportCSV(dt) {
+    //     this.isSpinnerVisible = true;
+    //     let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+    //     let filters = Object.keys(dt.filters);
+    //     filters.forEach(x=>{
+	// 		PagingData.filters[x] = dt.filters[x].value;
+    //     })
+    
+    //     this.vendorService.getATASubchapterData(this.vendorId).subscribe(res => {
+    //         dt._value = res[0]['results'].map(x => {
+	// 			return {
+    //             ...x,
+    //             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+    //             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+    //             }
+    //         });
+    //         dt.exportCSV();
+    //         dt.value = this.ataChapterList;
+    //         this.isSpinnerVisible = false;
+    //     },error => {
+    //             this.saveFailedHelper(error)
+    //         },
+    //     );
+    //   }
+
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
     }
 
     // get all subchapters

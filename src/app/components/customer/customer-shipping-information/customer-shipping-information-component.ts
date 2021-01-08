@@ -1,14 +1,13 @@
 ﻿
-import { Component, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ViewChild, ElementRef, OnInit, SimpleChanges } from '@angular/core';
 import { CustomerService } from '../../../services/customer.service';
-import { OnInit, SimpleChanges } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CustomerShippingModel } from '../../../models/customer-shipping.model';
 import { CustomerInternationalShippingModel, CustomerInternationalShipVia } from '../../../models/customer-internationalshipping.model';
 import { getValueFromObjectByKey, getObjectById, formatNumberAsGlobalSettingsModule, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-  
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import * as $ from 'jquery';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
@@ -106,13 +105,17 @@ export class CustomerShippingInformationComponent implements OnInit {
     totalPages: number;
     totalRecordsInter: any;
     totalPagesInter: number;
+    textDomesticMemo:any;
+    textInternationalMemo:any;
+    disableShipVia:boolean=false;
+    disableEditor:any=true;
     totalRecordsShipVia: any;
     totalPagesShipVia: number;
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
     selectedColumnsForInternationShipViaTable = [
         { field: 'shipViaName', header: 'Ship Via' },
-        { field: 'shippingAccountInfo', header: 'Shipping AccountInfo' },
+        { field: 'shippingAccountInfo', header: 'Shipping Account' },
         { field: 'memo', header: 'Memo' }
     ];
     selectedShipViaInternational: any;
@@ -231,6 +234,54 @@ export class CustomerShippingInformationComponent implements OnInit {
 		})
 	}
 
+    parsedText(text) {
+    
+        if(text){
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+                const decodedString = dom.body.textContent;
+                return decodedString;
+        }
+          }
+    // memoType:any;
+    onSaveDomesticMemo(){
+        this.shipViaDomestic.memo=this.textDomesticMemo;
+        this.textDomesticMemo='';
+        this.disableShipVia=false;
+        $("#textarea-popup1").modal("hide");
+    
+    }
+    
+    onSaveInternationalMemo(){
+        this.shipViaInternational.memo=this.textInternationalMemo;
+        this.textInternationalMemo='';
+        $("#textarea-popup2").modal("hide");
+        this.disableShipVia=false;
+    }
+    onAddDomesticMemo(){
+    this.textDomesticMemo=this.shipViaDomestic.memo;
+    this.disableEditor=true;
+    this.disableSaveShipViaDomestic = false;
+    }
+    onAddInternationalmemo(){
+        this.textInternationalMemo=this.shipViaInternational.memo;
+        this.disableEditor=true;
+    
+    }
+    
+    onCloseTextAreaInfo(type) {
+        if(type==1){
+            $("#textarea-popup1").modal("hide");
+        }else if(type==2){
+            $("#textarea-popup2").modal("hide");
+        }
+    }
+    editorgetmemo(){
+        this.disableEditor=false;
+        this.disableShipVia=false;
+    }
+    
     getshipvialistList(){
         this.isSpinnerVisible = true;
         this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {

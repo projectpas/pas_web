@@ -14,12 +14,12 @@
             </div>
         </div>
     </div> 
-    <div class="card-body new-card-body">
+    <div class="card-body new-card-body"> 
         <p-table #dt
                  class="rpo-table-cstm rro-table-cstm"
                  [value]="allATAMaininfo"
                  [metaKeySelection]="true"
-                 [first]="first"
+                 [(first)]="pageNumber"
                  [rows]="10"
                  [paginator]="true"
                  [pageLinks]="3"
@@ -70,8 +70,12 @@
                                 matTooltipPosition="above"
                                 style="left:-10px; padding: 5px 10px !important;"
                                 data-toggle="modal"
+
                                 (click)="selectedOnly = false; targetData = dt;" 
-                                data-target="#export"></button>
+                                data-target="#downloadConfirmation"></button>
+
+                                <!--data-target="#downloadConfirmation"></button> -->
+
                         <button type="button" class="btn btn-primary new-table-button"
                                 pButton icon="fa-download" iconPos="left"
                                 label="Export Selected Data"
@@ -79,7 +83,8 @@
                                 matTooltipPosition="above" (click)="dt.exportCSV({selectionOnly:true})"
                                 style="padding: 5px 12px !important;"></button> 
                     </div>
-                    <ng-template #export let-c="close" let-d="dismiss">
+
+                    <!-- <ng-template #export let-c="close" let-d="dismiss">
                         <div class="modal-header">
                             <h4 class="modal-title">Are You Sure Want to Download?</h4>
                             <button type="button" class="close" aria-label="Close"
@@ -98,7 +103,30 @@
                             <button type="button" class="btn btn-danger"
                                 (click)="dismissModel()">Cancel</button>
                         </div>
-                    </ng-template>
+                    </ng-template> -->
+
+                    <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="text-align: start;">
+                                            <button type="button" class="close" (click)="closeDeleteModal()" style="float: right;color: grey;">&times;</button>
+                                            <h4 class="modal-title">Are You Sure Want to Download?</h4>
+                                        </div>
+                                        <div class="modal-body" style="text-align: start;">
+                                            <strong>
+                                                <span>
+                                                    You are attempting to export {{totalRecords}} of records. 
+                                                </span> 
+                                            </strong>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary"  (click)="exportCSV(dt)">Confirm</button>
+                                            <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                     <div class="col">
                         <div class="">
                             <div class="col"
@@ -219,7 +247,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns >
                 <tr>
-                    <td colspan="15" style="color: red; font-weight: bold; text-align: center">
+                    <td colspan="17" style="color: red; font-weight: bold; text-align: center">
                         No records found
                     </td>
                 </tr>
@@ -268,11 +296,18 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <div class="modal-body">
-        <strong>
-            Legal Entity:
-            <span class="new-label">{{selectedRowforDelete.name}}</span>
-        </strong>
+    <div class="modal-body" *ngIf="sourceLegalEntity">
+    <div class="form-row" >
+        <div class="col-md-6" style="margin-right: 0px !important;">
+            <label class="fs12" style="width: 44%;">  Legal Entity Name: </label>
+            <span class="new-label"> {{sourceLegalEntity.name}}</span>
+        </div>
+        <div class="col-md-6" style="margin-right: 0px !important;">
+            <label class="fs12" style="width: 44%;">Company Name  : </label>
+            <span class="new-label"> {{sourceLegalEntity.companyName}}</span>
+
+        </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">Yes</button>
@@ -315,6 +350,7 @@
                                 <th>Is this Address For Billing</th>
                                 <th>Is this Address For Shipping</th>
                                 <th>Balancing Entity</th>
+                                <th>Tag Names</th>
                                 <th>Is Active</th>
                                 <th>Created Date</th>
                                 <th>Created By</th>
@@ -356,6 +392,7 @@
                                 <input type="checkbox" disabled [checked]="audit.isBalancingEntity === true"
                                 />
                               </td>
+                              <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'tagname', audit.tagname)  ? 'black' : 'red'  }">{{audit.tagname}}</td>
                               <td style="text-align: center;">
                                 <input type="checkbox" disabled [checked]="audit.isActive === true"
                                 />
@@ -403,14 +440,47 @@
         </button>
     </div>
     <div class="modal-body">
-        <strong>
-        <h6 style="font-size: 14px;">Legal Entity: <span class="new-label"> {{restorerecord.name}}</span> </h6></strong>
+        <!-- <strong>
+        <h6 style="font-size: 14px;">Legal Entity: <span class="new-label"> {{restorerecord.name}}</span> </h6></strong> -->
+        <div class="form-row" *ngIf="restorerecord">
+            <div class="col-md-6" style="margin-right: 0px !important;">
+                <label class="fs12" style="width: 44%;">  Legal Entity Name: </label>
+                <span class="new-label"> {{restorerecord.name}}</span>
+            </div>
+            <div class="col-md-6" style="margin-right: 0px !important;">
+                <label class="fs12" style="width: 44%;">Company Name  : </label>
+                <span class="new-label"> {{restorerecord.companyName}}</span>
+    
+            </div>
+            </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span *ngIf="!selectedOnly">
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="exportCSV(targetData)">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="modal" id="invView" role="dialog"  data-keyboard="false">
     <div class="modal-dialog modal-xlg">
         <div class="modal-content">
@@ -421,7 +491,7 @@
             </div>
             <div class="col-sm-3" style="margin-top: 5px !important;">
                 Legal Entity <span style="color:red">
-                    : {{ viewDataGeneralInformation.name }}
+                    : {{ viewDataGeneralInformation.name }} 
                 </span>
             </div>
             <div class="col-sm-3" style="margin-top: 5px !important;">
@@ -543,9 +613,9 @@
                                        
                                     </div>
                                     <div class="col-md-4">
-                                        <div>
+                                        <div style="width: 100%;display: inline-flex;">
                                             <label class=" label " style="width: 35%;font-weight: bold;">Invoice Address Position</label>
-                                            <div class="value">
+                                            <div class="value" style="width: 50%;margin-bottom: 5px;">
                                                 <div>
                                                     <label class="radio-cstm wauto pull-left" style="pointer-events: none;    font-weight: 100;">
                                                         <input type="radio" name="invoiceAddPosition" 
@@ -653,9 +723,17 @@
                                         <p>
                                             <span class="value">
                                                 <input type="checkbox"
+                                                       name="isIsShippingAddress"
+                                                       [checked]="viewDataGeneralInformation.isBalancingEntity==true"
+                                                       disabled /><span><b> Balancing Entity </b></span>
+                                            </span>
+                                        </p>
+                                        <p>
+                                            <span class="value">
+                                                <input type="checkbox"
                                                        name="isIsShippingAddress" 
                                                        [checked]="viewDataGeneralInformation.lastLevel==true"
-                                                       disabled /><span><b> Is this Address For Shipping </b></span>
+                                                       disabled /><span><b> Last Level </b></span>
                                             </span>
                                         </p>
         
@@ -696,8 +774,10 @@
                                                         </td>
                                                         <td style="text-align: center;">
                                                             <a (click)="downloadFileUpload(part)" matTooltipPosition="above" matTooltip="Download" class="btn nobg btn-cstm"><span><i class="fa fa-download"></i></span></a>
-                                                           
-                                                        </td>
+                                                            <!-- <a (click)="downloadFileUpload(part)" matTooltip="Download"
+                                                            matTooltipPosition="above" class="btn nobg btn-cstm"><span><i
+                                                                    class="fa fa-download"></i></span></a> -->
+                                                        </td> 
                                                     </tr>
                                                 </ng-template>
                                                 <ng-template pTemplate="emptymessage" let-columns *ngIf="sourceViewforDocumentList.length == 0">
@@ -763,7 +843,12 @@
         
                                 <div >
                                     <div class="bg-block2">
-                                        <h3>Lockbox</h3>
+                                        <h3>Lockbox</h3> <br>
+                                        <h6 *ngIf="!isLockBox"  class="history_crd col-Tec">  History
+                                            <a class="btn nobg" (click)="getAuditHistoryByIdbanking(contentHist,1)" matTooltipPosition="above" matTooltip="History">
+                                                <i class="fa fa-history"></i>
+                                            </a>
+                                        </h6><br>
                                         <p><span class="label"><b>PO Box <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.poBox}}</span></p>
                                         <p><span class="label"><b>Bank Street Address line 1 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress1}}</span></p>
                                         <p><span class="label"><b>Bank Street Address line 2 <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.bankStreetaddress2}}</span></p>
@@ -774,6 +859,12 @@
                                     </div>
                                     <div class="bg-block2">
                                         <h3>Domestic Wire</h3>
+                                        <br>
+                                        <h6  *ngIf="!isDomesticWire"  class="history_crd col-Tec">  History
+                                            <a class="btn nobg" (click)="getAuditHistoryByIdbanking(contentHist,2)" matTooltipPosition="above" matTooltip="History">
+                                                <i class="fa fa-history"></i>
+                                            </a>
+                                        </h6><br>
                                         <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBankName}}</span></p>
                                         <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticIntermediateBank}}</span></p>
                                         <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.domesticBenficiaryBankName}}</span></p>
@@ -782,6 +873,12 @@
                                     </div>
                                     <div class="bg-block2">
                                         <h3>International Wire</h3>
+                                        <br>
+                                        <h6  *ngIf="!isInternationalWire"  class="history_crd col-Tec">  History
+                                            <a class="btn nobg" (click)="getAuditHistoryByIdbanking(contentHist,3)" matTooltipPosition="above" matTooltip="History">
+                                                <i class="fa fa-history"></i>
+                                            </a>
+                                        </h6><br>
                                         <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBankName}}</span></p>
                                         <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalIntermediateBank}}</span></p>
                                         <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.internationalBenficiaryBankName}}</span></p>
@@ -790,6 +887,12 @@
                                     </div>
                                     <div class="bg-block2">
                                         <h3>ACH</h3>
+                                        <br>
+                                        <h6  *ngIf="!isAch"  class="history_crd col-Tec">  History
+                                            <a class="btn nobg" (click)="getAuditHistoryByIdbanking(contentHist,4)" matTooltipPosition="above" matTooltip="History">
+                                                <i class="fa fa-history"></i>
+                                            </a>
+                                        </h6><br>
                                         <p><span class="label"><b>Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBankName}}</span></p>
                                         <p><span class="label"><b>Intermediate Bank <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achIntermediateBank}}</span></p>
                                         <p><span class="label"><b>Benficiary Bank Name <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achBenficiaryBankName}}</span></p>
@@ -797,6 +900,71 @@
                                         <p><span class="label"><b>ABA Number <span class="clr-red">*</span> : </b></span><span class="value">{{lockboxing.achABANumber}}</span></p>
                                         <p><span class="label"><b>SWIFT Code <span class="clr-red">*</span>: </b></span><span class="value">{{lockboxing.achSWIFTID}}</span></p>
                                     </div>
+                                    <!-- <div  class="modal" id="contentHist" role="dialog"  data-keyboard="false"> -->
+                                        <!-- <div class="modal-dialog modal-xlg"> -->
+                                            <ng-template #contentHist class="modal fade assetMange" id="view" role="dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" (click)="CloserCOnatcHistory()">&times;</button>
+                                                    <div class="col-md-12 shadow-box-cstm">
+                                                        <div class="col-md-6">
+                                                            <p class="fs12">
+                                                                <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                                                                <span class="span-header-red" style="text-transform: capitalize"> {{viewDataGeneralInformation.name }} </span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p class="fs12">
+                                                                <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                                                                <span class="span-header-red" style="text-transform: capitalize"> {{viewDataGeneralInformation.companyCode }} </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <h4 class="modal-title">History of Banking Information</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!-- <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                                                        <div class="loading">
+                                                            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                                        </div>
+                                                    </div> -->
+                                                    <div class="table-responsive rrhistory history_hg">
+                                                        <!-- *ngIf="auditHistoryList.length> 0 else noDatavailable" -->
+                                                        <table class="table table-bordered " >
+                                                            <thead>
+                                                                <tr>
+                                                                    <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
+                                                                    
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody *ngIf="auditHistoryList.length> 0">
+                                                                <tr *ngFor="let audit of auditHistoryList; let i = index;">
+                                    
+                                                                    <td *ngFor="let auditHead of auditHistoryHeaders; let j = index;" >
+                                                                        <span [ngStyle]="{'color':  getColorCodeForHistoryBanking(i, auditHead.field, audit[auditHead.field])  ? 'black' : 'red'  }">
+                                                                     <span *ngIf="auditHead.field=='createdDate' || auditHead.field=='updatedDate'">  {{audit[auditHead.field] | date: 'MM/dd/yyyy h:mm a'}}</span>  
+                                                                     <span *ngIf="auditHead.field!='createdDate' && auditHead.field!='updatedDate'">  {{audit[auditHead.field] }}</span></span>
+                                                                    </td>
+                                                       </tr>
+                                                            </tbody>
+                                    
+                                    
+                                                        </table>
+                                                        <ng-template #noDatavailable>
+                                                            <div class="text-center">
+                                                                <h4 style="color: #ff5663;">No History Found </h4>
+                                                            </div>
+                                    
+                                                        </ng-template>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" (click)="CloserCOnatcHistory()">Close</button>
+                                                </div>
+                                            </div>
+                                    </ng-template>
+                                        <!-- </div> -->
+                                    <!-- </div> -->
                                 </div>
                             </div>
                         </div>
@@ -839,8 +1007,9 @@
                     </div>
                     <div id="step10" class="panel-collapse  collapse" >
                         <div class="panel-body m-lr-7" *ngIf="viewDataGeneralInformation">
-          <app-legal-entity-documents  [legalEntityDataFromExternalComponents]="viewDataGeneralInformation">
-        </app-legal-entity-documents>
+          <!-- <app-legal-entity-documents  [legalEntityDataFromExternalComponents]="viewDataGeneralInformation">
+        </app-legal-entity-documents> -->
+        <app-common-documents [generalInformtionData]="viewDataGeneralInformation" (tab)="changeOfTab($event)" [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="true" [offLineUpload]="false"></app-common-documents>
                         </div> 
                     </div>
                 </div>
@@ -852,6 +1021,9 @@
         </div>
     </div> 
     </div>
+    <!-- //banking history -->
+           <!-- audit history -->
+       
     <div class="preloader" *ngIf="isSpinnerVisible">
         <div class="loading">
             <div class="lds-roller">

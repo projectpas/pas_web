@@ -9,8 +9,6 @@ import { CommonService } from '../../../../services/common.service';
 import { getObjectByValue, getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
 import * as $ from 'jquery';
-;
-
 import { AlertService,MessageSeverity } from '../../../../services/alert.service';
 @Component({
   selector: 'app-work-order-labor',
@@ -1343,26 +1341,25 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
           switch (type) {
             case "Hours": {
               if (data.hours) htotal += Number(data.hours);
-            }break;
+            }
             case "LaborOHCost": {
               if (data.directLaborOHCost) loTotal += Number(data.directLaborOHCost.toString().split(',').join(''));
-            }break;
+            }
             case "LaborBurdenRate": {
               if (data.burdenRateAmount) burTotal += Number(data.burdenRateAmount.toString().split(',').join(''));
-            }break;
+            }
             case "CostPerHour": {
               if (data.totalCostPerHour) cpTotal += Number(data.totalCostPerHour);
-            }break;
+            }
             case "Cost": {
               if (data.totalCost && !data.IsDeleted) costTotal += Number(data.totalCost.toString().split(',').join(''));
-            }break;
+            }
             case "BillingRate": {
               if (data.billingRate) bRTotal += Number(data.billingRate);
             }
-            break;
             default: {
               if (data.billingAmount && !data.IsDeleted) bATotal += Number(data.billingAmount.toString().split(',').join(''));
-            }break;
+            }
           }
         }
       )

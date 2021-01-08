@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class BinEndpoint extends EndpointFactory {
 	 
@@ -39,53 +39,53 @@ export class BinEndpoint extends EndpointFactory {
 	getManagementShelfEndpoint<T>(shelfID: any): Observable<T> {
 		let endpointUrl = `${this.__managementShelfURL}/${shelfID}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getManagementShelfEndpoint(shelfID));
-			}));
+			});
 	}
 
 	//edit data ManagementSite Data Retrive based on location id
 	getManagementBinEditEndpoint<T>(binId: number): Observable<T> {
 		let endpointUrl = `${this._actionsManagemetUrl}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getManagementBinEditEndpoint(binId));
-			}));
+			});
 	}
 
 	getnewManagementBinData<T>(userObject: any): Observable<T> {
-		return this.http.post<any>(this._actionsUrlManagementPost, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._actionsUrlManagementPost, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getnewManagementBinData(userObject));
-			}));
+			});
 	}
 
 	//Delete management Location Before Edit
 	getDeleteManagementBinEndpoint<T>(binId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlManagementPost}/${binId}`;
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getDeleteManagementBinEndpoint(binId));
-			}));
+			});
 	}
 
 
 	getBinEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.binurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.binurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getBinEndpoint());
-			}));
+			});
 	}
 
 	getNewBinEndpoint<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getNewBinEndpoint(userObject));
-			}));
+			});
 	}
 
 	//getcountryListEndpoint<T>(): Observable<T> {
@@ -99,126 +99,126 @@ export class BinEndpoint extends EndpointFactory {
 	getHistoryBinEndpoint<T>(binId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlAuditHistory}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getHistoryBinEndpoint(binId));
-			}));
+			});
 	}
 
 	getEditBinEndpoint<T>(binId?: number): Observable<T> {
 		let endpointUrl = binId ? `${this._actionsUrlNew}/${binId}` : this._actionsUrlNew;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getEditBinEndpoint(binId));
-			}));
+			});
 	}
 
 	getUpdateBinEndpoint<T>(roleObject: any, binId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew}/${binId}`;
 
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getUpdateBinEndpoint(roleObject, binId));
-			}));
+			});
 	}
 
 	getDeleteBinEndpoint<T>(binId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew}/${binId}`;
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getDeleteBinEndpoint(binId));
-			}));
+			});
 	}
 
 	getAddressDataWarehouseEndpoint<T>(binId: any): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew1}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getAddressDataWarehouseEndpoint(binId));
-			}));
+			});
 	}
 
 	getWareHouseDataEndpoint<T>(binId: any): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew2}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getWareHouseDataEndpoint(binId));
-			}));
+			});
 	}
 
     getWareHouseBySiteIdEndpoint<T>(siteId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNew2}/${siteId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getWareHouseBySiteIdEndpoint(siteId));
-            }));
+            });
     }
 	getLocationDataEndpoint<T>(binId: any): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew3}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getLocationDataEndpoint(binId));
-			}));
+			});
     }
 
     getLocationByWareHouseIdEndpoint<T>(wareHouseId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNew3}/${wareHouseId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getLocationByWareHouseIdEndpoint(wareHouseId));
-            }));
+            });
     }
 
 	getShelfDataEndpoint<T>(binId: any): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew4}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getShelfDataEndpoint(binId));
-			}));
+			});
 	}
 
     getShelfByLocationIdEndpoint<T>(locationId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNew4}/${locationId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getShelfByLocationIdEndpoint(locationId));
-            }));
+            });
     }
 
 	getBinDataEndpoint<T>(binId: any): Observable<T> {
 		let endpointUrl = `${this._actionsUrlNew5}/${binId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getShelfDataEndpoint(binId));
-			}));
+			});
     }
 
     getBinByShelfIdEndpoint<T>(shelfId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNew5}/${shelfId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getBinByShelfIdEndpoint(shelfId));
-            }));
+            });
     }
 
     
     getBinAuditDataById<T>(binId: number): Observable<T> {
         let endpointUrl = `${this.getBinAuditById}/${binId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getBinAuditDataById(binId));
-            }));
+            });
     }
 }

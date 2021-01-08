@@ -1,7 +1,7 @@
-import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
+﻿import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { TableModule, Table } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -18,17 +18,17 @@ import { MasterComapnyService } from '../../../services/mastercompany.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { CustomerClassification } from '../../../models/customer-classification.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { GMapModule } from 'primeng/gmap';
 import { AddActionsDialogComponent } from '../../dialogs/add-actions-dialog/add-actions-dialog.component';
-
+// import { unescapeHtml } from '@angular/platform-browser/src/browser/transfer_state';
 import { FileUploadModule } from 'primeng/fileupload';
 import { Message } from 'primeng/components/common/message';
 import { CustomerClassificationService } from '../../../services/CustomerClassification.service';
 import { Integration } from '../../../models/integration.model';
 import { IntegrationService } from '../../../services/integration-service';
 import { DialogModule } from 'primeng/dialog';
-
+import { timeInterval } from 'rxjs/operator/timeInterval';
 import { BaseRowDef } from '@angular/cdk/table';
 import { ItemClassificationService } from '../../../services/item-classfication.service';
 import { ItemClassificationModel } from '../../../models/item-classification.model';

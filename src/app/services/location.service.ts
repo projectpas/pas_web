@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+﻿import { Injectable } from "@angular/core";
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { Observable ,  Subject,forkJoin } from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
 import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
@@ -38,7 +39,7 @@ export class LocationService {
   ) {}
 
   getLocationList() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.locationEndpoint.getLocationEndpoint<Location[]>()
     );
   }
@@ -54,7 +55,7 @@ export class LocationService {
   }
 
   //getCountrylist() {
-  //	return forkJoin(
+  //	return Observable.forkJoin(
   //		this.siteEndpoint.getcountryListEndpoint<any[]>());
   //}
 
@@ -63,7 +64,7 @@ export class LocationService {
   }
 
   historyLocation(locationId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.locationEndpoint.getHistoryLocationEndpoint<AuditHistory[]>(
         locationId
       )

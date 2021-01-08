@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 //import { ActionEndpoint } from './action-endpoint.service';
 import { AuthService } from './auth.service';
@@ -38,12 +39,12 @@ export class DocumentService {
         private documentEndpoint: DocumentEndpointService) { }
 
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.documentEndpoint.getActionEndpoint<DocumentModel[]>());
     }
 
     historyAcion(actionId: number) {
-        return forkJoin(this.documentEndpoint.getHistoryActionEndpoint<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.documentEndpoint.getHistoryActionEndpoint<AuditHistory[]>(actionId));
     }
 
     newAction(action: DocumentModel) {
@@ -68,7 +69,7 @@ export class DocumentService {
         return this.documentEndpoint.getAuditById<any[]>(documentId);
     }
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.documentEndpoint.getDocumentRecords<Document[]>(serverSidePagesData));
     }
 

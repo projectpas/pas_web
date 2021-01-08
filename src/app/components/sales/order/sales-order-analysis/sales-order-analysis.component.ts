@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import * as $ from "jquery";
-import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
 import {
-  AlertService,
-  DialogType,
-  MessageSeverity
+  AlertService
 } from "../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
@@ -14,10 +11,7 @@ import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
-import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
-import { SalesOrderQuotePart } from "../../../../models/sales/SalesOrderQuotePart";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
-import { Currency } from "../../../../models/currency.model";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { CustomerService } from "../../../../services/customer.service";
@@ -25,14 +19,6 @@ import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
 import { PartDetail } from "../../shared/models/part-detail";
 import { formatNumberAsGlobalSettingsModule, listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
-import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
-import {
-  getValueFromObjectByKey,
-  getObjectById,
-  editValueAssignByCondition,
-  getObjectByValue
-} from "../../../../generic/autocomplete";
-
 import * as moment from 'moment';
 import { MenuItem } from "primeng/api";
 import { SalesOrderService } from "../../../../services/salesorder.service";
@@ -43,7 +29,7 @@ import { SalesOrderService } from "../../../../services/salesorder.service";
   styleUrls: ["./sales-order-analysis.component.css"]
 })
 export class SalesOrderAnalysisComponent implements OnInit {
-  // @ViewChild("dt",{static:false})
+  // @ViewChild("dt")
   isEnablePOList: any;
   searchParameters: ISalesSearchParameters;
   sales: any[] = [];
@@ -111,10 +97,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
       viewType: this.viewType
     }
     this.isSpinnerVisible = false;
-    // this.breadcrumbs = [
-    //   { label: 'Sales Order Quote' },
-    //   { label: 'Quote List' },
-    // ];
   }
 
 
@@ -223,9 +205,9 @@ export class SalesOrderAnalysisComponent implements OnInit {
           this.totalRecords / this.searchParameters.rows
         );
         this.showPaginator = this.totalRecords > 0;
-        //this.alertService.stopLoadingMessage();
-        // this.isSpinnerVisible = false;
-      }, error => this.onDataLoadFailed(error));
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
   }
 
   dismissModel() {
@@ -237,18 +219,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
   dismissPartViewModel() {
     this.partModal.close();
   }
-
-  onDataLoadFailed(error) {
-    this.isSpinnerVisible = false;
-    let errorMessage = '';
-    if (error.message) {
-      errorMessage = error.message;
-    }
-    this.alertService.resetStickyMessage();
-    this.alertService.showStickyMessage("Sales Order", errorMessage, MessageSeverity.error, error);
-    // this.alertService.showMessage(error);
-  }
-
+  
   mouseOverData(key, data) {
     if (key === 'partNumberType') {
       return data['partNumber']
@@ -273,7 +244,7 @@ export class SalesOrderAnalysisComponent implements OnInit {
     // debugger;
     // console.log("data checked data",key,data);
     if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
-      return moment(data[key]).format('MM-DD-YYYY');
+      return moment(data[key]).format('MM/DD/YYYY');
     } else {
       return data[key];
     }

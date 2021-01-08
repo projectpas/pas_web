@@ -5,10 +5,10 @@
 
 
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AssetStatus } from '../../models/asset-status.model';
 import { AssetStatusEndpointService } from './assetstatus-endpoint.service';
 
@@ -19,12 +19,12 @@ export class AssetStatusService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetStatusEndpoint.getAllAssets<any>());
     }
 
     getById(assetStatusId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetStatusEndpoint.getAssetById<AssetStatus>(assetStatusId)
         );
     }

@@ -1,15 +1,16 @@
 import { Component, OnInit, Input, EventEmitter, Output, ViewChild, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ItemMasterService } from '../../../services/itemMaster.service';
+import { fadeInOut } from '../../../services/animations';
 
 import { DashNumberService } from '../../../services/dash-number/dash-number.service';
 import { AircraftModelService } from '../../../services/aircraft-model/aircraft-model.service';
 import { CustomerService } from '../../../services/customer.service';
 import { AuthService } from '../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
-
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
- 
+import { DatePipe } from '@angular/common';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
 import * as $ from 'jquery';
@@ -18,6 +19,7 @@ import { Table } from 'primeng/table';
     selector: 'app-customer-aircraft',
     templateUrl: './customer-aircraft.component.html',
     styleUrls: ['./customer-aircraft.component.scss'],
+    providers: [DatePipe]
 
 })
 export class CustomerAircraftComponent implements OnInit {
@@ -38,6 +40,8 @@ export class CustomerAircraftComponent implements OnInit {
     selectedAircraftModel = [];
     selectedDashNumbers = [];
     selectedmemo: any = '';
+    selectedOnly: boolean = false;
+    targetData: any;
     viewAircraftData: any;
     modal: NgbModalRef;
     add_SelectedAircraftId: any;
@@ -48,6 +52,7 @@ export class CustomerAircraftComponent implements OnInit {
     add_AircraftModelList: any = [];
     add_AircraftDashNumberList: any = [];
     tempAircraftType: any;
+    currentstatus: string = 'Active';
     tempAircraftModel: any;
     aircraftManfacturerIdsUrl: string = '';
     aircraftModelsIdUrl: string = '';
@@ -92,12 +97,14 @@ export class CustomerAircraftComponent implements OnInit {
     stopmulticlicks: boolean;
     currentDeletedstatus:boolean=false;
     restorerecord:any={}
+
     constructor(private route: ActivatedRoute, private itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
         private Dashnumservice: DashNumberService,
         public customerService: CustomerService,
         private authService: AuthService,
         private alertService: AlertService,
+        private datePipe: DatePipe,
         private modalService: NgbModal,
         private activeModal: NgbActiveModal,
         private cd: ChangeDetectorRef
@@ -164,6 +171,21 @@ export class CustomerAircraftComponent implements OnInit {
     enableSaveAdd() {
         this.disableSaveAdd = false;
     }
+    closeDeleteModal() {
+		$("#downloadPopup").modal("hide");
+    }
+
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
+    }
+
     closeMyModel() {
         $("#editAirCraftDetails").modal("hide");
         this.disableSave = true;
@@ -191,7 +213,6 @@ export class CustomerAircraftComponent implements OnInit {
 
     // get all Aircraft Models
     getAllAircraftModels() {
-
         this.aircraftModelService.getAll().subscribe(models => {
             const responseValue = models[0];
             const aircraftModelList = responseValue.map(models => {
@@ -582,11 +603,6 @@ export class CustomerAircraftComponent implements OnInit {
             this.dismissModel();
             this.getAircraftMappedDataByCustomerId()
         }, error => {
-            this.alertService.showMessage(
-                'Failed',
-                error.error,
-                MessageSeverity.error
-            );
             this.inventoryData = []
             this.add_SelectedAircraftId = undefined;
             this.add_SelectedModel = [];
@@ -733,7 +749,6 @@ export class CustomerAircraftComponent implements OnInit {
         if (airCraftingMappingId > 0) {
             this.customerService.restoreAircraftInvetoryById(airCraftingMappingId).subscribe(res => {
                 this.currentDeletedstatus=true,
-                //this.getAircraftMappedDataByCustomerId();`
                 this.getDeleteListByStatus(true);
                 this.alertService.showMessage("Success", `Restored Successfully`, MessageSeverity.success)
                 this.isSpinnerVisible = false;
@@ -743,4 +758,5 @@ export class CustomerAircraftComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.modal.close();
     }
+
 }

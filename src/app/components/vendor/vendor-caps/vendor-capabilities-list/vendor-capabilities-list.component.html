@@ -1,13 +1,13 @@
 ﻿<div class="card new-card">
-  <div class="card-header bg-primary new-card-header">
+  <div class="card-header header">
     <div class="row">
        <div class="col">
-        <h4 class="new-card-heading">Vendor Capes List</h4>
+        <h4 class="header-name">Vendor Capes List</h4>
       </div>
       <div *ngIf="!isViewMode">
         <button
           type="button"
-          class="btn-sm new-btn-primary"
+          class="btn-sm header-button"
           (click)="navigateTogeneralInfo()"
           *ngIf="!isEnableVendor">
           Add Vendor Capabilities
@@ -15,10 +15,10 @@
       </div>
     </div>
   </div>
-  <div class="card-body new-card-body">
+  <div class="card-body header-body">
     <p-table
       #dt
-      class="rpo-table-cstm lastcol-fix"
+      class="main-table rpo-table-cstm lastcol-fix"
       [value]="allvendorCapsList"      
       [first]="0"
       [rows]="pageSize"
@@ -80,8 +80,8 @@
               label=" Export Data"
               data-toggle="modal" 
                             (click)="selectedOnly = false; targetData = dt;"
-                             data-target="#downloadConfirmation"
-            ></button>
+                             data-target="#downloadConfirmation">
+            </button>
             <button
               type="button"
               class="btn btn-primary new-table-button"
@@ -91,10 +91,31 @@
               icon="fa-download"
               iconPos="left"
               label=" Export Selected Data"
-              data-target="#downloadConfirmation"
-              data-toggle="modal"
-              (click)="selectedOnly = true; targetData = dt;"
-            ></button>
+              (click)="dt.exportCSV({selectionOnly:true})">
+            </button>
+            <button class="btn btn-primary new-table-button " style="padding: 4px 10px !important; height: 22px !important; width: 130px !important;"
+                *ngIf="showAdvancedSearchCard == false" type="button" (click)="enableDisableAdvancedSearch(true)">
+                Advanced Search <i class="fa fa-caret-down"></i>
+              </button>
+              <button class="btn btn-primary new-table-button" style="padding: 4px 10px !important; height: 22px !important; width: 130px !important;"
+                *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
+                Advanced Search <i class="fa fa-caret-up"></i>
+            </button>
+            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Sample File"
+                        matTooltipPosition="above" (click)="sampleExcelDownload()"
+                        style="padding: 4px 10px !important;">
+                    Sample File Download
+            </button>
+            <div class="excel-upload  excel-upload-cstm">
+                <input type="file" name="upload[]" id="upload"
+                      (change)="customExcelUpload($event)" class="uploaddoc upload-file"
+                      accept=".xlsx, .xls, .csv">
+                <label for="upload">
+                    <span matTooltip="Upload Data (Excel)" matTooltipPosition="above">
+                        <i class="fa fa-upload"></i>
+                    </span>
+                </label>
+            </div>            
           </div>
           <div class="col">
             <div class="">
@@ -169,40 +190,77 @@
             </div>
           </div>
         </div>
+        <div class="row" *ngIf="showAdvancedSearchCard == true">
+          <div class="col" style="margin-top: 10px !important;">
+            <div class="advance-search-card" >
+              <div class="form-row" style="padding: 0 5px;">
+                <div class="col-md-1">
+                  <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>
+                      PN
+                    </label>
+                    <p-multiSelect [maxSelectedLabels]="2" [options]="search_PartNumberList"
+                      [(ngModel)]="selectedPartNumberModel" [ngModelOptions]="{ standalone: true }" class="pub-multi"
+                      [selectionLimit]="30"></p-multiSelect>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>Caps Type</label>
+                    <p-multiSelect [maxSelectedLabels]="2" [options]="search_CapesTypeList"
+                      [(ngModel)]="selectedCapesTypeModel" [ngModelOptions]="{ standalone: true }" class="pub-multi"
+                      [selectionLimit]="30"></p-multiSelect>
+                  </div>
+                </div>
+                <div class="col-md-1" style="padding-top: 20px !important;">
+                  <div class="form-group">
+                    <button class="btn btn-primary mtop20" (click)="advanSearchCapesInformation()" matTooltip="Search"
+                      matTooltipPosition="above">
+                      <i class="pi pi-search pi-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" style="width: 130px;" />
+          <col *ngFor="let col of columns" class="table-column-width" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th
             *ngFor="let col of columns"
+            class="table-column-width"
             pResizableColumn
             pReorderableColumn
-            [pSortableColumn]="col.field"
-          >
+            [pSortableColumn]="col.field">
             {{ col.header }}
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
           <th
-            style="width: 200px; position: sticky;"
+          class="table-actions-column"
             *ngIf="selectedColumns.length > 0"
           >
             Actions
           </th>
         </tr>
         <tr>
-          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
               <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" style="width: 100%;"
-                     pInputText
+                     pInputText class="table-header-input-width"
                      type="text"
                      (keyup)=" dt.filter($event.target.value, col.field, 'contains'); resetGlobalFilter() " />
-              <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
-              <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+              <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+              <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
           </th>
-        <th style="width: 200px;"></th>
+        <th class="table-actions-column"></th>
       </tr>
       </ng-template>
 
@@ -211,23 +269,23 @@
           [pSelectableRow]="rowData"
           [pSelectableRowDblClick]="rowData"
           pReorderableRowHandle
-          (dblclick)="viewSelectedRowdbl(vendorCapesView,rowData)"
-        >
-          <td
-            *ngFor="let col of columns"
-            class="ui-resizable-column"
-            pReorderableRowHandle
-          >
-            {{
-              col.field == 'createdDate'
-                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
-                : rowData[col.field] && col.field == 'updatedDate'
-                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
-                : rowData[col.field]
-            }}
-          </td>
-
-          <td class="text-center" style="width: 200px;">
+          (dblclick)="viewSelectedRowdbl(vendorCapesView,rowData)">
+          <ng-container *ngFor="let col of columns">
+            <td class="ui-resizable-column" class="table-column-width" *ngIf="col.field != 'memo'"
+              pReorderableRowHandle>
+              {{
+                col.field == 'createdDate'
+                  ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                  : rowData[col.field] && col.field == 'updatedDate'
+                  ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a')
+                  : rowData[col.field]
+              }}
+            </td>
+            <td *ngIf="col.field == 'memo'" class="table-column-width">
+                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+            </td>
+          </ng-container>          
+          <td class="action-icons-cstm table-column-width">
             <div *ngIf="currentDeletedstatus == false">
               <ng-container *ngIf="!isViewMode">
                 <p-inputSwitch
@@ -279,6 +337,14 @@
                   ><i class="fa fa-trash"></i
                 ></a>
               </span>
+              <span *ngIf="!isViewMode">
+                <a class="btn nobg btn-users-cstm"
+                  (click)="openVendorCapes(vendorCapesList, rowData)"     
+                  data-target="#vendorCapesList"
+                  matTooltip="Display Capes"
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i></a
+              ></span>
               <span *ngIf="!isViewMode"
                 ><a
                   class="btn nobg btn-pluspo-cstm"
@@ -343,7 +409,7 @@
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
         <tr>
-            <td [attr.colspan]="13" style="color: red; font-weight: bold; text-align: center">
+            <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
                 No records found
             </td>
         </tr>
@@ -351,7 +417,7 @@
       <ng-template pTemplate="summary" id="footer">
         <label id="footer" class="footer">Total:</label>
         <input
-          style="width: 5%;"
+        class="footer-input-width"
           [(ngModel)]="totalRecords"
           [disabled]="true"
           pInputText
@@ -361,7 +427,7 @@
         <label id="footer" class="footer1">Pages Count:</label>
 
         <input
-          style="width: 5%;"
+        class="footer-input-width"
           [ngModel]="getPageCount(totalRecords, pageSize)"
           [disabled]="true"
           pInputText
@@ -495,6 +561,50 @@
     </button>
   </div>
 </ng-template>
+<ng-template class="modal-dialog modal-xl" #vendorCapesList let-c="close" let-d="dismiss" data-backdrop="static">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="dismissCapesModel()" data-dismiss="modal">
+          &times;
+        </button>
+        <div class="col-md-12 shadow-box-cstm">
+          <div class="col-md-4">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Vendor Name:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ vendorName }}
+              </span>
+            </p>
+          </div>
+          <div class="col-md-4">
+            <p class="fs12">
+              <label class="control-label labels-font-header" style="width: auto;">Vendor Code:
+              </label>
+              <span class="span-header-red" style="text-transform: capitalize">
+                {{ vendorCode }}
+              </span>
+            </p>
+          </div>
+        </div>
+        <h4 class="modal-title">Vendor Capes List</h4>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <app-vendor-capes
+          *ngIf="vendorId"    
+          [vendorId]= "vendorId"            
+          [isViewMode]="isCapesViewMode">
+        </app-vendor-capes>  
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="dismissCapesModel()" data-dismiss="modal">
+          Close
+        </button>
+      </div>
+    </div>
+</ng-template>
 
 <ng-template
   #contentAuditHist
@@ -539,9 +649,8 @@
     </div>
   </div>
   <div class="modal-body">
-    <div class="table-responsive rro-table-cstm">
-      <table style=" overflow: scroll;"
-        class="table table-bordered"
+    <div class="table-responsive  pas-table-cstm poro-table-cstm parts-list-table-align">
+      <table class="table table-bordered header-table-width"
         *ngIf="capabilityauditHisory.length > 0; else noDatavailable" >
         <thead>
           <tr>
@@ -552,7 +661,7 @@
             <th>Part Number <span class="clr-red">*</span></th>
             <th>Part Description</th>           
             <th>Vendor Ranking <span class="clr-red">*</span></th>
-            <th>Cost <span class="clr-red">*</span></th>
+            <th>Price <span class="clr-red">*</span></th>
             <th>TAT <span class="clr-red">*</span></th>
             <th>Is Active</th>
             <th>Created Date</th>
@@ -782,7 +891,7 @@
                                             <span class="label"><b>Vendor Ranking: <span class="clr-red">*</span></b></span ><span class="value">{{ vendorCapesGeneralInfo.vendorRanking ? vendorCapesGeneralInfo.vendorRanking : '-' }}</span>
                                         </p>
                                         <p>
-                                            <span class="label"><b>Cost: <span class="clr-red">*</span></b></span ><span class="value">{{ vendorCapesGeneralInfo.cost | twoDecimalGlobalNumberFormatPipe }}</span>
+                                            <span class="label"><b>Price: <span class="clr-red">*</span></b></span ><span class="value">{{ vendorCapesGeneralInfo.cost | twoDecimalGlobalNumberFormatPipe }}</span>
                                         </p>
                                         <p>
                                           <span class="label"><b>TAT (Days): <span class="clr-red">*</span></b></span><span class="value">{{ vendorCapesGeneralInfo.tat ? vendorCapesGeneralInfo.tat : '-' }}</span>

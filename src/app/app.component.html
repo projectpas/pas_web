@@ -6,31 +6,42 @@
   [class.is-mobile]="mobileQuery.matches"
   class="nav-container"
 >
-  <div fxLayout="column" fxFlexOffset="10px" fxFlex>
+  <div fxLayout="column" fxFlexOffset style="margin-top:0px !important;background-color: #fff;" fxFlex>
     <mat-toolbar color="primary">
       <mat-toolbar-row>
-        <div class="title-logo">
+        <div  *ngIf="!isUserLoggedIn" class="title-logo">
           <p>
             <a routerLink="/">
               <img src="assets/images/PAS-logo.png" id="logo" />
             </a>
           </p>
+          
+        </div>
+        <div  *ngIf="isUserLoggedIn" class="title-logo-login">
+          <p>
+            <a routerLink="/">
+              <img src="assets/images/PAS-logo.png" id="logo" style="padding-left:0px !important" />
+            </a>
+          </p>
+          
         </div>
         <span class="app-toolbar-spacer"></span>
-        <span matTooltip="Dashboard">
+        <span  *ngIf="isUserLoggedIn" matTooltip="Dashboard">
         <i class="fa fa-sitemap entity-block-btn" (click)="showthis()"></i>
         </span>
         <!-- <app-theme-picker
           tooltip="{{ 'mainMenu.Theme' | translate }}"
         ></app-theme-picker> -->
-        <button
+      
+        <!-- <button
           *ngIf="!isUserLoggedIn"
           mat-button
           (click)="router.navigateByUrl('/login')"
         >
           <mat-icon>lock_open</mat-icon>
           <span>{{ 'mainMenu.Login' | translate }}</span>
-        </button>
+        </button> -->
+
         <button
           *ngIf="isUserLoggedIn"
           class="side-button"

@@ -4,10 +4,11 @@ import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CustomerBillingAddressModel } from '../../../models/customer-billing-address.model';
 import { AuthService } from '../../../services/auth.service';
 import { getValueFromObjectByKey, getObjectByValue, editValueAssignByCondition } from '../../../generic/autocomplete';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-  
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuditHistory } from '../../../models/audithistory.model';
 import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 
@@ -15,7 +16,7 @@ import { CommonService } from '../../../services/common.service';
     selector: 'app-customer-billing-information',
     templateUrl: './customer-billing-information.component.html',
     styleUrls: ['./customer-billing-information.component.scss'],
-
+    providers: [DatePipe]
 })
 
 /** anys component*/
@@ -52,6 +53,8 @@ export class CustomerBillingInformationComponent {
     id: number;
     customerCode: any;
     customerName: any;
+    selectedOnly: boolean = false;
+    targetData: any;
     isEditMode: boolean = false;
     billingHistoryData: Object;
     modal: NgbModalRef;
@@ -84,7 +87,7 @@ export class CustomerBillingInformationComponent {
 
     constructor(public customerService: CustomerService, private authService: AuthService, private alertService: AlertService, 
         private modalService: NgbModal, private configurations: ConfigurationService,
-        private activeModal: NgbActiveModal, private commonService: CommonService, ) {
+        private activeModal: NgbActiveModal, private datePipe: DatePipe, private commonService: CommonService, ) {
     }
 
     ngOnInit(): void {
@@ -135,6 +138,20 @@ export class CustomerBillingInformationComponent {
                 }
             }
         }
+    }
+    closeDeleteModal() {
+        $("#downloadBilling").modal("hide");
+    }
+    
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
     }
 
 	getDeleteListByStatus(value){

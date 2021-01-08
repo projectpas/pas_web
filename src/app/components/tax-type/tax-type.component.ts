@@ -10,8 +10,8 @@ import { TaxType } from '../../models/taxtype.model';
 import { AuditHistory } from '../../models/audithistory.model';
 import { AuthService } from '../../services/auth.service';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 
 import { TableModule, Table } from 'primeng/table';

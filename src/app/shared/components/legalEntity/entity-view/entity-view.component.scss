@@ -34,11 +34,11 @@ th {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-// :host ::ng-deep .ui-widget{
+// :host /deep/ .ui-widget{
 // padding: 0px !important;
 // }
 
-// :host ::ng-deep .ui-table-summary {
+// :host /deep/ .ui-table-summary {
 //     margin-right: 0px !important;
 //     background: transparent !important
 // }

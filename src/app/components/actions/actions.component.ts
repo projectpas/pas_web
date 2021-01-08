@@ -9,9 +9,9 @@ import { AlertService, DialogType, MessageSeverity } from '../../services/alert.
 import { Action } from '../../models/action.model';
 import { AuditHistory } from '../../models/audithistory.model';
 import { AuthService } from '../../services/auth.service';
-
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import * as $ from 'jquery';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 
 import { TableModule, Table } from 'primeng/table';
@@ -36,6 +36,8 @@ export class ActionsComponent implements OnInit {
     isEdit: boolean = false;
     totalRecords: any;
     pageIndex: number = 0;
+    selectedOnly: boolean = false;
+    targetData: any;
     pageSize: number = 10;
     totalPages: number;
     headers = [        
@@ -96,7 +98,9 @@ export class ActionsComponent implements OnInit {
 
         this.getList();
     }
-
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+	}
     customExcelUpload(event) {
         // const file = event.target.files;
 

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
+﻿import { Component, OnInit, Input, EventEmitter, Output, ViewChild, ElementRef, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
 import { AuthService } from '../../../services/auth.service';
 import { CustomerService } from '../../../services/customer.service';
@@ -10,7 +10,6 @@ import { LocalStoreManager } from '../../../services/local-store-manager.service
 import { DBkeys } from '../../../services/db-Keys';
 import { CommonService } from '../../../services/common.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { SimpleChanges } from '@angular/core';
 
 @Component({
     selector: 'app-customer-sales-person',
@@ -313,7 +312,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                     this.saveFailedHelper(res.message)
                 }
                 else{
-                    this.customerSalesId = res.customersalesObj.customerSalesId;                    
+                    this.customerSalesId = res.customerSalesId;                    
                     this.alertService.showMessage(
                         'Success',
                         `${this.isFirstSave ? 'Saved' : 'Updated'} Customer Sales Infromation Successfully `,
@@ -322,7 +321,7 @@ export class CustomerSalesPersonComponent implements OnInit {
                 }
                 this.isFirstSave = false;
                 this.disableSave = true;
-                this.formdata.reset();
+                //this.formdata.reset();
             }
         ),error => this.saveFailedHelper(error)}
         

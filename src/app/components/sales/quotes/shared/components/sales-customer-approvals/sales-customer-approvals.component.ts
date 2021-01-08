@@ -19,7 +19,7 @@ import { StocklineViewComponent } from "../../../../../../shared/components/stoc
 import * as $ from 'jquery'
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
 import { CommonService } from "../../../../../../services/common.service";
-import { forkJoin } from "rxjs";
+import { forkJoin } from "rxjs/observable/forkJoin";
 import { SOQuoteMarginSummary } from "../../../../../../models/sales/SoQuoteMarginSummary";
 import { ApprovalProcessEnum } from "../../../models/approval-process-enum";
 import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../models/approval-status-enum";
@@ -140,15 +140,17 @@ export class SalesCustomerApprovalsComponent {
 
         }
         forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
-            this.salesQuoteService.getInternalApproversList(ApprovalTaskEnum.SalesQuoteApproval, marginSummary.netSales),
+            //this.salesQuoteService.getInternalApproversList(ApprovalTaskEnum.SalesQuoteApproval, marginSummary.netSales),
+            this.salesQuoteService.approverslistbyTaskId(ApprovalTaskEnum.SalesQuoteApproval, this.salesQuoteId),
             this.salesQuoteService.getCustomerQuotesList(this.salesQuoteId)).subscribe(response => {
                 this.isSpinnerVisible = false;
                 // this.setApprovers = response[0];
-                if (response[1] && response[1].length > 0) {
-                    this.approvers = response[1];
-                } else {
-                    this.approvers = [];
-                }
+                // if (response[1] && response[1].length > 0) {
+                //     this.approvers = response[1];
+                // } else {
+                //     this.approvers = [];
+                // }
+                this.approvers = response[1];
                 // this.getCustomerQuotesList();
                 this.setApprovers(response[0])
                 this.setApproverProcessdata(response[2]);
@@ -204,29 +206,28 @@ export class SalesCustomerApprovalsComponent {
 
     getPartToDisableOrNot(part) {
         if (part.actionStatus != 'Approved') {
-            if (part.approvalActionId == ApprovalProcessEnum.SentForInternalApproval && part.createdBy != this.userName) {
+            if (part.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
                 return true;
             } else if (part.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
                 if (this.approvers && this.approvers.length > 0) {
-                    let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId);
+                    let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId && approver.isExceeded == false);
                     if (approverFound) {
-                        return false;
-                    } else {
                         return true;
+                    } else {
+                        return false;
                     }
                 } else {
-                    return true;
+                    return false;
                 }
-            } else if (part.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval && part.createdBy != this.userName) {
+            } else if (part.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
                 return true;
-            } else if (part.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval && part.createdBy != this.userName) {
+            } else if (part.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
                 return true;
-
             } else {
                 return false;
             }
         } else {
-            return true;
+            return false;
         }
     }
 
@@ -336,7 +337,7 @@ export class SalesCustomerApprovalsComponent {
         this.quotesList.forEach(
             (x, i) => {
                 let disableEdit = this.getPartToDisableOrNot(x);
-                if (!disableEdit) {
+                if (disableEdit) {//if (!disableEdit) {
                     x.isSelected = !isSelected;
                     this.onApprovalSelected(x, i);
                 }
@@ -495,13 +496,13 @@ export class SalesCustomerApprovalsComponent {
                         "CustomerStatusId": x.customerStatusId,
                         "InternalMemo": x.internalMemo,
                         "CustomerMemo": x.customerMemo,
-                        "UpdatedBy": "admin",
+                        "UpdatedBy": this.userName, //"admin",
                         "salesOrderQuoteApprovalId": x.salesOrderQuoteApprovalId,
                         "ApprovalActionId": x.approvalActionId,
                         "IsInternalApprove": x.isInternalApprove,
 
-                        "createdBy": "admin",
-                        "updatedBy": "admin",
+                        "createdBy": this.userName, //"admin",
+                        //"updatedBy": "admin",
                         "createdDate": new Date().toDateString(),
                         "updatedDate": new Date().toDateString(),
                         "isActive": true,
@@ -540,8 +541,8 @@ export class SalesCustomerApprovalsComponent {
                 res => {
                     $('#quoteVersion').modal('hide');
                     this.alertService.showMessage(
-                        this.moduleName,
-                        `Data updated successfully`,
+                        "Success",
+                        `Saved Approver Process Successfully`,
                         MessageSeverity.success
                     );
                     this.isSpinnerVisible = false;
@@ -571,7 +572,7 @@ export class SalesCustomerApprovalsComponent {
             }
         }
         else if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
-            if (! (x.internalStatusId == ApprovalStatusEnum.Approved
+            if (!(x.internalStatusId == ApprovalStatusEnum.Approved
                 || x.internalStatusId == ApprovalStatusEnum.Rejected)) {
                 str += 'internal status is required<br/>';
             }
@@ -586,7 +587,7 @@ export class SalesCustomerApprovalsComponent {
         }
         else if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
             if (!(x.customerStatusId == ApprovalStatusEnum.Approved
-                || x.customerStatusId == ApprovalStatusEnum.Rejected) ) {
+                || x.customerStatusId == ApprovalStatusEnum.Rejected)) {
                 str += 'Customer status is required<br/>';
             }
             if (!x.customerApprovedDate) {

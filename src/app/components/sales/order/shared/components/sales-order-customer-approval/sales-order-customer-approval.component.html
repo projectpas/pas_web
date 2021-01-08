@@ -17,7 +17,7 @@
           <tr class="mpn-row" style="display: table-row;"
             *ngFor="let approver of salesOrderCustomerApprovalListView; let i=index;">
             <td>
-              <input type="checkbox" [disabled]="isView || getPartToDisableOrNot(approver)"
+              <input type="checkbox" [disabled]="isView || !getPartToDisableOrNot(approver)"
                 [(ngModel)]="approver.selected" (click)="onApprovalSelected(approver, i)" />
             </td>
             <ng-container *ngFor="let field of columns">

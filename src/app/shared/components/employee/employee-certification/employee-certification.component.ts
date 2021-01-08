@@ -6,8 +6,8 @@ import { MasterComapnyService } from '../../../../services/mastercompany.service
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { AuthService } from '../../../../services/auth.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../../../models/mastercompany.model';
 import { EmployeeService } from '../../../../services/employee.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,7 +16,8 @@ import { CertificationtypeService } from '../../../../services/certificationtype
 // import { CertificationType } from '../../../../models/certificationtype.model';
 import { DatePipe } from '@angular/common';
 import { editValueAssignByCondition } from '../../../../generic/autocomplete';
-import { filter } from 'rxjs/operators';
+import { CommonService } from '../../../../services/common.service';
+
 @Component({
     selector: 'app-employee-certification',
     templateUrl: './employee-certification.component.html',
@@ -77,6 +78,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     public firstName: any;
     public lastName: any;
     public allWorkFlows: any[] = [];
+    arrayCertificationlist : any = [];
     employeeId: any;
     nextOrPreviousTab: any;
     isEditContent: boolean = false;
@@ -89,13 +91,14 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         private activeModal: NgbActiveModal,
         private _fb: FormBuilder, private alertService: AlertService,
         public employeeService: EmployeeService, private dialog: MatDialog,
-        private masterComapnyService: MasterComapnyService) {
+        private masterComapnyService: MasterComapnyService,
+        public commonService: CommonService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
       
     }
     ngOnInit(): void { 
-        this.loadDataforCertification();        
+        this.loadDataforCertification('');        
         this.employeeId = this.route.snapshot.paramMap.get('id');
         this.isSpinnerVisible = true;
         if (this.employeeId) {
@@ -105,12 +108,12 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             if(this.empId == null || this.empId == undefined ) {
                 this.employeeService.toGetEmployeeDetailsByEmpId(this.employeeId).subscribe(res => {
                     if(res) {
-                                                                  
+                                                         
                         this.sourceEmployee = res;
                         if(this.sourceEmployee.employeeCertificationTypeId == null)
                             this.sourceEmployee.employeeCertificationTypeId = 0;
                         this.route.queryParams
-                        .pipe(filter(params => params.order))
+                        .filter(params => params.order)
                         .subscribe(params => {               
                             this.empId = params.order;
                             if (this.empId) {
@@ -133,17 +136,20 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
                         } 
                         this.employeeService.bredcrumbObj.next(this.employeeService.currentUrl);
                         this.employeeService.ShowPtab = true;
-                        this.employeeService.alertObj.next(this.employeeService.ShowPtab); //steps   
+                        this.employeeService.alertObj.next(this.employeeService.ShowPtab); //steps
+
                         setTimeout(() => {				
                             this.isSpinnerVisible = true;
                             this.getwithemployeeLicensureId();
-							this.isSpinnerVisible = false;
+                            this.isSpinnerVisible = false;
+                            
 						},							 
 						1200); 	 
                 });
             }
             this.employeeService.currentUrl =  this.employeeService.currentUrl = `/employeesmodule/employeepages/app-employee-certification-edit/${this.employeeId}`;
-        }else{
+        }else{            
+            this.loadDataforCertification(''); 
             this.isSpinnerVisible = false;
             this.employeeService.currentUrl = '/employeesmodule/employeepages/app-employee-certification';
         }
@@ -400,18 +406,37 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.dataSource.data = getCertificationList;
         this.allEmployeeinfo = getCertificationList;
     }
-    private loadDataforCertification() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.certificationser.getWorkFlows().subscribe(
-            results => this.onDataLoadSuccessfulforCertification(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
+    // private loadDataforCertification() {
+    //     this.alertService.startLoadingMessage();
+    //     this.loadingIndicator = true;
+    //     this.certificationser.getWorkFlows().subscribe(
+    //         results => this.onDataLoadSuccessfulforCertification(results[0]),
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+    private loadDataforCertification(strText = '') {
+         this.alertService.startLoadingMessage();
+         this.loadingIndicator = true;
+		if(this.arrayCertificationlist.length == 0) {			
+			this.arrayCertificationlist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeCertificationType', 'EmployeeCertificationTypeId', 'description',strText,true,20000,this.arrayCertificationlist.join()).subscribe(response => {
+            this.alertService.stopLoadingMessage();
+            this.loadingIndicator = false;
+            this.allCertification = response;           			
+		},err => {
+            this.alertService.stopLoadingMessage();
+            this.loadingIndicator = false;
+			this.isSpinnerVisible = false;
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);		
+		});
     }
+    
     private onDataLoadSuccessfulforCertification(allWorkFlows: any[]) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
-        this.allCertification = allWorkFlows;     
+        this.allCertification = allWorkFlows;
     }
     private onCertifywithEmpId(certfilist: any) {
         this.alertService.stopLoadingMessage();
@@ -419,13 +444,17 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
         this.dataSource.data = certfilist;
         this.data = certfilist;
         if (this.data.length > 0) {
-            this.sourceEmployee = this.data[0].t;
+            this.sourceEmployee = this.data[0].t;            
             if (this.sourceEmployee.certificationDate != null) {
                 this.sourceEmployee.certificationDate = new Date(this.sourceEmployee.certificationDate);
             }            
             if (this.sourceEmployee.expirationDate != null) {
                 this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
             }
+            if(this.sourceEmployee.employeeCertificationTypeId  && this.sourceEmployee.employeeCertificationTypeId > 0) {
+                this.arrayCertificationlist.push(this.sourceEmployee.employeeCertificationTypeId);
+            }
+            this.loadDataforCertification('');
         }
     }
     private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
@@ -682,10 +711,10 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
             this.sourceEmployee.createdBy = this.userName;
             this.sourceEmployee.updatedBy = this.userName;
             this.sourceEmployee.description = this.description;
-            this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;
+            this.sourceEmployee.masterCompanyId = this.currentUserMasterCompanyId;           
             this.certificationser.newCertificationtype(this.sourceEmployee).subscribe(data => {
                 this.getwithemployeeLicensureId();
-                this.loadDataforCertification();
+                this.loadDataforCertification('');
                 this.isEnableNext=true;  
                 this.nextbuttonEnable=true;
                 this.sourceEmployee.employeeCertificationId = data.employeeCertificationId;
@@ -722,7 +751,8 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
 
     nextClick(nextOrPrevious) {       
         this.nextOrPreviousTab = nextOrPrevious;
-        if (this.formdata.form.dirty) {        
+        // if (this.formdata.form.dirty) {  
+        if (this.enableSaveBtn == true) {           
         let content = this.tabRedirectConfirmationModal2;
         this.modal = this.modalService.open(content, { size: "sm" });}
         else {

@@ -12,8 +12,8 @@ import { MenuItem } from 'primeng/api';
 import {  Inject, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
 import { ConfigurationService } from '../../../services/configuration.service';

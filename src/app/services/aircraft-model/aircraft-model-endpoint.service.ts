@@ -1,16 +1,15 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AircraftModel } from '../../models/aircraft-model.model';
-import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class AircraftModelEndpointService extends EndpointFactory {
@@ -42,73 +41,73 @@ export class AircraftModelEndpointService extends EndpointFactory {
     getAllAircraftModel<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllAircraftModel());
-            }));
+            });
     }
 
     getAircraftModelById<T>(aircraftModelId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${aircraftModelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftModelById(aircraftModelId));
-            }));
+            });
     }
 
     addAircraftModel<T>(aircraftModel: AircraftModel): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(aircraftModel), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(aircraftModel), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addAircraftModel(aircraftModel));
-            }));
+            });
     }
 
     updateAircraftModel<T>(aircraftModel: AircraftModel): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(aircraftModel), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(aircraftModel), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateAircraftModel(aircraftModel));
-            }));
+            });
     }
 
     removeAircraftModelById<T>(aircraftModelId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${aircraftModelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeAircraftModelById(aircraftModelId));
-            }));
+            });
     }
 
     getUpdateForActive<T>(roleObject: any, id: number): Observable<T> {
         let endpointUrl = `${this.updateForActive}/${id}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateForActive(roleObject, id));
-            }));
+            });
     }
 
     getAudit<T>(aircraftModelId: number): Observable<T> {
         let endpointUrl = `${this.getAuditById}/${aircraftModelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAudit(aircraftModelId));
-            }));
+            });
     }
 
 
-    getAircraftModelListByAircraftManufacturerId<T>(aircraftManufacturerId: string): Observable<T> {
-        let endpointUrl = `${this.getModelsListById}/${aircraftManufacturerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getAircraftModelListByAircraftManufacturerId(aircraftManufacturerId));
-            }));
+    getAircraftModelListByAircraftManufacturerId<T>(aircraftManufacturerId: string, idlist? : string ): Observable<T> {
+        let endpointUrl = `${this.getModelsListById}/${aircraftManufacturerId}/${idlist !== undefined ? idlist : '0'}`;        
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleError(error, () => this.getAircraftModelListByAircraftManufacturerId(aircraftManufacturerId,idlist));
+            });
     }
 
     //getAircraftModelsRecords<T>(data: any) Observable<T>{
@@ -116,18 +115,18 @@ export class AircraftModelEndpointService extends EndpointFactory {
     getAircraftModelsRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
         //let endpointUrl = `${this.getPaginationData}/${data}`;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftModelsRecords(paginationOption));
-            }));
+            });
     }
     getLandingPageList<T>(): Observable<T> {
         let endpointUrl = this.getLandingPage;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getLandingPageList());
-            }));
+            });
     }
 
 }

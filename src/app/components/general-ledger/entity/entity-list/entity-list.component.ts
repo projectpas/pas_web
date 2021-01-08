@@ -4,8 +4,8 @@ import { PageHeaderComponent } from '../../../../shared/page-header.component';
 import * as $ from 'jquery';
 import { LegalEntityEndpontService } from '../../../../services/legalentity-endpoint.service';
 import { AuthService } from '../../../../services/auth.service';
-  
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { FormBuilder } from '@angular/forms';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';

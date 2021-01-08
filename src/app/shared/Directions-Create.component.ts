@@ -3,7 +3,7 @@ import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
 import { IDirections } from "../Workflow/Directions";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-
+import * as $ from 'jquery';
 @Component({
     selector: 'grd-directions',
     templateUrl: './Directions-Create.component.html',
@@ -13,15 +13,15 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
 
     @Input() workFlow: IWorkFlow;
     @Input() UpdateMode: boolean;
-    @Output() notify: EventEmitter<IWorkFlow> =
-        new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
     errorMessage: string;
     row: any;
     currentPage: number = 1;
     itemsPerPage: number = 10;
+    memoIndex;
+    textAreaInfo: any;
 
     constructor(private alertService: AlertService) {
-
     }
 
     ngOnInit(): void {
@@ -37,7 +37,6 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
     }
 
     addRow(): void {
-
         var newRow = Object.assign({}, this.row);
         newRow.workflowDirectionId = "0";
         newRow.taskId = this.workFlow.taskId;
@@ -60,7 +59,6 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
     }
 
     checkDuplicateSequence(event, direction: any): void {
-
         if (this.workFlow.directions != undefined && this.workFlow.directions.length > 0) {
             var duplicate = this.workFlow.directions.filter(d => d.sequence == direction.sequence && direction.taskId == this.workFlow.taskId && d.isDelete != true);
             if (duplicate.length > 1) {
@@ -71,4 +69,20 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
         }
     }
 
+    onAddTextAreaInfo(material, index) {
+        this.memoIndex = index;
+        this.textAreaInfo = material.memo;
+    }
+
+    onSaveTextAreaInfo(memo) {
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.workFlow.directions[this.memoIndex].memo = this.textAreaInfo;
+        }
+        $("#textarea-popupMemo").modal("hide");
+    }
+
+    onCloseTextAreaInfo() {
+        $("#textarea-popupMemo").modal("hide");
+    }
 }

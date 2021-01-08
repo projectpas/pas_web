@@ -22,6 +22,7 @@ export class PartDetail {
   salesDiscount: number;
 
   itemMasterId: number;
+  partId: number;
   stockLineId: number;
   masterCompanyId: number;
   method: string;

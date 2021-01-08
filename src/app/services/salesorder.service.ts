@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { Observable ,  Subject ,  ReplaySubject, BehaviorSubject,forkJoin } from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
 import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
@@ -24,6 +25,7 @@ import { SalesOrderQuote } from "../models/sales/SalesOrderQuote";
 import { ItemMasterSearchQuery } from "../components/sales/quotes/models/item-master-search-query";
 import { PartDetail } from "../components/sales/shared/models/part-detail";
 import { PartAction } from "../components/sales/shared/models/part-action";
+import { ReplaySubject, BehaviorSubject } from "rxjs";
 import { SalesOrderReference } from "../models/sales/salesOrderReference";
 import { WorkOrderService } from "./work-order/work-order.service";
 import { ISalesOrderCustomerApproval } from "../components/sales/order/models/isales-order-customer-approval";
@@ -96,32 +98,32 @@ export class SalesOrderService {
   }
 
   getNewSalesOrderInstance(customerId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getNewSalesOrderInstance<ISalesOrderView>(
         customerId
       )
     );
   }
   create(salesOrder: ISalesOrderView): Observable<ISalesOrder[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.create(salesOrder)
     );
   }
 
   createBilling(salesOrderBilling: SalesOrderBillingAndInvoicing) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.createBilling(salesOrderBilling)
     );
   }
 
   createShipping(salesOrderShipping: SalesOrderShipping): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.createShipping(salesOrderShipping)
     );
   }
 
   update(salesquote: ISalesOrderView): Observable<ISalesOrder[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.update(salesquote)
     );
   }
@@ -129,7 +131,7 @@ export class SalesOrderService {
   search(
     salesQuoteSearchParameters: ISalesSearchParameters
   ): Observable<ISalesQuoteListView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.search(salesQuoteSearchParameters)
     );
   }
@@ -154,112 +156,112 @@ export class SalesOrderService {
   globalSearch(
     salesQuoteSearchParameters: ISalesSearchParameters
   ): Observable<ISalesQuoteListView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.globalSearch(salesQuoteSearchParameters)
     );
   }
 
   delete(salesOrderId: number): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.delete(salesOrderId)
     );
   }
 
   deletePart(salesOrderPartId: number): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.deletePart(salesOrderPartId)
     );
   }
 
   getSalesOrder(salesOrderId: number): Observable<ISalesOrderView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getSalesOrder(salesOrderId)
     );
   }
   getsoconfirmationlist(): Observable<ISalesOrderView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getSalesOrderConformation()
     );
   }
   getReservedParts(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getReservedParts(salesOrderId)
     );
   }
   getReservestockpartlists(salesOrderId: number, itemMasterId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getReservestockpartlists(salesOrderId, itemMasterId)
     );
   }
   getIssuedParts(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getIssuedParts(salesOrderId)
     );
   }
   GetTotal(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.GetTotal(salesOrderId)
     );
   }
   getReservedAndIssuedParts(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getReservedAndIssuedParts(salesOrderId)
     );
   }
   getUnreservedParts(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getUnreservedParts(salesOrderId)
     );
   }
   getUnissuedParts(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getUnissuedParts(salesOrderId)
     );
   }
   getcommonsalesorderdetails(salesOrderId: number, salesOrderPartId: number): Observable<SalesOrderReference[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getcommonsalesorderdetails(salesOrderId, salesOrderPartId)
     );
   }
   getunreservedstockpartslist(salesOrderId: number, itemMasterId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getunreservedstockpartslist(salesOrderId, itemMasterId)
     );
   }
   getholdstocklinereservedparts(salesOrderId: number, salesOrderPartId: number, stockLineId: number, quantityRequested: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getholdstocklinereservedparts(salesOrderId, salesOrderPartId, stockLineId, quantityRequested)
     );
   }
   releasestocklinereservedparts(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.releasestocklinereservedparts(salesOrderId)
     );
   }
   savereserveissuesparts(parts: PartAction): Observable<PartAction[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.savereserveissuesparts(parts)
     );
   }
 
   getview(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getview(salesOrderId)
     );
   }
   getPickTicket(salesOrderId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getPickTicket(salesOrderId)
     );
   }
   getCustomerApprovalList(salesOrderId: number): Observable<ISalesOrderCustomerApproval[][]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.getCustomerApprovalList(salesOrderId)
     );
   }
 
   approveParts(parts: ISalesOrderCustomerApproval[]): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.approveParts(parts)
     );
   }
@@ -267,19 +269,19 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.sentForInternalApproval(data);
   }
   close(salesOrderId: number): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.close(salesOrderId)
     );
   }
 
   cancel(salesOrderId: number): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.cancel(salesOrderId)
     );
   }
 
   copy(salesOrderId: number): Observable<ISalesOrderView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.copy(salesOrderId)
     );
   }
@@ -303,35 +305,35 @@ export class SalesOrderService {
   }
 
   deletesalesOrderFreightList(friegntId, userName) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.deleteFrieght(friegntId, userName)
     );
   }
 
   deletesalesOrderChargesList(chargesId, userName) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.deleteCharge(chargesId, userName)
     );
   }
 
   createFreight(freightsList: ISOFreight[]): Observable<ISalesOrderQuote[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.createFreight(freightsList)
     );
   }
 
   createSOQCharge(chargesList: ISalesOrderCharge[]): Observable<ISalesOrderQuote[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.createCharges(chargesList)
     );
   }
 
-  getSalesOrderFreights(id, partId) {
-    return this.salesOrderEndPointSevice.getSalesOrderFreights(id, partId);
+  getSalesOrderFreights(id, isDeleted) {
+    return this.salesOrderEndPointSevice.getSalesOrderFreights(id, isDeleted);
   }
 
-  getSalesQuoteCharges(id, partId) {
-    return this.salesOrderEndPointSevice.getSalesOrderCharges(id, partId);
+  getSalesQuoteCharges(id, isDeleted) {
+    return this.salesOrderEndPointSevice.getSalesOrderCharges(id, isDeleted);
   }
 
   createSOMarginSummary(marginSummary: MarginSummary) {
@@ -486,7 +488,7 @@ export class SalesOrderService {
   }
 
   deleteSoSetting(salesOrdersettingsId: number, updatedBy): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesOrderEndPointSevice.deleteSoSetting(salesOrdersettingsId, updatedBy)
     );
   }
@@ -502,6 +504,18 @@ export class SalesOrderService {
 
   getAllSalesOrderAnalysis(id) {
     return this.salesOrderEndPointSevice.getAllSalesOrderAnalysis(id);
+  }
+
+  getSOFreightsHistory(id) {
+    return this.salesOrderEndPointSevice.getSOFreightsHistory(id);
+  }
+
+  getSOChargesHistory(id) {
+    return this.salesOrderEndPointSevice.getSOChargesHistory(id);
+  }
+
+  getSOHistory(salesOrderId) {
+    return this.salesOrderEndPointSevice.getSOHistory(salesOrderId)
   }
 
   //ed --nitin

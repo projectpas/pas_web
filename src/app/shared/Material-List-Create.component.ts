@@ -56,13 +56,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Output() workFlowChange = new EventEmitter();
     @Output() saveMaterialListForWO = new EventEmitter();
     @Output() updateMaterialListForWO = new EventEmitter();
-    @Input() isSubWorkOrder=false;
+    @Input() isSubWorkOrder = false;
     @Input() unitOfMeasuresList = [];
     @Input() percentageListFromSource = [];
     @Input() conditionsListFromSource = [];
     @Input() isView: boolean = false;
-    @Output() notify: EventEmitter<IWorkFlow> =
-        new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
+
     materialCondition: any = [];
     materialMandatory: IMaterialMandatory[];
     materialUOM: any[] = [];
@@ -157,34 +157,24 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     viewItemMasterNS: any = {};
     aircraftauditHistory: any = [];
     pageSize: number = 10;
+    isSpinnerVisible = false
     cols = [
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
         { field: 'manufacturerdesc', header: 'Manufacturer' },
-        //{ field: '', header: 'Material Type' },
         { field: 'classificationdesc', header: 'Classification' },
-        //{ field: '', header: 'capes' },
         { field: 'itemGroup', header: 'Group Name' },
-        //{ field: '', header: ' Aircraft Manufacturer' },
         { field: 'nationalStockNumber', header: 'NSN' },
         { field: 'isSerialized', header: 'S/N' },
         { field: 'isTimeLife', header: 'Time Life' },
-        //{ field: 'updatedDate', header: 'Updated Date' },
-        //{ field: 'createdDate', header: 'Created Date' }
     ];
     cols1 = [
-        //{ field: 'actionId', header: 'Action Id' },
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'Description' },
         { field: 'isHazardousMaterial', header: 'Is Hazardous Material' },
         { field: 'manufacturerdesc', header: 'Manufacturer' },
         { field: 'unitCost', header: 'Unit Cost' },
         { field: 'listPrice', header: 'List Price' },
-
-        //{ field: 'updatedDate', header: 'Updated Date' },
-        //{ field: 'createdDate', header: 'Created Date' }
-
-
     ];
     colsaircraftLD: any[] = [
         { field: "aircraft", header: "Aircraft" },
@@ -192,12 +182,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         { field: "dashNumber", header: "Dash Numbers" },
         { field: "memo", header: "Memo" }
     ];
-
     atasub: any[] = [
         { field: 'ataChapterName', header: 'ATA Chapter' },
         { field: 'ataSubChapterDescription', header: 'ATA Sub-Chapter' }
     ];
-
     pnCols1 = [
         { field: 'partNo', header: 'PN' },
         { field: 'pnDiscription', header: 'PN Description' },
@@ -211,31 +199,27 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         { field: 'verifiedDate', header: 'Date Verified' },
         { field: 'memo', header: 'Memo' }
     ];
-
-
     alterTableColumns: any[] = [
         { field: "altPartNo", header: "PN" },
         { field: "altPartDescription", header: "Description" },
         { field: "manufacturer", header: "Manufacturer " }
     ];
-    //nhaTableColumns: any[] = [
-    //    { field: "altPartNo", header: "PN" },
-    //    { field: "altPartDescription", header: "Description" },
-    //    { field: "manufacturer", header: "Manufacturer " }
-    //];
-    //tlaTableColumns: any[] = [
-    //    { field: "altPartNo", header: "PN" },
-    //    { field: "altPartDescription", header: "Description" },
-    //    { field: "manufacturer", header: "Manufacturer " }
-    //];
     equivalencyTableColumns: any[] = [
         { field: "altPartNo", header: "PN" },
         { field: "altPartDescription", header: "Description" },
         { field: "manufacturer", header: "Manufacturer " },
         { field: "itemClassification", header: "ITEM CLASSIFICATION " },
     ];
-    provisionListData: any=[];
-    conditionList: any=[];
+    provisionListData: any = [];
+    conditionList: any = [];
+    percentageList: any;
+    defaultMaterialMandatory: string;
+    partconditionsList = [];
+    altequPartList = [];
+    textAreaInfo: any;
+    memoIndex;
+    moduleName: any = '';
+
     constructor(private actionService: ActionService,
         private commonService: CommonService,
         private itemMasterService: ItemMasterService,
@@ -246,56 +230,19 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         private alertService: AlertService,
         public unitofmeasureService: UnitOfMeasureService,
         public itemClassService: ItemClassificationService,
-        private masterComapnyService: MasterComapnyService, ) {
+        private masterComapnyService: MasterComapnyService,) {
     }
-    percentageList: any;
 
-    // constructor(private actionService: ActionService,
-    //     private commonservice : CommonService,
-    //     private itemser: ItemMasterService, 
-    // private vendorService: VendorService, 
-    // private conditionService: ConditionService,
-    //  public itemClassService: ItemClassificationService,
-    //   public unitofmeasureService: UnitOfMeasureService,
-    //    private alertService: AlertService, 
-    //    private workOrderQuoteService: WorkOrderQuoteService) {
-
-    // }
-
-    defaultMaterialMandatory: string;
-
-    ngOnInit(): void {        
-        // this.row = this.workFlow.materialList[0];
-        // if (this.row == undefined) {
-        //     this.row = {};
-        // }
-        // this.row.taskId = this.workFlow.taskId;
-
-this.isSubWorkOrder=this.isSubWorkOrder;
+    ngOnInit(): void {
+        this.isSubWorkOrder = this.isSubWorkOrder;
         if (this.isWorkOrder) {
             this.row = this.workFlow.materialList[0];
-            // console.log(this.editData);
             if (this.isEdit) {
                 this.workFlow.materialList = [];
-                // this.getPartConditions(this.editData,0);
-                // const data = {
-                //     ...this.editData,
-                //     partDescription: this.editData.epnDescription,
-                //     partNumber: this.editData.epn,
-
-                // }
-
-                // console.log(this.editData);
-
-                // this.getPartConditions(this.editData, 0);  // for new conditions
-                // this.loadAltEquPartInfoData({ itemMasterId: this.editData.itemMasterId }, 0)
-
                 this.workFlow.materialList.push(this.editData);
                 this.reCalculate();
             } else {
                 this.workFlow.materialList = [];
-                // this.row = this.workFlow.materialList[0];
-                // console.log("thiss", this.row);
                 this.addRow();
                 this.workFlow.materialQtySummation = 0;
                 this.workFlow.materialExtendedCostSummation = 0;
@@ -304,16 +251,16 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             }
 
         } else {
-            // this.row = this.workFlow.materialList[0];
             if (this.row == undefined) {
                 this.row = {};
             }
             this.row.taskId = this.workFlow.taskId;
             this.workFlow.materialList.map((x, index) => {
-                // console.log(x);
+                if (x['mandatoryOrSupplemental'] == this.workFlow.materialList[index].mandatoryOrSupplemental) {
+                    this.workFlow.materialList[index]['mandatorySupplementalId'] = x['mandatorySupplementalId'];
 
-                // this.getPartConditions(x, index),
-                    this.getPNDetails(x);
+                }
+                this.getPNDetails(x);
             })
         }
 
@@ -325,66 +272,47 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             this.addRow();
         }
 
-
-
-
-
-        // this.actionService.GetMaterialMandatory().subscribe(
-        //     mandatory => {
-        //         this.materialMandatory = mandatory;
-        //         this.defaultMaterialMandatory = 'Mandatory';
-        //         if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
-        //             this.workFlow.materialList[0].mandatorySupplementalId = 1;
-        //         }
-        //     },
-        //     error => this.errorMessage = <any>error
-        // );
-        this.commonService.smartDropDownList('MaterialMandatories', 'Id', 'Name').subscribe(
-        mandatory => {
-            this.materialMandatory = mandatory.map(x => {
-                    return {
-                        id: x.value,
-                        name: x.label
-                    }
-                  });
-                //   console.log("this.materialMandatory",this.materialMandatory);
-            this.defaultMaterialMandatory = 'Mandatory';
-            if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
-                this.workFlow.materialList[0].mandatorySupplementalId = 1;
-            }
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        }
-    );
-
-
-        // this.loadConditionData();
-        // this.loadItemClassData();
-        // this.loadPartData();
-        // this.loadUOMData();
-        if(!this.isView){
+        this.getMaterailMandatories();
+        if (!this.isView) {
             this.getPartnumbers('');
         }
-        this.getAllPercentage();
         if (this.isWorkOrder || this.isQuote) {
-        this.provisionList();
-        this.getConditionsList();
+            this.provisionList();
+            this.getConditionsList();
         }
-        //    this.loadAltEquPartInfoData();
-        // if (this.UpdateMode) {
-        //     this.reCalculate();
-
-        // }
     }
-    
 
+    getMaterailMandatories() {
+        let mandatorySupplementalIds = [];
+        if (!this.isWorkOrder || !this.isQuote) {
+            mandatorySupplementalIds = this.workFlow.materialList.reduce((acc, x) => {
+                return mandatorySupplementalIds.push(acc.mandatorySupplementalId);
+            }, 0)
+        }
+        this.isSpinnerVisible = true;
+        this.commonService.smartDropDownList('MaterialMandatories', 'Id', 'Name')
+            .subscribe(
+                mandatory => {
+                    this.isSpinnerVisible = false;
+                    this.materialMandatory = mandatory.map(x => {
+                        return {
+                            id: x.value,
+                            name: x.label
+                        }
+                    });
+                    this.defaultMaterialMandatory = 'Mandatory';
+                    if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
+                        this.workFlow.materialList[0].mandatorySupplementalId = 1;
+                    }
+                }, error => {
+                    this.isSpinnerVisible = false;
+                });
+    }
 
     ngOnChanges() {
-        if(this.workFlow) {
+        if (this.workFlow) {
             this.getConditionsList();
-            if(this.workFlow.materialList.length > 0) {
+            if (this.workFlow.materialList.length > 0) {
                 this.workFlow.materialList = this.workFlow.materialList.map(x => {
                     return {
                         ...x,
@@ -402,31 +330,23 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         }
         if (this.isQuote && this.editData.length > 0) {
             this.workFlow.materialList = this.editData;
-            // this.getPartConditions(this.editData[0], 0);
         }
-        else if(this.isQuote && (!this.editData || this.editData.length <= 0)){
+        else if (this.isQuote && (!this.editData || this.editData.length <= 0)) {
             this.workFlow.materialList = [];
             this.addRow();
         }
-        // else  {
-
-        // }
-        // if (this.workFlow.materialList && this.workFlow.materialList.length == 0)
-        // this.row = this.workFlow.materialList[0];
-        // if (!this.isWorkFlow) {
-        // }
-        // console.log("event changes")
     }
 
-    onSelectMaterialManditory(rowData){
+    onSelectMaterialManditory(rowData) {
         this.materialMandatory.forEach(
-            x=>{
-                if(x['id'] == rowData.mandatorySupplementalId){
+            x => {
+                if (x['id'] == rowData.mandatoryOrSupplemental) {
                     rowData['mandatoryOrSupplemental'] = x['name'];
                 }
             }
         )
     }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -436,24 +356,27 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             return decodedString;
         }
     }
+
     getConditionsList() {
-        if(this.conditionsListFromSource.length == 0){
-            this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(res => {
-                this.conditionList = res;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
-            })
+        this.isSpinnerVisible = true;
+        let conditionIds = [];
+        if (this.UpdateMode) {
+            conditionIds = this.workFlow.materialList.reduce((acc, x) => {
+                return conditionIds.push(acc.conditionCodeId);
+            }, 0)
         }
-        else{
-            this.conditionList = this.conditionsListFromSource.map(x=>{ return {label: x.description, value: x.conditionId}});
-        }
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, conditionIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.conditionList = res
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     onTaskChhange(task) {
-        this.taskList.forEach((t)=>{
-            if(t.taskId == task.taskId){
+        this.taskList.forEach((t) => {
+            if (t.taskId == task.taskId) {
                 task['taskName'] = t.description;
             }
         })
@@ -466,15 +389,15 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         this.calculateExtendedPriceSummation();
     }
 
-    filterpartItems(event) { 
+    filterpartItems(event) {
         this.partCollection = [];
         this.itemclaColl = [];
         if (this.allPartnumbersInfo != undefined && this.allPartnumbersInfo.length > 0) {
             for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
                 let partName = this.allPartnumbersInfo[i].partNumber;
                 let canPush = true;
-                for(let mpnPartIndex = 0; mpnPartIndex<this.mpnPartNumbersList.length; mpnPartIndex++){
-                    if(this.mpnPartNumbersList[mpnPartIndex]['label'] == partName){
+                for (let mpnPartIndex = 0; mpnPartIndex < this.mpnPartNumbersList.length; mpnPartIndex++) {
+                    if (this.mpnPartNumbersList[mpnPartIndex]['label'] == partName) {
                         canPush = false;
                     }
                 }
@@ -487,10 +410,10 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                             "description": this.allPartnumbersInfo[i].partDescription,
                             "masterCompanyId": this.allPartnumbersInfo[i].masterCompanyId,
                             "itemClassificationId": this.allPartnumbersInfo[i].itemClassificationId,
-                            "itemClassification":this.allPartnumbersInfo[i].itemClassification,
-                            "unitOfMeasureId":this.allPartnumbersInfo[i].unitOfMeasureId,
-                            "unitOfMeasure":this.allPartnumbersInfo[i].unitOfMeasure,
-                            "stockType":this.allPartnumbersInfo[i].stockType
+                            "itemClassification": this.allPartnumbersInfo[i].itemClassification,
+                            "unitOfMeasureId": this.allPartnumbersInfo[i].unitOfMeasureId,
+                            "unitOfMeasure": this.allPartnumbersInfo[i].unitOfMeasure,
+                            "stockType": this.allPartnumbersInfo[i].stockType
                         }]);
                         this.partCollection.push(partName);
                     }
@@ -500,8 +423,6 @@ this.isSubWorkOrder=this.isSubWorkOrder;
     }
 
     onPartSelect(event, material, index) {
-        // console.log("list sear", event, material);
-
         if (this.itemclaColl) {
             var materialObj = this.workFlow.materialList.find(x => x.partNumber == event && x.taskId == this.workFlow.taskId);
 
@@ -523,135 +444,91 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                     }
                 }
             }
-// console.log("itemclas",this.itemclaColl);
             for (let i = 0; i < this.itemclaColl.length; i++) {
                 if (event == this.itemclaColl[i][0].partName) {
                     material.itemMasterId = this.itemclaColl[i][0].partId;
                     material.partDescription = this.itemclaColl[i][0].description;
                     material.partNumber = this.itemclaColl[i][0].partName;
-                    material.masterCompanyId = this.itemclaColl[i][0].masterCompanyId ? this.itemclaColl[i][0].masterCompanyId :1;
-                    // material.unitOfMeasureId = this.allPartDetails.find(x => x.itemMasterId == material.itemMasterId).purchaseUnitOfMeasureId;
-                    // material.stockType = this.allPartDetails.find(x => x.itemMasterId == material.itemMasterId).stockType;
-                    material.stockType=this.itemclaColl[i][0].stockType;
+                    material.masterCompanyId = this.itemclaColl[i][0].masterCompanyId ? this.itemclaColl[i][0].masterCompanyId : 1;
+                    material.stockType = this.itemclaColl[i][0].stockType;
                     material.itemClassificationId = this.itemclaColl[i][0].itemClassificationId;
-                    material.itemClassification=this.itemclaColl[i][0].itemClassification;
-                    material.unitOfMeasure=this.itemclaColl[i][0].unitOfMeasure;
-                    material.unitOfMeasureId=this.itemclaColl[i][0].unitOfMeasureId;
+                    material.itemClassification = this.itemclaColl[i][0].itemClassification;
+                    material.unitOfMeasure = this.itemclaColl[i][0].unitOfMeasure;
+                    material.unitOfMeasureId = this.itemclaColl[i][0].unitOfMeasureId;
                 }
             };
 
-            material.conditionCodeId= this.conditionList[0].value;
+            material.conditionCodeId = this.conditionList[0].value;
             this.getPNDetails(material);
         }
-
-        // this.getPartConditions(material, index)
-        // this.loadAltEquPartInfoData(material, index);
     }
+
     clearautoCompleteInput(currentRecord, field) {
         currentRecord[field] = null;
     }
 
-    provisionList(){
-        this.commonService.smartDropDownList('Provision', 'ProvisionId', 'Description').subscribe(res => {
-        //    console.log("sub work order list",this.isSubWorkOrder)
-           this.provisionListData=[];
-            if(this.isSubWorkOrder){
-                res.forEach(element => {
-                    if(element.label!="Sub Work Order"){
-                        this.provisionListData.push(element);
-                    }
-                });
-                // this.provisionListData = res;
-                // console.log("provision list",this.provisionListData)
-            }else{
-                this.provisionListData = res;
-            }
-            // console.log("this.provisionsdfsdf",this.provisionListData)
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        }) 
+    provisionList() {
+        this.isSpinnerVisible = true;
+        let provisionIds = [];
+        provisionIds = this.workFlow.materialList.reduce((acc, x) => {
+            return provisionIds.push(acc.provisionId);
+        }, 0)
+        this.isSpinnerVisible = true;
+        this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 100, provisionIds)
+
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.provisionListData = [];
+                if (this.isSubWorkOrder) {
+                    res.forEach(element => {
+                        if (element.label != "Sub Work Order") {
+                            this.provisionListData.push(element);
+                        }
+                    });
+                } else {
+                    this.provisionListData = res;
+                }
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
+
     getAllPercentage() {
-        if(this.percentageListFromSource.length == 0){
-            this.commonService.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
+        this.isSpinnerVisible = true;
+        let provisionIds = [];
+        provisionIds = this.workFlow.materialList.reduce((acc, x) => {
+            return provisionIds.push(acc.provisionId);
+        }, 0)
+        this.commonService.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue', '', true, 100, provisionIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
                 this.percentageList = res;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
-            })
-        }
-        else{
-            this.percentageList = this.percentageListFromSource;
-        }
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
-    getPartnumbers(value){
-        this.commonService.getPartnumList(value).subscribe(res=>{
-            // console.log("res",res)
+
+    getPartnumbers(value) {
+        this.isSpinnerVisible = true;
+        this.commonService.getPartnumList(value).subscribe(res => {
+            this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        }) 
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
- 
-    // private ptnumberlistdata() {
-        // this.itemser.getPrtnumberslistList().subscribe(
-        //     results => this.onptnmbersSuccessful(results[0]),
-        // );
-
-       
-    // }
-
-    // private onptnmbersSuccessful(allWorkFlows: any[]) {
-    //     this.allPartnumbersInfo = allWorkFlows;
-    // }
-
-    // private loadPartData() {
-    //     this.vendorService.getPartDetails().subscribe(
-    //         data => {
-    //             this.allPartDetails = data[0];
-
-    //             if (this.vendorService.isEditMode == false) {
-
-    //                 for (let i = 0; i < this.partListData.length; i++) {
-    //                     this.partListData[i].partListObj = this.allPartDetails;
-    //                 }
-    //             }
-    //         })
-    // }
-
-    // private loadConditionData() {
-    //     this.conditionService.getConditionList().subscribe(data => {
-    //         console.log("common condition list",data[0])
-    //         this.materialCondition = data[0];
-    //         var defaultCondition = this.materialCondition.find(x => x.description.trim().toLowerCase() == "new");
-
-    //         this.defaultConditionId = defaultCondition != undefined ? defaultCondition.conditionId : 0;
-
-    //         if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && !this.isEdit && this.workFlow.materialList[0] != undefined) {
-    //             this.workFlow.materialList[0].conditionCodeId = this.defaultConditionId;
-    //         }
-    //     })
-    // }
-    partconditionsList = [];
+    
     async getPartConditions(part, index) {
-        // this.materialCondition = [];
-        // console.log("index", index)
+        this.isSpinnerVisible = true;
         if (part) {
             await this.workOrderQuoteService.getPartConditions(part.itemMasterId).subscribe(
                 res => {
+                    this.isSpinnerVisible = false;
                     this.materialCondition = res;
-                    // console.log("res", res);
                     if (this.materialCondition && this.materialCondition.length > 0) {
-
                         this['partconditionsList' + index] = this.materialCondition;
                         var defaultCondition = this['partconditionsList' + index].find(x => x.condition.trim().toLowerCase() == "new");
                         this.defaultConditionId = defaultCondition != undefined ? defaultCondition.conditionId : this.materialCondition[0].conditionId;
-                        // console.log("conditionid", this.defaultConditionId);
                         if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && !this.isEdit && this.workFlow.materialList[index] != undefined) {
                             this.workFlow.materialList[index].conditionCodeId = this.defaultConditionId;
                         }
@@ -660,42 +537,23 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                         this['partconditionsList' + index] = [];
                     }
 
-                },
-                err => {
-                    // this.isSpinnerVisible = false;
-                    this.errorHandling(err);
-                }
-            )
+                }, error => {
+                    this.isSpinnerVisible = false;
+                });
         }
     }
 
-    getProvisionDetails(event,part, index){
-
+    getProvisionDetails(event, part, index) {
     }
 
-    // private loadItemClassData() {
-        // this.itemClassService.getWorkFlows().subscribe(data => { this.itemClassInfo = data[0] });
-//         this.commonService.smartDropDownList('ItemClassification', 'ItemClassificationId', 'Description').subscribe(res => {
-//             this.itemClassInfo = res.map(x => {
-//                 return {
-//                     itemClassificationId: x.value,
-//                     description: x.label
-//                 }
-//               });
-// console.log("res",this.itemClassInfo);
-//          })
-//     }
-
-    altequPartList = [];
     async loadAltEquPartInfoData(data, index) {
         if (data) {
+            this.isSpinnerVisible = true;
             await this.itemClassService.loadAltEquPartInfoData(data.itemMasterId).subscribe(res => {
+                this.isSpinnerVisible = false;
                 this.AltEquPartInfo = res;
                 this['altequPartList' + index] = this.AltEquPartInfo;
-                // console.log("conditions", res);
                 if (this.AltEquPartInfo && this.AltEquPartInfo.length > 0) {
-
-
                     if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && !this.isEdit && this.workFlow.materialList[0] != undefined) {
                         this.workFlow.materialList[0].AltEquPartDescription = this.altequPartList[index][0].partDescription
                     }
@@ -703,71 +561,31 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                     this.workFlow.materialList[0].AltEquPartId = '';
                     this.workFlow.materialList[0].AltEquPartDescription = '';
                 }
-
-
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+            }, error => {
+                this.isSpinnerVisible = false;
             });
         }
     }
-    // getaltequDetails(event, material, index) {
-    //     // var defaultCondition = this.materialCondition.find(x => x.condition.toLowerCase() == "new");
-    //     console.log("event", event, material, index);
-    //     // this.workFlow.materialList[index].AltEquPartId = event.target.value;
-    //     this.workFlow.materialList[index].AltEquPartDescription = this.materialCondition.find(x => {
-    //         if (x.partNumber == event.target.value) {
-    //             return x.partDescription;
-    //         }
-    //     })
-    // }
-    memoIndex;
+
     onAddTextAreaInfo(material, index) {
         this.memoIndex = index;
-        // console.log("memolist", material, index);
         this.textAreaInfo = material.memo;
     }
-    textAreaInfo: any;
+
     onSaveTextAreaInfo(memo) {
         if (memo) {
             this.textAreaInfo = memo;
-            // console.log("hello cjkf", this.workFlow.materialList)
             this.workFlow.materialList[this.memoIndex].memo = this.textAreaInfo;
-            // console.log("index", this.workFlow.materialList);
-            // items.indexOf(3452)
-
         }
         $("#textarea-popup").modal("hide");
     }
+
     onCloseTextAreaInfo() {
         $("#textarea-popup").modal("hide");
     }
-    // private loadUOMData() {
-    //     if(this.unitOfMeasuresList.length == 0){
-    //         this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName').subscribe(uomdata => {
-    //             this.materialUOM = uomdata.map(x => { return {'unitOfMeasureId': x.value, "shortName": x.label, "description": x.label}});
-    
-    //         });
-    //     }
-    //     else{
-    //         this.materialUOM = this.unitOfMeasuresList;
-    //     }
-    // }
-
-    // setUOM(){
-    //     var defaultUOM = this.materialUOM.find(x => x.shortName.trim().toLowerCase() == "ea".toLowerCase());
-    //     this.defaultUOMId = defaultUOM != undefined ? defaultUOM.defaultUOMId : 0;
-    //     if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && !this.isEdit && this.workFlow.materialList[0] != undefined) {
-    //         this.workFlow.materialList[0].unitOfMeasureId = this.defaultUOMId;
-    //     }
-    // }
 
     addRow(): void {
-        // console.log("value assign new")
         var newRow = Object.assign({}, this.row);
-        // var newRow = Object.assign({}, this.workFlow.materialList[0]);
-        // this.workFlow.materialList[0]
         newRow.workflowMaterialListId = "0";
         if (this.taskList) {
             this.taskList.forEach(
@@ -795,21 +613,20 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         newRow.unitOfMeasureId = this.defaultUOMId;
         newRow.isDelete = false;
         newRow.extendedPrice = '';
-        // console.log("new itemsdf", newRow)
-        
-        if(this.materialMandatory){
+
+        if (this.materialMandatory) {
             this.materialMandatory.forEach(
-                x=>{
-                    if(x['id'] == 1){
+                x => {
+                    if (x['id'] == 1) {
                         newRow['mandatoryOrSupplemental'] = x['name'];
                     }
                 }
             )
         }
-        else{
+        else {
             newRow['mandatoryOrSupplemental'] = 'Mandatory';
         }
-            
+
         this.workFlow.materialList.push(newRow);
     }
 
@@ -829,9 +646,9 @@ this.isSubWorkOrder=this.isSubWorkOrder;
 
     calculateExtendedCost(material): void {
         material.unitCost = material.unitCost ? formatNumberAsGlobalSettingsModule(material.unitCost, 2) : '';
-        material.quantity = material.quantity ? material.quantity.toString().replace(/\,/g,'') : 0;
+        material.quantity = material.quantity ? material.quantity.toString().replace(/\,/g, '') : 0;
         if (material.quantity != "" && material.unitCost) {
-            material.extendedCost = formatNumberAsGlobalSettingsModule((material.quantity * material.unitCost.toString().replace(/\,/g,'')), 2);
+            material.extendedCost = formatNumberAsGlobalSettingsModule((material.quantity * material.unitCost.toString().replace(/\,/g, '')), 2);
         }
         else {
             material.extendedCost = "";
@@ -839,11 +656,10 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         this.calculateExtendedCostSummation();
     }
 
-
     // sum of extended cost
     calculateExtendedCostSummation() {
         this.workFlow.materialExtendedCostSummation = this.workFlow.materialList.reduce((acc, x) => {
-            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.totalMaterialCostValue = this.workFlow.materialExtendedCostSummation ? formatNumberAsGlobalSettingsModule(this.workFlow.materialExtendedCostSummation, 2) : null;
@@ -853,7 +669,7 @@ this.isSubWorkOrder=this.isSubWorkOrder;
     calculateExtendedPrice(material): void {
         material.price = material.price ? formatNumberAsGlobalSettingsModule(material.price, 2) : '';
         if (material.quantity != "" && material.price != "") {
-            material.extendedPrice = formatNumberAsGlobalSettingsModule((material.quantity * parseFloat(material.price.toString().replace(/\,/g,''))), 2);
+            material.extendedPrice = formatNumberAsGlobalSettingsModule((material.quantity * parseFloat(material.price.toString().replace(/\,/g, ''))), 2);
         }
         else {
             material.extendedPrice = "";
@@ -861,11 +677,10 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         this.calculateExtendedPriceSummation();
     }
 
-
     // sum of extended cost
     calculateExtendedPriceSummation() {
         this.workFlow.materialExtendedPriceSummation = this.workFlow.materialList.reduce((acc, x) => {
-            return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.materialExtendedPriceSummation = this.workFlow.materialExtendedPriceSummation ? formatNumberAsGlobalSettingsModule(this.workFlow.materialExtendedPriceSummation, 2) : null;
@@ -874,11 +689,11 @@ this.isSubWorkOrder=this.isSubWorkOrder;
     // sum of the qty
     calculateQtySummation() {
         this.workFlow.materialQtySummation = this.workFlow.materialList.reduce((acc, x) => {
-            return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.materialList.forEach(function (material) {
-            material.quantity = material.quantity != '' ? parseFloat(material.quantity.toString().replace(/\,/g,'')) : '';
+            material.quantity = material.quantity != '' ? parseFloat(material.quantity.toString().replace(/\,/g, '')) : '';
         });
     }
 
@@ -886,9 +701,6 @@ this.isSubWorkOrder=this.isSubWorkOrder;
 
         if (!material.quantity) {
             material.quantity = '0';
-            // material.quantity = formatNumberAsGlobalSettingsModule(material.quantity, 0);
-            // event.target.value = parseInt(material.quantity);
-            // material.quantity = parseInt(material.quantity);
         }
     }
 
@@ -922,40 +734,36 @@ this.isSubWorkOrder=this.isSubWorkOrder;
     }
 
     saveMaterialsWorkOrder() {
-        // console.log("materiallist",this.workFlow)
-        if(this.isQuote==true || this.isWorkOrder==true){
-        this.workFlow.materialList.forEach(element => {
-            if(element.provisionId){
-                this.provisionListData.forEach(child => {
-                    if(child.value==element.provisionId){
-                        element.provision=child.label;
-                    }
-                });
-                
-            }
-        });
-    }
+        if (this.isQuote == true || this.isWorkOrder == true) {
+            this.workFlow.materialList.forEach(element => {
+                if (element.provisionId) {
+                    this.provisionListData.forEach(child => {
+                        if (child.value == element.provisionId) {
+                            element.provision = child.label;
+                        }
+                    });
+
+                }
+            });
+        }
         this.saveMaterialListForWO.emit(this.workFlow);
         this.workFlow.materialList = [];
-        // this.row = this.workFlow.materialList[0];
         this.addRow();
         this.workFlow.materialQtySummation = 0;
         this.workFlow.materialExtendedCostSummation = 0;
         this.workFlow.totalMaterialCost = 0;
         this.workFlow.materialExtendedPriceSummation = 0;
     }
-    closeMaterialTab (){
-    this.workFlow.materialList = [];
 
-    // this.getDynamicVariableData:any=[];
-    this.addRow();
-    this.workFlow.materialList[0].conditionCodeId=0;
-    // this.workFlow.materialList[0].mandatoryOrSupplemental=0;
-}
+    closeMaterialTab() {
+        this.workFlow.materialList = [];
+        this.addRow();
+        this.workFlow.materialList[0].conditionCodeId = 0;
+    }
+
     updateMaterialsWorkOrder() {
         this.updateMaterialListForWO.emit(this.workFlow);
         this.workFlow.materialList = [];
-        // this.row = this.workFlow.materialList[0];
         this.addRow();
         this.workFlow.materialQtySummation = 0;
         this.workFlow.materialExtendedCostSummation = 0;
@@ -972,7 +780,6 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             })
         }
         catch (e) {
-            // console.log(e);
         }
     }
 
@@ -1001,34 +808,28 @@ this.isSubWorkOrder=this.isSubWorkOrder;
     }
 
     getPNDetails(part) {
-        // console.log("get pnDetails", part)
         if (part.partNumber && part.conditionCodeId) {
-            // this.allPartDetails.forEach(
-                // pn => {
-                    // if (pn.partNumber == part.partNumber) {
-                        this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionCodeId)
-                            .subscribe(
-                                partDetail => {
-                                    if (partDetail) {
-                                        part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["pP_UnitPurchasePrice"], 2);
-                                        part.billingRate = partDetail["sP_FSP_FlatPriceAmount"];
-                                        part.markupPercentageId = partDetail["sP_CalSPByPP_MarkUpPercOnListPrice"];
-                                        part.stockType = part.stockType ? part.stockType : partDetail["stockType"];
-                                        part.price = part.price ? formatNumberAsGlobalSettingsModule(part.price, 2) : formatNumberAsGlobalSettingsModule(partDetail["salePrice"], 2);
-                                        this.calculateExtendedCost(part);
-                                        this.calculateExtendedPrice(part);
-                                    }
-                                },
-                                err => {
-                                    // this.isSpinnerVisible = false;
-                                    this.errorHandling(err);
-                                }
-                            // )
-                    // }
-                // }
-            )
+            this.isSpinnerVisible = true;
+            this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionCodeId)
+                .subscribe(
+                    partDetail => {
+
+                        this.isSpinnerVisible = false;
+                        if (partDetail) {
+                            part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : formatNumberAsGlobalSettingsModule(partDetail["pP_UnitPurchasePrice"], 2);
+                            part.billingRate = partDetail["sP_FSP_FlatPriceAmount"];
+                            part.markupPercentageId = partDetail["sP_CalSPByPP_MarkUpPercOnListPrice"];
+                            part.stockType = part.stockType ? part.stockType : partDetail["stockType"];
+                            part.price = part.price ? formatNumberAsGlobalSettingsModule(part.price, 2) : formatNumberAsGlobalSettingsModule(partDetail["salePrice"], 2);
+                            this.calculateExtendedCost(part);
+                            this.calculateExtendedPrice(part);
+                        }
+                    }, error => {
+                        this.isSpinnerVisible = false;
+                    });
         }
     }
+
     getDynamicVariableData(variable, index) {
         return this[variable + index];
     }
@@ -1043,6 +844,7 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         $('#step7').collapse('show');
         $('#step8').collapse('show');
     }
+
     closeAllItemMasterDetails() {
         $('#step1').collapse('hide');
         $('#step2').collapse('hide');
@@ -1053,6 +855,7 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         $('#step7').collapse('hide');
         $('#step8').collapse('hide');
     }
+
     closeItemMasterDetails() {
         $('#step1').collapse('show');
         $('#step2').collapse('hide');
@@ -1066,44 +869,39 @@ this.isSubWorkOrder=this.isSubWorkOrder;
 
     toGetAllDocumentsList(itemMasterId) {
         var moduleId = 22;
+        this.isSpinnerVisible = true;
         this.commonService.GetDocumentsList(itemMasterId, moduleId).subscribe(res => {
             this.allUploadedDocumentsList = res;
-            //console.log(this.allEmployeeTrainingDocumentsList);
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        })
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
+
     getItemMasterById(itemMasterId) {
         this.itemMasterService.getItemMasterDetailById(itemMasterId).subscribe(res => {
             this.viewItemMaster = res[0];
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
 
     getPurchaseSalesInfo(id) {
+        this.isSpinnerVisible = true;
         this.itemMasterService.getPurcSaleDetailById(id).subscribe(res => {
+
+            this.isSpinnerVisible = false;
             this.purchaseSalesInfo = res;
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
     openView(row) {
-        // console.log(row);
-
         this.closeItemMasterDetails();
-        // $('#step1').collapse('show');
         this.itemMasterId = row.itemMasterId;
         this.toGetAllDocumentsList(row.itemMasterId);
         this.getItemMasterById(row.itemMasterId);
         this.getPurchaseSalesInfo(this.itemMasterId);
-        // this.viewItemMaster = row;
         this.partNumber = row.partNumber;
         this.description = row.partDescription;
         if (row.isAlternatePartChecked) {
@@ -1130,8 +928,6 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             this.priorityId = row.priority.description;
         }
         else { this.priorityId = "" }
-
-        //this.currencyId = row.currencyId;
 
         if (row.currency) {
             this.currencyId = row.currency.symbol;
@@ -1179,7 +975,7 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         this.exportValue = row.exportValue;
         this.salesMarkUpOnListPrice = row.salesMarkUpOnListPrice;
         this.createdBy = row.createdBy;
-        //this.exportClassificationId = row.exportClassificationId;
+
         if (row.exportClassification) {
             this.exportClassificationId = row.exportClassification.description;
         }
@@ -1190,7 +986,6 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         this.exportSizeWidth = row.exportSizeWidth;
         this.exportSizeHeight = row.exportSizeHeight;
         this.updatedBy = row.updatedBy;
-        // this.exportCountryId = row.exportCountryId;
         this.memo = row.memo;
         this.createddate = row.createdDate;
         this.updatedDate = row.updatedDate;
@@ -1198,33 +993,30 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         this.getAllSubChapters();
         this.getAircraftMappedDataByItemMasterId(row.itemMasterId);
         this.getATAMappedDataByItemMasterId(row.itemMasterId);
-        // this.getCapabilityList(row.itemMasterId);
         this.getNtaeData(row.itemMasterId);
         this.getExchange(row.itemMasterId);
 
         this.loadMasterCompanies();
-        // this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-        // this.modal.result.then(() => {
-        //         console.log('When user closes');
-        //     },
-        //     () => { console.log('Backdrop click') });
     }
+
     getAllSubChapters() {
+        this.isSpinnerVisible = true;
         this.atasubchapter1service
             .getAtaSubChapter1List()
             .subscribe(atasubchapter => {
+
+                this.isSpinnerVisible = false;
                 const responseData = atasubchapter[0];
                 this.orginalAtaSubChapterValues = responseData;
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
+            }, error => {
+                this.isSpinnerVisible = false;
             });
     }
+
     getAircraftMappedDataByItemMasterId(itemMasterId) {
         this.itemMasterService.getMappedAirCraftDetails(itemMasterId).subscribe(data => {
             const responseData = data;
-            this.aircraftListDataValues = responseData.map(x => { //aircraftListData
+            this.aircraftListDataValues = responseData.map(x => { 
                 return {
                     ...x,
                     aircraft: x.aircraftType,
@@ -1233,28 +1025,28 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                     memo: x.memo,
                 }
             });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
+
     getATAMappedDataByItemMasterId(itemMasterId) {
-        // check whether edit or create and send and passes ItemMasterId
+        this.isSpinnerVisible = true;
         this.itemMasterService.getMappedATADetails(itemMasterId).subscribe(res => {
             this.ataMappedList = res.map(x => {
+
+                this.isSpinnerVisible = false;
                 return {
                     ...x,
                     ataChapterName: x.ataChapterCode + ' - ' + x.ataChapterName,
                     ataSubChapterDescription: getValueFromArrayOfObjectById('ataSubChapterCode', 'ataSubChapterId', x.ataSubChapterId, this.orginalAtaSubChapterValues) + ' - ' + x.ataSubChapterDescription
                 }
             });
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
+
     getNtaeData(itemMasterId) {
         this.filterManufacturerData = [];
         this.filterDiscriptionData = [];
@@ -1299,37 +1091,42 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             globalFilter: null
         }
 
+        this.isSpinnerVisible = true;
         this.itemMasterService.getnhatlaaltequpartlis(reqData).subscribe(res => {
+
+            this.isSpinnerVisible = false;
             this.ntaeData = res;
             this.getntlafieds(this.ntaeData);
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        });
-        this.itemMasterService.getnhatlaaltequpartlis(reqDatas).subscribe(res => {
-            this.ntaeData2 = res;
-            this.getntlafieds(this.ntaeData2);
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        });
-        this.itemMasterService.getnhatlaaltequpartlis(reqDatas1).subscribe(res => {
-            this.ntaeData3 = res;
-            this.getntlafieds(this.ntaeData3);
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
 
+        this.isSpinnerVisible = true;
+        this.itemMasterService.getnhatlaaltequpartlis(reqDatas).subscribe(res => {
+
+            this.isSpinnerVisible = false;
+            this.ntaeData2 = res;
+            this.getntlafieds(this.ntaeData2);
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
+
+        this.isSpinnerVisible = true;
+        this.itemMasterService.getnhatlaaltequpartlis(reqDatas1).subscribe(res => {
+            this.ntaeData3 = res;
+
+            this.isSpinnerVisible = false;
+            this.getntlafieds(this.ntaeData3);
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
+
+        this.isSpinnerVisible = true;
         this.itemMasterService.getequivalencypartlist(reqDatas2).subscribe(res => {
             this.ntaeData4 = res;
+
+            this.isSpinnerVisible = false;
             for (let i = 0; i < this.ntaeData4.length; i++) {
-                // if (this.ntaeData4[i].attachmentDetails) {
-                // 	this.ntaeData4[i]["fileName"] = this.ntaeData4[i].attachmentDetails.ad.fileName
-                // }
                 this.filterManufacturerData.push({
                     label: this.ntaeData4[i].manufacturer,
                     value: this.ntaeData4[i].manufacturerId
@@ -1343,61 +1140,40 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                     value: this.ntaeData4[i].itemClassificationId
                 });
             }
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
-
-        //}
     }
+
     getExchange(itemMasterId) {
+        this.isSpinnerVisible = true;
         this.itemMasterService.getExchangeLoan(itemMasterId).subscribe(res => {
+
+            this.isSpinnerVisible = false;
             if (res[0] != null && res[0] != undefined) {
                 this.exchangeLoanInfo = res[0];
             }
-            // if (c[0] != null) {
-            // this.currentItem = c[0];
-            // this.exchangeListPrice = this.currentItem.exchangeListPrice;
-            // this.exchangeCorePrice = this.currentItem.exchangeCorePrice;
-            // this.exchangeOverhaulPrice = this.currentItem.exchangeOverhaulPrice;
-            // this.exchangeOutrightPrice = this.currentItem.exchangeOutrightPrice;
-            // this.exchangeCoreCost = this.currentItem.exchangeCoreCost;
-            // this.loanFees = this.currentItem.loanFees;
-            // this.loanCorePrice = this.currentItem.loanCorePrice;
-            // this.loanOutrightPrice = this.currentItem.loanOutrightPrice;
-
-            // this.showExchange = this.currentItem.isExchange;
-            // this.showLoan = this.currentItem.isLoan;
-            // }
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
+
     private loadMasterCompanies() {
         this.alertService.startLoadingMessage();
-        // this.loadingIndicator = true;
-
+        this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
-            results => {this.onDataMasterCompaniesLoadSuccessful(results[0])
-            // error => this.onDataLoadFailed(error)
-             },
-             err => {
-                 // this.isSpinnerVisible = false;
-                 this.errorHandling(err);
-             } );
-
+            results => {
+                this.isSpinnerVisible = false;
+                this.onDataMasterCompaniesLoadSuccessful(results[0])
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     private onDataMasterCompaniesLoadSuccessful(allStockInfo: MasterCompany[]) {
-        // alert('success');
         this.alertService.stopLoadingMessage();
-        // this.loadingIndicator = false;
-        //this.allStockInfo = allStockInfo;
-
     }
+
     getntlafieds(ntaeData) {
         for (let i = 0; i < ntaeData.length; i++) {
             this.filterManufacturerData.push({
@@ -1411,31 +1187,56 @@ this.isSubWorkOrder=this.isSubWorkOrder;
         }
         this.itemMasterView = true;
         $('#itemMasterView').modal('show');
-
     }
+
     dismissItemMasterModel() {
         $('#itemMasterView').modal('hide');
         this.itemMasterId = undefined;
     }
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
-    checkQuantityAvailability(){
+    checkQuantityAvailability() {
         let result = false;
         this.workFlow.materialList.forEach(
             material => {
-                if(!material.quantity || Number(material.quantity)<=0){
+                if (!material.quantity || Number(material.quantity) <= 0) {
                     result = true;
                 }
             }
         )
         return result;
     }
-    moduleName:any='';
-    errorHandling(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
+
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
+    }
+
+    errorHandling(err) {
+        if (err['error']['errors']) {
+            err['error']['errors'].forEach(x => {
                 this.alertService.showMessage(
                     this.moduleName,
                     x['message'],
@@ -1443,7 +1244,7 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                 );
             })
         }
-        else{
+        else {
             this.alertService.showMessage(
                 this.moduleName,
                 'Saving data Failed due to some input error',
@@ -1451,9 +1252,10 @@ this.isSubWorkOrder=this.isSubWorkOrder;
             );
         }
     }
-    handleError(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
+    
+    handleError(err) {
+        if (err['error']['errors']) {
+            err['error']['errors'].forEach(x => {
                 this.alertService.showMessage(
                     this.moduleName,
                     x['message'],
@@ -1461,7 +1263,7 @@ this.isSubWorkOrder=this.isSubWorkOrder;
                 );
             })
         }
-        else{
+        else {
             this.alertService.showMessage(
                 this.moduleName,
                 'Saving data Failed due to some input error',

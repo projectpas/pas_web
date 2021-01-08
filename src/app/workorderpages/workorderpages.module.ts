@@ -201,7 +201,7 @@ import { TreeTableModule } from 'primeng/treetable';
     SummarizedChargesComponent,
     SummarizedFreightComponent,
     CommunicationComponent,
-    AnalysisComponent,
+    AnalysisComponent
 
   ],
   entryComponents: [],

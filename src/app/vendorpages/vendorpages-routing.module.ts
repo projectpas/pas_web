@@ -25,6 +25,8 @@ import { PolistComponent } from '../components/vendor/purchase-orders/polist/pol
 import { CreatePoComponent } from '../components/vendor/purchase-orders/create-po/create-po.component';
 import { PoApprovalComponent } from '../components/vendor/purchase-orders/po-approval/po-approval.component';
 import { RoApprovalComponent } from '../components/vendor/repaire-orders/ro-approval/ro-approval.component';
+import { RoApprovalRuleComponent } from '../components/vendor/repaire-orders/ro-approval-rule/ro-approval-rule.component';
+import { RoSettingsComponent } from '../components/vendor/repaire-orders/ro-settings/ro-settings.component';
 import { PurchaseSetupComponent } from '../components/vendor/purchase-orders/purchase-setup/purchase-setup.component';
 import { CreateRoComponent } from '../components/vendor/repaire-orders/create-ro/create-ro.component';
 import { RoListComponent } from '../components/vendor/repaire-orders/ro-list/ro-list.component';
@@ -65,6 +67,8 @@ const vendorPagesRoutes: Routes = [
 			{ path: "app-po-approval", component: PoApprovalComponent, data: { title: "Po Approval" } },
 			{ path: "app-po-approval-rule", component: PoApprovalRuleComponent, data: { title: "Po Approval Rule"} },
 			{ path: "app-ro-approval", component: RoApprovalComponent, data: { title: "Ro Approval" } },
+			{ path: "app-ro-approval-rule", component: RoApprovalRuleComponent, data: { title: "Ro Approval Rule" } },
+			{ path: "app-ro-settings", component: RoSettingsComponent, data: { title: "Ro Settings" } },			
 			{ path: "app-purchase-setup", component: PurchaseSetupComponent, data: { title: "Purchase Setup" } },
 			{ path: "app-purchase-setup/edit/:id", component: PurchaseSetupComponent, data: { title: "Purchase Setup" } },
 			{ path: "app-purchase-setup/vendor/:vendorId", component: PurchaseSetupComponent, data: { title: "Purchase Setup" } },

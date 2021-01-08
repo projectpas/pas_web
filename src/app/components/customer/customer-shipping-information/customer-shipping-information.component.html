@@ -27,11 +27,12 @@
           <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">                    
-                    <!-- <a data-toggle="collapsed" href="#step1">Domestic Shipping Info</a> -->
-                    <a class="" data-toggle="collapse" href="#step1">Domestic Shipping Info</a>
+                    <a class="collapsed" data-toggle="collapse" href="#step1" aria-expanded="false">Domestic Shipping Info</a>
+                    <!-- <a class="" data-toggle="collapse" href="#step1">Domestic Shipping Info</a> -->
                 </h4>
             </div>
-            <div id="step1" class="panel-collapse collapse in show">
+            <!-- <div id="step1" class="panel-collapse collapse in show"> -->
+            <div id="step1" class="panel-collapse collapse">
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
                       <div style="text-align: right;">
@@ -935,12 +936,13 @@
               }">
               {{ audit.shippingAccountInfo }}
             </td>
-            <td [ngStyle]="{
+            <td
+              [ngStyle]="{
                 color: getColorCodeForShipViaHistory(i, 'memo', audit.memo)
                   ? 'black'
                   : 'red'
               }">
-              {{ audit.memo }}
+            <p [innerHTML]="audit.memo"></p>
             </td>
             <td style="text-align: center;">
               <span class="value">
@@ -1369,7 +1371,17 @@
               <div class="col-md-2">
                 <div class="form-group">
                   <label>Memo</label>
-                  <textarea class="form-control" name="memo" rows="2" (ngModelChange)="enableSaveShipViaDomestic()" [(ngModel)]="shipViaDomestic.memo"></textarea>
+                  <div class="align_adh">
+                      <div [innerHTML]="shipViaDomestic.memo" 
+                      [(ngModel)]="shipViaDomestic.memo"
+                       matTooltipPosition="above"
+                        [matTooltip]="parsedText(shipViaDomestic.memo)" class="text_editor_box"
+                          style="width: 96% !important;"></div>
+                      <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
+                          data-target="#textarea-popup1" matTooltip="Memo"
+                          matTooltipPosition="above"
+                          (click)="onAddDomesticMemo()"></i>
+                  </div>
                 </div>
               </div>
 
@@ -1388,6 +1400,38 @@
               </div>
             </div>
           </div>
+          <div class="modal fade" id="textarea-popup1" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+          <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="onCloseTextAreaInfo(1)">&times;</button>
+                        <h4 class="modal-title">Edit Memo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-fixed workflow-table-material">
+                            <thead>
+                                <th style="color: #fff;">Memo</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p-editor [(ngModel)]="textDomesticMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                        name="textDomesticMemo" ></p-editor>
+                                    </td>
+                                </tr>
+                            </tbody> 
+                        </table>
+                        <div style="float:right;margin-top: 12px;">
+                            <button type="button" class="btn btn-primary"
+                             (ngModelChange)="enableSave()" (click)="onSaveDomesticMemo()" [disabled]="disableEditor">Save</button>
+                        <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(1)">Close</button>
+                       </div> 
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
           <div style="text-align: right !important; padding-right: 15px;">
             <div class="checkbox-cstm" style="margin-left: 0;">
               <label style="width: auto ">
@@ -1453,7 +1497,9 @@
                       }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                   </span>
                 </td>
-                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                <ng-container *ngFor="let col of columns">
+                  <td class="ui-resizable-column" *ngIf="col.field != 'memo'"
+                  pReorderableRowHandle>
                   {{
                     col.field == 'createdDate'
                       ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -1462,6 +1508,10 @@
                       : rowData[col.field]
                   }}
                 </td>
+                <td *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                </td>
+                </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
                   <div *ngIf="!currentDeletedstatusShipVia">
                       <p-inputSwitch [(ngModel)]="rowData['isActive']" matTooltip="Is Active" matTooltipPosition="above"
@@ -1737,18 +1787,15 @@
                     : 'red'
                 }">
                 {{ audit.shippingAccountInfo }}
-              </td>
-              <td [ngStyle]="{
-                  color: getColorCodeForInterShipViaHistory(
-                    i,
-                    'memo',
-                    audit.memo
-                  )
+              </td>             
+              <td
+                [ngStyle]="{
+                  color: getColorCodeForInterShipViaHistory(i, 'memo', audit.memo)
                     ? 'black'
                     : 'red'
                 }">
-                {{ audit.memo }}
-              </td>
+              <p [innerHTML]="audit.memo"></p>
+            </td>
               <td style="text-align: center;">
                 <span class="value">
                   <label class="wauto">
@@ -1940,17 +1987,23 @@
 
               <div class="col-md-2">
                 <div class="form-group">
-                  <label>Shipping Account Info <span class="clr-red">*</span></label>
+                  <label>Shipping Account <span class="clr-red">*</span></label>
                   <input class="form-control" type="text" name="shippingAccountinfo" (ngModelChange)="enableSaveShipViaInternational()"
                     [(ngModel)]="shipViaInternational.shippingAccountInfo" required />
                 </div>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <div class="form-group">
                   <label>Memo</label>
-                  <textarea class="form-control" name="memo" rows="2" (ngModelChange)="enableSaveShipViaInternational()"
-                    [(ngModel)]="shipViaInternational.memo"></textarea>
-                </div>
+                    <div class="align_adh">
+                      <div [innerHTML]="shipViaInternational.memo"  matTooltipPosition="above" [matTooltip]="parsedText(shipViaInternational.memo)" class="text_editor_box"
+                          style="width: 96% !important;"></div>
+                      <i class="fa fa-pencil contoel_v" style="font-size:12px !important" data-toggle="modal"
+                          data-target="#textarea-popup2" matTooltip="Memo"
+                          matTooltipPosition="above"
+                          (click)="onAddInternationalmemo()"></i>
+                  </div>
+                  </div>
               </div>
 
               <div class="col-md-2">
@@ -1966,6 +2019,37 @@
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="modal fade" id="textarea-popup2" role="dialog" data-backdrop="static" data-keyboard="false">
+            <div class="modal-dialog modal-sm" style="max-width: 500px !important;">
+          <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="onCloseTextAreaInfo(2)">&times;</button>
+                        <h4 class="modal-title">Edit Memo</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-fixed workflow-table-material">
+                            <thead>
+                                <th style="color: #fff;">Memo</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <p-editor [(ngModel)]="textInternationalMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                        name="textAreaInf2o" ></p-editor>
+                                    </td>
+                                </tr>
+                            </tbody> 
+                        </table>
+                        <div style="float:right;margin-top: 12px;">
+                            <button type="button" class="btn btn-primary" (ngModelChange)="enableSave()"
+                            (click)="onSaveInternationalMemo()" [disabled]="disableEditor">Save</button>
+                        <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(2)">Close</button>
+                       </div> 
+                    </div>
+                </div>
+
             </div>
           </div>
           <div style="text-align: right !important; padding-right: 15px;">
@@ -2014,9 +2098,7 @@
                       internationShipVia.filter(
                         $event.target.value,
                         col.field,
-                        'contains'
-                      )
-                    " />
+                        'contains')" />
                 </th>
                 <th></th>
               </tr>
@@ -2031,7 +2113,10 @@
                       }" class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                   </span>
                 </td>
-                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+
+                <ng-container *ngFor="let col of columns">
+                  <td class="ui-resizable-column" *ngIf="col.field != 'memo'"
+                  pReorderableRowHandle>
                   {{
                     col.field == 'createdDate'
                       ? (rowData[col.field] | date: 'MM/dd/yyyy')
@@ -2040,6 +2125,10 @@
                       : rowData[col.field]
                   }}
                 </td>
+                <td *ngIf="col.field == 'memo'">
+                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                </td>
+                </ng-container>
                 <td style="width: 140px; text-align: center;" *ngIf="isViewMode == false">
                     <div *ngIf="currentDeletedstatusIntShipVia == false">
                       <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="rowData.isPrimary == true"
@@ -2222,10 +2311,11 @@
                 sourceViewforInterShippingVia.shippingAccountInfo
               }}</span>
             </p>
-            <p>
-              <span class="label"><b>Memo: </b></span><span class="value">{{
-                sourceViewforInterShippingVia.memo
-              }}</span>
+            <p style="vertical-align: top;">
+              <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
+              <span class="value">
+                <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforInterShippingVia.memo"></p>
+              </span>
             </p>
             <p>
               <span class="label"><b>In Active : </b></span>
@@ -2295,11 +2385,11 @@
                 sourceViewforDomesticShippingVia.shippingAccountInfo
               }}</span>
             </p>
-            <p>
-              <span class="label"><b>Memo: </b></span><span class="value">{{
-                sourceViewforDomesticShippingVia.memo
-              }}</span>
-            </p>
+            <p style="vertical-align: top;">
+              <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
+              <span class="value">
+            <p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforDomesticShippingVia.memo">
+            </p></span></p>
             <p>
               <span class="label"><b>In Active : </b></span><span class="value">
                 <input type="checkbox" name="isActive" [(ngModel)]="sourceViewforDomesticShippingVia.isActive" disabled>

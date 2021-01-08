@@ -8,6 +8,9 @@ import { takeUntil } from 'rxjs/operators';
 import { AlertService, MessageSeverity } from "../../services/alert.service";
 import { AuthService } from "../../services/auth.service";
 import { SalesOrderService } from "../../services/salesorder.service";
+import { SOSettingsModel } from "../../components/sales/quotes/models/verify-sales-quote-model";
+import { DatePipe } from "@angular/common";
+import * as $ from "jquery";
 @Component({
     selector: 'app-sales-order-settings-list',
     templateUrl: './sales-order-settings-list.component.html',
@@ -21,6 +24,7 @@ export class SalesOrderSettingsListComponent {
     auditHistory: any = [];
     modal: NgbModalRef;
     isSpinnerVisible = false;
+    targetData: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     selectedGridColumn: any[];
     disableCreateNewSettings = false;
@@ -29,7 +33,7 @@ export class SalesOrderSettingsListComponent {
         { field: 'prefix', header: 'Prefix' },
         { field: 'sufix', header: 'Suffix' },
         { field: 'startCode', header: 'Start Code' },
-        { field: 'defaultStatusName', header: 'Status' },
+        { field: 'defaultStatusName', header: 'SO Status' },
         { field: 'defaultPriorityName', header: 'Priority' }
     ];
     gridColumns = [
@@ -37,7 +41,7 @@ export class SalesOrderSettingsListComponent {
         { field: 'prefix', header: 'Prefix' },
         { field: 'sufix', header: 'Suffix' },
         { field: 'startCode', header: 'Start Code' },
-        { field: 'defaultStatusName', header: 'Status' },
+        { field: 'defaultStatusName', header: 'SO Status' },
         { field: 'defaultPriorityName', header: 'Priority' }
     ];
     pageSize: number = 10;
@@ -48,6 +52,7 @@ export class SalesOrderSettingsListComponent {
     totalRecords: number = 0;
     totalPages: number = 0;
     selected;
+    selectedOnly: boolean = false;
 
     constructor(private router: ActivatedRoute,
         public customerService: CustomerService,
@@ -56,7 +61,8 @@ export class SalesOrderSettingsListComponent {
         public alertService: AlertService,
         private modalService: NgbModal,
         public authService: AuthService,
-        private route: Router) {
+        private route: Router,
+        private datePipe: DatePipe) {
     }
 
     ngOnInit() {
@@ -64,6 +70,9 @@ export class SalesOrderSettingsListComponent {
         this.getAllSOSettings();
     }
 
+    closeModal() {
+        $("#downloadConfirmation").modal("hide");
+    }
     ngOnChange() {
     }
 
@@ -115,6 +124,7 @@ export class SalesOrderSettingsListComponent {
             this.isSpinnerVisible = false;
             this.getAllSOSettings();
             this.dismissModel();
+            this.salesOrderService.soSettingsData = new SOSettingsModel();
             this.alertService.showMessage(
                 'SO Settings',
                 `Succesfully deleted setting`,
@@ -156,6 +166,7 @@ export class SalesOrderSettingsListComponent {
                     this.disableCreateNewSettings = true;
                 } else {
                     this.totalRecords = 0;
+                    this.disableCreateNewSettings = false;
                 }
 
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -189,5 +200,52 @@ export class SalesOrderSettingsListComponent {
             }
         );
     }
+    exportCSV(dt) {
+        this.isSpinnerVisible = true;
+        this.salesOrderService
+            .getAllSalesOrderSettings().subscribe(res => {
+                let response: any = res;
+                const vList = response.map(x => {
+                    return {
+                        ...x,
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    }
+                });
 
+                dt._value = vList;
+                dt.exportCSV();
+                dt.value = this.soqSettingsList;
+                this.isSpinnerVisible = false;
+            }, err => {
+                this.isSpinnerVisible = false;
+                const errorLog = err;
+                this.onDataLoadFailed(errorLog);
+            });
+
+    }
+
+    onDataLoadFailed(log) {
+        // this.isSpinnerVisible = false;
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
+    }
 }

@@ -1,8 +1,6 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
-import { IExclusionEstimatedOccurance } from "../Workflow/ExclusionEstimatedOccurance";
-import { IExclusion } from "../Workflow/Exclusion";
 import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import * as $ from 'jquery'
@@ -11,6 +9,7 @@ import { ItemClassificationService } from "../services/item-classfication.servic
 import { VendorService } from "../services/vendor.service";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'grd-exclusions',
     templateUrl: './Exclusions-Create.component.html',
@@ -28,9 +27,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     @Input() isWorkFlow: boolean = false;
     @Output() saveExclusionsListForWO = new EventEmitter();
     @Output() updateExclusionsListForWO = new EventEmitter();
-
-    @Output() notify: EventEmitter<IWorkFlow> =
-        new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
 
     exclusionEstimatedOccurances: any = [];
     row: any;
@@ -45,13 +42,20 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     materialCondition: any;
     defaultConditionId: any;
     partListData: any = [];
-    conditionList: any=[];
-
+    conditionList: any = [];
+    isSpinnerVisible = false;
+    textAreaInfo: any;
+    memoIndex;
+    modal: NgbModalRef;
+    deleteRowRecord:any={};
+    deletedRowIndex:any;
+    disabledMemo: boolean = false;
 
     constructor(private actionService: ActionService,
         private workOrderQuoteService: WorkOrderQuoteService,
         private itemClassService: ItemClassificationService,
         private vendorService: VendorService,
+        private modalService: NgbModal,
         private itemser: ItemMasterService, private alertService: AlertService,
         private commonService: CommonService,) {
         for (var i = 0; i <= 100; i++) {
@@ -60,21 +64,17 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.loadItemClassData();
-        this.loadPartData();        
         if (this.isEdit) {
             this.workFlow.exclusions = [];
             const data = {
                 ...this.editData,
                 partDescription: this.editData.epnDescription,
                 partNumber: this.editData.epn,
-                estimtPercentOccurrance:(this.isQuote)?this.editData.exstimtPercentOccuranceId:this.editData.exstimtPercentOccurance
-            } 
-            console.log("edit data",this.editData)
+                estimtPercentOccurrance: (this.isQuote) ? this.editData.exstimtPercentOccuranceId : this.editData.exstimtPercentOccurance
+            }
             this.workFlow.exclusions.push(data);
             this.reCalculate();
-            if (this.isWorkOrder){
-                // this.getPNDetails(data); 
+            if (this.isWorkOrder) {
                 this.workFlow.exclusions.map((x, index) => {
                     this.getPartConditions(x, index),
                         this.getPNDetails(x);
@@ -88,48 +88,30 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                 this.addRow();
             }
         }
-
         if (this.isWorkOrder) {
             this.row = this.workFlow.exclusions[0];
-
-            // this.row = this.workFlow.exclusions[0];
-            // this.addRow();
-
         } else {
             this.row = this.workFlow.exclusions[0];
             if (this.row == undefined) {
                 this.row = {};
             }
-            this.workFlow.exclusions.map((x, index) => {
-                this.getPartConditions(x, index),
-                    this.getPNDetails(x);
-            })
             if (!this.isQuote) {
                 this.row.taskId = this.workFlow.taskId;
-
             }
         }
-        this.ptnumberlistdata();
         if (this.UpdateMode) {
             this.reCalculate();
         }
+        if(this.workFlow.exclusions && this.workFlow.exclusions.length !=0){
+        this.workFlow.exclusions.map((x, index) => {
+                this.workFlow.exclusions[index].partName=x;
+                this.workFlow.exclusions[index].conditionId=x.conditionCodeId ? x.conditionCodeId : x.conditionId;
+        })
+    }
         this.getConditionsList();
     }
 
-
     ngOnChanges(): void {
-        // if(this.workFlow) {
-        //     if(this.workFlow.exclusions.length > 0) {
-        //         this.workFlow.exclusions = this.workFlow.charges.map(x => {
-        //             return {
-        //                 ...x,
-        //                 quantity: x.quantity ? formatNumberAsGlobalSettingsModule(x.quantity, 0) : '0',
-        //                 unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
-        //                 extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00'
-        //             }
-        //         })
-        //     }
-        // }
         if (this.UpdateMode) {
             this.reCalculate();
         }
@@ -138,36 +120,68 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.addRow();
         }
     }
-
-    getConditionsList(){
-        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(res => {
-            this.conditionList = res;
-            console.log(res);
-        })
+    
+    enableSaveMemo() {
+        this.disabledMemo = false;
     }
+
+    getConditionsList() {
+        this.isSpinnerVisible = true;
+        let consitionIds = [];
+        if (this.UpdateMode) {
+            consitionIds = this.workFlow.exclusions.reduce((acc, x) => {
+                return consitionIds.push(acc.conditionId);
+            }, 0)
+        }
+        if(consitionIds && consitionIds.length ==0){
+            consitionIds.push(0)
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, consitionIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.conditionList = res;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
+
     reCalculate() {
         this.calculateQtySummation();
         this.calculateExtendedCostSummation();
     }
 
-    private loadPartData() {
-        this.vendorService.getPartDetails().subscribe(
-            data => {
-                this.allPartDetails = data[0];
-
-                if (this.vendorService.isEditMode == false) {
-
-                    for (let i = 0; i < this.partListData.length; i++) {
-                        this.partListData[i].partListObj = this.allPartDetails;
+    loapartItems(strvalue = '') {
+        this.isSpinnerVisible = true;
+        let exclusionsIds = [];
+        if (this.UpdateMode) {
+            exclusionsIds = this.workFlow.exclusions.reduce((acc, x) => {
+                return exclusionsIds.push(acc.itemMasterId);
+            }, 0)
+        }
+        this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, exclusionsIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.partCollection = res.map(x => {
+                    return {
+                        partId: x.value,
+                        itemMasterId: x.value,
+                        partDescription: x.partDescription,
+                        partNumber: x.label,
+                        itemClassificationId: x.itemClassificationId,
+                        itemClassification: x.itemClassification,
+                        partName: x.label,
+                        conditionId:x.conditionId
                     }
-                }
-            })
+                });
+                this.itemclaColl = this.partCollection;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     addRow(): void {
         var newRow = Object.assign({}, this.row);
         newRow.workflowExclusionId = "0";
-        // newRow.taskId = this.workFlow.taskId;
         if (this.taskList) {
             this.taskList.forEach(
                 task => {
@@ -178,8 +192,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             )
         }
         newRow.partDescription = "";
-
-        newRow.conditionCodeId = '';
+        newRow.conditionId = '';
         newRow.itemClassificationId = '';
         newRow.stockType = '';
         newRow.estimtPercentOccurrance = "";
@@ -191,100 +204,68 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         newRow.unitCost = "";
         newRow.memo = "";
         newRow.itemMasterId = "";
-        // newRow.estimtPercentOccurranceId = '';
         newRow.isDelete = false;
         this.workFlow.exclusions.push(newRow);
     }
 
     onTaskChange(task) {
-        this.taskList.forEach((t)=>{
-            if(t.taskId == task.taskId){
+        this.taskList.forEach((t) => {
+            if (t.taskId == task.taskId) {
                 task['taskName'] = t.description;
             }
         })
     }
-
     clearValue(object, index) {
         object.partNumber = null;
     }
-    deleteRow(index): void {
-        if (this.workFlow.exclusions[index].workflowExclusionId == undefined || this.workFlow.exclusions[index].workflowExclusionId == "0" || this.workFlow.exclusions[index].workflowExclusionId == "") {
-            this.workFlow.exclusions.splice(index, 1);
-        }
-        else {
-            this.workFlow.exclusions[index].isDelete = true;
-        }
-        this.reCalculate();
-    }
 
     onPartSelect(event, exclusion, index) {
-        console.log("current record", exclusion, index);
-        var isEpnExist = this.workFlow.exclusions.filter(x => x.partNumber == exclusion.partNumber && x.taskId == this.workFlow.taskId);
-
+        var isEpnExist = this.workFlow.exclusions.filter(x => x.partNumber == event.partNumber && x.taskId == this.workFlow.taskId);
         if (isEpnExist.length > 1) {
             exclusion.itemMasterId = "";
             exclusion.partDescription = "";
             exclusion.partNumber = "";
+            exclusion.partName = "";
             exclusion.itemClassificationId = '';
             event = "";
             this.alertService.showMessage("Workflow", "EPN is already in use in Exclusion List.", MessageSeverity.error);
             return;
         }
-        else {
+        else { 
             if (this.itemclaColl) {
                 for (let i = 0; i < this.itemclaColl.length; i++) {
-                    if (event == this.itemclaColl[i][0].partName) {
-                        exclusion.itemMasterId = this.itemclaColl[i][0].partId;
-                        exclusion.partDescription = this.itemclaColl[i][0].description;
-                        exclusion.partNumber = this.itemclaColl[i][0].partName;
-                        exclusion.itemClassificationId = this.itemclaColl[i][0].itemClassificationId;
+                    if (event.partName == this.itemclaColl[i].partName) {
+                        exclusion.itemMasterId = this.itemclaColl[i].partId;
+                        exclusion.partDescription = this.itemclaColl[i].partDescription;
+                        exclusion.partNumber = event.partNumber;
+                        exclusion.partName = event;
+                        exclusion.conditionId = event.conditionId;
+                        exclusion.itemClassificationId = this.itemclaColl[i].itemClassificationId;
+                        exclusion.itemClassification = this.itemclaColl[i].itemClassification;
                     }
                 }
-                this.getPNDetails(exclusion);
             }
+
+            this.getPNDetails(exclusion); 
         }
-        this.getPartConditions(exclusion, index)
     }
 
     filterpartItems(event) {
-        this.partCollection = [];
-        this.itemclaColl = [];
-        if (this.allPartnumbersInfo != undefined && this.allPartnumbersInfo.length > 0) {
-            for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-                let partName = this.allPartnumbersInfo[i].partNumber;
-
-                let isMaterialListPart: any;
-                if (this.workFlow.materialList != undefined && this.workFlow.materialList.length > 0) {
-                    isMaterialListPart = this.workFlow.materialList.find(x => x.itemMasterId == this.allPartnumbersInfo[i].itemMasterId);
-                    if (isMaterialListPart != undefined)
-                        continue;
-                }
-
-                if (partName.toLowerCase().indexOf(event.query.toLowerCase()) == 0 && isMaterialListPart == undefined) {
-                    this.itemclaColl.push([{
-                        "partId": this.allPartnumbersInfo[i].itemMasterId,
-                        "partName": partName,
-                        "description": this.allPartnumbersInfo[i].partDescription,
-                        "itemClassificationId": this.allPartnumbersInfo[i].itemClassificationId,
-                    }]);
-
-                    this.partCollection.push(partName);
-                }
-            }
+        if (event.query !== undefined && event.query !== null) {
+            this.loapartItems(event.query);
         }
     }
 
     validateQuantity(event, exclusion): void {
-        // event.target.value = event.target.value == '' ? '' : parseInt(exclusion.quantity);
         if (event.target.value != '') {
             exclusion.quantity = formatNumberAsGlobalSettingsModule(exclusion.quantity, 0);
         }
     }
 
     calculateExtendedCost(exclusion): void {
-        exclusion.unitCost = exclusion.unitCost ? formatNumberAsGlobalSettingsModule(exclusion.unitCost ,2) : '';
-        exclusion.quantity = exclusion.quantity ? exclusion.quantity.toString().replace(/\,/g,'') : 0;
-        var value: any = parseFloat(exclusion.quantity) * parseFloat(exclusion.unitCost.toString().replace(/\,/g,''));
+        exclusion.unitCost = exclusion.unitCost ? formatNumberAsGlobalSettingsModule(exclusion.unitCost, 2) : '';
+        exclusion.quantity = exclusion.quantity ? exclusion.quantity.toString().replace(/\,/g, '') : 0;
+        var value: any = parseFloat(exclusion.quantity) * parseFloat(exclusion.unitCost.toString().replace(/\,/g, ''));
         if (value > 0) {
             exclusion.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);
             this.calculateExtendedCostSummation()
@@ -292,17 +273,17 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         else {
             exclusion.extendedCost = "";
         }
-
     }
+
     getPNDetails(part) {
-        console.log("get pnDetails", part)
-        if (part && part.partNumber && part.conditionCodeId) {
-            this.allPartDetails.forEach(
-                pn => {
-                    if (pn.partNumber == part.partNumber) {
-                        this.workOrderQuoteService.getPartDetails(pn.itemMasterId, part.conditionCodeId)
+        part.conditionId=part.conditionId?part.conditionId :1;
+        part.conditionCodeId=part.conditionId;
+        if (part && part.partNumber && part.conditionId) {
+                        this.isSpinnerVisible = true;
+                        this.workOrderQuoteService.getPartDetails(part.itemMasterId, part.conditionId)
                             .subscribe(
                                 partDetail => {
+                                    this.isSpinnerVisible = false;
                                     if (partDetail) {
                                         part.unitCost = partDetail["pP_UnitPurchasePrice"];
                                         part.unitCost = part.unitCost ? formatNumberAsGlobalSettingsModule(part.unitCost, 2) : '0.00';
@@ -313,52 +294,55 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                                         this.calculateExtendedCost(part);
                                     }
                                 }
-                            )
-                    }
-                }
-            )
+                                , error => {
+                                    this.isSpinnerVisible = false;
+                                });
+
+            this.reCalculate();
         }
     }
+
     getDynamicVariableData(variable, index) {
         return this[variable + index];
     }
+
     async getPartConditions(part, index) {
-        // this.materialCondition = [];
-        console.log("index", index)
         if (part) {
+            this.isSpinnerVisible = true;
             await this.workOrderQuoteService.getPartConditions(part.itemMasterId).subscribe(
                 res => {
+                    this.isSpinnerVisible = false;
                     this.materialCondition = res;
-                    console.log("res", res);
-                    console.log("this.exclusions",this.workFlow)
                     if (this.materialCondition && this.materialCondition.length > 0) {
-
                         this['partconditionsList' + index] = this.materialCondition;
                         var defaultCondition = this['partconditionsList' + index].find(x => x.condition.trim().toLowerCase() == "new");
                         this.defaultConditionId = defaultCondition != undefined ? defaultCondition.conditionId : this.materialCondition[0].conditionId;
-                        console.log("conditionid", this.defaultConditionId);
                         if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && !this.isEdit && this.workFlow.exclusions[index] != undefined) {
-                            this.workFlow.exclusions[index].conditionCodeId = this.defaultConditionId;
-                            console.log("this.exclusions22",this.workFlow)
+                            this.workFlow.exclusions[index].conditionId = this.defaultConditionId;
                         }
                         this.getPNDetails(this.workFlow.exclusions[index]);
                     } else {
                         this['partconditionsList' + index] = [];
                     }
                     if (this.isEdit) {
-                        this.workFlow.exclusions[index].conditionCodeId = part.conditionCodeId ? part.conditionCodeId :this.defaultConditionId;
-                        console.log("this.exclusions33",this.workFlow)
-                    }else{
-                        this.workFlow.exclusions[index].conditionCodeId = part.conditionCodeId ? part.conditionCodeId :this.defaultConditionId;
-                        console.log("this.exclusions55",this.workFlow)
+                        this.workFlow.exclusions[index].conditionId = part.conditionId ? part.conditionId : this.defaultConditionId;
+                    } else {
+                        this.workFlow.exclusions[index].conditionId = part.conditionId ? part.conditionId : this.defaultConditionId;
                     }
-                    console.log("this.exclusions44",this.workFlow)
-                }
-            )
+                }, error => {
+                    this.isSpinnerVisible = false;
+                });
         }
     }
+
     private loadItemClassData() {
-        this.itemClassService.getWorkFlows().subscribe(data => { this.itemClassInfo = data[0] });
+        this.isSpinnerVisible = true;
+        this.itemClassService.getWorkFlows().subscribe(data => {
+            this.isSpinnerVisible = false;
+            this.itemClassInfo = data[0]
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     // sum of the qty
@@ -366,58 +350,49 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         this.workFlow.sumofQty = this.workFlow.exclusions.filter(x => x.isDelete != true).reduce((acc, x) => {
             return acc + parseFloat(x.quantity == undefined || x.quantity === '' ? 0 : x.quantity)
         }, 0);
-
     }
+
     // sum of extended cost
     calculateExtendedCostSummation() {
         this.workFlow.sumofExtendedCost = this.workFlow.exclusions.filter(x => x.isDelete != true).reduce((acc, x) => {
-            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
         }, 0);
         this.workFlow.sumofExtendedCost = this.workFlow.sumofExtendedCost ? formatNumberAsGlobalSettingsModule(this.workFlow.sumofExtendedCost, 2) : '';
     }
-
-    private ptnumberlistdata() {
-        this.itemser.getPrtnumberslistList().subscribe(
-            results => this.onptnmbersSuccessful(results[0])
-            //error => this.onDataLoadFailed(error)
-        );
-    }
-    private onptnmbersSuccessful(allWorkFlows: any[]) {
-        this.allPartnumbersInfo = allWorkFlows;
-    }
-    memoIndex;
+   
     onAddTextAreaInfo(material, index) {
         this.memoIndex = index;
-        console.log("memolist", material, index);
         this.textAreaInfo = material.memo;
+        this.disabledMemo = true;
     }
-    textAreaInfo: any;
+    
     onSaveTextAreaInfo(memo) {
         if (memo) {
             this.textAreaInfo = memo;
-            console.log("hello cjkf", this.workFlow.exclusions)
             this.workFlow.exclusions[this.memoIndex].memo = this.textAreaInfo;
-            console.log("index", this.workFlow.exclusions);
-            // items.indexOf(3452)
-
         }
         $("#textarea-popupexclusion").modal("hide");
+        this.disabledMemo = true;
     }
+
     onCloseTextAreaInfo() {
         $("#textarea-popupexclusion").modal("hide");
+        this.disabledMemo = true;
     }
-    saveExclusionsWorkOrder() {
 
+    saveExclusionsWorkOrder() {
         this.saveExclusionsListForWO.emit(this.workFlow)
         this.workFlow.exclusions = [];
         this.addRow();
         this.workFlow.sumofQty = 0;
         this.workFlow.sumofExtendedCost = 0;
     }
-    closeExclusionTab(){
+
+    closeExclusionTab() {
         this.workFlow.exclusions = [];
         this.addRow();
     }
+
     updateExclusionsWorkOrder() {
         this.updateExclusionsListForWO.emit(this.workFlow);
         this.workFlow.exclusions = [];
@@ -429,14 +404,12 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     markupChanged(matData) {
         try {
             this.markupList.forEach((markup) => {
-
                 if (markup.value == Number(matData.markUpPercentageId)) {
                     matData.costPlusAmount = (matData.extendedPrice) + (((matData.extendedPrice) / 100) * Number(markup.label))
                 }
             })
         }
         catch (e) {
-            console.log(e);
         }
     }
 
@@ -450,4 +423,46 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         $('#addNewExclusions').modal('hide');
     }
 
+    dismissModel() {
+        this.modal.close();
+    }
+
+
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+        this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.exclusions[this.deletedRowIndex].workflowExclusionId == undefined || this.workFlow.exclusions[this.deletedRowIndex].workflowExclusionId == "0" || this.workFlow.exclusions[this.deletedRowIndex].workflowExclusionId == "") {
+            this.workFlow.exclusions.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
+        }
+        this.reCalculate();
+    }
+
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
+        }
+        this.reCalculate();
+        this.dismissModel();
+    }
 }

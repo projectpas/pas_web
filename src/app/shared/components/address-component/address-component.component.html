@@ -1,0 +1,673 @@
+<ng-container>
+    <form #createPOAddressForm="ngForm">
+      <div class="form-row ro-view-address">
+          <div class="col-md-3">
+              <h5 class="po-head">Ship To</h5>
+              <div class="form-group">
+                  <label>User Type <span class="clr-red">*</span></label>
+                  <select [ngClass]="shipToUserTypeValidCheck ? 'select-validate-cstm' : ''" class="form-control" name="shipToUserTypeId" [(ngModel)]="sourcePoApproval.shipToUserTypeId" (change)="clearInputShipTo(); onModuleTypeChange(); checkValidOnChange(sourcePoApproval.shipToUserTypeId, 'shipToUserTypeId');" #shipUserType="ngModel" (ngModelChange)="enableAddSave()" required>
+                      <option value="0">-- Select --</option>
+                      <ng-container *ngFor="let item of userTypes">
+                          <option [value]="item.moduleId" *ngIf="item.moduleName != 'Others'">{{item.moduleName}}</option>
+                      </ng-container>
+                  </select>
+                  <!-- <div *ngIf="sourcePoApproval.shipToUserTypeId.invalid && (sourcePoApproval.shipToUserTypeId.dirty || sourcePoApproval.shipToUserTypeId.touched)" class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="sourcePoApproval.shipToUserTypeId.errors.required">
+                          <small> User Type is required </small>
+                      </div>
+                  </div> -->
+              </div>
+              <div class="form-group">
+                  <div class="form-row" >
+                      <div class="col-sm-12">
+                        <label> {{shippingModuleName}} Name <span class="clr-red">*</span></label>
+                         <p-autoComplete field="userName" [ngClass]="inputValidCheckAdd ? 'p-acomp-validate' : ''" class="pautocomp-cstm"
+                                          (onClear)="clearInputShipTo()"
+                                          (onSelect)="onShipToSelected($event)"
+                                          [(ngModel)]="sourcePoApproval.shipToUserId" 
+                                          name="shipCompanyName"
+                                          [suggestions]="userShipingList"
+                                          (completeMethod)="filterUsersForShiping($event, sourcePoApproval.shipToUserTypeId)"
+                                          [size]="30"
+                                          title="Ship to Name"
+                                          [minLength]="1"
+                                          [dropdown]="true"
+                                          errorMessage="Records not found"
+                                          [forceSelection]="true"
+                                          #shipCompanyName="ngModel" (ngModelChange)="enableAddSave()" required>
+                          </p-autoComplete>
+                          
+                          <!-- <div *ngIf="shipCompanyName.invalid && (shipCompanyName.dirty || shipCompanyName.touched)" class="alert alert-danger alert-danger-cstm">
+                              <div *ngIf="shipCompanyName.errors.required">
+                                  <small> Company Name is required </small>
+                              </div>
+                          </div> -->
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label>
+                      Site Name <span class="clr-red">*</span>                              
+                      <span style="margin-left:3px;cursor:pointer;"><a *ngIf="sourcePoApproval.shipToUserId" class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createPOSiteName" (click)="onClickShipSiteName('Add')"></a></span>                                
+                      <!-- <span style="margin-left:5px;cursor:pointer;">
+                        <a *ngIf="sourcePoApproval.shipToUserId && sourcePoApproval.shipToSiteId > 0"
+                             class="fa fa-edit fa-lg" matTooltip="Edit Site Name" matTooltipPosition="above"
+                              data-toggle="modal" data-target="#createPOSiteName" 
+                              (click)="onClickShipSiteName('Edit',sourcePoApproval)"></a></span> -->
+
+                              <span style="margin-left:0px;cursor:pointer;"
+                              ><a
+                                class="btn nobg"
+                                *ngIf="sourcePoApproval.shipToUserId && sourcePoApproval.shipToSiteId > 0"
+                                matTooltip="Edit Site Name" matTooltipPosition="above"
+                                 data-toggle="modal" data-target="#createPOSiteName" 
+                                 (click)="onClickShipSiteName('Edit',sourcePoApproval)"
+                                ><i class="fa fa-pencil" ></i
+                              ></a>
+                              </span>
+                  </label>
+                  <select [ngClass]="shipToSiteNameValidCheck ? 'select-validate-cstm' : ''" class="form-control" (change)="onShipToGetAddress(sourcePoApproval.shipToSiteId);" name="shipCusSiteName" [(ngModel)]="sourcePoApproval.shipToSiteId" #shipCusSiteName="ngModel" (ngModelChange)="enableAddSave()" required>
+                      <option value="0">-- Select --</option>
+                      <option *ngFor="let object of shipToSite" 
+                      [ngValue]="object.siteId">{{object.siteName}}</option>
+                  </select>
+                  <!-- <div *ngIf="shipCusSiteName.invalid && (shipCusSiteName.dirty || shipCusSiteName.touched)" class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="shipCusSiteName.errors.required">
+                          <small> Site Name is required </small>
+                      </div>
+                  </div> -->
+              </div>
+              <div class="form-group">
+                  <label>Address</label>
+                  <input class="form-control" type="text" value="{{shipToAddress?.address1}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>City</label>
+                  <input class="form-control" type="text" value="{{shipToAddress?.city}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Primary State/Province</label>
+                  <input class="form-control" type="text" value="{{shipToAddress?.stateOrProvince}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Postal</label>
+                  <input class="form-control" type="text" value="{{shipToAddress?.postalCode}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Country</label>
+                  <input class="form-control" type="text" value="{{shipToAddress?.country}}" disabled>
+              </div>
+              <div class="form-group" >
+                  <label>Contact Name <span class="clr-red">*</span></label>
+                  <select [ngClass]="shipToSiteNameValidCheck ? 'select-validate-cstm' : ''" class="form-control" name="shiptoContact" [(ngModel)]="sourcePoApproval.shipToContactId" #shiptoContact="ngModel" (ngModelChange)="enableAddSave()" required>
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let object of shipToContactDataList" 
+                    [ngValue]="object.contactId">{{object.name}}</option>
+                </select>
+                  <!-- <select [ngClass]="inputValidCheckAdd ? 'select-validate-cstm' : ''" class="form-control" [(ngModel)]="sourcePoApproval.shipToContactId" #shipCusContactName="ngModel" (ngModelChange)="enableAddSave()" required>
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let object of shipToContactDataList" [ngValue]="object.contactId">{{object.name}} </option>
+                </select> -->
+                <!-- <select [ngClass]="shipToSiteNameValidCheck ? 'select-validate-cstm' : ''" class="form-control" (change)="onShipToGetAddress(sourcePoApproval , sourcePoApproval.shipToSiteId);" name="shipCusSiteName" [(ngModel)]="sourcePoApproval.shipToSiteId" #shipCusSiteName="ngModel" (ngModelChange)="enableAddSave()" required>
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let object of shipToSite" 
+                    [ngValue]="object.siteId">{{object.siteName}}</option>
+                </select> -->
+
+                  <!-- <p-autoComplete field="name" [ngClass]="inputValidCheckAdd ? 'p-acomp-validate' : ''" class="pautocomp-cstm"
+                                  [(ngModel)]="sourcePoApproval.shipToContactId" 
+                                  title="Contact Name" name="shipToCustomerContactName" 
+                                  [suggestions]="firstNamesShipTo" 
+                                  (completeMethod)="filterContactsForShipTo($event)" 
+                                  [size]="30" [minLength]="1" [dropdown]="true" #shipCusContactName="ngModel" 
+                                  errorMessage="Records not found" [forceSelection]="true" 
+                                  (onClear)="clearShipToContact()" 
+                                  required></p-autoComplete> -->
+                  <!-- <div *ngIf="shipCusContactName.invalid && (shipCusContactName.dirty || shipCusContactName.touched)" class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="shipCusContactName.errors.required">
+                          <small> Contact Name is required </small>
+                      </div>
+                  </div> -->
+              </div>          
+              <div class="form-group memo-popup-cstm">
+                  <label>
+                      Memo 
+                      <!-- <i class="fa fa-info-circle fa-lg" 
+                      matTooltipPosition="above" matTooltip="Add Memo"
+                              data-toggle="modal" data-target="#address-memo"
+                               (click)="onClickShipMemo()"></i> -->
+
+                               <span style="margin-left:-7px"
+                               ><a
+                                 class="btn nobg"
+                                 matTooltipPosition="above" matTooltip="Add Memo"
+                                 data-toggle="modal" data-target="#address-memo"
+                                  (click)="onClickShipMemo()"
+                                 ><i class="fa fa-pencil" ></i
+                               ></a>
+                               </span>
+                  </label>
+                  <span>
+                      <div [innerHTML]="sourcePoApproval.shipToMemo"
+                      [matTooltip]="parsedText(sourcePoApproval.shipToMemo)"
+                       class="form-control"
+                           style="width:100%;padding:0px !important;" class="text_editor_box"></div>
+                  </span>
+    
+              </div>
+    
+              <div>
+                  <div class="form-group">
+                      <label>
+                          Ship Via <span class="clr-red">*</span>
+                          <span style="margin-left:3px;cursor:pointer;"><a *ngIf="sourcePoApproval.shipToUserId" class="fa fa-plus-circle fa-lg" matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" data-target="#shipToShipVia" (click)="onEditShipVia('Add',0)"></a></span>
+                          <!-- <span style="margin-left:5px;cursor:pointer;">
+                            <a *ngIf="sourcePoApproval.shipToUserId && sourcePoApproval.shippingViaId > 0" 
+                                class="fa fa-edit fa-lg" matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                 data-toggle="modal" data-target="#shipToShipVia" 
+                                 (click)="onEditShipVia('Edit',sourcePoApproval.shippingViaId)"></a></span> -->
+
+                                 <span style="margin-left:0px;cursor:pointer;"
+                                 ><a
+                                   class="btn nobg"
+                                   *ngIf="sourcePoApproval.shipToUserId && sourcePoApproval.shippingViaId > 0" 
+                                   matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                    data-toggle="modal" data-target="#shipToShipVia" 
+                                    (click)="onEditShipVia('Edit',sourcePoApproval.shippingViaId)"
+                                   ><i class="fa fa-pencil"></i
+                                 ></a>
+                                 </span>
+                                
+                      </label>
+                      <select [ngClass]="shipViaValidCheck ? 'select-validate-cstm' : ''" class="form-control"  title="Ship Via" name="cusShipViaId"  (ngModelChange)="getShipViaDetails($event); checkValidOnChange(sourcePoApproval.shippingViaId, 'shipViaId');" [(ngModel)]="sourcePoApproval.shippingViaId" #cusShipViaId="ngModel" (ngModelChange)="enableAddSave()" required>
+                          <option value="0">-- Select --</option>
+                          <option *ngFor="let object of shipViaList" [ngValue]="object.shippingViaId">{{object.name}}</option>
+                      </select>
+                      <!-- <div *ngIf="cusShipViaId.invalid && (cusShipViaId.dirty || cusShipViaId.touched)" class="alert alert-danger alert-danger-cstm">
+                          <div *ngIf="cusShipViaId.errors.required">
+                              <small> Ship Via is required </small>
+                          </div>
+                      </div> -->
+                  </div>
+                  <div class="form-group" *ngIf="addressType!= 'SOQ'">
+                      <label>Shipping Cost</label>
+                      <input class="form-control text-right" type="text" pKeyFilter="money" name="cusShippingCost" [(ngModel)]="sourcePoApproval.shippingCost" (ngModelChange)="enableAddSave()" (change)="onChangeShippingHandlingCost('shippingCost');">
+                  </div>
+                  <div class="form-group" *ngIf="addressType!= 'SOQ'">
+                      <label>Handling Cost</label>
+                      <input class="form-control text-right" type="text" pKeyFilter="money" name="cusHandlingCost" [(ngModel)]="sourcePoApproval.handlingCost" (ngModelChange)="enableAddSave()" (change)="onChangeShippingHandlingCost('handlingCost');">
+                  </div>
+                  <div class="form-group">
+                      <label>Shipping Acct Info</label>
+                      <input class="form-control" type="text" name="cusShippingAcctNum" [(ngModel)]="sourcePoApproval.shippingAccountNo" disabled>
+                  </div>
+              </div>
+          </div>
+          <div class="col-md-3">
+              <h5 class="po-head">Bill To</h5>
+              <div class="form-group">
+                  <label>User Type <span class="clr-red">*</span></label>
+                  <select [ngClass]="billToUserTypeValidCheck ? 'select-validate-cstm' : ''" class="form-control" name="billToUserTypeId" [(ngModel)]="sourcePoApproval.billToUserTypeId" (change)="clearInputBillTo(); checkValidOnChange(sourcePoApproval.billToUserTypeId, 'billToUserTypeId');onModuleBillTypeChange();" #billUserType="ngModel" (ngModelChange)="enableAddSave()" required>
+                      <option value="0">-- Select --</option>
+                      <ng-container *ngFor="let item of userTypes">
+                          <option [value]="item.moduleId" *ngIf="item.moduleName != 'Others'">{{item.moduleName}}</option>
+                      </ng-container>
+                  </select>
+                  <!-- <div *ngIf="billToUserTypeId.invalid && (billToUserTypeId.dirty || billToUserTypeId.touched)" class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="billUserType.errors.required">
+                          <small> User Type is required </small>
+                      </div>
+                  </div> -->
+              </div>
+              <div class="form-group">
+                  <div class="form-row" >
+                      <div class="col-sm-12">
+                          <label>{{billingingModuleName}} Name <span class="clr-red">*</span></label>
+                          <p-autoComplete field="userName" [ngClass]="inputValidCheckAdd ? 'p-acomp-validate' : ''" class="pautocomp-cstm"
+                                          (onClear)="clearInputBillTo()"
+                                          (onSelect)="onBillToSelected($event)"
+                                          [(ngModel)]="sourcePoApproval.billToUserId" name="billCompanyName"
+                                          [suggestions]="userBillingList"
+                                          (completeMethod)="filterUsersForBilling($event, sourcePoApproval.billToUserTypeId)"
+                                          [size]="30"
+                                          [minLength]="1"
+                                          [dropdown]="true"
+                                          errorMessage="Records not found"
+                                          [forceSelection]="true"
+                                          #billCompName="ngModel" (ngModelChange)="enableAddSave()" required>
+                          </p-autoComplete>
+                          <!-- <div *ngIf="billCompName.invalid && (billCompName.dirty || billCompName.touched)" class="alert alert-danger alert-danger-cstm">
+                              <div *ngIf="billCompName.errors.required">
+                                  <small> Company Name is required </small>
+                              </div>
+                          </div> -->
+                      </div>
+                  </div>
+              </div>
+              <div class="form-group">
+                  <label>
+                      Site Name <span class="clr-red">*</span>
+                      <span style="margin-left:3px;cursor:pointer;"><a *ngIf="sourcePoApproval.billToUserId"  class="fa fa-plus-circle fa-lg" matTooltip="Add Site Name" matTooltipPosition="above" data-toggle="modal" data-target="#createBillingSiteName" (click)="onClickBillSiteName('Add')"></a></span>
+                      <!-- <span style="margin-left:5px;cursor:pointer;"><a 
+                        *ngIf="sourcePoApproval.billToUserId && sourcePoApproval.billToSiteId > 0"
+                           class="fa fa-edit fa-lg" matTooltip="Edit Site Name" matTooltipPosition="above"
+                            data-toggle="modal" data-target="#createBillingSiteName"
+                             (click)="onClickBillSiteName('Edit', sourcePoApproval)"></a></span> -->
+
+                             <span style="margin-left:0px;cursor:pointer;"
+                             ><a
+                               class="btn nobg"
+                               matTooltipPosition="above" matTooltip="Edit Site Name"
+                               *ngIf="sourcePoApproval.billToUserId && sourcePoApproval.billToSiteId > 0"
+                                data-toggle="modal" data-target="#createBillingSiteName"
+                                 (click)="onClickBillSiteName('Edit', sourcePoApproval)"
+                               ><i class="fa fa-pencil" ></i
+                             ></a>
+                             </span>
+                  </label>
+                  <select [ngClass]="billToSiteNameValidCheck ? 'select-validate-cstm' : ''" class="form-control" (change)="onBillToGetAddress(sourcePoApproval.billToSiteId); checkValidOnChange(sourcePoApproval.billToSiteId, 'billToSiteId');" name="billCusSiteName" [(ngModel)]="sourcePoApproval.billToSiteId" #billCusSiteName="ngModel" (ngModelChange)="enableAddSave()" required>
+                      <option value="0">-- Select --</option>
+                      <option *ngFor="let object of billToSite" [ngValue]="object.siteId">{{object.siteName}} </option>
+                  </select>
+    
+                  <!-- <div *ngIf="billCusSiteName.invalid && (billCusSiteName.dirty || billCusSiteName.touched)" class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="billCusSiteName.errors.required">
+                          <small> Site Name is required </small>
+                      </div>
+                  </div> -->
+              </div>
+              <div class="form-group">
+                  <label>Address </label>
+                  <input class="form-control" type="text" value="{{billToAddress?.address1}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>City</label>
+                  <input class="form-control" type="text" value="{{billToAddress?.city}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Primary State/Province</label>
+                  <input class="form-control" type="text" value="{{billToAddress?.stateOrProvince}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Postal</label>
+                  <input class="form-control" type="text" value="{{billToAddress?.postalCode}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Country</label>
+                  <input class="form-control" type="text" value="{{billToAddress?.country}}" disabled>
+              </div>
+              <div class="form-group">
+                  <label>Contact Name <span class="clr-red">*</span></label>
+                  <select [ngClass]="shipToSiteNameValidCheck ? 'select-validate-cstm' : ''" class="form-control" name="billtoContact" [(ngModel)]="sourcePoApproval.billToContactId" #billtoContact="ngModel" (ngModelChange)="enableAddSave()" required>
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let object of billToContactDataList" 
+                    [ngValue]="object.contactId">{{object.name}}</option>
+                </select>
+                  <!-- <select [ngClass]="inputValidCheckAdd ? 'select-validate-cstm' : ''" class="form-control" [(ngModel)]="sourcePoApproval.billToContactId" #billCusContactName="ngModel" (ngModelChange)="enableAddSave()" required>
+                    <option value="0">-- Select --</option>
+                    <option *ngFor="let object of billToContactDataList" [ngValue]="object.contactId">{{object.name}} </option>
+                </select> -->
+
+                  <!-- <p-autoComplete field="name" title="Contact Name " [ngClass]="inputValidCheckAdd ? 'p-acomp-validate' : ''" class="pautocomp-cstm" 
+                            [(ngModel)]="sourcePoApproval.billToContactId" 
+                            name="customerContactsForBillTo" 
+                            [suggestions]="firstNamesBillTo" 
+                            (completeMethod)="filterContactsForBillTo($event)" [size]="30" 
+                            errorMessage="Records not found" [forceSelection]="true" [minLength]="1" 
+                            [dropdown]="true" #billCusContactName="ngModel" (onClear)="clearBillToContact()" 
+                            (ngModelChange)="enableAddSave()" required>
+                  </p-autoComplete> -->
+                  <!-- <div *ngIf="billCusContactName.invalid && (billCusContactName.dirty || billCusContactName.touched)" class="alert alert-danger alert-danger-cstm">
+                      <div *ngIf="billCusContactName.errors.required">
+                          <small> Contact Name is required </small>
+                      </div>
+                  </div> -->
+              </div>
+              <div class="form-group memo-popup-cstm">
+                  <label>
+                      Memo 
+                      <!-- <i class="fa fa-info-circle fa-lg" 
+                        matTooltipPosition="above"
+                              matTooltip="Add Memo" data-toggle="modal" 
+                              data-target="#address-memo"
+                              (click)="onClickBillMemo()"></i> -->
+
+                              <span style="margin-left:-7px"
+                              ><a
+                                class="btn nobg"
+                                matTooltipPosition="above"
+                                matTooltip="Add Memo" data-toggle="modal" 
+                                data-target="#address-memo"
+                                (click)="onClickBillMemo()"
+                                ><i class="fa fa-pencil" ></i
+                              ></a>
+                              </span>
+
+                  </label>
+                  <span>
+    
+                      <div [innerHTML]="sourcePoApproval.billToMemo"
+                      [matTooltip]="parsedText(sourcePoApproval.billToMemo)" class="form-control"
+                           style="width:100%;padding:0px !important;" class="text_editor_box"></div>
+    
+                  </span>
+    
+              </div>
+          </div>
+      </div>
+      <div>
+        <button class="btn btn-primary pull-right" (click)="savePurchaseOrderAddress()" [disabled]="!enableAddSaveBtn">{{isEditModeAdd ? 'Update' : 'Save'}}</button>
+           </div>
+    </form>
+    </ng-container>
+
+    <div class="modal fade" id="createPOSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog partsList-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="resetAddressShippingForm();">&times;</button>
+                    <h4 class="modal-title">{{addressSiteNameHeader}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <form #addSiteNameForm="ngForm" class="form-horizontal">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Is Primary </label>
+                                <input type="checkbox" name="isPrimary"  class="form-control col-md-6"  [(ngModel)]="addressFormForShipping.isPrimary"  (ngModelChange)="shipAddChange()">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Site Name <span class="clr-red">*</span> :</label>
+                                <p-autoComplete                 
+                                class="autocomp-customer-cstm" 
+                                name="siteName"
+                                [(ngModel)]="addressFormForShipping.siteName" 
+                                [suggestions]="lstfilterShippingSite"                     
+                                emptyMessage="No Match Found" 
+                                field="siteName" 
+                                (onKeyUp)="checkShippingSiteNameExist($event.target.value)"
+                                (onChange)="checkShippingSiteNameExist($event.target.value)"
+                                (onSelect)="checkShippingSiteNameSelect()"
+                                (completeMethod)="filterShippingSite($event);" 
+                                (ngModelChange)="shipAddChange()" 
+                                [size]="30" [minLength]="1" [dropdown]="true" required>
+                              </p-autoComplete>
+                              <div *ngIf="isShippingSiteNameAlreadyExists" class="clr-red">
+                                        Site Name Already Exists
+                              </div>
+                                <!-- <input type="text" class="form-control col-md-6" name="siteName" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.siteName" required>-->
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="address1" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.address1" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Address 2:</label>
+                                <input type="text" class="form-control col-md-6" name="address2" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.address2">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">City <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="city" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.city" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">State <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="stateOrProvince" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.stateOrProvince" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="postalCode" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.postalCode" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                                <p-autoComplete field="label" class="pautocomp-cstm" (onSelect)="shipAddChange()" (change)="shipAddChange()" [(ngModel)]="addressFormForShipping.countryId" name="country" [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required></p-autoComplete>
+                            </div>
+                            <div class="form-group col-md-12" style="margin-top: 8px;">
+                                <button type="button" class="btn btn-primary" *ngIf="(!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
+                                <button type="button" class="btn btn-primary" *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly" [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists) || addressFormForShipping.isPrimary" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+                                <!--<button type="button" class="btn btn-primary" *ngIf="(!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShipping" (click)="saveShippingAddress();"  [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeShipping ? 'Update' : 'Save' }}</button> 
+                                <button type="button" class="btn btn-primary" *ngIf="showIsPoOnlyButton &&  (!isEditModeShippingPoOnly && !isEditModeShipping) || isEditModeShippingPoOnly" [disabled]="!(addSiteNameForm.valid && ShipAddbutton && !isShippingSiteNameAlreadyExists)" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeShippingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>-->
+                            </div>
+    
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetAddressShippingForm();">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createBillingSiteName" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog partsList-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="resetAddressBillingForm();">&times;</button>
+                    <h4 class="modal-title">{{addressSiteNameHeader}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <form #addBillNameForm="ngForm" class="form-horizontal">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Is Primary </label>
+                                <input type="checkbox" name="isPrimary"  class="form-control col-md-6"  [(ngModel)]="addressFormForBilling.isPrimary"  (ngModelChange)="billAddChange()">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Site Name <span class="clr-red">*</span></label>
+                                <p-autoComplete                 
+                                class="autocomp-customer-cstm" 
+                                name="siteName"
+                                [(ngModel)]="addressFormForBilling.siteName" 
+                                [suggestions]="lstfilterBillingSite"                     
+                                emptyMessage="No Match Found" 
+                                field="siteName" 
+                                (onKeyUp)="checkSiteNameExist($event.target.value)"
+                                (onChange)="checkSiteNameExist($event.target.value)"
+                                (onSelect)="checkSiteNameSelect()"
+                                (completeMethod)="filterBillingSite($event);" 
+                                (ngModelChange)="billAddChange()" 
+                                [size]="30" [minLength]="1" [dropdown]="true" required>
+                              </p-autoComplete>
+                              <div *ngIf="isSiteNameAlreadyExists" class="clr-red">
+                                        Site Name Already Exists
+                              </div>
+                            </div>
+                            <!-- <div class="form-group col-md-12">
+                                <label class="col-md-6">Site Name <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="siteName" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.siteName" required>
+                            </div> -->
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Address 1 <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="address1"  (change)="billAddChange()" [(ngModel)]="addressFormForBilling.address1" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Address 2 </label>
+                                <input type="text" class="form-control col-md-6" name="address2" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.address2">
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">City <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="city" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.city" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">State <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="stateOrProvince" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.stateOrProvince" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Postal <span class="clr-red">*</span></label>
+                                <input type="text" class="form-control col-md-6" name="postalCode" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.postalCode" required>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Country <span class="clr-red">*</span></label>
+                                <p-autoComplete field="label" class="pautocomp-cstm"  (onSelect)="billAddChange()" (change)="billAddChange()" [(ngModel)]="addressFormForBilling.countryId" name="country" [suggestions]="countriesList" (completeMethod)="filterCountries($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" required></p-autoComplete>
+                            </div>
+                            <div class="form-group col-md-12" style="margin-top: 8px;">
+                                  <button type="button" class="btn btn-primary" 
+                                  (click)="saveBillingAddress();"  
+                                  *ngIf="(!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBilling"
+                                   [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)" 
+                                    data-dismiss="modal">{{isEditModeBilling ? 'Update' : 'Save' }}</button>                                
+
+                                  <button type="button" class="btn btn-primary"   *ngIf="showIsPoOnlyButton && ((!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBillingPoOnly)" [disabled]="!addBillNameForm.valid" (click)="saveBillingAddressToPO();" [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists) || addressFormForBilling.isPrimary"  data-dismiss="modal">{{isEditModeBillingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+
+                                  <!--<button type="button" class="btn btn-primary" 
+                                    *ngIf="showIsPoOnlyButton && ((!isEditModeBilling && !isEditModeBillingPoOnly) || isEditModeBillingPoOnly)"
+                                     [disabled]="!addBillNameForm.valid" 
+                                     (click)="saveBillingAddressToPO();" 
+                                     [disabled]="!(addBillNameForm.valid && billAddbutton && !isSiteNameAlreadyExists)" 
+                                      data-dismiss="modal">{{isEditModeBillingPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>-->
+
+                            </div>
+    
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="resetAddressBillingForm();">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="preloader" *ngIf="isSpinnerVisible">
+        <div class="loading">
+            <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="shipToShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog partsList-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="resetAddressShipViaForm()">&times;</button>
+                    <h4 class="modal-title"> {{ ShipViaHeader }} </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-row">
+                        <form #addShipViaForm="ngForm" class="form-horizontal">
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Ship Via: <span class="clr-red">*</span></label>
+                                <select class="form-control col-md-6" title="Ship Via" name="shipVia" [(ngModel)]="addShipViaFormForShipping.shipViaId" (change)="shipViaChange()" required>
+                                    <option *ngFor="let object of allShipViaInfo" [ngValue]="object.value">{{object.label}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <label class="col-md-6">Shipping Acct Info:</label>
+                                <input type="text" class="form-control col-md-6" name="shippingAcctInfo" (change)="shipViaChange()" [(ngModel)]="addShipViaFormForShipping.shippingAccountInfo">
+                            </div>
+                          
+                            <div class="form-group col-md-12">                               
+                                <label class="col-md-6" style="vertical-align: top;">Memo:</label>
+                                <div  class="col-md-6">
+                                <div class="form-group memo-popup-cstm" > 
+                                        <div [innerHTML]="addShipViaFormForShipping.memo" class="form-control"
+                                       class="text_editor_box" style="width:100%;padding:0px !important;line-height:1.6">
+                                    </div>
+                                        <!-- <i class="fa fa-info-circle fa-lg pull-right"
+                                             style="margin-top:-20px;margin-right:-18px"
+                                                data-toggle="modal"
+                                                data-target="#ship-via-memo" matTooltip="Memo"
+                                                matTooltipPosition="above"
+                                                (click)="onAddShipMemo()"></i>        -->
+
+                                              <i class="fa fa-pencil btn nobg pull-right"  style="margin-top:-25px;margin-right:-29px" 
+                                                  data-toggle="modal"
+                                                data-target="#ship-via-memo" matTooltip="Memo"
+                                                matTooltipPosition="above"
+                                                (click)="onAddShipMemo()"></i>
+                                        </div>  
+                                </div>      
+
+                             </div>
+                            <div class="form-group col-md-12" style="margin-top: 8px;">
+                                   <button type="button" class="btn btn-primary" data-dismiss="modal" style="display: none;" [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this PO</button>
+                            </div>
+    
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="modal fade" id="ship-via-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Edit Memo</h4>
+            </div>
+            <div class="modal-body">
+              <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                <thead>
+                  <th style="color: #fff;">Memo</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <p-editor [(ngModel)]="tempAddshipViaMemo" 
+                      [style]="{'height':'320px'}" name="tempAddshipViaMemo" 
+                      required></p-editor>							
+                    </td>
+                  </tr>
+                </tbody>
+              </table> -->
+              <p-editor [(ngModel)]="tempAddshipViaMemo" 
+              [style]="{'height':'320px'}" name="tempAddshipViaMemo" 
+              required></p-editor>
+              <div class="editor-buttons">
+                <button type="button" class="btn btn-primary editor-buttons-margin"						 
+                 (click)="onSaveTextAreaInfo()">Save</button>
+                <button type="button" class="btn btn-danger editor-buttons-margin"
+                 (click)="closeMemoModel()"
+                  >Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <div class="modal fade" id="address-memo"
+     role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">
+                    {{addressMemoLabel == 'Edit Ship' || addressMemoLabel == 'Edit Bill' ? 'Edit': addressMemoLabel }} Memo
+                </h4>
+            </div>
+            <div class="modal-body">
+                <!-- <table class="table table-bordered
+                        table-fixed workflow-table-material">
+                    <thead>
+                    <th style="color: #fff;">Memo</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="tempMemo"
+                                          [style]="{'height':'320px'}" name="tempMemo" required></p-editor>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> -->
+                <p-editor [(ngModel)]="tempMemo"
+                                          [style]="{'height':'320px'}" name="tempMemo" required></p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin"
+                            data-dismiss="modal" (click)="onSaveAddressMemo()">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    

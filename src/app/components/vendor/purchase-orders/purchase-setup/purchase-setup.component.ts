@@ -13,6 +13,7 @@ import { CustomerService } from '../../../../services/customer.service';
 import { CreatePOPartsList, PartDetails } from '../../../../models/create-po-partslist.model';
 import { NgForm } from '@angular/forms';
 import * as $ from 'jquery';
+import { MenuItem } from 'primeng/api';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition, getValueByFieldFromArrayofObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
@@ -27,6 +28,9 @@ import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { DatePipe } from '@angular/common';
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-reference-storage';
+// import { connectableObservableDescriptor } from 'rxjs/observable/ConnectableObservable';
+import { AppModuleEnum } from '../../../../enum/appmodule.enum';
+import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -36,6 +40,16 @@ import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-r
 })
 /** purchase-setup component*/
 export class PurchaseSetupComponent implements OnInit {
+	arrayPrioritylist:any[] = [];
+	arrayPostatuslist:any[] = [];
+	arrayCurrencylist:any[] = [];
+	arrayConditionlist:any[] = [];
+	managmentstrctureId: number = 0;
+	isheaderEmployee: boolean = false;
+	showAddresstab:boolean  = false;
+	showDocumenttab:boolean  = false;
+	showComunicationtab:boolean  = false;
+	showVendorCaptab:boolean  = false;
 	addressType:any  = 'PO';
 	id: number;
 	firstNamesbillTo1: any;
@@ -215,13 +229,7 @@ export class PurchaseSetupComponent implements OnInit {
 	vendorCapesGeneralInfo: any = {};
 	aircraftListDataValues: any;
 	isViewMode: boolean = true;
-    capvendorId: number; 
-    colsaircraftLD: any[] = [
-        { field: "aircraft", header: "Aircraft" },
-        { field: "model", header: "Model" },
-        { field: "dashNumber", header: "Dash Numbers" },
-        { field: "memo", header: "Memo" }
-    ];
+    capvendorId: number;     
 	listOfErrors: any;
 	disableAddPart: boolean = false;
 	disableHeaderInfo: boolean = false; 
@@ -267,6 +275,7 @@ export class PurchaseSetupComponent implements OnInit {
 	poOpenstatusID: number = -1;
 	poApprovaltaskId = 0;
 	ApprovedstatusId = 0; 
+	WaitingForApprovalstatusId = 0; 
 	ShowWarning = 0; 
 	SubmitInternalApprovalID = 0;
 	pendingApprovalID = 0;
@@ -279,7 +288,7 @@ export class PurchaseSetupComponent implements OnInit {
 	arraysubWOlist:any[] = [];
 	arrayROlist:any[] = [];
 	arraySOlist:any[] = [];
-
+	breadcrumbs: MenuItem[];
 	splitAddbutton: boolean = false;
 	lstfilterSplitSite: any[];
 	changeName: boolean = false;
@@ -287,18 +296,15 @@ export class PurchaseSetupComponent implements OnInit {
 	editSiteName: string = '';
 	splitSieListOriginal: any[];
 	splitmoduleId: number=0;
-	splituserId:number=0
-
+	splituserId:number=0;
 	posettingModel: any = {};
-	
-	
 	fields = ['partsCost', 'partsRevPercentage', 'unitCost', 'extCost', 'qty', 'laborCost', 'laborRevPercentage', 'overHeadCost', 'overHeadPercentage', 'chargesCost', 'freightCost', 'exclusionCost', 'directCost', 'directCostPercentage', 'revenue', 'margin', 'marginPercentage'];
 	approvalProcessHeader = [
         {
             header: 'Action',
             field: 'actionStatus'
         }, {
-            header: 'Sent Date',
+            header: 'Send Date',
             field: 'sentDate'
         }, {
             header: 'Status',
@@ -312,13 +318,27 @@ export class PurchaseSetupComponent implements OnInit {
 		}, {
             header: 'Approved Date',
             field: 'approvedDate'
-        }, {
+		}, {
+            header: 'Rejected By',
+            field: 'rejectedBy'
+		}, {
+            header: 'Rejected Date',
+            field: 'rejectedDate'
+        }
+		, {
             header: 'PN',
             field: 'partNumber'
         }, {
             header: 'PN Desc',
             field: 'partDescription'
-		}, {
+		},{
+            header: 'ALT/Equiv PN',
+            field: 'altEquiPartNumber'
+        }, {
+            header: 'ALT/Equiv PN Desc',
+            field: 'altEquiPartDescription'
+		},
+	    {
             header: 'Item Type',
             field: 'itemType'
 		}, {
@@ -346,7 +366,9 @@ export class PurchaseSetupComponent implements OnInit {
 	enableMultiPartAddBtn: boolean = false;
 	moduleId:any=0;
 	referenceId:any=0;
-	moduleName:any="PurchseOrder"
+	moduleName:any="PurchaseOrder";
+	home: any;
+
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,
@@ -369,85 +391,51 @@ export class PurchaseSetupComponent implements OnInit {
 		private datePipe: DatePipe,		
 		private salesOrderReferenceStorage: SalesOrderReferenceStorage,
 		private stocklineReferenceStorage: StocklineReferenceStorage) {
-
 		this.vendorService.ShowPtab = false;
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
-		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);		
 	}
 
 	ngOnInit() {
-		this.priorityData();
-		this.loadModuleListForVendorComp();		
-		this.loadPOStatus();
+		this.companyModuleId = AppModuleEnum.Company;
+        this.sourcePoApproval.shipToUserTypeId = AppModuleEnum.Company;
+        this.sourcePoApproval.billToUserTypeId = AppModuleEnum.Company;
+        this.vendorModuleId = AppModuleEnum.Vendor;
+        this.customerModuleId = AppModuleEnum.Customer;
+        this.headerInfo.companyId = 0;
+        this.headerInfo.buId = 0;
+        this.headerInfo.divisionId = 0;
+        this.headerInfo.departmentId = 0;
+        this.headerInfo.statusId = 0;
+        this.headerInfo.openDate = new Date();
+		this.headerInfo.closedDate = ''; 
 		this.posettingModel.IsResale = false;
         this.posettingModel.IsDeferredReceiver = false;
-		this.posettingModel.IsEnforceApproval = false;
-        this.isSpinnerVisible = false;
-        this.getPurchaseOrderMasterData();		
-		
-		//#Happy this.loadManagementdata(); // 
-		//#Happy this.loadCurrencyData();
-		//#Happy this.loadConditionData();		
-		//#Happy this.loadApprovalProcessStatus();
-		//#Happy this.loadPOApproverStatus();		
-		//#Happy this.loadcustomerData();		
-		//#Happy this.getLegalEntity();
-		//#Happy this.getCountriesList();
-		//#Happy this.loadPercentData();
-		//#Happy this.loadVendorContactInfo();
-		//#Happy this.loadWorkOrderList();
-		//#Happy this.loadRepairOrderList();
-		//#Happy this.loadSalesOrderList();
-		//#Happy this.loadShippingViaList();
-		
-		this.salesOrderReferenceData = this.salesOrderReferenceStorage.salesOrderReferenceData;  
-		this.stocklineReferenceData = this.stocklineReferenceStorage.stocklineReferenceData;
-
-			//vendor Warnings and Restrictions Functionality.
-	
-        
-		if(!this.isEditMode) {
-			this.getManagementStructureDetails(this.currentUserManagementStructureId,this.employeeId);			
-			this.isSpinnerVisible = false;
-		}	
-		this.headerInfo.resale = true;
-		this.headerInfo.companyId = 0;
-		this.headerInfo.buId = 0;
-		this.headerInfo.divisionId = 0;
-		this.headerInfo.departmentId = 0;
-		if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
-			this.headerInfo.purchaseOrderNumber = 'Creating';
-		}
-
-		this.vendorCapesCols = [			
-			{ field: 'vendorRanking', header: 'Ranking' },
-			{ field: 'partNumber', header: 'PN' },
-			{ field: 'partDescription', header: 'PN Description' },
-			{ field: 'capabilityType', header: 'Capability Type' },
-			{ field: 'cost', header: 'Cost' },
-			{ field: 'tat', header: 'TAT' },
-			{ field: 'manufacturerName', header: 'PN Mfg' },
-		];
-		this.headerInfo.statusId = 0;
-		this.headerInfo.openDate = new Date();	
+        this.posettingModel.IsEnforceApproval = false;		 
+		this.getPurchaseOrderMasterData();
 		
 
-	
-
-
-		this.poId = this._actRoute.snapshot.params['id'];
-		this.ShowWarning = this._actRoute.snapshot.params['ShowWarning'];
-		this.id = this.poId;
+		this.vendorIdByParams = this._actRoute.snapshot.params['vendorId'];       
+		this.id = this.poId = this._actRoute.snapshot.params['id'];	
 		this.workOrderPartNumberId = this._actRoute.snapshot.params['mpnid'];
-		if (this.poId !== 0 && this.poId !== undefined) {	
+        if (this.poId !== 0 && this.poId !== undefined) {
+				this.breadcrumbs = [
+					{ label: 'Purchase Order' },
+					{ label: 'Edit Purchase Order' },
+				];
+                this.isEditMode = true;
+                this.isEditModeHeader = true;
+				this.toggle_po_header = false;				
+				this.isSpinnerVisible = false;
 				this.purchaseOrderService.getAllEditID(this.poId).subscribe(res => {
 					const result = res;
 					if(result && result.length > 0) {
 						result.forEach(x => 
 							{
 								if(x.label == "VENDOR"){
-									this.arrayVendlsit.push(x.value); 
+									this.arrayVendlsit.push(x.value);
+									this.vendorId=x.value; 
 								}
 								else if (x.label == "EMPLOYEE") {
 									this.arrayEmplsit.push(x.value); 
@@ -470,183 +458,127 @@ export class PurchaseSetupComponent implements OnInit {
 								else if (x.label == "SONO") {
                                     this.arraySOlist.push(x.value);
 								}
+								else if (x.label == "PRIORITY") {
+                                    this.arrayPrioritylist.push(x.value);
+								}
+								else if (x.label == "CURRENCY") {
+                                    this.arrayCurrencylist.push(x.value);
+								}
+								else if (x.label == "CONDITION") {
+                                    this.arrayConditionlist.push(x.value);
+								}								
 							});
 						this.editDropDownLoad();
 						this.isEditMode = true;
 						this.isEditModeHeader = true;
 						this.toggle_po_header = false;
 						this.isSpinnerVisible = true;			
-						setTimeout(() => {				
+						setTimeout(() => {	
+							this.isSpinnerVisible = true;			
 							this.getVendorPOHeaderById(this.poId);
-							// this.getPurchaseOrderPartsById(this.poId);
 							this.getPurchaseOrderAllPartsById(this.poId);
 							this.enableHeaderSaveBtn = false;
 							this.isSpinnerVisible = false;
-						},							 
-						2200); 	
-						
+						},2200);
 					}
 				});
-			
-		} else if (this.poId === 0) {
-			setTimeout(() => {
-				this.editDropDownLoad(); 	
-			}, 2200);
-			setTimeout(() => {
-				// this.getPurchaseOrderPartsById(this.poId);
-				this.getPurchaseOrderAllPartsById(this.poId);
-			}, 1200);
+               
 		}
-
-		this.vendorIdByParams = this._actRoute.snapshot.params['vendorId'];
-		if(this.vendorIdByParams) {
-			setTimeout(() => {			
-					this.arrayVendlsit.push(this.vendorIdByParams); 				
-					this.vendorService.getVendorNameCodeListwithFilter('',20,this.arrayVendlsit.join()).subscribe(res => {
-					this.allActions = res;
-					this.vendorNames = res;
-					this.vendorCodes = res;
-					this.splitVendorNames = res; 								
-					this.loadvendorDataById(this.vendorIdByParams);
-					this.warningsandRestriction(this.vendorIdByParams);
-					this.capvendorId = this.vendorIdByParams;
-				},err => {
-					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);		
-				});
-				;
-			}, 1200);
+		else {
+				if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
+					this.headerInfo.purchaseOrderNumber = 'Creating';
+				}          
+				this.priorityData();           
+				this.loadPOStatus();			
+				this.getManagementStructureDetails(this.currentUserManagementStructureId,this.employeeId);			
+				this.isSpinnerVisible = false;
+				if (this.vendorIdByParams) {
+						this.arrayVendlsit.push(this.vendorIdByParams);
+						this.loadvendorDataById(this.vendorIdByParams);               
+				}else {
+					this.loadVendorList(''); 
+				}
+				this.breadcrumbs = [
+					{ label: 'Purchase Order' },
+					{ label: 'Create Purchase Order' },
+				];           
 		}
-		else if (this.poId == 0 || this.poId == undefined || this.poId == null) {
-			this.loadVendorList();	
-		} 
-		//grid childlist disable on load
-		// if (!this.isEditMode) {
-		// 	this.partListData = [this.newObjectForParent];
-		// 	for (let i = 0; i < this.partListData.length; i++) {
-		// 		if (!this.partListData[i].ifSplitShip) {
-		// 			this.partListData[i].childList = [];
-		// 		}
-		// 	}
-		// }
+		
+        
 	}
-	getPurchaseOrderMasterData() {
-        this.purchaseOrderService.getPurchaseOrderSettingMasterData();
+	getPurchaseOrderMasterData() {        
         this.purchaseOrderService.getPurchaseOrderSettingMasterData().subscribe(res => {
             if (res) {
                 this.posettingModel.PurchaseOrderSettingId = res.purchaseOrderSettingId;
                 this.posettingModel.IsResale = res.isResale;
                 this.posettingModel.IsDeferredReceiver = res.isDeferredReceiver;
-                this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
+				this.posettingModel.IsEnforceApproval = res.isEnforceApproval;
+				if(!this.isEditMode) {
+				this.headerInfo.resale = this.posettingModel.IsResale;
+				this.headerInfo.deferredReceiver = res.isDeferredReceiver;
+			   }
             }
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-            //this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
     }
-	    warningMessage:any;
-		warningID:any = 0;
-		isEditWork:any = false;
-		restrictID:any = 0;
-		restrictMessage:any;
-		WarningsList: any;
-		WarningListId:any;
 
 	//#region All Binding 
-	warningsandRestriction(Id) {
-			this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name').subscribe(res => {
-				if(res) {
-				res.forEach(element => {
-					if (element.label == 'Create Purchase Order') {
-						this.WarningListId = element.value;
-					}
-				});
-				if (Id && this.WarningListId) {
-					this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
-						if (res) {
-							if(res.warning) {
-							this.warningMessage = res.warningMessage;
-							this.warningID = res.vendorWarningId;
-							this.restrictID == 0;
-						   }
-							if(res.restrict && !this.isEditMode) {
-							this.restrictMessage = res.restrictMessage;
-							this.restrictID = res.vendorWarningId;}
-		
-							if (this.warningID != 0 && this.restrictID == 0) {
-								this.showAlertMessage();
-							} else if (this.warningID == 0 && this.restrictID != 0) {
-								this.showAlertMessage();
-							} 
-							else if (this.warningID != 0 && this.restrictID != 0) {
-								this.showAlertMessage();
-							} 
-						}
-					},err => {
-						this.isSpinnerVisible = false;
-						const errorLog = err;
-						this.errorMessageHandler(errorLog);		
-					});
-				}}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			}); 
-		
+    warningMessage:any;
+	warningID:any = 0;
+    isEditWork:any = false;
+	restrictID:any = 0;
+	restrictMessage:any;
+	WarningsList: any;
+	WarningListId:any;
+	warningsandRestriction(Id) {       
+            this.WarningListId = VendorWarningEnum.Create_Purchase_Requisition;
+            if (Id && this.WarningListId) {
+                this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
+                    if (res) {
+                        if(res.warning) {
+                        this.warningMessage = res.warningMessage;
+                        this.warningID = res.vendorWarningId;
+                        this.restrictID == 0;
+                       }
+                        if(res.restrict && !this.isEditMode) {
+                        this.restrictMessage = res.restrictMessage;
+                        this.restrictID = res.vendorWarningId;}    
+                        if (this.warningID != 0 && this.restrictID == 0) {
+                            this.showAlertMessage();
+                        } else if (this.warningID == 0 && this.restrictID != 0) {
+                            this.showAlertMessage();
+                        } 
+                        else if (this.warningID != 0 && this.restrictID != 0) {
+                            this.showAlertMessage();
+                        } 
+                    }
+                },err => {
+                    this.isSpinnerVisible = false;                   
+                });
+            }
 	}
-
+	
 	getStatusvalue(status, action ) {
         if (status == 'Submit Approval' && action == '1') {
             return true;
         } else { return false; }
 	}
 
-	// resctrictions(Id, warningMessage) {
-	// 	//this.restrictMessage = '';
-	// 	if (Id && this.WarningListId) {
-	// 		this.commonService.vendorResctrictions(Id, this.WarningListId).subscribe((res: any) => {
-	// 			if (res) {
-	// 				this.restrictMessage = res.restrictMessage;
-	// 				this.restrictID = res.vendorWarningId;
-	// 			}
+	// bindshippingSieListOriginal(moduleId=0,userId=0) {
+	// 	moduleId = moduleId = 0 ? this.splitmoduleId : 0;
+	// 	userId= userId = 0 ? this.splituserId : 0;
 
-	// 			if (this.warningID != 0 && this.restrictID == 0) {
-	// 				this.showAlertMessage();
-	// 			} else if (this.warningID == 0 && this.restrictID != 0) {
-	// 				this.showAlertMessage();
-	// 			} else if (this.warningID != 0 && this.restrictID != 0) {
-	// 				this.showAlertMessage();
-	// 			} else if (this.warningID == 0 && this.restrictID == 0) {
+	// this.commonService.getaddressdetailsOnlyUserbyuser(moduleId, userId, 'Ship',this.poId).subscribe(
+	// 	returnddataforbill => {
+	// 		this.splitSieListOriginal = returnddataforbill.address.map(x => {
+	// 																		return {
+	// 																			siteName: x.siteName, siteId: x.siteId
+	// 																		}});
+	// 	});
+	// }
 
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;
-	// 			const errorLog = err;
-	// 			this.errorMessageHandler(errorLog);		
-	// 		});
-	// 	}
-	// }	
-
-	bindshippingSieListOriginal(moduleId=0,userId=0) {
-		moduleId = moduleId = 0 ? this.splitmoduleId : 0;
-		userId= userId = 0 ? this.splituserId : 0;
-
-	this.commonService.getaddressdetailsOnlyUserbyuser(moduleId, userId, 'Ship',this.poId).subscribe(
-		returnddataforbill => {
-			this.splitSieListOriginal = returnddataforbill.address.map(x => {
-																			return {
-																				siteName: x.siteName, siteId: x.siteId
-																			}});
-		});
-	}
-
-
-
-	filterSplitSite(event) {
-		
+	filterSplitSite(event) {		
         this.commonService.getaddressdetailsOnlyUserbyuser(this.splitmoduleId, this.splituserId, 'Ship',this.poId).subscribe(
 			returnddataforbill => {
 				this.splitSieListOriginal = returnddataforbill.address.map(x => {
@@ -662,8 +594,7 @@ export class PurchaseSetupComponent implements OnInit {
 			this.lstfilterSplitSite = shippingSite;	
 		}
 	});		
-		
-	  }
+	}
 	 
 	 
 	checkSplitSiteNameSelect() {
@@ -716,13 +647,11 @@ export class PurchaseSetupComponent implements OnInit {
 
 		}
 	}
-	
-	
 
 	getManagementStructureDetails(id,empployid=0,editMSID=0) {
 		empployid = empployid == 0 ? this.employeeId : empployid ;
 		editMSID = this.isEditMode ? editMSID = id : 0;
-		this.commonService.getManagmentStrctureData(id,empployid,editMSID).subscribe(response => {
+		this.commonService.getManagmentStrctureData(id,empployid,editMSID,this.currentUserMasterCompanyId).subscribe(response => {
 			if(response) {
 				const result = response;
 				if(result[0] && result[0].level == 'Level1') {
@@ -792,9 +721,7 @@ export class PurchaseSetupComponent implements OnInit {
 				this.employeedata('',this.headerInfo.managementStructureId);	
 			}
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}
 
@@ -863,7 +790,7 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 
 		} else {
-		this.commonService.getManagmentStrctureData(msId,employid,editMSID).subscribe(response => {
+		this.commonService.getManagmentStrctureData(msId,employid,editMSID,this.currentUserMasterCompanyId).subscribe(response => {
 			if(response) {
 				const result = response;
 				if(result[0] && result[0].level == 'Level1') {
@@ -933,9 +860,7 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			}
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});
 		}
 		this.getFunctionalReportCurrencyById(partList);
@@ -1040,7 +965,7 @@ export class PurchaseSetupComponent implements OnInit {
 	
 	getManagementStructureForChildEdit(partChildList) {
 		var editMSID = this.isEditMode ? partChildList.managementStructureId : 0;
-		this.commonService.getManagmentStrctureData(partChildList.managementStructureId,this.employeeId,editMSID).subscribe(response => {
+		this.commonService.getManagmentStrctureData(partChildList.managementStructureId,this.employeeId,editMSID,this.currentUserMasterCompanyId).subscribe(response => {
 			if(response) {
 				const result = response;
 				if(result[0] && result[0].level == 'Level1') {
@@ -1126,7 +1051,8 @@ export class PurchaseSetupComponent implements OnInit {
 			this.headerInfo.managementStructureId = legalEntityId;	
 			this.headerInfo.companyId = legalEntityId;		
 			this.commonService.getManagementStructurelevelWithEmployee(legalEntityId,this.employeeId ).subscribe(res => {
-                this.bulist = res;
+				this.bulist = res;
+				this.employeedata('',this.headerInfo.managementStructureId);
 			});
 		}
 	    else {
@@ -1208,19 +1134,14 @@ export class PurchaseSetupComponent implements OnInit {
 			this.headerInfo.buId = buId;
 			this.commonService.getManagementStructurelevelWithEmployee(buId,this.employeeId ).subscribe(res => {
                 this.divisionlist = res;
-			});
-			// for (let i = 0; i < this.partListData.length; i++) {
-			// 	this.partListData[i].parentbuId = buId;
-			// 	this.getParentDivisionlist(this.partListData[i]);
-			// }		
+			});					
 		 }  else {
 			 this.headerInfo.managementStructureId  = this.headerInfo.companyId;		
 		 }
-
+		 this.employeedata('',this.headerInfo.managementStructureId);
 	}
 	
 	getParentDivisionlist(partList) {
-	 	
 	 	partList.parentDivisionlist = [];
 	 	partList.parentDepartmentlist = [];		
 	 	partList.parentDivisionId = 0;
@@ -1259,8 +1180,6 @@ export class PurchaseSetupComponent implements OnInit {
 	 	 this.getFunctionalReportCurrencyById(partList);
 	 }
 
-	
-
 	getChildDivisionlist(partChildList) {	
 		partChildList.childDivisionId = 0;
 		partChildList.childDeptId = 0;
@@ -1287,15 +1206,12 @@ export class PurchaseSetupComponent implements OnInit {
 		   this.commonService.getManagementStructurelevelWithEmployee(divisionId,this.employeeId ).subscribe(res => {
 			this.departmentList = res;
 		});
-		//    for (let i = 0; i < this.partListData.length; i++) {
-		// 	this.partListData[i].divisionId = divisionId;
-		// 	this.getParentDeptlist(this.partListData[i]);
-		// 	}
 		}
 		 else {
 			 this.headerInfo.managementStructureId  = this.headerInfo.buId;
 			 this.headerInfo.divisionId = 0;
 		 }
+		 this.employeedata('',this.headerInfo.managementStructureId);
 	}
 	getParentDeptlist(partList) {	
 		partList.parentDeptId = 0;
@@ -1347,16 +1263,13 @@ export class PurchaseSetupComponent implements OnInit {
 	getDepartmentId(departmentId) {
 		if (departmentId != 0 && departmentId != null && departmentId != undefined) {
 			this.headerInfo.managementStructureId = departmentId;
-			this.headerInfo.departmentId = departmentId;			
-			//  for (let i = 0; i < this.partListData.length; i++) {
-		    // 	this.partListData[i].parentDeptId = departmentId;
-		    // 	this.getParentDeptId(this.partListData[i]);			
-		    // }
+			this.headerInfo.departmentId = departmentId;
 		}
 		 else {
 			 this.headerInfo.managementStructureId  = this.headerInfo.divisionId;
 			 this.headerInfo.departmentId = 0;
-		 }		
+		 }	
+		 this.employeedata('',this.headerInfo.managementStructureId);	
 	}	
 	getParentDeptId(partList) {
 		if (partList.parentDeptId != 0 && partList.parentDeptId != null && partList.parentDeptId != undefined) {
@@ -1404,32 +1317,32 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 				this.getFXRate(partList);
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;						
 			});
 		}
 	}
 	
-	loadPOStatus() {		
-        this.commonService.smartDropDownList('POStatus', 'POStatusId', 'Description').subscribe(response => { 		        
-			if(response) {
-			this.poStatusList = response;
-            this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	
-            response.forEach(x => {
-                if (x.label.toUpperCase() == "OPEN") {
-					this.headerInfo.statusId = x.value;
-					this.poOpenstatusID = x.value;
-                }
-                else if (x.label.toUpperCase()  == "FULFILLING") {
-                    this.poFulfillingstatusID = x.value;
-                }
-            }); }
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
+	loadPOStatus() {
+		if (this.arrayPostatuslist.length == 0) {
+            this.arrayPostatuslist.push(0); }
+			this.commonService.autoSuggestionSmartDropDownList('POStatus','POStatusId','Description','',
+								  true, 0,this.arrayPostatuslist.join(),this.currentUserMasterCompanyId)
+				.subscribe(res => {
+				this.poStatusList = res;
+				this.poStatusList = this.poStatusList.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	
+				res.forEach(x => {
+					if (x.label.toUpperCase() == "OPEN") {
+						this.headerInfo.statusId = x.value;
+						this.poOpenstatusID = x.value;
+					}
+					else if (x.label.toUpperCase()  == "FULFILLING") {
+						this.poFulfillingstatusID = x.value;
+					}
+				}); }
+			,err => {
+				this.isSpinnerVisible = false;	}
+			); 
+		
 	}
 
 	loadApprovalProcessStatus() {		
@@ -1447,13 +1360,10 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 				else if (x.label.toUpperCase() == "SUBMITINTERNALAPPROVAL") {
                     this.pendingApprovalID = x.value;
-				}		
-				
+				}				
             });}
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});
 	}
 
@@ -1461,9 +1371,10 @@ export class PurchaseSetupComponent implements OnInit {
 	
 	}
 
-	onWOSelect(id)
-	{
-		this.arrayWOlist.push(id);
+	onWOSelect(id,partList,index)
+	{		
+		this.arrayWOlist.push(id);		
+		this.GetSubWolist(id,partList,index);		
 	}
 
 	onSubWOSelect(id)
@@ -1481,29 +1392,29 @@ export class PurchaseSetupComponent implements OnInit {
 		this.arraySOlist.push(id);
 	}
 	
-	private salesStockRefData() {		
-			if(this.salesOrderReferenceData){
-                this.newObjectForParent.partNumberId = {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber};
-					const newObject = {
-							...this.newObjectForParent,
-							partNumberId: {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber},
-							needByDate: this.headerInfo.needByDate,
-							priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
-							discountPercent: {percentId: 0, percentValue: 'Select'}
-						}
-						this.getManagementStructureForParentEdit(newObject);
-						this.getPNDetailsById(this.newObjectForParent)
-				this.newObjectForParent.quantityOrdered = this.salesOrderReferenceData.quantity;
-				this.newObjectForParent.managementStructureId = this.salesOrderReferenceData.quantity;
-				this.newObjectForParent.conditionId = this.salesOrderReferenceData.conditionId;
-			}
-			//bind part details by stocklineid
-			if(this.stocklineReferenceData){
-						this.newObjectForParent.partNumberId = {value: this.stocklineReferenceData.itemMasterId, label: this.stocklineReferenceData.partNumber};
-						this.getPNDetailsById(this.newObjectForParent);
-				this.newObjectForParent.quantityOrdered = this.stocklineReferenceData.quantity;	
-			}	
-	}
+	// private salesStockRefData() {		
+	// 		if(this.salesOrderReferenceData){
+    //             this.newObjectForParent.partNumberId = {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber};
+	// 				const newObject = {
+	// 						...this.newObjectForParent,
+	// 						partNumberId: {value: this.salesOrderReferenceData.itemMasterId, label: this.salesOrderReferenceData.partNumber},
+	// 						needByDate: this.headerInfo.needByDate,
+	// 						priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+	// 						discountPercent: {percentId: 0, percentValue: 'Select'}
+	// 					}
+	// 					this.getManagementStructureForParentEdit(newObject);
+	// 					this.getPNDetailsById(this.newObjectForParent)
+	// 			this.newObjectForParent.quantityOrdered = this.salesOrderReferenceData.quantity;
+	// 			this.newObjectForParent.managementStructureId = this.salesOrderReferenceData.quantity;
+	// 			this.newObjectForParent.conditionId = this.salesOrderReferenceData.conditionId;
+	// 		}
+	// 		//bind part details by stocklineid
+	// 		if(this.stocklineReferenceData){
+	// 					this.newObjectForParent.partNumberId = {value: this.stocklineReferenceData.itemMasterId, label: this.stocklineReferenceData.partNumber};
+	// 					this.getPNDetailsById(this.newObjectForParent);
+	// 			this.newObjectForParent.quantityOrdered = this.stocklineReferenceData.quantity;	
+	// 		}	
+	// }
 
 	loadModuleListForVendorComp() {
 		this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
@@ -1523,23 +1434,35 @@ export class PurchaseSetupComponent implements OnInit {
 			});			
 		}
 		,err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 	
 	//#endregion
 	// Load Vendor data
 	loadvendorDataById(vendorId) {		
-		if(vendorId) {
-			this.vendorContactList = [];
-			this.getVendorContactsListByID(vendorId);		
-			this.getVendorCreditTermsByID(vendorId);
-			this.headerInfo.vendorId = getObjectById('vendorId', vendorId, this.allActions);
-			this.headerInfo.vendorCode = getObjectById('vendorId', vendorId, this.allActions);
-			this.headerInfo.vendorName = getValueFromArrayOfObjectById('vendorName', 'vendorId', vendorId, this.allActions);
-		}
+		if (vendorId) {
+            this.vendorContactList = [];
+            this.getVendorContactsListByID(vendorId);
+            this.getVendorCreditTermsByID(vendorId);
+            this.warningsandRestriction(vendorId);
+            if (this.arrayVendlsit.length == 0) {
+                this.arrayVendlsit.push(0);
+            }
+            this.isSpinnerVisible = true;
+            this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                this.allActions = res;
+                this.vendorNames = res;
+                this.vendorCodes = res;
+                this.splitVendorNames = res;
+                this.headerInfo.vendorId = getObjectById('vendorId', vendorId, this.allActions);
+                this.headerInfo.vendorCode = getObjectById('vendorId', vendorId, this.allActions);
+                this.headerInfo.vendorName = getValueFromArrayOfObjectById('vendorName', 'vendorId', vendorId, this.allActions);
+                this.isSpinnerVisible = false;    
+            }, err => {
+                this.isSpinnerVisible = false;            
+            });
+        }
 	}
 
 	async getVendorContactsListByID(vendorId) {
@@ -1553,9 +1476,7 @@ export class PurchaseSetupComponent implements OnInit {
 			this.headerInfo.vendorContactId = isDefaultContact[0];
 			this.headerInfo.vendorContactPhone = isDefaultContact[0];
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -1568,16 +1489,13 @@ export class PurchaseSetupComponent implements OnInit {
 			this.headerInfo.creditTermsId = res.creditTermsId;
 			this.headerInfo.creditTerms = res.creditTerms; }
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
-	getVendorPOHeaderById(poId) {	
-		
+	getVendorPOHeaderById(poId) {			
 		this.purchaseOrderService.getVendorPOHeaderById(poId).subscribe(res => {			
-								
+			this.isheaderEmployee = true;					
 			this.headerInfo = {
 				purchaseOrderNumber: res.purchaseOrderNumber,
 				openDate: new Date(res.openDate),
@@ -1588,17 +1506,19 @@ export class PurchaseSetupComponent implements OnInit {
 				vendorId: getObjectById('vendorId', res.vendorId, this.allActions),
 				vendorCode: getObjectById('vendorId', res.vendorId, this.allActions),
 				//vendorCode: res.VendorCode,
-				vendorContactId: this.getVendorContactsListByIDEdit(res),
-				vendorContactPhone: this.getVendorContactsListByIDEdit(res),
+				//vendorContactId: this.getVendorContactsListByIDEdit(res),
+				//vendorContactPhone: this.getVendorContactsListByIDEdit(res),
 				vendorName: getValueFromArrayOfObjectById('vendorName', 'vendorId', res.vendorId, this.allActions),
 				creditLimit: res.creditLimit ? formatNumberAsGlobalSettingsModule(res.creditLimit, 2) : '0.00',
 				creditTerms: res.creditTerms,
 				creditTermsId: res.creditTermsId,
+				requestedBy: res.requestedBy,
 				requisitionerId: getObjectById('value', res.requestedBy, this.allEmployeeList),
 				approverId: getObjectById('value', res.approverId, this.allEmployeeList),
 				approvedDate: res.dateApproved ? new Date(res.dateApproved) : '',
 				statusId: res.statusId,
 				resale: res.resale,
+				managementStructureId:res.managementStructureId,
 				companyId: this.getManagementStructureDetails(res.managementStructureId,this.employeeId,res.managementStructureId),
                 poMemo: res.poMemo,
 				notes: res.notes,
@@ -1606,7 +1526,8 @@ export class PurchaseSetupComponent implements OnInit {
 				updatedDate:res.updatedDate,
 				createdBy:res.createdBy,
 				updatedBy:res.updatedBy 
-			};			
+			};	
+			this.getVendorContactsListByIDEdit(res);		
 			if(this.headerInfo.statusId == this.poOpenstatusID)
 			{
 				this.disableHeaderInfo = false;
@@ -1622,11 +1543,8 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 			this.enableHeaderSaveBtn = false;
 			this.capvendorId = res.vendorId;
-			 this.warningsandRestriction(res.vendorId); 
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -1635,25 +1553,24 @@ export class PurchaseSetupComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		this.purchaseOrderService.getPurchaseOrderAllPartsById(poId,this.employeeId, this.workOrderPartNumberId).subscribe(res => {
 			if(res) {
+				this.isSpinnerVisible = true;
 				this.BindAllParts(res);
 				this.isSpinnerVisible = false;
 				this.enableHeaderSaveBtn = false;
 				}
 				this.isSpinnerVisible = false;
 		}, err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
-	BindAllParts(data) {
+	BindAllParts(data) {		
 		this.partListData = [];
-		this.newPartsList = [this.newObjectForParent];	
+		this.newPartsList = [this.newObjectForParent];
 		if(data) {	
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
 					...x,							
-					partNumberId: {value: x.itemMasterId, label: x.partNumber},					
+					partNumberId: {value: x.itemMasterId, label: x.partNumber},						
 					ifSplitShip: x.purchaseOrderSplitParts.length > 0 ? true : false,
 					partNumber: x.partNumber,
 					partDescription: x.partDescription,
@@ -1663,7 +1580,8 @@ export class PurchaseSetupComponent implements OnInit {
 					discountPercent: x.discountPercent ? parseInt(x.discountPercent) : 0,							
 					functionalCurrencyId: getObjectById('value', x.functionalCurrencyId, this.allCurrencyData),
 					reportCurrencyId: getObjectById('value', x.reportCurrencyId, this.allCurrencyData),							
-					workOrderId: getObjectById('value', x.workOrderId == null ? 0 : x.workOrderId, this.allWorkOrderInfo),
+					workOrderId: getObjectById('value', x.workOrderId == null ? 0 : x.workOrderId, this.allWorkOrderInfo),					
+					subWorkOrderId: x.subWorkOrderId,
 					repairOrderId: getObjectById('value', x.repairOrderId == null ? 0 : x.repairOrderId, this.allRepairOrderInfo),
 					salesOrderId: getObjectById('value', x.salesOrderId == null ? 0 : x.salesOrderId, this.allSalesOrderInfo),
 					quantityOrdered: x.quantityOrdered ? formatNumberAsGlobalSettingsModule(x.quantityOrdered, 0) : '0',
@@ -1674,6 +1592,7 @@ export class PurchaseSetupComponent implements OnInit {
 					extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
 					isApproved: x.isApproved ? x.isApproved : false,							
 					childList: this.getPurchaseOrderSplitPartsEdit(x, pindex,data[1]),
+					remQty: 0,
 				}
 				this.getManagementStructureForParentPart(this.newPartsList,data[1],data[3]);
 
@@ -1688,6 +1607,18 @@ export class PurchaseSetupComponent implements OnInit {
 				if (!this.newPartsList.childList) {
 					this.newPartsList.childList = [];
 				}
+
+				var childQty = 0;
+				if (this.newPartsList.childList != null && this.newPartsList.childList.length > 0) {
+					for (let j = 0; j < this.newPartsList.childList.length; j++) {
+						if(!this.newPartsList.childList[j].isDeleted){
+							childQty +=  this.newPartsList.childList[j].quantityOrdered ? parseInt(this.newPartsList.childList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0;
+						}					
+					}
+					var quantityOrdered =  this.newPartsList.quantityOrdered ? parseInt(this.newPartsList.quantityOrdered.toString().replace(/\,/g,'')) : 0;					
+					this.newPartsList.remQty = quantityOrdered - childQty;
+				}
+				this.getSubWOlsitId(this.newPartsList,data[4]);		
 				this.partListData.push(this.newPartsList);
 				if(this.partListData.length > 0) {
 					this.isEditModePart = true;
@@ -1695,8 +1626,8 @@ export class PurchaseSetupComponent implements OnInit {
 					this.isEditModePart = false;
 				}
 				this.getTotalExtCost();
-				this.getTotalDiscAmount();
-			});		
+				this.getTotalDiscAmount();				
+			});	
 		}
 		this.enableHeaderSaveBtn = false;
 	
@@ -1724,8 +1655,7 @@ export class PurchaseSetupComponent implements OnInit {
 					partListUserId: this.getPartSplitUserIdEdit(y, pindex, cindex),
 					partListAddressId: y.poPartSplitAddressId ? y.poPartSplitAddressId : 0,
 					quantityOrdered: y.quantityOrdered ? formatNumberAsGlobalSettingsModule(y.quantityOrdered, 0) : '0'				
-				}
-				//this.getManagementStructureForChildPart(splitpart,ms);
+				}				
 				return splitpart;
 			})
 		}
@@ -1805,6 +1735,28 @@ export class PurchaseSetupComponent implements OnInit {
 	
 	}
 
+	getSubWOlsitId(parentdata,response) {		
+        const data1 = response[parentdata.purchaseOrderPartRecordId];
+		if(data1) {
+				if (data1[0]) {
+					//parentdata.subWorkOrderlist = data1[0];
+					const data = data1.map(x => {
+						return {
+							value: x.subWorkOrderId,
+							label: x.subWorkOrderNo
+						}
+					});
+					this.allsubWorkOrderInfo = [
+						{ value: 0, label: 'Select' }
+					];
+					parentdata.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];					
+					parentdata.subWorkOrderId = getObjectByValue('value',parentdata.subWorkOrderId  == null ? 0 : parentdata.subWorkOrderId, parentdata.subWorkOrderlist);
+
+				}
+			}			
+	}
+
+
 	getPartItemDetailsById(parentdata,response) {	
 		this.showInput = true;
 		const itemMasterId = getValueFromObjectByKey('value', parentdata.partNumberId)
@@ -1819,6 +1771,7 @@ export class PurchaseSetupComponent implements OnInit {
 					this.partWithId = data1[0];
 					parentdata.partId = this.partWithId.itemMasterId;
 					parentdata.partDescription = this.partWithId.partDescription;
+					parentdata.minimumOrderQuantity = this.partWithId.minimumOrderQuantity;
 					parentdata.itemTypeId = this.partWithId.itemTypeId;
 					parentdata.stockType = this.partWithId.stockType;
 					parentdata.manufacturerId = this.partWithId.manufacturerId;
@@ -1828,15 +1781,15 @@ export class PurchaseSetupComponent implements OnInit {
 					parentdata.UOMId = this.partWithId.purchaseUnitOfMeasureId;
 					parentdata.UOMShortName = this.partWithId.shortName;
 					parentdata.partNumber = this.partWithId.partNumber;
-					parentdata.itemMasterId = this.partWithId.itemMasterId;
-					parentdata.altPartCollection = this.partWithId.altPartNumList;
+					parentdata.itemMasterId = this.partWithId.itemMasterId;					
+					parentdata.altPartCollection = this.partWithId.altPartNumList.map(x => {
+						return {value: x.altEquiPartNumberId, label: x.altEquiPartNumber }});
 					this.altPartNumList = this.partWithId.altPartNumList;
 					if(parentdata.altEquiPartNumberId) {
-						parentdata.altEquiPartNumberId = getObjectById('altEquiPartNumberId', parentdata.altEquiPartNumberId, this.altPartNumList);
+						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
-						parentdata.altEquiPartNumberId = this.altPartNumList[0];
-					}
-										
+						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
+					}					
 				}
 			}
 			
@@ -1930,62 +1883,6 @@ export class PurchaseSetupComponent implements OnInit {
 			}	
 		this.getFunctionalReportCurrencyforPart(partList,responseFC);
 	}
-
-
-	// getPurchaseOrderPartsById(poId) {
-	// 	this.partListData = [];
-	// 	this.isSpinnerVisible = true;
-	// 				this.purchaseOrderService.getPurchaseOrderPartsById(poId, this.workOrderPartNumberId).subscribe(res => {
-	// 				this.newPartsList = [this.newObjectForParent];					
-	// 				res.map((x, pindex) => {
-	// 					this.newPartsList = {
-	// 						...x,							
-	// 						partNumberId: {value: x.itemMasterId, label: x.partNumber},
-	// 						ifSplitShip: x.purchaseOrderSplitParts.length > 0 ? true : false,
-	// 						partNumber: x.partNumber,
-	// 						partDescription: x.partDescription,
-	// 						needByDate: x.needByDate ? new Date(x.needByDate) : '',
-	// 						conditionId: parseInt(x.conditionId),
-	// 						priorityId: parseInt(x.priorityId),
-	// 						discountPercent: x.discountPercent ? parseInt(x.discountPercent) : 0,							
-	// 						functionalCurrencyId: getObjectById('value', x.functionalCurrencyId, this.allCurrencyData),
-	// 						reportCurrencyId: getObjectById('value', x.reportCurrencyId, this.allCurrencyData),							
-	// 						workOrderId: getObjectById('value', x.workOrderId, this.allWorkOrderInfo),
-	// 						repairOrderId: getObjectById('value', x.repairOrderId, this.allRepairOrderInfo),
-	// 						salesOrderId: getObjectById('value', x.salesOrderId, this.allSalesOrderInfo),
-	// 						quantityOrdered: x.quantityOrdered ? formatNumberAsGlobalSettingsModule(x.quantityOrdered, 0) : '0',
-	// 						vendorListPrice: x.vendorListPrice ? formatNumberAsGlobalSettingsModule(x.vendorListPrice, 2) : '0.00',
-	// 						discountPerUnit: x.discountPerUnit ? formatNumberAsGlobalSettingsModule(x.discountPerUnit, 2) : '0.00',
-	// 						discountAmount: x.discountAmount ? formatNumberAsGlobalSettingsModule(x.discountAmount, 2) : '0.00',
-	// 						unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
-	// 						extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
-	// 						isApproved: x.isApproved ? x.isApproved : false,							
-	// 						childList: this.getPurchaseOrderSplitPartsEdit(x, pindex),
-
-	// 					}
-	// 					this.getManagementStructureForParentEdit(this.newPartsList,this.employeeId,this.newPartsList.managementStructureId);
-	// 					this.getPNDetailsById(this.newPartsList, 'onEdit');
-	// 					if (!this.newPartsList.childList) {
-	// 						this.newPartsList.childList = [];
-	// 					}
-	// 					this.partListData.push(this.newPartsList);
-	// 					if(this.partListData.length > 0) {
-	// 						this.isEditModePart = true;
-	// 					} else {
-	// 						this.isEditModePart = false;
-	// 					}
-	// 					this.getTotalExtCost();
-	// 					this.getTotalDiscAmount();
-	// 				})
-	// 				this.isSpinnerVisible = false;
-	// 			}, err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);
-	// 			})	
-	// }
-	
-	
 	
 	getPartSplitUserIdEdit(data, pindex, cindex) {
 		if (data.poPartSplitUserTypeId === this.customerModuleId) {		
@@ -2001,56 +1898,6 @@ export class PurchaseSetupComponent implements OnInit {
 			return getObjectById('value', data.poPartSplitUserId, this.legalEntity);
 		}
 	}
-	
-
-	// onCustomerNameChange(customerId, data?, pindex?, cindex?) {
-	// 	this.customerService.getCustomerShipAddressGet(customerId).subscribe(returnedcustomerAddressses => {			
-	// 		this["splitAddressData" + pindex + cindex] = [];
-	// 		this["splitAddressData" + pindex + cindex] = returnedcustomerAddressses[0];
-	// 		if (this.isEditMode) {
-	// 			if (data && data.poPartSplitAddressId == 0) {
-	// 				this["splitAddressData" + pindex + cindex].push({ addressId: 0, address1: data.poPartSplitAddress1, address2: data.poPartSplitAddress2, city: data.poPartSplitCity, stateOrProvince: data.poPartSplitState, postalCode: data.poPartSplitPostalCode, country: data.poPartSplitCountry })
-	// 			}
-	// 			this["splitAddressData" + pindex + cindex].map(x => {
-	// 				if (x.addressId == 0) {
-	// 					data.partListAddressId = x.addressId;
-	// 				}
-	// 			});	
-	// 		}	
-	// 		if(data) {	
-	// 		data.poPartSplitAddressId = 0;
-	// 		data.partListAddressId = 0;}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;
-	// 		const errorLog = err;
-	// 		this.errorMessageHandler(errorLog);		
-	// 	});
-	// }
-	
-	// onVendorNameChange(vendorId, data?, pindex?, cindex?): void {		
-	// 	this.vendorService.getVendorShipAddressGet(vendorId).subscribe(
-	// 		vendorAddresses => {				
-	// 			this["splitAddressData" + pindex + cindex] = [];
-	// 			this["splitAddressData" + pindex + cindex] = vendorAddresses[0].map(x => {
-	// 				return {
-	// 					...x,
-	// 					countryName: x.country
-	// 				}
-	// 			});				
-	// 			if (this.isEditMode) {
-	// 				if (data && data.poPartSplitAddressId != null && data.poPartSplitAddressId == 0) {
-	// 					this["splitAddressData" + pindex + cindex].push({ addressId: 0, address1: data.poPartSplitAddress1, address2: data.poPartSplitAddress2, city: data.poPartSplitCity, stateOrProvince: data.poPartSplitState, postalCode: data.poPartSplitPostalCode, country: data.poPartSplitCountry })
-	// 				}				
-	// 			}
-	// 			if(data) {
-	// 			data.poPartSplitAddressId = 0;
-	// 			data.partListAddressId = 0;}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;
-	// 			const errorLog = err;
-	// 			this.errorMessageHandler(errorLog);		
-	// 		});
-	// }
 
     onUserNameChange(moduleID, userID, data?, pindex?, cindex?, siteID?) {      
 		if(moduleID == this.vendorModuleId){
@@ -2083,70 +1930,11 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			}
 			},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 		
 	}
-
 	
-
-	// onCompanyNameChange(companyId, data?, pindex?, cindex?) {
-	// 	this.commonService.getaddressdetailsbyuser(this.companyModuleId, companyId, 'Ship',this.poId).subscribe(
-	// 		returnddataforbill => {
-	// 			this["splitAddressData" + pindex + cindex] = [];
-	// 			this["splitAddressData" + pindex + cindex] = returnddataforbill.address;
-				
-				
-	// 			// if (this.isEditMode) {
-	// 			// 	if (data && data.poPartSplitAddressId == 0) {
-	// 			// 		this["splitAddressData" + pindex + cindex].push({ addressId: 0, address1: data.poPartSplitAddress1, address2: data.poPartSplitAddress2, city: data.poPartSplitCity, country: data.poPartSplitCountry, postalCode: data.poPartSplitPostalCode, stateOrProvince: data.poPartSplitState });
-	// 			// 	}
-	// 			// } else {
-	// 			// 	this.onShipToGetCompanyAddress(this.companySiteList_Shipping[0].legalEntityShippingAddressId);
-	// 			// }
-	// 			// if (data) {
-	// 			// data.POPartSplitSiteId = 0;
-	// 			// data.partListAddressId = 0;}
-
-	// 		},err => {
-	// 		this.isSpinnerVisible = false;
-	// 		const errorLog = err;
-	// 		this.errorMessageHandler(errorLog);		
-	// 	});
-	// 	// this.legalEntityService.getLegalEntityAddressById(companyId).subscribe(response => {
-	// 	// 	this["splitAddressData" + pindex + cindex] = [];
-	// 	//     this["splitAddressData" + pindex + cindex] = response[0];
-	// 	// 	// .map(x => {
-	// 	// 	// // 	return {
-	// 	// 	// // 		...x,
-	// 	// 	// // 		address1: x.line1,
-	// 	// 	// // 		address2: x.line2,					
-	// 	// 	// // 		countryName: x.country
-	// 	// 	// // 	}
-	// 	// 	// });
-	// 	// 	if (this.isEditMode) {
-	// 	// 		if (data && data.poPartSplitAddressId == 0) {
-	// 	// 			this["splitAddressData" + pindex + cindex].push({ addressId: 0, address1: data.poPartSplitAddress1, address2: data.poPartSplitAddress2, city: data.poPartSplitCity, country: data.poPartSplitCountry, postalCode: data.poPartSplitPostalCode, stateOrProvince: data.poPartSplitState });
-	// 	// 		}
-	// 	// 	} else {
-	// 	// 		this.onShipToGetCompanyAddress(this.companySiteList_Shipping[0].legalEntityShippingAddressId);
-	// 	// 	}
-	// 	// 	if (data) {
-	// 	// 	data.poPartSplitAddressId = 0;
-	// 	// 	data.partListAddressId = 0;}
-	// 	// },err => {
-	// 	// 	this.isSpinnerVisible = false;
-	// 	// 	const errorLog = err;
-	// 	// 	this.errorMessageHandler(errorLog);		
-	// 	// });
-	// }
-
-
-
-	
-
 
 	getPNDetailsById(parentdata, value?) {	
 		this.showInput = true;
@@ -2174,6 +1962,7 @@ export class PurchaseSetupComponent implements OnInit {
 				if (data1[0]) {
 					this.partWithId = data1[0];
 					parentdata.partId = this.partWithId.itemMasterId;
+					parentdata.minimumOrderQuantity = this.partWithId.minimumOrderQuantity;					
 					parentdata.partDescription = this.partWithId.partDescription;
 					parentdata.itemTypeId = this.partWithId.itemTypeId;
 					parentdata.stockType = this.partWithId.stockType;
@@ -2184,39 +1973,24 @@ export class PurchaseSetupComponent implements OnInit {
 					parentdata.UOMId = this.partWithId.purchaseUnitOfMeasureId;
 					parentdata.UOMShortName = this.partWithId.shortName;
 					parentdata.partNumber = this.partWithId.partNumber;
-					parentdata.itemMasterId = this.partWithId.itemMasterId;
-					parentdata.altPartCollection = this.partWithId.altPartNumList;
+					parentdata.itemMasterId = this.partWithId.itemMasterId;					
+					parentdata.altPartCollection = this.partWithId.altPartNumList.map(x => {
+						return {value: x.altEquiPartNumberId, label: x.altEquiPartNumber }});				
 					if(parentdata.conditionId && value != 'onEdit') {
 						this.getPriceDetailsByCondId(parentdata);
 					}
 					this.altPartNumList = this.partWithId.altPartNumList;
-					if(parentdata.altEquiPartNumberId && value == 'onEdit') {
-						parentdata.altEquiPartNumberId = getObjectById('altEquiPartNumberId', parentdata.altEquiPartNumberId, this.altPartNumList);
+					if (parentdata.altEquiPartNumberId && value == 'onEdit') {
+						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
-						parentdata.altEquiPartNumberId = this.altPartNumList[0];
-					}
-										
+						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
+					}										
 				}
-			}, err => {				
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
-			});
-			//get altPartNummbers
-			// this.itemser.getItemMasterAltEquiMappingParts(itemMasterId).subscribe(res => {
-			// 	this.altPartNumList = res;
-			// 	if(parentdata.altEquiPartNumberId && value == 'onEdit') {
-			// 		parentdata.altEquiPartNumberId = getObjectById('altEquiPartNumberId', parentdata.altEquiPartNumberId, this.altPartNumList);
-			// 	} else if(this.altPartNumList.length > 0) {
-			// 		parentdata.altEquiPartNumberId = this.altPartNumList[0];
-			// 	}
-			// }, err => {				
-			// 	const errorLog = err;
-			// 	this.errorMessageHandler(errorLog);
-			// })
+			}, err => {								
+			});			
 	}
 
-	getPriceDetailsByCondId(parentdata) {
-		// const condId = getValueFromObjectByKey('conditionId', parentdata.conditionId);
+	getPriceDetailsByCondId(parentdata) {	
 		this.commonService.getPriceDetailsByCondId(parentdata.itemMasterId, parentdata.conditionId).subscribe(res => {
 			if(res) {
 				parentdata.vendorListPrice = res.vendorListPrice ? formatNumberAsGlobalSettingsModule(res.vendorListPrice, 2) : '0.00';
@@ -2273,8 +2047,8 @@ export class PurchaseSetupComponent implements OnInit {
 		this.partListData.map(x => {			
 			x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g,'')) : 0;
 			this.totalDiscAmount += x.tempDiscAmt;
+			this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
 		})
-		this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
 	}
 
 	
@@ -2289,7 +2063,7 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 		this.getTotalExtCost();
 	}
-
+	
 	getTotalExtCost() {
 		this.totalExtCost = 0;
 		this.partListData.map(x => {			
@@ -2299,8 +2073,10 @@ export class PurchaseSetupComponent implements OnInit {
 		this.totalExtCost = this.totalExtCost ? formatNumberAsGlobalSettingsModule(this.totalExtCost, 2) : '0.00';
 	}
 
-	async getVendorContactsListByIDEdit(res) {
-		await this.vendorService.getVendorContactDataByVendorId(res.vendorId).subscribe(data => {
+	getVendorContactsListByIDEdit(res) {
+		this.vendorContactList = [];		
+		this.warningsandRestriction(res.vendorId);
+		this.vendorService.getVendorContactDataByVendorId(res.vendorId).subscribe(data => {
 			this.vendorContactList = data;
 			const isContact = this.vendorContactList.filter(x => {
 				if (x.vendorContactId === res.vendorContactId) {
@@ -2311,9 +2087,7 @@ export class PurchaseSetupComponent implements OnInit {
 			this.headerInfo.vendorContactPhone = isContact[0];
 			this.getVendorCreditTermsByID(res.vendorId);
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -2330,9 +2104,7 @@ export class PurchaseSetupComponent implements OnInit {
 			this.getApproversByTask(poId)
 		}
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 		}
 		else {
@@ -2394,25 +2166,9 @@ export class PurchaseSetupComponent implements OnInit {
 				}	
 			this.isSpinnerVisible = false; 
 		}, err => {
-			this.isSpinnerVisible = false;						
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);						
+			this.isSpinnerVisible = false;	
 		});
-	}
-	
-	getVendorCapesByID(vendorId) {
-		const status = 'active';	
-        if(vendorId != undefined) {
-			this.isSpinnerVisible = true;
-            this.vendorService.getVendorCapabilityList(status, vendorId).subscribe(   
-				results => {this.onDataLoadVendorCapsSuccessful(results[0])	}
-				,err => {
-					this.isSpinnerVisible = false;						
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);					
-				});
-		}
-	}
+	}	
 
 	public onDataLoadVendorCapsSuccessful(allWorkFlows: any[]) {
         this.vendorCapesInfo = allWorkFlows.map(x => {
@@ -2424,178 +2180,109 @@ export class PurchaseSetupComponent implements OnInit {
 		this.isSpinnerVisible = false;    
 	}	
 
-	////////// Address Tab
-	// getVendorPOAddressById(poId) {
-	// 	this.isSpinnerVisible = true;
-	// 	this.purchaseOrderService.getVendorPOAddressById(poId).subscribe(res => {
-	// 		this.sourcePoApproval = {
-	// 			shipToPOAddressId: res.shipToPOAddressId,
-	// 			shipToUserTypeId: res.shipToUserType,	
-	// 			shipToUserId: this.getShipToUserIdEdit(res),
-	// 			shipToSiteId: res.shipToSiteId,
-	// 			shipToSiteName: res.shipToSiteName,
-	// 			shipToContactId: res.shipToContactId,
-	// 			shipToContact: res.shipToContact,  
-	// 			shipToMemo: res.shipToMemo,
-	// 			shipToAddressId: res.shipToAddressId,
-	// 			shipToAddress1: res.shipToAddress1,
-	// 			shipToAddress2: res.shipToAddress2,			
-	// 			shipToCity: res.shipToCity,
-	// 			shipToStateOrProvince: res.shipToState,
-	// 			shipToPostalCode: res.shipToPostalCode,
-	// 			ShipToCountryId: res.ShipToCountryId,
-	// 			poShipViaId: res.poShipViaId,
-	// 			billToPOAddressId: res.billToPOAddressId,
-	// 			billToUserTypeId: res.billToUserType,
-	// 			billToUserId: this.getBillToUserIdEdit(res),
-	// 			billToSiteId: res.billToSiteId,
-	// 			billToSiteName: res.billToSiteName,
-	// 			billToContactId: res.billToContactId,
-	// 			billToContactName: res.billToContactName,
-	// 			billToMemo: res.billToMemo,				
-	// 			billToAddressId: res.billToAddressId,	
-	// 			billToAddress1: res.billToAddress1,
-	// 			billToAddress2: res.billToAddress2,
-	// 			billToCity: res.billToCity,
-	// 			billToStateOrProvince: res.billToState,
-	// 			billToPostalCode: res.billToPostalCode,
-	// 			billToCountryId: res.billToCountryId,				
-	// 			shipViaId: res.shipViaId,
-	// 			shipVia: res.shipVia,
-	// 			shippingCost: formatNumberAsGlobalSettingsModule(res.shippingCost, 2),
-	// 			handlingCost: formatNumberAsGlobalSettingsModule(res.handlingCost, 2),	
-	// 			shippingAccountNo: res.shippingAccountNo
-	// 		};
-	// 		if(this.sourcePoApproval && this.sourcePoApproval.shipToUserTypeId && this.sourcePoApproval.billToUserTypeId) {
-	// 			this.isEditModeAdd = true;
-	// 			this.isSpinnerVisible = false;
-	// 		} else {
-	// 			this.isEditModeAdd = false;
-	// 			this.sourcePoApproval.shipToUserTypeId = this.companyModuleId;
-	// 			this.sourcePoApproval.billToUserTypeId = this.companyModuleId;
-	// 			//this.getLegalEntityDetailsById();
-	// 		}
-	// 		this.isSpinnerVisible = false;
-	// 	}, err => {
-	// 		this.isSpinnerVisible = false;
-	// 		const errorLog = err;
-	// 		this.errorMessageHandler(errorLog);		
-	// 	})		
+	// getShipToUserIdEdit(data) {
+	// 	if (data.shipToUserType === this.customerModuleId) {
+	// 		this.tempShipTOAddressId = data.shipToAddressId;
+	// 		this.onShipToCustomerSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
+	// 		this.getShipViaEdit(data);
+	// 		return getObjectById('value', data.shipToUserId, this.allCustomers);
+	// 	}
+	// 	if (data.shipToUserType === this.vendorModuleId) {
+	// 		this.tempShipTOAddressId = data.shipToAddressId;
+	// 		this.onShipToVendorSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
+	// 		this.getShipViaEdit(data);
+	// 		return getObjectById('vendorId', data.shipToUserId, this.allActions);
+	// 	}
+	// 	if (data.shipToUserType === this.companyModuleId) {			
+	// 		this.tempShipTOAddressId = data.shipToAddressId;		
+	// 		this.shipToSelectedvalue = data.shipToUserId;
+	// 		this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
+	// 			this.companySiteList_Shipping = response;
+	// 			if (this.isEditMode) {
+    //                 if (data.shipToSiteId == 0) {
+    //                     this.companySiteList_Shipping.push({ legalEntityShippingAddressId: 0, siteName: data.shipToSiteName, addressId: data.shipToAddressId });
+	// 					this.shipToAddress.address1 = data.shipToAddress1;
+	// 					this.shipToAddress.address2 = data.shipToAddress2;						
+	// 					this.shipToAddress.city = data.shipToCity;
+	// 					this.shipToAddress.stateOrProvince = data.shipToState;
+	// 					this.shipToAddress.postalCode = data.shipToPostalCode;
+	// 					this.shipToAddress.country = data.shipToCountry;
+	// 				} else {
+    //                     this.onShipToGetCompanyAddress(data.shipToSiteId);
+	// 				}
+	// 			}
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// 		this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
+	// 			this.contactListForCompanyShipping = response;
+	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', data.shipToContactId, this.contactListForCompanyShipping);
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// 		this.getShipViaEdit(data);			
+	// 		return getObjectById('value', data.shipToUserId, this.legalEntity);
+	// 	}
 	// }
 
-	getShipToUserIdEdit(data) {
-		if (data.shipToUserType === this.customerModuleId) {
-			this.tempShipTOAddressId = data.shipToAddressId;
-			this.onShipToCustomerSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
-			this.getShipViaEdit(data);
-			return getObjectById('value', data.shipToUserId, this.allCustomers);
-		}
-		if (data.shipToUserType === this.vendorModuleId) {
-			this.tempShipTOAddressId = data.shipToAddressId;
-			this.onShipToVendorSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
-			this.getShipViaEdit(data);
-			return getObjectById('vendorId', data.shipToUserId, this.allActions);
-		}
-		if (data.shipToUserType === this.companyModuleId) {			
-			this.tempShipTOAddressId = data.shipToAddressId;		
-			this.shipToSelectedvalue = data.shipToUserId;
-			this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
-				this.companySiteList_Shipping = response;
-				if (this.isEditMode) {
-                    if (data.shipToSiteId == 0) {
-                        this.companySiteList_Shipping.push({ legalEntityShippingAddressId: 0, siteName: data.shipToSiteName, addressId: data.shipToAddressId });
-						this.shipToAddress.address1 = data.shipToAddress1;
-						this.shipToAddress.address2 = data.shipToAddress2;						
-						this.shipToAddress.city = data.shipToCity;
-						this.shipToAddress.stateOrProvince = data.shipToState;
-						this.shipToAddress.postalCode = data.shipToPostalCode;
-						this.shipToAddress.country = data.shipToCountry;
-					} else {
-                        this.onShipToGetCompanyAddress(data.shipToSiteId);
-					}
-				}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-			this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
-				this.contactListForCompanyShipping = response;
-				this.sourcePoApproval.shipToContactId = getObjectById('contactId', data.shipToContactId, this.contactListForCompanyShipping);
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-			this.getShipViaEdit(data);			
-			return getObjectById('value', data.shipToUserId, this.legalEntity);
-		}
-	}
+	// onShipToCustomerSelected(customerId, res?, id?, value?) {	
+	// 	this.clearInputOnClickUserIdShipTo();
+	// 	this.shipToSelectedvalue = customerId;
+	// 	this.customerService.getCustomerShipAddressGet(customerId).subscribe(
+	// 		returnddataforbill => {
+	// 			this.shipToCusData = returnddataforbill[0];
+	// 			for(var i =0; i < this.shipToCusData.length; i++) {
+	// 				if(this.shipToCusData[i].isPrimary && value != 'shipEdit') {
+	// 					this.sourcePoApproval.shipToSiteId = this.shipToCusData[i].customerShippingAddressId;
+	// 					this.sourcePoApproval.shipToAddressId = this.shipToCusData[i].AddressId;
+	// 				}
+	// 			}
+	// 			if (id) {
+	// 				res.shipToSiteId = id;
+	// 			}
+	// 			if (this.isEditMode) {
+	// 				if(res){
+	// 					if (res.shipToSiteId == 0) {
+	// 					this.shipToCusData.push({ customerShippingAddressId: 0, addressId:res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
+	// 				}}
+	// 			}
+	// 			this.onShipToGetAddress(res, res.shipToSiteId);
+	// 		}, err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
 
-	onShipToCustomerSelected(customerId, res?, id?, value?) {	
-		this.clearInputOnClickUserIdShipTo();
-		this.shipToSelectedvalue = customerId;
-		this.customerService.getCustomerShipAddressGet(customerId).subscribe(
-			returnddataforbill => {
-				this.shipToCusData = returnddataforbill[0];
-				for(var i =0; i < this.shipToCusData.length; i++) {
-					if(this.shipToCusData[i].isPrimary && value != 'shipEdit') {
-						this.sourcePoApproval.shipToSiteId = this.shipToCusData[i].customerShippingAddressId;
-						this.sourcePoApproval.shipToAddressId = this.shipToCusData[i].AddressId;
-					}
-				}
-				if (id) {
-					res.shipToSiteId = id;
-				}
-				if (this.isEditMode) {
-					if(res){
-						if (res.shipToSiteId == 0) {
-						this.shipToCusData.push({ customerShippingAddressId: 0, addressId:res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-					}}
-				}
-				this.onShipToGetAddress(res, res.shipToSiteId);
-			}, err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
+	// 	this.customerService.getContacts(customerId).subscribe(data => {
+	// 		this.shipToContactData = data[0];
+	// 		for(var i =0; i < this.shipToContactData.length; i++) {
+	// 			if(this.shipToContactData[i].isDefaultContact) {
+	// 				this.sourcePoApproval.shipToContactId = this.shipToContactData[i];
+	// 			}
+	// 		}
+	// 		if (this.isEditMode && value == 'shipEdit') {
+	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.shipToContactData);
+	// 		}
+	// 	},
+	// 	err => {
+	// 		this.isSpinnerVisible = false;				
+	// 	});
+	// 	this.getShipViaDetailsForShipTo(res.shipViaId);
+	// }
 
-		this.customerService.getContacts(customerId).subscribe(data => {
-			this.shipToContactData = data[0];
-			for(var i =0; i < this.shipToContactData.length; i++) {
-				if(this.shipToContactData[i].isDefaultContact) {
-					this.sourcePoApproval.shipToContactId = this.shipToContactData[i];
-				}
-			}
-			if (this.isEditMode && value == 'shipEdit') {
-				this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.shipToContactData);
-			}
-		},
-		err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-		this.getShipViaDetailsForShipTo(res.shipViaId);
-	}
-
-	
-	clearInputOnClickUserIdShipTo() {
-		this.sourcePoApproval.shipToSiteId = 0;
-		this.sourcePoApproval.shipToAddressId = 0;
-		this.sourcePoApproval.shipToContactId = 0;
-		this.sourcePoApproval.shipToMemo = '';
-		this.sourcePoApproval.shipViaId = 0;
-		this.sourcePoApproval.shippingCost = 0;
-		this.sourcePoApproval.handlingCost = 0;
-		this.sourcePoApproval.shippingAcctNum = 0;		
-		this.shipToAddress = {};
-		this.shipViaList = [];
-		this.shipToCusData = [];
-		this.vendorSelected = [];
-		this.companySiteList_Shipping = [];
-	}
-
+	// clearInputOnClickUserIdShipTo() {
+	// 	this.sourcePoApproval.shipToSiteId = 0;
+	// 	this.sourcePoApproval.shipToAddressId = 0;
+	// 	this.sourcePoApproval.shipToContactId = 0;
+	// 	this.sourcePoApproval.shipToMemo = '';
+	// 	this.sourcePoApproval.shipViaId = 0;
+	// 	this.sourcePoApproval.shippingCost = 0;
+	// 	this.sourcePoApproval.handlingCost = 0;
+	// 	this.sourcePoApproval.shippingAcctNum = 0;		
+	// 	this.shipToAddress = {};
+	// 	this.shipViaList = [];
+	// 	this.shipToCusData = [];
+	// 	this.vendorSelected = [];
+	// 	this.companySiteList_Shipping = [];
+	// }
 	
 	getShipViaDetailsForShipTo(id?) {		
 		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue).subscribe(response => {
@@ -2612,9 +2299,7 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 		},
 		err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		})
 	}
 
@@ -2631,9 +2316,7 @@ export class PurchaseSetupComponent implements OnInit {
                 this.sourcePoApproval.shipVia = responseData.shipVia;					
 				
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;				
 			})
 		} 		
 	}
@@ -2662,542 +2345,512 @@ export class PurchaseSetupComponent implements OnInit {
 				this.sourcePoApproval.shippingAcctNum = data.shippingAcctNum;
 			} 
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-	}
-	
-	onShipToVendorSelected(vendorId, res?, id?, value?) {
-		this.clearInputOnClickUserIdShipTo();
-		this.shipToSelectedvalue = vendorId;
-		this.showInput = true;
-		this.vendorService.getVendorShipAddressGet(vendorId).subscribe(
-			returdaa => {
-				this.vendorSelected = returdaa[0];
-				for(var i =0; i < this.vendorSelected.length; i++) {
-					if(this.vendorSelected[i].isPrimary && value != 'shipEdit') {
-                        this.sourcePoApproval.shipToSiteId = this.vendorSelected[i].vendorShippingAddressId;
-                        this.sourcePoApproval.shipToAddressId = this.vendorSelected[i].AddressId;
-					}
-				}
-				if (id) {
-                    res.shipToSiteId = id;
-				}
-				if (this.isEditMode && res) {
-                    if (res.shipToSiteId == 0) {
-                        this.vendorSelected.push({ vendorShippingAddressId: 0, addressId: res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-					}
-				}
-				if(res) {
-                    this.onShipToGetAddress(res, res.shipToSiteId);
-				} else {
-                    this.onShipToGetAddress(this.sourcePoApproval, this.sourcePoApproval.shipToSiteId);
-				}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-		this.vendorService.getContacts(vendorId).subscribe(data => {
-			this.vendorContactsForshipTo = data[0];
-			for(var i =0; i < this.vendorContactsForshipTo.length; i++) {
-				if(this.vendorContactsForshipTo[i].isDefaultContact) {
-					this.sourcePoApproval.shipToContactId = this.vendorContactsForshipTo[i];
-				}
-			}
-			if (this.isEditMode && value == 'shipEdit') {
-				this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.vendorContactsForshipTo);
-			}	
-
-			this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, vendorId).subscribe(res => {
-				this.shipViaList = res;
-						},err => {
-							this.isSpinnerVisible = false;
-							const errorLog = err;
-							this.errorMessageHandler(errorLog);		
-						});
-            this.getShipViaDetailsForShipTo(res.shipViaId);
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-	}
-
-	onShipToGetCompanyAddress(id) {
-		this.shipToAddress = {};		
-		this.companyService.getShippingAddress(id).subscribe(res => {			
-			const resp = res;
-            if (resp) {
-                this.shipToAddress.addressId = resp.addressId;
-				this.shipToAddress.address1 = resp.line1;
-				this.shipToAddress.address2 = resp.line2;				
-				this.shipToAddress.city = resp.city;
-				this.shipToAddress.stateOrProvince = resp.stateOrProvince;
-				this.shipToAddress.postalCode = resp.postalCode;
-				this.shipToAddress.countryId = resp.countryId;
-				this.shipToAddress.country = getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList);
-            } else {
-                this.shipToAddress.addressId = 0;
-				this.shipToAddress.address1 = '';
-				this.shipToAddress.address2 = '';				
-				this.shipToAddress.city = '';
-				this.shipToAddress.stateOrProvince = '';
-				this.shipToAddress.postalCode = '';
-				this.shipToAddress.country = '';
-				this.shipToAddress.countryId = null;
-			}
-				},
-		err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);});		
-	}	
-
-	errorMessageHandler(log) {
-		const errorLog = log;
-		var msg = '';
-		if(errorLog.message) {
-		  if (errorLog.error && errorLog.error.errors.length > 0) {
-					for (let i = 0; i < errorLog.error.errors.length; i++){
-						msg = msg + errorLog.error.errors[i].message + '<br/>'
-					}
-				}
-				this.alertService.showMessage(
-                    errorLog.error.message,
-					msg,
-					MessageSeverity.error
-				);
-		   }
-		   else {
-			this.alertService.showMessage(
-				'Error',
-				log.error,
-				MessageSeverity.error
-			); }
-	}
-
-	getLegalEntityDetailsById() {
-		this.commonService.getLegalEntityIdByMangStrucId(this.currentUserManagementStructureId).subscribe(res => {
-			this.currentUserLegalEntityId = res.legalEntityId;
-			this.getInactiveObjectForLEOnEdit('value', this.currentUserLegalEntityId, this.legalEntity, 'LegalEntity', 'LegalEntityId', 'Name');
 			this.isSpinnerVisible = false;			
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
 		});
 	}
+	
+	// onShipToVendorSelected(vendorId, res?, id?, value?) {
+	// 	this.clearInputOnClickUserIdShipTo();
+	// 	this.shipToSelectedvalue = vendorId;
+	// 	this.showInput = true;
+	// 	this.vendorService.getVendorShipAddressGet(vendorId).subscribe(
+	// 		returdaa => {
+	// 			this.vendorSelected = returdaa[0];
+	// 			for(var i =0; i < this.vendorSelected.length; i++) {
+	// 				if(this.vendorSelected[i].isPrimary && value != 'shipEdit') {
+    //                     this.sourcePoApproval.shipToSiteId = this.vendorSelected[i].vendorShippingAddressId;
+    //                     this.sourcePoApproval.shipToAddressId = this.vendorSelected[i].AddressId;
+	// 				}
+	// 			}
+	// 			if (id) {
+    //                 res.shipToSiteId = id;
+	// 			}
+	// 			if (this.isEditMode && res) {
+    //                 if (res.shipToSiteId == 0) {
+    //                     this.vendorSelected.push({ vendorShippingAddressId: 0, addressId: res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
+	// 				}
+	// 			}
+	// 			if(res) {
+    //                 this.onShipToGetAddress(res, res.shipToSiteId);
+	// 			} else {
+    //                 this.onShipToGetAddress(this.sourcePoApproval, this.sourcePoApproval.shipToSiteId);
+	// 			}
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;						
+	// 		});
+	// 	this.vendorService.getContacts(vendorId).subscribe(data => {
+	// 		this.vendorContactsForshipTo = data[0];
+	// 		for(var i =0; i < this.vendorContactsForshipTo.length; i++) {
+	// 			if(this.vendorContactsForshipTo[i].isDefaultContact) {
+	// 				this.sourcePoApproval.shipToContactId = this.vendorContactsForshipTo[i];
+	// 			}
+	// 		}
+	// 		if (this.isEditMode && value == 'shipEdit') {
+	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.vendorContactsForshipTo);
+	// 		}	
+
+	// 		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, vendorId).subscribe(res => {
+	// 			this.shipViaList = res;
+	// 					},err => {
+	// 						this.isSpinnerVisible = false;								
+	// 					});
+    //         this.getShipViaDetailsForShipTo(res.shipViaId);
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;				
+	// 	});
+	// }
+
+	// onShipToGetCompanyAddress(id) {
+	// 	this.shipToAddress = {};		
+	// 	this.companyService.getShippingAddress(id).subscribe(res => {			
+	// 		const resp = res;
+    //         if (resp) {
+    //             this.shipToAddress.addressId = resp.addressId;
+	// 			this.shipToAddress.address1 = resp.line1;
+	// 			this.shipToAddress.address2 = resp.line2;				
+	// 			this.shipToAddress.city = resp.city;
+	// 			this.shipToAddress.stateOrProvince = resp.stateOrProvince;
+	// 			this.shipToAddress.postalCode = resp.postalCode;
+	// 			this.shipToAddress.countryId = resp.countryId;
+	// 			this.shipToAddress.country = getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList);
+    //         } else {
+    //             this.shipToAddress.addressId = 0;
+	// 			this.shipToAddress.address1 = '';
+	// 			this.shipToAddress.address2 = '';				
+	// 			this.shipToAddress.city = '';
+	// 			this.shipToAddress.stateOrProvince = '';
+	// 			this.shipToAddress.postalCode = '';
+	// 			this.shipToAddress.country = '';
+	// 			this.shipToAddress.countryId = null;
+	// 		}
+	// 			},
+	// 	err => {});		
+	// }	
+
+	// errorMessageHandler(log) {
+	// 	const errorLog = log;
+	// 	var msg = '';
+	// 	if(errorLog.message) {
+	// 	  if (errorLog.error && errorLog.error.errors.length > 0) {
+	// 				for (let i = 0; i < errorLog.error.errors.length; i++){
+	// 					msg = msg + errorLog.error.errors[i].message + '<br/>'
+	// 				}
+	// 			}
+	// 			this.alertService.showMessage(
+    //                 errorLog.error.message,
+	// 				msg,
+	// 				MessageSeverity.error
+	// 			);
+	// 	   }
+	// 	   else {
+	// 		this.alertService.showMessage(
+	// 			'Error',
+	// 			log.error,
+	// 			MessageSeverity.error
+	// 		); }
+	// }
+
+	// getLegalEntityDetailsById() {
+	// 	this.commonService.getLegalEntityIdByMangStrucId(this.currentUserManagementStructureId).subscribe(res => {
+	// 		this.currentUserLegalEntityId = res.legalEntityId;
+	// 		this.getInactiveObjectForLEOnEdit('value', this.currentUserLegalEntityId, this.legalEntity, 'LegalEntity', 'LegalEntityId', 'Name');
+	// 		this.isSpinnerVisible = false;			
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;					
+	// 	});
+	// }
 
 	
-	getInactiveObjectForLEOnEdit(string, id, originalData, tableName, primaryColumn, description) {
-        if(id) {
-            for(let i=0; i < originalData.length; i++) {
-                if(originalData[i][string] == id) {
-                    this.sourcePoApproval.shipToUserId = originalData[i];
-					this.sourcePoApproval.billToUserId = originalData[i];
-					this.onShipToCompanySelected(originalData[i]);
-					this.onBillToCompanySelected(originalData[i]);
-                } 
-            }
-            let obj: any = {};
-            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
-				obj = res[0];
-				this.legalEntity = [...originalData, obj];
-				this.sourcePoApproval.shipToUserId = obj;
-				this.sourcePoApproval.billToUserId = obj;
-				this.onShipToCompanySelected(obj);
-				this.onBillToCompanySelected(obj);
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-		} else {
-            return null;
-        }
-	}	
+	// getInactiveObjectForLEOnEdit(string, id, originalData, tableName, primaryColumn, description) {
+    //     if(id) {
+    //         for(let i=0; i < originalData.length; i++) {
+    //             if(originalData[i][string] == id) {
+    //                 this.sourcePoApproval.shipToUserId = originalData[i];
+	// 				this.sourcePoApproval.billToUserId = originalData[i];
+	// 				this.onShipToCompanySelected(originalData[i]);
+	// 				this.onBillToCompanySelected(originalData[i]);
+    //             } 
+    //         }
+    //         let obj: any = {};
+    //         this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+	// 			obj = res[0];
+	// 			this.legalEntity = [...originalData, obj];
+	// 			this.sourcePoApproval.shipToUserId = obj;
+	// 			this.sourcePoApproval.billToUserId = obj;
+	// 			this.onShipToCompanySelected(obj);
+	// 			this.onBillToCompanySelected(obj);
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;				
+	// 		});
+	// 	} else {
+    //         return null;
+    //     }
+	// }	
 	
-	onShipToCompanySelected(object?, res?, id?) {
-		this.clearInputOnClickUserIdShipTo();
-		this.shipToSelectedvalue = object ? object.value : this.shipToSelectedvalue;
-		this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
-			this.companySiteList_Shipping = response;
-			for(var i =0; i < this.companySiteList_Shipping.length; i++) {
-				if(this.companySiteList_Shipping[i].isPrimary) {
-					this.sourcePoApproval.shipToSiteId = this.companySiteList_Shipping[i].legalEntityShippingAddressId;
-					this.sourcePoApproval.shipToAddressId = this.companySiteList_Shipping[i].AddressId;
-					this.onShipToGetCompanyAddress(this.sourcePoApproval.shipToSiteId);
-				}
-			}
-			if (id) {
-				res.shipToSiteId = id;
-				this.onShipToGetCompanyAddress(id);
-			}
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-		this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
-			this.contactListForCompanyShipping = response;
-			for(var i =0; i < this.contactListForCompanyShipping.length; i++) {
-				if(this.contactListForCompanyShipping[i].isDefaultContact) {
-					this.sourcePoApproval.shipToContactId = this.contactListForCompanyShipping[i];
-				}
-			}
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-		this.getShipViaDetailsForShipTo();
-	}
+	// onShipToCompanySelected(object?, res?, id?) {
+	// 	this.clearInputOnClickUserIdShipTo();
+	// 	this.shipToSelectedvalue = object ? object.value : this.shipToSelectedvalue;
+	// 	this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
+	// 		this.companySiteList_Shipping = response;
+	// 		for(var i =0; i < this.companySiteList_Shipping.length; i++) {
+	// 			if(this.companySiteList_Shipping[i].isPrimary) {
+	// 				this.sourcePoApproval.shipToSiteId = this.companySiteList_Shipping[i].legalEntityShippingAddressId;
+	// 				this.sourcePoApproval.shipToAddressId = this.companySiteList_Shipping[i].AddressId;
+	// 				this.onShipToGetCompanyAddress(this.sourcePoApproval.shipToSiteId);
+	// 			}
+	// 		}
+	// 		if (id) {
+	// 			res.shipToSiteId = id;
+	// 			this.onShipToGetCompanyAddress(id);
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;			
+	// 	});
+	// 	this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
+	// 		this.contactListForCompanyShipping = response;
+	// 		for(var i =0; i < this.contactListForCompanyShipping.length; i++) {
+	// 			if(this.contactListForCompanyShipping[i].isDefaultContact) {
+	// 				this.sourcePoApproval.shipToContactId = this.contactListForCompanyShipping[i];
+	// 			}
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;					
+	// 	});
+	// 	this.getShipViaDetailsForShipTo();
+	// }
 
-	onBillToCompanySelected(object?, response?, id?) {
-		this.clearInputOnClickUserIdBillTo();
-		this.billToSelectedvalue = object ? object.value : this.billToSelectedvalue;
-		this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(res => {
-			this.companySiteList_Billing = res;
-			for(var i =0; i < this.companySiteList_Billing.length; i++) {
-				if(this.companySiteList_Billing[i].isPrimary) {
-					this.sourcePoApproval.billToSiteId = this.companySiteList_Billing[i].legalEntityBillingAddressId;
-					this.sourcePoApproval.billToAddressId = this.companySiteList_Billing[i].AddressId;
-					this.onBillToGetCompanyAddress(this.sourcePoApproval.billToSiteId);
-				}
-			}
-			if (id) {
-				response.billToSiteId = id;
-				this.onBillToGetCompanyAddress(id);
-			}
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-		this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(res => {
-			this.contactListForCompanyBilling = res;
-			for(var i =0; i < this.contactListForCompanyBilling.length; i++) {
-				if(this.contactListForCompanyBilling[i].isDefaultContact) {
-					this.sourcePoApproval.billToContactId = this.contactListForCompanyBilling[i];
-				}
-			}
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-		// this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.billToUserTypeId, this.billToSelectedvalue).subscribe(res => {
-		// 	this.shipViaList = res;
-		// },err => {
-		// 	this.isSpinnerVisible = false;
-		// 	const errorLog = err;
-		// 	this.errorMessageHandler(errorLog);		
-		// });
-	}
+	// onBillToCompanySelected(object?, response?, id?) {
+	// 	this.clearInputOnClickUserIdBillTo();
+	// 	this.billToSelectedvalue = object ? object.value : this.billToSelectedvalue;
+	// 	this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(res => {
+	// 		this.companySiteList_Billing = res;
+	// 		for(var i =0; i < this.companySiteList_Billing.length; i++) {
+	// 			if(this.companySiteList_Billing[i].isPrimary) {
+	// 				this.sourcePoApproval.billToSiteId = this.companySiteList_Billing[i].legalEntityBillingAddressId;
+	// 				this.sourcePoApproval.billToAddressId = this.companySiteList_Billing[i].AddressId;
+	// 				this.onBillToGetCompanyAddress(this.sourcePoApproval.billToSiteId);
+	// 			}
+	// 		}
+	// 		if (id) {
+	// 			response.billToSiteId = id;
+	// 			this.onBillToGetCompanyAddress(id);
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;				
+	// 	});
+	// 	this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(res => {
+	// 		this.contactListForCompanyBilling = res;
+	// 		for(var i =0; i < this.contactListForCompanyBilling.length; i++) {
+	// 			if(this.contactListForCompanyBilling[i].isDefaultContact) {
+	// 				this.sourcePoApproval.billToContactId = this.contactListForCompanyBilling[i];
+	// 			}
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;				
+	// 	});
+	// 	// this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.billToUserTypeId, this.billToSelectedvalue).subscribe(res => {
+	// 	// 	this.shipViaList = res;
+	// 	// },err => {
+	// 	// 	this.isSpinnerVisible = false;
+	// 	// 	const errorLog = err;
+	// 	// 	this.errorMessageHandler(errorLog);		
+	// 	// });
+	// }
 
-	clearInputOnClickUserIdBillTo() {
-		this.sourcePoApproval.billToSiteId = 0;
-		this.sourcePoApproval.billToContactId = 0;
-		this.billToAddress = {};
-		this.sourcePoApproval.billToMemo = '';
-		this.billToCusData = [];
-		this.vendorSelectedForBillTo = [];
-		this.companySiteList_Billing = [];
-	}
-	onBillToGetCompanyAddress(id) {
-		this.billToAddress = {};
-		this.companyService.getBillingAddress(id).subscribe(res => {
-            if (res) {
-                this.billToAddress.addressId = res[0].addressId;
-				this.billToAddress.address1 = res[0].address1;
-				this.billToAddress.address2 = res[0].address2;				
-				this.billToAddress.city = res[0].city;
-				this.billToAddress.stateOrProvince = res[0].stateOrProvince;
-				this.billToAddress.postalCode = res[0].postalCode;
-				this.billToAddress.countryId= res[0].countryId;
-				this.billToAddress.country = res[0].countryId ? getValueFromArrayOfObjectById('label', 'value', res[0].countryId, this.allCountriesList) : '';
+	// clearInputOnClickUserIdBillTo() {
+	// 	this.sourcePoApproval.billToSiteId = 0;
+	// 	this.sourcePoApproval.billToContactId = 0;
+	// 	this.billToAddress = {};
+	// 	this.sourcePoApproval.billToMemo = '';
+	// 	this.billToCusData = [];
+	// 	this.vendorSelectedForBillTo = [];
+	// 	this.companySiteList_Billing = [];
+	// }
+
+	// onBillToGetCompanyAddress(id) {
+	// 	this.billToAddress = {};
+	// 	this.companyService.getBillingAddress(id).subscribe(res => {
+    //         if (res) {
+    //             this.billToAddress.addressId = res[0].addressId;
+	// 			this.billToAddress.address1 = res[0].address1;
+	// 			this.billToAddress.address2 = res[0].address2;				
+	// 			this.billToAddress.city = res[0].city;
+	// 			this.billToAddress.stateOrProvince = res[0].stateOrProvince;
+	// 			this.billToAddress.postalCode = res[0].postalCode;
+	// 			this.billToAddress.countryId= res[0].countryId;
+	// 			this.billToAddress.country = res[0].countryId ? getValueFromArrayOfObjectById('label', 'value', res[0].countryId, this.allCountriesList) : '';
 				
-            } else {
-                this.billToAddress.addressId = 0;
-				this.billToAddress.address1 = '';
-				this.billToAddress.address2 = '';			
-				this.billToAddress.city = '';
-				this.billToAddress.stateOrProvince = '';
-				this.billToAddress.postalCode = '';
-				this.billToAddress.country = '';
-				this.billToAddress.countryId= null;
-			}
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
+    //         } else {
+    //             this.billToAddress.addressId = 0;
+	// 			this.billToAddress.address1 = '';
+	// 			this.billToAddress.address2 = '';			
+	// 			this.billToAddress.city = '';
+	// 			this.billToAddress.stateOrProvince = '';
+	// 			this.billToAddress.postalCode = '';
+	// 			this.billToAddress.country = '';
+	// 			this.billToAddress.countryId= null;
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;					
+	// 	});
 	
-	}
+	// }
 	
-	getBillToUserIdEdit(data) {
-		if (data.billToUserType === this.customerModuleId) {
-			this.tempBillTOAddressId = data.billToAddressId;
-			this.onBillToCustomerSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
-			return getObjectById('value', data.billToUserId, this.allCustomers);
-		}
-		if (data.billToUserType === this.vendorModuleId) {
-			this.tempBillTOAddressId = data.billToAddressId;
-			this.onBillToVendorSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
-			return getObjectById('vendorId', data.billToUserId, this.allActions);
-		}
-		if (data.billToUserType === this.companyModuleId) {
-			this.tempBillTOAddressId = data.billToAddressId;			
-			this.billToSelectedvalue = data.billToUserId;
-			this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(response => {
-				this.companySiteList_Billing = response;
-				if (this.isEditMode) {
-					if (data.billToSiteId == 0) {
-						this.companySiteList_Billing.push({ legalEntityBillingAddressId: 0, siteName: data.billToSiteName });
-						this.billToAddress.address1 = data.billToAddress1;
-						this.billToAddress.address2 = data.billToAddress2;						
-						this.billToAddress.city = data.billToCity;
-						this.billToAddress.stateOrProvince = data.billToState;
-						this.billToAddress.postalCode = data.billToPostalCode;
-						this.billToAddress.country = data.billToCountry;
-					} else {
-						this.onBillToGetCompanyAddress(data.billToSiteId);
-					}
-				}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-			this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(response => {
-				this.contactListForCompanyBilling = response;
-				this.sourcePoApproval.billToContactId = getObjectById('contactId', data.billToContactId, this.contactListForCompanyBilling);
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-			return getObjectById('value', data.billToUserId, this.legalEntity);
-		}
-	}
+	// getBillToUserIdEdit(data) {
+	// 	if (data.billToUserType === this.customerModuleId) {
+	// 		this.tempBillTOAddressId = data.billToAddressId;
+	// 		this.onBillToCustomerSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
+	// 		return getObjectById('value', data.billToUserId, this.allCustomers);
+	// 	}
+	// 	if (data.billToUserType === this.vendorModuleId) {
+	// 		this.tempBillTOAddressId = data.billToAddressId;
+	// 		this.onBillToVendorSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
+	// 		return getObjectById('vendorId', data.billToUserId, this.allActions);
+	// 	}
+	// 	if (data.billToUserType === this.companyModuleId) {
+	// 		this.tempBillTOAddressId = data.billToAddressId;			
+	// 		this.billToSelectedvalue = data.billToUserId;
+	// 		this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(response => {
+	// 			this.companySiteList_Billing = response;
+	// 			if (this.isEditMode) {
+	// 				if (data.billToSiteId == 0) {
+	// 					this.companySiteList_Billing.push({ legalEntityBillingAddressId: 0, siteName: data.billToSiteName });
+	// 					this.billToAddress.address1 = data.billToAddress1;
+	// 					this.billToAddress.address2 = data.billToAddress2;						
+	// 					this.billToAddress.city = data.billToCity;
+	// 					this.billToAddress.stateOrProvince = data.billToState;
+	// 					this.billToAddress.postalCode = data.billToPostalCode;
+	// 					this.billToAddress.country = data.billToCountry;
+	// 				} else {
+	// 					this.onBillToGetCompanyAddress(data.billToSiteId);
+	// 				}
+	// 			}
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// 		this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(response => {
+	// 			this.contactListForCompanyBilling = response;
+	// 			this.sourcePoApproval.billToContactId = getObjectById('contactId', data.billToContactId, this.contactListForCompanyBilling);
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// 		return getObjectById('value', data.billToUserId, this.legalEntity);
+	// 	}
+	// }
 	
     // bill to
-	onBillToGetAddress(data, id) {	
-		if (data.billToUserTypeId == this.customerModuleId || data.billToUserType == this.customerModuleId) {			
-			const resp = getObjectById('customerBillingAddressId', id, this.billToCusData);		
-			if (resp) {
-				this.billToAddress.address1 = resp.address1;
-				this.billToAddress.address2 = resp.address2;			
-				this.billToAddress.city = resp.city;
-				this.billToAddress.stateOrProvince = resp.stateOrProvince;
-				this.billToAddress.postalCode = resp.postalCode;
-				this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
-			} else {
-				this.billToAddress.address1 = '';
-				this.billToAddress.address2 = '';				
-				this.billToAddress.city = '';
-				this.billToAddress.stateOrProvince = '';
-				this.billToAddress.postalCode = '';
-				this.billToAddress.country = '';
-			}		
-		} else if (data.billToUserTypeId == this.vendorModuleId || data.billToUserType == this.vendorModuleId) {
-			if(id != 0) {
-				this.vendorService.getVendorAddressById(id).subscribe(res => {
-					const resp = res;
-					if (resp) {
-						this.billToAddress.addressId = resp.vba.addressId;
-						this.billToAddress.address1 = resp.line1;
-						this.billToAddress.address2 = resp.line2;						
-						this.billToAddress.city = resp.city;
-						this.billToAddress.stateOrProvince = resp.stateOrProvince;
-						this.billToAddress.postalCode = resp.postalCode;
-						this.billToAddress.countryId = resp.countryId;
-						this.billToAddress.country = resp.countryId ? getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList) : '';
-					} else {
-						this.billToAddress.address1 = '';
-						this.billToAddress.address2 = '';						
-						this.billToAddress.city = '';
-						this.billToAddress.stateOrProvince = '';
-						this.billToAddress.postalCode = '';
-						this.billToAddress.countryId = null;
-						this.billToAddress.country = '';
-					}
-				},err => {
-					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);		
-				});
-			} else {
-				const resp = getObjectById('vendorBillingAddressId', id, this.vendorSelectedForBillTo);
-				if (resp) {
-					this.billToAddress.address1 = resp.address1;
-					this.billToAddress.address2 = resp.address2;
-					this.billToAddress.city = resp.city;
-					this.billToAddress.stateOrProvince = resp.stateOrProvince;
-					this.billToAddress.postalCode = resp.postalCode;
-					this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
-				} else {
-					this.billToAddress.address1 = '';
-					this.billToAddress.address2 = '';
-					this.billToAddress.city = '';
-					this.billToAddress.stateOrProvince = '';
-					this.billToAddress.postalCode = '';
-					this.billToAddress.country = '';
-				}
-			}
-		}
-	}
+	// onBillToGetAddress(data, id) {	
+	// 	if (data.billToUserTypeId == this.customerModuleId || data.billToUserType == this.customerModuleId) {			
+	// 		const resp = getObjectById('customerBillingAddressId', id, this.billToCusData);		
+	// 		if (resp) {
+	// 			this.billToAddress.address1 = resp.address1;
+	// 			this.billToAddress.address2 = resp.address2;			
+	// 			this.billToAddress.city = resp.city;
+	// 			this.billToAddress.stateOrProvince = resp.stateOrProvince;
+	// 			this.billToAddress.postalCode = resp.postalCode;
+	// 			this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
+	// 		} else {
+	// 			this.billToAddress.address1 = '';
+	// 			this.billToAddress.address2 = '';				
+	// 			this.billToAddress.city = '';
+	// 			this.billToAddress.stateOrProvince = '';
+	// 			this.billToAddress.postalCode = '';
+	// 			this.billToAddress.country = '';
+	// 		}		
+	// 	} else if (data.billToUserTypeId == this.vendorModuleId || data.billToUserType == this.vendorModuleId) {
+	// 		if(id != 0) {
+	// 			this.vendorService.getVendorAddressById(id).subscribe(res => {
+	// 				const resp = res;
+	// 				if (resp) {
+	// 					this.billToAddress.addressId = resp.vba.addressId;
+	// 					this.billToAddress.address1 = resp.line1;
+	// 					this.billToAddress.address2 = resp.line2;						
+	// 					this.billToAddress.city = resp.city;
+	// 					this.billToAddress.stateOrProvince = resp.stateOrProvince;
+	// 					this.billToAddress.postalCode = resp.postalCode;
+	// 					this.billToAddress.countryId = resp.countryId;
+	// 					this.billToAddress.country = resp.countryId ? getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList) : '';
+	// 				} else {
+	// 					this.billToAddress.address1 = '';
+	// 					this.billToAddress.address2 = '';						
+	// 					this.billToAddress.city = '';
+	// 					this.billToAddress.stateOrProvince = '';
+	// 					this.billToAddress.postalCode = '';
+	// 					this.billToAddress.countryId = null;
+	// 					this.billToAddress.country = '';
+	// 				}
+	// 			},err => {
+	// 				this.isSpinnerVisible = false;							
+	// 			});
+	// 		} else {
+	// 			const resp = getObjectById('vendorBillingAddressId', id, this.vendorSelectedForBillTo);
+	// 			if (resp) {
+	// 				this.billToAddress.address1 = resp.address1;
+	// 				this.billToAddress.address2 = resp.address2;
+	// 				this.billToAddress.city = resp.city;
+	// 				this.billToAddress.stateOrProvince = resp.stateOrProvince;
+	// 				this.billToAddress.postalCode = resp.postalCode;
+	// 				this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
+	// 			} else {
+	// 				this.billToAddress.address1 = '';
+	// 				this.billToAddress.address2 = '';
+	// 				this.billToAddress.city = '';
+	// 				this.billToAddress.stateOrProvince = '';
+	// 				this.billToAddress.postalCode = '';
+	// 				this.billToAddress.country = '';
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 
-	onBillToCustomerSelected(customerId, res?, id?, value?) {		
-		if(res) {
-			res.billToStateOrProvince = res.billToState ? res.billToState : '';
-		}		
-		this.clearInputOnClickUserIdBillTo();
-		this.billToSelectedvalue = customerId;
-		this.customerService.getCustomerBillViaDetails(customerId).subscribe(
-			returnddataforbill => {
-				this.billToCusData = returnddataforbill[0];
-				for(var i =0; i < this.billToCusData.length; i++) {
-					if(this.billToCusData[i].isPrimary && value != 'billEdit') {
-						this.sourcePoApproval.billToSiteId = this.billToCusData[i].customerBillingAddressId;
-						this.sourcePoApproval.billToAddressId = this.billToCusData[i].AddressId;
-					}
-				}
-				if (id) {
-					res.billToSiteId = id;
-				}
-				if (this.isEditMode) {
-					if (res && res.billToSiteId == 0) {
-						this.billToCusData.push({ customerBillingAddressId: 0, address1: res.billToAddress1, address2: res.billToAddress2, city: res.billToCity, stateOrProvince: res.billToStateOrProvince, postalCode: res.billToPostalCode, country: res.billToCountry, siteName: res.billToSiteName })
-					}
-				}
-				if(res) {
-					this.onBillToGetAddress(res, res.billToSiteId);
-				} else {
-					this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
-				}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-		this.customerService.getContacts(customerId).subscribe(data => {
-			this.billToContactData = data[0];
-			for(var i =0; i < this.billToContactData.length; i++) {
-				if(this.billToContactData[i].isDefaultContact) {
-					this.sourcePoApproval.billToContactId = this.billToContactData[i];
-				}
-			}
-			if (this.isEditMode && value == 'billEdit') {
-				this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.billToContactData);
-			}
-		},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-	}
+	// onBillToCustomerSelected(customerId, res?, id?, value?) {		
+	// 	if(res) {
+	// 		res.billToStateOrProvince = res.billToState ? res.billToState : '';
+	// 	}		
+	// 	this.clearInputOnClickUserIdBillTo();
+	// 	this.billToSelectedvalue = customerId;
+	// 	this.customerService.getCustomerBillViaDetails(customerId).subscribe(
+	// 		returnddataforbill => {
+	// 			this.billToCusData = returnddataforbill[0];
+	// 			for(var i =0; i < this.billToCusData.length; i++) {
+	// 				if(this.billToCusData[i].isPrimary && value != 'billEdit') {
+	// 					this.sourcePoApproval.billToSiteId = this.billToCusData[i].customerBillingAddressId;
+	// 					this.sourcePoApproval.billToAddressId = this.billToCusData[i].AddressId;
+	// 				}
+	// 			}
+	// 			if (id) {
+	// 				res.billToSiteId = id;
+	// 			}
+	// 			if (this.isEditMode) {
+	// 				if (res && res.billToSiteId == 0) {
+	// 					this.billToCusData.push({ customerBillingAddressId: 0, address1: res.billToAddress1, address2: res.billToAddress2, city: res.billToCity, stateOrProvince: res.billToStateOrProvince, postalCode: res.billToPostalCode, country: res.billToCountry, siteName: res.billToSiteName })
+	// 				}
+	// 			}
+	// 			if(res) {
+	// 				this.onBillToGetAddress(res, res.billToSiteId);
+	// 			} else {
+	// 				this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
+	// 			}
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// 	this.customerService.getContacts(customerId).subscribe(data => {
+	// 		this.billToContactData = data[0];
+	// 		for(var i =0; i < this.billToContactData.length; i++) {
+	// 			if(this.billToContactData[i].isDefaultContact) {
+	// 				this.sourcePoApproval.billToContactId = this.billToContactData[i];
+	// 			}
+	// 		}
+	// 		if (this.isEditMode && value == 'billEdit') {
+	// 			this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.billToContactData);
+	// 		}
+	// 	},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// }
 
 	
-	async onBillToVendorSelected(vendorId, res?, id?, value?) {
-		this.clearInputOnClickUserIdBillTo();
-		this.billToSelectedvalue = vendorId;
-		this.showInput = true;
-		await this.vendorService.getVendorSiteNames(vendorId).subscribe(
-			returdaa => {
-				this.vendorSelectedForBillTo = returdaa;
-				for(var i =0; i < this.vendorSelectedForBillTo.length; i++) {
-					if(this.vendorSelectedForBillTo[i].isPrimary && value != 'billEdit') {
-						this.sourcePoApproval.billToSiteId = this.vendorSelectedForBillTo[i].vendorBillingAddressId;
-						this.sourcePoApproval.billToAddressId = this.vendorSelectedForBillTo[i].AddressId;
+	// async onBillToVendorSelected(vendorId, res?, id?, value?) {
+	// 	this.clearInputOnClickUserIdBillTo();
+	// 	this.billToSelectedvalue = vendorId;
+	// 	this.showInput = true;
+	// 	await this.vendorService.getVendorSiteNames(vendorId).subscribe(
+	// 		returdaa => {
+	// 			this.vendorSelectedForBillTo = returdaa;
+	// 			for(var i =0; i < this.vendorSelectedForBillTo.length; i++) {
+	// 				if(this.vendorSelectedForBillTo[i].isPrimary && value != 'billEdit') {
+	// 					this.sourcePoApproval.billToSiteId = this.vendorSelectedForBillTo[i].vendorBillingAddressId;
+	// 					this.sourcePoApproval.billToAddressId = this.vendorSelectedForBillTo[i].AddressId;
 						
-					}
-				}
-				if (id) {
-					res.billToSiteId = id;
-					this.onBillToGetAddress(res, res.billToSiteId);
-				}
-				if (this.isEditMode) {
-					if (res && res.billToSiteId == 0) {
-						this.vendorSelectedForBillTo.push({ vendorBillingAddressId: 0, siteName: res.billToSiteName });
-						this.billToAddress.address1 = res.billToAddress1;
-						this.billToAddress.address2 = res.billToAddress2;
-						this.billToAddress.city = res.billToCity;
-						this.billToAddress.stateOrProvince = res.billToState;
-						this.billToAddress.postalCode = res.billToPostalCode;
-						this.billToAddress.country = res.billToCountry;
-					} else {
-						if(res) {
-							this.onBillToGetAddress(res, res.billToSiteId);
-						} else {
-							this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
-						}
-					}
-				}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
-		this.vendorService.getContacts(vendorId).subscribe(
-			returdaa => {
-				this.vendorContactsForBillTO = returdaa[0];
-				for(var i =0; i < this.vendorContactsForBillTO.length; i++) {
-					if(this.vendorContactsForBillTO[i].isDefaultContact) {
-						this.sourcePoApproval.billToContactId = this.vendorContactsForBillTO[i];
-					}
-				}
-				if (this.isEditMode && value == 'billEdit') {
-					this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.vendorContactsForBillTO);
-				}
-			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
-			});
+	// 				}
+	// 			}
+	// 			if (id) {
+	// 				res.billToSiteId = id;
+	// 				this.onBillToGetAddress(res, res.billToSiteId);
+	// 			}
+	// 			if (this.isEditMode) {
+	// 				if (res && res.billToSiteId == 0) {
+	// 					this.vendorSelectedForBillTo.push({ vendorBillingAddressId: 0, siteName: res.billToSiteName });
+	// 					this.billToAddress.address1 = res.billToAddress1;
+	// 					this.billToAddress.address2 = res.billToAddress2;
+	// 					this.billToAddress.city = res.billToCity;
+	// 					this.billToAddress.stateOrProvince = res.billToState;
+	// 					this.billToAddress.postalCode = res.billToPostalCode;
+	// 					this.billToAddress.country = res.billToCountry;
+	// 				} else {
+	// 					if(res) {
+	// 						this.onBillToGetAddress(res, res.billToSiteId);
+	// 					} else {
+	// 						this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
+	// 					}
+	// 				}
+	// 			}
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
+	// 	this.vendorService.getContacts(vendorId).subscribe(
+	// 		returdaa => {
+	// 			this.vendorContactsForBillTO = returdaa[0];
+	// 			for(var i =0; i < this.vendorContactsForBillTO.length; i++) {
+	// 				if(this.vendorContactsForBillTO[i].isDefaultContact) {
+	// 					this.sourcePoApproval.billToContactId = this.vendorContactsForBillTO[i];
+	// 				}
+	// 			}
+	// 			if (this.isEditMode && value == 'billEdit') {
+	// 				this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.vendorContactsForBillTO);
+	// 			}
+	// 		},err => {
+	// 			this.isSpinnerVisible = false;					
+	// 		});
 		
-		}
+	// 	}
 
 	onChangeTabView(event) {
 		if(event.index == 0) {
-			// this.getPurchaseOrderPartsById(this.poId);
 			this.getPurchaseOrderAllPartsById(this.poId);
 			this.enablePartSaveBtn = false;
 		}
-		if(event.index == 2 && this.posettingModel.IsEnforceApproval == false) {
+		if(event.index == 1 ) {
+			this.showAddresstab = true;
+		}
+		if(event.index == 2 ) {
 			this.getApproversListById(this.poId);
 		}
-		if(event.index == 3 && this.posettingModel.IsEnforceApproval == false) {
+		if(event.index == 3 ) {
 			this.getApproversListById(this.poId);
 			this.getApprovalProcessListById(this.poId);
 			this.enableApproverSaveBtn = false;
 		}
 		if(event.index == 4) {
-			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
-			this.getVendorCapesByID(id);
+			this.showVendorCaptab = true;
+			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
 		}
-		// if(event.index == 4) {
-		// 	this.enableAddSaveBtn = false;
-		// 	this.getVendorPOAddressById(this.poId);
-		// }
+		if(event.index == 5) {
+			this.showDocumenttab = true;
+		}
+		if(event.index == 6) {
+			this.showComunicationtab = true;
+		}	
+		
 	}
 
 	employeedata(strText = '',manStructID = 0) {
 		if(this.arrayEmplsit.length == 0) {			
 		this.arrayEmplsit.push(0); }	
 		this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
-		this.commonService.autoCompleteDropdownsEmployeeByMS(strText,true, 20,this.arrayEmplsit.join(),manStructID).subscribe(res => {
+		this.commonService.autoCompleteDropdownsEmployeeByMS(strText,true, 20,this.arrayEmplsit.join(),manStructID,this.currentUserMasterCompanyId).subscribe(res => {
 			this.allEmployeeList = res;
 			this.requisitionerList = res;
 			this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);			
+			if(this.isheaderEmployee){
+				this.headerInfo.requisitionerId = getObjectById('value', this.headerInfo.requestedBy, this.allEmployeeList);
+				this.isheaderEmployee = false;
+			}
 			if(!this.isEditMode) {
 				this.getRequisitionerOnLoad(this.employeeId);
-			}
-		},err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			}			
+		},err => {					
 		})
 	}
 	getRequisitionerOnLoad(id) {
@@ -3207,15 +2860,13 @@ export class PurchaseSetupComponent implements OnInit {
 	getLegalEntity(strText = '') {
 		if(this.arrayLegalEntitylsit.length == 0) {			
 			this.arrayLegalEntitylsit.push(0); }	
-			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name',strText,true, 20,this.arrayLegalEntitylsit.join()).subscribe(res => {
+			this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name',strText,true, 20,this.arrayLegalEntitylsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
 				this.legalEntity = res;
 				this.legalEntityList_Forgrid = res;
 				this.legalEntityList_ForShipping = res;
 				this.legalEntityList_ForBilling= res;
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;					
 			});
 	}
 
@@ -3223,66 +2874,44 @@ export class PurchaseSetupComponent implements OnInit {
 		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
 			this.allCountriesList = res;
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		})
-	}
+	}	
 
-	
-
-    filterCompanyNameforgrid(event) {
-	// 	this.legalEntityList_Forgrid = this.legalEntity;
-	// 	const legalFilter = [...this.legalEntity.filter(x => {
-	// 		return x.label.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.legalEntityList_Forgrid = legalFilter;
+    filterCompanyNameforgrid(event) {	
 			if (event.query !== undefined && event.query !== null) {
 				this.getLegalEntity(event.query); }
-		
+	}
+	// filterCompanyNameforShipping(event) {
+	// 	if (event.query !== undefined && event.query !== null) {
+	// 		this.getLegalEntity(event.query); }
+	// }
 
-	}
-	filterCompanyNameforShipping(event) {
-		if (event.query !== undefined && event.query !== null) {
-			this.getLegalEntity(event.query); }
-	}
+	// filterCompanyNameforBilling(event) {
+	// 	if (event.query !== undefined && event.query !== null) {
+	// 		this.getLegalEntity(event.query); }
+	// }
 
-	filterCompanyNameforBilling(event) {
-		if (event.query !== undefined && event.query !== null) {
-			this.getLegalEntity(event.query); }
-	}
-
-	private loadVendorContactInfo() {		
-		this.vendorService.getContactsFirstName().subscribe(results => {
-			this.venContactList = results[0];
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-	}
-
-	private priorityData() {
-		this.commonService.smartDropDownList('Priority', 'PriorityId', 'Description').subscribe(res => {
-			this.allPriorityInfo = res;
-			this.allPriorityInfo.map(x => {
-				if(x.label == 'Routine') {
-					this.headerInfo.priorityId = x;
-				}
-			})
-			this.onSelectPriority();
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		})
-		
-	}
+	private priorityData(strText = '') {
+        if (this.arrayPrioritylist.length == 0) {
+            this.arrayPrioritylist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('Priority','PriorityId','Description',strText,true, 0,this.arrayPrioritylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+				this.allPriorityInfo = res;
+                this.allPriorityInfo.map(x => {
+                    if (x.label == 'Routine') {
+                        this.headerInfo.priorityId = x;
+                    }
+            })
+            this.onSelectPriority();
+            },
+            err => {
+                this.isSpinnerVisible = false;	});                
+    }
 
 	loadWorkOrderList(filterVal = '') {
 		if (this.arrayWOlist.length == 0) {
             this.arrayWOlist.push(0); }
-		  this.commonService.getWODataFilter(filterVal,20,this.arrayWOlist.join()).subscribe(res => {
+		  this.commonService.getWODataFilter(filterVal,20,this.arrayWOlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
 					value: x.workOrderId,
@@ -3295,18 +2924,18 @@ export class PurchaseSetupComponent implements OnInit {
 			this.allWorkOrderInfo = [...this.allWorkOrderInfo, ...data];
 			this.allWorkOrderDetails = [...this.allWorkOrderInfo, ...data];
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		})
 
 	
 	}
 
-	loadSubWorkOrderList(filterVal = '') {
+	loadSubWorkOrderList(filterVal, workOrderId,partList,index) {
 		if (this.arraysubWOlist.length == 0) {
-            this.arraysubWOlist.push(0); }
-		  this.commonService.getsubWODataFilter(filterVal,20,this.arraysubWOlist.join()).subscribe(res => {
+			this.arraysubWOlist.push(0);
+		}
+		// this.commonService.getsubWODataFilter(filterVal, 20, this.arraysubWOlist.join()).subscribe(res => {
+		this.commonService.GetSubWolist(workOrderId.value).subscribe(res => {
 			const data = res.map(x => {
 				return {
 					value: x.subWorkOrderId,
@@ -3314,17 +2943,14 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			});
 			this.allsubWorkOrderInfo = [
-				{value: 0, label: 'Select'}
+				{ value: 0, label: 'Select' }
 			];
-			this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
-			this.allsubWorkOrderDetails = [...this.allsubWorkOrderDetails, ...data];
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			//this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
+			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data];
+			partList.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];
+		}, err => {
+			this.isSpinnerVisible = false;			
 		})
-
-	
 	}
 
 	
@@ -3332,7 +2958,7 @@ export class PurchaseSetupComponent implements OnInit {
 	loadRepairOrderList(filterVal = '') {
 		if (this.arrayROlist.length == 0) {
             this.arrayROlist.push(0); }
-		this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join()).subscribe(res => {
+		this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
 					value: x.repairOrderId,
@@ -3345,16 +2971,14 @@ export class PurchaseSetupComponent implements OnInit {
 			this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
 			this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}
 
 	loadSalesOrderList(filterVal = '') {
 		if (this.arraySOlist.length == 0) {
             this.arraySOlist.push(0); }
-		this.commonService.getSODataFilter(filterVal,20,this.arraySOlist.join()).subscribe(res => {
+		this.commonService.getSODataFilter(filterVal,20,this.arraySOlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
 					value: x.salesOrderId,
@@ -3367,39 +2991,8 @@ export class PurchaseSetupComponent implements OnInit {
 			this.allSalesOrderInfo = [...this.allSalesOrderInfo, ...data];
 			this.allSalesOrderDetails = [...this.allSalesOrderInfo, ...data];
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
-		// this.commonService.getOpenSONumbers().subscribe(res => {
-		// 	this.allSalesOrderInfo = res.map(x => {
-		// 		return {
-		// 			value: x.salesOrderId,
-		// 			label: x.salesOrderNumber
-		// 		}
-		// 	});
-		// 	for(let i = 0; i< this.allSalesOrderInfo.length; i++){
-		// 		if(this.salesOrderReferenceData) {
-		// 			if(this.allSalesOrderInfo[i].value == this.salesOrderReferenceData.salesOrderId){
-		// 				this.newObjectForParent.salesOrderId = this.allSalesOrderInfo[i];
-		// 			}
-		// 		}
-		// 	}
-		// },err => {
-		// 	this.isSpinnerVisible = false;
-		// 	const errorLog = err;
-		// 	this.errorMessageHandler(errorLog);		
-		// });
-	}
-
-	loadShippingViaList() {
-		this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
-			this.allShipViaInfo = res;
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
+			this.isSpinnerVisible = false;				
+		});		
 	}
 	
 	get userName(): string {	
@@ -3421,7 +3014,9 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 	
 	editDropDownLoad() {
-		this.employeedata('',0);
+		this.loadVendorList('');
+		this.priorityData();           
+		this.loadPOStatus();			
 		this.loadVendorList();	
 		this.loadCurrencyData();
 		this.loadConditionData();	
@@ -3432,15 +3027,10 @@ export class PurchaseSetupComponent implements OnInit {
 		this.getCountriesList();
 		this.loadPercentData();
 		this.loadWorkOrderList();
-		this.loadSubWorkOrderList();
 		this.loadRepairOrderList();
 		this.loadSalesOrderList();
-		this.loadShippingViaList();
 		this.loapartItems();
-		
-		//#Happy 	
-		//#Happy this.loadVendorContactInfo();
-
+		this.loadModuleListForVendorComp();
 	}
 
 	savePurchaseOrderHeader() {		
@@ -3454,8 +3044,7 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 		}
 		else {     
-			this.isSpinnerVisible = true;
-			
+			this.isSpinnerVisible = true;			
 			var headerInfoObj = {				
 				purchaseOrderNumber: this.headerInfo.purchaseOrderNumber,
 				priorityId: this.headerInfo.priorityId ? this.getPriorityId(this.headerInfo.priorityId) : 0,
@@ -3509,27 +3098,13 @@ export class PurchaseSetupComponent implements OnInit {
 						MessageSeverity.success
 					);
 					this.route.navigate(['/vendorsmodule/vendorpages/app-purchase-setup/edit/'+this.poId]);
-					// setTimeout(() => {
-					// 	this.editDropDownLoad(); 	
-					// }, 1200);
-					// ///After Save load data
-					// this.addPartNumber();
-					//#Happy this.salesStockRefData();  // need to check
-					//#Happy 
-					/*
-					if(this.stocklineReferenceData != null && this.stocklineReferenceData != undefined) {
-						this.getManagementStructureByStockline(this.stocklineReferenceData.managementStructureEntityId);
-					}	*/		
-							
 					if(this.poId) {
 						this.isEditModeHeader = true;
 						this.isEditMode = true;
 					}
 					this.isSpinnerVisible = false;				
 				}, err => {
-					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;					
 					this.toggle_po_header = true;
 					this.enableHeaderSaveBtn = true;
 
@@ -3550,9 +3125,7 @@ export class PurchaseSetupComponent implements OnInit {
 						MessageSeverity.success
 					);
 				}, err => {
-					this.isSpinnerVisible = false;
-					const errorLog = err;
-					this.errorMessageHandler(errorLog);
+					this.isSpinnerVisible = false;					
 					this.toggle_po_header = true;
 					this.enableHeaderSaveBtn = true;
 				});
@@ -3566,12 +3139,6 @@ export class PurchaseSetupComponent implements OnInit {
 		this.savePurchaseOrderPartsList(true); 
     }
 	savePurchaseOrderPartsList(contwithoutVendorPrice = false) {
-		
-		// if(this.createPOPartsForm.invalid) {
-		// 	this.alertService.showMessage('Purchase Order', "Please enter required highlighted fields for PO PartsList!", MessageSeverity.error);
-		// 	this.inputValidCheck = true;
-		// 	return;
-		// }		
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
@@ -3579,7 +3146,14 @@ export class PurchaseSetupComponent implements OnInit {
 			this.alertService.resetStickyMessage();			
 			if(this.partListData[i].quantityOrdered == 0) {	
 				this.isSpinnerVisible = false;	
-				errmessage = errmessage + '<br />' + "Please enter Qty."
+				errmessage = errmessage + '<br />' + "Please Enter Qty."
+			}
+			if(this.partListData[i].minimumOrderQuantity > 0
+				&& this.partListData[i].quantityOrdered > 0
+				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
+				this.partListData[i].quantityOrdered = this.partListData[i].minimumOrderQuantity;
+				this.isSpinnerVisible = false;	
+				errmessage = errmessage + '<br />' + 'Minimum Order Qty : '+ this.partListData[i].minimumOrder +'<br /> Order quantity can not be less then Minimum order quantity.'
 			}
 			if(!this.partListData[i].itemMasterId) {	
 				this.isSpinnerVisible = false;	
@@ -3651,7 +3225,8 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			}
 			if(errmessage != '') {
-				this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, 'Please enter Qty');
+			    var message = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  + errmessage 
+				this.alertService.showStickyMessage("Validation failed", message, MessageSeverity.error, 'Please enter Qty');
 				return;
 		    }
 
@@ -3711,16 +3286,20 @@ export class PurchaseSetupComponent implements OnInit {
 				purchaseOrderId: this.poId,
 				isParent: true,				
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
 				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumByObject(this.partListData[i].altEquiPartNumberId) : null,
+				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,
 				assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 				partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,			
-				itemTypeId: this.partListData[i].itemTypeId ? this.partListData[i].itemTypeId : 0,
+				itemTypeId: this.partListData[i].itemTypeId ? this.partListData[i].itemTypeId : 0,				
 				manufacturerId: this.partListData[i].manufacturerId ? this.partListData[i].manufacturerId : 0,
 				glAccountId: this.partListData[i].glAccountId ? this.partListData[i].glAccountId : 0,
 				UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
 				needByDate: this.datePipe.transform(this.partListData[i].needByDate, "MM/dd/yyyy"),
 				conditionId: this.partListData[i].conditionId ? this.partListData[i].conditionId : 0,
+			    //condition : this.partListData[i].conditionId ? this.getCondition(this.partListData[i].conditionId): 0,
 				priorityId: this.partListData[i].priorityId ? this.partListData[i].priorityId : 0,
+				//priority : this.partListData[i].priorityId ? this.getPriorityName(this.partListData[i].priorityId) : 0,
 				quantityOrdered: this.partListData[i].quantityOrdered ? parseFloat(this.partListData[i].quantityOrdered.toString().replace(/\,/g,'')) : 0,
 				unitCost: this.partListData[i].unitCost ? parseFloat(this.partListData[i].unitCost.toString().replace(/\,/g,'')) : 0,
 				vendorListPrice: this.partListData[i].vendorListPrice ? parseFloat(this.partListData[i].vendorListPrice.toString().replace(/\,/g,'')) : 0,
@@ -3728,12 +3307,19 @@ export class PurchaseSetupComponent implements OnInit {
 				discountPercent: this.partListData[i].discountPercent ? this.partListData[i].discountPercent : 0,
 				discountAmount: this.partListData[i].discountAmount ? parseFloat(this.partListData[i].discountAmount.toString().replace(/\,/g,'')) : 0,
 				extendedCost: this.partListData[i].extendedCost ? parseFloat(this.partListData[i].extendedCost.toString().replace(/\,/g,'')) : 0,
-				functionalCurrencyId: this.partListData[i].functionalCurrencyId ? this.getCurrencyIdByObject(this.partListData[i].functionalCurrencyId) : null,
+				functionalCurrencyId: this.partListData[i].functionalCurrencyId ? this.getCurrencyIdByObject(this.partListData[i].functionalCurrencyId) : null,				
+				//functionalCurrency: this.partListData[i].functionalCurrencyId ? this.getlabelFromObj(this.partListData[i].functionalCurrencyId) : null,
 				foreignExchangeRate: this.partListData[i].foreignExchangeRate ? this.partListData[i].foreignExchangeRate : 0,
-				reportCurrencyId: this.partListData[i].reportCurrencyId ? this.getCurrencyIdByObject(this.partListData[i].reportCurrencyId) : null,
+				reportCurrencyId: this.partListData[i].reportCurrencyId ? this.getCurrencyIdByObject(this.partListData[i].reportCurrencyId) : null,				
+				//reportCurrency : this.partListData[i].reportCurrencyId ? this.getlabelFromObj(this.partListData[i].reportCurrencyId) : null,				
 				workOrderId: this.partListData[i].workOrderId  && this.getValueFromObj(this.partListData[i].workOrderId) != 0 ? this.getValueFromObj(this.partListData[i].workOrderId) : null,
+				//WorkOrderNo : this.partListData[i].workOrderId  && this.getValueFromObj(this.partListData[i].workOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].workOrderId) : null,
+				subWorkOrderId: this.partListData[i].subWorkOrderId && this.getValueFromObj(this.partListData[i].subWorkOrderId) != 0 ? this.getValueFromObj(this.partListData[i].subWorkOrderId) : null,				
+				//subWorkOrderNo : this.partListData[i].subWorkOrderId && this.getValueFromObj(this.partListData[i].subWorkOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].subWorkOrderId) : null,				
 				repairOrderId: this.partListData[i].repairOrderId && this.getValueFromObj(this.partListData[i].repairOrderId) != 0 ? this.getValueFromObj(this.partListData[i].repairOrderId) : null,
+				//reapairOrderNo: this.partListData[i].repairOrderId && this.getValueFromObj(this.partListData[i].repairOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].repairOrderId) : null,				
 				salesOrderId: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getValueFromObj(this.partListData[i].salesOrderId) : null,
+				//salesOrderNo: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].salesOrderId) : null,
 				managementStructureId: this.partListData[i].managementStructureId && this.partListData[i].managementStructureId != 0  ? this.partListData[i].managementStructureId : null,
 				memo: this.partListData[i].memo,
 				isApproved: this.partListData[i].isApproved ? this.partListData[i].isApproved : false, 
@@ -3759,7 +3345,7 @@ export class PurchaseSetupComponent implements OnInit {
 		
 		
 		this.purchaseOrderService.savePurchaseOrderParts(this.parentObjectArray).subscribe(res => {
-			if(res) {
+			if(res) {				
 					this.BindAllParts(res);
 			}
 			this.isSpinnerVisible = false;
@@ -3770,289 +3356,37 @@ export class PurchaseSetupComponent implements OnInit {
 				MessageSeverity.success
 			);
         }, err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;		
-			this.errorMessageHandler(errorLog); 
+			this.isSpinnerVisible = false;			
 		});
 		this.enableHeaderSaveBtn = false;
 	}
 	
-	// savePurchaseOrderAddress() {	
 	
-	// 	if(this.createPOAddressForm.invalid || 
-	// 		 this.sourcePoApproval.shipToUserTypeId == 0 || this.sourcePoApproval.shipToUserTypeId == null 
-	// 		 || this.sourcePoApproval.shipToSiteId == 0  || this.sourcePoApproval.shipToSiteId == null 
-	// 		 || this.sourcePoApproval.shipViaId == 0  || this.sourcePoApproval.shipViaId == null
-	// 		 || this.sourcePoApproval.billToUserTypeId == 0 || this.sourcePoApproval.billToUserTypeId == null
-	// 		 || this.sourcePoApproval.billToSiteId == 0 || this.sourcePoApproval.billToSiteId == null ) {
-	// 		this.alertService.showMessage('Purchase Order', "Please enter required highlighted fields for PO Address!", MessageSeverity.error);
-	// 		this.inputValidCheckAdd = true;
-	// 		if(this.sourcePoApproval.shipToUserTypeId == 0) {
-	// 			this.shipToUserTypeValidCheck = true;
-	// 		}
-	// 		if(this.sourcePoApproval.shipToSiteId == 0) {
-	// 			this.shipToSiteNameValidCheck = true;
-	// 		}
-	// 		if(this.sourcePoApproval.shipViaId == 0) {
-	// 			this.shipViaValidCheck = true;
-	// 		}
-	// 		if(this.sourcePoApproval.billToUserTypeId == 0) {
-	// 			this.billToUserTypeValidCheck = true;
-	// 		}
-	// 		if(this.sourcePoApproval.billToAddressId == 0) {
-	// 			this.billToSiteNameValidCheck = true;
-	// 		}
-	// 	}
-	// 	else {
-	// 		this.isSpinnerVisible = true;			
-	// 		this.sourcePoApprovalObj = {
-	// 			purchaseOrderId: this.poId,		
-	// 			shipToPOAddressId :  this.sourcePoApproval.shipToPOAddressId ? this.sourcePoApproval.shipToPOAddressId : 0 ,	
-	// 			shipToUserTypeId: this.sourcePoApproval.shipToUserTypeId ? parseInt(this.sourcePoApproval.shipToUserTypeId) : 0,
-	// 			shipToUserId: this.sourcePoApproval.shipToUserId ? this.getShipToBillToUserId(this.sourcePoApproval.shipToUserId) : 0,
-	// 			shipToSiteId: this.sourcePoApproval.shipToSiteId ? this.sourcePoApproval.shipToSiteId : 0,
-	// 			shipToSiteName: this.postSiteNameForShipping(this.sourcePoApproval.shipToUserTypeId, this.sourcePoApproval.shipToSiteId),
-	// 			shipToMemo: this.sourcePoApproval.shipToMemo ? this.sourcePoApproval.shipToMemo : '',
-	// 			shipToContactId: this.sourcePoApproval.shipToContactId ? editValueAssignByCondition('contactId', this.sourcePoApproval.shipToContactId) : 0,
-	// 			ShipToContact: this.sourcePoApproval.shipToContactId && this.sourcePoApproval.shipToContactId.firstName 
-	// 			 	          && this.sourcePoApproval.shipToContactId.firstName != null && this.sourcePoApproval.shipToContactId.firstName != undefined  ? this.sourcePoApproval.shipToContactId.firstName : '',
-	// 			ShipAddIsPoOnly: false,
-	// 			shipToAddressId: this.shipToAddress.addressId ? this.shipToAddress.addressId : 0,
-	// 			shipToAddress1: this.shipToAddress.address1,
-	// 			shipToAddress2: this.shipToAddress.address2,
-	// 			shipToAddress3: this.shipToAddress.address3,
-	// 			shipToCity: this.shipToAddress.city,
-	// 			shipToStateOrProvince: this.shipToAddress.stateOrProvince,
-	// 			shipToPostalCode: this.shipToAddress.postalCode,
-	// 			shipToCountry: this.shipToAddress.country,
-	// 			shipToCountryId: this.shipToAddress.countryId,
-	// 			billToPOAddressId : this.sourcePoApproval.billToPOAddressId ? this.sourcePoApproval.billToPOAddressId : 0 ,	
-	// 			billToUserTypeId: this.sourcePoApproval.billToUserTypeId ? parseInt(this.sourcePoApproval.billToUserTypeId) : 0,
-	// 			billToUserId: this.sourcePoApproval.billToUserId ? this.getShipToBillToUserId(this.sourcePoApproval.billToUserId) : 0,
-	// 			billToSiteId: this.sourcePoApproval.billToSiteId ? this.sourcePoApproval.billToSiteId : 0,
-	// 			billToSiteName: this.postSiteNameForBilling(this.sourcePoApproval.billToUserTypeId, this.sourcePoApproval.billToSiteId),
-	// 			billToMemo: this.sourcePoApproval.billToMemo ? this.sourcePoApproval.billToMemo : '',				
-	// 			billToContactId: this.sourcePoApproval.billToContactId ? editValueAssignByCondition('contactId', this.sourcePoApproval.billToContactId) : 0,
-	// 			billToContact: this.sourcePoApproval.billToContactId && this.sourcePoApproval.billToContactId.firstName 
-	// 			 	          && this.sourcePoApproval.billToContactId.firstName != null && this.sourcePoApproval.billToContactId.firstName != undefined  ? this.sourcePoApproval.billToContactId.firstName : '',
-	// 			billAddIsPoOnly: false,	
-	// 			billToAddressId: this.billToAddress.addressId ? this.billToAddress.addressId : 0,
-	// 			billToAddress1: this.billToAddress.address1,
-	// 			billToAddress2: this.billToAddress.address2,				
-	// 			billToCity: this.billToAddress.city,
-	// 			billToStateOrProvince: this.billToAddress.stateOrProvince,
-	// 			billToPostalCode: this.billToAddress.postalCode,
-	// 			billToCountry: this.billToAddress.country,
-	// 			billToCountryId: this.billToAddress.countryId,	    		
-	// 			poShipViaId: this.sourcePoApproval.poShipViaId ? this.sourcePoApproval.poShipViaId : 0,
-	// 			shipViaId: this.sourcePoApproval.shipViaId,
-	// 			shippingCost: this.sourcePoApproval.shippingCost ? parseFloat(this.sourcePoApproval.shippingCost.toString().replace(/\,/g,'')) : 0,
-	// 			handlingCost: this.sourcePoApproval.handlingCost ? parseFloat(this.sourcePoApproval.handlingCost.toString().replace(/\,/g,'')) : 0,
-	// 			shipVia: this.sourcePoApproval.shipVia,
-	// 			shippingAcctNum: this.sourcePoApproval.shippingAcctNum,	
-	// 			MasterCompanyId: this.currentUserMasterCompanyId,
-	// 			createdBy: this.userName,
-	// 			updatedBy: this.userName,	
-				
-	// 		}
-	// 		// debugger; 
-			
-	// 		// const tempShipToAdd = {
-	// 		// AddressId: 0,	
-	// 		// line1: this.shipToAddress.address1,
-	// 		// line2: this.shipToAddress.address2,					
-	// 		// city: this.shipToAddress.city,
-	// 		// stateOrProvince: this.shipToAddress.stateOrProvince,
-	// 		// postalCode: this.shipToAddress.postalCode,
-	// 		// countryId: 0}
-
-	// 		// this.commonService.createAddress({...tempShipToAdd}).subscribe
-	// 		// ( res => {
-	// 		// 	var addressId =
-	// 		// },
-	// 		// err=>{this.isSpinnerVisible = false;
-	// 		// 		const errorLog = err;
-	// 		// 		this.errorMessageHandler(errorLog);}
-	// 		// );
-			
-		
-			
-	// 		// const poShippingAddress = {
-	// 		// 	POAddressId: 0,
-	// 		// 	PurchaseOrderId: this.poId,
-	// 		// 	IsShippingAdd: true,
-	// 		// 	UserType: this.sourcePoApproval.shipToUserTypeId ? parseInt(this.sourcePoApproval.shipToUserTypeId) : 0,
-	// 		// 	UserId: this.sourcePoApproval.shipToUserId ? this.getShipToBillToUserId(this.sourcePoApproval.shipToUserId) : 0,
-	// 		// 	SiteId: this.postSiteNameForShipping(this.sourcePoApproval.shipToUserTypeId, this.sourcePoApproval.shipToAddressId),
-	// 		// 	shipToSiteName: this.postSiteNameForShipping(this.sourcePoApproval.shipToUserTypeId, this.sourcePoApproval.shipToAddressId),
-	// 		// 	AddressId: this.sourcePoApproval.shipToAddressId ? this.sourcePoApproval.shipToAddressId : 0,
-	// 		// 	ContactId: this.sourcePoApproval.shipToContactId ? editValueAssignByCondition('contactId', this.sourcePoApproval.shipToContactId) : 0,
-	// 		// 	ContactName: this.sourcePoApproval.shipToContactId && this.sourcePoApproval.shipToContactId.firstName 
-	// 		// 	             && this.sourcePoApproval.shipToContactId.firstName != null && this.sourcePoApproval.shipToContactId.firstName != undefined  ? this.sourcePoApproval.shipToContactId.firstName : '',	
-	// 		// 	IsPoOnly: false,				 
-	// 		// 	createdBy: this.userName,
-	// 		// 	updatedBy: this.userName,
-	// 		// }
-
-	// 		// const Address = { AddressId: 0, line1:this.shipToAddress.address1,line2:this.shipToAddress.address2	}
-	// 		// //let poShippingAddress = {}
-
-	// 		// //this.poAddressArray.push[poShippingAddress];poShippingAddress
-	// 		//..this.poAddressArray.push[this.poShippingAddress];
-
-	// 		const poAddressEdit = { ...this.sourcePoApprovalObj, purchaseOrderId: parseInt(this.poId) };
-	// 		this.purchaseOrderService.savePurchaseOrderAddress({ ...poAddressEdit }).subscribe(res => {
-	// 				if(res.shipToUserTypeId && res.shipToUserTypeId > 0) {
-	// 					this.sourcePoApproval = {
-	// 						shipToPOAddressId: res.shipToPOAddressId,
-	// 						shipToUserTypeId: res.shipToUserType,	
-	// 						shipToUserId: this.getShipToUserIdEdit(res),
-	// 						shipToSiteId: res.shipToSiteId,
-	// 						shipToSiteName: res.shipToSiteName,
-	// 						shipToContactId: res.shipToContactId,
-	// 						shipToContact: res.shipToContact,  
-	// 						shipToMemo: res.shipToMemo,
-
-	// 						shipToAddressId: res.shipToAddressId,
-	// 						shipToAddress1: res.shipToAddress1,
-	// 						shipToAddress2: res.shipToAddress2,			
-	// 						shipToCity: res.shipToCity,
-	// 						shipToStateOrProvince: res.shipToState,
-	// 						shipToPostalCode: res.shipToPostalCode,
-	// 						ShipToCountryId: res.ShipToCountryId,
-	// 						poShipViaId: res.poShipViaId,
-
-	// 						billToPOAddressId: res.billToPOAddressId,
-	// 						billToUserTypeId: res.billToUserType,
-	// 						billToUserId: this.getBillToUserIdEdit(res),
-	// 						billToSiteId: res.billToSiteId,
-	// 						billToSiteName: res.billToSiteName,
-	// 						billToContactId: res.billToContactId,
-	// 						billToContactName: res.billToContactName,
-	// 						billToMemo: res.billToMemo,
-							
-	// 						billToAddressId: res.billToAddressId,	
-	// 						billToAddress1: res.billToAddress1,
-	// 						billToAddress2: res.billToAddress2,
-	// 						billToCity: res.billToCity,
-	// 						billToStateOrProvince: res.billToState,
-	// 						billToPostalCode: res.billToPostalCode,
-	// 						billToCountryId: res.billToCountryId,							
-							
-
-						
-	// 						shipViaId: res.shipViaId,
-	// 						shipVia: res.shipVia,
-	// 						shippingCost: formatNumberAsGlobalSettingsModule(res.shippingCost, 2),
-	// 						handlingCost: formatNumberAsGlobalSettingsModule(res.handlingCost, 2),	
-	// 						shippingAccountNo: res.shippingAccountNo
-	// 					};
-	// 					this.isEditModeAdd = true;
-	// 				} else {
-	// 					this.isEditModeAdd = false;
-	// 				}
-	// 				this.isSpinnerVisible = false;
-	// 				this.enableAddSaveBtn = false;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved PO Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);					
-	// 			}, err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);
-	// 			});			
-	// 	}
-	// }
-
 	goToCreatePOList() {
 		this.route.navigate(['/vendorsmodule/vendorpages/app-create-po']);
-	}
-
-	getManagementStructureByStockline(id) {
-		this.commonService.getManagementStructureNamesAndCodes(id).subscribe(msparent => {
-			if (msparent.Level1) {
-				this.newObjectForParent.parentCompanyId = msparent.Level1;
-				this.getParentBUList(this.newObjectForParent);
-			} else
-			this.newObjectForParent.parentCompanyId = 0;
-
-			if (msparent.Level2) {
-				this.newObjectForParent.parentbuId = msparent.Level2;
-				this.getParentDivisionlist(this.newObjectForParent);
-			} else
-			this.newObjectForParent.parentbuId = 0;
-
-			if (msparent.Level3) {
-				this.newObjectForParent.parentDivisionId = msparent.Level3;
-				this.getParentDeptlist(this.newObjectForParent);
-			} else
-			this.newObjectForParent.parentDivisionId = 0;
-
-			if (msparent.Level4) {
-				this.newObjectForParent.parentDeptId = msparent.Level4;
-				this.getParentDeptId(this.newObjectForParent);
-			} else
-			this.newObjectForParent.parentDeptId = 0;
-
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
 	}	
-
-	// postSiteNameForShipping(moduleId, currentshipToAddressId) {
-	// 	if (moduleId !== undefined && currentshipToAddressId !== undefined) {
-	// 		moduleId = parseInt(moduleId)
-	// 		if (moduleId == this.customerModuleId) {
-	// 			return getValueFromArrayOfObjectById('siteName', 'customerShippingAddressId', currentshipToAddressId, this.shipToCusData);
-	// 		} else if (moduleId == this.vendorModuleId) {
-	// 				return getValueFromArrayOfObjectById('siteName', 'vendorShippingAddressId', currentshipToAddressId, this.vendorSelected);
-	// 		} else if (moduleId == this.companyModuleId) {
-	// 				return getValueFromArrayOfObjectById('siteName', 'legalEntityShippingAddressId', currentshipToAddressId, this.companySiteList_Shipping);
-	// 		}
-	// 	}
-	// }
-	// postSiteNameForBilling(moduleId, currentbillToAddressId) {
-	// 	if (moduleId !== undefined && currentbillToAddressId !== undefined) {
-	// 		moduleId = parseInt(moduleId)
-	// 		if (moduleId == this.customerModuleId) {
-	// 			return getValueFromArrayOfObjectById('siteName', 'customerBillingAddressId', currentbillToAddressId, this.billToCusData);
-	// 		} else if (moduleId == this.vendorModuleId) {
-	// 				return getValueFromArrayOfObjectById('siteName', 'vendorBillingAddressId', currentbillToAddressId, this.vendorSelectedForBillTo);
-	// 		} else if (moduleId == this.companyModuleId) {
-	// 				return getValueFromArrayOfObjectById('siteName', 'legalEntityBillingAddressId', currentbillToAddressId, this.companySiteList_Billing);
-	// 		}
-	// 	}
-	// }	
 
 	loadcustomerData(strText = '') {
 		if(this.arrayCustlist.length == 0) {			
 			this.arrayCustlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name',strText,true,20,this.arrayCustlist.join()).subscribe(response => {
+		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name',strText,true,20,this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 			this.allCustomers = response;
 			this.customerNames = response;
 			this.splitcustomersList = response;
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}
 	
 	loapartItems(strvalue = '') {
-			this.commonService.getStockpartnumbersAutoComplete(strvalue, false, 0).subscribe(res => {
+			this.commonService.getStockpartnumbersAutoComplete(strvalue, false, 0,this.currentUserMasterCompanyId).subscribe(res => {
 				this.partCollection = res.map(x => {
 					return {
 						value: x.itemMasterId,
 						label: x.partNumber
 					}
 				});
-			})
-		
-				
+			})	
 	}
 
 	filterpartItems(event) {
@@ -4062,32 +3396,24 @@ export class PurchaseSetupComponent implements OnInit {
 		
 	
 
-	filterAltPartItems(event,partNo) {
+	filterAltPartItems(event,partNo,partList) {
 		const itemMasterId = getValueFromObjectByKey('value', partNo)
 		this.itemser.getItemMasterAltEquiMappingParts(itemMasterId).subscribe(res => {
 				this.altPartNumList = res;
 				this.altPartCollection = this.altPartNumList;
+				partList.altPartCollection = this.altPartNumList;
 				if (event.query !== undefined && event.query !== null) {
 					const partNumberFilter = [...this.altPartNumList.filter(x => {
 						return x.altEquiPartNumber.toLowerCase().includes(event.query.toLowerCase())
 					})]
-					this.altPartCollection = partNumberFilter;
-				}
-			}, err => {				
-				const errorLog = err;
-			 	this.errorMessageHandler(errorLog);
+					partList.altPartCollection = partNumberFilter;
+				}				
+			}, err => {	
 			});
 	}
 
 	filterNames(event) {
-		// this.customerNames = this.allCustomers;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const customers = [...this.allCustomers.filter(x => {
-		// 		return x.label.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.customerNames = customers;
-		// }
-
+		
 		if (event.query !== undefined && event.query !== null) {
 			this.loadcustomerData(event.query); }
 	}
@@ -4096,32 +3422,15 @@ export class PurchaseSetupComponent implements OnInit {
 		return this[variable + pindex + cindex]
 	}
 
-	filterCustomersSplit(event): void {
-		// this.splitcustomersList = this.allCustomers;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const customers = [...this.allCustomers.filter(x => {
-		// 		return x.label.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.splitcustomersList = customers;
-		// 		}
+	filterCustomersSplit(event): void {		
 				if (event.query !== undefined && event.query !== null) {
 					this.loadcustomerData(event.query); }		
 	}
 
-	filterSplitVendorNames(event) {
-		// this.splitVendorNames = this.allActions;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const vendorNames = [...this.allActions.filter(x => {
-		// 		return x.vendorName.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.splitVendorNames = vendorNames;
-		// }
-
-		if (event.query !== undefined && event.query !== null) {
-		//	this(event.query);
+	filterSplitVendorNames(event) {		
+		if (event.query !== undefined && event.query !== null) {	
 		this.loadVendorList(event.query);
-		 }		
-		
+		 }
 	}
 
 	onSelectSplitUserType(part, pindex, cindex) {
@@ -4137,8 +3446,12 @@ export class PurchaseSetupComponent implements OnInit {
 
 		if(childata.purchaseOrderPartRecordId !== undefined && childata.purchaseOrderPartRecordId !== null) {
 			this.partListData[mainindex].childList = this.partListData[mainindex].childList.map(x => {
-				if(x.purchaseOrderPartRecordId == childata.purchaseOrderPartRecordId){
+				if (x.purchaseOrderPartRecordId == childata.purchaseOrderPartRecordId) {
+					var remQty = this.partListData[mainindex].remQty ? parseInt(this.partListData[mainindex].remQty.toString().replace(/\,/g,'')) : 0;
+					var childQty = x.quantityOrdered ? parseInt(x.quantityOrdered.toString().replace(/\,/g,'')) : 0;						
+					this.partListData[mainindex].remQty = remQty + childQty;
 					return{...x, isDeleted : true}		
+
 				} else {
 					return x;
 				}
@@ -4148,64 +3461,65 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 	}
 
-	filterCustomerContactsForShipTo(event) {
-		this.firstNamesShipTo = this.shipToContactData;
+	// filterCustomerContactsForShipTo(event) {
+	// 	this.firstNamesShipTo = this.shipToContactData;
 
-		if (event.query !== undefined && event.query !== null) {
-			const customerContacts = [...this.shipToContactData.filter(x => {
-				return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.firstNamesShipTo = customerContacts;
-		}
-	}
+	// 	if (event.query !== undefined && event.query !== null) {
+	// 		const customerContacts = [...this.shipToContactData.filter(x => {
+	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+	// 		})]
+	// 		this.firstNamesShipTo = customerContacts;
+	// 	}
+	// }
 
-	filterVendorContactsForShipTo(event) {
-		this.firstNamesShipTo1 = this.vendorContactsForshipTo;
+	// filterVendorContactsForShipTo(event) {
+	// 	this.firstNamesShipTo1 = this.vendorContactsForshipTo;
 
-		if (event.query !== undefined && event.query !== null) {
-			const vendorContacts = [...this.vendorContactsForshipTo.filter(x => {
-				return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.firstNamesShipTo1 = vendorContacts;		
+	// 	if (event.query !== undefined && event.query !== null) {
+	// 		const vendorContacts = [...this.vendorContactsForshipTo.filter(x => {
+	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+	// 		})]
+	// 		this.firstNamesShipTo1 = vendorContacts;		
 
-		}
-	}
-	filterShippingContacts(event) {
-		this.contactListForShippingCompany = this.contactListForCompanyShipping;
-		const customerContacts = [...this.contactListForCompanyShipping.filter(x => {
-			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-		})]
-		this.contactListForShippingCompany = customerContacts;
-	}
+	// 	}
+	// }
 
-	filterBillingContact(event) {
-		this.contactListForBillingCompany = this.contactListForCompanyBilling;
-		const customerContacts = [...this.contactListForCompanyBilling.filter(x => {
-			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-		})]
-		this.contactListForBillingCompany = customerContacts;
-	}
+	// filterShippingContacts(event) {
+	// 	this.contactListForShippingCompany = this.contactListForCompanyShipping;
+	// 	const customerContacts = [...this.contactListForCompanyShipping.filter(x => {
+	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+	// 	})]
+	// 	this.contactListForShippingCompany = customerContacts;
+	// }
 
-	filterCustomerContactsForBillTo(event) {
-		this.firstNamesbillTo = this.billToContactData;
+	// filterBillingContact(event) {
+	// 	this.contactListForBillingCompany = this.contactListForCompanyBilling;
+	// 	const customerContacts = [...this.contactListForCompanyBilling.filter(x => {
+	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+	// 	})]
+	// 	this.contactListForBillingCompany = customerContacts;
+	// }
 
-		if (event.query !== undefined && event.query !== null) {
-			const customerContacts = [...this.billToContactData.filter(x => {
-				return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.firstNamesbillTo = customerContacts;
-		}
-	}
+	// filterCustomerContactsForBillTo(event) {
+	// 	this.firstNamesbillTo = this.billToContactData;
 
-	filterVendorContactsForBillTo(event) {
-		this.firstNamesbillTo1 = this.vendorContactsForBillTO;
-		if (event.query !== undefined && event.query !== null) {
-			const vendorContacts = [...this.vendorContactsForBillTO.filter(x => {
-				return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.firstNamesbillTo1 = vendorContacts;
-		}
-	}	
+	// 	if (event.query !== undefined && event.query !== null) {
+	// 		const customerContacts = [...this.billToContactData.filter(x => {
+	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+	// 		})]
+	// 		this.firstNamesbillTo = customerContacts;
+	// 	}
+	// }
+
+	// filterVendorContactsForBillTo(event) {
+	// 	this.firstNamesbillTo1 = this.vendorContactsForBillTO;
+	// 	if (event.query !== undefined && event.query !== null) {
+	// 		const vendorContacts = [...this.vendorContactsForBillTO.filter(x => {
+	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
+	// 		})]
+	// 		this.firstNamesbillTo1 = vendorContacts;
+	// 	}
+	// }	
 
 	onClickShipMemo() {
 		this.addressMemoLabel = 'Edit Ship';
@@ -4252,99 +3566,6 @@ export class PurchaseSetupComponent implements OnInit {
 		this.tempMemo = this.sourcePoApproval.billToMemo;
 	}
 	
-	// onClickBillSiteName(value, data?) {
-	// 	this.resetAddressBillingForm();
-	// 	if (value === 'AddCusSiteName') {
-	// 		this.addressSiteNameHeader = 'Add Bill To Customer Details';
-	// 	}
-	// 	if (value === 'EditCusSiteName') {
-	// 		this.addressSiteNameHeader = 'Edit Bill To Customer Details';
-	// 		this.isEditModeBilling = true;
-	// 		this.tempbillToAddress = getObjectById('customerBillingAddressId', data.billToSiteId, this.billToCusData);
-	// 		this.onBillToGetAddress(data, data.billToSiteId);
-	// 		if (typeof this.tempbillToAddress.country == 'number') {
-	// 			this.addressFormForBilling = { ...this.tempbillToAddress, country: getObjectByValue('value', this.tempbillToAddress.country, this.allCountriesList) };
-	// 		} else {
-	// 			this.addressFormForBilling = { ...this.tempbillToAddress, countryId: getObjectByValue('value', this.tempbillToAddress.countryId, this.allCountriesList) };
-	// 		}
-	// 	}
-
-	// 	if (value === 'AddVenSiteName') {
-	// 		this.addressSiteNameHeader = 'Add Bill To Vendor Details';
-	// 	}
-	// 	if (value === 'EditVenSiteName') {
-	// 		this.addressSiteNameHeader = 'Edit Bill To Vendor Details';
-	// 		this.isEditModeBilling = true;
-	// 		this.tempbillToAddress = getObjectById('vendorBillingAddressId', data.billToSiteId, this.vendorSelectedForBillTo);
-	// 		this.onBillToGetAddress(data, data.billToSiteId);
-	// 		const tempBillToAdd = this.billToAddress;
-	// 		this.addressFormForBilling = { ...tempBillToAdd, siteName: this.tempbillToAddress.siteName, vendorBillingAddressId: this.tempbillToAddress.vendorBillingAddressId };			
-	// 		if (typeof this.addressFormForBilling.country == 'number') {
-	// 			this.addressFormForBilling = { ...this.addressFormForBilling, country: getObjectByValue('value', this.addressFormForBilling.country, this.allCountriesList) };
-	// 		} else {
-	// 			this.addressFormForBilling = { ...this.addressFormForBilling, countryId: getObjectByValue('value', this.addressFormForBilling.countryId, this.allCountriesList) };
-	// 		}
-	// 	}
-	// 	if (value === 'AddComSiteName') {
-	// 		this.addressSiteNameHeader = 'Add Bill To Company Details';
-	// 	}
-	// 	if (value === 'EditComSiteName') {
-	// 		this.addressSiteNameHeader = 'Edit Bill To Company Details';
-	// 		this.isEditModeBilling = true;
-	// 		this.tempbillToAddress = getObjectById('legalEntityBillingAddressId', data.billToSiteId, this.companySiteList_Billing);
-	// 		if (data.billToSiteId != null  && data.billToSiteId != 0) {				
-	// 			this.companyService.getBillingAddress(data.billToSiteId).subscribe(res => {
-	// 				const resp = res;
-	// 				const tempBillToAdd:any = {};				
-	// 				tempBillToAdd.addressId = resp[0].addressId;
-	// 				tempBillToAdd.address1 = res[0].address1;
-	// 				tempBillToAdd.address2 = res[0].address2;						
-	// 				tempBillToAdd.city = resp[0].city;
-	// 				tempBillToAdd.stateOrProvince = resp[0].stateOrProvince;
-	// 				tempBillToAdd.postalCode = resp[0].postalCode;
-	// 				tempBillToAdd.countryId = resp[0].countryId;
-	// 				this.addressFormForBilling = { ...tempBillToAdd, siteName: this.tempbillToAddress.siteName, legalEntityBillingAddressId: this.tempbillToAddress.legalEntityBillingAddressId };
-	// 				if (typeof this.addressFormForBilling.country == 'number') {
-	// 					this.addressFormForBilling = { ...this.addressFormForBilling, country: getObjectByValue('value', this.addressFormForBilling.country, this.allCountriesList) };
-	// 				} else {
-	// 					this.addressFormForBilling = { ...this.addressFormForBilling, countryId: getObjectByValue('value', this.addressFormForBilling.countryId, this.allCountriesList) };
-	// 				}
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			this.addressFormForBilling = { ...this.tempbillToAddress, siteName: this.tempbillToAddress.siteName, legalEntityBillingAddressId: this.tempbillToAddress.legalEntityBillingAddressId };
-	// 			if (typeof this.addressFormForBilling.country == 'number') {
-	// 				this.addressFormForBilling = { ...this.addressFormForBilling, country: getObjectByValue('value', this.addressFormForBilling.country, this.allCountriesList) };
-	// 			} else {
-	// 				this.addressFormForBilling = { ...this.addressFormForBilling, countryId: getObjectByValue('value', this.addressFormForBilling.countryId, this.allCountriesList) };
-	// 			}
-	// 		}
-
-	// 	}
-	// }
-
-	// private loadManagementdata() {
-	// 	this.commonService.getLegalEntityList().subscribe(res => {
-    //         this.maincompanylist = res;
-    //     },err => {
-	// 		this.isSpinnerVisible = false;
-	// 		const errorLog = err;
-	// 		this.errorMessageHandler(errorLog);		
-	// 	});
-	// }
-
-
-	
-
-
-	
-
-
-
-
 	getFXRate(partList, onChange?) {
 		if ((partList.reportCurrencyId != null || partList.reportCurrencyId != undefined) && (partList.functionalCurrencyId != null || partList.functionalCurrencyId != undefined)) {
 			const funcCurrency = editValueAssignByCondition('value', partList.functionalCurrencyId);
@@ -4354,7 +3575,7 @@ export class PurchaseSetupComponent implements OnInit {
 				if(onChange == 'onChange') {
 					this.alertService.showMessage(
 					'Error',
-					`FXRate can\'t be greater than 1, if Func CUR and Report CUR are same`,
+					`FXRate can't be greater than 1, if Func CUR and Report CUR are same`,
 					MessageSeverity.error);
 				}
 				return;
@@ -4366,33 +3587,35 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	private loadConditionData() {
-		this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(response => {
-			this.allconditioninfo = response;
-			this.allconditioninfo.map(x => {
-				if(x.label == 'New') {
-					this.defaultCondtionId = x.value;
-					this.newObjectForParent.conditionId = x.value;
-				}
-			});
-			if(this.stocklineReferenceData != null && this.stocklineReferenceData != undefined) {
-				for(let i = 0; i< this.allconditioninfo.length; i++){
-					if(this.allconditioninfo[i].value == this.stocklineReferenceData.conditionId){
-						this.newObjectForParent.conditionId = this.allconditioninfo[i].value;
-						this.newObjectForParent.itemMasterId = this.stocklineReferenceData.itemMasterId;
-						this.getPriceDetailsByCondId(this.newObjectForParent);
+		if (this.arrayConditionlist.length == 0) {
+            this.arrayConditionlist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('Condition','ConditionId','Description','',true, 0,this.arrayConditionlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+				this.allconditioninfo = res;
+				this.allconditioninfo.map(x => {
+					if(x.label == 'New') {
+						this.defaultCondtionId = x.value;
+						this.newObjectForParent.conditionId = x.value;
 					}
-				}
-			}
-		});		
+				});
+				if(this.stocklineReferenceData != null && this.stocklineReferenceData != undefined) {
+					for(let i = 0; i< this.allconditioninfo.length; i++){
+						if(this.allconditioninfo[i].value == this.stocklineReferenceData.conditionId){
+							this.newObjectForParent.conditionId = this.allconditioninfo[i].value;
+							this.newObjectForParent.itemMasterId = this.stocklineReferenceData.itemMasterId;
+							this.getPriceDetailsByCondId(this.newObjectForParent);
+						}
+					}
+				}       
+            },
+            err => {
+                this.isSpinnerVisible = false;	}); 
 	}
 	loadPOApproverStatus() {
 		this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name').subscribe(response => {
 			 this.poApproverStatusList = response;			
 			 this.poApproverStatusList = this.poApproverStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}	
 
@@ -4482,10 +3705,11 @@ export class PurchaseSetupComponent implements OnInit {
 		this.addAllMultiPN = false;
 		this.enableMultiPartAddBtn = false;
 	}
-
+	
+	
 	addPartNumber() {
-		this.inputValidCheck = false;
-		if (this.vendorService.isEditMode == false) {
+		this.inputValidCheck = false;			
+		//if (this.vendorService.isEditMode == false) {
 			let newParentObject = new CreatePOPartsList();
 			newParentObject = {
 				...newParentObject, 
@@ -4554,7 +3778,8 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			}
 			
-		}
+		//}
+		//this.getRemainingAllQty();
 	}
 
 	getAllparts() {
@@ -4572,9 +3797,7 @@ export class PurchaseSetupComponent implements OnInit {
 				})
 				this.newPNList = data.partsNotFound;
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;						
 			});
 		}
 	}
@@ -4627,6 +3850,16 @@ export class PurchaseSetupComponent implements OnInit {
 				}
 			}
 		}
+		var childQty = 0;
+			if (partList.childList != null && partList.childList.length > 0) {
+				for (let j = 0; j < partList.childList.length; j++) {
+					if(!partList.childList[j].isDeleted){
+						childQty +=  partList.childList[j].quantityOrdered ? parseInt(partList.childList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0;	
+					}				
+				}
+				var quantityOrdered =  partList.quantityOrdered ? parseInt(partList.quantityOrdered.toString().replace(/\,/g,'')) : 0;					
+				partList.remQty = quantityOrdered - childQty;
+		}
 	}	
 
 	getAddRowCompanyId(partList) {
@@ -4666,48 +3899,48 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	private loadCurrencyData() {
-		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(res => {
-			this.allCurrencyData = res;
-		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});		
+		if (this.arrayCurrencylist.length == 0) {
+            this.arrayCurrencylist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('Currency','CurrencyId','Code','',true, 0,this.arrayCurrencylist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+				this.allCurrencyData = res;        
+            },
+            err => {
+                this.isSpinnerVisible = false;	});      
 	}
 
-	clearInputShipTo() {
-		this.sourcePoApproval.shipToUserId = 0;
-		this.sourcePoApproval.shipToAddressId = 0;
-		this.sourcePoApproval.shipToContactId = 0;
-		this.sourcePoApproval.shipToMemo = '';
-		this.sourcePoApproval.shipViaId = 0;
-		this.sourcePoApproval.shippingCost = 0;
-		this.sourcePoApproval.handlingCost = 0;
-		this.sourcePoApproval.shippingAcctNum = null;		
-		this.shipToAddress = {};
-		this.shipViaList = [];
-		this.shipToCusData = [];
-		this.vendorSelected = [];
-		this.companySiteList_Shipping = [];
-	}
+	// clearInputShipTo() {
+	// 	this.sourcePoApproval.shipToUserId = 0;
+	// 	this.sourcePoApproval.shipToAddressId = 0;
+	// 	this.sourcePoApproval.shipToContactId = 0;
+	// 	this.sourcePoApproval.shipToMemo = '';
+	// 	this.sourcePoApproval.shipViaId = 0;
+	// 	this.sourcePoApproval.shippingCost = 0;
+	// 	this.sourcePoApproval.handlingCost = 0;
+	// 	this.sourcePoApproval.shippingAcctNum = null;		
+	// 	this.shipToAddress = {};
+	// 	this.shipViaList = [];
+	// 	this.shipToCusData = [];
+	// 	this.vendorSelected = [];
+	// 	this.companySiteList_Shipping = [];
+	// }
 
-	clearInputBillTo() {
-		this.sourcePoApproval.billToUserId = 0;
-		this.sourcePoApproval.billToAddressId = 0;
-		this.sourcePoApproval.billToContactId = 0;
-		this.billToAddress = {};
-		this.sourcePoApproval.billToMemo = '';
-		this.billToCusData = [];
-		this.vendorSelectedForBillTo = [];
-		this.companySiteList_Billing = [];
-	}
+	// clearInputBillTo() {
+	// 	this.sourcePoApproval.billToUserId = 0;
+	// 	this.sourcePoApproval.billToAddressId = 0;
+	// 	this.sourcePoApproval.billToContactId = 0;
+	// 	this.billToAddress = {};
+	// 	this.sourcePoApproval.billToMemo = '';
+	// 	this.billToCusData = [];
+	// 	this.vendorSelectedForBillTo = [];
+	// 	this.companySiteList_Billing = [];
+	// }
 
-	clearShipToContact() {
-		this.sourcePoApproval.shipToContactId = null;
-	}
-	clearBillToContact() {
-		this.sourcePoApproval.billToContactId = null;
-	}
+	// clearShipToContact() {
+	// 	this.sourcePoApproval.shipToContactId = null;
+	// }
+	// clearBillToContact() {
+	// 	this.sourcePoApproval.billToContactId = null;
+	// }
 
 	eventHandler(event) {
 		if (event.target.value != "") {
@@ -4729,14 +3962,7 @@ export class PurchaseSetupComponent implements OnInit {
 
 
 	selectedVendorName(value) {
-		this.vendorContactList = [];
-		this.getVendorContactsListByID(value.vendorId);
-		this.getVendorCreditTermsByID(value.vendorId);
-		//this.getVendorCapesByID(value.vendorId);
-		this.headerInfo.vendorName = value.vendorName;
-		this.headerInfo.vendorId = getObjectById('vendorId', value.vendorId, this.allActions);
-		this.headerInfo.vendorCode = getObjectById('vendorId', value.vendorId, this.allActions);
-		this.warningsandRestriction(value.vendorId);
+		this.loadvendorDataById(value.vendorId);
 	}
 	onChangeVendorContact(value) {
 		this.headerInfo.vendorContactId = value;
@@ -4785,7 +4011,7 @@ export class PurchaseSetupComponent implements OnInit {
 			const funcCurrlist = [...this.allCurrencyData.filter(x => {
 				return x.label.toLowerCase().includes(event.query.toLowerCase())
 			})]
-			this.functionalCurrList = funcCurrlist;
+			this.functionalCurrList = funcCurrlist;			
 		}
 	}
 
@@ -4810,41 +4036,19 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	filterWorkOrderList(event) {
-		// this.allWorkOrderDetails = this.allWorkOrderInfo;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const wo = [...this.allWorkOrderInfo.filter(x => {
-		// 		return x.label.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.allWorkOrderDetails = wo;
-		// }
-
-		if (event.query !== undefined && event.query !== null) {			 
+			if (event.query !== undefined && event.query !== null) {			 
 			this.loadWorkOrderList(event.query);
 		}
 	}
 
-	filtersubWorkOrderList(event) {
-		// this.allWorkOrderDetails = this.allWorkOrderInfo;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const wo = [...this.allWorkOrderInfo.filter(x => {
-		// 		return x.label.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.allWorkOrderDetails = wo;
-		// }
-
-		if (event.query !== undefined && event.query !== null) {			 
-			this.loadSubWorkOrderList(event.query);
+	filtersubWorkOrderList(event,workOrderId,partList,index) {
+		if (event.query !== undefined && event.query !== null) {
+			this.loadSubWorkOrderList(event.query, workOrderId,partList,index);
 		}
 	}
 
 	filterRepairOrderList(event) {
-		// this.allRepairOrderDetails = this.allRepairOrderInfo;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const ro = [...this.allRepairOrderInfo.filter(x => {
-		// 		return x.label.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.allRepairOrderDetails = ro;
-		// }
+
 		if (event.query !== undefined && event.query !== null) {
 			this.loadRepairOrderList(event.query);
 	}
@@ -4868,40 +4072,24 @@ export class PurchaseSetupComponent implements OnInit {
 			];
 			this.allPercentData = [...this.allPercentData, ...data];
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
-	}
-	
+	}	
 	
 	loadVendorList(filterVal = '') {
         if (this.arrayVendlsit.length == 0) {
             this.arrayVendlsit.push(0); }
-		this.vendorService.getVendorNameCodeListwithFilter(filterVal,20,this.arrayVendlsit.join()).subscribe(res => {
+		this.vendorService.getVendorNameCodeListwithFilter(filterVal,20,this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			this.allActions = res;
 			this.vendorNames = res;
 			this.vendorCodes = res;
 			this.splitVendorNames = res; 
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});
 	}
 
-	filterVendorCodes(event) {
-		// this.vendorCodes = this.allActions;
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const vendorCodesTemp = [...this.allActions.filter(x => {
-		// 		return x.vendorCode.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.vendorCodes = vendorCodesTemp;
-
-		// 	if (event.query !== undefined && event.query !== null) {
-		// 		this.employeedata(event.query);
-		// 		}
-		// }
+	filterVendorCodes(event) {		
 		if (event.query !== undefined && event.query !== null) {
 			this.loadVendorList(event.query); }
 	}
@@ -4912,30 +4100,10 @@ export class PurchaseSetupComponent implements OnInit {
 		 }
 	 }
 
-	 filterVendorNames(event) {
-		// this.vendorNames = this.allActions;
-
-		// if (event.query !== undefined && event.query !== null) {
-		// 	const vendorFilter = [...this.allActions.filter(x => {
-		// 		return x.vendorName.toLowerCase().includes(event.query.toLowerCase())
-		// 	})]
-		// 	this.vendorNames = vendorFilter;
-		// }
+	 filterVendorNames(event) {		
 		if (event.query !== undefined && event.query !== null) {
 		this.loadVendorList(event.query); }
-	}
-
-	 /*
-	filterApprover(event) {
-		this.approverList = this.allEmployeeList;
-
-		if (event.query !== undefined && event.query !== null) {
-			const empFirstName = [...this.allEmployeeList.filter(x => {
-				return x.label;
-			})]
-			this.approverList = empFirstName;
-		}
-	}	*/
+	}	
 
     onDelPNRow(partList, index) {
         this.enablePartSave();		
@@ -5065,7 +4233,7 @@ export class PurchaseSetupComponent implements OnInit {
 		if (obj.altEquiPartNumberId) {
 			return obj.altEquiPartNumberId;
 		}
-	}
+	} 
 
 	getIdByObject(obj) {
 		if (obj.customerId) {
@@ -5163,566 +4331,6 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 	
 
-	// onClickShipSiteName(value, data?) {			
-	// 	this.resetAddressShippingForm();
-	// 	if (value === 'AddCusSiteName') {
-	// 		this.addressSiteNameHeader = 'Add Ship To Customer Details';
-	// 	}
-	// 	if (value === 'EditCusSiteName') {
-	// 		this.addressSiteNameHeader = 'Edit Ship To Customer Details';
-	// 		this.isEditModeShipping = true;
-	// 		this.tempshipToAddress = getObjectById('customerShippingAddressId', data.shipToSiteId, this.shipToCusData);
-	// 		if (typeof this.tempshipToAddress.country == 'number') {
-	// 			this.addressFormForShipping = { ...this.tempshipToAddress, country: getObjectByValue('value', this.tempshipToAddress.country, this.allCountriesList) };
-	// 		} else {
-	// 			this.addressFormForShipping = { ...this.tempshipToAddress, countryId: getObjectByValue('value', this.tempshipToAddress.countryId, this.allCountriesList) };
-	// 		}
-	// 	}
-	// 	if (value === 'AddVenSiteName') {
-	// 		this.addressSiteNameHeader = 'Add Ship To Vendor Details';
-	// 	}
-	// 	if (value === 'EditVenSiteName') {
-	// 		this.addressSiteNameHeader = 'Edit Ship To Vendor Details';
-	// 		this.isEditModeShipping = true;
-	// 		this.tempshipToAddress = getObjectById('vendorShippingAddressId', data.shipToSiteId, this.vendorSelected);
-	// 		if (typeof this.tempshipToAddress.country == 'number') {
-	// 			this.addressFormForShipping = { ...this.tempshipToAddress, country: getObjectByValue('value', this.tempshipToAddress.country, this.allCountriesList) };
-	// 		} else {
-	// 			this.addressFormForShipping = { ...this.tempshipToAddress, countryId: getObjectByValue('value', this.tempshipToAddress.countryId, this.allCountriesList) };
-	// 		}		
-				
-	// 	}
-	// 	if (value === 'AddComSiteName') {
-	// 		this.addressSiteNameHeader = 'Add Ship To Company Details';
-	// 	}
-	// 	if (value === 'EditComSiteName') {		
-	// 		this.addressSiteNameHeader = 'Edit Ship To Company Details';
-	// 		this.isEditModeShipping = true;
-	// 		this.tempshipToAddress = getObjectById('legalEntityShippingAddressId', data.shipToSiteId, this.companySiteList_Shipping);
-	// 		if (data.shipToSiteId != null && data.shipToSiteId != 0) {
-	// 			this.companyService.getShippingAddress(data.shipToSiteId).subscribe(res => {
-	// 				const resp = res;
-	// 				const tempShipToAdd:any = {};
-	// 				tempShipToAdd.addressId =  resp.addressId;
-	// 				tempShipToAdd.address1 = resp.line1;
-	// 				tempShipToAdd.address2 = resp.line2;					
-	// 				tempShipToAdd.city = resp.city;
-	// 				tempShipToAdd.stateOrProvince = resp.stateOrProvince;
-	// 				tempShipToAdd.postalCode = resp.postalCode;
-	// 				tempShipToAdd.countryId = resp.countryId;		
-	// 				this.addressFormForShipping = { ...tempShipToAdd, siteName: this.tempshipToAddress.siteName, legalEntityShippingAddressId: this.tempshipToAddress.legalEntityShippingAddressId };
-	// 				if (typeof this.addressFormForShipping.country == 'number') {
-	// 					this.addressFormForShipping = { ...this.addressFormForShipping, country: getObjectByValue('value', this.addressFormForShipping.country, this.allCountriesList) };
-	// 				} else {
-	// 					this.addressFormForShipping = { ...this.addressFormForShipping, countryId: getObjectByValue('value', this.addressFormForShipping.countryId, this.allCountriesList) };
-	// 				}
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			this.addressFormForShipping = { ...this.tempshipToAddress, siteName: this.tempshipToAddress.siteName, legalEntityShippingAddressId: this.tempshipToAddress.legalEntityShippingAddressId };
-	// 			if (typeof this.addressFormForShipping.country == 'number') {
-	// 				this.addressFormForShipping = { ...this.addressFormForShipping, country: getObjectByValue('value', this.addressFormForShipping.country, this.allCountriesList) };
-	// 			} else {
-	// 				this.addressFormForShipping = { ...this.addressFormForShipping, countryId: getObjectByValue('value', this.addressFormForShipping.countryId, this.allCountriesList) };
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-	// async saveShippingAddress() {
-	// 	const data = {
-	// 		...this.addressFormForShipping,
-	// 		createdBy: this.userName,
-	// 		updatedBy: this.userName,
-	// 		masterCompanyId: this.currentUserMasterCompanyId,
-	// 		isActive: true,
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.customerModuleId) {
-	// 		const customerData = { ...data, isPrimary: true, customerId: getValueFromObjectByKey('value', this.sourcePoApproval.shipToUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeShipping) {
-	// 			await this.customerService.newShippingAdd(customerData).subscribe(response => {
-    //                 this.onShipToCustomerSelected(customerData.customerId, this.sourcePoApproval, response.customerShippingAddressId );
-	// 				this.enableAddSaveBtn = true;					
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Shipping Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.customerService.newShippingAdd(customerData).subscribe(response => {
-    //                 this.onShipToCustomerSelected(customerData.customerId, this.sourcePoApproval, response.customerShippingAddressId );
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Shipping Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.vendorModuleId) {
-	// 		const vendorData = { ...data, vendorId: getValueFromObjectByKey('vendorId', this.sourcePoApproval.shipToUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeShipping) {
-	// 			await this.vendorService.newShippingAdd(vendorData).subscribe(response => {
-	// 				this.onShipToVendorSelected(vendorData.vendorId, this.sourcePoApproval, response.vendorShippingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Shipping Information Successfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.vendorService.newShippingAdd(vendorData).subscribe(response => {
-	// 				this.onShipToVendorSelected(vendorData.vendorId, this.sourcePoApproval, response.vendorShippingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Shipping Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.companyModuleId) {
-	// 		const companyData = { ...data, legalentityId: getValueFromObjectByKey('value', this.sourcePoApproval.shipToUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeShipping) {
-	// 			await this.companyService.addNewShippingAddress(companyData).subscribe(response => {
-	// 				this.onShipToCompanySelected(null, this.sourcePoApproval, response.legalEntityShippingAddressId);
-	// 				this.enableAddSaveBtn = true;				
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Shipping Information Successfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {				
-	// 			await this.companyService.addNewShippingAddress(companyData).subscribe(response => {
-	// 				this.onShipToCompanySelected(null, this.sourcePoApproval, response.legalEntityShippingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Shipping Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// }
-	// saveShippingAddressToPO() {
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.customerModuleId) {
-	// 		for (let i = 0; i < this.shipToCusData.length; i++) {
-	// 			if (this.shipToCusData[i].customerShippingAddressId == 0) {
-	// 				this.shipToCusData.splice(i, 1);;
-	// 			}
-	// 		}
-	// 		const addressInfo = {
-	// 			...this.addressFormForShipping,
-	// 			country: getValueFromObjectByKey('label', this.addressFormForShipping.countryId),
-	// 			countryId: getValueFromObjectByKey('value', this.addressFormForShipping.countryId),
-	// 			customerShippingAddressId: 0
-	// 		}
-	// 		this.shipToCusData.push(addressInfo);
-	// 		this.shipToCusData.map(x => {
-	// 			if (x.customerShippingAddressId == 0) {
-	// 				this.sourcePoApproval.shipToAddressId = x.customerShippingAddressId;
-	// 			}
-	// 		});
-	// 		this.onShipToGetAddress(this.sourcePoApproval, this.sourcePoApproval.shipToAddressId);
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.vendorModuleId) {
-	// 		for (let i = 0; i < this.vendorSelected.length; i++) {
-	// 			if (this.vendorSelected[i].vendorShippingAddressId == 0) {
-	// 				this.vendorSelected.splice(i, 1);;
-	// 			}
-	// 		}
-	// 		const addressInfo = {
-	// 			...this.addressFormForShipping,
-	// 			country: getValueFromObjectByKey('label', this.addressFormForShipping.countryId),
-	// 			countryId: getValueFromObjectByKey('value', this.addressFormForShipping.countryId),
-	// 			vendorShippingAddressId: 0
-	// 		}
-	// 		this.vendorSelected.push(addressInfo);
-	// 		this.vendorSelected.map(x => {
-	// 			if (x.vendorShippingAddressId == 0) {
-	// 				this.sourcePoApproval.shipToAddressId = x.vendorShippingAddressId;
-	// 			}
-	// 		});
-	// 		this.onShipToGetAddress(this.sourcePoApproval, this.sourcePoApproval.shipToAddressId);
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.companyModuleId) {
-	// 		for (let i = 0; i < this.companySiteList_Shipping.length; i++) {
-	// 			if (this.companySiteList_Shipping[i].legalEntityShippingAddressId == 0) {
-	// 				this.companySiteList_Shipping.splice(i, 1);;
-	// 			}
-	// 		}
-	// 		const addressInfo = {
-	// 			...this.addressFormForShipping,
-	// 			country: getValueFromObjectByKey('label', this.addressFormForShipping.countryId),
-	// 			countryId: getValueFromObjectByKey('value', this.addressFormForShipping.countryId),
-	// 			legalEntityShippingAddressId: 0
-	// 		}
-	// 		this.companySiteList_Shipping.push(addressInfo);
-	// 		this.companySiteList_Shipping.map(x => {
-	// 			if (x.legalEntityShippingAddressId == 0) {
-	// 				this.sourcePoApproval.shipToAddressId = x.legalEntityShippingAddressId;
-	// 			}
-	// 		});
-	// 		this.shipToAddress = addressInfo;			
-	// 	}
-	// 	this.enableAddSaveBtn = true;
-	// 	if (!this.isEditModeShipping) {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Saved Shipping Information Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	} else {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Updated Shipping Information Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	}
-	// }
-
-	// async saveBillingAddress() {
-	// 	const data = {
-	// 		...this.addressFormForBilling,
-	// 		createdBy: this.userName,
-	// 		updatedBy: this.userName,
-	// 		masterCompanyId: this.currentUserMasterCompanyId,
-	// 		isActive: true,
-	// 		isPrimary: true
-	// 	}
-	// 	if (this.sourcePoApproval.billToUserTypeId == this.customerModuleId) {
-	// 		const customerData = { ...data, customerId: getValueFromObjectByKey('value', this.sourcePoApproval.billToUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeBilling) {
-	// 			await this.customerService.newBillingAdd(customerData).subscribe(response => {
-	// 				this.onBillToCustomerSelected(customerData.customerId, this.sourcePoApproval, response.customerBillingAddressId);
-	// 				this.enableAddSaveBtn = true;					
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved  Billing Information Sucessfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.customerService.newBillingAdd(customerData).subscribe(response => {
-	// 				this.onBillToCustomerSelected(customerData.customerId, this.sourcePoApproval, response.customerBillingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Billing Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-
-	// 	}
-	// 	if (this.sourcePoApproval.billToUserTypeId == this.vendorModuleId ) {
-	// 		const vendorData = { ...data, vendorId: getValueFromObjectByKey('vendorId', this.sourcePoApproval.billToUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeBilling) {
-	// 			await this.vendorService.addNewBillingAddress(vendorData).subscribe(response => {
-	// 				this.onBillToVendorSelected(vendorData.vendorId, this.sourcePoApproval, response.vendorBillingAddressId);
-	// 				this.enableAddSaveBtn = true;					
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved  Billing Information Sucessfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.vendorService.addNewBillingAddress(vendorData).subscribe(response => {
-	// 				this.onBillToVendorSelected(vendorData.vendorId, this.sourcePoApproval, response.vendorBillingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Billing Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// 	if (this.sourcePoApproval.billToUserTypeId == this.companyModuleId) {
-	// 		const companyData = { ...data, legalentityId: getValueFromObjectByKey('value', this.sourcePoApproval.billToUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeBilling) {
-	// 			await this.companyService.addNewBillingAddress(companyData).subscribe(response => {
-	// 				this.onBillToCompanySelected(null, this.sourcePoApproval, response.legalEntityBillingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				// this.addressFormForBilling = new CustomerShippingModel()
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved  Billing Information Sucessfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.companyService.addNewBillingAddress(companyData).subscribe(response => {
-	// 				this.onBillToCompanySelected(null, this.sourcePoApproval, response.legalEntityBillingAddressId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Billing Information Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}	
-	// }
-
-	// saveBillingAddressToPO() {
-	// 	if (this.sourcePoApproval.billToUserTypeId == this.customerModuleId) {
-	// 		for (let i = 0; i < this.billToCusData.length; i++) {
-	// 			if (this.billToCusData[i].customerBillingAddressId == 0) {
-	// 				this.billToCusData.splice(i, 1);;
-	// 			}
-	// 		}
-	// 		const addressInfo = {
-	// 			...this.addressFormForBilling,
-	// 			country: getValueFromObjectByKey('label', this.addressFormForBilling.countryId),
-	// 			countryId: getValueFromObjectByKey('value', this.addressFormForBilling.countryId),
-	// 			customerBillingAddressId: 0
-	// 		}
-	// 		this.billToCusData.push(addressInfo);
-	// 		this.billToCusData.map(x => {
-	// 			if (x.customerBillingAddressId == 0) {
-	// 				this.sourcePoApproval.billToAddressId = x.customerBillingAddressId;
-	// 			}
-	// 		});
-	// 		this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToAddressId);
-	// 	}
-	// 	if (this.sourcePoApproval.billToUserTypeId == this.vendorModuleId) {
-	// 		for (let i = 0; i < this.vendorSelectedForBillTo.length; i++) {
-	// 			if (this.vendorSelectedForBillTo[i].vendorBillingAddressId == 0) {
-	// 				this.vendorSelectedForBillTo.splice(i, 1);;
-	// 			}
-	// 		}
-	// 		const addressInfo = {
-	// 			...this.addressFormForBilling,
-	// 			country: getValueFromObjectByKey('label', this.addressFormForBilling.countryId),
-	// 			countryId: getValueFromObjectByKey('value', this.addressFormForBilling.countryId),
-	// 			vendorBillingAddressId: 0
-	// 		}
-	// 		this.vendorSelectedForBillTo.push(addressInfo);
-	// 		this.vendorSelectedForBillTo.map(x => {
-	// 			if (x.vendorBillingAddressId == 0) {
-	// 				this.sourcePoApproval.billToAddressId = x.vendorBillingAddressId;
-	// 			}
-	// 		});			
-	// 		this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToAddressId);
-	// 	}
-	// 	if (this.sourcePoApproval.billToUserTypeId == this.customerModuleId) {
-	// 		for (let i = 0; i < this.companySiteList_Billing.length; i++) {
-	// 			if (this.companySiteList_Billing[i].legalEntityBillingAddressId == 0) {
-	// 				this.companySiteList_Billing.splice(i, 1);;
-	// 			}
-	// 		}
-	// 		const addressInfo = {
-	// 			...this.addressFormForBilling,
-	// 			country: getValueFromObjectByKey('label', this.addressFormForBilling.countryId),
-	// 			countryId: getValueFromObjectByKey('value', this.addressFormForBilling.countryId),
-	// 			legalEntityBillingAddressId: 0
-	// 		}
-	// 		this.companySiteList_Billing.push(addressInfo);
-	// 		this.companySiteList_Billing.map(x => {
-	// 			if (x.legalEntityBillingAddressId == 0) {
-	// 				this.sourcePoApproval.billToAddressId = x.legalEntityBillingAddressId;
-	// 			}
-	// 		});
-	// 		this.billToAddress = addressInfo;						
-	// 	}
-	// 	this.enableAddSaveBtn = true;
-	// 	if (!this.isEditModeBilling) {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Saved Billing Information Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	} else {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Updated Billing Information Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	}
-	// }
-
-	// resetAddressShipViaForm() {
-	// 	this.addShipViaFormForShipping = new CustomerInternationalShipVia();
-	// 	this.isEditModeShipVia = false;
-	// }
-
-	// async saveShipViaForShipTo() {
-	// 	this.sourcePoApproval.shipViaId = 0;
-	// 	this.sourcePoApproval.shippingAcctNum = '';		
-	// 	const data = {
-	// 		...this.addShipViaFormForShipping,			
-	// 		name: getValueFromArrayOfObjectById('label', 'value', this.addShipViaFormForShipping.shipViaId, this.allShipViaInfo),
-	// 		createdBy: this.userName,
-	// 		updatedBy: this.userName,
-	// 		masterCompanyId: this.currentUserMasterCompanyId,
-	// 		isActive: true,
-	// 		UserType: parseInt(this.sourcePoApproval.shipToUserTypeId)
-	// 	}
-
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.customerModuleId) {
-	// 		const customerData = { ...data, 
-	// 			ReferenceId: getValueFromObjectByKey('value', this.sourcePoApproval.shipToUserId),
-	// 			 AddressId: this.sourcePoApproval.shipToSiteId ? this.sourcePoApproval.shipToSiteId : 0 }
-	// 		if (!this.isEditModeShipVia) {
-	// 			await this.commonService.createShipVia(customerData).subscribe(response => {
-	// 				this.getShipViaDetailsForShipTo(response.shipViaId);
-	// 				this.enableAddSaveBtn = true;					
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Ship Via Information Sucessfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.commonService.createShipVia(customerData).subscribe(response => {
-	// 				this.getShipViaDetailsForShipTo(response.shipViaId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Ship Via Information Sucessfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			})
-	// 		}
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.vendorModuleId) {
-	// 		const vendorData = { ...data, ReferenceId: getValueFromObjectByKey('vendorId', this.sourcePoApproval.shipToUserId), 
-	// 		AddressId: this.sourcePoApproval.shipToSiteId ? this.sourcePoApproval.shipToSiteId : 0 }
-	// 		if (!this.isEditModeShipVia) {
-	// 			await this.commonService.createShipVia(vendorData).subscribe(response => {
-	// 				this.getShipViaDetailsForShipTo(response.shipViaId);
-	// 				this.enableAddSaveBtn = true;
-	// 				// this.addressFormForShipping = new CustomerShippingModel()
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved  Ship Via Information Sucessfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.commonService.createShipVia(vendorData).subscribe(response => {
-	// 				this.getShipViaDetailsForShipTo(response.shipViaId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Ship Via Information Sucessfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-
-	// 	}
-	// 	if (this.sourcePoApproval.shipToUserTypeId == this.companyModuleId) {
-	// 		const companyData = { ...data, ReferenceId: getValueFromObjectByKey('value', this.sourcePoApproval.shipToUserId),
-	// 					 AddressId: this.sourcePoApproval.shipToSiteId ? this.sourcePoApproval.shipToSiteId : 0 }
-	// 		if (!this.isEditModeShipVia) {
-	// 			await this.commonService.createShipVia(companyData).subscribe(response => {
-	// 				this.getShipViaDetailsForShipTo(response.shipViaId);
-	// 				this.enableAddSaveBtn = true;					
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved  Ship Via Information Sucessfully `,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.commonService.createShipVia(companyData).subscribe(response => {
-	// 				this.getShipViaDetailsForShipTo(response.shipViaId);
-	// 				this.enableAddSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Ship Via Information Sucessfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// 	$('#shipToShipVia').modal('hide');
-	// }
-
 	splitAddChange(){
 		this.splitAddbutton = true;	}
 
@@ -5731,198 +4339,14 @@ export class PurchaseSetupComponent implements OnInit {
 		this.isEditModeSplitAddress = false;
 		this.isEditModeSplitPoOnly = false;		
 	}
-
-	// async saveSplitAddress() {
-	// 	const data = {
-	// 		...this.addNewAddress,
-	// 		siteName: this.addNewAddress.siteName,
-	// 		address1: this.addNewAddress.line1,
-	// 		address2: this.addNewAddress.line2,			
-	// 		createdBy: this.userName,
-	// 		updatedBy: this.userName,
-	// 		masterCompanyId: this.currentUserMasterCompanyId,
-	// 		isActive: true,			
-	// 	}
-	// 	if (this.tempSplitPart.partListUserTypeId == this.customerModuleId) {
-	// 		const customerData = { ...data, isPrimary: true, customerId: getValueFromObjectByKey('value', this.tempSplitPart.partListUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeSplitAddress) {
-	// 			await this.customerService.newShippingAdd(customerData).subscribe(res => {
-	// 				this.onCustomerNameChange(customerData.customerId, null, this.parentIndex, this.childIndex); //res.customerId
-	// 				this.enablePartSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.customerService.newShippingAdd(customerData).subscribe(res => {
-	// 				this.onCustomerNameChange(customerData.customerId, null, this.parentIndex, this.childIndex);
-	// 				this.enablePartSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// 	if (this.tempSplitPart.partListUserTypeId == this.vendorModuleId) {
-	// 		const vendorData = { ...data, vendorId: getValueFromObjectByKey('vendorId', this.tempSplitPart.partListUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeSplitAddress) {
-	// 			await this.vendorService.newShippingAdd(vendorData).subscribe(res => {
-	// 				this.onVendorNameChange(vendorData.vendorId, null, this.parentIndex, this.childIndex);
-	// 				this.enablePartSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.vendorService.newShippingAdd(vendorData).subscribe(res => {
-	// 				this.onVendorNameChange(vendorData.vendorId, null, this.parentIndex, this.childIndex);
-	// 				this.enablePartSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// 	if (this.tempSplitPart.partListUserTypeId == this.companyModuleId) {
-	// 		const companyData = { ...data, legalentityId: getValueFromObjectByKey('value', this.tempSplitPart.partListUserId), countryId: getValueFromObjectByKey('value', data.countryId) }
-	// 		if (!this.isEditModeSplitAddress) {
-	// 			await this.companyService.addNewShippingAddress(companyData).subscribe(res => {
-	// 				this.onCompanyNameChange(companyData.legalentityId, null, this.parentIndex, this.childIndex); //res.legalEntityId
-	// 				this.enablePartSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Saved Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		} else {
-	// 			await this.companyService.addNewShippingAddress(companyData).subscribe(res => {
-	// 				this.onCompanyNameChange(companyData.legalentityId, null, this.parentIndex, this.childIndex);
-	// 				this.enablePartSaveBtn = true;
-	// 				this.alertService.showMessage(
-	// 					'Success',
-	// 					`Updated Address Successfully`,
-	// 					MessageSeverity.success
-	// 				);
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;
-	// 				const errorLog = err;
-	// 				this.errorMessageHandler(errorLog);		
-	// 			});
-	// 		}
-	// 	}
-	// }
-
-	// saveSplitAddressToPO() {
-	// 	for (let i = 0; i < this.tempSplitAddressData.length; i++) {
-	// 		if (this.tempSplitAddressData[i].addressId == 0) {
-	// 			this.tempSplitAddressData.splice(i, 1);;
-	// 		}
-	// 	}
-	// 	const addressInfo = {
-	// 		...this.addNewAddress,
-	// 		country: getValueFromObjectByKey('label', this.addNewAddress.countryId),
-	// 		countryName: getValueFromObjectByKey('label', this.addNewAddress.countryId),
-	// 		countryId: getValueFromObjectByKey('value', this.addNewAddress.countryId),
-	// 		addressId: 0,
-	// 		address1: this.addNewAddress.line1,
-	// 		address2: this.addNewAddress.line2,			
-	// 	}
-	// 	this.tempSplitAddressData.push(addressInfo);
-	// 	this.tempSplitAddressData.map(x => {
-	// 		if (x.addressId == 0) {
-	// 			this.tempSplitPart.partListAddressId = x.addressId;			
-	// 		}
-	// 	});
-	// 	this["splitAddressData" + this.parentIndex + this.childIndex] = this.tempSplitAddressData;
-	// 	this.enablePartSaveBtn = true;
-
-	// 	if (!this.isEditModeSplitAddress) {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Saved Address Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	} else {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Updated Address Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	}		
-	// }
-
+	
 	onEditShipVia(data) {	
 		this.tempshipVia = getObjectById('shipViaId', data.shipViaId, this.shipViaList);
 		this.addShipViaFormForShipping = { ...this.tempshipVia, shipVia: this.tempshipVia.name };	
 		this.isEditModeShipVia = true;		
 	}
 
-	// saveShipToShipViaDetailsToPO() {	
-	// 	for (let i = 0; i < this.shipViaList.length; i++) {
-	// 		if (this.shipViaList[i].shipViaId == 0) {
-	// 			this.shipViaList.splice(i, 1);;
-	// 		}
-	// 	}
-	// 	const shipViaInfo = {
-	// 		...this.addShipViaFormForShipping,
-	// 		shipViaId: 0,
-	// 		name: getValueFromArrayOfObjectById('label', 'value', this.addShipViaFormForShipping.shipViaId, this.allShipViaInfo)	
-	// 	}
-	// 	this.shipViaList.push(shipViaInfo);
-	// 	this.shipViaList.map(x => {
-	// 		if (x.shipViaId == 0) {
-	// 			this.sourcePoApproval.shipViaId = x.shipViaId;
-	// 		}
-	// 	});
-	// 	if(this.sourcePoApproval.shipViaId != 0) {
-	// 		this.sourcePoApproval.shipViaId = this.addShipViaFormForShipping.shipViaId;
-	// 	}
-	// 	this.sourcePoApproval.shippingAcctNum = this.addShipViaFormForShipping.shippingAccountInfo;		
-	// 	this.enableAddSaveBtn = true;
-	// 	if (!this.isEditModeShipVia) {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Saved ShipVia Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	} else {
-	// 		this.alertService.showMessage(
-	// 			'Success',
-	// 			`Updated ShipVia Successfully`,
-	// 			MessageSeverity.success
-	// 		);
-	// 	}
-	// }
-
+	
 	onClickPartsListAddress(value, splitPart, pindex?, cindex?) {				
 		this.tempSplitPart = splitPart;
 		this.parentIndex = pindex;
@@ -6003,9 +4427,7 @@ export class PurchaseSetupComponent implements OnInit {
 						);
 					 }
 				 },err => {
-					 this.isSpinnerVisible = false;
-					 const errorLog = err;
-					 this.errorMessageHandler(errorLog);		
+					 this.isSpinnerVisible = false;							
 				});
 			} else {
 				 this.commonService.createAllAddres(addressData).subscribe(response => {  
@@ -6023,9 +4445,7 @@ export class PurchaseSetupComponent implements OnInit {
 						);
 					 }
 				 },err => {
-					 this.isSpinnerVisible = false;
-					 const errorLog = err;
-					 this.errorMessageHandler(errorLog);		
+					 this.isSpinnerVisible = false;					 		
 				});
 			 }
 	}
@@ -6063,9 +4483,7 @@ export class PurchaseSetupComponent implements OnInit {
 						);
 					 }
 				 },err => {
-					 this.isSpinnerVisible = false;
-					 const errorLog = err;
-					 this.errorMessageHandler(errorLog);		
+					 this.isSpinnerVisible = false;							
 				});
 			} else {
 				 this.commonService.createAllAddres(addressData).subscribe(response => {  
@@ -6083,9 +4501,7 @@ export class PurchaseSetupComponent implements OnInit {
 						);
 					 }
 				 },err => {
-					 this.isSpinnerVisible = false;
-					 const errorLog = err;
-					 this.errorMessageHandler(errorLog);		
+					 this.isSpinnerVisible = false;						
 				});
 			 }
 	}
@@ -6093,16 +4509,58 @@ export class PurchaseSetupComponent implements OnInit {
 
 	onChangeParentQtyOrdered(event, partList) {	
 		this.parentQty = event.target.value;
+		if(partList.minimumOrderQuantity > 0
+			&& this.parentQty > 0
+			&& this.parentQty < partList.minimumOrderQuantity
+			) {
+			partList.quantityOrdered = partList.minimumOrderQuantity;
+			var childQty = 0;
+			if (partList.childList != null && partList.childList.length > 0) {
+				for (let j = 0; j < partList.childList.length; j++) {
+					if(!partList.childList[j].isDeleted){
+						childQty +=  partList.childList[j].quantityOrdered ? parseInt(partList.childList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0;	
+					}				
+				}
+				var quantityOrdered =  partList.quantityOrdered ? parseInt(partList.quantityOrdered.toString().replace(/\,/g,'')) : 0;					
+				partList.remQty = quantityOrdered - childQty;
+			}
+			
+			this.alertService.showMessage(
+				'Error',				
+				'Minimum Order Qty : '+ partList.minimumOrderQuantity +'<br /> Order quantity can not be less then Minimum order quantity.',
+				MessageSeverity.error
+			);
+		return;
+	    }
+		
 		if (partList.childList.length > 0) {
 			this.onChangeChildQtyOrdered(partList);
 		}
+		
 	}
+
+	getRemainingAllQty() {
+		var childQty = 0;
+		if(this.partList && this.partList.length > 0) {
+			for (let i = 0; i < this.partList[i].length; i++) {
+				childQty = 0;
+				if (this.partList[i].childList != null && this.partList[i].childList.length > 0) {
+					for (let j = 0; j < this.partList[i].childList.length; j++) {
+						childQty +=  this.partList[i].childList[j].quantityOrdered ?  parseInt(this.partList[i].childList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0;					
+					}
+				}
+				var quantityOrdered =  this.partList[i].quantityOrdered ? parseInt(this.partList[i].quantityOrdered.toString().replace(/\,/g,'')) : 0;					
+				this.partList[i].remQty = quantityOrdered -  childQty;
+			}
+		}		
+	}
+
 	onChangeChildQtyOrdered(partList, partChildList?) {
 		this.childOrderQtyArray = [];
 		this.childOrderQtyTotal = null;
         this.parentQty = partList.quantityOrdered ? parseFloat(partList.quantityOrdered.toString().replace(/\,/g,'')) : 0;
 		for (let i = 0; i < partList.childList.length; i++) {
-			if (partList.childList[i].quantityOrdered === null || partList.childList[i].quantityOrdered === undefined) {
+			if (partList.childList[i].quantityOrdered === null || partList.childList[i].quantityOrdered === undefined || partList.childList[i].isDeleted ) {
 				partList.childList[i].quantityOrdered = 0;
 			}
 			this.childOrderQtyArray.push(parseInt(partList.childList[i].quantityOrdered.toString().replace(/\,/g,'')));
@@ -6114,6 +4572,8 @@ export class PurchaseSetupComponent implements OnInit {
 					partList.quantityOrdered = 0;}
 			}
 		}
+		
+
 		if (this.childOrderQtyTotal > this.parentQty) {		
 			this.alertService.showMessage(
 				'Error',
@@ -6123,7 +4583,17 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 		if(partChildList) {
 			partChildList.quantityOrdered = partChildList.quantityOrdered ? formatNumberAsGlobalSettingsModule(partChildList.quantityOrdered, 0) : 0;
-		}		
+		}	
+		var childQty = 0;
+			if (partList.childList != null && partList.childList.length > 0) {
+				for (let j = 0; j < partList.childList.length; j++) {
+					if(!partList.childList[j].isDeleted){
+						childQty +=  partList.childList[j].quantityOrdered ? parseInt(partList.childList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0;		
+					}			
+				}
+				var quantityOrdered =  partList.quantityOrdered ? parseInt(partList.quantityOrdered.toString().replace(/\,/g,'')) : 0;					
+				partList.remQty = quantityOrdered - childQty;
+			}	
 	}	
 
 	filterVenContactFirstNames(event) {
@@ -6162,21 +4632,22 @@ export class PurchaseSetupComponent implements OnInit {
 	resetVenContactInfo() {
 		this.vendorContactInfo = new Object();
 	}
-
-	addContactForVendor() {
+		
+	addContactForVendor() {		
 		let vendorContactInfo = {
 			...this.vendorContactInfo,			
 			vendorId: editValueAssignByCondition('vendorId', this.headerInfo.vendorId),
 			isDefaultContact: this.vendorContactInfo.isDefaultContact ? this.vendorContactInfo.isDefaultContact : false,
 			createdBy: this.userName,
 			updatedBy: this.userName,
-			masterCompanyId: this.currentUserMasterCompanyId
-			
+			masterCompanyId: this.currentUserMasterCompanyId			
+
 		}
 		this.vendorService.newAddContactInfo(vendorContactInfo).subscribe(res => {
 			const data = {...res,	
 				          createdBy: this.userName,
 						  updatedBy: this.userName,
+						  isDefaultContact: this.vendorContactInfo.isDefaultContact ? this.vendorContactInfo.isDefaultContact : false,
 						  masterCompanyId: this.currentUserMasterCompanyId,
 						  vendorId: editValueAssignByCondition('vendorId', this.headerInfo.vendorId)}
 			this.vendorService.newAddvendorContact(data).subscribe(data => {
@@ -6187,14 +4658,10 @@ export class PurchaseSetupComponent implements OnInit {
 					MessageSeverity.success
 				);
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;					
 			});			
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});		
 	}	
 
@@ -6239,9 +4706,7 @@ export class PurchaseSetupComponent implements OnInit {
 				cost: res.cost ? formatNumberAsGlobalSettingsModule(res.cost, 2) : '0.00'
 			};
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -6257,9 +4722,7 @@ export class PurchaseSetupComponent implements OnInit {
                 }
             })
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}
 
@@ -6314,9 +4777,7 @@ export class PurchaseSetupComponent implements OnInit {
 			});
 			this.isSpinnerVisible = false;
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
     }
 
@@ -6406,6 +4867,8 @@ export class PurchaseSetupComponent implements OnInit {
 		 	}
 		 }
 	}
+
+
 	
 	saveApprovalProcess() {
 		const data = [];
@@ -6417,20 +4880,41 @@ export class PurchaseSetupComponent implements OnInit {
 				internalEmails: this.apporoverEmailList,
 				approvers: this.apporoverNamesList.join(),
 				approvedById: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : null,
+				rejectedBy: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : null,
                 createdBy: this.userName,
                 updatedBy: this.userName
 			}
 		});
+		var selectedcnt = 0;
+		var waitingforcnt = 0;
 		
 		this.approvalProcessList.map(x => {
 			if(x.isSelected) {
-				data.push(x)
+				data.push(x);
+				selectedcnt++;				
+			}
+			
+		});
+
+		data.forEach(x=> {
+			if (x.statusId == 4) {
+				waitingforcnt++;
 			}
 		});		
+
+		if (selectedcnt == waitingforcnt) {
+			this.alertService.showMessage(
+				'Error', 
+				'Select atleast one part other than Waiting for Approval status',
+				MessageSeverity.error
+			);
+			this.isSpinnerVisible = false;
+			return;
+		}
+	
         this.purchaseOrderService.savePurchaseOrderApproval(data).subscribe(res => {
 			if(res) {
-                if (res.response) {
-						this.getApprovalProcessListById(this.poId);
+				this.getApprovalProcessListById(this.poId);
 						this.headerInfo.statusId = res.response;
 						//this.getVendorPOHeaderById(this.poId);
 						this.enableHeaderSaveBtn = false;
@@ -6444,22 +4928,13 @@ export class PurchaseSetupComponent implements OnInit {
 							'Success',
 							`Saved Approver Process Successfully`,
 							MessageSeverity.success
-						);}
-			 else {
-				this.isSpinnerVisible = false;
-				this.alertService.showMessage(
-					'Error',
-					res.message,
-					MessageSeverity.error
-				);}
+						);			
 			 }
 			}, err => {
 			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+			
 		});
 		this.enableHeaderSaveBtn = false;
-
 	}
 
 showAlertMessage() {
@@ -6497,5 +4972,63 @@ WarnRescticModel() {
             }
 		} else {return false;}
 		
-    }
+	}
+	
+	suborderlist: any = [];
+
+	GetSubWolist(workOrderId,partList,index) {
+		this.allsubWorkOrderDetails = [];
+		this.commonService.GetSubWolist(workOrderId).subscribe(res => {			
+			const data = res.map(x => {
+				return {
+					value: x.subWorkOrderId,
+					label: x.subWorkOrderNo
+				}
+			});
+			//this.suborderlist = data;
+			this.allsubWorkOrderInfo = [...this.allsubWorkOrderInfo, ...data];
+			this.allsubWorkOrderDetails = [...this.allsubWorkOrderInfo, ...data]
+			partList.subWorkOrderlist = [...this.allsubWorkOrderInfo, ...data];	
+		}, err => {
+			this.isSpinnerVisible = false;			
+		})
+	}	
+
+	partNumber : any
+	getPartnumber(id){		
+		this.partNumber = this.partCollection.find((x: any) => x.value == id);
+		this.partNumber = this.partNumber["label"];	
+		return this.partNumber;
+	}
+
+	altPartNumber : any
+	getAltEquiPartNumer(id){
+		this.altPartNumber = this.altPartCollection.find((x: any) => x.altEquiPartNumberId == id.altEquiPartNumberId);		
+		this.altPartNumber = this.altPartNumber["altEquiPartNumber"];	
+		return this.altPartNumber;		
+	}
+
+	prioritys : any
+	getPriorityName(id){		
+		this.prioritys = this.allPriorityInfo.find((x: any) => x.value == id);		
+		this.prioritys = this.prioritys["label"];	
+		return this.prioritys;
+	}
+
+	condition : any
+	getCondition(id){
+		this.condition = this.allconditioninfo.find((x: any) => x.value == id);		
+		this.condition = this.condition["label"];	
+		return this.condition;
+	}
+	
+	getlabelFromObj(obj) {
+		if (obj.value) {
+			return obj.label;
+		} else {
+			return null;
+		}
+	}
+	
+	
 }

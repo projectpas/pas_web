@@ -69,7 +69,10 @@
                           <div class="row">
                               <div class="col">
                                   <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
-                                          pButton icon="fa-download" iconPos="left" label="Export Data" (click)="dt.exportCSV()"
+                                          pButton icon="fa-download" iconPos="left" label="Export Data"
+                                          data-toggle="modal" 
+                                          (click)="selectedOnly = false; targetData = dt;"
+                                           data-target="#downloadConfirmation"
                                           style="padding:5px 10px !important; width: 115px !important;"></button>
                                   <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
                                           matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
@@ -295,6 +298,28 @@
   </div>
 </div>
 
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <ng-template #deleteContent let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
     <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
@@ -380,6 +405,8 @@
             <th style="min-width: 50px;">Suffix</th>
             <th style="min-width: 100px;">Contact Title</th>
             <th style="min-width: 100px;">Email</th>
+            <th style="min-width: 100px;">Tag</th>
+            <th style="min-width: 100px;">Attention</th>
             <th style="min-width: 120px;">Work Phone</th>
             <th style="min-width: 90px;">Mobile Phone</th>
             <th style="min-width: 90px;">Alternate Phone</th>
@@ -457,14 +484,36 @@
             <td [ngStyle]="{
                 color: getColorCodeForHistory(
                   i,
-                  'fullContact',
-                  audit.fullContact
+                  'tagName',
+                  audit.tagName
                 )
                   ? 'black'
                   : 'red'
               }">
-              {{ audit.fullContact }}
+              {{ audit.tagName }}
             </td>
+            <td [ngStyle]="{
+              color: getColorCodeForHistory(
+                i,
+                'attention',
+                audit.attention
+              )
+                ? 'black'
+                : 'red'
+            }">
+            {{ audit.attention }}
+          </td>
+          <td [ngStyle]="{
+            color: getColorCodeForHistory(
+              i,
+              'fullContact',
+              audit.fullContact
+            )
+              ? 'black'
+              : 'red'
+          }">
+          {{ audit.fullContact }}
+        </td>
             <td [ngStyle]="{
                 color: getColorCodeForHistory(
                   i,
@@ -606,6 +655,14 @@
           class="value">{{ sourceVendorforView.email }}</span>
       </p>
       <p>
+        <span class="label"><b>Tag: <span class="clr-red">*</span> </b></span><span
+          class="value">{{ sourceVendorforView.tagName }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Attention: <span class="clr-red">*</span> </b></span><span
+          class="value">{{ sourceVendorforView.attention }}</span>
+      </p>
+      <p>
         <span class="label"><b>Mobile Phone : </b></span><span
           class="value">{{ sourceVendorforView.mobilePhone }}</span>
       </p>
@@ -678,6 +735,29 @@
                 <div class="col-sm-5">
                   <input type="checkbox" name="isDefaultContact" (ngModelChange)="enableSave()" [disabled]="sourceVendor.tempIsDefaultContact == true"
                     [(ngModel)]="sourceVendor.isDefaultContact" />
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Tag <span class="clr-red">*</span></label>
+              </div>
+              <div class="col-sm-5">
+                <div class="inner-addon right-addon inline-block" style="width: 100%">
+                  <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.tagName"
+                    (ngModelChange)="enableSave()" name="tagName" field="tagName" [suggestions]="tagNamesList"
+                    (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                    [inputStyle]="{ width: '100%' }" [forceSelection]="true" required>
+                  </p-autoComplete>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="col-sm-4">
+                <label>Attention </label>
+              </div>
+              <div class="col-sm-5">
+                <input class="form-control" type="text" name="attention" (ngModelChange)="enableSave()"
+                  [(ngModel)]="sourceVendor.attention" />
               </div>
             </div>
             <div class="col-sm-12">
@@ -860,7 +940,7 @@
                   </span>
               </div>
               <div class="col-sm-1">
-                <span>
+                <span style="margin-left:-10px">
                   <a
                   class="btn nobg"
                   data-toggle="modal"
@@ -868,7 +948,8 @@
                   data-target="#memo-popup-Doc"
                   (click)="onClickMemo()"
                   matTooltip="Add Memo"
-                  matTooltipPosition="above"><i class="fa fa-pencil"></i>
+                  matTooltipPosition="above">
+                  <i style="color: #337ab7" class="fa fa-pencil"></i>
                   </a>
                 </span>
               </div>
@@ -1124,7 +1205,7 @@
               <td style="white-space: inherit">
                 <p-editor
                  spellcheck="true"
-                 (ngModelChange)="enableSave()"
+                 (ngModelChange)="enableSaveMemo()"
                   [(ngModel)]="memoPopupContent"
                   [style]="{ height: '320px' }"
                   name="memoPopupContent"
@@ -1139,7 +1220,7 @@
             type="button"
             class="btn btn-primary"
             style="padding: 6px 12px !important; margin-top: 10px;"
-            (click)="onClickPopupSave()" [disabled]="disableSave">
+            (click)="onClickPopupSave()" [disabled]="disableSaveMemo">
             Save
           </button>
           <button

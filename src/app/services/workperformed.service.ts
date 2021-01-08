@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { WorkPerformedEndpointService } from './workperformed-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,7 +37,7 @@ export class WorkPerformedService {
         private workperformedEndpoint:  WorkPerformedEndpointService) { }
 
     getWorkPerformedList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.workperformedEndpoint.getWorkPerformedEndpoint<WorkPerformed[]>());
     }
     newWorkPerformed(workperformed) {
@@ -44,7 +45,7 @@ export class WorkPerformedService {
     }
 
     historyWorkPerformed(workPerformedId: number) {
-        return forkJoin(this.workperformedEndpoint.getHistoryWorkPerformedEndpoint<AuditHistory[]>(workPerformedId));
+        return Observable.forkJoin(this.workperformedEndpoint.getHistoryWorkPerformedEndpoint<AuditHistory[]>(workPerformedId));
     }
 
     getWorkPerformed(workPerformedId?: number) {

@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { TagTypeEndpointService } from './tagtype-endpoint.service';
 import { AuthService } from './auth.service';
@@ -32,7 +33,7 @@ export class TagTypeService {
 		private tagTypeEndpoint: TagTypeEndpointService) { }
 
 	getAll() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.tagTypeEndpoint.getTagTypeEndpoint<TagType[]>());
 	}
 

@@ -1,6 +1,6 @@
 ﻿
 <div class="right_col" role="main" style="padding: 2px 6px">
-    <div style="">
+    <div>
         <div class="x_content">
             <div *ngIf="isViewMode == false">
                 <div class="col-md-12 shadow-box-cstm">
@@ -74,8 +74,12 @@
                                               >
                                     <i class="fa fa-search"></i>
                                     <input type="text" pInputText size="50"  autocomplete="off"
-                                     class="form-control" (input)="domestictable.filterGlobal($event.target.value, 'contains')" placeholder=" Filter" style="height: 28px !important;">
+                                     class="form-control" 
+                                     
+                                     (input)="globalSearchForDomestic($event.target.value)"
+                                     placeholder=" Filter" style="height: 28px !important;">
                                     </div>
+                                    <!-- (input)="domestictable.filterGlobal($event.target.value, 'contains')" -->
                                 </div>
                               </div>
                               <div class="row">
@@ -175,9 +179,9 @@
                                     <input style="width:100%;"  autocomplete="off" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
                                 </th> -->
                                 <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                    <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
+                                    <input style="width:100%;" name="domesticShip" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
            
-                                    <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                    <input type="date" name="domesticShip"  style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
                                     name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
                                <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
                                (change)="dateFilterForTable($event.target.value,col.field)" />
@@ -342,8 +346,9 @@
                                                 class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
                                               >
                                     <i class="fa fa-search"></i>
-                                    <input type="text" pInputText size="50" 
-                                    class="form-control" (input)="intlShippingTable.filterGlobal($event.target.value, 'contains')" placeholder=" Filter" style="height: 28px !important;">
+                                    <input type="text" pInputText size="50" (input)="globalSearchForInternational($event.target.value)"
+                                    class="form-control"  placeholder=" Filter" style="height: 28px !important;">
+                                    <!-- (input)="intlShippingTable.filterGlobal($event.target.value, 'contains')" -->
                                 </div>
                             </div>
                           </div>
@@ -444,7 +449,7 @@
                             <tr>
                                 <th></th>
                                 <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                    <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'startDate' && col.field != 'expirationDate' " pInputText type="text" (input)="intlShippingTable.filter($event.target.value, col.field, 'contains')">
+                                    <input name="shippingInt"style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'startDate' && col.field != 'expirationDate' " pInputText type="text" (input)="intlShippingTable.filter($event.target.value, col.field, 'contains')">
            
                                     <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
                                     name="createdDate"  (change)="dateFilterForTableForInternational($event.target.value, col.field)" />
@@ -582,161 +587,6 @@
         </div>
     </div>
 </div>
-
-<ng-template #contentShipVia let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
-    <div class="modal-header">
-        <h4 class="modal-title" *ngIf="isEditMode">Edit Ship Via Info</h4>
-        <h4 class="modal-title" *ngIf="!isEditMode">Add Ship Via Info</h4>
-        <button type="button" class="btn btn-danger" aria-label="Close" (click)="dismissShipViaModelModel()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-
-    </div>
-
-    <div class="modal-body">
-        <form #userForm="ngForm" class="form-horizontal">
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="classificationName" class="control-label w100">Ship Via<strong class="clr-red">*</strong></label>
-                    <div class="control-data">
-                        <p-autoComplete (onSelect)="onShipVia($event)" (onKeyUp)=eventShipviaHandler($event) [(ngModel)]="shipViaObj.shipVia" [ngModelOptions]="{standalone: true}" [suggestions]="shipviacollection" (completeMethod)="filterShipVia($event)" [size]="30"
-                                        [minLength]="1" [dropdown]="true">
-                            <ng-template let-siteName pTemplate="item">
-                                <div class="ui-helper-clearfix">{{siteName}}</div>
-                            </ng-template>
-                        </p-autoComplete>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="form-group">
-                    <label for="description" class="control-label w100">Ship Account Info</label>
-                    <div class="control-data">
-                        <input type="text" name="" id="" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="shipViaObj.shippingAccountinfo">
-
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="description" class="control-label w100">Shipping Url</label>
-                    <div class="control-data">
-                        <input type="text" name="" id="" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="shipViaObj.shippingURL">
-
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="form-group" style="display:none">
-                    <label for="description" class="control-label w100">Shipping Id</label>
-                    <div class="control-data">
-                        <input type="text" name="" id="" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="shipViaObj.shippingId">
-
-                    </div>
-                    <div class="clear"></div>
-                </div>
-            </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <label for="description" class="control-label w100">Memo</label> 
-                    <div class="control-data">
-                        <input type="text" placeholder="Tool Bar" name="" id=""
-                         class="form-control" [ngModelOptions]="{standalone: true}" 
-                         [(ngModel)]="shipViaObj.memo">
-
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-6">
-                        <label class="form-check-label" for="isActive">
-                            <input type="checkbox" name="isActive" #isActive="ngModel" class="form-check-input" checked id="isActive" [(ngModel)]="sourceAction.isActive"> Active
-                        </label>
-                    </div>
-                    <div class="clear"></div>
-                </div>
-                <div class="clear"></div>
-            </div>
-
-            <div class="clear"></div>
-            <p-table #dt class="rpo-table-cstm rro-table-cstm"
-            [value]="allShipViaDetails"
-            [metaKeySelection]="true"
-            [rows]="20"
-            [paginator]="true" 
-            [pageLinks]="3" 
-
-            [rowsPerPageOptions]="[10,20,50,100]" 
-            [columns]="selectedShipViaColumn" 
-            selectionMode="multiple" 
-            [(selection)]="selectedShipViaColumns" 
-            [resizableColumns]="true" 
-            [reorderableColumns]="true">
-
-                <ng-template pTemplate="caption">
-                    <div style="text-align: right">
-                        <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" [ngModelOptions]="{standalone: true}" optionLabel="header"
-                                       selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-                        <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
-                            <i class="fa fa-search"></i>
-                            <input type="text" pInputText size="50" class="form-control ui-autocomplete-input" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter">
-                        </div>
-                        <button type="button" pButton icon="fa-download" iconPos="left" label="Export All Data" (click)="dt.exportCSV()"></button>
-                        <button type="button" pButton icon="fa-download" iconPos="left" label="Export Selection Only" *ngIf="selectedShipViaColumn" (click)="dt.exportCSV({selectionOnly:true})"></button>
-
-                        <div class="excel-upload excel-upload-cstm">
-                            <input type="file" name="upload[]" id="upload" class="uploaddoc upload-file" data-multiple-caption="{count} files selected" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                            <label for="upload">
-                                <span matTooltip="Upload Data (Excel)" matTooltipPosition="above"><i class="fa fa-upload"></i></span>
-                            </label>
-                        </div>
-                    </div>
-                </ng-template>
-
-                <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th style="width: 40px;">Flag</th>
-                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                            {{col.header}}
-                            <p-sortIcon [field]="col.field"></p-sortIcon>
-                        </th>
-                        <th style="width:140px;position:sticky"></th>
-                    </tr>
-                </ng-template>
-
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                    <tr [pSelectableRow]="rowData">
-                        <td>
-                            <span class="flag">
-                                <i *ngIf="rowData.isPrimary == true" [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
-                                   class="fa fa-flag" aria-hidden="true"></i>
-                            </span>
-                        </td>
-                        <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                            {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a'):rowData[col.field]}}
-                        </td>
-                        <td>
-                            <button class="btn-edit" mat-icon-button (click)="openShipViaEdit(rowData)" matTooltip="edit">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button class="btn-delete" mat-icon-button matTooltipPosition="above" matTooltip="delete" (click)="deleteItemShippingCloseModel(rowData.legalEntityShippingId)">
-                                <mat-icon color="warn">delete</mat-icon>
-                            </button>
-                            <button class="btn-history" mat-icon-button matTooltipPosition="above" matTooltip="history" (click)="openHist(contentHist,rowData)">
-                                <mat-icon color="green">history</mat-icon>
-                            </button>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-
-            <div class="clear"></div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" [disabled]="!userForm.valid" (click)="savelegalEntityShipViaDetails()">Submit</button>
-                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
-            </div>
-        </form>
-    </div>
-</ng-template>
 
 <ng-template #contentHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
     <div class="modal-header">
@@ -916,7 +766,7 @@
 
                             </div>
                             <div class="col-sm-5">
-                                <input type="checkbox" checked id="isPrimary" name="isPrimary" [(ngModel)]="domesticShippingInfo.isPrimary"
+                                <input type="checkbox" checked id="isPrimary2" name="isPrimary2" [disabled]="editisPrimary==true" [(ngModel)]="domesticShippingInfo.isPrimary"
                                        (ngModelChange)="enableSave()">
                                 <!-- <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
 
@@ -940,7 +790,7 @@
                                 <label>Address 1 <span class="clr-red">*</span></label>
                             </div>
                             <div class="col-sm-5">
-                                <input autocomplete="off" class="form-control" id="csaddress1" type="text" name="address1" [(ngModel)]="domesticShippingInfo.address1" (ngModelChange)="enableSave()" required>
+                                <input autocomplete="off" class="form-control" id="csaddress12" type="text" name="address12" [(ngModel)]="domesticShippingInfo.address1" (ngModelChange)="enableSave()" required>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -972,7 +822,8 @@
                                 <label>Postal Code <span class="clr-red">*</span></label>
                             </div>
                             <div class="col-sm-5">
-                                <input autocomplete="off" class="form-control" (keypress)="checkvalid($event)" id="cspostal2" type="text" name="postalCode" [(ngModel)]="domesticShippingInfo.postalCode" (ngModelChange)="enableSave()" required>
+                                <!-- (keypress)="checkvalid($event)" -->
+                                <input autocomplete="off" class="form-control"  id="cspostal2" type="text" name="postalCode" [(ngModel)]="domesticShippingInfo.postalCode" (ngModelChange)="enableSave()" required>
                             </div>
                         </div>
 
@@ -1104,9 +955,9 @@
 
                             </div>
                             <div class="col-sm-5">
-                                <input type="checkbox" name="isPrimary" class="form-check-input" checked id="isPrimary" [(ngModel)]="internationalShippingInfo.isPrimary" (ngModelChange)="enableSave()">
+                                <input type="checkbox" name="isPrimary3" [disabled]="editisPrimary2==true" class="form-check-input" checked id="isPrimary3" [(ngModel)]="internationalShippingInfo.isPrimary" (ngModelChange)="enableSave()">
                                 <!-- [disabled]="internationalShippingInfo.isPrimary"  <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
-                                <!-- <input type="checkbox" checked id="isPrimary" name="isPrimary" [(ngModel)]="domesticShippingInfo.isPrimary"
+                                <!-- <input type="checkbox" checked id="isPrimary6" name="isPrimary" [(ngModel)]="domesticShippingInfo.isPrimary"
                                 (ngModelChange)="enableSave()"> -->
 
                             </div>
@@ -1272,7 +1123,7 @@
                         <div class="form-group" style="margin-top: 22px;margin-right:15px;">
                             <div  style="margin-left: 0;">
                                 <label>
-                                    <input type="checkbox" checked id="isPrimaryDomestic" name="isPrimaryDomestic" (ngModelChange)="enableSave2()" [(ngModel)]="shipViaDomestic.isPrimary">
+                                    <input type="checkbox" [disabled]="editisPrimary3==true" checked id="isPrimaryDomestic" name="isPrimaryDomestic" (ngModelChange)="enableSave2()" [(ngModel)]="shipViaDomestic.isPrimary">
                                     <!-- removed from above input [disabled]="shipViaDomestic.isPrimary"-->
                                    <!--  <span class="cr"><i class="cr-icon pi pi-check"></i></span> -->
                                     Primary
@@ -1423,7 +1274,11 @@
                               >
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50" 
-                                class="form-control" (input)="domesShipVia.filterGlobal($event.target.value, 'contains')" placeholder=" Filter" style="height: 28px !important;">
+                                class="form-control" 
+                                
+                                (input)="globalSearchForDomesticShipVia($event.target.value)"
+                                placeholder=" Filter" style="height: 28px !important;">
+                                <!-- (input)="domesShipVia.filterGlobal($event.target.value, 'contains')" -->
                             </div>
                         </div>
 
@@ -1588,6 +1443,21 @@
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                 <span aria-hidden="true">&times;</span>
             </button>
+            <br>
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                    </p>
+                </div>
+            </div><br>
         </div>
         <div class="modal-body">
             <strong>
@@ -1743,7 +1613,7 @@
                         <div class="form-group" style="margin-top: 22px;margin-right:15px;">
                             <div  style="margin-left: 0;">
                                 <label>
-                                    <input type="checkbox"   id="isPrimaryInter" (ngModelChange)="enableSave2()" name="isPrimaryDomesticInter" [(ngModel)]="shipViaInternational.isPrimary" >
+                                    <input type="checkbox" [disabled]="editisPrimary4==true"   id="isPrimaryInter" (ngModelChange)="enableSave2()" name="isPrimaryDomesticInter" [(ngModel)]="shipViaInternational.isPrimary" >
                                     <!-- removed from above input
                                     [disabled]="shipViaInternational.isPrimary"-->
 
@@ -1894,7 +1764,12 @@
                                 class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
                               >
                                 <i class="fa fa-search"></i>
-                                <input type="text" pInputText size="50" class="form-control" (input)="internationShipVia.filterGlobal($event.target.value, 'contains')" placeholder=" Filter" style="height: 28px !important;">
+                                <input type="text" pInputText size="50" class="form-control"
+                                 
+                                  placeholder=" Filter" style="height: 28px !important;"
+                                  
+                                  (input)="globalSearchForinternationalShipVia($event.target.value)">
+                                  <!-- (input)="internationShipVia.filterGlobal($event.target.value, 'contains')" -->
                             </div>
                             </div>
                         </div>
@@ -2083,6 +1958,21 @@
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                 <span aria-hidden="true">&times;</span>
             </button>
+            <br>
+            <div class="col-md-12 shadow-box-cstm">
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <p class="fs12">
+                        <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                        <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                    </p>
+                </div>
+            </div><br>
         </div>
         <div class="modal-body">
             <strong>
@@ -2125,21 +2015,22 @@
             <!-- Modal body -->
             <div class="modal-body" *ngIf="sourceViewforInterShippingVia">
                 <div class="col-sm-12">
-                    <p><span class="label"><b>Ship Via <span class="clr-red">*</span>: </b></span><span class="value">{{sourceViewforInterShippingVia.shipvia}}</span></p>
-                    <p><span class="label"><b>Shipping Account Info <span class="clr-red">*</span>: </b></span><span class="value">{{sourceViewforInterShippingVia.shipAccountinfo}}</span></p>
-                    <!--<p><span class="label"><b>Shipping URL: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingURL}}</span></p>
-                    <p><span class="label"><b>ShippingId: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingId}}</span></p>-->
-                    <p><span class="label" style="margin-top: 12px;" ><b>Memo: </b></span><span class="value"> 
-                        <span  [innerHTML]="sourceViewforInterShippingVia.memo"   matTooltipPosition="above" [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" class="text_editor_box"
-                        style="width: 96% !important;border: none;"></span>
-                        </span></p>
-                    <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforInterShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
-                    <!-- <p><span class="label"><b>Primary : </b></span><span class="value"> {{sourceViewforInterShippingVia.isPrimary === true ? 'Yes' : 'No'}}</span></p> -->
                     <p><span class="label"><b>Primary: </b></span><span class="value">
                         <!-- {{viewData.isPrimary === true ? 'Yes' : 'No'}} -->
                         <input type="checkbox" disabled [checked]="sourceViewforInterShippingVia.isPrimary === true"
                          />
                     </span></p>
+                    <p><span class="label"><b>Ship Via <span class="clr-red">*</span>: </b></span><span class="value">{{sourceViewforInterShippingVia.shipvia}}</span></p>
+                    <p><span class="label"><b>Shipping Account Info <span class="clr-red">*</span>: </b></span><span class="value">{{sourceViewforInterShippingVia.shipAccountinfo}}</span></p>
+                    <!--<p><span class="label"><b>Shipping URL: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingURL}}</span></p>
+                    <p><span class="label"><b>ShippingId: </b></span><span class="value">{{sourceViewforInterShippingVia.shippingId}}</span></p>-->
+                    <p><span class="label"  ><b>Memo: </b></span><span class="value"> 
+                        <span  [innerHTML]="sourceViewforInterShippingVia.memo"   matTooltipPosition="above" [matTooltip]="parsedText(sourceViewforInterShippingVia.memo)" class="text_editor_box"
+                        style="width: 96% !important;border: none;"></span>
+                        </span></p>
+                    <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforInterShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
+                    <!-- <p><span class="label"><b>Primary : </b></span><span class="value"> {{sourceViewforInterShippingVia.isPrimary === true ? 'Yes' : 'No'}}</span></p> -->
+                 
                     <p><span class="label"><b>Is Active: </b></span><span class="value">
                         <!-- {{viewData.isActive === true ? 'Yes' : 'No'}} -->
                         <input type="checkbox" disabled [checked]="sourceViewforInterShippingVia.isActive === true"
@@ -2187,6 +2078,11 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <div class="col-sm-12" *ngIf="sourceViewforDomesticShippingVia">
+                    <p><span class="label"><b>Primary: </b></span><span class="value">
+                        <!-- {{viewData.isPrimary === true ? 'Yes' : 'No'}} -->
+                        <input type="checkbox" disabled [checked]="sourceViewforDomesticShippingVia.isPrimary === true"
+                         />
+                    </span></p>
                     <p><span class="label"><b>Ship Via <span class="clr-red">*</span>: </b></span><span class="value">{{sourceViewforDomesticShippingVia.shipvia}}</span></p>
                     <p><span class="label"><b>Shipping Account Info <span class="clr-red">*</span>: </b></span><span class="value">{{sourceViewforDomesticShippingVia.shipAccountinfo}}</span></p>
                     <!--<p><span class="label"><b>Shipping URL: </b></span><span class="value">{{sourceViewforDomesticShippingVia.shippingURL}}</span></p>
@@ -2198,11 +2094,7 @@
                     <!-- <p><span class="label"><b>In Active : </b></span><span class="value"> {{sourceViewforDomesticShippingVia.isActive === true ? 'Yes' : 'No'}}</span></p> -->
                     <!-- <p><span class="label"><b>Primary : </b></span><span class="value"> {{sourceViewforDomesticShippingVia.isPrimary === true ? 'Yes' : 'No'}}</span></p> -->
 
-                    <p><span class="label"><b>Primary: </b></span><span class="value">
-                        <!-- {{viewData.isPrimary === true ? 'Yes' : 'No'}} -->
-                        <input type="checkbox" disabled [checked]="sourceViewforDomesticShippingVia.isPrimary === true"
-                         />
-                    </span></p>
+                   
                     <p><span class="label"><b>Is Active: </b></span><span class="value">
                         <!-- {{sourceViewforDomesticShippingVia.isActive === true ? 'Yes' : 'No'}} -->
                         <input type="checkbox" disabled [checked]="sourceViewforDomesticShippingVia.isActive === true"
@@ -2229,6 +2121,21 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
+        <br>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                </p>
+            </div>
+        </div><br>
     </div>
     <div class="modal-body">
         <strong>
@@ -2247,6 +2154,21 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
+        <br>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                </p>
+            </div>
+        </div><br>
     </div>
     <div class="modal-body">
         <strong>
@@ -2461,6 +2383,21 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
+        <br>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                </p>
+            </div>
+        </div><br>
     </div>
     <div class="modal-body">
         <strong *ngIf="restoreTypeId==1">

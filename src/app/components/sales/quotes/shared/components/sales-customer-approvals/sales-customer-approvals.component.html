@@ -13,9 +13,15 @@
           </tr>
         </thead>
         <tbody>
+          <ng-container *ngIf="!quotesList || quotesList.length==0"><tr>
+            <td colspan="13" class="no-records-cstm">
+              No records found
+            </td>
+          </tr></ng-container>
+          <ng-container *ngIf="quotesList">
           <tr class="mpn-row" style="display: table-row;" *ngFor="let approver of quotesList; let i=index;">
             <td>
-              <input type="checkbox" [disabled]="isView || getPartToDisableOrNot(approver)"
+              <input type="checkbox" [disabled]="isView || !getPartToDisableOrNot(approver)"
                 [(ngModel)]="approver.isSelected" (click)="onApprovalSelected(approver, i)" />
             </td>
             <ng-container *ngFor="let field of columns">
@@ -169,6 +175,7 @@
               </td>
             </ng-container>
           </tr>
+        </ng-container>
         </tbody>
       </table>
     </div>

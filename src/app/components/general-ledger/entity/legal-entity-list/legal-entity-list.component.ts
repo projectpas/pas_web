@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { fadeInOut } from '../../../../services/animations';
 import * as $ from 'jquery';
 import { AuthService } from '../../../../services/auth.service';
-  
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import {  MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
@@ -14,12 +14,14 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { Currency } from '../../../../models/currency.model';
 import { TreeNode } from 'primeng/api';
 import {  MenuItem } from 'primeng/api';
-import {  Table } from 'primeng/table';
+import {  Table,  } from 'primeng/table';
 import { EntityViewComponent } from '../../../../shared/components/legalEntity/entity-view/entity-view.component';
 import { DatePipe } from '@angular/common';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
-
+// import { DataTable } from 'primeng/datatable';
 import * as moment from 'moment';
+import { ConfigurationService } from '../../../../services/configuration.service';
+
 @Component({ 
 	selector: 'app-legal-entity-list',
 	templateUrl: './legal-entity-list.component.html',
@@ -59,7 +61,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	selectedColumns1: any[];
 	isEditMode: boolean = false;
 	isDeleteMode: boolean;
-	@ViewChild('dt',{static:false}) dataTable: Table;
+	// @ViewChild('dt',{static:false}) dataTable: DataTable;
 	sourceViewforDocumentListColumns = [
         { field: 'fileName', header: 'File Name' },
     ];
@@ -114,6 +116,9 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		{ field: 'updatedBy', header: 'Updated By' },
 	];
 	selectedColumns = this.legalEntityColumns;
+	moduleName:any="LegalEntity";
+	referenceId:any;
+	pageNumber = 0;
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -121,6 +126,7 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		public entityService: LegalEntityService,
 		private modalService: NgbModal,
 		private commonService: CommonService,
+		private configurations: ConfigurationService,
 		private datePipe: DatePipe) {
 		this.dataSource = new MatTableDataSource();
 		if (this.entityService.listCollection != null && this.entityService.isEditMode == true) {
@@ -149,7 +155,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 			});
 	}
 	first:any=0;
-	getStatusForList(status) {
+	getStatusForList(status) { 
+		this.pageNumber = 0;
 		const pageIndex = 0;
 		this.currentStatusForList=status ? status :'Active';
 		this.pageIndex = pageIndex;
@@ -158,10 +165,38 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 		this.statusForList = status ? status :'Active';
 		this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
 		const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-		this.first=0;
-		PagingData.page=1;
+		// this.first=0;
+		// PagingData.page=1;
 		this.getList(PagingData);
 	}
+	
+	getDeleteListByStatus(value) {
+		// this.pageNumber = 0;
+		this.currentDeletedstatus=true;
+		// const pageIndex = 0;
+		// this.pageIndex = pageIndex;
+		// this.pageSize = this.lazyLoadEventDataInput.rows;
+		// this.lazyLoadEventDataInput.first = pageIndex;
+
+		this.pageNumber = 0;
+        const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
+        this.pageIndex = pageIndex;
+        this.pageSize = this.lazyLoadEventDataInput.rows;
+        this.lazyLoadEventDataInput.first = this.pageIndex;
+
+		if (value == true) {
+			this.currentDeletedstatus = true;
+			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForList };
+			this.isSpinnerVisible = true;
+			this.loadDatas(this.lazyLoadEventDataInput);
+		} else {
+			this.currentDeletedstatus = false;
+			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForList };
+			this.isSpinnerVisible = true;
+			this.loadDatas(this.lazyLoadEventDataInput);
+		}
+	}
+
 	globalSearch(value) {
 		this.isSpinnerVisible = true;
 		this.pageIndex = this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
@@ -274,10 +309,13 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 
 	loadDatas(event) {
 		this.lazyLoadEventData = event;
-		const pageIndex = parseInt(event.first) / event.rows;;
-		this.pageIndex = pageIndex;
+		this.pageIndex = parseInt(event.first) / event.rows;
+		if(this.pageIndex <1){
+            this.pageIndex=this.pageIndex*10;
+        }
+		// this.pageIndex = pageIndex;
 		this.pageSize = event.rows;
-		event.first = pageIndex;
+		event.first = this.pageIndex;
 		this.lazyLoadEventDataInput = event;
 		this.lazyLoadEventDataInput.filters = {
 			...this.lazyLoadEventDataInput.filters,
@@ -508,9 +546,16 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 		this.entityService.updateEntitydelete(this.selectedRowforDelete.legalEntityId).subscribe(
 			data => {
 				this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-				this.getStatusForList(this.statusForList);
+				// this.getStatusForList(this.statusForList);
+				const lazyEvent = this.lazyLoadEventDataInput;
+				this.loadDatas({
+					...lazyEvent,
+					filters: {
+						...lazyEvent.filters,
+						status:this.statusForList
+					}
+				})
 			}, err => {
-
 				const errorLog = err;
 				this.errorMessageHandler(errorLog);
 			})
@@ -528,12 +573,22 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 			this.Active = "Active";
 		}
 		this.entityService.updateLegalEntityStatus(rowData.legalEntityId, this.Active, this.userName).subscribe(res => {
-			if (rowData.isActive) {
-				this.getStatusForList('InActive')
-			}
-			else {
-				this.getStatusForList('Active')
-			}
+			// if (rowData.isActive) {
+			// 	this.getStatusForList('InActive')
+			// }
+			// else {
+			// 	this.getStatusForList('Active')
+			// }
+			const pageIndex = parseInt(this.lazyLoadEventDataInput.first); 
+			this.pageIndex = pageIndex;
+			this.pageSize = this.lazyLoadEventDataInput.rows;
+			this.lazyLoadEventDataInput.first = pageIndex >= 1 ? pageIndex : 0;
+			
+			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForList, isDeleted: this.currentDeletedstatus };
+			const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+		  
+			const lazyEvent = this.lazyLoadEventDataInput;
+			this.loadDatas(PagingData)
 			this.alertService.showMessage("Success", `Updated successfully`, MessageSeverity.success);
 		}, err => {
 
@@ -573,11 +628,13 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 	openView(content, row) {
 // 		            $('.show').add();
 //             $('.modal').add();
-// $('.modal-backdrop').add();
+// $('.modal-backdrop').add(); 
+ 
 		this.showViewForTabs=false;
 		const { legalEntityId } = row;
 	
 		this.isSpinnerVisibleHistory = true;
+		this.referenceId=legalEntityId
 		this.entityService.getEntityDataById(legalEntityId).subscribe(res => {
 			this.showViewForTabs=true;
 			res.legalEntityCode=res.companyCode;
@@ -620,10 +677,15 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 			this.errorMessageHandler(errorLog);
 		});
 	}
+	isLockBox:any=false;
+	isDomesticWire:any=false;
+	isInternationalWire:any=false;
+	isAch:any=false;
 	
 	getEntityLockBoxDataById(legalEntityId) {
         this.entityService.getEntityLockboxDataById(legalEntityId).subscribe(res => {
             if (res != null && res && res.length !=0)  {
+this.isLockBox=false;
                 this.lockboxing = {
                     ...this.lockboxing,
                     poBox: res[0].poBox,
@@ -634,13 +696,16 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                     bankcountry: res[0].country,
                     bankpostalCode: res[0].postalCode
                 };
-            }
+            }else{
+				this.isLockBox=true;
+			}
         })
         this.getEntityDomesticwireDataById(legalEntityId);
     }
     getEntityDomesticwireDataById(legalEntityId) {
         this.entityService.getEntityDomesticDataById(legalEntityId).subscribe(res => {
             if ( res != null && res && res.length !=0) {
+				this.isDomesticWire=false;
                 this.lockboxing = {
                     ...this.lockboxing,
                     domesticBankName: res[0].bankName,
@@ -649,7 +714,9 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                     domesticBankAccountNumber: res[0].accountNumber,
                     domesticABANumber: res[0].aba
                 }
-            }
+            }else{
+				this.isDomesticWire=true;
+			}
 
         })
 
@@ -661,6 +728,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         this.entityService.getEntityInternalDataById(legalEntityId).subscribe(res => {
             const response = res;
             if ( res != null && res && res.length !=0) {
+				this.isInternationalWire=false;
                 this.lockboxing = {
                     ...this.lockboxing,
                     internationalBankName: res[0].bankName,
@@ -669,7 +737,9 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                     internationalBankAccountNumber: res[0].beneficiaryBankAccount,
                     internationalSWIFTID: res[0].swiftCode
                 }
-            }
+            }else{
+				this.isInternationalWire=true;
+			}
         })
         this.getEntityACHDataById(legalEntityId);
     }
@@ -679,6 +749,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         this.entityService.getEntityAchDataById(legalEntityId).subscribe(res => {
             const response = res;
             if ( res != null && res && res.length !=0) {
+				this.isAch=false;
                 this.lockboxing = {
                     ...this.lockboxing,
                     achBankName: res[0].bankName,
@@ -688,7 +759,9 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                     achABANumber: res[0].aba,
                     achSWIFTID: res[0].swiftCode,
                 }
-            }
+            }else{
+				this.isAch=true;
+			}
         })
     }
 	bankingApiDataList:any=[];
@@ -741,8 +814,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 			}
 		}
 	}
-
-	exportCSV(dt) {
+		exportCSV(dt) {
 		this.isSpinnerVisible = true;
 		const isdelete = this.currentDeletedstatus ? true : false;
 		let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.statusForList, "isDeleted": isdelete }, "globalFilter": this.filterText ? this.filterText :"" }
@@ -762,6 +834,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 
 			dt._value = vList;
 			dt.exportCSV();
+			$("#downloadConfirmation").modal("hide");
 			this.dismissModel();
 			dt.value = this.allATAMaininfo;
 			this.isSpinnerVisible = false;
@@ -770,26 +843,6 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 			const errorLog = err;
 			this.errorMessageHandler(errorLog);
 		});
-	}
-
-	getDeleteListByStatus(value) {
-
-		this.currentDeletedstatus=true;
-		const pageIndex = 0;
-		this.pageIndex = pageIndex;
-		this.pageSize = this.lazyLoadEventDataInput.rows;
-		this.lazyLoadEventDataInput.first = pageIndex;
-		if (value == true) {
-			this.currentDeletedstatus = true;
-			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForList };
-			this.isSpinnerVisible = true;
-			this.getList(this.lazyLoadEventDataInput);
-		} else {
-			this.currentDeletedstatus = false;
-			this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.statusForList };
-			this.isSpinnerVisible = true;
-			this.getList(this.lazyLoadEventDataInput);
-		}
 	}
 
 
@@ -806,10 +859,22 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 		});
 	}
 	restorerecord: any = {}
-
+	downloadFileUpload(rowData) {
+		console.log("roe",rowData)
+        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
+        window.location.assign(url);
+    }
 	restoreRecord() {
 		this.commonService.updatedeletedrecords('LegalEntity', 'LegalEntityId', this.restorerecord.legalEntityId).subscribe(res => {
-			this.getDeleteListByStatus(true)
+			// this.getDeleteListByStatus(true)
+			const lazyEvent = this.lazyLoadEventDataInput;
+			this.loadDatas({
+				...lazyEvent,
+				filters: {
+					...lazyEvent.filters,
+					status:this.statusForList
+				}
+			})
 			this.modal.close();
 			this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
 		}, err => {
@@ -870,5 +935,123 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         //     log,
         //     MessageSeverity.error
         // ); 
-    }
+	}
+	auditHistoryHeaders: any = [];
+	auditHistoryList: any = [];
+	// isSpinnerVisibleHistory: boolean = false;
+	getAuditHistoryByIdbanking(content,type) {
+		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false ,windowClass: 'assetMange'});
+		if (type == 1) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglLockBoxHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					this.isSpinnerVisibleHistory = false;
+					const errorLog = err;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'PO Box', field: 'poBox' },
+				{ header: 'Street Address Line 1', field: 'line1' },
+				{ header: 'Street Address Line 2', field: 'line2' },
+				{ header: 'City', field: 'city' },
+				{ header: 'Province/State', field: 'stateOrProvince' },
+				{ header: 'Country', field: 'countries_name' },
+				{ header: 'Postal Code', field: 'postalCode' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 2) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglDomesticHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					const errorLog = err;
+					this.isSpinnerVisibleHistory = false;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediaryBankName' },
+				{ header: 'Benficiary Bank Name', field: 'benificiaryBankName' },
+				{ header: 'Bank Account Number', field: 'accountNumber' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 3) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglInternationalHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					const errorLog = err;
+					this.isSpinnerVisibleHistory = false;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
+				{ header: 'Benficiary', field: 'beneficiaryBank' },
+				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 4) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.entityService.getLeaglAchHistory(this.referenceId).subscribe(
+				res => {
+					this.auditHistoryList = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					const errorLog = err;
+					this.isSpinnerVisibleHistory = false;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
+				{ header: 'Benficiary Bank Name', field: 'beneficiaryBankName' },
+				{ header: 'Bank Account Number', field: 'accountNumber' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		}
+	}
+	CloserCOnatcHistory() {
+		// $("#contentHist").modal("hide");
+		this.modal.close();
+	}	
+	getColorCodeForHistoryBanking(i, field, value) {
+		const data = this.auditHistoryList;
+		const dataLength = data.length;
+		if (i >= 0 && i <= dataLength) {
+			if ((i + 1) === dataLength) {
+				return true;
+			} else {
+				return data[i + 1][field] === value
+			}
+		}
+	}
 }

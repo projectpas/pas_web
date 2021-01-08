@@ -75,9 +75,10 @@
                                           >
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50" 
-                                class="form-control"
-                                       (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Filter" style="height: 28px !important;">
+                                class="form-control" (input)="globalSearch($event.target.value)"
+                                   placeholder="Filter" style="height: 28px !important;">
                             </div> 
+                            <!-- (input)="dt.filterGlobal($event.target.value, 'contains')" -->
                         </div>
                       </div>
                       <div class="row">
@@ -239,12 +240,13 @@ col.field == 'createdDate'?
                                 <p-inputSwitch  [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                 matTooltipPosition="above"  disabled></p-inputSwitch> 
                                 <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewSelectedRowdbl(viewdbl,rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
+                                <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                 <span data-toggle="modal" data-target="#contentHist">
                                     <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltipPosition="above" matTooltip="History">
                                         <i class="fa fa-history"></i>
                                     </a>
-                                </span>
-                                <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                </span> 
+                              
                             </div>
                             </td>
                         </tr>
@@ -256,6 +258,21 @@ col.field == 'createdDate'?
                                 <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                                <br>
+                                <div class="col-md-12 shadow-box-cstm">
+                                    <div class="col-md-6">
+                                        <p class="fs12">
+                                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyName }} </span>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p class="fs12">
+                                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyCode }} </span>
+                                        </p>
+                                    </div>
+                                </div><br>
                             </div>
                             <div class="modal-body">
                                 <strong>
@@ -275,6 +292,21 @@ col.field == 'createdDate'?
                                 <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
+                                             <br>
+                <div class="col-md-12 shadow-box-cstm">
+                    <div class="col-md-6">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyName }} </span>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="fs12">
+                            <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                            <span class="span-header-red" style="text-transform: capitalize"> {{ companyCode }} </span>
+                        </p>
+                    </div>
+                </div><br>
                             </div>
                             <div class="modal-body">
                                 <strong>
@@ -365,6 +397,11 @@ col.field == 'createdDate'?
             <div class="modal-body">
            
                 <div class="col-sm-12">
+                    <p><span class="label"><b>Primary: </b></span><span class="value">
+                        <!-- {{viewData.isPrimary === true ? 'Yes' : 'No'}} -->
+                        <input type="checkbox" disabled [checked]="sourceViewforContact.isDefaultContact === true"
+                           />
+                    </span></p>
                     <p><span class="label"><b>Tag <span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforContact.tag}}</span></p>
                     <p><span class="label"><b>Prefix: </b></span><span class="value">{{sourceViewforContact.prefix}}</span></p>
                     <p><span class="label"><b>First Name<span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforContact.firstName}}</span></p>
@@ -375,11 +412,7 @@ col.field == 'createdDate'?
                     <p><span class="label"><b>Work Phone <span class="clr-red">*</span> : </b></span><span class="value">{{sourceViewforContact.fullContactNo}}</span></p>
                     <!-- <p><span class="label"><b>IPrimary Contact </b></span><span class="value">{{sourceViewforContact.isDefaultContact}}</span></p> -->
                     <div class="col-sm-12">
-                        <p><span class="label"><b>Is Primary: </b></span><span class="value">
-                            <!-- {{viewData.isPrimary === true ? 'Yes' : 'No'}} -->
-                            <input type="checkbox" disabled [checked]="sourceViewforContact.isDefaultContact === true"
-                               />
-                        </span></p>
+                    
                         <p><span class="label"><b>Is Active: </b></span><span class="value">
                             <!-- {{viewData.isActive === true ? 'Yes' : 'No'}} -->
                             <input type="checkbox" disabled [checked]="sourceViewforContact.isActive === true"
@@ -464,7 +497,7 @@ col.field == 'createdDate'?
                         <tbody *ngIf="auditHistory.length> 0">
                             <tr *ngFor="let audit of auditHistory; let i = index;">
 
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'tag', audit.tag)  ? 'black' : 'red'  }">{{audit.tag}}</td>
+                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'tagName', audit.tagName)  ? 'black' : 'red'  }">{{audit.tagName}}</td>
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'prefix', audit.prefix)  ? 'black' : 'red'  }">{{audit.prefix}}</td>
 
                                 <td [ngStyle]="{'color': getColorCodeForHistory(i, 'firstName', audit.firstName)  ? 'black' : 'red'  }">{{audit.firstName}}</td>

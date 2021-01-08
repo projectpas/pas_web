@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit, Input, SimpleChanges } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatIcon } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -16,6 +16,7 @@ import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/route
 import { WorkFlowtService } from '../../../services/workflow.service';
 import { ActionService } from '../../../Workflow/ActionService';
 import { CustomerService } from '../../../services/customer.service';
+import { CommonService } from '../../../services/common.service';
 import { CurrencyService } from '../../../services/currency.service';
 import { ItemMasterService } from '../../../services/itemMaster.service';
 import { AssetService } from '../../../services/asset/Assetservice';
@@ -28,12 +29,18 @@ import { AircraftModelService } from '../../../services/aircraft-model/aircraft-
 import { DashNumberService } from '../../../services/dash-number/dash-number.service';
 import { PublicationService } from '../../../services/publication.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
+import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
+import { MenuItem } from 'primeng/api';
+import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
+import * as $ from 'jquery';
 
 @Component({
     selector: 'app-workflow-list',
     templateUrl: './workflow-list.component.html',
     styleUrls: ['./workflow-list.component.scss'],
-    animations: [fadeInOut]
+    animations: [fadeInOut],
+    providers: [DatePipe],
 })
 
 
@@ -44,7 +51,6 @@ export class WorkflowListComponent implements OnInit {
     sourceWorkFlow: any;
     title: string = "Work Flow";
     workFlowGridSource: MatTableDataSource<any>;
-    gridColumns: any[];
     selectedGridColumn: any[];
     selectedGridColumns: any[];
     selectedWorflow: any[];
@@ -78,14 +84,49 @@ export class WorkflowListComponent implements OnInit {
     publications: any[];
     allVendors: any[];
     responseDataForWorkFlow: Object;
+    totalRecords: number = 0;
+    totalPages: number = 0;
     pageSize: number = 10;
+    pageIndex: number = 0;
+    public allWorkFlows: any[] = [];
+    publicationTypes: any[];
+    lazyLoadEventData: any;
+    lazyLoadEventDataInput: any;
+    filterText: any = '';
+    currentDeletedstatus: boolean = false;
+    status: string = 'active';
+    restorerecord: any = {};
+    dateObject: any = {};
+    targetData: any;
+    selectedOnly : boolean = false;
+    breadcrumbs: MenuItem[] = [
+        { label: 'Work Flow' },
+        { label: 'Work Flow List' }
+    ];
+    gridColumns: any[] = [
+        { field: 'workOrderNumber', header: 'Workflow ID' },
+        { field: 'version', header: 'Version Number' },
+        { field: 'partNumber', header: 'PN' },
+        { field: 'partDescription', header: 'PN Description' },
+        { field: 'description', header: 'Work Scope' },
+        { field: 'name', header: 'Customer Name' },
+        { field: 'workflowCreateDate', header: 'WF Created Date' },
+        { field: 'workflowExpirationDate', header: 'Expiration Date' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'createdBy', header: 'CreatedBy' },
+        { field: 'updatedDate', header: 'Updated Date' },
+        { field: 'updatedBy', header: 'UpdatedBy' }
+    ];
+
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
+        private datePipe: DatePipe,
         private authService: AuthService,
         private modalService: NgbModal,
         private alertService: AlertService,
         public workFlowtService: WorkFlowtService,
+        public commonService: CommonService,
         private customerService: CustomerService,
         private currencyService: CurrencyService,
         private itemMasterService: ItemMasterService,
@@ -102,72 +143,158 @@ export class WorkflowListComponent implements OnInit {
         this.workFlowGridSource = new MatTableDataSource();
         this.workFlowtService.listCollection = null;
     }
- 
+
     ngOnInit() {
-        this.getAllWorkflows();
         this.getWorkFlowActions();
         this.LoadParts();
+        this.selectedGridColumns = this.gridColumns;
         if (this.isWorkOrder) {
             this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
-
                 this.onViewWFDetails(res);
                 this.responseDataForWorkFlow = res;
-
             })
-
         }
-
     }
+
     ngOnChanges(changes: SimpleChanges) {
-            if(changes.workFlowId){
-                    this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
-        
-                        this.onViewWFDetails(res);
-                        this.responseDataForWorkFlow = res;
-        
-                    })
-                }
+        if (changes.workFlowId) {
+            this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
+                this.onViewWFDetails(res);
+                this.responseDataForWorkFlow = res;
+            })
+        }
     }
-    public allWorkFlows: any[] = [];
 
-    private getAllWorkflows() {
-        this.alertService.startLoadingMessage();
-        this.workFlowtService.getWorkFlows().subscribe(
-            results => this.onWorkflowLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
+    //Load Data for work Flow List
+    loadData(event) {
+        this.lazyLoadEventData = event;
+        const pageIndex = parseInt(event.first) / event.rows;;
+        this.pageIndex = pageIndex;
+        this.pageSize = event.rows;
+        event.first = pageIndex;
+        this.lazyLoadEventDataInput = event;
 
-        this.gridColumns = [
-            { field: 'workOrderNumber', header: 'Workflow ID' },
-            { field: 'version', header: 'Version Number' },
-            { field: 'partNumber', header: 'PN' },
-            { field: 'partDescription', header: 'PN Description' },
-            { field: 'description', header: 'Work Scope' },
-            { field: 'name', header: 'Customer Name' },
-            { field: 'workflowCreateDate', header: 'Created Date' },
-            { field: 'workflowExpirationDate', header: 'Expiration Date' },
+        if (this.filterText == '') {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus }
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        } else {
+            this.globalSearch(this.filterText);
+        }
+    }
 
-        ];
+    getList(data) {
+        this.isSpinnerVisible = true;
+        this.workFlowtService.getAllWorkFlowList(data).subscribe(res => {
 
-        this.selectedGridColumns = this.gridColumns;
+            this.workflowList = res[0]['results'].map(x => {
+                return {
+                    ...x,
+                    createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                    updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                    workflowCreateDate: x.workflowCreateDate ? this.datePipe.transform(x.workflowCreateDate, 'MM/dd/yyyy') : '',
+                    workflowExpirationDate: x.workflowExpirationDate ? this.datePipe.transform(x.workflowExpirationDate, 'MM/dd/yyyy') : '',
+                }
+            });
+
+            this.workFlowGridSource.data = this.workflowList;
+
+            if (this.workflowList != undefined) {
+                if (this.workflowList.length > 0) {
+                    this.totalRecords = res[0]['totalRecordsCount'];
+                    this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                } else {
+                    this.totalRecords = 0;
+                    this.totalPages = 0;
+                }
+                this.isSpinnerVisible = false;
+            } else {
+                this.totalRecords = 0;
+                this.totalPages = 0;
+                this.isSpinnerVisible = false;
+            }
+        }, error => this.onDataLoadFailed(error))
+    }
+
+    globalSearch(value) {
+        const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;
+        this.pageIndex = pageIndex;
+        this.pageSize = this.lazyLoadEventDataInput.rows;
+        this.lazyLoadEventDataInput.first = pageIndex;
+        this.lazyLoadEventDataInput.globalFilter = value;
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, isDeleted: this.currentDeletedstatus };
+        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+        this.getList(PagingData);
+    }
+
+    getListByStatus(status) {
+        this.lazyLoadEventDataInput.first = 0;
+        this.status = status;
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, isDeleted: this.currentDeletedstatus };
+        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+        this.getList(PagingData);
+    }
+
+    dateFilterForWorkFlowList(date, field) {
+        this.dateObject = {}
+        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if (field == 'createdDate') {
+                this.dateObject = { 'createdDate': date }
+            } else if (field == 'updatedDate') {
+                this.dateObject = { 'updatedDate': date }
+            }
+            else if (field == 'workflowCreateDate') {
+                this.dateObject = { 'workflowCreateDate': date }
+            }
+            else if (field == 'workflowExpirationDate') {
+                this.dateObject = { 'workflowExpirationDate': date }
+            }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        } else {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
+                delete this.lazyLoadEventDataInput.filters.createdDate;
+            }
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
+                delete this.lazyLoadEventDataInput.filters.updatedDate;
+            }
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.workflowCreateDate) {
+                delete this.lazyLoadEventDataInput.filters.workflowCreateDate;
+            }
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.workflowExpirationDate) {
+                delete this.lazyLoadEventDataInput.filters.workflowExpirationDate;
+            }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.status, ...this.dateObject };
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        }
+    }
+
+    getDeleteListByStatus(value) {
+        this.lazyLoadEventDataInput.filters.isDeleted = value
+        this.currentDeletedstatus = value;
+        if (value == true) {
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        } else {
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        }
+    }
+
+    resetGlobalFilter() {
+        this.filterText = '';
     }
 
     public applyFilter(filterValue: string) {
         this.workFlowGridSource.filter = filterValue;
     }
 
-    private refresh() {
-        this.applyFilter(this.workFlowGridSource.filter);
-    }
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
-    }
-
-    private onWorkflowLoadSuccessful(allWorkFlows: any[]) {
-        this.alertService.stopLoadingMessage();
-       this.isSpinnerVisible = false;
-        this.workFlowGridSource.data = allWorkFlows;
-        this.workflowList = allWorkFlows;
     }
 
     confirmDelete(confirmDeleteTemplate, rowData) {
@@ -179,7 +306,7 @@ export class WorkflowListComponent implements OnInit {
         this.actionService.RemoveWorkFlow(this.currentWorkflow.workflowId).subscribe(
             result => {
                 this.alertService.showMessage(this.title, "ACC" + this.currentWorkflow.workflowId + ' deleted successfully.', MessageSeverity.success);
-                this.getAllWorkflows();
+                this.getDeleteListByStatus(this.currentDeletedstatus)
             },
             error => {
                 var message = '';
@@ -194,10 +321,29 @@ export class WorkflowListComponent implements OnInit {
         this.dismissModel();
     }
 
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('Workflow', 'WorkflowId', this.restorerecord.workflowId).subscribe(res => {
+            this.modal.close();
+            this.getDeleteListByStatus(this.currentDeletedstatus)
+            this.alertService.showMessage("Success", `Record was Restored successfully. `, MessageSeverity.success);
+        }, error => this.onDataLoadFailed(error))
+    }
+
     toggleIsActive(workflow: any, event): void {
         this.actionService.toggleState(workflow.workflowId).subscribe(
             result => {
-                this.alertService.showMessage(this.title, "Workflow updated successfully.", MessageSeverity.success);
+                this.getDeleteListByStatus(this.currentDeletedstatus);
+                if (event.checked) {
+                    this.alertService.showMessage(this.title, "Records was Activated successfully.", MessageSeverity.success);
+                }
+                else {
+                    this.alertService.showMessage(this.title, "Records was In-Activated successfully.", MessageSeverity.success);
+                }
             },
             error => {
                 var message = '';
@@ -210,31 +356,37 @@ export class WorkflowListComponent implements OnInit {
                 this.alertService.showMessage(this.title, message, MessageSeverity.error);
             }
         )
-
     }
 
     AddPage() {
         this.route.navigateByUrl('/workflowmodule/workflowpages/wf-create');
     }
+
     pageIndexChange(event) {
         this.pageSize = event.rows;
     }
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
     openEdit(row) {
-
         this.workFlowtService.listCollection = row;
         this.workFlowtService.enableUpdateMode = true;
         this.workFlowtService.currentWorkFlowId = row.workflowId;
-        this.route.navigateByUrl('/workflowmodule/workflowpages/wf-create');
+        // this.route.navigateByUrl('/workflowmodule/workflowpages/wf-edit/${this.workFlowtService.currentWorkFlowId');
+
+        this.route.navigateByUrl(`/workflowmodule/workflowpages/wf-edit/${this.workFlowtService.currentWorkFlowId}`);
     }
 
     dismissModel() {
         if (this.modal != undefined)
             this.modal.close();
     }
+
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+	}
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
@@ -251,8 +403,6 @@ export class WorkflowListComponent implements OnInit {
             task.selected = false;
         }
     }
-
-    publicationTypes: any[];
 
     private loadPublicationTypes(): void {
         this.actionService.GetPublicationType().subscribe(
@@ -279,6 +429,7 @@ export class WorkflowListComponent implements OnInit {
 
     onViewWFDetails(rowData): void {
         this.sourceWorkFlow = undefined;
+        this.isSpinnerVisible = true;
         this.actionService.getWorkFlow(rowData.workflowId).subscribe(
             workflow => {
                 const sourceWF = workflow[0];
@@ -306,10 +457,9 @@ export class WorkflowListComponent implements OnInit {
                 this.loadCurrencyData();
                 this.calculateTotalWorkFlowCost();
                 this.getAllTasks();
-
+                this.isSpinnerVisible = false;
             },
-            error => {
-            });
+            error => { this.isSpinnerVisible = false; });
     }
 
     onViewMaterialList(rowData): void {
@@ -376,7 +526,6 @@ export class WorkflowListComponent implements OnInit {
         if (myValue && percentValue) {
             this.sourceWorkFlow.percentOfNew = formatNumberAsGlobalSettingsModule((myValue / 100) * percentValue, 2);
         }
-        // this.berDetermination();
     }
 
     private calculatePercentOfReplacement(myValue, percentValue) {
@@ -386,53 +535,13 @@ export class WorkflowListComponent implements OnInit {
             this.sourceWorkFlow.percentOfReplacement = formatNumberAsGlobalSettingsModule(afterpercent * percentValue, 2);
 
         }
-        // this.berDetermination();
     }
 
-    // private berDetermination(): any {
-    //     if (this.sourceWorkFlow.fixedAmount != undefined && this.sourceWorkFlow.fixedAmount != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
-    //     }
-    //     // check on is percentOfNew enable
-    //     if (this.sourceWorkFlow.percentOfNew != undefined && this.sourceWorkFlow.percentOfNew != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
-    //     }
-    //     // check on is .percentOfReplacement enable
-    //     if (this.sourceWorkFlow.percentOfReplacement != undefined && this.sourceWorkFlow.percentOfReplacement != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
-    //     }
-
-
-    //     // 1 and 2 check box 
-    //     if (this.sourceWorkFlow.fixedAmount != undefined && this.sourceWorkFlow.fixedAmount != "" && this.sourceWorkFlow.percentOfNew != undefined && this.sourceWorkFlow.percentOfNew != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = Math.min(this.sourceWorkFlow.fixedAmount, this.sourceWorkFlow.percentOfNew);
-    //     }
-
-    //     // 2 and 3  check box 
-    //     if (this.sourceWorkFlow.percentOfNew != undefined && this.sourceWorkFlow.percentOfNew != "" && this.sourceWorkFlow.percentOfReplacement != undefined && this.sourceWorkFlow.percentOfReplacement != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = Math.min(this.sourceWorkFlow.percentOfNew, this.sourceWorkFlow.percentOfReplacement);
-    //     }
-    //     // 1 and 3  check box 
-    //     if (this.sourceWorkFlow.fixedAmount != undefined && this.sourceWorkFlow.fixedAmount != "" && this.sourceWorkFlow.percentOfReplacement != undefined && this.sourceWorkFlow.percentOfReplacement != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = Math.min(this.sourceWorkFlow.fixedAmount, this.sourceWorkFlow.percentOfReplacement);
-    //     }
-
-
-    //     //1 and 2 and 3 check box
-    //     if (this.sourceWorkFlow.fixedAmount != undefined && this.sourceWorkFlow.fixedAmount != "" && this.sourceWorkFlow.percentOfNew != undefined && this.sourceWorkFlow.percentOfNew != "" && this.sourceWorkFlow.percentOfReplacement != undefined && this.sourceWorkFlow.percentOfReplacement != "") {
-    //         this.sourceWorkFlow.berThresholdAmount = Math.min(this.sourceWorkFlow.fixedAmount, this.sourceWorkFlow.percentOfNew, this.sourceWorkFlow.percentOfReplacement);
-    //     }
-    //     //1 and 2 and 3 check box all uncheck 
-    //     if (this.sourceWorkFlow.fixedAmount == undefined && this.sourceWorkFlow.percentOfNew == undefined && this.sourceWorkFlow.percentOfReplacement == undefined) {
-    //         this.sourceWorkFlow.berThresholdAmount = 0;
-    //     }
-    // }
- 
     private loadCurrencyData() {
         this.currencyService.getCurrencyList().subscribe(currencydata => {
             this.allCurrencyData = currencydata[0];
-            if(this.sourceWorkFlow && this.sourceWorkFlow.currencyId){
-            var selectectedCurrency = this.allCurrencyData.filter(x => x.currencyId == this.sourceWorkFlow.currencyId);
+            if (this.sourceWorkFlow && this.sourceWorkFlow.currencyId) {
+                var selectectedCurrency = this.allCurrencyData.filter(x => x.currencyId == this.sourceWorkFlow.currencyId);
             }
             if (selectectedCurrency.length > 0) {
                 this.sourceWorkFlow.currencySymbol = selectectedCurrency[0].symbol;
@@ -456,12 +565,12 @@ export class WorkflowListComponent implements OnInit {
 
         for (let expertise of this.sourceWorkFlow.expertise) {
             this.TotalExpertiseCost += expertise.laborOverheadCost != undefined ? expertise.laborOverheadCost : 0.00;
-        }        
+        }
 
-        const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g,''));
-        const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g,''));
-        const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g,''));
-        const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g,'')) : 0.00;
+        const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
+        const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
+        const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
+        const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, '')) : 0.00;
         const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
 
         // const total = (parseInt(this.MaterialCost) + parseInt(this.TotalCharges) + parseInt(this.TotalExpertiseCost) + Math.round(((this.sourceWorkFlow.otherCost == undefined || this.sourceWorkFlow.otherCost == '') ? 0.00 : this.sourceWorkFlow.otherCost)));
@@ -599,20 +708,16 @@ export class WorkflowListComponent implements OnInit {
                 for (let attr of actions) {
                     this.tasks.push({ Id: attr.taskId, Name: attr.description, Description: "", Memo: "" })
                 }
-                
                 this.organiseTaskAndTaskAttributes();
                 this.loadPublicationTypes();
-               
             },
-            
             error => { }
         );
-       
     }
 
     private organiseTaskAndTaskAttributes() {
         this.addedTasks = this.getUniqueTask();
-        if(this.addedTasks && this.addedTasks.length !=0){
+        if (this.addedTasks && this.addedTasks.length != 0) {
             this.onAccordTabClick1(this.addedTasks[0]);
         }
         for (let task of this.addedTasks) {
@@ -620,7 +725,7 @@ export class WorkflowListComponent implements OnInit {
             var chargesTotalQty = 0;
             var chargesTotalExtendedCost = 0;
             var chargesTotalChargesCost = 0;
-            
+
             task.charges = this.sourceWorkFlow.charges.filter(x => {
                 if (x.taskId == task.Id) {
                     this.LoadChargesDropDownValues(x);
@@ -658,7 +763,7 @@ export class WorkflowListComponent implements OnInit {
 
             var qty = 0;
             var extendedQty = 0
-            
+
             task.exclusions = this.sourceWorkFlow.exclusions.filter(x => {
                 if (x.taskId == task.Id) {
                     qty += x.quantity == undefined || x.quantity == '' ? 0 : x.quantity;
@@ -682,7 +787,7 @@ export class WorkflowListComponent implements OnInit {
             var totalDirectLaborCost = 0;
             var totalOHCost = 0;
             var totalDirectLabourAndOHCost = 0;
-            
+
             task.expertise = this.sourceWorkFlow.expertise.filter(x => {
                 if (x.taskId == task.Id) {
                     this.LoadExpertise(x);
@@ -714,7 +819,7 @@ export class WorkflowListComponent implements OnInit {
             var materialTotalExtendedCost = 0;
             var materialTotalPrice = 0;
             var materialTotalExtendedPrice = 0;
-            
+
             task.materialList = this.sourceWorkFlow.materialList.filter(x => {
                 if (x.taskId == task.Id) {
                     this.loadConditionData(x);
@@ -801,7 +906,6 @@ export class WorkflowListComponent implements OnInit {
                             }
                         });
                     }
-
                 }
 
                 if (this.publications != undefined) {
@@ -1038,10 +1142,32 @@ export class WorkflowListComponent implements OnInit {
         else {
             this.setMaterialItemClassificationName(material);
         }
+    }
+    private loadDashNumberByManfacturerandModel(publication: any, airCraftTypeId: number, aircraftModelId: number) {
 
     }
 
-    private loadDashNumberByManfacturerandModel(publication: any, airCraftTypeId: number, aircraftModelId: number) {
-
+    exportCSV(dt){
+		this.isSpinnerVisible = true;
+        const isdelete=this.currentDeletedstatus ? true:false;
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":isdelete},"globalFilter":""}
+		let filters = Object.keys(dt.filters);
+		filters.forEach(x=>{
+			PagingData.filters[x] = dt.filters[x].value;
+        })
+        this.workFlowtService.getAllWorkFlowList(PagingData).subscribe(res => {
+            dt._value = res[0]['results'].map(x => {
+				return {
+					...x,
+                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                    workflowExpirationDate: x.workflowExpirationDate ?  this.datePipe.transform(x.workflowExpirationDate, 'MMM-dd-yyyy hh:mm a'): '',
+                    workflowCreateDate: x.workflowCreateDate ?  this.datePipe.transform(x.workflowCreateDate, 'MMM-dd-yyyy hh:mm a'): '',
+				}
+			});	
+			dt.exportCSV();
+			dt.value = this.workflowList;
+        	this.isSpinnerVisible = false;
+        },error => this.onDataLoadFailed(error))
     }
 }

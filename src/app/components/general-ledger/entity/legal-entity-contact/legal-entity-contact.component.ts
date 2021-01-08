@@ -2,7 +2,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Router, } from '@angular/router';
 import * as $ from 'jquery';
-  
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../services/auth.service';
 import { FormBuilder } from '@angular/forms';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material';
 import {  getValueFromObjectByKey, editValueAssignByCondition, listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { AtaSubChapter1Service } from '../../../../services/atasubchapter1.service';
 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 
 import { emailPattern, urlPattern,titlePattern, phonePattern } from '../../../../validations/validation-pattern';
 import { ConfigurationService } from '../../../../services/configuration.service';
@@ -192,8 +192,10 @@ if(this.isViewMode==false){
 					this.statusForContact='Active';
 				
                setTimeout(() => {
-		
-				this.billingStatusForContact(this.statusForContact);
+		if(this.isViewMode==false){
+
+			this.billingStatusForContact(this.statusForContact);
+		}
 			   }, 1200);
                 }
             }
@@ -669,13 +671,13 @@ if(this.isViewMode==false){
 			status: this.statusForContact ? this.statusForContact : 'Active',
 		}
 		this.currentstatusForCotnact = this.statusForContact ? this.statusForContact : 'Active'
-	if(this.isViewMode==false){
+	// if(this.isViewMode==false){
 		if (this.filterText == '') {
 			this.getList(this.lazyLoadEventDataInput);
 		} else {
 			this.globalSearch(this.filterText);
 		}
-	}
+	// }
 	}
 	first: any = 0;
 	billingStatusForContact(status) {

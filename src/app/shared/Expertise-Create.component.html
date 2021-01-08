@@ -3,10 +3,8 @@
         <span class="cat-heading cat4">Add Expertise <i (click)="addRow()" class="fa fa-plus"></i></span>
     </div>
     <table class="table table-bordered table-fixed workflow-table-expertise" style="margin-top:31px;">
-
         <tr>
-            <!-- <th><label>S.No</label></th> -->
-            <th><label> Expertise Type *</label></th>
+            <th><label>Expertise Type<span class="clr-red">*</span></label></th>
             <th><label>Estimated Hours </label></th>
             <th><label>Direct Labor Rate</label></th>
             <th><label>Direct Labor Cost</label></th>
@@ -16,64 +14,52 @@
             <th><label>Action </label></th>
         </tr>
         <tr class="expertise-tr" [hidden]="expert.isDelete" *ngFor="let expert of workFlow.expertise;let i = index">
-            <!-- <td>{{(currentPage - 1) * itemsPerPage + i + 1}}</td> -->
             <td>
-                <select class="form-control custom-select full-width" id="ddlExpertiesType"
-                        [(ngModel)]="expert.expertiseTypeId" style="border-radius:4px !important;">
-                    <option value="">Select</option>
+                <select id="ddlExpertiesType" class="form-control wf-pub-id full-width"
+                    [(ngModel)]="expert.expertiseTypeId" required>
+                    <option value="">--Select--</option>
                     <option *ngFor="let type of expertiseTypes" value="{{type.employeeExpertiseId}}">
                         {{type.description}}
                     </option>
                 </select>
-
             </td>
             <td>
-                <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{expert.estimatedHours}}"
-                       (change)="calculateLabourCost(expert);calculateOHCost(expert);" [(ngModel)]="expert.estimatedHours">
+                <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
+                    value="{{expert.estimatedHours}}" (change)="calculateLabourCost(expert);calculateOHCost(expert);"
+                    [(ngModel)]="expert.estimatedHours">
             </td>
             <td>
-                <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{expert.laborDirectRate}}"
-                       (change)="calculateLabourCost(expert);calculateOHCost(expert);" [(ngModel)]="expert.laborDirectRate">
+                <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
+                    value="{{expert.laborDirectRate}}" (change)="calculateLabourCost(expert);calculateOHCost(expert);"
+                    [(ngModel)]="expert.laborDirectRate">
             </td>
             <td class="text-right">
                 {{expert.directLaborRate}}
-                <!-- <input type="text" pInputText pKeyFilter="money"
-                       class="form-control" [disabled]="true"
-                       value="{{expert.directLaborRate}}"
-                       [(ngModel)]="expert.directLaborRate"> -->
             </td>
             <td>
-                <input type="text" pInputText pKeyFilter="money" class="form-control text-right" (change)="calculateOHCost(expert)"
-                       value="{{expert.overheadBurden}}" [(ngModel)]="expert.overheadBurden"   maxlength="3"
-                       min="0"  max="100"
-                       [disabled]="expert.estimatedHours == '' && expert.laborDirectRate == '' ">
-
+                <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
+                    (change)="calculateOHCost(expert)" value="{{expert.overheadBurden}}"
+                    [(ngModel)]="expert.overheadBurden" maxlength="3" min="0" max="100"
+                    [disabled]="expert.estimatedHours == '' && expert.laborDirectRate == '' ">
             </td>
-
             <td>
-                <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{expert.overheadCost}}"
-                       [(ngModel)]="expert.overheadCost"
-                       (change)="calculateOHCostSummation();calculateLabourOHCost(expert)">
+                <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
+                    value="{{expert.overheadCost}}" [(ngModel)]="expert.overheadCost"
+                    (change)="calculateOHCostSummation();calculateLabourOHCost(expert)">
             </td>
             <td class="text-right">
                 {{expert.laborOverheadCost}}
-                <!-- <input type="text" pInputText pKeyFilter="money"
-                       class="form-control" [disabled]="true"
-                       value="{{expert.laborOverheadCost}}"
-                       [(ngModel)]="expert.laborOverheadCost"> -->
             </td>
-            <td>
+            <td style="text-align: center;">
                 <button class="btn btn-danger nobg" (click)="deleteRow(i)">
                     <i class="fa fa-trash"></i>
                 </button>
             </td>
-
         </tr>
         <tr *ngIf="workFlow.expertise.length > 0">
             <td>
                 <b>Total </b>
             </td>
-            <!-- <td>&nbsp;</td> -->
             <td class="text-right"><b>{{ workFlow.sumofestimatedhrs }}</b></td>
             <td>&nbsp;</td>
             <td class="text-right"><b>{{ workFlow.sumofLabourDirectCost }}</b></td>
@@ -81,7 +67,21 @@
             <td class="text-right"><b>{{ workFlow.sumOfOHCost }}</b></td>
             <td class="text-right"><b>{{ workFlow.totalExpertiseCost }}</b></td>
             <td>&nbsp;</td>
-
         </tr>
     </table>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 </div>

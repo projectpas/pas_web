@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { FindingEndpoint } from './finding-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,7 +37,7 @@ export class FindingService {
         private findingEndpoint: FindingEndpoint) { }
 
     getFindingList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.findingEndpoint.getFindingEndpoint<Finding[]>());
     }
     newAction(action: Finding) {
@@ -57,7 +58,7 @@ export class FindingService {
 
     }
     historyAcion(actionId: number) {
-        return forkJoin(this.findingEndpoint.getHistoryActionEndpoint<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.findingEndpoint.getHistoryActionEndpoint<AuditHistory[]>(actionId));
     }
 
     getAuditById(findingId: number) {

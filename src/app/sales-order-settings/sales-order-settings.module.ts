@@ -10,7 +10,7 @@ import { SalesOrderSettingsComponent } from "./sales-order-settings.component";
 import { CreateSalesQuoteSettingsComponent } from "./create-sales-quote-settings/create-sales-quote-settings.component";
 import { SalesQuoteSettingsListComponent } from "./sales-quote-settings-list/sales-quote-settings-list.component";
 
-import { CommonModule } from '@angular/common'; //<-- This one
+import { CommonModule, DatePipe } from '@angular/common'; //<-- This one
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -80,7 +80,8 @@ import { SalesOrderSettingsListComponent } from "./sales-order-settings-list/sal
 		WorkOrderSettingsService,
 		WorkOrderSettingsEndpointService,
 		SalesQuoteService,
-		SalesQuoteEndpointService
+		SalesQuoteEndpointService,
+		DatePipe
 	],
 	entryComponents: [
 	],

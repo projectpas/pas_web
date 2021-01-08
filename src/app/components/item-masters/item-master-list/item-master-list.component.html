@@ -86,8 +86,10 @@
                                     pButton
                                     icon="fa-download"
                                     iconPos="left"
-                                    label="Export Data"
-                                    (click)="exportCSV(dt)"
+                                    label="Export All Data"
+                                    data-toggle="modal" 
+                                    (click)="selectedOnly = false; targetData = dt;"
+                                     data-target="#downloadConfirmation"
                                   ></button> 
                                   <button
                                     type="button"
@@ -98,8 +100,12 @@
                                     icon="fa-download"
                                     iconPos="left"
                                     label="Export Selected Data"
-                                    (click)="dt.exportCSV({ selectionOnly: true })"
+                                    (click)="dt.exportCSV({selectionOnly:true})"
+                                   
                                   ></button>
+                                  <!-- data-toggle="modal"
+                                  data-target="#downloadConfirmation"
+                                  (click)="selectedOnly = true; targetData = dt;" -->
                                   <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
                                   </button>
@@ -948,6 +954,28 @@
             </div>
         </div>
     </div>
+</div>
+
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">

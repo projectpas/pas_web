@@ -1,13 +1,13 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AssetStatus } from '../../models/asset-status.model';
 import { JournalBatch } from '../../models/JournalBatch';
 import { JournalManual } from '../../models/journal-manual';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class JournelsEndpointService extends EndpointFactory {
     //Urls for Batch
@@ -57,64 +57,64 @@ export class JournelsEndpointService extends EndpointFactory {
     getAllBatch<T>(): Observable<T> {
         let endpointUrl = this.getBatchAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllBatch());
-            }));
+            });
     }
 
     getBatchById<T>(assetId: number): Observable<T> {
         let endpointUrl = `${this.getByIdBatch}/${assetId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getBatchById(assetId));
-            }));
+            });
     }
 
     addBatch<T>(asset: JournalBatch): Observable<T> {
         let endpointUrl = this.batchAdd;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(asset), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(asset), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addBatch(asset));
-            }));
+            });
     }
 
     updateBatch<T>(assetStatus: JournalBatch): Observable<T> {
         let endpointUrl = this.batchUpdate;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(assetStatus), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(assetStatus), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateBatch(assetStatus));
-            }));
+            });
     }
 
     removeBatchById<T>(assetId: number): Observable<T> {
         let endpointUrl = `${this.removeByIdBatch}/${assetId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeBatchById(assetId));
-            }));
+            });
     }
 
     getUpdateBatchForActive<T>(roleObject: any, id: number): Observable<T> {
         let endpointUrl = `${this.updateBatchForActive}/${id}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateBatchForActive(roleObject, id));
-            }));
+            });
     }
 
     getBatchAuditById<T>(assetId: number): Observable<T> {
         let endpointUrl = `${this.getBatchAuditDataById}/${assetId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getBatchAuditById(assetId));
-            }));
+            });
     }
 
     //Journel Controller
@@ -122,98 +122,98 @@ export class JournelsEndpointService extends EndpointFactory {
     getAllJournel<T>(): Observable<T> {
         let endpointUrl = this.getJournelAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllJournel());
-            }));
+            });
     }
 
     getJournelById<T>(journelId: number): Observable<T> {
         let endpointUrl = `${this.getByIdJournel}/${journelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getJournelById(journelId));
-            }));
+            });
     }
 
     addEndpointJournel<T>(journel: JournalManual): Observable<T> {
         let endpointUrl = this.journelAdd;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(journel), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(journel), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addEndpointJournel(journel));
-            }));
+            });
     }
 
     updateJournel<T>(journel: JournalManual): Observable<T> {
         let endpointUrl = this.journelUpdate;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(journel), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(journel), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateJournel(journel));
-            }));
+            });
     }
 
     removeJournelById<T>(journelId: number): Observable<T> {
         let endpointUrl = `${this.removeByIdjournel}/${journelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeJournelById(journelId));
-            }));
+            });
     }
 
     getUpdateJournelForActive<T>(roleObject: any, id: number): Observable<T> {
         let endpointUrl = `${this.updateJournelForActive}/${id}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateJournelForActive(roleObject, id));
-            }));
+            });
     }
 
     getJournelAuditById<T>(journelId: number): Observable<T> {
         let endpointUrl = `${this.getJournelAuditDataById}/${journelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getJournelAuditById(journelId));
-            }));
+            });
     }
 
     getAllBalanceTypes<T>(): Observable<T> {
         let endpointUrl = this.allBalanceTypes;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllBalanceTypes());
-            }));
+            });
     }
 
     getAllJournalCategory<T>(): Observable<T> {
         let endpointUrl = this.allJournalCategory;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllJournalCategory());
-            }));
+            });
     }
 
     getAllJournalTypes<T>(): Observable<T> {
         let endpointUrl = this.allJournalTypes;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllJournalTypes());
-            }));
+            });
     }
 
     getJournalCurrencyTypes<T>(): Observable<T> {
         let endpointUrl = this.allJournalCurrencyTypes;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getJournalCurrencyTypes());
-            }));
+            });
 
     }
 

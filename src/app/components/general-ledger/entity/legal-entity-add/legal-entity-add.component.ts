@@ -3,7 +3,7 @@
 import { Component, ViewChild, OnInit, Output, EventEmitter, Input, ElementRef } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { AuthService } from '../../../../services/auth.service';
- 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { CommonService } from '../../../../services/common.service';
@@ -14,7 +14,6 @@ import { GlAccount } from '../../../../models/GlAccount.model';
 import {  phonePattern } from '../../../../validations/validation-pattern';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-legal-entity-add',
     templateUrl: './legal-entity-add.component.html',
@@ -658,7 +657,9 @@ this.tagRowData=rowData;
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        
+        this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+        // this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
             this.countryListOriginal = res;
         }, err => {
             const errorLog = err;

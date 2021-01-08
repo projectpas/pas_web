@@ -5,8 +5,8 @@ import { ItemMasterService } from '../../../services/itemMaster.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { pulloutRequiredFieldsOfForm } from '../../../validations/form.validator';
-  
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { AuthService } from '../../../services/auth.service';
 import { getObjectByValue, getPageCount, getObjectById,getValueByFieldFromArrayofObject, getValueFromObjectByKey, editValueAssignByCondition, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 

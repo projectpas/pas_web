@@ -55,9 +55,9 @@ input[type=number]::-webkit-outer-spin-button {
     margin-left: 6px;
 }
 
-select {
+/* select {
     background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
-}
+} */
 .dropdown-select {
     background: none;
     background-color: none !important;

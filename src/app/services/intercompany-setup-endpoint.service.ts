@@ -5,13 +5,13 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { InterCompanySetup } from '../models/intercompany-setup.model';
-import {catchError} from 'rxjs/operators'
+
 @Injectable()
 export class InterCompanySetupEndPointService extends EndpointFactory {
 
@@ -34,33 +34,33 @@ export class InterCompanySetupEndPointService extends EndpointFactory {
 
     getInterCompanySetupList<T>(): Observable<T> {
         let endPointUrl = this.getAllUrl;
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getInterCompanySetupList());
-            }));
+            });
     }
 
     addInterCompanySetup<T>(interCompanySetupDetails: InterCompanySetup): Observable<T> {
         let endPointUrl = this.getAddUrl;
-        return this.http.post<any>(endPointUrl, JSON.stringify(interCompanySetupDetails), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endPointUrl, JSON.stringify(interCompanySetupDetails), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addInterCompanySetup(interCompanySetupDetails));
-            }));
+            });
     }
 
     updateInterCompanySetup<T>(interCompanySetupDetails: InterCompanySetup): Observable<T> {
         let endPointUrl = this.getUpdateUrl;
-        return this.http.post<any>(endPointUrl, JSON.stringify(interCompanySetupDetails), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endPointUrl, JSON.stringify(interCompanySetupDetails), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateInterCompanySetup(interCompanySetupDetails));
-            }));
+            });
     }
 
     removeInterCompanySetup<T>(Id: number): Observable<T> {
         let endPointUrl = `${this.getRemoveUrl}/${Id}`;
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeInterCompanySetup(Id));
-            }));
+            });
     }
 }

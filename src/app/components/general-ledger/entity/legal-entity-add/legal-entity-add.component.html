@@ -69,7 +69,8 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Postal <span class="clr-red">*</span></label>
-                                    <input class="form-control" (keypress)="numberonly($event)" type="text" name="postalCode" (ngModelChange)="setvaliDate()"
+                                    <!-- (keypress)="numberonly($event)" -->
+                                    <input class="form-control"  type="text" name="postalCode" (ngModelChange)="setvaliDate()"
                                         [(ngModel)]="generalInformation.postalCode" required />
                                 </div>
                                 <div class="form-group">
@@ -181,8 +182,8 @@
                                         [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                 </div>
                                 <div class="inline-block display-flex inline-adjust">
-                                    <label class="control-label">
-                                        Ledger Name
+                                    <label class="control-label" style="position: relative;">
+                                        Ledger Name <span class="clr-red">*</span>
                                     </label>
                                 </div> 
                                 <div>
@@ -194,7 +195,7 @@
                                         </option>
                                     </select> -->
                                     <p-dropdown (input)="onFilterLedgername($event.target.value)" [showClear]="true"
-                                        class="p-dropdown-100" (ngModelChange)="setvaliDate()"
+                                        class="p-dropdown-100" (ngModelChange)="setvaliDate()" required
                                         [options]="allLedgerInfo" filter="true" field="label"
                                         [(ngModel)]="generalInformation.ledgerId" name="ledgerId"
                                         [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>

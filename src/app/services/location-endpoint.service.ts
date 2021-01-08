@@ -1,11 +1,11 @@
-import { Injectable, Injector } from "@angular/core";
+﻿import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 
 import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class LocationEndpoint extends EndpointFactory {
   private readonly _actionsUrl: string = "/api/Location/Get";
@@ -48,32 +48,32 @@ export class LocationEndpoint extends EndpointFactory {
     let endpointUrl = `${this._actionLOcationStock}/${locationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getLocationStockEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getLocationEndpoint<T>(): Observable<T> {
     return this.http
-      .get<any>(this.actionsUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(this.actionsUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getLocationEndpoint());
-      }));
+      });
   }
 
   getManagementWareHouseEndpoint<T>(wareHouseID: any): Observable<T> {
     let endpointUrl = `${this.__managementWarwhouseURL}/${wareHouseID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getManagementWareHouseEndpoint(wareHouseID)
         );
-      }));
+      });
   }
 
   //edit data ManagementSite Data Retrive based on location id
@@ -81,52 +81,52 @@ export class LocationEndpoint extends EndpointFactory {
     let endpointUrl = `${this._actionsManagemetUrl}/${locationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getManagementLocationEditEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getnewManagementLocationData<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._actionsUrlManagementPost,
         JSON.stringify(userObject),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () =>
           this.getnewManagementLocationData(userObject)
         );
-      }));
+      });
   }
 
   //Delete management Location Before Edit
   getDeleteManagementLocationEndpoint<T>(locationId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlManagementPost}/${locationId}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteManagementLocationEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getNewLocationEndpoint<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._actionsUrlNew,
         JSON.stringify(userObject),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () =>
           this.getNewLocationEndpoint(userObject)
         );
-      }));
+      });
   }
 
   //getcountryListEndpoint<T>(): Observable<T> {
@@ -141,12 +141,12 @@ export class LocationEndpoint extends EndpointFactory {
     let endpointUrl = `${this._actionsUrlAuditHistory}/${locationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getHistoryLocationEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getEditLocationEndpoint<T>(locationId?: number): Observable<T> {
@@ -155,12 +155,12 @@ export class LocationEndpoint extends EndpointFactory {
       : this._actionsUrlNew;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getEditLocationEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getUpdateLocationEndpoint<T>(
@@ -170,60 +170,60 @@ export class LocationEndpoint extends EndpointFactory {
     let endpointUrl = `${this._actionsUrlNew}/${locationId}`;
 
     return this.http
-      .put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getUpdateLocationEndpoint(roleObject, locationId)
         );
-      }));
+      });
   }
 
   getDeleteLocationEndpoint<T>(locationId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew}/${locationId}`;
 
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteLocationEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getAddressDataWarehouseEndpoint<T>(locationId: any): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew1}/${locationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAddressDataWarehouseEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getWareHouseDataEndpoint<T>(locationId: any): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew2}/${locationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getWareHouseDataEndpoint(locationId)
         );
-      }));
+      });
   }
 
   getLocationAuditById<T>(locationId: number): Observable<T> {
     let endpointUrl = `${this.getLocationDataAuditById}/${locationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getLocationAuditById(locationId)
         );
-      }));
+      });
   }
 
   bulkUpload(file: any): Observable<object> {

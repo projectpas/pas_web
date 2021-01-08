@@ -1,13 +1,14 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
-import { Observable , Subject} from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/map';
 
-import {map} from 'rxjs/operators';
 import { LocalStoreManager } from './local-store-manager.service';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
@@ -101,7 +102,7 @@ private defaultEmployeeDetails= new Subject<any>()
 
     refreshLogin() {
         return this.endpointFactory.getRefreshLoginEndpoint<LoginResponse>()
-            .pipe(map(response => this.processLoginResponse(response, this.rememberMe)));
+            .map(response => this.processLoginResponse(response, this.rememberMe));
     }
 
     login(user: UserLogin) {
@@ -110,7 +111,7 @@ private defaultEmployeeDetails= new Subject<any>()
             this.logout();
 
         return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password)
-            .pipe(map(response => this.processLoginResponse(response, user.rememberMe)));
+            .map(response => this.processLoginResponse(response, user.rememberMe));
     }
 
     employeeDetailsByEmpId(id: number){

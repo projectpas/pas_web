@@ -11,4 +11,6 @@ export interface ISalesQuoteListView {
     numberOfItems: number;
     createdDate: Date;
     updatedDate: Date;
+    createdBy: string;
+    updatedBy: string;
 }

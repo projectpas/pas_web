@@ -1,11 +1,11 @@
-import { Injectable, Injector } from "@angular/core";
+﻿import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 
 import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ShelfEndpoint extends EndpointFactory {
   private readonly _actionsUrl: string = "/api/Shelf/Get";
@@ -44,48 +44,48 @@ export class ShelfEndpoint extends EndpointFactory {
 
   getShelfEndpoint<T>(): Observable<T> {
     return this.http
-      .get<any>(this.actionsUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(this.actionsUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getShelfEndpoint());
-      }));
+      });
   }
 
   getShelfStockEndpoint<T>(locationID: any): Observable<T> {
     let endpointUrl = `${this._actionsUrlStock}/${locationID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getShelfStockEndpoint(locationID)
         );
-      }));
+      });
   }
 
   getManagementLocationEndpoint<T>(locationID: any): Observable<T> {
     let endpointUrl = `${this.__managementLocationURL}/${locationID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getManagementLocationEndpoint(locationID)
         );
-      }));
+      });
   }
 
   getnewManagementShelfData<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._actionsManagemetUrl,
         JSON.stringify(userObject),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () =>
           this.getnewManagementShelfData(userObject)
         );
-      }));
+      });
   }
 
   //edit data ManagementSite Data Retrive based on location id
@@ -93,38 +93,38 @@ export class ShelfEndpoint extends EndpointFactory {
     let endpointUrl = `${this._actionsManagemetUrl}/${shelfId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getManagementShelfEditEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   //Delete management Location Before Edit
   getDeleteManagementShelfEndpoint<T>(shelfId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlManagementPost}/${shelfId}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteManagementShelfEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getNewShelfEndpoint<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._actionsUrlNew,
         JSON.stringify(userObject),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () =>
           this.getNewShelfEndpoint(userObject)
         );
-      }));
+      });
   }
 
   //getcountryListEndpoint<T>(): Observable<T> {
@@ -139,12 +139,12 @@ export class ShelfEndpoint extends EndpointFactory {
     let endpointUrl = `${this._actionsUrlAuditHistory}/${shelfId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getHistoryShelfEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getEditShelfEndpoint<T>(shelfId?: number): Observable<T> {
@@ -153,84 +153,84 @@ export class ShelfEndpoint extends EndpointFactory {
       : this._actionsUrlNew;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getEditShelfEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getUpdateShelfEndpoint<T>(roleObject: any, shelfId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew}/${shelfId}`;
 
     return this.http
-      .put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getUpdateShelfEndpoint(roleObject, shelfId)
         );
-      }));
+      });
   }
 
   getDeleteShelfEndpoint<T>(shelfId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew}/${shelfId}`;
 
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteShelfEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getAddressDataWarehouseEndpoint<T>(shelfId: any): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew1}/${shelfId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAddressDataWarehouseEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getWareHouseDataEndpoint<T>(shelfId: any): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew2}/${shelfId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getWareHouseDataEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getLocationDataEndpoint<T>(shelfId: any): Observable<T> {
     let endpointUrl = `${this._actionsUrlNew3}/${shelfId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getLocationDataEndpoint(shelfId)
         );
-      }));
+      });
   }
 
   getShelfDataAuditById<T>(shelfId: number): Observable<T> {
     let endpointUrl = `${this.getShelfAuditById}/${shelfId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getShelfDataAuditById(shelfId)
         );
-      }));
+      });
   }
 
   bulkUpload(file: any): Observable<object> {

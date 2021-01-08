@@ -93,9 +93,10 @@
               icon="fa-download"
               iconPos="left"
               label="Export Selected Data"
-              data-toggle="modal" data-target="#downloadConfirmation"
-              (click)="selectedOnly = true; targetData = dt;" 
+              (click)="dt.exportCSV({selectionOnly:true})"               
             ></button>
+            <!-- data-toggle="modal" data-target="#downloadConfirmation"
+              (click)="selectedOnly = true; targetData = dt;" -->
           </div>
           <div class="col">
             <div class="">
@@ -254,6 +255,15 @@
                   matTooltipPosition="above"
                   ><i class="fa fa-pencil"></i
                 ></a>
+              </span>              
+              <span
+                ><a
+                  class="btn nobg btn-users-cstm"
+                  (click)="openVendorCapesList(contentvendorcapes, rowData)"
+                  matTooltip="Show Capes "
+                  matTooltipPosition="above"
+                  ><i class="fa fa-users"></i
+                ></a>
               </span>
               <!-- <span
                 ><a
@@ -291,7 +301,7 @@
                 <a
                   class="btn nobg btn-po-cstm"
                   (click)="getVendorPOId(rowData)"
-                  matTooltip="PO's"
+                  matTooltip="Show PO History"
                   matTooltipPosition="above"
                   ><i class="fa fa-list-ul"></i></a
               ></span>
@@ -305,7 +315,7 @@
                 <a
                   class="btn nobg btn-ro-cstm"
                   (click)="getVendorROId(rowData)"
-                  matTooltip="RO's"
+                  matTooltip="Show RO History"
                   matTooltipPosition="above"
                   ><i class="fa fa-list"></i></a
               ></span>
@@ -1719,6 +1729,54 @@
 </ng-template>
 
 <ng-template
+  #contentvendorcapes
+  let-c="close"
+  let-d="dismiss"
+  class="modal fade"
+  role="dialog"
+>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button
+        type="button"
+        class="close"
+        (click)="dismissModel()"
+        data-dismiss="modal"
+        id=""
+        name=""
+      >
+        ×
+      </button>
+
+      <h4 class="modal-title">
+        Capes Details of Vendor : {{ this.selectedRow['vendorName'] }}
+      </h4>
+    </div>
+
+    <div class="modal-body">
+      <div>
+        <app-vendor-capes
+          *ngIf="vendorId"
+          [vendorId]="vendorId"
+          [isViewMode]="isViewMode"
+        >
+        </app-vendor-capes>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-danger"
+        data-dismiss="modal"
+        (click)="dismissModel()"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template
   #contentcontact
   let-c="close"
   let-d="dismiss"
@@ -1784,7 +1842,7 @@
           &times;
         </button>
         <h4 class="modal-title">
-          Purchase Orders
+          PO History
           <a
             matTooltip="Create PO"
             (click)="navigateToCreatePO()"
@@ -1836,7 +1894,7 @@
           &times;
         </button>
         <h4 class="modal-title">
-          Repair Orders
+          RO History
           <a
             matTooltip="Create RO"
             (click)="navigateToCreateRO()"

@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { UnitOfMeasureEndpoint } from './unitofmeasure-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,11 +37,11 @@ export class UnitOfMeasureService {
         private unitofmeasureEndpoint: UnitOfMeasureEndpoint) { }
 
     getUnitOfMeasureList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.unitofmeasureEndpoint.getUnitOfMeasureEndpoint<UnitOfMeasure[]>());
     }
     getAllUnitofMeasureList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.unitofmeasureEndpoint.getAllUnitOfMeasureEndpoint<any>());
     }
     newUnitOfMeasure(unitofmeasure) {
@@ -48,7 +49,7 @@ export class UnitOfMeasureService {
     }
 
     historyUnitOfMeasure(unitofmeasureId: number) {
-        return forkJoin(this.unitofmeasureEndpoint.getHistoryUnitOfMeasureEndpoint<AuditHistory[]>(unitofmeasureId));
+        return Observable.forkJoin(this.unitofmeasureEndpoint.getHistoryUnitOfMeasureEndpoint<AuditHistory[]>(unitofmeasureId));
     }
 
     getUnitOfMeasure(unitofmeasureId?: number) {
@@ -70,7 +71,7 @@ export class UnitOfMeasureService {
     }
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.unitofmeasureEndpoint.getUnitOfMeasurePages<any[]>(serverSidePagesData));
     }
     UOMFileUpload(file){

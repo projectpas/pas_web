@@ -1,0 +1,26 @@
+﻿<div>
+    <div class="mt-2" style="margin-bottom: 12px;">
+        <!-- <ul class="nav nav-pills"> -->
+           <button class="btn btn-default grayCls"  [ngClass]="memoStyle ? 'btn-primary' : ''" style="margin-right: 3px; " (click)="selectedTab(1)">Memo</button>
+           <button class="btn btn-default grayCls" [ngClass]="emailstyle ? 'btn-primary' : ''" style="margin-right: 3px; " (click)="selectedTab(2)" >Email</button>
+           <button class="btn btn-default grayCls" [ngClass]="phoneStyle ? 'btn-primary' : ''" style="margin-right: 3px; " (click)="selectedTab(3)">Phone</button>
+           <button class="btn btn-default grayCls" [ngClass]="textStyle ? 'btn-primary' : ''" style="margin-right: 3px; " (click)="selectedTab(4)" >Text</button>
+        
+    </div>
+    <div *ngIf="moduleId && referenceId">
+       <div *ngIf="memoStyle">
+        <app-common-memo [isView]="isViewMode" [moduleId]="moduleId" [referenceId]="referenceId"></app-common-memo>
+       </div>
+       <div *ngIf="emailstyle">
+            <!-- type ==1 for customer, type==2 for vendor contacts -->
+        <app-common-email [isView]="isViewMode" [type]="type" [commonContactId]="idForContact" [CurrentModuleName]="moduleName" [moduleId]="moduleId" [referenceId]="referenceId"></app-common-email>
+       </div>
+       <div *ngIf="phoneStyle">
+           <!-- type ==1 for customer, type==2 for vendor contacts -->
+        <app-common-phone [isView]="isViewMode" [type]="type"  [moduleId]="moduleId" [commonContactId]="idForContact" [referenceId]="referenceId"></app-common-phone>
+       </div>
+       <div *ngIf="textStyle">
+        <app-common-text [isView]="isViewMode" [moduleId]="moduleId" [referenceId]="referenceId"></app-common-text>
+       </div>
+    </div>
+</div>

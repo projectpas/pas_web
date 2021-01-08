@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AssetIntangibleType } from '../../models/asset-intangible-type.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class AssetIntangibleTypeEndpointService extends EndpointFactory {
 
@@ -34,10 +34,10 @@ export class AssetIntangibleTypeEndpointService extends EndpointFactory {
 
     addItem<T>(item: AssetIntangibleType): Observable<T> {
         let endpointUrl = this.add;
-        return this.http.post<any>(endpointUrl, JSON.stringify(item), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(item), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addItem(item));
-            }));
+            });
     }
 
     bulkItemUpload(file: any): Observable<object> {
@@ -47,44 +47,44 @@ export class AssetIntangibleTypeEndpointService extends EndpointFactory {
     getAllItems<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllItems());
-            }));
+            });
     }
 
     getItemAudit<T>(id: number): Observable<T> {
         let endpointUrl = `${this.getAudit}/${id}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemAudit(id));
-            }));
+            });
     }
 
     getItemById<T>(id: number): Observable<T> {
         let endpointUrl = `${this.getById}/${id}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemById(id));
-            }));
+            });
     }
 
     removeItemById<T>(id: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${id}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeItemById(id));
-            }));
+            });
     }
 
     updateItem<T>(item: AssetIntangibleType): Observable<T> {
         let endpointUrl = this.update;
-        return this.http.post<any>(endpointUrl, JSON.stringify(item), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(item), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItem(item));
-            }));
+            });
     }
 }

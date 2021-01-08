@@ -40,10 +40,12 @@
     <div class="form-group">
       <label>PN<span class="clr-red">*</span></label>
       <p-autoComplete class="autocomp-customer-cstm" name="partNumber"
-        [(ngModel)]="query.partSearchParamters.partNumberObj" [suggestions]="this.partDetails" [forceSelection]="true"
-        emptyMessage="No Match Found" field="partNumber" (completeMethod)="searchPartByPartNumber($event)"
+        [(ngModel)]="query.partSearchParamters.partNumberObj"
+        [suggestions]="this.partDetails" [forceSelection]="true"
+        field="partNumber" 
+        (completeMethod)="searchPartByPartNumber($event)"
         (onSelect)="onPartNumberSelect($event)" [size]="30" [minLength]="1" [dropdown]="true"
-        [disabled]="partEditDisable">
+        [disabled]="partEditDisable" required>
       </p-autoComplete>
     </div>
   </div>
@@ -59,7 +61,7 @@
       <div class="form-group">
         <label>Cond<span class="clr-red">*</span></label>
         <select name="conditionId" [(ngModel)]="query.partSearchParamters.conditionId" [disabled]="partEditDisable"
-          (change)="onConditionSelect()">
+          (change)="onConditionSelect()" required>
           <option value="0" selected>--select--</option>
           <option *ngFor="let condition of allConditionInfo" [ngValue]="condition.conditionId">
             {{condition.description}}
@@ -71,18 +73,18 @@
     <div class="col-2 column">
       <div class="form-group">
         <label>Qty Req<span class="clr-red">*</span></label>
-        <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText
+        <input class="form-control text-right" type="text" pKeyFilter="pint" pInputText required
           [ngModel]="query.partSearchParamters.quantityRequested  | globalNmberFormat"
-          [ngModelOptions]="{updateOn:'blur'}"
           (ngModelChange)="query.partSearchParamters.quantityRequested=formatStringToNumberGlobal($event)"
-          (blur)="calculate()" name="quantityRequested" autocomplete="off" />
+          (keyup)="calculate()" name="quantityRequested" autocomplete="off" />
       </div>
     </div>
     <!-- [(ngModel)]="query.partSearchParamters.quantityToQuote" -->
     <div class="col-2 column">
       <div class="form-group">
-        <label>Qty to Quote</label>
-        <input type="text" class="form-control text-right" pKeyFilter="pint" pInputText name="quantityToQuote"
+        <label>Qty to Quote<span class="clr-red">*</span></label>
+        <input type="text" class="form-control text-right" pKeyFilter="pint"  required
+          pInputText name="quantityToQuote"
           [ngModel]="query.partSearchParamters.quantityToQuote  | globalNmberFormat"
           [ngModelOptions]="{updateOn:'blur'}"
           (ngModelChange)="query.partSearchParamters.quantityToQuote=formatStringToNumberGlobal($event)"
@@ -120,7 +122,7 @@
 <div class="row justify-content-start">
   <div class="col-1 column" style="margin-right: 8px;">
     <div class="form-group">
-      <label>&nbsp;</label>
+      <!-- <label>&nbsp;</label> -->
       <button class="btn btn-primary" (click)="search($event)"
         [disabled]="searchDisabled || !(query.partSearchParamters.quantityToQuote > 0)">
         Search PN
@@ -129,19 +131,19 @@
   </div>
   <div class="col-2 column" style="margin-right: 8px;" *ngIf="enableMultiSearch">
     <div class="form-group">
-      <label>&nbsp;</label>
+      <!-- <label>&nbsp;</label> -->
       <button class="btn btn-primary" (click)="openMultiPartSearch($event)"
         style="background-color: #f0ad4e !important;">
         Search Multiple PN's
       </button>
     </div>
   </div>
-  <div class="col-1 column" style="margin-right: 8px;">
+  <!-- <div class="col-1 column" style="margin-right: 8px;">
     <div class="form-group">
       <label>&nbsp;</label>
       <button class="btn btn-primary" [disabled]="historicalDisabled">Historical</button>
     </div>
-  </div>
+  </div> -->
 </div>
 <ng-template #searchMultiPart let-c="close" let-d="dismiss">
   <div class="modal-header">
@@ -240,7 +242,7 @@
   </div>
 
 </ng-template>
-<!-- <div class="preloader" *ngIf="isSpinnerVisible">
+<div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
     <div class="lds-roller">
       <div></div>
@@ -253,4 +255,4 @@
       <div></div>
     </div>
   </div>
-</div> -->
+</div>

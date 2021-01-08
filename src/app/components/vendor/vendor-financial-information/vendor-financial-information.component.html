@@ -64,6 +64,7 @@
                                     </label>
                                     <select class="form-control" name="discountId"
                                         [(ngModel)]="sourceVendor.discountId" (ngModelChange)="enableSave()">
+                                        <option value="0">--Select--</option>
                                         <option *ngFor="let discontValue of discountList"
                                             [ngValue]="discontValue.value">{{discontValue.label}}</option>
                                     </select>

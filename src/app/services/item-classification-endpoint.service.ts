@@ -1,12 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ItemClassificationEndpointService extends EndpointFactory {
 
@@ -30,79 +30,79 @@ export class ItemClassificationEndpointService extends EndpointFactory {
 
     getitemclassificationEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getCodeUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getCodeUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemclassificationEndpoint());
-            }));
+            });
     }
 
     getloadAltEquPartInfoData<T>(itemMasterId): Observable<T> {
         let endpointUrl = `${this._altEquPartlist}?itemMasterId=${itemMasterId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getloadAltEquPartInfoData(itemMasterId));
-            }));
+            });
     }
     getNewitemclassificationEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._itemclassificationUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._itemclassificationUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemclassificationEndpoint(userObject));
-            }));
+            });
     }
 
     getEditActionEndpoint<T>(actionId?: number): Observable<T> {
         let endpointUrl = actionId ? `${this._itemclassificationUrlNew}/${actionId}` : this._itemclassificationUrlNew;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditActionEndpoint(actionId));
-            }));
+            });
     }
 
     getUpdateActionEndpoint<T>(roleObject: any, actionId: number): Observable<T> {
         let endpointUrl = `${this._itemclassificationUrlNew}/${actionId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateActionEndpoint(roleObject, actionId));
-            }));
+            });
     }
 
     getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._itemclassificationUrlNew}/${actionId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteActionEndpoint(actionId));
-            }));
+            });
     }
 
     getHistoryActionEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlAuditHistory}/${actionId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryActionEndpoint(actionId));
-            }));
+            });
     }
     
     getItemClassificationDataAuditById<T>(itemClassificationId: number): Observable<T> {
         let endpointUrl = `${this.getItemClassificationAuditById}/${itemClassificationId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemClassificationDataAuditById(itemClassificationId));
-            }));
+            });
     }
     getItemClassificationPagination<T>(pageSearch: any): Observable<T> {
         let endpointUrl = this.paginate;
         //let endpointUrl = `${this.getPaginationData}/${data}`;
-        return this.http.post<any>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemClassificationPagination(pageSearch));
-            }));
+            });
     } 
     ItemClassCustomUpload(file) {
         return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}`, file)
@@ -111,9 +111,9 @@ export class ItemClassificationEndpointService extends EndpointFactory {
 
 SearchData<T>(pageSearch: any): Observable<T> {
         let endpointUrl = this.serach;
-        return this.http.post<any>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.SearchData(pageSearch));
-            }));
+            });
     }
 }

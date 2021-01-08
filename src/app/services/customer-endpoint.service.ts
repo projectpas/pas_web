@@ -1,9 +1,7 @@
-
-import {throwError as observableThrowError,  Observable } from 'rxjs';
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import {catchError,map} from 'rxjs/operators'
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
@@ -268,392 +266,392 @@ export class CustomerEndpoint extends EndpointFactory {
     }
 
     getShipViaByDomesticShippingId<T>(customerShippingId: number, isDeleted: boolean): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/${this._getShipViaByShippingId}/${customerShippingId}?isDeleted=${isDeleted}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._getShipViaByShippingId}/${customerShippingId}?isDeleted=${isDeleted}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getShipViaByDomesticShippingId(customerShippingId, isDeleted));
-            }));
+            });
     }
 
     getCustomerWarningsById<T>(customerId: number): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}${this._customerGetWarning}/${customerId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}${this._customerGetWarning}/${customerId}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerWarningsById(customerId));
-            }));
+            });
     }
 
     getCustomerWarningsByCustomerIdandCustomerWarningsListID(customerId, customerWarningListId) {
         return this.http.get<any>(`${this.configurations.baseUrl}${this._customerWarningsByCustomerAndCustomerWarningListIdUrl}?customerId=${customerId}&customerWarningListId=${customerWarningListId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCustomerWarningsByCustomerIdandCustomerWarningsListID(customerId, customerWarningListId));
-            }));
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCustomerWarningsByCustomerIdandCustomerWarningsListID(customerId, customerWarningListId));
+            });
     }
     getCustomerRestrictionsByCustomerIdandCustomerWarningsListID(customerId, customerWarningListId) {
         return this.http.get<any>(`${this.configurations.baseUrl}${this._customerRestrictionsByCustomerAndCustomerWarningListIdUrl}?customerId=${customerId}&customerWarningListId=${customerWarningListId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerRestrictionsByCustomerIdandCustomerWarningsListID(customerId, customerWarningListId));
-            }));
+            });
     }
     getDocumentList(customerId: number, isDeleted: boolean) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/Customer/getCustomerDocumentDetail/${customerId}?isDeleted=${isDeleted}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getDocumentList(customerId, isDeleted));
-            }));
+            });
     }
 
     postDomesticShipVia<T>(postData: any): Observable<T> {
-        return this.http.post<any>(this.domesticShipVia, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.domesticShipVia, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.postDomesticShipVia(postData));
-            }));
+            });
     }
 
     getCustomerAll(data) {
         return this.http.post(this._customerList, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerAll(data));
-            }));
+            });
     }
 
     getDocumentUploadEndpoint<T>(file: any): Observable<T> {
         const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-        return this.http.post<any>(`${this._addDocumentDetails}`, file)
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._addDocumentDetails}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.getDocumentUploadEndpoint(file));
-            }));
+            });
     }
 
     getDeleteDocumentEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._addDocumentDetails}/${actionId}`;
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () =>
                     this.getDeleteDocumentEndpoint(actionId)
                 );
-            }));
+            });
     }
 
     getCustomerContactAuditDetails<T>(customerContactId: number, customerId: number): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}${this._customerContactHistory}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}${this._customerContactHistory}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () =>
                     this.getCustomerContactAuditDetails(customerContactId, customerId)
                 );
-            }));
+            });
     }
 
     getCustomerContactAuditDetails1<T>(customerContactId, customerId): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}${this._customerContactHistory1}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}${this._customerContactHistory1}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () =>
                     this.getCustomerContactAuditDetails1(customerContactId, customerId)
                 );
-            }));
+            });
     }
 
     deleteAircraftInvetoryById<T>(id): Observable<T> {
         let endpointUrl = `${this.deleteAircraftInvetory}/${id}`;
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteAircraftInvetoryById(id));
-            }));
+            });
     }
 
     restoreAircraftInvetoryById<T>(id): Observable<T> {
         let endpointUrl = `${this.restoreAircraftInvetory}/${id}`;
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreAircraftInvetoryById(id));
-            }));
+            });
     }
 
     updateActiveStatusAircraftInvetoryById<T>(id, status, user): Observable<T> {
         let endpointUrl = `${this.updateActiveAircraftInvetory}?id=${id}&status=${status}&updatedBy=${user}`
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateActiveStatusAircraftInvetoryById(id, status, user));
-            }));
+            });
     }
 
     deleteTaxTypeRateMappedDataById<T>(id, status, user): Observable<T> {
         let endpointUrl = `${this.deleteTaxTypeRateMapped}?id=${id}&status=${status}&updatedBy=${user}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteTaxTypeRateMappedDataById(id, status, user));
-            }));
+            });
     }
     searchATAMappedByMultiATAIDATASUBIDByCustomerId<T>(contactId: number, searchUrl: string): Observable<T> {
         let endpointUrl = `${this.CustomerATASearchUrl}?customerId=${contactId}&${searchUrl}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.searchATAMappedByMultiATAIDATASUBIDByCustomerId(contactId, searchUrl));
-            }));
+            });
     }
     searchAirMappedByMultiTypeIDModelIDDashIDByCustomerId<T>(customerId: number, searchUrl: string): Observable<T> {
         let endpointUrl = `${this.CustomerAircraftSearchUrl}?customerId=${customerId}&${searchUrl}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.searchAirMappedByMultiTypeIDModelIDDashIDByCustomerId(customerId, searchUrl));
-            }));
+            });
     }
 
     updateShipViaInternational<T>(postData): Observable<T> {
 
-        return this.http.post<any>(this.UpdateShipViaInternational, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.UpdateShipViaInternational, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateShipViaInternational(postData));
-            }));
+            });
     }
 
     getShipViaByInternationalShippingId<T>(id, pageIndex, pageSize): Observable<T> {
-        return this.http.get<any>(`${this.ShipViaByInternationalShippingId}?internationalShippingId=${id}&pageNumber=${pageIndex}&pageSize=${pageSize}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.ShipViaByInternationalShippingId}?internationalShippingId=${id}&pageNumber=${pageIndex}&pageSize=${pageSize}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getShipViaByInternationalShippingId(id, pageIndex, pageSize));
-            }));
+            });
     }
 
     postInternationalShipVia<T>(postData): Observable<T> {
-        return this.http.post<any>(this.InternationalShipVia, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.InternationalShipVia, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.postInternationalShipVia(postData));
-            }));
+            });
     }
 
     updateInternationalShipping<T>(postData): Observable<T> {
-        return this.http.post<any>(this.UpdateInternationalshipping, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.UpdateInternationalshipping, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateInternationalShipping(postData));
-            }));
+            });
     }
 
     getInternationalShippingById<T>(id): Observable<T> {
-        return this.http.get<any>(`${this.InternationalShippingById}?id=${id}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.InternationalShippingById}?id=${id}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getInternationalShippingById(id));
-            }));
+            });
     }
 
     deleteInternationalShipping<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this.InternationalShippingDelete}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.InternationalShippingDelete}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.deleteInternationalShipping(id, updatedBy));
-            }));
+            });
     }
 
     updateStatusForInternationalShipping<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this.InternationalShippingStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.InternationalShippingStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.updateStatusForInternationalShipping(id, status, updatedBy));
-            }));
+            });
     }
     updateStatusForInternationalShippingVia<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/customer/shippingviadetailsstatus?id=${id}&status=${status}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}/api/customer/shippingviadetailsstatus?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.updateStatusForInternationalShippingVia(id, status, updatedBy));
-            }));
+            });
     }
 
     getInternationalShippingByCustomerId<T>(customerId) {
-        return this.http.get<any>(`${this.InternationalShippingList}?customerId=${customerId}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.InternationalShippingList}?customerId=${customerId}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getInternationalShippingByCustomerId(customerId));
-            }));
+            });
     }
 
     postInternationalShippingPost<T>(postData): Observable<T> {
-        return this.http.post<any>(this.InternationalShippingPost, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.InternationalShippingPost, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.postInternationalShippingPost(postData));
-            }));
+            });
     }
 
     postCustomerAircraft<T>(postData): Observable<T> {
-        return this.http.post<any>(this.getCustomerAircrafPosttUrl, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.postCustomerAircraft(postData));
-            }));
+        return this.http.post<T>(this.getCustomerAircrafPosttUrl, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.postCustomerAircraft(postData));
+            });
     }
 
     postCustomerTaxTypeRate<T>(postData): Observable<T> {
-        return this.http.post<any>(this.getCustomerTaxTypeRatePosttUrl, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.getCustomerTaxTypeRatePosttUrl, JSON.stringify(postData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.postCustomerTaxTypeRate(postData));
-            }));
+            });
     }
 
     postCustomerATA(postData): any {
         return this.http.post<any>(this.getCustomerATAPosttUrl, JSON.stringify(postData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.postCustomerATA(postData));
-            }));
+            });
     }
     updateCustomerTaxTypeRate<T>(data) {
         const url = `${this.configurations.baseUrl}/api/Customer/CustomerTaxTypeRateUpdate/${data.customerTaxTypeRateMappingId}`
-        return this.http.put<any>(url, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, JSON.stringify(data), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateCustomerTaxTypeRate(data));
-            }));
+            });
     }
 
     getAuditHistoryForTaxType<T>(customerTaxTypeRateMappingId): Observable<T> {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/Customer/CustomerTaxTypeRateAudit/${customerTaxTypeRateMappingId}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getAuditHistoryForTaxType(customerTaxTypeRateMappingId));
-            }));
+            });
     }
 
     getNewitemAircraftEndpoint<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._CustomerAircraftPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._CustomerAircraftPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemAircraftEndpoint(userObject));
-            }));
+            });
     }
 
     getNewitemATAEndpoint<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._CustomerATAPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._CustomerATAPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemATAEndpoint(userObject));
-            }));
+            });
     }
 
     getcustomerEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this.customersUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.customersUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getcustomerEndpoint());
-            }));
+            });
     }
 
     getAllcustomerEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.customersUrlAll, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.customersUrlAll, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllcustomerEndpoint());
-            }));
+            });
     }
 
     getcountryListEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this.countryUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.countryUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getcountryListEndpoint());
-            }));
+            });
     }
 
     getCustomerTypes<T>(): Observable<T> {
-        return this.http.get<any>(this.getCustomerTypeUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getCustomerTypeUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerTypes());
-            }));
+            });
     }
 
     getAirccraftTypes<T>(selectedvalues: any): Observable<T> {
         let url = `${this.getAircraftTypeUrl}/${selectedvalues}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAirccraftTypes(selectedvalues));
-            }));
+            });
     }
 
     getATAChapters<T>(): Observable<T> {
-        return this.http.get<any>(this.getATAchapterUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getATAchapterUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getATAChapters());
-            }));
+            });
     }
 
     getAircraftmodels<T>(): Observable<T> {
-        return this.http.get<any>(this.getAircraftUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getAircraftUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftmodels());
-            }));
+            });
     }
 
     getFinalrobj<T>(): Observable<T> {
-        return this.http.get<any>(this.fianlurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.fianlurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getFinalrobj());
-            }));
+            });
     }
 
     getUpdateFinanceInfo<T>(roleObject: any, customerId: number): Observable<T> {
         let endpointUrl = `${this._customerFinanceInfoSaveUrl}/${customerId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateFinanceInfo(roleObject, customerId));
-            }));
+            });
     }
 
     getFinanceInfo<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._customerFinanceInfoGetUrl}/${customerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getFinanceInfo(customerId));
-            }));
+            });
     }
 
     getUpdateSalesInfo(roleObject: any, customerId: number) {
         let endpointUrl = `${this._customerSalesSaveUrl}/${customerId}`;
         return this.http.put(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateSalesInfo(roleObject, customerId));
-            }));
+            });
     }
 
     getSalesInfo<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._customerSalesGetUrl}/${customerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getSalesInfo(customerId));
-            }));
+            });
     }
 
     getGeneralrobj<T>(): Observable<T> {
-        return this.http.get<any>(this.generalurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.generalurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getGeneralrobj());
-            }));
+            });
     }
 
     getCustomersDatawithid<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.customerListWithId}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomersDatawithid(customerId));
-            }));
+            });
     }
 
     getCustomerListByid<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.customerRowById}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerListByid(customerId));
-            }));
+            });
     }
 
     getCustomerCommonDataByid<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.customerCommonDataById}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerCommonDataByid(customerId));
-            }));
+            });
     }
 
-    getCustomerCommonDataWithContactsById<T>(customerId: any): Observable<T> {
-        let endpointurl = `${this.customerCommonDataWithContactsById}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCustomerCommonDataWithContactsById(customerId));
-            }));
+    getCustomerCommonDataWithContactsById<T>(customerId: any, contactIds = null): Observable<T> {
+        let endpointurl = `${this.customerCommonDataWithContactsById}/${customerId}?colds=${contactIds}`;
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleError(error, () => this.getCustomerCommonDataWithContactsById(customerId, contactIds));
+            });
     }
 
     getsalespersonwithid<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.salesListWithId}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getsalespersonwithid(customerId));
-            }));
+            });
     }
 
     getNewCustomerContactInfo<T>(param: any): Observable<any> {
@@ -662,246 +660,246 @@ export class CustomerEndpoint extends EndpointFactory {
         // delete param.masterCompanyId;        
         //let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(this._CustomerContctUrl, body, this.getRequestHeaders())
-            .pipe(map((response: Response) => {
+            .map((response: Response) => {
                 return <any>response;
-            }),catchError(error => {
+            }).catch(error => {
                 return this.handleError(error, () => this.getNewCustomerContactInfo(param));
-            }));
+            });
     }
 
     getNewcustomerEndpoint<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._customersUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getNewcustomerEndpoint(userObject));
-            }));
+        return this.http.post<T>(this._customersUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getNewcustomerEndpoint(userObject));
+            });
     }
 
     getNewcountryEndpoint<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._countryUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._countryUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewcountryEndpoint(userObject));
-            }));
+            });
     }
 
     insertToaddressAudit<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._insertToaddAudit, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._insertToaddAudit, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.insertToaddressAudit(userObject));
-            }));
+            });
     }
 
     AddCustomerContactDetails<T>(param: any): Observable<any> {
         let body = JSON.stringify(param);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(this._CustomerUpdateContctUrl, body, this.getRequestHeaders())
-            .pipe(map((response: Response) => {
+            .map((response: Response) => {
                 return <any>response;
 
-            }),catchError(error => {
+            }).catch(error => {
                 return this.handleError(error, () => this.AddCustomerContactDetails(param));
-            }));
+            });
     }
 
     getEditcustomerEndpoint<T>(customerId?: number): Observable<T> {
         let endpointUrl = customerId ? `${this._customersUrlNew}/${customerId}` : this._customersUrlNew;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditcustomerEndpoint(customerId));
-            }));
+            });
     }
 
     getUpdatecustomerEndpoint<T>(roleObject: any, customerId: number): Observable<T> {
         let endpointUrl = `${this._customersUrlNew}/${roleObject.customerId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getUpdatecustomerEndpoint(roleObject, customerId));
-            }));
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getUpdatecustomerEndpoint(roleObject, customerId));
+            });
 
     }
 
     getUpdatecustomerEndpointforActive<T>(roleObject: any, login): Observable<T> {
         let endpointUrl = `${this._updateActiveInactive}?CustomerId=${roleObject.customerId}&status=${roleObject.isActive}&updatedBy=${login}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdatecustomerEndpointforActive(roleObject, login));
-            }));
+            });
 
     }
 
     updateAuditaddress<T>(roleObject: any, customerId: number): Observable<T> {
         let endpointUrl = `${this._updateToaddressaudit}/${roleObject.addressId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateAuditaddress(roleObject, customerId));
-            }));
+            });
     }
 
     getHistoryCustomerEndpoint<T>(CustomerId: number): Observable<T> {
         let endpointUrl = `${this.getContactHistory}/${CustomerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryCustomerEndpoint(CustomerId));
-            }));
+            });
     }
 
     getDeletecustomerEndpoint<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._customersUrlNew}/${customerId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeletecustomerEndpoint(customerId));
-            }));
+            });
     }
 
     removeById<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._updatelists}/${customerId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeById(customerId));
-            }));
+            });
     }
 
     getDeleteShippingEndpoint<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._deleteShipingData}/${customerId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteShippingEndpoint(customerId));
-            }));
+            });
     }
 
     getContcatDetails<T>(CustomerId: any): Observable<T> {
         let endpointUrl = `${this.contctsUrl}/${CustomerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getContcatDetails(CustomerId));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getContcatDetails(CustomerId));
+            });
     }
     getContcatCompleteDetails<T>(): Observable<T> {
-        return this.http.get<any>(this.contctsCompleteUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.contctsCompleteUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getContcatCompleteDetails());
-            }));
+            });
     }
 
     getCustomerBillAddressdetails<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.customerBillAddressUrl}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerBillAddressdetails(customerId));
-            }));
+            });
     }
 
     getCusHippingaddresdetails<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.cusShippingUrl}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCusHippingaddresdetails(customerId));
-            }));
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCusHippingaddresdetails(customerId));
+            });
     }
 
     getCusHippingaddresdetailswithid<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.cusShippingUrlwithaddressid}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCusHippingaddresdetailswithid(customerId));
-            }));
+            });
     }
 
     getvenHippingaddresdetailswithid<T>(customerId: any): Observable<T> {
         let endpointurl = `${this.venShippingUrlwithaddressid}/${customerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getvenHippingaddresdetailswithid(customerId));
-            }));
+            });
     }
 
     getCustomerBillViaDetails<T>(roleObject: any): Observable<T> {
         let endpointUrl = `${this.customerBillViaDetails}/${roleObject}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCustomerBillViaDetails(roleObject));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCustomerBillViaDetails(roleObject));
+            });
     }
 
     getBillviaHistory<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this.getBillviaHistory}/${customerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getBillviaHistory(customerId));
-            }));
+            });
     }
 
     getAircraftMappingEndpoint<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._getAircraftMapped}/${customerId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftMappingEndpoint(customerId));
-            }));
+            });
     }
 
     getMappedAirCraftDetailsByIdAndStatusEndpoint<T>(customerId: number, status: boolean): Observable<T> {
         let endpointUrl = `${this._getAircraftMapped}/${customerId}?status=${status}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMappedAirCraftDetailsByIdAndStatusEndpoint(customerId, status));
-            }));
+            });
     }
 
     getATAMappingByCustomerId<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._getATAMappedByCustomerId}/${customerId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getATAMappingByCustomerId(customerId));
-            }));
+            });
     }
 
     getATAMappingByContactId<T>(contactId: number, isDeleted?: boolean): Observable<T> {
         let endpointUrl = `${this._getATAMappedByContactId}/${contactId}?isDeleted=${isDeleted}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getATAMappingByContactId(contactId, isDeleted));
-            }));
+            });
     }
 
     deleteATAMappedByContactId(contactId) {
         return this.http.delete(`${this.configurations.baseUrl}${this._deleteATAMappedByContactId}/${contactId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.deleteATAMappedByContactId(contactId));
-            }));
+            });
     }
 
     restoreATAMappedByContactId(contactId) {
         return this.http.delete(`${this.configurations.baseUrl}${this._restoreATAMappedByContactId}/${contactId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.restoreATAMappedByContactId(contactId));
-            }));
+            });
     }
 
     getTaxTypeRateMappingEndpoint<T>(customerId: number, status: boolean): Observable<T> {
         let endpointUrl = `${this._getTaxTypeRateMapped}/${customerId}?status=${status}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getTaxTypeRateMappingEndpoint(customerId, status));
-            }));
+            });
     }
 
     getShipaddressHistory<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this.getBilladdresshistory}/${customerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getShipaddressHistory(customerId));
-            }));
+            });
     }
 
     getNewBillinginfo<T>(param: any): Observable<T> {
@@ -909,95 +907,95 @@ export class CustomerEndpoint extends EndpointFactory {
         //let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         // post request to create new book
         return this.http
-            .post<any>(this._billingInfoUrl, body, this.getRequestHeaders())
+            .post<T>(this._billingInfoUrl, body, this.getRequestHeaders())
             //.map((res: Response) => res)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getNewBillinginfo(param));
-            }));
+            });
     }
 
     getUpdateContactInfo<T>(roleObject: any, vendorId: number): Observable<T> {
         let endpointUrl = `${this._CustomerContctUrl}/${vendorId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateContactInfo(roleObject, vendorId));
-            }));
+            });
     }
 
     getUpdateContactInfo1<T>(roleObject: any, vendorId: number): Observable<T> {
         let endpointUrl = `${this._CustomerContctUrl1}/${vendorId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateContactInfo1(roleObject, vendorId));
-            }));
+            });
     }
 
     updateShippinginfo<T>(roleObject: any, customerId: any): Observable<T> {
         let endpointUrl = `${this._updatshippingAddressDetails}/${roleObject.customerDomensticShippingId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateShippinginfo(roleObject, customerId));
-            }));
+            });
     }
     updateBillingInfo<T>(roleObject: any, customerId: any): Observable<T> {
         let endpointUrl = `${this._updatshippingAddressDetails}/${roleObject.customerShippingAddressId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateBillingInfo(roleObject, customerId));
-            }));
+            });
     }
 
     updateStatusShippinginfo<T>(roleObject: any, customerId: any): Observable<T> {
         let endpointUrl = `${this._updateStatusCustomerShipping}/${roleObject.customerShippingAddressId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateStatusShippinginfo(roleObject, customerId));
-            }));
+            });
     }
     getDeleteCustomerEndpoint<T>(roleObject: any): Observable<T> {
         let endpointUrl = `${this._CustomerContactUrlNew}/${roleObject.CustomerShippingAddressId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteCustomerEndpoint(roleObject));
-            }));
+            });
     }
 
     getCustomerShipViaDetails<T>(roleObject: any): Observable<T> {
         let endpointUrl = `${this.customerShipViaDetails}/${roleObject.customerShippingAddressId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerShipViaDetails(roleObject));
-            }));
+            });
     }
 
     deleteContact<T>(id, updatedBy): Observable<T> {
-        return this.http.delete<any>(`${this._deleteContactUrl}/${id}?updatedBy=${updatedBy}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(`${this._deleteContactUrl}/${id}?updatedBy=${updatedBy}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteContact(id, updatedBy));
-            }));
+            });
     }
 
     deleteContactLegal<T>(id, updatedBy): Observable<T> {
-        return this.http.delete<any>(`${this._deleteContactUrl1}/${id}?updatedBy=${updatedBy}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(`${this._deleteContactUrl1}/${id}?updatedBy=${updatedBy}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteContactLegal(id, updatedBy));
-            }));
+            });
     }
 
     updateBillingViainfo<T>(roleObject: any, customerId: any): Observable<T> {
         let endpointUrl = `${this._updateBillingViaDetails}/${customerId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateBillingViainfo(roleObject, customerId));
-            }));
+            });
     }
 
     deleteBillingAddress<T>(roleObject: any, customerId: any): Observable<T> {
         let endpointUrl = `${this._deleteBillingCusDettilas}/${customerId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteBillingAddress(roleObject, customerId));
-            }));
+            });
     }
 
     getNewBillinginfoWithAddressId<T>(param: any, addressId: any): Observable<T> {
@@ -1007,18 +1005,18 @@ export class CustomerEndpoint extends EndpointFactory {
         // post request to create new book
         return this.http
             .post(this._billingInfoUrl, body, this.getRequestHeaders())
-            .pipe(map((res: Response) => <any>res.json())
-            ,catchError(error => {
+            .map((res: Response) => res.json())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewBillinginfoWithAddressId(param, addressId));
-            }));
+            });
     }
 
     getShipviaHistory<T>(CustomerId: number): Observable<T> {
         let endpointUrl = `${this.getShipViaHistory}/${CustomerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getShipviaHistory(CustomerId));
-            }));
+            });
     }
 
     //Not In Use
@@ -1030,7 +1028,7 @@ export class CustomerEndpoint extends EndpointFactory {
     //         });
     // }    
 
-    newShippingAll<T>(param: any): Observable<T> {
+    newShippingAll<T>(param: any): Observable<Response> {
 
         let body = JSON.stringify(param);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
@@ -1039,8 +1037,8 @@ export class CustomerEndpoint extends EndpointFactory {
         // post request to create new book
         return this.http
             .post(this._shippingInfoUrl, body, this.getRequestHeaders())
-            .pipe(map((res: Response) => <any>res)
-             ,catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
+            .map((res: Response) => res)
+            .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
     }
 
 
@@ -1053,39 +1051,39 @@ export class CustomerEndpoint extends EndpointFactory {
         // post request to create new book
         return this.http
             .post(this._shippingInfoUrl, body, this.getRequestHeaders())
-            .pipe(map((res: Response) => <any>res)
-            ,catchError(error => {
+            .map((res: Response) => res)
+            .catch(error => {
                 return this.handleError(error, () => this.getNewShipppinginfo(param));
-            }));
+            });
     }
 
     getAddressDetails<T>(): Observable<T> {
-        return this.http.get<any>(this.addressUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.addressUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAddressDetails());
-            }));
+            });
     }
 
     getEmptyrobj<T>(): Observable<T> {
-        return this.http.get<any>(this.contactEmptyurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.contactEmptyurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEmptyrobj());
-            }));
+            });
     }
 
     getCustomerEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this.customersattributesUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.customersattributesUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerEndpoint());
-            }));
+            });
     }
 
     updateShippingViainfo<T>(roleObject: any, CustomerId: any): Observable<T> {
         let endpointUrl = `${this._updateShippingViaDetails}/${CustomerId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateShippingViainfo(roleObject, CustomerId));
-            }));
+            });
     }
 
     updateCustomershippingAddressDetails<T>(param: any, CustomerId: any): Observable<any> {
@@ -1093,12 +1091,12 @@ export class CustomerEndpoint extends EndpointFactory {
         let body = JSON.stringify(param);
         //let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(this._CustomerShipAddressdetails, body, this.getRequestHeaders())
-            .pipe(map((response: Response) => {
+            .map((response: Response) => {
                 return <any>response;
             })
-            ,catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.updateCustomershippingAddressDetails(param, CustomerId));
-            }));
+            });
     }
 
     getNewShipppinginfoWithAddressId<T>(param: any, addressId: any): Observable<T> {
@@ -1108,18 +1106,18 @@ export class CustomerEndpoint extends EndpointFactory {
         // post request to create new book
         return this.http
             .post(this._shippingInfoUrl, body, this.getRequestHeaders())
-            .pipe(map((res: Response) => <any>res.json())
-            ,catchError(error => {
+            .map((res: Response) => res.json())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewShipppinginfoWithAddressId(param, addressId));
-            }));
+            });
     }
 
     getDeletecustomershippingEndpoint<T>(roleObject: any): Observable<T> {
         let endpointUrl = `${this._CustomerShippingUrlNew}/${roleObject.customerShippingId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeletecustomershippingEndpoint(roleObject));
-            }));
+            });
     }
 
     updateCustomerBillingAddressDetails<T>(param: any, customerId: any): Observable<any> {
@@ -1127,38 +1125,38 @@ export class CustomerEndpoint extends EndpointFactory {
         let body = JSON.stringify(param);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(this._customerBillAddressdetails, body, this.getRequestHeaders())
-            .pipe(map((response: Response) => {
+            .map((response: Response) => {
                 return <any>response;
             })
-            ,catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.updateCustomerBillingAddressDetails(param, customerId));
-            }));
+            });
     }
 
     getAddressDeatails<T>(): Observable<T> {
-        return this.http.get<any>(this.addressUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.addressUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAddressDeatails());
-            }));
+            });
     }
 
     getCustomerwarnigs<T>(CustomerId: any): Observable<T> {
         let endpointurl = `${this.CustomerWarningsDetails}/${CustomerId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerwarnigs(CustomerId));
-            }));
+            });
     }
 
     saveCustomerWarningdata<T>(param: any): Observable<any> {
         let body = JSON.stringify(param);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(this._CustomerwarningUrl, body, this.getRequestHeaders())
-            .pipe(map((response: Response) => {
+            .map((response: Response) => {
                 return <any>response;
-            }),catchError(error => {
+            }).catch(error => {
                 return this.handleError(error, () => this.saveCustomerWarningdata(param));
-            }));
+            });
     }
     //Not In Use
     // updateCustomerWarnings<T>(roleObject: any, customerWarningId): Observable<T> {
@@ -1170,450 +1168,450 @@ export class CustomerEndpoint extends EndpointFactory {
     // }
 
     getcustomeraircrafttypeEndpoint<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._CustomerdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._CustomerdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getcustomeraircrafttypeEndpoint(userObject));
-            }));
+            });
     }
 
     getDiscountEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this._actionsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this._actionsUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDiscountEndpoint());
-            }));
+            });
     }
 
     getNewDiscount<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._newDiscount, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._newDiscount, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewDiscount(userObject));
-            }));
+            });
     }
 
     getupdateDiscount<T>(roleObject: any, discountId: number): Observable<T> {
         let endpointUrl = `${this._discountPutUrl}/${discountId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getupdateDiscount(roleObject, discountId));
-            }));
+            });
     }
 
     getCustomerByname<T>(name): Observable<T> {
         let url = `${this.listUrl}/${name}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCustomerByname(name));
-            }));
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCustomerByname(name));
+            });
     }
 
     saveAircraftinfo<T>(data: any): Observable<T> {
-        return this.http.post<any>(this._aircraftmodelsPost, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._aircraftmodelsPost, JSON.stringify(data), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.saveAircraftinfo(data));
-            }));
+            });
     }
 
     geticustomertemMasterEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.geticustomertemMasterEndpoint());
-            }));
+            });
     }
 
     getAircraftList<T>(cusId: any): Observable<T> {
         let url = `${this.aircraftmodelsurl}/${cusId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftList(cusId));
-            }));
+            });
     }
 
     getUpdateBillingEndpointforActive<T>(roleObject: any, customerBillingAddressId: number): Observable<T> {
         let endpointUrl = `${this._updateActiveInactiveforBilling}/${roleObject.customerBillingAddressId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateBillingEndpointforActive(roleObject, customerBillingAddressId));
-            }));
+            });
     }
 
     getUpdateBillingEndpoint<T>(roleObject: any, customerBillingAddressId: number): Observable<T> {
         let endpointUrl = `${this._customerBillAddressdetails}/${roleObject.customerBillingAddressId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateBillingEndpoint(roleObject, customerBillingAddressId));
-            }));
+            });
     }
 
     getUpdateshippingEndpointforActive<T>(roleObject: any, customerShippingAddressId: number): Observable<T> {
         let endpointUrl = `${this._updateActiveInactiveforshipping}/${roleObject.customerShippingAddressId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateshippingEndpointforActive(roleObject, customerShippingAddressId));
-            }));
+            });
 
     }
 
     getUpdateshippingEndpoint<T>(roleObject: any, customerShippingAddressId: number): Observable<T> {
         let endpointUrl = `${this._updateShippingViaDetails}/${roleObject.customerShippingAddressId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateshippingEndpoint(roleObject, customerShippingAddressId));
-            }));
+            });
     }
 
     getAircraftManufacturerEndpoint<T>(cusId: any): Observable<T> {
         let url = `${this.getAircraftManufacturerUrl}/${cusId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftManufacturerEndpoint(cusId));
-            }));
+            });
     }
 
     getMultiIntegrations<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._multiintegrationsdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._multiintegrationsdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMultiIntegrations(userObject));
-            }));
+            });
     }
 
     getIntegrationEndpoint<T>(customerId: any): Observable<T> {
         let url = `${this.getIntegrationUrl}/${customerId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getIntegrationEndpoint(customerId));
-            }));
+            });
     }
 
     getDescriptionbypart<T>(name): Observable<T> {
         let url = `${this.listsUrl}/${name}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDescriptionbypart(name));
-            }));
+            });
     }
 
     getMarkUpEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this.getMarkup, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getMarkup, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMarkUpEndpoint());
-            }));
+            });
     }
 
     newMarkUp<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this.addMarkUp, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.addMarkUp, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.newMarkUp(userObject));
-            }));
+            });
     }
 
     updateMarkUp<T>(roleObject: any, markUpPercentageId: number): Observable<T> {
         let endpointUrl = `${this.addMarkUp}/${markUpPercentageId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateMarkUp(roleObject, markUpPercentageId));
-            }));
+            });
     }
 
     getAllCustomers<T>(): Observable<T> {
         let endPointUrl = this.getAllCustomersURL;
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllCustomers());
-            }));
+            });
     }
 
     getAllCustomerInfo<T>(): Observable<T> {
         let endPointURL = this.getAllCustomersInfoURL;
-        return this.http.get<any>(endPointURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointURL, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllCustomerInfo());
-            }));
+            });
     }
 
     getCustomerRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerRecords(paginationOption));
-            }));
+            });
     }
 
     getGlobalCustomerRecords<T>(value, pageIndex, pageSize): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}${this._customerGlobalSearch}?value=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}${this._customerGlobalSearch}?value=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getGlobalCustomerRecords(value, pageIndex, pageSize));
-            }));
+            });
     }
 
     getCustomerClassificationMapping(customerId) {
         let url = `${this.customerclassificationMapUrl}?referenceId=${customerId}`;
         return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerClassificationMapping(customerId));
-            }));
+            });
     }
 
     deleteInternationalShipViaId<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this._deleteInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._deleteInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.deleteInternationalShipViaId(id, updatedBy));
-            }));
+            });
     }
 
     restoreInternationalShipViaId<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this._restoreInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._restoreInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.restoreInternationalShipViaId(id, updatedBy));
-            }));
+            });
     }
 
     deleteShipViaDetails<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this._deleteShipVia}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._deleteShipVia}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.deleteShipViaDetails(id, updatedBy));
-            }));
+            });
     }
 
     restoreShipViaDetails<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this._restoreShipVia}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._restoreShipVia}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.restoreShipViaDetails(id, updatedBy));
-            }));
+            });
     }
 
     deleteRestrictedPartsById<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this._deleteRestrictedParts}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._deleteRestrictedParts}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.deleteRestrictedPartsById(id, updatedBy));
-            }));
+            });
     }
 
     restoreRestrictedPartsById<T>(id, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this._restoreRestrictedParts}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._restoreRestrictedParts}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.restoreRestrictedPartsById(id, updatedBy));
-            }));
+            });
     }
 
     updateStatusForShippingDetails<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this.ShippingDetailsStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.ShippingDetailsStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.updateStatusForShippingDetails(id, status, updatedBy));
-            }));
+            });
     }
 
     Shippingdetailsviastatus<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this.shippingdetailsviastatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.shippingdetailsviastatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.Shippingdetailsviastatus(id, status, updatedBy));
-            }));
+            });
     }
 
     CustomersBillingUpdateforActive<T>(id, status, updatedBy): Observable<T> {
-        return this.http.get<any>(`${this.customersBillingUpdateforActive}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.customersBillingUpdateforActive}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
+            .catch(error => {
                 return this.handleError(error, () => this.CustomersBillingUpdateforActive(id, status, updatedBy));
-            }));
+            });
     }
 
     GetUploadDocumentsList(attachmentId, customerId, moduleId) {
         return this.http.get<any>(`${this._getCustomerDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${customerId}&moduleId=${moduleId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.GetUploadDocumentsList(attachmentId, customerId, moduleId));
-            }));
+            });
     } GetCustomerFinanceDocumentsListEndpoin
 
     getdeleteDocumentListbyId<T>(customerDocumentId): Observable<T> {
-        return this.http.delete<any>(`${this._deleteCustomerDocuments}/${customerDocumentId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(`${this._deleteCustomerDocuments}/${customerDocumentId}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getdeleteDocumentListbyId(customerDocumentId));
-            }));
+            });
     }
 
     UpdateDocumentUpload<T>(file: any): Observable<T> {
         const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-        return this.http.put<any>(`${this._updateCustomerDocument}`, file)
-            .pipe(catchError(error => {
+        return this.http.put<T>(`${this._updateCustomerDocument}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.UpdateDocumentUpload(file));
-            }));
+            });
     }
     deleteDocumentByCustomerAttachementId<T>(customerAttachementId, updatedBy): Observable<T> {
-        return this.http.delete<any>(`${this.configurations.baseUrl}/api/common/attachmentDelete/${customerAttachementId}?updatedBy=${updatedBy}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(`${this.configurations.baseUrl}/api/common/attachmentDelete/${customerAttachementId}?updatedBy=${updatedBy}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteDocumentByCustomerAttachementId(customerAttachementId, updatedBy));
-            }));
+            });
     }
 
     restoreDocumentByAttachmentId<T>(AttachmentId, updatedBy): Observable<T> {
-        return this.http.delete<any>(`${this.configurations.baseUrl}/api/common/attachmentRestore/${AttachmentId}?updatedBy=${updatedBy}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(`${this.configurations.baseUrl}/api/common/attachmentRestore/${AttachmentId}?updatedBy=${updatedBy}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreDocumentByAttachmentId(AttachmentId, updatedBy));
-            }));
+            });
     }
 
     customerFinanceFileUploadEndpoint<T>(file: any): Observable<T> {
         const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-        return this.http.post<any>(`${this._addCustomerFileUpload}`, file)
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._addCustomerFileUpload}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.customerFinanceFileUploadEndpoint(file));
-            }));
+            });
     }
 
     GetCustomerFinanceDocumentsListEndpoint<T>(customerId, moduleId): Observable<T> {
-        return this.http.get<any>(`${this._addCustomerFinanceFileDetails}/${customerId}?moduleId=${moduleId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._addCustomerFinanceFileDetails}/${customerId}?moduleId=${moduleId}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.GetCustomerFinanceDocumentsListEndpoint(customerId, moduleId));
-            }));
+            });
     }
 
     GetCustomerAttachmentDeleteEndpoint<T>(attachmentDetailId, status, updatedBy): Observable<T> {
-        return this.http.delete<any>(`${this._customerDeleteAttachment}/${attachmentDetailId}?updatedBy=${updatedBy}&status=${status}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(`${this._customerDeleteAttachment}/${attachmentDetailId}?updatedBy=${updatedBy}&status=${status}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.GetCustomerAttachmentDeleteEndpoint(attachmentDetailId, status, updatedBy));
-            }));
+            });
     }
 
     getContactsByCustomerId<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._getContactsByCustomerId}?id=${customerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getContactsByCustomerId(customerId));
-            }));
+            });
     }
 
     getCustomerContactGet<T>(customerId: number): Observable<T> {
         let endpointUrl = `${this._getCustomerContactGet}/${customerId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerContactGet(customerId));
-            }));
+            });
     }
 
     getUpdateAircraft<T>(roleObject: any, customerAircraftId: number): Observable<T> {
         let endpointUrl = `${this._customerAircraftUpdate}/${customerAircraftId}`;
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateAircraft(roleObject, customerAircraftId));
-            }));
+            });
     }
     getCustomerHistory(customerId) {
         return this.http.get(`${this.configurations.baseUrl}/${this._customerHistory}?customerId=${customerId}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerHistory(customerId));
-            }));
+            });
     }
 
     getAircraftMappingEndpointAudit<T>(customerAircraftMappingId: number): Observable<T> {
         let endpointUrl = `${this._getAircraftMappedAudit}/${customerAircraftMappingId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftMappingEndpointAudit(customerAircraftMappingId));
-            }));
+            });
     }
 
     getCustomerShippingHistory<T>(customerId, customerShippingAddressId): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/${this._customerShippingHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerShippingHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerShippingHistory(customerId, customerShippingAddressId));
-            }));
+            });
     }
     getCustomerInterShippingHistory<T>(customerId, customerInterShippingId): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/${this._customerInterShippingHistory}?customerId=${customerId}&internationalShippingId=${customerInterShippingId}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerInterShippingHistory}?customerId=${customerId}&internationalShippingId=${customerInterShippingId}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerInterShippingHistory(customerId, customerInterShippingId));
-            }));
+            });
     }
 
     getCustomerShipViaHistory<T>(customerId, customerShippingAddressId, customerShippingId): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/${this._customerShipViaHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}&customerShippingId=${customerShippingId}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerShipViaHistory}?customerId=${customerId}&customerShippingAddressId=${customerShippingAddressId}&customerShippingId=${customerShippingId}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerShipViaHistory(customerId, customerShippingAddressId, customerShippingId));
-            }));
+            });
     }
     getCustomerInterShipViaHistory<T>(customerId, internationalShippingId, shippingViaDetailsId): Observable<T> {
-        return this.http.get<any>(`${this.configurations.baseUrl}/${this._customerInterShipViaHistory}?customerId=${customerId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.configurations.baseUrl}/${this._customerInterShipViaHistory}?customerId=${customerId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerInterShipViaHistory(customerId, internationalShippingId, shippingViaDetailsId));
-            }));
+            });
     }
     getCustomerDocumentAuditHistory<T>(id, customerId): Observable<T> {
-        return this.http.get<any>(`${this._getCustomerDocumentHistory}?id=${id}&customerId=${customerId}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this._getCustomerDocumentHistory}?id=${id}&customerId=${customerId}`, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerDocumentAuditHistory(id, customerId));
-            }));
+            });
     }
 
     CustomerBillingFileUpload<T>(file, customerId): Observable<T> {
-        return this.http.post<any>(`${this.configurations.baseUrl}${this.excelUpload}?customerId=${customerId}`, file)
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this.configurations.baseUrl}${this.excelUpload}?customerId=${customerId}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.CustomerBillingFileUpload(file, customerId));
-            }));
+            });
     }
 
     CustomerShippingFileUpload<T>(file, customerId): Observable<T> {
-        return this.http.post<any>(`${this.configurations.baseUrl}${this.excelUploadShipping}?customerId=${customerId}`, file)
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this.configurations.baseUrl}${this.excelUploadShipping}?customerId=${customerId}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.CustomerShippingFileUpload(file, customerId));
-            }));
+            });
     }
 
     CustomerInternationalShippingFileUpload<T>(file, customerId): Observable<T> {
-        return this.http.post<any>(`${this.configurations.baseUrl}${this.excelUploadInterShipping}?customerId=${customerId}`, file)
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this.configurations.baseUrl}${this.excelUploadInterShipping}?customerId=${customerId}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.CustomerInternationalShippingFileUpload(file, customerId));
-            }));
+            });
     }
 
     CustomerContactFileUpload<T>(file, customerId, MasterCompanyId): Observable<T> {
-        return this.http.post<any>(`${this.configurations.baseUrl}${this.excelUploadContact}?customerId=${customerId}&masterCompanyId=${MasterCompanyId}`, file)
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this.configurations.baseUrl}${this.excelUploadContact}?customerId=${customerId}&masterCompanyId=${MasterCompanyId}`, file)
+            .catch(error => {
                 return this.handleError(error, () => this.CustomerContactFileUpload(file, customerId, MasterCompanyId));
-            }));
+            });
     }
 
     getInternationalShipViaByInternationalShippingId<T>(id, isDeleted): Observable<T> {
-        return this.http.get<any>(`${this.InternatioanlShipViaByInternationalShippingId}?internationalShippingId=${id}&isDeleted=${isDeleted}`)
-            .pipe(catchError(error => {
+        return this.http.get<T>(`${this.InternatioanlShipViaByInternationalShippingId}?internationalShippingId=${id}&isDeleted=${isDeleted}`)
+            .catch(error => {
                 return this.handleError(error, () => this.getInternationalShipViaByInternationalShippingId(id, isDeleted));
-            }));
+            });
     }
 
     getCustomerContactATAAuditDetails<T>(customerContactATAMappingId: any): Observable<T> {
         let url = `${this.customerContacATAHistory}/${customerContactATAMappingId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCustomerContactATAAuditDetails(customerContactATAMappingId));
-            }));
+            });
     }
 
     updateCustomerContactATAMApped<T>(data): Observable<T> {
         const url = `${this.configurations.baseUrl}/api/Customer/customercontactataupdate/${data.customerContactATAMappingId}`
-        return this.http.put<any>(url, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, JSON.stringify(data), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateCustomerContactATAMApped(data));
-            }));
+            });
     }
 
     restoreCustomerRecord<T>(id, name): Observable<T> {
         const url = `${this.configurations.baseUrl}/api/Customer/RestoreCustomer/${id}?updatedBy=${name}`
-        return this.http.put<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreCustomerRecord(id, name));
-            }));
+            });
     }
     restoreCustomerDocumentRecord<T>(attachmentDetailId, name): Observable<T> {
         const url = `${this.configurations.baseUrl}/api/Customer/RestoreCustomerDocument/${attachmentDetailId}?updatedBy=${name}`
-        return this.http.put<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreCustomerDocumentRecord(attachmentDetailId, name));
-            }));
+            });
     }
     deleteCustomerDocumentRecord<T>(attachmentDetailId, name): Observable<T> {
         const url = `${this.configurations.baseUrl}/api/Customer/DeleteCustomerDocument/${attachmentDetailId}?updatedBy=${name}`
-        return this.http.put<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteCustomerDocumentRecord(attachmentDetailId, name));
-            }));
+            });
     }
 }

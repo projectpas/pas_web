@@ -1,7 +1,7 @@
 import { NgModule, ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule }   from '@angular/forms'
+
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { ToastyModule } from 'ng2-toasty';
 import { ChartsModule } from 'ng2-charts';
@@ -155,7 +155,7 @@ import { GlCashFlowClassificationService } from './services/gl-cash-flow-classif
 import { ManufacturerService } from './services/manufacturer.service';
 import { ManufacturerEndpoint } from './services/manufacturer-endpoint.service';
 import { VendorCapabilitiesService } from './services/vendorcapabilities.service';
-import { VendorCapabilitiesEndpoint } from './services/VendorCapabilities-endpoint.service';
+import { VendorCapabilitiesEndpoint } from './services/vendorcapabilities-endpoint.service';
 import { LocationService } from './services/location.service';
 import { LocationEndpoint } from './services/location-endpoint.service';
 import { laborAndOverheadCostEndpointservice } from './services/laborandoverheadcost-endpoint.service';
@@ -187,7 +187,7 @@ import { InterCompanySetupEndPointService } from './services/intercompany-setup-
 import { UserRoleEndPointService } from './components/user-role/user-role-endpoint.service';
 import { UserRoleService } from './components/user-role/user-role-service';
 import { RolesGuardService } from './services/roles-guard.service';
-import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
+import { UnauthorizedAccessComponent } from '../unauthorizedaccess/unauthorized-access.component';
 import { CompanyService } from './services/company.service';
 import { CompanyEndpoint } from './services/company-endpoint.service';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
@@ -225,14 +225,12 @@ import { StocklineHistoryComponent } from './shared/components/stockline/stockli
 import { CommonService } from './services/common.service';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
-import { AutoCompleteModule } from "primeng/autocomplete";
-
 import { StageCodeService } from './services/work-order-stagecode.service';
 import { RefreshAlert } from './directive/refreshalert.directive';
 import { LeadSourceService } from './services/lead-source.service';
 import { LeadSourceEndpointService } from './services/lead-source-endpoint.service';
 import { CustomerPagesModule } from './customerpages/customerpages.module';
-
+import { ChangeButtonStatus } from './directive/changebutton.directive';
 
 import { AssetAcquisitionTypeService } from './services/asset-acquisition-type/asset-acquisition-type.service';
 import { AssetAcquisitionTypeEndpointService } from './services/asset-acquisition-type/asset-acquisition-type-endpoint.service';
@@ -266,14 +264,13 @@ import { Master1099Service } from './services/master-1099.service';
 
 import { AppSharedModule } from './app-shared.module';
 import { StocklineReferenceStorage } from './components/stockline/shared/stockline-reference-storage';
-
-import {ChangeButtonStatus} from './directive/changebutton.directive'
-//import {AnalysisComponent} from './components/work-order/work-order-setup/work-order-summarizedview/components/analysis/analysis.component'
+import { CommunicationService } from './shared/services/communication.service';
+import { AllViewComponent } from './shared/components/all-view/all-view.component';
+import { TabViewModule } from 'primeng/tabview';
 
 
 @NgModule({
   imports: [
-    FormsModule,
     CardModule,
     PanelMenuModule,
     SharedModule,
@@ -285,7 +282,6 @@ import {ChangeButtonStatus} from './directive/changebutton.directive'
     AppRoutingModule,
     CommonModule,
     TableModule,
-    AutoCompleteModule,
     DropdownModule,
     MegaMenuModule,
     CustomerPagesModule,
@@ -299,6 +295,7 @@ import {ChangeButtonStatus} from './directive/changebutton.directive'
     ChartsModule,
     AppSharedModule,
     NgbModule,
+    TabViewModule
   ],
   declarations: [
     AppComponent,
@@ -329,7 +326,8 @@ import {ChangeButtonStatus} from './directive/changebutton.directive'
     EntityViewComponent,
     StocklineViewComponent,
     StocklineHistoryComponent,
-    RefreshAlert,ChangeButtonStatus   
+    RefreshAlert,    
+    AllViewComponent,
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -531,12 +529,12 @@ import {ChangeButtonStatus} from './directive/changebutton.directive'
     ShipViaService,
     ShipViaEndpoint,
     EmployeeTrainingTypeService,
-    
     EmployeeTrainingTypeEndpointService,
     SalesOrderService,
     SalesOrderEndpointService,
     SalesOrderReferenceStorage,
     StocklineReferenceStorage,
+    CommunicationService
   ],
   entryComponents: [
     LoginDialogComponent,
@@ -545,6 +543,7 @@ import {ChangeButtonStatus} from './directive/changebutton.directive'
     StocklineViewComponent,
     StocklineHistoryComponent,
     EntityViewComponent,
+    AllViewComponent,
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],

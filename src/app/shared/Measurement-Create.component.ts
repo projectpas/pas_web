@@ -1,8 +1,6 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { IMeasurement } from "../Workflow/Measurement";
 import { ItemMasterService } from "../services/itemMaster.service";
-import { ActionService } from "../Workflow/ActionService";
 import { ActivatedRoute, Router } from "@angular/router";
 import { EmployeeExpertiseService } from "../services/employeeexpertise.service";
 import { ItemClassificationService } from "../services/item-classfication.service";
@@ -10,25 +8,34 @@ import { UnitOfMeasureService } from "../services/unitofmeasure.service";
 import { ConditionService } from "../services/condition.service";
 import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
+import { CommonService } from "../services/common.service";
+import * as $ from 'jquery';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
+@Component({ 
     selector: 'grd-measurement',
     templateUrl: './Measurement-Create.component.html',
     styleUrls: ['./Measurement-Create.component.css']
 })
+
 export class MeasurementCreateComponent implements OnInit, OnChanges {
     allPartnumbersInfo: any[] = [];
     itemclaColl: any[];
     partCollection: any[];
     @Input() workFlow: IWorkFlow;
     @Input() UpdateMode: boolean;
-    @Output() notify: EventEmitter<IWorkFlow> =
-        new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
     row: any;
     currentPage: number = 1;
     itemsPerPage: number = 10;
+    isSpinnerVisible = false;
+    memoIndex;
+    textAreaInfo: any;    
+    modal: NgbModalRef;
+    deleteRowRecord:any={};
+    deletedRowIndex:any;
 
-    constructor(private actionService: ActionService, private route: ActivatedRoute, private router: Router, private expertiseService: EmployeeExpertiseService, public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private itemser: ItemMasterService, private vendorService: VendorService, private alertService: AlertService) {
+    constructor(private commonService: CommonService,   private modalService: NgbModal, private route: ActivatedRoute, private router: Router, private expertiseService: EmployeeExpertiseService, public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private itemser: ItemMasterService, private vendorService: VendorService, private alertService: AlertService) {
     }
 
     ngOnInit(): void {
@@ -37,11 +44,14 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             this.row = {};
         }
         this.row.taskId = this.workFlow.taskId;
-        this.ptnumberlistdata();
+        if(this.workFlow.measurements && this.workFlow.measurements.length !=0){
+            this.workFlow.measurements.map((x, index) => {
+                    this.workFlow.measurements[index].partName=x;
+            })
+        }
     }
 
     ngOnChanges(): void {
-
     }
 
     addRow(): void {
@@ -61,20 +71,9 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         this.workFlow.measurements.push(newRow);
     }
 
-    deleteRow(index): void {
-
-        if (this.workFlow.measurements[index].workflowMeasurementId == "0" || this.workFlow.measurements[index].workflowMeasurementId == "") {
-            this.workFlow.measurements.splice(index, 1);
-        }
-        else {
-            this.workFlow.measurements[index].isDelete = true;
-        }
-    }
-
     onPartSelect(event, measurement) {
         var anyMeasurement = this.workFlow.measurements.filter(measurement =>
             measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
-
         if (anyMeasurement.length > 1) {
             measurement.partNumber = "";
             measurement.partDescription = "";
@@ -85,52 +84,59 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         else {
             if (this.itemclaColl) {
                 for (let i = 0; i < this.itemclaColl.length; i++) {
-                    if (event == this.itemclaColl[i][0].partName) {
-                        measurement.partNumber = this.itemclaColl[i][0].partId;
-                        measurement.partDescription = this.itemclaColl[i][0].partName;
+                    if (event == this.itemclaColl[i].partName) {
+                        measurement.partNumber = this.itemclaColl[i].partId;
+                        measurement.partDescription = this.itemclaColl[i].partName;
                     }
                 };
             }
         }
+    }
 
-
+    loapartItems(strvalue = '', initialCall = false) {
+        this.isSpinnerVisible = true;
+        let measurementIds = [];
+        if (this.UpdateMode) {
+            measurementIds = this.workFlow.measurements.reduce((acc, x) => {
+                return measurementIds.push(acc.partId);
+            }, 0)
+        }
+        this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, measurementIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.partCollection = res.map(x => {
+                    return {
+                        ...x,
+                        partId: x.value,
+                        partDescription: x.partDescription,
+                        partNumber: x.label,
+                        partName: x.label
+                    }
+                });
+                this.itemclaColl = this.partCollection;
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     filterpartItems(event) {
-
-        this.partCollection = [];
-        this.itemclaColl = [];
-        if (this.allPartnumbersInfo) {
-            if (this.allPartnumbersInfo.length > 0) {
-
-                for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-                    let partName = this.allPartnumbersInfo[i].partNumber;
-                    if (partName) {
-                        if (partName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-                            this.itemclaColl.push([{
-                                "partId": this.allPartnumbersInfo[i].itemMasterId,
-                                "partName": partName,
-                                "description": this.allPartnumbersInfo[i].partDescription
-                            }]);
-
-                            this.partCollection.push(partName);
-                        }
-                    }
-                }
-            }
+        if (event.query !== undefined && event.query !== null) {
+            this.loapartItems(event.query);
         }
     }
 
     private ptnumberlistdata() {
+        this.isSpinnerVisible = true;
         this.itemser.getPartDetailsDropdown().subscribe(
             results => {
+                this.isSpinnerVisible = false;
                 this.allPartnumbersInfo = results;
-            }
-        );
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     checkDuplicateSequence(event, measurements: any): void {
-
         if (this.workFlow.measurements != undefined && this.workFlow.measurements.length > 0) {
             var duplicate = this.workFlow.measurements.filter(d => d.sequence == measurements.sequence && measurements.taskId == this.workFlow.taskId);
             if (duplicate.length > 1) {
@@ -139,5 +145,75 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
                 event.target.value = '';
             }
         }
+    }
+
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
+    }
+
+    onAddTextAreaInfo(material, index) {
+        this.memoIndex = index;
+        this.textAreaInfo = material.memo;
+        $("#textareapopupMemo").modal("show");
+    }
+
+    onSaveTextAreaInfo(memo) {
+        if (memo) {
+            this.textAreaInfo = memo;
+            this.workFlow.measurements[this.memoIndex].memo = this.textAreaInfo;
+        }
+        $("#textareapopupMemo").modal("hide");
+    }
+
+    onCloseTextAreaInfo() {
+        $("#textareapopupMemo").modal("hide");
+    }
+    validateMaxMin(event,measurement){
+       if(measurement && measurement.min && measurement.max){
+        if(measurement.min > measurement.max){
+            measurement.max="";
+            this.alertService.showMessage('Work Flow', 'Enter maximum Value.', MessageSeverity.error);
+        }
+       }
+    }
+
+    dismissModel() {
+        this.modal.close();
+    }
+
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.measurements[this.deletedRowIndex].workflowMeasurementId == "0" || this.workFlow.measurements[this.deletedRowIndex].workflowMeasurementId == undefined || this.workFlow.measurements[this.deletedRowIndex].workflowMeasurementId == "") {
+            this.workFlow.measurements.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.measurements[this.deletedRowIndex].isDelete = true;
+        }
+        this.dismissModel();
     }
 }

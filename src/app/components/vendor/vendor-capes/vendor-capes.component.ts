@@ -7,8 +7,8 @@ import { Router, ActivatedRoute} from '@angular/router';
 import * as $ from 'jquery';
 import { editValueAssignByCondition, getObjectById } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
-  
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { IfObservable } from 'rxjs/observable/IfObservable';
 import { geaterThanZeroPattern } from '../../../validations/validation-pattern';
 import { ConfigurationService } from '../../../services/configuration.service';
@@ -28,6 +28,8 @@ export class VendorCapesComponent implements OnInit {
     activeIndex = 2;
     matSpinner: boolean;
     local: any;
+    selectedOnly: boolean = false;
+    targetData: any;
     vendorCapsList : any;
     originalvendorCapsList: any = [];
     downloadvendorCapsList: any = [];
@@ -130,6 +132,8 @@ export class VendorCapesComponent implements OnInit {
         if(!this.isViewMode)
         {
             this.vendorId = this.router.snapshot.params['id'];
+            this.vendorService.vendorId = this.vendorId;
+            this.vendorService.listCollection.vendorId = this.vendorId
         }
         this.vendorService.currentEditModeStatus.subscribe(message => {
             this.isvendorEditMode = message;
@@ -150,7 +154,10 @@ export class VendorCapesComponent implements OnInit {
             this.addrawNo = row_no;
 		}
     }
-
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+    }
+   
     onSaveTextAreaInfo() {
 		if(this.textAreaLabel == 'Memo') {
             this.fieldArray[this.addrawNo].memo = this.textAreaInfo;
@@ -169,13 +176,16 @@ export class VendorCapesComponent implements OnInit {
 
     getVendorCodeandNameByVendorId()
     {
-        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-            res => {
-                    this.vendorCodeandName = res[0];
-            },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+        if(this.vendorId > 0)
+        {
+            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                res => {
+                        this.vendorCodeandName = res[0];
+                },err => {
+                    const errorLog = err;
+                    this.saveFailedHelper(errorLog);
             });
+        }        
     }
 
     get userName(): string {
@@ -246,11 +256,14 @@ export class VendorCapesComponent implements OnInit {
                         this.arraylistCapabilityTypeId.push(x.capabilityTypeId);
                     })
 
-                    if(!this.isViewMode)
-                    {
-                        this.getItemMasterSmartDropDown();
-                        this.getCapesTypesSmartDropDown()
-                    }
+                    this.getCapesTypesSmartDropDown()
+                    this.getItemMasterSmartDropDown();
+
+                    // if(!this.isViewMode)
+                    // {
+                    //     this.getCapesTypesSmartDropDown()
+                    //     this.getItemMasterSmartDropDown();                 
+                    // }
 
                     this.vendorCapsList =  results[0];
                     this.isSpinnerVisible = false;
@@ -387,29 +400,29 @@ export class VendorCapesComponent implements OnInit {
     }
 
     saveVendorCapes(){
-        var errmessage = '';
+        // var errmessage = '';
 
-        for (let i = 0; i < this.fieldArray.length; i++) {
-            this.alertService.resetStickyMessage();	
-            if(this.fieldArray[i].TAT == 0 || this.fieldArray[i].TAT == null) {	
-				this.isSpinnerVisible = false;	
-				errmessage = errmessage + "TAT values must be greater than zero."
-            }
-            if(this.fieldArray[i].cost == 0 || this.fieldArray[i].cost == null) {	
-                this.isSpinnerVisible = false;	
-                if(errmessage != '') {
-                    errmessage = errmessage + '<br />' + "Cost values must be greater than zero."
-                }
-                else
-                {
-                    errmessage = errmessage + "Cost values must be greater than zero."
-                }				
-            }
-            if(errmessage != '') {
-				this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
-				return;
-		    }
-        }
+        // for (let i = 0; i < this.fieldArray.length; i++) {
+        //     this.alertService.resetStickyMessage();	
+        //     if(this.fieldArray[i].TAT == 0 || this.fieldArray[i].TAT == null) {	
+		// 		this.isSpinnerVisible = false;	
+		// 		errmessage = errmessage + "TAT values must be greater than zero."
+        //     }
+        //     if(this.fieldArray[i].cost == 0 || this.fieldArray[i].cost == null) {	
+        //         this.isSpinnerVisible = false;	
+        //         if(errmessage != '') {
+        //             errmessage = errmessage + '<br />' + "Cost values must be greater than zero."
+        //         }
+        //         else
+        //         {
+        //             errmessage = errmessage + "Cost values must be greater than zero."
+        //         }				
+        //     }
+        //     if(errmessage != '') {
+		// 		this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
+		// 		return;
+		//     }
+        // }
 
         const data = this.fieldArray.map(obj => {
             obj.isPMA = obj.isPMA;
@@ -697,14 +710,14 @@ export class VendorCapesComponent implements OnInit {
                 Capability_Type: x.capabilityType,
                 Capability_Type_Description: x.capabilityTypeDescription,
                 vendor_Ranking: x.vendorRanking,
-                Memo: x.memo.replace(/<[^>]*>/g, ''),
+                //Memo: x.memo.replace(/<[^>]*>/g, ''),
                 IsPMA: x.isPMA,
                 IsDER: x.isDER,
-                Cost: x.cost,
-                TAT: x.tat,
-                CreatedDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                Price: x.cost,
+                TAT_Days: x.tat,
+                CreatedDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 CreatedBy : x.createdBy,
-                UpdatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                UpdatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 UpdatedBy : x.updatedBy,
                 IsDeleted: x.isDeleted, 
                 IsActive: x.isActive                       

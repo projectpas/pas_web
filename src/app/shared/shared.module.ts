@@ -8,7 +8,8 @@ import { FlexLayoutModule } from '@angular/flex-layout'
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { AutoCompleteModule } from "primeng/autocomplete";
+import { EditorModule } from "primeng/editor";
 import { TranslateModule } from "@ngx-translate/core";
 
 import { QuickAppProMaterialModule } from "../modules/material.module";
@@ -30,7 +31,9 @@ import { CustomerPagesModule } from "../customerpages/customerpages.module";
         QuickAppProMaterialModule,
         TranslateModule,
         CommonModule,
-        CustomerPagesModule
+        CustomerPagesModule,
+        AutoCompleteModule,
+        EditorModule
     ],
     exports: [
         FlexLayoutModule,
@@ -42,16 +45,12 @@ import { CustomerPagesModule } from "../customerpages/customerpages.module";
         GroupByPipe,
         UserEditorComponent,
         AppDialogComponent,
-        
-        
-        
     ],
     declarations: [
         PageHeaderComponent,
         GroupByPipe,
         UserEditorComponent,
         AppDialogComponent,
-        
     ],
     entryComponents: [
         AppDialogComponent

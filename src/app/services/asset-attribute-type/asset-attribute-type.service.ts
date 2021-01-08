@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+﻿import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AssetAttributeType } from '../../models/asset-attribute-type.model';
 import { AssetAttributeTypeEndpointService } from './asset-attribute-type-endpoint.service';
 @Injectable()
@@ -12,43 +12,43 @@ export class AssetAttributeTypeService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getAllItems<AssetAttributeType[]>()
         );
     }
 
     getByAssetTypeId(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getByAssetType<AssetAttributeType>(id)
         );
     }
 
     getById(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getItemById<AssetAttributeType>(id)
         );
     }
 
     add(item: AssetAttributeType) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.addItem<AssetAttributeType>(item)
         );
     }
 
     update(item: AssetAttributeType) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.updateItem<AssetAttributeType>(item)
         );
     }
 
     remove(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.removeItemById(id)
         );
     }
 
     getItemAuditById(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getItemAudit<any[]>(id)
         );
     }

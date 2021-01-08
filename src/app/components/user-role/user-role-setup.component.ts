@@ -5,7 +5,6 @@ import { OnInit, Component } from "@angular/core";
 import { fadeInOut } from "../../services/animations";
 import { UserRoleService } from "./user-role-service";
 import { ModuleHierarchyMaster, UserRole, RolePermission } from "./ModuleHierarchyMaster.model";
-
 import { single } from "rxjs/operators";
 import { Role } from "../../models/role.model";
 

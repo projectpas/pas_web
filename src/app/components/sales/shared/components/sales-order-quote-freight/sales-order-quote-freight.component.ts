@@ -5,11 +5,11 @@ import { SalesQuoteService } from '../../../../../services/salesquote.service';
 import { AuthService } from '../../../../../services/auth.service';
 import { CommonService } from '../../../../../services/common.service';
 import { getModuleIdByName } from '../../../../../generic/enums';
-import { editValueAssignByCondition, getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from '../../../../../generic/autocomplete';
+import { editValueAssignByCondition, getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule, formatStringToNumber } from '../../../../../generic/autocomplete';
 import { SalesOrderFreight } from '../../../../../models/sales/SalesOrderFreight';
-import { forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgForm } from "@angular/forms";
 
 @Component({
     selector: 'app-sales-order-quote-freight',
@@ -34,11 +34,13 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     selectedRowForDelete;
     selectedRowIndexForDelete;
     deleteModal: NgbModalRef;
+    modal: NgbModalRef;
     shipViaList: any;
     mainEditingIndex: any;
     subEditingIndex: any;
-    overAllMarkup: any;
+    overAllMarkup: any='';
     costPlusType: number = 0;
+    isUpdate: boolean = false;
     cols = [
         { field: 'shipVia', header: 'Ship Via' },
         { field: 'weight', header: 'Weight' },
@@ -50,7 +52,6 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     salesOrderFreightLists: any;
     freightFlatBillingAmount: any;
     isSpinnerVisible = false;
-    modal: NgbModalRef;
     constructor(private salesOrderQuoteService: SalesQuoteService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -69,13 +70,16 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         if (this.salesOrderFreightList && this.salesOrderFreightList.length > 0 && this.salesOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.salesOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.salesOrderFreightList[0].headerMarkupId);
+            this.overAllMarkup=this.overAllMarkup? this.overAllMarkup :'';
         }
+        this.isView = this.isView ? this.isView :false;
     }
 
     ngOnChanges() {
         if (this.salesOrderFreightList && this.salesOrderFreightList.length > 0 && this.salesOrderFreightList[0].headerMarkupId) {
             this.costPlusType = this.salesOrderFreightList[0].headerMarkupId;
             this.overAllMarkup = Number(this.salesOrderFreightList[0].headerMarkupPercentageId);
+            this.overAllMarkup=this.overAllMarkup? this.overAllMarkup :'';
         }
         if (this.salesOrderFreightList) {
             this.salesOrderFreightList = [];
@@ -84,58 +88,74 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             }
         }
     }
+ 
+restorerecord: any = {}
 
+dismissModelAlett() {
+    this.deleteModal.close();
+}
+dismissModelAlettRestore() {
+    this.modal.close();
+}
+    deletedStatusInfo:boolean=false;
+    arrayEmplsit:any=[];
     refresh(isview) {
-        this.isView = isview;
         this.isSpinnerVisible = true;
-        forkJoin(this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId),
-            this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.customerId),
-            this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName'),
-            this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code')).subscribe(response => {
+        this.arrayEmplsit.push(0);
+        forkJoin(this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId,this.deletedStatusInfo),
+            this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join())).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
-                this.unitOfMeasureList = response[2];
-                this.currencyList = response[3];
-
-            }, error => {
+            }, 
+            error => {
                 this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadFailed(errorLog)
             })
-
+            this.getunitOfMeasureList('');
+            this.CurrencyData('');
     }
 
-    refreshFreightsOnSaveOrDelete(fromDelete = false) {
-        this.isSpinnerVisible = true;
-        this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId).subscribe(res => {
-            this.isSpinnerVisible = false;
-            this.setFreightsData(res);
-            if (fromDelete) {
-                this.getTotalBillingAmount();
-                this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
-            }
-        }, error => {
-            this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog)
-        })
+    onFilterUom(value) {
+        this.getunitOfMeasureList(value);
     }
-
-    setFreightsData(res) {
-        if (res && res.length > 0) {
-            this.salesOrderFreightList = res;
-            this.costPlusType = res[0].headerMarkupId;
-            this.overAllMarkup = res[0].headerMarkupPercentageId;
-            if (Number(this.costPlusType) == 3) {
-                this.freightFlatBillingAmount = res[0].markupFixedPrice;
-            }
+    setEditArray:any=[];
+     getunitOfMeasureList(value) {
+        this.setEditArray=[];
+        if (this.isEdit == true) {
+            this.setEditArray.push(this.freightForm[0].dimensionUOMId ? this.freightForm[0].dimensionUOMId : 0,
+                this.freightForm[0].uomId ? this.freightForm[0].uomId : 0);
         } else {
-            this.salesOrderFreightList = [];
+            this.setEditArray.push(0);
         }
-        this.freightForm = [];
-        this.salesOrderFreightLists = [];
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.unitOfMeasureList = res;
+
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
+    onFilterCurrency(value) {
+        this.CurrencyData(value);
+    }
+   CurrencyData(value) {
+        this.setEditArray = [];
+        if (this.isEdit == true) {
+            this.setEditArray.push(this.freightForm[0].currencyId ? this.freightForm[0].currencyId : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.currencyList = res;
+        }, err => {
+            this.isSpinnerVisible = false;
+            const errorLog = err;
+        });
+    }
+
+
+
 
     setShipViaList(res) {
         if (res && res.length > 0) {
@@ -184,6 +204,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     }
 
     edit(rowData, mainIndex) {
+        this.isEnableUpdateButton=true;
         this.mainEditingIndex = mainIndex;
         this.isEdit = true;
         rowData.amount = this.formateCurrency(rowData.amount);
@@ -196,6 +217,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     }
     textAreaInfo: any;
     onSaveTextAreaInfo(memo) {
+        this.isEnableUpdateButton=false;
         if (memo) {
             this.textAreaInfo = memo;
             this.freightForm[this.memoIndex].memo = this.textAreaInfo;
@@ -205,41 +227,7 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
     onCloseTextAreaInfo() {
         $("#textarea-popupFreight").modal("hide");
     }
-    saveFreightList() {
-        this.freightForm = this.freightForm.map(x => {
-            return {
-                ...x,
-                uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
-                dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
-                currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
-                billingAmount: this.formateCurrency(x.amount)
-            }
-        });
-        if (this.isEdit) {
-            if (this.costPlusType == 1) {
-                this.markupChanged(this.freightForm[0], 'row');
-            }
-            this.salesOrderFreightList[this.mainEditingIndex] = this.freightForm[0];
-            $('#addNewFreight').modal('hide');
-            this.isEdit = false;
-        }
-        else {
-            let temp = [];
-            this.salesOrderFreightList.forEach((x) => {
-                temp = [...temp, ...x];
-            })
-            temp = [...temp, ...this.freightForm];
-            this.salesOrderFreightLists = temp;
-            this.salesOrderFreightList = [];
-            for (let x in this.salesOrderFreightLists) {
-                this.salesOrderFreightList.push(this.salesOrderFreightLists[x]);
-            }
-            if (this.costPlusType == 1) {
-                this.markupChanged({}, 'all');
-            }
-            $('#addNewFreight').modal('hide');
-        }
-    }
+
 
     createFreightsQuote() {
         let temp = this.salesOrderFreightList;
@@ -262,72 +250,12 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
             );
             this.refreshFreightsOnSaveOrDelete();
             this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
-        }, error => {
+        },
+        error => {
             this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog)
         })
-    }
-    onDataLoadFailed(log) {
-        // this.isSpinnerVisible = false;
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
-    delete() {
-        this.isSpinnerVisible = true;
-        this.deleteModal.close();
-        if (!this.selectedRowForDelete.salesOrderQuoteFreightId) {
-            this.selectedRowForDelete.isDeleted = true;
-            this.isSpinnerVisible = false;
-            this.salesOrderFreightList.splice(this.selectedRowIndexForDelete, 1);
-        } else {
-            let salesOrderQuoteFreightId = this.selectedRowForDelete.salesOrderQuoteFreightId;
-            this.salesOrderQuoteService.deletesalesOrderFreightList(salesOrderQuoteFreightId, this.userName).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.alertService.showMessage(
-                    '',
-                    'Deleted Sales Order Freight Successfully',
-                    MessageSeverity.success
-                );
-                this.refreshFreightsOnSaveOrDelete(true);
-            }, error => {
-                this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadFailed(errorLog)
-            })
-        }
-        $('#addNewFreight').modal('hide');
-        this.isEdit = false;
-    }
-
-    onDataLoadError(error) {
-        this.isSpinnerVisible = false;
-        let errorMessage = '';
-        if (error.message) {
-            errorMessage = error.message;
-        }
-        this.alertService.resetStickyMessage();
-        this.alertService.showStickyMessage("SO Quote", errorMessage, MessageSeverity.error, error);
-        // this.alertService.showMessage(error);
+        this.isSaveChargesDesabled=true;
+        this.storedData=[];
     }
 
     markupChanged(matData, type) {
@@ -416,26 +344,18 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
         this.selectedRowForDelete = rowData;
         this.selectedRowIndexForDelete = rowIndex;
         this.deleteModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-        this.deleteModal.result.then(
-            () => {
-            },
-            () => {
-            }
-        );
     }
 
     dismissModel() {
         this.deleteModal.close();
     }
+
     freightAudiHistory:any=[];
     openInterShipViaHistory(content, rowData) {
-        console.log("rowData",rowData)
         if(rowData && rowData.salesOrderQuoteFreightId){
         this.salesOrderQuoteService.getSOQFreightsHistory(rowData.salesOrderQuoteFreightId).subscribe(
             results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content),error => {
                 this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadFailed(errorLog)
             });
         }
     }
@@ -461,5 +381,191 @@ export class SalesOrderQuoteFreightComponent implements OnInit, OnChanges {
                 return data[i + 1][field] === value
             }
         }
+    }
+    isEnableUpdateButton:boolean=true;
+    enableUpdate(){
+      this.isEnableUpdateButton=false;
+    }
+
+    isSaveChargesDesabled:boolean=true;
+    validated(){
+      this.isSaveChargesDesabled=false;
+    }
+    deleteRow(index, form: NgForm): void {
+        this.freightForm.splice(index, 1);
+    }
+    formatStringToNumberGlobal(val) {
+        let tempValue = Number(val.toString().replace(/\,/g, ''));
+        return formatStringToNumber(tempValue)
+      }
+      storedData:any=[];
+      deletedrowIndex:any;
+      restore(content, rowData,index) {
+          this.restorerecord = rowData;
+          this.deletedrowIndex=index;
+          this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+      }
+      
+      restoreRecord() {
+        if(this.restorerecord && this.restorerecord.salesOrderQuoteFreightId>0){
+        this.commonService.updatedeletedrecords('SalesOrderQuoteFreight','SalesOrderQuoteFreightId',this.restorerecord.salesOrderQuoteFreightId, ).subscribe(res => {
+                    this.refreshFreightsOnSaveOrDelete();
+                this.modal.close();
+                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+            }, err => {
+                const errorLog = err;
+            });
+        }
+        else {
+            this.restorerecord.isDeleted = false;
+            this.salesOrderFreightList.splice(this.deletedrowIndex, 1);
+            this.storedData.forEach(element => {
+            if(
+                JSON.stringify(element) === JSON.stringify(this.restorerecord)
+                ) {
+                element.isDeleted=false;
+    
+            }
+        });
+        this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+        this.modal.close();
+        }
+    }
+      delete() {
+        this.isSpinnerVisible = true;
+        this.deleteModal.close();
+        if (!this.selectedRowForDelete.salesOrderQuoteFreightId) {
+            this.selectedRowForDelete.isDeleted = true;
+            this.isSpinnerVisible = false;
+            if(this.storedData && this.storedData.length !=0){
+            this.storedData.forEach(element => {
+                if(
+                 JSON.stringify(element) === JSON.stringify(this.selectedRowForDelete)
+                 ) {
+                 element.isDeleted=true;
+                 this.salesOrderFreightList.splice(this.selectedRowIndexForDelete, 1);
+                }
+            });
+        }
+        else{
+            this.salesOrderFreightList.splice(this.selectedRowIndexForDelete, 1);
+        }
+            this.storedData=[...this.storedData];
+            this.alertService.showMessage(
+                '',
+                'Deleted Sales Order Quote Freight Successfully',
+                MessageSeverity.success
+            );
+        } else {
+            let salesOrderQuoteFreightId = this.selectedRowForDelete.salesOrderQuoteFreightId;
+            this.salesOrderQuoteService.deletesalesOrderFreightList(salesOrderQuoteFreightId, this.userName).subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.alertService.showMessage(
+                    '',
+                    'Deleted Sales Order Quote Freight Successfully',
+                    MessageSeverity.success
+                );
+                this.refreshFreightsOnSaveOrDelete(true);
+            }, error => {
+                this.isSpinnerVisible = false;
+            })
+        }
+        $('#addNewFreight').modal('hide');
+        this.isEdit = false;
+        this.isSaveChargesDesabled=false;
+    }
+    getDeleteListByStatus(value){
+        this.deletedStatusInfo=value ? value :false;
+        this.refreshFreightsOnSaveOrDelete();
+    }
+    refreshFreightsOnSaveOrDelete(fromDelete = false) {
+        this.isSpinnerVisible = true;
+        this.salesOrderFreightList=[];
+        this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId,this.deletedStatusInfo).subscribe(res => {
+            this.isSpinnerVisible = false;
+//Handeling offline Records also
+           if( this.storedData &&  this.storedData.length!=0){
+               if (this.deletedStatusInfo == true ) {
+                this.deletedStatusInfo = true;
+                this.storedData.forEach(element => {
+                    if (element.isDeleted == true && element.salesOrderQuoteFreightId==0) {
+                        res.push(element);
+                    }
+                });
+            } else {
+                this.deletedStatusInfo = false;
+                this.storedData.forEach(element => {
+                    if (element.isDeleted == false && element.salesOrderQuoteFreightId==0) {
+                        res.push(element)
+                    }
+                });
+            }
+               this.setFreightsData(res);
+           }else{
+            this.setFreightsData(res);
+           }
+     
+            if (fromDelete) {
+                this.getTotalBillingAmount();
+                this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
+            }
+        }, 
+        error => {
+            this.isSpinnerVisible = false;
+        })
+    }
+    setFreightsData(res) {
+        if (res && res.length > 0) {
+            this.salesOrderFreightList = res;
+            this.costPlusType = res[0].headerMarkupId;
+            this.overAllMarkup = res[0].headerMarkupPercentageId;
+            if (Number(this.costPlusType) == 3) {
+                this.freightFlatBillingAmount = res[0].markupFixedPrice;
+            }
+            this.isUpdate = true;
+        } else {
+            this.salesOrderFreightList = [];
+            this.isUpdate = false;
+        }
+        this.freightForm = [];
+        this.salesOrderFreightLists = [];
+    }
+    saveFreightList() {
+        this.freightForm = this.freightForm.map(x => {
+            return {
+                ...x,
+                uom: x.uomId ? getValueFromArrayOfObjectById('label', 'value', x.uomId, this.unitOfMeasureList) : '',
+                dimensionUOM: x.dimensionUOMId ? getValueFromArrayOfObjectById('label', 'value', x.dimensionUOMId, this.unitOfMeasureList) : '',
+                currency: x.currencyId ? getValueFromArrayOfObjectById('label', 'value', x.currencyId, this.currencyList) : '',
+                billingAmount: this.formateCurrency(x.amount)
+            }
+        });
+        if (this.isEdit) {
+            if (this.costPlusType == 1) {
+                this.markupChanged(this.freightForm[0], 'row');
+            }
+            this.salesOrderFreightList[this.mainEditingIndex] = this.freightForm[0];
+            $('#addNewFreight').modal('hide');
+            this.isEdit = false;
+        }
+        else {
+            let temp = [];
+            this.salesOrderFreightList.forEach((x) => {
+                temp = [...temp, ...x];
+            })
+            temp = [...temp, ...this.freightForm];
+            this.salesOrderFreightLists = temp;
+            this.salesOrderFreightList = [];
+            for (let x in this.salesOrderFreightLists) {
+                this.salesOrderFreightList.push(this.salesOrderFreightLists[x]);
+            }
+            if (this.costPlusType == 1) {
+                this.markupChanged({}, 'all');
+            }
+            $('#addNewFreight').modal('hide');
+        }
+        this.isEnableUpdateButton=true;
+        this.isSaveChargesDesabled=false;
+        this.storedData=[...this.salesOrderFreightList];
     }
 }

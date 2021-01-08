@@ -6,8 +6,8 @@ import { MasterComapnyService } from '../../../../services/mastercompany.service
 import { AlertService, DialogType, MessageSeverity } from '../../../../services/alert.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { AuthService } from '../../../../services/auth.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../../../models/mastercompany.model';
 import { EmployeeService } from '../../../../services/employee.service';
 import { AppTranslationService } from '../../../../services/app-translation.service';
@@ -23,7 +23,6 @@ import { ConfigurationService } from '../../../../services/configuration.service
 import { AircraftModelService } from '../../../../services/aircraft-model/aircraft-model.service';
 import * as $ from 'jquery';
 import * as moment from 'moment';
-import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-employee-training',
@@ -43,6 +42,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     getAllFrequencyTrainingInfodrpData;
     employeeId: any;
     isSaving = true;
+    disableSaveMemo: boolean = true;
     search_AircraftModelList: any;
     durationTypes: any = [
         { id: 1, type: 'Days' },
@@ -81,7 +81,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     public nextbuttonEnable = false;
     public userA: any;
     formData = new FormData();
-    @ViewChild("empform", {static: false}) formdata;
+    @ViewChild("empform",{static:false}) formdata;
     allEmployeeTrainingDocumentsList: any = [];
     /** Actions ctor */
     private isEditMode: boolean = false;
@@ -132,6 +132,10 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     selectedRowForDelete: any;
     rowIndex: number;
     isEditContent: boolean = false;
+    arrayAircraftManfacturerlist : any = [];
+    arrayTrainingtypelist : any = [];
+    arrayFrequencyTrainingInfolist : any = [];
+    arrayaircraftmodelarraylist : any = [];
     constructor(private route: ActivatedRoute,
         private aircraftModelService: AircraftModelService,
         private itemser: ItemMasterService, private translationService: AppTranslationService,
@@ -147,8 +151,8 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         if (this.employeeService.generalCollection) {
             this.local = this.employeeService.generalCollection;
         }
-        this.getAllFrequencyTrainingData();
-        this.loadTariningTypes();       
+        //this.getAllFrequencyTrainingData('');
+        //this.loadTariningTypes('');       
         let user = this.localStorage.getDataObject<User>(DBkeys.CURRENT_USER);
         this.userA = user.userName;
         this.translationService.closeCmpny = false;
@@ -215,12 +219,13 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.employeeService.bredcrumbObj.next(this.employeeService.currentUrl);
         this.employeeService.ShowPtab = true;
         this.employeeService.alertObj.next(this.employeeService.ShowPtab);    
-        this.getAllAircraftManfacturer();
-        this.getAllFrequencyTrainingData();
+        this.getAllAircraftManfacturer('');
+        this.getAllFrequencyTrainingData('');
+        this.loadTariningTypes('');
     }
     ngAfterViewInit() {
         this.route.queryParams
-            .pipe(filter(params => params.order))
+            .filter(params => params.order)
             .subscribe(params => {
                 this.empId = params.order;
                 this.empId = params.order;
@@ -240,20 +245,40 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.empId = this.employeeId;      
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
-        this.employeeService.getTrainingList(this.empId).subscribe(
+        this.employeeService.getTrainingList(this.empId).subscribe(            
             results => this.onDataLoadSuccessful(results[0]),
             error => this.onDataLoadFailed(error)
         );
     }
 
-    private loadTariningTypes() {
-        this.alertService.startLoadingMessage();
+    // private loadTariningTypes() {
+    //     this.alertService.startLoadingMessage();
+    //     this.loadingIndicator = true;
+    //     this.commonService.smartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType').subscribe(
+    //         results => this.onTariningTypesData(results),
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+    
+    private loadTariningTypes(strText = '') {
+        this.alertService.stopLoadingMessage();
         this.loadingIndicator = true;
-        this.commonService.smartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType').subscribe(
-            results => this.onTariningTypesData(results),
-            error => this.onDataLoadFailed(error)
-        );
-    }
+		if(this.arrayTrainingtypelist.length == 0) {			
+			this.arrayTrainingtypelist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType',strText,true,20000,this.arrayTrainingtypelist.join()).subscribe(response => {           
+            this.dataSource.data = response;
+            this.alltrainingTypes = response;
+            this.alertService.stopLoadingMessage();
+            this.loadingIndicator = false;
+		},err => {
+            this.alertService.stopLoadingMessage();
+            this.loadingIndicator = false;
+			this.isSpinnerVisible = false;
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);		
+		});
+	}
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -272,26 +297,42 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.toGetDocumentsListNew(this.empId,this.empModuleId);
 	}
 
-    getAllAircraftManfacturer() {
-        this.itemser.getAircraft().subscribe(res => {
-            this.manufacturerData = res[0].map(x => {
-                return {
-                    value: x.aircraftTypeId, label: x.description
-                }
-            })
-        },err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-        });
-    }
-
+    // getAllAircraftManfacturer() {
+    //     this.itemser.getAircraft().subscribe(res => {
+    //         this.manufacturerData = res[0].map(x => {
+    //             return {
+    //                 value: x.aircraftTypeId, label: x.description
+    //             }
+    //         })
+    //     },err => {
+    //             const errorLog = err;
+    //             this.errorMessageHandler(errorLog);
+    //     });
+    // }
+    
+    private getAllAircraftManfacturer(strText = '') {        
+		if(this.arrayAircraftManfacturerlist.length == 0) {			
+			this.arrayAircraftManfacturerlist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'aircraftTypeId', 'description',strText,true,20000,this.arrayAircraftManfacturerlist.join()).subscribe(response => { 
+            this.manufacturerData = response;
+		},err => {
+			this.isSpinnerVisible = false;
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);		
+		});
+	}
+    
     onChangeManufacture(event, value) {
         this.search_AircraftModelList = [];
+        this.sourceEmployee.aircraftModelIds = "";
         this.loadmodels(value);
     }
     loadmodels(value) {
+        if(this.arrayaircraftmodelarraylist.length == 0) {			
+            this.arrayaircraftmodelarraylist.push(0); 
+        }    
         this.aircraftModelService
-            .getAircraftModelListByManufactureId(value)
+            .getAircraftModelListByManufactureId(value,this.arrayaircraftmodelarraylist.join())
             .subscribe(models => {
                 const responseValue = models[0];
                 if(responseValue){
@@ -337,14 +378,17 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         if (this.allEmployeeinfo.length > 0) {
             this.sourceEmployee = this.allEmployeeinfo[0].t;
             this.sourceEmployee.aircraftManufacturerId = this.sourceEmployee.aircraftManufacturerId ==  null ? 0 : this.sourceEmployee.aircraftManufacturerId;
-            
-            if(this.sourceEmployee.aircraftManufacturerId > 0) 
-            {
-            this.loadmodels(this.sourceEmployee.aircraftManufacturerId);            
-            } else {
-                this.sourceEmployee.aircraftManufacturerId = 0;
-                this.sourceEmployee.aircraftModelId =  0;                
-            }            
+                                   
+            for (let i = 0; i < this.allEmployeeinfo.length; i++) {
+                this.sourceEmployee.aircraftModelIds = this.allEmployeeinfo[i].aircraftModelIds;                
+            }   
+            // if(this.sourceEmployee.aircraftManufacturerId > 0) 
+            // {
+            //    this.loadmodels(this.sourceEmployee.aircraftManufacturerId);            
+            // } else {
+            //     this.sourceEmployee.aircraftManufacturerId = 0;
+            //     this.sourceEmployee.aircraftModelId =  0;                
+            // }            
             this.sourceEmployee.durationTypeId = this.sourceEmployee.durationTypeId == null ? 0 : this.sourceEmployee.durationTypeId;
             
             if (this.sourceEmployee.scheduleDate != null) {
@@ -363,6 +407,30 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                 this.sourceEmployee.expirationDate = new Date(this.sourceEmployee.expirationDate);
             }            
             this.sourceEmployee.cost = this.sourceEmployee.cost ? formatNumberAsGlobalSettingsModule(this.sourceEmployee.cost, 2) : '0.00';
+
+            if(this.sourceEmployee.aircraftManufacturerId  && this.sourceEmployee.aircraftManufacturerId > 0) {
+                this.arrayAircraftManfacturerlist.push(this.sourceEmployee.aircraftManufacturerId);
+            }
+            this.getAllAircraftManfacturer('');
+
+            if(this.sourceEmployee.employeeTrainingTypeId  && this.sourceEmployee.employeeTrainingTypeId > 0) {
+                this.arrayTrainingtypelist.push(this.sourceEmployee.employeeTrainingTypeId);
+            }
+            this.loadTariningTypes('');
+
+            if(this.sourceEmployee.frequencyOfTrainingId  && this.sourceEmployee.frequencyOfTrainingId > 0) {
+                this.arrayFrequencyTrainingInfolist.push(this.sourceEmployee.frequencyOfTrainingId);
+            }
+            this.getAllFrequencyTrainingData('');
+          
+            if(this.sourceEmployee.aircraftManufacturerId > 0){ 
+                if(this.sourceEmployee.aircraftModelIds) {          
+                    this.loadmodels(this.sourceEmployee.aircraftManufacturerId); 
+                }   
+            } else {
+                this.sourceEmployee.aircraftManufacturerId = 0;
+                this.sourceEmployee.aircraftModelIds =  "";                
+            }
         }
     }
 
@@ -375,7 +443,6 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = false;
         this.dataSource.data = getTrainingList;
         this.alltrainingTypes = getTrainingList;
-
     }
 
 
@@ -610,15 +677,27 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         }
     }
 
-    async getAllFrequencyTrainingData() {
-        await this.commonService.smartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName').subscribe(res => {
-            this.getAllFrequencyTrainingInfodrpData = res;
-        },err => {
+    // async getAllFrequencyTrainingData() {
+    //     await this.commonService.smartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName').subscribe(res => {
+    //         this.getAllFrequencyTrainingInfodrpData = res;
+    //     },err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
+    
+    private getAllFrequencyTrainingData(strText = '') {       
+		if(this.arrayFrequencyTrainingInfolist.length == 0) {			
+			this.arrayFrequencyTrainingInfolist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName',strText,true,20000,this.arrayFrequencyTrainingInfolist.join()).subscribe(response => {  
+            this.getAllFrequencyTrainingInfodrpData = response;
+		},err => {
 			this.isSpinnerVisible = false;
 			const errorLog = err;
 			this.errorMessageHandler(errorLog);		
 		});
-    }
+	}
 
     errorMessageHandler(log) {
         this.isSpinnerVisible = false;
@@ -995,8 +1074,9 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     }
 
     nextClick(nextOrPrevious) {
-        this.nextOrPreviousTab = nextOrPrevious;
-        if (this.formdata.form.dirty) {  
+        this.nextOrPreviousTab = nextOrPrevious;      
+        // if (this.formdata.form.dirty) {  
+        if(this.disableSave == false) {
             let content = this.tabRedirectConfirmationModal3;
             this.modal = this.modalService.open(content, { size: "sm" });       
           }
@@ -1041,9 +1121,13 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
 
             }   
             
+            enableSaveMemo() {
+                this.disableSaveMemo = false;
+            }
             onClickMemo() {
                 this.memoPopupContent = this.documentInformation.docMemo;
                 //this.memoPopupValue = value;
+                this.disableSaveMemo=true;
             }  
             onClickPopupSave() {
                 this.documentInformation.docMemo = this.memoPopupContent;

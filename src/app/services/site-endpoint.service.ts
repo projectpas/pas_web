@@ -1,13 +1,11 @@
-import { Injectable, Injector } from "@angular/core";
+﻿import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
-import {catchError} from 'rxjs/operators'
+
 import { EndpointFactory } from "./endpoint-factory.service";
 import { ConfigurationService } from "./configuration.service";
-import { Site } from "../models/site.model";
-import {of} from 'rxjs';
-import { AnalysisComponent } from "../components/work-order/work-order-setup/work-order-summarizedview/components/analysis/analysis.component";
+
 @Injectable()
 export class SiteEndpoint extends EndpointFactory {
   private readonly _actionsUrl: string = "/api/Site/Get";
@@ -42,36 +40,36 @@ export class SiteEndpoint extends EndpointFactory {
     super(http, configurations, injector);
   }
 
-  getSiteEndpoint<T>() {
-return this.http
-      .get(this.actionsUrl, this.getRequestHeaders()).pipe(
-      catchError(error => {
+  getSiteEndpoint<T>(): Observable<T> {
+    return this.http
+      .get<T>(this.actionsUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getSiteEndpoint());
-      }));
+      });
   }
   getManagementSiteEditEndpoint<T>(siteId: number): Observable<T> {
     let endpointUrl = `${this._actionsManagemetUrl}/${siteId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders()).pipe(
-      catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getManagementSiteEditEndpoint(siteId)
         );
-      }));
+      });
   }
   getNewSiteEndpoint<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._actionsUrlNew,
         JSON.stringify(userObject),
         this.getRequestHeaders()
-      ).pipe(
-        catchError(error => {
+      )
+      .catch(error => {
         return this.handleError(error, () =>
           this.getNewSiteEndpoint(userObject)
         );
-      }));
+      });
   }
 
   //new ManagementSie table entereing
@@ -79,111 +77,111 @@ return this.http
   getnewManagementSiteData<T>(userObject: any): Observable<T> {
     // debugger;
     return this.http
-      .post<any>(
+      .post<T>(
         this._actionsUrlManagementPost,
         JSON.stringify(userObject),
         this.getRequestHeaders()
-      ).pipe(
-        catchError(error => {
+      )
+      .catch(error => {
         return this.handleError(error, () =>
           this.getnewManagementSiteData(userObject)
         );
-      }));
+      });
   }
 
   getHistorySiteEndpoint<T>(siteId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlAuditHistory}/${siteId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders()).pipe(
-        catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getHistorySiteEndpoint(siteId)
         );
-      }));
+      });
   }
 
-  getEditSiteEndpoint<T>(siteId?: number) {
+  getEditSiteEndpoint<T>(siteId?: number): Observable<T> {
     let endpointUrl = siteId
       ? `${this._actionsUrlNew}/${siteId}`
       : this._actionsUrlNew;
 
     return this.http
-      .get(endpointUrl, this.getRequestHeaders()).pipe(
-        catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getEditSiteEndpoint(siteId));
-      }));
+      });
   }
 
-  getUpdateSiteEndpoint(roleObject: any, siteId: number) {
+  getUpdateSiteEndpoint<T>(roleObject: any, siteId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlUpdate}/${siteId}`;
     return this.http
-      .put(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders()).pipe(
-      catchError(error => {
+      .put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getUpdateSiteEndpoint(roleObject, siteId)
         );
-      }));
+      });
   }
 
-  getUpdateManagementSiteEndpoint(
+  getUpdateManagementSiteEndpoint<T>(
     roleObject: any,
     siteId: number
-  ) {
+  ): Observable<T> {
     let endpointUrl = `${this._actionsUrlManagementPost}/${siteId}`;
     return this.http
-      .put(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders()).pipe(
-      catchError(error => {
+      .put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getUpdateManagementSiteEndpoint(roleObject, siteId)
         );
-      }));
+      });
   }
 
-  getDeleteSiteEndpoint(siteId: number) {
+  getDeleteSiteEndpoint<T>(siteId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlDelete}/${siteId}`;
 
     return this.http
-      .delete(endpointUrl, this.getRequestHeaders()).pipe(
-      catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteSiteEndpoint(siteId)
         );
-      }));
+      });
   }
 
   //Delete management Site Before Edit
-  getDeleteManagementSiteEndpoint(siteId: number) {
+  getDeleteManagementSiteEndpoint<T>(siteId: number): Observable<T> {
     let endpointUrl = `${this._actionsUrlManagementPost}/${siteId}`;
     return this.http
-      .delete(endpointUrl, this.getRequestHeaders()).pipe(
-      catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteManagementSiteEndpoint(siteId)
         );
-      }));
+      });
   }
 
-  getSiteAuditById<T>(siteId: number) {
+  getSiteAuditById<T>(siteId: number): Observable<T> {
     let endpointUrl = `${this.getSiteAuditDataById}/${siteId}`;
 
     return this.http
-      .get(endpointUrl, this.getRequestHeaders()).pipe(
-      catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getSiteAuditById(siteId));
-      }));
+      });
   }
 
   bulkUpload<T>(file: any): Observable<object> {
     return this.http.post(this.bulkSiteUpload, file);
     }
 
-    SearchData<T>(paginationOption: any) {
+    SearchData<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.searchUrl;
-        return this.http.post(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.SearchData(paginationOption));
-            }));
+            });
     }
    
 }

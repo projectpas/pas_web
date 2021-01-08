@@ -1,14 +1,9 @@
 import { Component, Input, ViewChild, ElementRef, Output, EventEmitter, OnInit, OnChanges } from "@angular/core";
-import { ISalesOrderQuote } from "../../../../../../models/sales/ISalesOrderQuote";
-import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 import { EmployeeService } from '../../../../../../services/employee.service';
 import { AuthService } from '../../../../../../services/auth.service';
-import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
 import { ActivatedRoute } from "@angular/router";
 import { DBkeys } from "../../../../../../services/db-Keys";
 import { MessageSeverity, AlertService } from "../../../../../../services/alert.service";
-import { SalesQuote } from "../../../../../../models/sales/SalesQuote.model";
-import { SalesOrderQuote } from "../../../../../../models/sales/SalesOrderQuote";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerService } from "../../../../../../services/customer.service";
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
@@ -17,7 +12,6 @@ import { ISalesOrder } from "../../../../../../models/sales/ISalesOrder.model";
 import { SalesOrderService } from "../../../../../../services/salesorder.service";
 import { ISalesOrderCustomerApproval } from "../../../models/isales-order-customer-approval";
 import { ICustomerContact } from "../../../../models/icustomer-contact";
-import { ISalesOrderCustomerApprovalView } from "../../../models/isales-order-customer-approval-view";
 import { SalesOrderCustomerApprovalView } from "../../../models/sales-order-customer-approval-view";
 import { SalesOrderCustomerApproval } from '../../../models/sales-order-customer-approval';
 import { WorkOrderQuoteService } from "../../../../../../services/work-order/work-order-quote.service";
@@ -25,7 +19,9 @@ import { WorkOrderQuoteService } from "../../../../../../services/work-order/wor
 import * as $ from 'jquery'
 import { CommonService } from "../../../../../../services/common.service";
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
-import { forkJoin } from "rxjs";
+// import { m } from "@angular/core/src/render3";
+import { forkJoin } from "rxjs/observable/forkJoin";
+import { ApprovalProcessEnum } from "../../../models/sales-approval-process-enum";
 @Component({
   selector: "app-sales-order-customer-approval",
   templateUrl: "./sales-order-customer-approval.component.html",
@@ -159,18 +155,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         this.loadApprovalListView(response[2][0]);
       }
     }, error => this.dataLoadError(error))
-    // this.workOrderService.getInternalApproversList(6, marginSummary.netSales)
-    //   .subscribe(
-    //     (res) => {
-    //       if (res && res.length > 0) {
-    //         this.approvers = res;
-    //       } else {
-    //         this.approvers = [];
-    //       }
-    //       this.isSpinnerVisible = false;
-    //     }, error => this.dataLoadError(error)
-    //   )
-    // this.getCustomerApprovalList();
   }
 
   ngOnChanges(changes) {
@@ -230,29 +214,29 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
 
   getPartToDisableOrNot(part) {
     if (part.actionStatus != 'Approved') {
-      if (part.approvalActionId == 1 && part.createdBy != this.userName) {
+      if (part.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
         return true;
-      } else if (part.approvalActionId == 2) {
+      } else if (part.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
         if (this.approvers && this.approvers.length > 0) {
-          let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId);
+          let approverFound = this.approvers.find(approver => approver.approverId == this.employeeId && approver.isExceeded == false);
           if (approverFound) {
-            return false;
-          } else {
             return true;
+          } else {
+            return false;
           }
         } else {
-          return true;
+          return false;
         }
-      } else if (part.approvalActionId == 3 && part.createdBy != this.userName) {
+      } else if (part.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
         return true;
-      } else if (part.approvalActionId == 4 && part.createdBy != this.userName) {
+      } else if (part.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
         return true;
 
       } else {
         return false;
       }
     } else {
-      return true;
+      return false;
     }
   }
 
@@ -548,8 +532,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         res => {
           $('#quoteVersion').modal('hide');
           this.alertService.showMessage(
-            this.moduleName,
-            `Data updated successfully`,
+            "Success",
+            `Saved Approver Process Successfully`,
             MessageSeverity.success
           );
           this.isSpinnerVisible = false;
@@ -584,14 +568,6 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   getApproversEmails() {
     let result = '';
     if (this.approvers && this.approvers.length > 0) {
-      // this.approvers.forEach(
-      //   (x) => {
-      //     if (result != '') {
-      //       result += ','
-      //     }
-      //     result += x.approverEmail;
-      //   }
-      // )
       return this.approvers[0].approverEmails;
     }
     return result;
@@ -626,14 +602,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         this.onPartApprovedEvent.emit();
       }, error => {
         this.getCustomerApprovalList();
-        // this.alertService.showMessage(
-        //   "Success",
-        //   `Quote(s) approved successfully.`,
-        //   MessageSeverity.success
-        // );
         this.dataLoadError(error);
-        // this.isSpinnerVisible = false;
-        // this.alertService.showStickyMessage(error, null, MessageSeverity.error);
       });
     }
   }

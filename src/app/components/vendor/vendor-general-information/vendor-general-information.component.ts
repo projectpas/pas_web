@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, EventEmitter, AfterViewInit, ChangeDetectorRef, AfterViewChecked, OnDestroy, HostListener, ElementRef, Output , Input} from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { TableModule, Table } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -20,11 +20,11 @@ import { Vendor } from '../../../models/vendor.model';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { VendorClassification } from '../../../models/vendorclassification.model';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { GMapModule } from 'primeng/gmap';
 import { AddActionsDialogComponent } from '../../dialogs/add-actions-dialog/add-actions-dialog.component';
 import { VendorClassificationService } from '../../../services/vendorclassification.service';
-
+//import { unescapeHtml } from '@angular/platform-browser/src/browser/transfer_state';
 import { FileUploadModule } from 'primeng/fileupload';
 import { Message } from 'primeng/components/common/message';
 import { MenuItem } from 'primeng/components/common/menuitem';
@@ -35,7 +35,7 @@ import { IntegrationService } from '../../../services/integration-service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { editValueAssignByCondition, getObjectById, getValueFromObjectByKey, selectedValueValidate, toLowerCaseOnInput, validateRecordExistsOrNot, validateRecordExistsOrNotOnEdit, getObjectByValue } from '../../../generic/autocomplete';
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
-import { emailPattern, urlPattern, phonePattern } from '../../../validations/validation-pattern';
+import { emailPattern, urlPattern, phonePattern, namePattern } from '../../../validations/validation-pattern';
 declare const google: any;
 import * as $ from 'jquery';
 
@@ -56,12 +56,13 @@ export class VendorGeneralInformationComponent implements OnInit {
     disableSaveVenderName: boolean;
     disableSaveVendorPhone: boolean;
     disableSaveVendorEmail: boolean;
-    disableSaveVendorCountry: boolean;
+    //disableSaveVendorCountry: boolean;
     disableSaveVenderCode: boolean;
     VendorCodesColl: any[] = [];
     selectedVendorCode: any;
     disableSaveVenCode: boolean;
     disableSave: boolean;
+    disableSaveMemo: boolean = true;
     selectedActionName: any;
     disableSaveVenName: boolean;
     VendorNamecoll: any[] = [];
@@ -162,6 +163,7 @@ export class VendorGeneralInformationComponent implements OnInit {
     emailPattern = emailPattern()
     urlPattern = urlPattern()
     phonePattern = phonePattern();
+    namePattern = namePattern();
     parentVendorOriginal: any[];
     forceSelectionOfVendorName: boolean = false;
     selectedEditData: any;
@@ -241,6 +243,7 @@ export class VendorGeneralInformationComponent implements OnInit {
     stopmulticlicks: boolean;
     disableSaveForEditDocument:boolean=true;
     disableSaveForEditDocumentAudit:boolean=true;
+    arrayIntegrationlist:any[] = [];
 
     constructor(public vendorclassificationService: VendorClassificationService,
         private http: HttpClient,
@@ -309,8 +312,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         }
     }
 
-    
-
     ngOnInit(): void {
         if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -322,14 +323,17 @@ export class VendorGeneralInformationComponent implements OnInit {
                 this.vendorService.enableExternal = true;
                 this.vendorId = this.acRouter.snapshot.params['id'];
 				this.vendorService.vendorId = this.vendorId;
-				this.vendorService.listCollection.vendorId = this.vendorId; 
-				this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-					res => {
-							this.local = res[0];
-					},err => {
-						const errorLog = err;
-						this.saveFailedHelper(errorLog);
-					});
+                this.vendorService.listCollection.vendorId = this.vendorId; 
+                if(this.vendorId > 0)
+                {
+                    this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                        res => {
+                                this.local = res[0];
+                        },err => {
+                            const errorLog = err;
+                            this.saveFailedHelper(errorLog);
+                    });
+                }				
             }
         }
         this.vendorId = this.acRouter.snapshot.params['id'];
@@ -342,19 +346,12 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.getAllIntegrations();
             this.getVendorIntegrationByVendorrId();
             this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-vendor-general-information/${this.vendorId}';
-            //this.router.navigateByUrl(`vendorsmodule/vendorpages/app-vendor-general-information/${this.vendorId}`);
         }
         else{
             this.getAllVendorClassification();
             this.getAllIntegrations();
             this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-vendor-general-information';
         }
-        
-        //this.Capabilitydata();
-        //this.loadDataVendorData();
-        //this.getAllVendorCapabilities();        
-        //this.getVendorClassificationByVendorrId();
-        
     }
 
     get userName(): string {
@@ -367,6 +364,14 @@ export class VendorGeneralInformationComponent implements OnInit {
 		  : null;
     }
 
+    patternVendorNamevalidation(event: any) {
+        const pattern = /[a-zA-Z0-9.-_/ ]/;
+        let inputChar = String.fromCharCode(event.charCode);
+        if (event.keyCode != 8 && !pattern.test(inputChar)) {
+            event.preventDefault();
+        }
+    }
+
     getVendorData(vendorId){
         this.isSpinnerVisible = true;
         this.vendorService.getVendorDataById(vendorId).subscribe(res => {
@@ -377,7 +382,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
             this.originalData = Object.assign({}, res);
             this.newvendorId = res.vendorId;
-            this.selectedParentId = res.vendorParentId;
+            this.selectedParentId = res.vendorParentId;           
 
             if(res.vendorParentId > 0) {			
                 this.arrayVendorParentlist.push(res.vendorParentId); }
@@ -443,19 +448,6 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
     public allWorkFlows: any[] = [];
 
-    //Need to remove after Verify Old 
-    // async  loadData() {
-    //     await this.vendorService.getWorkFlows().subscribe(res =>
-    //     {
-    //         if (this.vendorId) {            
-    //             this.getVendorData(this.vendorId);
-    //         }
-    //         this.checVendorName()
-    //     },
-    //         error => this.onDataLoadFailed(error)
-    //     ); 
-    // }
-
     async loadVendorData(strText = '') {
         if(this.vendorId > 0)
 			this.arrayVendorlist.push(this.vendorId);
@@ -487,8 +479,33 @@ export class VendorGeneralInformationComponent implements OnInit {
 		});
     }	
 
+    bindvendordropdownData(strText = '') {
+        if(this.vendorId > 0)
+			this.arrayVendorlist.push(this.vendorId);
+		if(this.arrayVendorlist.length == 0) {			
+            this.arrayVendorlist.push(0); }
+        
+        this.commonService.autoSuggestionSmartDropDownList('Vendor', 'VendorId', 'VendorName',strText,true,20,this.arrayVendorlist.join()).subscribe(response => {
+            this.venderListOriginal = response.map(x => {
+                return {
+                    vendorName: x.label, vendorId: x.value 
+                }
+            })
+            this.vendorNames = response;
+            this.vendorNames = this.venderListOriginal.reduce((acc, obj) => {
+                return acc.filter(x => x.vendorId !== this.selectedParentId)
+            }, this.venderListOriginal)
+            
+            this.checVendorName();
+		},err => {
+			const errorLog = err;
+            this.onDataLoadFailed(errorLog);		
+            this.isSpinnerVisible = false;
+		});
+    }
+
     enableSave() {
-		this.disableSaveForEdit = false;
+        this.disableSaveForEdit = false;
     }
     
     enableSaveDocument() {
@@ -499,15 +516,8 @@ export class VendorGeneralInformationComponent implements OnInit {
 		this.disableSaveForEditDocumentAudit = false;
     }
 
-    private onDataLoadSuccessful(allWorkFlows: any[]) {
-        this.alertService.stopLoadingMessage();
-        //this.loadingIndicator = false;
-        this.dataSource.data = allWorkFlows;
-    }
     //get Country List
     private countrylist() {
-        //this.alertService.startLoadingMessage();
-        //this.loadingIndicator = true;
         this.isSpinnerVisible = true;
         this.vendorService.getCountrylist().subscribe(
             results => this.onDatacountrySuccessful(results[0]),
@@ -515,31 +525,12 @@ export class VendorGeneralInformationComponent implements OnInit {
         );
     }
     private onDatacountrySuccessful(allWorkFlows: any[]) {
-        //this.alertService.stopLoadingMessage();
         this.isSpinnerVisible = false;
-        //this.loadingIndicator = false;
         this.dataSource.data = allWorkFlows;
         this.allCountryinfo = allWorkFlows;
         if (this.vendorService.isEditMode && this.sourceVendor.countryId != null) {
         }
     }
-
-    //Load Capability Data
-    // private Capabilitydata() {
-    //     this.alertService.startLoadingMessage();
-    //     this.loadingIndicator = true;
-    //     this.vendorService.getCapabilibylist().subscribe(
-    //         results => this.onCapabilitySuccessful(results[0]),
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
-
-    // private onCapabilitySuccessful(allWorkFlows: any[]) {
-    //     this.alertService.stopLoadingMessage();
-    //     this.loadingIndicator = false;
-    //     this.dataSource.data = allWorkFlows;
-    //     this.allCapbilityClassInfo = allWorkFlows;
-    // }
 
     public addEntity() {
         let dialogRef = this.dialog.open(AddActionsDialogComponent, {
@@ -553,8 +544,6 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
     //Load Address 
     private loadAddressDara() {
-        //this.alertService.startLoadingMessage();
-        //this.loadingIndicator = true;
         this.isSpinnerVisible = true;
         this.vendorService.getAddressDtails().subscribe(
             results => this.onAddressDataLoadSuccessful(results[0]),
@@ -562,8 +551,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         );
     }
     private onAddressDataLoadSuccessful(alladdress: any[]) {
-        //this.alertService.stopLoadingMessage();
-        //this.loadingIndicator = false;        
         this.dataSource.data = alladdress;
         this.allAddresses = alladdress;
         this.addressId = this.allAddresses[0].addressId;
@@ -575,14 +562,17 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.memoPopupContent = this.documentInformation.docMemo;
         this.enableSaveDocumentAudit();
         this.enableSaveDocument();
+        this.disableSaveMemo=true;
     }
 
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
+    
     onClickPopupSave() {
         this.documentInformation.docMemo = this.memoPopupContent;
     }
     private loadMasterCompanies() {
-        //this.alertService.startLoadingMessage();
-        //this.loadingIndicator = true;
         this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
@@ -590,8 +580,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         );
     }
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
-        //this.alertService.stopLoadingMessage();
-        //this.loadingIndicator = false;
         this.isSpinnerVisible = false;
         this.allComapnies = allComapnies;
     }
@@ -606,72 +594,27 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.vendorClassName = "";
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    //Not in Use
-    // saveVendorClassificationDetails() {
-    //     this.isSaving = true;
-    //     if (this.vendorClassName.toLowerCase().trim() == "") {
-    //         this.alertService.showMessage("Empty", 'Cannot Submit Empty', MessageSeverity.warn);
-    //         return;
-    //     }
-    //     for (let i = 0; i < this.allVendorClassInfo.length; i++) {
-    //         let vendorName = this.allVendorClassInfo[i].classificationName;
-    //         if (vendorName.toLowerCase().localeCompare(this.vendorClassName.toLowerCase()) == 0) {
-    //             this.alertService.showMessage("Duplicate", 'Already Exist', MessageSeverity.warn);
-    //             return;
-    //         }
-    //         else {
-    //         }
-    //     }
-    //     if (this.isEditMode == false) {
-    //         this.sourceAction.createdBy = this.userName;
-    //         this.sourceAction.updatedBy = this.userName;
-    //         this.sourceAction.classificationName = this.vendorClassName;
-    //         this.sourceAction.masterCompanyId = 1;
-    //         this.vendorclassificationService.newVendorClassification(this.sourceAction).subscribe(data => {
-    //             if (data) {
-    //                 this.sourceVendor.vendorClassificationId = data.vendorClassificationId
-    //             }
-    //             this.alertService.showMessage("Success", 'Added New Vendor Classification Successfully.', MessageSeverity.success);
-    //             this.loadDataVendorData();
-    //             this.getAllVendorClassification();
-    //         })
-    //     }
-    //     else {
-    //         this.sourceAction.updatedBy = this.userName;
-    //         this.sourceAction.classificationName = this.vendorClassName;
-    //         this.sourceAction.masterCompanyId = 1;
-    //         this.vendorclassificationService.updateVendorClassification(this.sourceAction).subscribe(
-    //             response => this.saveCompleted(this.sourceAction),
-    //             error => this.saveFailedHelper(error));
-    //     }
-    //     this.modal.close();
-    // }
+    
     async getAllVendorClassification() {
         await this.commonService.smartDropDownList('VendorClassification', 'VendorClassificationId', 'ClassificationName').subscribe(res => {
             this.allvendorclassificationInfo = res;
         },
             error => this.onDataLoadFailed(error));
     }
-    // async  getVendorClassificationByVendorrId() {
-    //     if (this.sourceVendor.vendorId > 0) {
-    //         await this.commonService.getClassificationMapping(this.sourceVendor.vendorId, 3).subscribe(res => {
-    //             this.sourceVendor.vendorClassificationIds = res.map(x => x.vendorClassificationId);
-    //         },
-    //             error => this.onDataLoadFailed(error));
-    //     }
-    // }
 
     async getAllIntegrations() {
-        await this.integrationService.getWorkFlows().subscribe(res => {
-            const responseData = res[0]
-            this.integrationOriginalList = responseData.map(x => {
+		var strText = '';
+        if(this.arrayIntegrationlist.length == 0) {			
+            this.arrayIntegrationlist.push(0); }
+        await this.commonService.autoSuggestionSmartDropDownList('IntegrationPortal', 'IntegrationPortalId', 'Description',strText,true,300,this.arrayIntegrationlist.join()).subscribe(res => {
+            this.integrationOriginalList = res.map(x => {
                 return {
-                    label: x.description, value: x.integrationPortalId
+                    label: x.label, value: x.value 
                 }
             })
-        },
-        error => this.onDataLoadFailed(error))
-    }
+		})
+	}
+
     async  getVendorIntegrationByVendorrId() {
         if (this.sourceVendor.vendorId > 0) {
             await this.commonService.getIntegrationMapping(this.sourceVendor.vendorId, 3).subscribe(res => {
@@ -680,22 +623,6 @@ export class VendorGeneralInformationComponent implements OnInit {
                 error => this.onDataLoadFailed(error));
         }
     }
-    //Need to remove after verify
-    // private loadDataVendorData() {
-    //     this.alertService.startLoadingMessage();
-    //     this.loadingIndicator = true;
-    //     this.vendorclassificationService.getActiveVendorClassificationEndpointList().subscribe(
-    //         results => this.onVendorDataLoad(results[0]),
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
-
-    // private onVendorDataLoad(getActiveVendorClassificationList: VendorClassification[]) {
-    //     this.alertService.stopLoadingMessage();
-    //     this.loadingIndicator = false;
-    //     this.dataSource.data = getActiveVendorClassificationList;
-    //     this.allVendorClassInfo = getActiveVendorClassificationList;
-    // }
 
     filterVendors(event) {
         this.vendorCollection = [];
@@ -721,19 +648,8 @@ export class VendorGeneralInformationComponent implements OnInit {
 
     filterVendorNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.loadVendorData(event.query); }
+			this.bindvendordropdownData(event.query); }
     }
-    
-    //Need to remove after verify
-    // filterVendorNamesold(event) {
-    //     this.vendorNames = this.allActions;
-    //     if (event.query !== undefined && event.query !== null) {
-    //         const vendorName = [...this.allActions.filter(x => {
-    //             return x.vendorName.toLowerCase().includes(event.query.toLowerCase())
-    //         })]
-    //         this.vendorNames = vendorName;
-    //     }
-    // }
 
     async loadVendorParentsData(strText = '') {      
 		if(this.arrayVendorParentlist.length == 0 || this.arrayVendorParentlist == undefined) {			
@@ -765,23 +681,6 @@ export class VendorGeneralInformationComponent implements OnInit {
 		if (event.query !== undefined && event.query !== null) {
 			this.loadVendorParentsData(event.query); }
     }
-
-    //Need to Remove After Verify
-    // parentVendorListOld(id) {
-    //     this.parentVendorOriginal = [... this.allActions.filter(x => {
-    //         if (x.vendorId != id) {
-    //             return x;
-    //         }
-    //     })]
-    // }
-    
-    //Need to Remove After Verify
-    // filterVendorParentNamesOld(event) {
-    //     this.vendorParentNames = this.allActions;
-    //     this.vendorParentNames = [...this.parentVendorOriginal.filter(x => {
-    //         return x.vendorName.toLowerCase().includes(event.query.toLowerCase());
-    //     })]
-    // }
 
     selectedParentName(event) {
         if (event.name === this.sourceVendor.vendorName) {
@@ -821,42 +720,11 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
-    // private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
-    //     this.alertService.stopLoadingMessage();
-    //     this.loadingIndicator = false;
-    //     this.auditHisory = auditHistory;
-    //     this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-    // }
 
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
-        //this.alertService.stopLoadingMessage();
-        //this.loadingIndicator = false;
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
-    // private loadGeneralObject() {
-    //     //this.alertService.startLoadingMessage();
-    //     //this.loadingIndicator = true;
-    //     this.isSpinnerVisible = false;
-    //     this.vendorService.getGeneralObj().subscribe(
-    //         results => this.onGeneralObjUrl(results[0]),
-    //         error => this.onDataLoadFailed(error)
-    //     );
-    // }
-
-    // private onGeneralObjUrl(allWorkFlows: any) {
-    //     //this.alertService.stopLoadingMessage();
-    //     //this.loadingIndicator = false;
-    //     this.dataSource.data = allWorkFlows;
-    //     this.sourceVendor = allWorkFlows;
-    // }
-
-    // private ongeneralDataLoadSuccessful(allWorkFlows: any[]) {
-    //     this.alertService.stopLoadingMessage();
-    //     this.loadingIndicator = false;
-    //     this.dataSource.data = allWorkFlows;
-    //     this.allgeneralInfo = allWorkFlows;
-    // }
 
     open(content) {
         this.isEditMode = false;
@@ -898,8 +766,6 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
 
     openHist(content, row) {
-        //this.alertService.startLoadingMessage();
-        //this.loadingIndicator = true;
         this.sourceVendor = row;
     }
 
@@ -907,23 +773,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         const value = event.target.value;
         event.target.value = toLowerCaseOnInput(value);
     }
-
-    //checkVendorExists(field, value) {
-    //    let isEdit;
-    //    if (this.vendorService.isEditMode) {
-    //        this.editModeData = this.sourceVendor.listCollection;
-    //    } else {
-    //        isEdit = undefined;
-    //    }
-    //    const exists = validateRecordExistsOrNot(field, value, this.allActions, this.editModeData);
-
-    //    if (exists.length > 0) {
-    //        this.disableSaveVenderName = true;
-    //    }
-    //    else {
-    //        this.disableSaveVenderName = false;
-    //    }
-    //}
 
     checkVendorExists(field, value) {
         let isEdit;
@@ -978,9 +827,19 @@ export class VendorGeneralInformationComponent implements OnInit {
         }
         this.editItemAndCloseModel(goNext);
     }
+
     editItemAndCloseModel(goNxt?: any) {
         this.isSaving = true;
         this.isEditMode = true;
+
+        if(this.sourceVendor.countryId == undefined || this.sourceVendor.countryId == '' || this.sourceVendor.countryId == null) {
+			this.alertService.showMessage(
+				'Validation Error',
+				`Country Selection is Required.`,
+                MessageSeverity.error)		
+            return;
+        } 
+
         this.sourceVendor.vendorCode = this.vendorCodeTemp;
         if (!(this.sourceVendor.vendorName && this.sourceVendor.vendorCode && this.sourceVendor.vendorEmail && this.sourceVendor.vendorPhone && this.sourceVendor.address1 && this.sourceVendor.city
             && this.sourceVendor.postalCode && this.sourceVendor.countryId && this.sourceVendor.vendorClassificationIds
@@ -1040,7 +899,6 @@ export class VendorGeneralInformationComponent implements OnInit {
                         if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
                                 this.onUploadDocumentListNew(data.vendorId);
                         }
-                        //this.getVendorData(data.vendorId);
                         if (this.sourceVendor.isVendorAlsoCustomer == true) {
                             this.vendorService.isVendorAlsoCustomer = this.sourceVendor.isVendorAlsoCustomer;
                             this.vendorService.localCollectiontoCustomer = this.sourceVendor;
@@ -1115,12 +973,10 @@ export class VendorGeneralInformationComponent implements OnInit {
         else {
             this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
         }
-        //this.loadData();
     }
     private savesuccessCompleted(user?: any, goNxt?: any) {
         this.isSaving = false;
         this.alertService.showMessage("Success", `${this.vendorService.isEditMode==true ? 'Updated' : 'Saved'}  General Information  successfully`, MessageSeverity.success);
-        //this.loadData();
     }
     private saveSuccessHelper(role?: any) {
         this.isSaving = false;
@@ -1133,16 +989,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.alertService.stopLoadingMessage();
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
-
-    // private getDismissReason(reason: any): string {
-    //     if (reason === ModalDismissReasons.ESC) {
-    //         return 'by pressing ESC';
-    //     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    //         return 'by clicking on a backdrop';
-    //     } else {
-    //         return `with: ${reason}`;
-    //     }
-    // }
 
     onUpload(event) {
         for (let file of event.files) {
@@ -1160,7 +1006,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         }
 
         const exists = selectedValueValidate('vendorId', object, this.selectedEditData);
-        //this.loadVendorParentsData(getValueFromObjectByKey('vendorId', object));
         this.disableSaveVenderName = !exists;
     }
 
@@ -1203,33 +1048,24 @@ export class VendorGeneralInformationComponent implements OnInit {
                     this.selectedCountries = event;
                 }
             }
-            this.disableSaveVendorCountry = false;
         }
     }
-    //Not IN Use
-    // getAllVendorCapabilities(): void {
-    //     this.commonService.smartDropDownList('VendorCapabiliy', 'VendorCapabilityId', 'capabilityDescription').subscribe(res => {
-    //         this.dropDownVendorCapabilitiesList = res;
-    //     },
-    //         error => this.onDataLoadFailed(error))
-    // }
+
     eventCountryHandler(event) {
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
-            if (this.selectedCountries) {
-                if (value == this.selectedCountries.toLowerCase()) {
+            for (let i = 0; i < this.allCountryinfo.length; i++) {
+                if (value == this.allCountryinfo[i].nice_name.toLowerCase()) {
+                    this.sourceVendor.nice_name = this.allCountryinfo[i].nice_name;
+                    this.sourceVendor.countryId = getObjectByValue('nice_name', this.allCountryinfo[i].nice_name, this.allCountryinfo)
                     this.disablesave = false;
+                    this.selectedCountries = event;
+                    return;
                 }
-                else {
-                    this.disablesave = true;
-                }
-            } else {
-                this.disableSaveVendorCountry = true;
             }
-        } else {
-            this.disableSaveVendorCountry = true;
-        }
+        } 
     }
+
     filtercountry(event) {
         this.countrycollection = this.allCountryinfo;
         if (event.query !== undefined && event.query !== null) {
@@ -1239,6 +1075,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             this.countrycollection = countries;
         }
     }
+    
     parentEventHandler(event) {
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
@@ -1252,6 +1089,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+
     onParentNameselected(event) {
         if (this.allActions) {
             for (let i = 0; i < this.allActions.length; i++) {
@@ -1263,6 +1101,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+
     onClassificationelected(event) {
         if (this.allVendorClassInfo) {
             for (let i = 0; i < this.allVendorClassInfo.length; i++) {
@@ -1274,6 +1113,7 @@ export class VendorGeneralInformationComponent implements OnInit {
             }
         }
     }
+    
     eventClassificationHandler(event) {
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
@@ -1607,7 +1447,6 @@ export class VendorGeneralInformationComponent implements OnInit {
                     }
                 }
             }
-            //this.dismissDocumentPopupModel(type)
         }
 
         if (mode == 'add') {
@@ -1753,9 +1592,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.formData.append('attachmentdetais', JSON.stringify(this.sourceViewforDocumentList));
         this.commonService.uploadVendorDocumentsEndpoint(this.formData).subscribe(res => {
             this.formData = new FormData();
-            // this.toGetDocumentsListNew(this.sourceVendor.vendorId);
-            // this.toGetDocumentsListAudit(this.sourceVendor.vendorId);
-
         },
             error => this.saveFailedHelper(error));
     }
@@ -1876,7 +1712,6 @@ export class VendorGeneralInformationComponent implements OnInit {
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
     openHistory(content, rowData) {
-        //this.alertService.startLoadingMessage();
         this.isSpinnerVisible = true;
         this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
             results => this.onAuditHistoryLoadSuccessful(results, content),

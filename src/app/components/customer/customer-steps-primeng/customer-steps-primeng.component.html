@@ -165,11 +165,13 @@
         </div>
       </div>
       <div class="card">
-        <div [ngClass]="{ hideTab: currentTab !== 'General' }">
+        <div [ngClass]="{ hideTab: currentTab !== 'General' && customerallListOriginal }">
           <div *ngIf="countryListOriginal">
             <app-customer-general-information
               [editMode]="editMode"
               [editCustomerId]="customerId"
+              [customerListOriginal]="customerListOriginal"
+              [customerallListOriginal]="customerallListOriginal"
               [countryListOriginal]="countryListOriginal"
               (saveGeneralInformationData)="generalInformationData($event)"
               (editGeneralInformation)="updateInformationData($event)"

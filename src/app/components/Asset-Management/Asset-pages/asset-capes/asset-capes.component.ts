@@ -3,8 +3,8 @@ import { fadeInOut } from '../../../../services/animations';
 import { MessageSeverity, AlertService } from '../../../../services/alert.service';
 import { FormBuilder, FormGroup,  FormArray } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { ATAMain } from '../../../../models/atamain.model';
 import { ItemMasterCapabilitiesModel } from '../../../../models/itemMasterCapabilities.model';
@@ -86,6 +86,8 @@ export class AssetCapesComponent implements OnInit {
     data: any;
     currentAsset: any;
     disableSave: boolean;
+    selectedOnly: boolean = false;
+    targetData: any;
     onSelectedId: any;
     itemMasterId: number;
     showLable: boolean;
@@ -1860,6 +1862,9 @@ const newCapesData={...capdata};
         this.route.navigateByUrl(`/assetmodule/assetpages/app-asset-calibration/${assetRecordId}`);
     }
 
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+	}
     isSpinnerVisible:boolean=false;
     exportData:any=[];
     exportCSV(dt){
@@ -1874,8 +1879,8 @@ const newCapesData={...capdata};
                     dt._value = results['results'].map(x => {
                         return {
                             ...x,                  
-                            createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                            updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                            createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                            updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                         }
                     }); 
                     dt.exportCSV();

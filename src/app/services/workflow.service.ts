@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,7 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject, forkJoin} from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { WorkFlowEndpoint } from './workflow-endpoint.service';
 import { AuthService } from './auth.service';
@@ -28,6 +32,9 @@ export class WorkFlowtService {
 	public listCollection: any;
 	public enableUpdateMode: boolean = false;
 	public currentWorkFlowId: number;
+	public bredcrumbObj = new Subject<any>();
+	public bredcrumbObjChangeObject$ = this.bredcrumbObj.asObservable();
+
 	constructor(
 		private router: Router,
 		private http: HttpClient,
@@ -37,54 +44,59 @@ export class WorkFlowtService {
 
 	getWorkFlows() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getWorkFlowEndpoint<any[]>());
 	}
 
+	getAllWorkFlowList(data) {
+        return Observable.forkJoin(
+            this.workflowEndpoint.getAllWorkFlowListEndpoint(data));
+    }
+
 	getWorkFlowActions() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getWorkFlowActions<any[]>());
 	}
 
 	getMaterialType() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getMaterialTypes<any[]>());
 	}
 
 	getWorkflowActionAttributes(workflowId: number) {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getworkflowActionAttributesCollection<any[]>(workflowId));
 	}
 
 	getWorkFlowMaterial() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getworkflowMaterailCollection<any[]>());
 	}
 
 	getWorkFlowEquipmentList() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getworkflowEquipmentCollection<any[]>());
 	}
 	getChargeList() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getChargeListcollection<any[]>());
 	}
 
 	getWorkflowExpertise() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getworkflowExpertiseCollection<any[]>());
 	}
 
 	getActionAttributes() {
 
-		return forkJoin(
+		return Observable.forkJoin(
 			this.workflowEndpoint.getActionAttributesCollection<any[]>());
 	}
 

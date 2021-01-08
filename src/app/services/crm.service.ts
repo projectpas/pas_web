@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { AuthService } from './auth.service';
 import { Role } from '../models/role.model';
 import { AuditHistory } from '../models/audithistory.model';
 import { CrmEndpoint } from './crm-endpoint.service';
-import {forkJoin} from 'rxjs';
+
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = { roles: Role[] | string[], operation: RolesChangedOperation };
 
@@ -78,7 +79,7 @@ updateOpportunity(action: any) {
 }
 
 getDealNames() {
-    return forkJoin(
+    return Observable.forkJoin(
         this.crmEndpoint.getDealNames<any[]>());
 }
   

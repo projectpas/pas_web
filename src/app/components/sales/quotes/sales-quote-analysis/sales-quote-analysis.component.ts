@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import * as $ from "jquery";
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
 import {
-  AlertService,
-  DialogType,
-  MessageSeverity
+  AlertService
 } from "../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
@@ -14,10 +12,7 @@ import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
-import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
-import { SalesOrderQuotePart } from "../../../../models/sales/SalesOrderQuotePart";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
-import { Currency } from "../../../../models/currency.model";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { CustomerService } from "../../../../services/customer.service";
@@ -25,17 +20,8 @@ import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
 import { PartDetail } from "../../shared/models/part-detail";
 import { formatNumberAsGlobalSettingsModule, listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
-import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
-import {
-  getValueFromObjectByKey,
-  getObjectById,
-  editValueAssignByCondition,
-  getObjectByValue
-} from "../../../../generic/autocomplete";
-
 import * as moment from 'moment';
 import { MenuItem } from "primeng/api";
-
 
 @Component({
   selector: "app-sales-quote-analysis",
@@ -43,7 +29,7 @@ import { MenuItem } from "primeng/api";
   styleUrls: ["./sales-quote-analysis.component.css"]
 })
 export class SalesQuoteAnalysisComponent implements OnInit {
-  // @ViewChild("dt",{static:false})
+  // @ViewChild("dt")
   isEnablePOList: any;
   searchParameters: ISalesSearchParameters;
   sales: any[] = [];
@@ -263,12 +249,8 @@ export class SalesQuoteAnalysisComponent implements OnInit {
           this.totalRecords / this.searchParameters.rows
         );
         this.showPaginator = this.totalRecords > 0;
-        //this.alertService.stopLoadingMessage();
-        // this.isSpinnerVisible = false;
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       });
   }
 
@@ -280,30 +262,6 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   }
   dismissPartViewModel() {
     this.partModal.close();
-  }
-
-  onDataLoadFailed(log) {
-    const errorLog = log;
-    var msg = '';
-    if (errorLog.message) {
-      if (errorLog.error && errorLog.error.errors.length > 0) {
-        for (let i = 0; i < errorLog.error.errors.length; i++) {
-          msg = msg + errorLog.error.errors[i].message + '<br/>'
-        }
-      }
-      this.alertService.showMessage(
-        errorLog.error.message,
-        msg,
-        MessageSeverity.error
-      );
-    }
-    else {
-      this.alertService.showMessage(
-        'Error',
-        log.error,
-        MessageSeverity.error
-      );
-    }
   }
 
   mouseOverData(key, data) {
@@ -328,7 +286,7 @@ export class SalesQuoteAnalysisComponent implements OnInit {
 
   convertDate(key, data) {
     if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
-      return moment(data[key]).format('MM-DD-YYYY');
+      return moment(data[key]).format('MM/DD/YYYY');
     } else {
       return data[key];
     }

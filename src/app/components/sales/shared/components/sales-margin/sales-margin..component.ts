@@ -20,21 +20,13 @@ export class SalesMarginComponent implements OnInit {
   query: ItemMasterSearchQuery;
   percentage: any[] = [];
   invalidQuantityenteredForQuantityFromThis: boolean = false;
-  constructor(private salesQuoteService: SalesQuoteService, private commonservice: CommonService, ) {
+  constructor(private salesQuoteService: SalesQuoteService, private commonservice: CommonService,) {
 
   }
 
   ngOnInit() {
-    console.log(this.part, "this.part+++++++++++")
     this.getPercents();
     this.calculate();
-    // this.part.quantityRequested = formatNumberAsGlobalSettingsModule(this.part.quantityRequested, 2)
-    // this.part.quantityAlreadyQuoted = formatNumberAsGlobalSettingsModule(this.part.quantityAlreadyQuoted, 2)
-    // this.part.quantityFromThis = formatNumberAsGlobalSettingsModule(this.part.quantityFromThis, 2)
-    // this.part.quantityToBeQuoted = formatNumberAsGlobalSettingsModule(this.part.quantityToBeQuoted, 2)
-    /* for (let i = 1; i <= 10; i++) {
-       this.percentage.push({ value: i.toString(), text: i.toString() });
-     }*/
   }
   formatStringToNumberGlobal(val) {
     return formatStringToNumber(val)
@@ -48,19 +40,13 @@ export class SalesMarginComponent implements OnInit {
   onClose(event: Event): void {
     event.preventDefault();
     this.close.emit(true);
-    //this.showPartNumberModal();
   }
 
 
   onSave(event: Event): void {
-    // this.part.quantityRequested = formatStringToNumber(this.part.quantityRequested)
-    // this.part.quantityAlreadyQuoted = formatStringToNumber(this.part.quantityAlreadyQuoted)
-    // this.part.quantityFromThis = formatStringToNumber(this.part.quantityFromThis)
-    // this.part.quantityToBeQuoted = formatStringToNumber(this.part.quantityToBeQuoted)
-    // this.part.QuantityToBeQuoted = formatStringToNumber(this.part.QuantityToBeQuoted)
+    
     event.preventDefault();
     this.save.emit(this.part);
-    // this.showPartNumberModal();
   }
 
   showPartNumberModal() {
@@ -72,7 +58,6 @@ export class SalesMarginComponent implements OnInit {
 
   calculate() {
     if (this.part) {
-      console.log(this.part);
       this.calculatePart();
     }
   }
@@ -113,7 +98,6 @@ export class SalesMarginComponent implements OnInit {
       this.part.totalSales = +(Number(this.part.netSalesPriceExtended) + Number(this.part.taxAmount)).toFixed(2);
     }
     catch (e) {
-      console.log(e);
     }
   }
 

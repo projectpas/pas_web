@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { ATASubChapter1Endpoint } from './atasubchapter1-endpoint.service';
 
@@ -37,7 +38,7 @@ export class AtaSubChapter1Service {
 		private ataSubChapter1Endpoint: ATASubChapter1Endpoint) { }
 
 	getAtaSubChapter1List() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.ataSubChapter1Endpoint.getATASubChapter1Endpoint<ATASubChapter[]>());
 	}
 
@@ -68,11 +69,11 @@ export class AtaSubChapter1Service {
 	}
 
 	getATASubChapterListByATAChapterId(ataChapterId: number) {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.ataSubChapter1Endpoint.getAtaSubChaptersListByAtaChapterId<ATASubChapter[]>(ataChapterId));
     }
     getAtaSubChaptersList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.ataSubChapter1Endpoint.getAtaSubChaptersList<ATASubChapter[]>());
     }
     

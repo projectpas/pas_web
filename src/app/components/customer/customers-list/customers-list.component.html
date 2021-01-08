@@ -91,10 +91,12 @@
               icon="fa-download"
               iconPos="left"
               label="Export Selected Data"
-              data-toggle="modal"
-               data-target="#downloadConfirmation"
-               (click)="selectedOnly = true; targetData = dt;" 
+              (click)="dt.exportCSV({selectionOnly:true})"
+             
             ></button>
+            <!-- data-toggle="modal"
+            data-target="#downloadConfirmation"
+            (click)="selectedOnly = true; targetData = dt;"  -->
           </div>
           <div class="col">
             <div class="">
@@ -191,7 +193,7 @@
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
           <th
-            style="width: 200px; position: sticky;"
+            style="width: 150px; position: sticky;"
             *ngIf="selectedColumns.length > 0"
           >
             Actions
@@ -206,7 +208,7 @@
                 <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableCustomerList($event.target.value, col.field)" />
                 <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableCustomerList($event.target.value, col.field)" />
             </th>
-          <th style="width: 200px;"></th>
+          <th style="width: 150px;"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns"> 
@@ -232,7 +234,7 @@
           </td>
           <td
             class="action-icons-cstm"
-            style="width: 200px;"
+            style="width: 150px;"
             *ngIf="selectedColumns.length > 0"
           >
             <div *ngIf="onDeletedActionState == false">
@@ -261,7 +263,7 @@
                   ><i class="fa fa-pencil"></i
                 ></a>
               </span>
-              <span
+              <!-- <span
                 ><a
                   class="btn nobg"
                   (click)="openContactList(contentcontact, rowData)"
@@ -278,7 +280,7 @@
                   matTooltipPosition="above"
                   ><i class="fa fa-map" style="color: red;"></i
                 ></a>
-              </span>
+              </span> -->
               <span
                 ><a
                   class="btn nobg"

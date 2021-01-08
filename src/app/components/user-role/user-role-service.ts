@@ -6,7 +6,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable,forkJoin } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserRoleEndPointService } from './user-role-endpoint.service';
 import { ModuleHierarchyMaster, UserRole, User, UserRoleMapper } from './ModuleHierarchyMaster.model';
 
@@ -19,7 +19,7 @@ export class UserRoleService {
         private userRoleEndpoint: UserRoleEndPointService) { }
 
     getAllModuleHierarchies() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.userRoleEndpoint.getAllModuleHierarchies<ModuleHierarchyMaster[]>());
     }
 
@@ -32,17 +32,17 @@ export class UserRoleService {
     }
 
     getAllUsers() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.userRoleEndpoint.getAllUsers<User[]>());
     }
 
     getAllUserRole() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.userRoleEndpoint.getAllUserRole<UserRole[]>());
     }
     
     getUserRoleByUserId(userId:string) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.userRoleEndpoint.getUserRolesByUserId<UserRole[]>(userId));
     }
 
@@ -52,7 +52,7 @@ export class UserRoleService {
 
     getGlobalData(masterCompanyId: number) 
     {
-        return forkJoin(
+        return Observable.forkJoin(
             this.userRoleEndpoint.getSavedCountryDataEndPoint<any>(masterCompanyId));
         // return this.accountEndpoint.getSavedCountryDataEndPoint<any>(masterCompanyId);
     }

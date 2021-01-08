@@ -5,10 +5,10 @@
 
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { WorkOrderEndpointService } from '../work-order/work-order-endpoint.service';
 import { QuoteEndpointService } from './work-order-quote.endpoint.service';
 

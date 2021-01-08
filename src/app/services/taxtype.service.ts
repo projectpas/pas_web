@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { TaxTypeEndpointService } from './taxtype-endpoint.service';
 import { AuthService } from './auth.service';
@@ -32,12 +33,12 @@ export class TaxTypeService {
 		private taxTypeEndpoint: TaxTypeEndpointService) { }
 
 	getWorkFlows() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.taxTypeEndpoint.getTaxTypeEndpoint<TaxType[]>());
 	}
 
 	historyTaxType(actionId: number) {
-		return forkJoin(this.taxTypeEndpoint.getHistoryTaxTypeEndpoint<AuditHistory[]>(actionId));
+		return Observable.forkJoin(this.taxTypeEndpoint.getHistoryTaxTypeEndpoint<AuditHistory[]>(actionId));
 	}
 
 	newAction(action) {
@@ -67,7 +68,7 @@ export class TaxTypeService {
     }
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.taxTypeEndpoint.getTaxTypeRecords<TaxType[]>(serverSidePagesData));
 	}
 

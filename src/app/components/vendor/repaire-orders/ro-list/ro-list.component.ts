@@ -14,6 +14,8 @@ import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomp
 import * as $ from 'jquery';
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MenuItem } from 'primeng/api';
+import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';
+import * as moment from 'moment';
 
 
 @Component({
@@ -28,16 +30,21 @@ export class RoListComponent implements OnInit {
 	totalRecords: number = 0;
     totalPages: number = 0;
     breadcrumbs: MenuItem[];
-    home: any;
+    home: any;    
+    dateObject: any = {};
     headers = [
 		{ field: 'repairOrderNumber', header: 'RO Num' },
         { field: 'openDate', header: 'Open Date' },
-        { field: 'closedDate', header: 'Closed/Cancelled Date' },
+        { field: 'closedDate', header: 'Closed/Can Date' },
         { field: 'vendorName', header: 'Vendor Name' },
         { field: 'vendorCode', header: 'Vendor Code' },
         { field: 'status', header: 'Status' },
         { field: 'requestedBy', header: 'Requested By' },
         { field: 'approvedBy', header: 'Approved By' },
+        { field: 'createdBy', header: 'CreatedBy' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'updatedBy', header: 'UpdatedBy' },
+		{ field: 'updatedDate', header: 'Updated Date' }	
     ]
     selectedColumns = this.headers;
     data: any;
@@ -58,6 +65,8 @@ export class RoListComponent implements OnInit {
     repairOrderNoInput: any;
     openDateInput: any;
     closedDateInput: any;
+    createdDateInput: any;
+    updatedDateInput: any;
     vendorNameInput: any;
     vendorCodeInput: any;
     statusIdInput: any;
@@ -66,6 +75,7 @@ export class RoListComponent implements OnInit {
     @Input() isEnableROList: boolean;
     @Input() vendorId: number;
     @Input() isApproverlist: boolean = false;   
+    @Input() isReceivingRolist : boolean = false;
     currentStatus: string = 'Open';
     filterText: any = '';
     selectedrepairOrderId: any;
@@ -77,6 +87,8 @@ export class RoListComponent implements OnInit {
     aircraftListDataValues: any;
     ApprovedstatusId: number = 0;
     roApprovaltaskId: number = 0;
+    selectedOnly: boolean = false;
+    targetData: any;
     colsaircraftLD: any[] = [
         { field: "aircraft", header: "Aircraft" },
         { field: "model", header: "Model" },
@@ -157,12 +169,21 @@ export class RoListComponent implements OnInit {
 			{ field: 'tat', header: 'TAT' },
 			{ field: 'name', header: 'PN Mfg' },
         ];
-        this.breadcrumbs = [
-            { label: 'Repair Order' },
-            { label: 'Repair Order List' },
-        ];
+        if(this.isReceivingRolist == false){
+            this.breadcrumbs = [
+                { label: 'Repair Order' },
+                { label: 'Repair Order List' },
+            ];
+        } else {
+            this.breadcrumbs = [
+                { label: 'Receiving' },
+                { label: 'Repair Order' },
+            ];
+        }      
+    }
 
-      
+    closeModal() {
+        $("#downloadConfirmation").modal("hide");
     }
 
     loadROStatus() {
@@ -250,32 +271,32 @@ export class RoListComponent implements OnInit {
 		);
 	}
 
-    getManagementStructureCodes(id) {
-        this.commonService.getManagementStructureCodes(id).subscribe(res => {
-			if (res.Level1) {
-				this.headerManagementStructure.level1 = res.Level1;
-            } else {
-                this.headerManagementStructure.level1 = '-';
-            }
-            if (res.Level2) {
-				this.headerManagementStructure.level2 = res.Level2;
-            } else {
-                this.headerManagementStructure.level2 = '-';
-            }
-            if (res.Level3) {
-				this.headerManagementStructure.level3 = res.Level3;
-            } else {
-                this.headerManagementStructure.level3 = '-';
-            }
-            if (res.Level4) {
-				this.headerManagementStructure.level4 = res.Level4;
-			} else {
-                this.headerManagementStructure.level4 = '-';
-            }
-		},err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);})
-    }
+    // getManagementStructureCodes(id) {
+    //     this.commonService.getManagementStructureCodes(id).subscribe(res => {
+	// 		if (res.Level1) {
+	// 			this.headerManagementStructure.level1 = res.Level1;
+    //         } else {
+    //             this.headerManagementStructure.level1 = '-';
+    //         }
+    //         if (res.Level2) {
+	// 			this.headerManagementStructure.level2 = res.Level2;
+    //         } else {
+    //             this.headerManagementStructure.level2 = '-';
+    //         }
+    //         if (res.Level3) {
+	// 			this.headerManagementStructure.level3 = res.Level3;
+    //         } else {
+    //             this.headerManagementStructure.level3 = '-';
+    //         }
+    //         if (res.Level4) {
+	// 			this.headerManagementStructure.level4 = res.Level4;
+	// 		} else {
+    //             this.headerManagementStructure.level4 = '-';
+    //         }
+	// 	},err => {			
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);})
+    // }
     
     getManagementStructureCodesParent(partList) {
         this.commonService.getManagementStructureCodes(partList.managementStructureId).subscribe(res => {
@@ -350,7 +371,7 @@ export class RoListComponent implements OnInit {
         }
     }
 
-    onChangeInputField(value, field, el) {       
+    onChangeInputField(value, field, el) {            
         if (value === '') { el.classList.add("hidePlaceHolder"); }
         else el.classList.remove("hidePlaceHolder");
 
@@ -378,6 +399,12 @@ export class RoListComponent implements OnInit {
         if(field == "approvedBy") {
             this.approvedByInput = value;
         }
+        if(field == "createdDate") {
+            this.createdDateInput = value;
+        }
+        if(field == "updatedDate") {
+            this.updatedDateInput = value;
+        }        
 
         this.lazyLoadEventDataInput.filters = {
             repairOrderNo: this.repairOrderNoInput,
@@ -388,9 +415,55 @@ export class RoListComponent implements OnInit {
             status: this.statusIdInput ? this.statusIdInput : this.currentStatus,
             requestedBy: this.requestedByInput,
             approvedBy: this.approvedByInput,
-            vendorId: this.vendorId ? this.vendorId : null
+            vendorId: this.vendorId ? this.vendorId : null,
+            createdDate : this.createdDateInput,
+            updatedDate : this.updatedDateInput
         }        
         this.getList(this.lazyLoadEventDataInput);
+    }
+    
+    dateFilterForROList(date, field,el){
+        if (date === '') { el.classList.add("hidePlaceHolder"); }
+        else el.classList.remove("hidePlaceHolder");
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');;
+        this.dateObject={}
+        date=moment(date).format('MM/DD/YYYY');
+        moment(date).format('MM/DD/YY');
+        if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
+            if(dateyear > minyear){
+                if(field=='createdDate'){
+                    this.dateObject={'createdDate':date}
+                }else if(field=='updatedDate'){
+                    this.dateObject={'updatedDate':date}
+                }else if(field=='openDate'){
+                    this.dateObject={'openDate':date}
+                }else if(field=='closedDate'){
+                    this.dateObject={'closedDate':date}
+                }
+                this.lazyLoadEventDataInput.filters = {   
+                    ...this.lazyLoadEventDataInput.filters,                 
+                    ...this.dateObject
+                }
+                this.getList(this.lazyLoadEventDataInput);                 
+            }            
+        }else{
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
+            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
+                delete this.lazyLoadEventDataInput.filters.createdDate;
+            }
+            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
+                delete this.lazyLoadEventDataInput.filters.updatedDate;
+            }
+            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.openDate){
+                delete this.lazyLoadEventDataInput.filters.openDate;
+            }
+            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.closedDate){
+                delete this.lazyLoadEventDataInput.filters.closedDate;
+            }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};            
+            this.getList(this.lazyLoadEventDataInput); 
+        }
     }
    
     edit(rowData) {		
@@ -400,6 +473,64 @@ export class RoListComponent implements OnInit {
     delete(rowData) {
         this.rowDataToDelete = rowData;
     }
+    exportCSV(tt) {
+        this.isSpinnerVisible = true;
+        const isdelete = this.currentDeletedstatus ? true : false;
+        let PagingData;
+        PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": tt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+        // let PagingData: ISalesSearchParameters = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentStatus, "isDeleted": isdelete }, "globalFilter": "" }
+        let filters = Object.keys(tt.filters);
+        filters.forEach(x => {
+          PagingData.filters[x] = tt.filters[x].value;
+        });
+        this.repairOrderService.getROList(PagingData).subscribe(res => {               
+            const vList = res[0]['results'].map(x => {
+                return {
+                  ...x,                                    
+                    openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',
+                    closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MMM-dd-yyyy'): '',
+                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',                
+                }
+                });
+                tt._value = vList;
+                tt.exportCSV();
+                tt.value = vList;
+                this.isSpinnerVisible = false;                
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            }
+        );
+    } 
+
+
+    // exportCSV(tt) {
+    //     this.isSpinnerVisible = true;
+    //     let PagingData = {"first":0,"rows":tt.totalRecords,"sortOrder":1,"filters":{"status":this.currentStatus,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+    //     let filters = Object.keys(tt.filters);
+    //     filters.forEach(x=>{
+	// 		PagingData.filters[x] = tt.filters[x].value;
+    //     })
+    //     this.repairOrderService.getROList(PagingData).subscribe(res => {
+    //         tt._value = res[0]['results'].map(x => {
+	// 			return {
+    //                 ...x,
+    //                 openDateInput : x.openDateInput ?  this.datePipe.transform(x.openDateInput, 'MMM-dd-yyyy'): '',
+    //                 closedDateInput : x.closedDateInput ?  this.datePipe.transform(x.closedDateInput, 'MMM-dd-yyyy'): '',
+    //                 //createdDate: new Date(x.createdDate).getFullYear() +'/'+ (new Date(x.createdDate).getMonth() + 1) +'/'+ new Date(x.createdDate).getDate() +'  '+ new Date(x.createdDate).getHours() +':'+ new Date(x.createdDate).getMinutes() +':'+ new Date(x.createdDate).getSeconds(),
+    //                 //updatedDate: new Date(x.updatedDate).getFullYear() +'/'+ (new Date(x.updatedDate).getMonth() + 1) +'/'+ new Date(x.updatedDate).getDate() +'  '+ new Date(x.updatedDate).getHours() +':'+ new Date(x.updatedDate).getMinutes() +':'+ new Date(x.updatedDate).getSeconds(),
+	// 			}
+	// 		});	
+    //         tt.exportCSV();
+    //         tt.value = this.data;
+    //         this.isSpinnerVisible = false;
+    //     },error => {
+    //             this.errorMessageHandler(error)
+    //         },
+    //     );
+    // }
+
 
     deleteRO() {
         const { repairOrderId } = this.rowDataToDelete;
@@ -410,12 +541,19 @@ export class RoListComponent implements OnInit {
                   this.errorMessageHandler(errorLog);});
     }
 
-    viewSelectedRow(rowData) {       
+    // viewSelectedRow(rowData) {       
+    //     this.selectedrepairOrderId  = rowData.repairOrderId;
+    //     this.getROViewById(rowData.repairOrderId);
+    //     this.getROPartsViewById(rowData.repairOrderId);
+    //     this.getApproversListById(rowData.repairOrderId);
+    //     this.getApprovalProcessListById(rowData.repairOrderId);
+    // }
+
+    viewSelectedRow(rowData) {
         this.selectedrepairOrderId  = rowData.repairOrderId;
-        this.getROViewById(rowData.repairOrderId);
-        this.getROPartsViewById(rowData.repairOrderId);
-        this.getApproversListById(rowData.repairOrderId);
-        this.getApprovalProcessListById(rowData.repairOrderId);
+        this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal.componentInstance.OrderId = this.selectedrepairOrderId;
+        this.modal.componentInstance.OrderType = 'Repair Order';
     }
 
     viewSelectedRowdbl(rowData) {
@@ -431,7 +569,7 @@ export class RoListComponent implements OnInit {
                 handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
             };
             this.getVendorCapesByID(this.roHeaderAdd.vendorId);
-            this.getManagementStructureCodes(res.managementStructureId);
+            //this.getManagementStructureCodes(res.managementStructureId);
         }, err => {			
 			const errorLog = err;
 			this.errorMessageHandler(errorLog);}
@@ -617,5 +755,27 @@ export class RoListComponent implements OnInit {
 		},err => {const errorLog = err;
             this.isSpinnerVisible = false;
                         this.errorMessageHandler(errorLog);});
-	}
+    }
+   
+    totalExportRow : number = 0;
+    exportSelectedBtn(tt){ 
+        this.selectedOnly = true;
+        this.totalExportRow = tt.selection.length;  
+     }
+
+    public getSelectedRow(rowData) {
+        //this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
+        // this._router.navigateByUrl('/receivingmodule/receivingpages/app-receiving-ro');
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receiving-ro?repairOrderId=${rowData.repairOrderId}`);
+    }
+
+    public editStockLine(rowData) {
+        //this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
+        //return this._router.navigate(['/receivingmodule/receivingpages/app-edit-ro']);
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${rowData.repairOrderId}`);
+    }
+
+    public viewSummary(rowData) {
+        this._route.navigateByUrl(`/receivingmodule/receivingpages/app-view-ro?repairOrderId=${rowData.repairOrderId}`);
+    }
 }

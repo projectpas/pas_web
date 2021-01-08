@@ -31,7 +31,6 @@ export class AddSalesPartNumberComponent implements OnInit {
   allConditionInfo: any[] = [];
 
   constructor(private itemMasterService: ItemMasterService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService) {
-    console.log("add...");
     this.searchType = ItemSearchType.ItemMaster;
     this.showModalMargin = false;
   }
@@ -43,24 +42,34 @@ export class AddSalesPartNumberComponent implements OnInit {
       .getSearchPartResult()
       .subscribe(data => {
         this.parts = data;
-        console.log(this.parts);
       });
     this.salesQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
         this.searchType = this.getSearchType(this.query.partSearchParamters.itemSearchType);
-        console.log(this.query);
-        console.log(this.searchType);
-
       });
   }
 
   getConditions() {
     this.conditionService.getConditionList().subscribe(
       results => {
-        this.allConditionInfo = results[0];
+        // this.allConditionInfo = results[0];
+        let activeConditions = results[0].filter(x => x.isActive == true);
+        if (activeConditions && activeConditions.length > 0) {
+          this.allConditionInfo = activeConditions;
+          if (this.selectedSummaryRow) {
+            let conditionExists = this.allConditionInfo.find(x => x.conditionId == this.query.partSearchParamters.conditionId);
+            if (!conditionExists) {
+              let addConditionExists = results[0].find(x => x.conditionId == this.query.partSearchParamters.conditionId);
+              if (addConditionExists) {
+                this.allConditionInfo.push(addConditionExists);
+              }
+            }
+          }
+        }
       });
   }
+
   getSearchType(event) {
     let searchType: ItemSearchType = ItemSearchType.None;
     switch (event) {
@@ -90,7 +99,6 @@ export class AddSalesPartNumberComponent implements OnInit {
   }
 
   onPartSearch(parts) {
-    console.log(parts);
     this.parts = parts.data;
     if (this.parts.length > 0) {
       this.parts.forEach((part, i) => {
@@ -102,9 +110,6 @@ export class AddSalesPartNumberComponent implements OnInit {
       .subscribe(data => {
         this.query = data;
         this.searchType = this.getSearchType(this.query.partSearchParamters.itemSearchType);
-        console.log(this.query);
-        console.log(this.searchType);
-
       });
   }
   updateQuantiy() {
@@ -117,7 +122,6 @@ export class AddSalesPartNumberComponent implements OnInit {
     this.query.partSearchParamters.qtyAvailable = qtyAvailable;
     this.query.partSearchParamters.qtyOnHand = qtyOnHand;
     this.salesQuoteService.updateSearchPartObject(this.query);
-    console.log(this.parts);
   }
 
   onSearchTypeChange(type: ItemSearchType) {
@@ -134,12 +138,10 @@ export class AddSalesPartNumberComponent implements OnInit {
   }*/
 
   onShowModalMargin(part: any) {
-    console.log(part);
     this.select.emit(part);
   }
 
   onSelect(part: any) {
-    console.log(part);
     this.select.emit(part);
   }
 

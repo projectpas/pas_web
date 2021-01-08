@@ -5,10 +5,10 @@
 
 
 import { Injectable } from '@angular/core';
-import { Observable ,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { DepriciationMethod } from '../../models/depriciation-method.model';
 import { DepriciationMethodEndpointService } from './depriciationmethod-endpoint.service';
 
@@ -19,12 +19,12 @@ export class DepriciationMethodService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.depriciationMethodEndpointService.getAlldepriciationMethod<any>());
     }
 
     getById(assetDepreciationMethodId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.depriciationMethodEndpointService.getdepriciationMethodById<DepriciationMethod>(assetDepreciationMethodId)
         );
     }

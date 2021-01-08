@@ -5,7 +5,7 @@
 
 import { Injectable } from '@angular/core';
 
-import {Subject} from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 import { AppTranslationService } from './app-translation.service';
 import { LocalStoreManager } from './local-store-manager.service';

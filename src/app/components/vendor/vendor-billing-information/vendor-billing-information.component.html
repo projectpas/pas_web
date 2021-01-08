@@ -80,7 +80,10 @@
                                             <div class="col">
                                                 <button type="button" class="btn btn-primary  new-table-button" matTooltip="Download Data"
                                                         matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
-                                                        label="Export Data" (click)="dt.exportCSV()"
+                                                        label="Export Data" 
+                                                        data-toggle="modal" 
+                                                        (click)="selectedOnly = false; targetData = dt;"
+                                                        data-target="#downloadConfirmation"
                                                         style="padding:5px 10px !important;"></button>
                                                 <button type="button" class="btn btn-primary  new-table-button" matTooltip="Download Selected Data"
                                                         matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
@@ -110,13 +113,13 @@
                                                          style="width: 370px; float: right; padding-top: 3px;">
                                                         <div class="form-group">
                                                             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                                                <p-radioButton class="custom_set" name="groupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
+                                                                <p-radioButton class="custom_set" name="billinggroupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                                             </div>
                                                             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                                                <p-radioButton class="custom_set" name="groupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
+                                                                <p-radioButton class="custom_set" name="billinggroupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
                                                             </div>
                                                             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                                                <p-radioButton class="custom_set" name="groupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
+                                                                <p-radioButton class="custom_set" name="billinggroupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
                                                             </div>
                                                             <div class="checkbox-cstm" style="margin-left: 0;">
                                                                 <label style="width: auto !important;margin-top: 3px;">
@@ -139,13 +142,13 @@
                                                          style="width: 350px; float: right; padding-top: 3px;">
                                                         <div class="form-group">
                                                             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                                                <p-radioButton class="custom_set" name="groupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
+                                                                <p-radioButton class="custom_set" name="billinggroupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                                             </div>
                                                             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                                                <p-radioButton class="custom_set" name="groupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
+                                                                <p-radioButton class="custom_set" name="billinggroupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
                                                             </div>
                                                             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                                                <p-radioButton class="custom_set" name="groupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
+                                                                <p-radioButton class="custom_set" name="billinggroupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
                                                             </div>
                                                             <div class="checkbox-cstm" style="margin-left: 0;">
                                                                 <label style="width: auto !important;margin-top: 3px;">
@@ -289,6 +292,28 @@
     </div>
 </div>
 
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
     <div class="modal-header">
 
@@ -324,6 +349,8 @@
             <table class="table table-bordered" *ngIf="billingauditHisory.length> 0 else noDatavailable">
                 <thead>
                     <tr>
+                        <th>Tag</th>
+                        <th>Attention</th>
                         <th>Site Name</th>
                         <th>Address1</th>
                         <th>Address2</th>
@@ -343,6 +370,12 @@
 
                 <tbody class="audithistory-cstm">
                     <tr *ngFor="let audit of billingauditHisory; let i = index;">
+                        <td
+                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'tagName', audit.tagName)  ? 'black' : 'red'  }">
+                        {{audit.tagName}}</td>
+                        <td
+                        [ngStyle]="{'color':  getColorCodeForHistory(i, 'attention', audit.attention)  ? 'black' : 'red'  }">
+                        {{audit.attention}}</td>
                         <td
                             [ngStyle]="{'color':  getColorCodeForHistory(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">
                             {{audit.siteName}}</td>
@@ -454,6 +487,10 @@
                         <input type="checkbox" name="isPrimary" disabled>
                     </div>    
             </span></p>
+            <p><span class="label"><b>Tag: </b><span class="clr-red">*</span></span><span
+                class="value">{{ sourceVendor.tagName}}</span></p>
+            <p><span class="label"><b>Attention: </b><span class="clr-red">*</span></span><span
+                class="value">{{sourceVendor.attention}}</span></p>
             <p><span class="label"><b>Site Name: </b><span class="clr-red">*</span></span><span
                     class="value">{{siteName}}</span></p>
             <p><span class="label"><b>Address 1: </b><span class="clr-red">*</span></span><span
@@ -517,6 +554,30 @@
                                 </div>
                             </div>
                             <div class="col-sm-12">
+                                <div class="col-sm-4">
+                                    <label>Tag <span class="clr-red">*</span></label>
+                                  </div>
+                                <div class="col-sm-5">
+                                    <div class="inner-addon right-addon inline-block" style="width: 100%">
+                                      <p-autoComplete class="autocomp-customer-cstm" [(ngModel)]="sourceVendor.tagName"
+                                        (ngModelChange)="enableSave()" name="tagName" field="tagName" [suggestions]="tagNamesList"
+                                        (completeMethod)="filterTagNames($event)" [size]="30" [minLength]="1" [dropdown]="true"
+                                        [inputStyle]="{ width: '100%' }" [forceSelection]="true" required>
+                                      </p-autoComplete>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-sm-12">
+                                  <div class="col-sm-4">
+                                    <label>Attention </label>
+                                  </div>
+                                  <div class="col-sm-5">
+                                    <input class="form-control" type="text" name="attention" (ngModelChange)="enableSave()"
+                                      [(ngModel)]="sourceVendor.attention" />
+                                  </div>
+                                </div>
+                            <div class="col-sm-12">
+                            
                                 <div class="col-sm-4">
                                 <label>Site Name <span class="clr-red">*</span></label>
                                </div>

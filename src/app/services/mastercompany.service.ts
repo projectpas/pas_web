@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { MasterCompanyEndpoint } from './mastercompany-endpoint.service';
 import { AuthService } from './auth.service';
@@ -19,7 +20,7 @@ import { MasterCompany } from '../models/mastercompany.model';
 
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = { roles: Role[] | string[], operation: RolesChangedOperation };
-import {forkJoin} from 'rxjs';
+
 @Injectable()
 export class MasterComapnyService {
     public static readonly roleAddedOperation: RolesChangedOperation = "add";
@@ -35,7 +36,7 @@ export class MasterComapnyService {
         private masterCompanyEndpoint: MasterCompanyEndpoint) { }
 
     getMasterCompanies() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.masterCompanyEndpoint.getMasterCompanyEndpoint<MasterCompany[]>());
     }
 

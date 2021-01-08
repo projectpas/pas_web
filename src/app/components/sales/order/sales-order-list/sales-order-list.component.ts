@@ -1,4 +1,4 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, ElementRef } from "@angular/core";
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { SalesOrderService } from "../../../../services/salesorder.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
@@ -14,14 +14,9 @@ import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
-import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
 import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
 import { ISalesOrder } from "../../../../models/sales/ISalesOrder.model";
-import { SalesOrder } from "../../../../models/sales/SalesOrder.model";
-import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
 import { ISalesOrderView } from "../../../../models/sales/ISalesOrderView";
-import { SalesOrderView } from "../../../../models/sales/SalesOrderView";
-import { Currency } from "../../../../models/currency.model";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { CustomerService } from "../../../../services/customer.service";
@@ -29,17 +24,11 @@ import { CommonService } from "../../../../services/common.service";
 import { AuthService } from "../../../../services/auth.service";
 import { PartDetail } from "../../shared/models/part-detail";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
-import { StocklineViewComponent } from '../../../../shared/components/stockline/stockline-view/stockline-view.component';
-import {
-  getValueFromObjectByKey,
-  getObjectById,
-  editValueAssignByCondition,
-  getObjectByValue
-} from "../../../../generic/autocomplete";
 import * as moment from 'moment';
 import { DatePipe } from "@angular/common";
 import { MenuItem } from "primeng/api";
-import { forkJoin } from "rxjs";
+import { forkJoin } from "rxjs/observable/forkJoin";
+import { AuditHistory } from "../../../../models/audithistory.model";
 
 @Component({
   selector: "app-sales-order-list",
@@ -67,7 +56,6 @@ export class SalesOrderListComponent {
   partColumns: any[];
   selectedOnly: boolean = false;
   targetData: any;
-
   customerDetails: any;
   salesQuote: ISalesQuote;
   salesOrder: ISalesOrder;
@@ -90,6 +78,12 @@ export class SalesOrderListComponent {
   breadcrumbs: MenuItem[];
   currentDeletedstatus = false;
   home: any;
+  isSettingsReceived = false;
+  auditHistory: AuditHistory[];
+  @ViewChild("filterStatusInput",{static:false}) public filterText: ElementRef;
+  clearStatusText: boolean = false;
+  selectedSalesOrderToDelete:any;
+  
   constructor(
     private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
@@ -105,8 +99,10 @@ export class SalesOrderListComponent {
   ) { }
 
   ngOnInit() {
+    debugger;
     this.isSpinnerVisible = true;
     this.salesQuote = new SalesQuote();
+    //this.headerValue = new HeaderValue();
     this.salesOrderQuote = new SalesOrderQuote();
     this.searchParameters = new SalesSearchParameters();
     this.getStatusList();
@@ -134,20 +130,23 @@ export class SalesOrderListComponent {
   get userId() {
     return this.authService.currentUser ? this.authService.currentUser.id : 0;
   }
+
   getDeleteListByStatus(value) {
-    this.currentDeletedstatus = true;
+    this.currentDeletedstatus = value;
     this.pageIndex = this.searchParameters.rows > 10 ? this.searchParameters.first / this.searchParameters.rows : 0;
     this.pageSize = this.searchParameters.rows;
     this.searchParameters.first = this.pageIndex;
     if (value == true) {
-      this.searchParameters.filters = { ...this.searchParameters.filters, status: this.currentStatus };
+      this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
       this.isSpinnerVisible = true;
-      this.onSearch();
+      //this.onSearch();
+      this.loadData(this.searchParameters);
     } else {
       this.currentDeletedstatus = false;
-      this.searchParameters.filters = { ...this.searchParameters.filters, status: this.currentStatus };
+      this.searchParameters.filters = { ...this.searchParameters.filters, isDeleted: this.currentDeletedstatus };
       this.isSpinnerVisible = true;
-      this.onSearch();
+      //this.onSearch();
+      this.loadData(this.searchParameters);
     }
   }
 
@@ -156,7 +155,7 @@ export class SalesOrderListComponent {
       { field: "salesOrderNumber", header: "SO Num", width: "120px" },
       { field: "customerName", header: "Customer Name", width: "180px" },
       { field: "customerReference", header: "Customer Ref", width: "130px" },
-      { field: "salesQuoteNumber", header: "Quote Num", width: "130px" },
+      { field: "salesOrderQuoteNumber", header: "Quote Num", width: "130px" },
       { field: "versionNumber", header: "Quote Ver Num", width: "130px" },
       { field: "quoteDate", header: "Quote Date", width: "130px" },
       { field: "partNumberType", header: "PN", width: "130px" },
@@ -168,7 +167,9 @@ export class SalesOrderListComponent {
       { field: "estimatedShipDateType", header: "Est. Ship Date", width: "130px" },
       { field: "salesPerson", header: "Sales Person", width: "180px" },
       { field: "createdDate", header: "Created Date", width: "130px" },
-      { field: "updatedDate", header: "Modified Date", width: "130px" }
+      { field: "createdBy", header: "CreatedBy", width: "130px" },
+      { field: "updatedDate", header: "Updated Date", width: "130px" },
+      { field: "updatedBy", header: "UpdatedBy", width: "130px" }
 
     ];
     this.selectedColumns = this.headers;
@@ -206,6 +207,8 @@ export class SalesOrderListComponent {
   }
 
   loadData(event, gloabalFilter = "") {
+    const isdelete = this.currentDeletedstatus ? true : false;
+    event.filters.isDeleted = isdelete;
     event.filters.statusId = this.currentStatus;
 
     this.searchParameters.first = parseInt(event.first) / event.rows;
@@ -215,17 +218,23 @@ export class SalesOrderListComponent {
     this.searchParameters.sortOrder = event.sortOrder;
     this.searchParameters.sortField = event.sortField;
     this.lazyLoadEventData = event;
-
     this.searchParameters.filters = listSearchFilterObjectCreation(
       event.filters
     );
+
+    if (this.clearStatusText) {
+      this.searchParameters.filters.status = '';
+      this.clearStatusText = false;
+    }
     this.searchParameters.filters = {
       ...this.searchParameters.filters,
       viewType: this.viewType
     }
     this.searchParameters.globalFilter = gloabalFilter;
 
-    this.onSearch();
+    if (this.isSettingsReceived) {
+      this.onSearch();
+    }
   }
 
   globalSearch(val) {
@@ -233,6 +242,7 @@ export class SalesOrderListComponent {
     const lazyEvent = this.lazyLoadEventData;
     this.loadData(lazyEvent, val);
   }
+
   getStatusList() {
     forkJoin(this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
       this.salesOrderService.getAllSalesOrderSettings()).subscribe(res => {
@@ -245,54 +255,70 @@ export class SalesOrderListComponent {
             this.viewType = 'soview';
           }
           this.currentStatus = this.settingsList[0].soListStatusId.toString();
-
         }
+        this.isSettingsReceived = true;
         this.changeOfStatus(this.currentStatus, this.viewType);
-      }, err => {
+      }, error => {
+        this.isSettingsReceived = true;
         this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.onDataLoadFailed(errorLog);
       });
-
   }
-
 
   changeOfStatus(status, viewType) {
     const lazyEvent = this.lazyLoadEventData;
     this.currentStatus = status.toString() === '' ? this.currentStatus : status.toString();
     this.viewType = viewType === '' ? this.viewType : viewType;
     this.loadData(this.lazyLoadEventData);
-
   }
 
   onSearch() {
     this.isSpinnerVisible = true;
+    let params: ISalesSearchParameters = new SalesSearchParameters();
+    params.first = this.searchParameters.first;
+    params.page = this.searchParameters.page;
+    params.rows = this.searchParameters.rows;
+    params.limit = this.searchParameters.limit;
+    params.sortOrder = this.searchParameters.sortOrder;
+    params.sortField = this.searchParameters.sortField;
+    params.salesQuoteNumber = this.searchParameters.salesQuoteNumber;
+    params.columnFilters = this.searchParameters.columnFilters;
+    params.filters = this.searchParameters.filters;
+    params.globalFilter = this.searchParameters.globalFilter;
+    params.customerName = this.searchParameters.customerName;
+    params.status = this.searchParameters.status;
+    params.startDate = this.searchParameters.startDate;
+    params.endDate = this.searchParameters.endDate;
+
     this.salesOrderService
-      .search(this.searchParameters)
-      .subscribe((response: any) => {
-        this.sales = response[0].results;
-
-        this.totalRecords = response[0].totalRecordsCount;
-        this.totalPages = Math.ceil(
-          this.totalRecords / this.searchParameters.rows
-        );
-        this.showPaginator = this.totalRecords > 0;
-        this.isSpinnerVisible = false;
-      }, err => {
-        this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.onDataLoadFailed(errorLog);
-      });
+        .search(params)
+        .subscribe((response: any) => {
+            if (response[0].results) {
+                this.sales = response[0].results
+                    .map(x => {
+                        return {
+                            ...x,
+                            quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy') : '',
+                            createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                            updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                        }
+                    });
+                this.totalRecords = response[0].totalRecordsCount;
+                this.totalPages = Math.ceil(
+                    this.totalRecords / this.searchParameters.rows
+                );
+                this.showPaginator = this.totalRecords > 0;
+            }
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
   }
-
 
   onPaging(event, globalFilter = "") {
     event.filters.statusId = this.currentStatus;
 
     this.searchParameters.first = parseInt(event.first) / event.rows;
-
     this.searchParameters.rows = event.rows;
-
     this.searchParameters.sortOrder = event.sortOrder;
     this.searchParameters.sortField = event.sortField;
     this.lazyLoadEventData = event;
@@ -321,6 +347,7 @@ export class SalesOrderListComponent {
 
   openDelete(content, rowData) {
     this.selected = rowData.salesOrderId;
+    this.selectedSalesOrderToDelete = rowData.salesOrderNumber;
     this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
     this.modal.result.then(
       () => { },
@@ -339,10 +366,8 @@ export class SalesOrderListComponent {
         MessageSeverity.success
       );
       this.onSearch();
-    }, err => {
+    }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.onDataLoadFailed(errorLog);
     });
   }
 
@@ -367,10 +392,8 @@ export class SalesOrderListComponent {
         }
       );
       this.isSpinnerVisible = false;
-    }, err => {
+    }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.onDataLoadFailed(errorLog);
     });
   }
 
@@ -411,9 +434,7 @@ export class SalesOrderListComponent {
   }
 
   convertDate(key, data) {
-    if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate' || key === 'openDate') && data[key]) {
-      return moment(data[key]).format('MM-DD-YYYY');
-    } else if (key === 'requestedDateType' && data[key]) {
+    if (key === 'requestedDateType' && data[key]) {
       return data['requestedDateType'] !== 'Multiple' ? moment(data['requestedDate']).format('MM-DD-YYYY') : data['requestedDateType'];
     }
     else if (key === 'estimatedShipDateType' && data[key]) {
@@ -425,67 +446,6 @@ export class SalesOrderListComponent {
 
   getColorCodeForMultiple(data) {
     return data['partNumberType'] === 'Multiple' ? 'green' : 'black';
-  }
-
-  // exportCSV(dt) {
-  //   this.isSpinnerVisible = true;
-  //   const isdelete = this.currentDeletedstatus ? true : false;
-  //   let PagingData;
-  //   PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "globalFilter": "" };
-  //   // let PagingData: ISalesSearchParameters = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentStatus, "isDeleted": isdelete }, "globalFilter": "" }
-  //   let filters = Object.keys(dt.filters);
-  //   filters.forEach(x => {
-  //     PagingData.filters[x] = dt.filters[x].value;
-  //   });
-
-  //   this.salesOrderService
-  //     .search(PagingData).subscribe(res => {
-  //       const vList = res[0]['results'].map(x => {
-  //         return {
-  //           ...x,
-  //           quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MMM-dd-yyyy') : '',
-  //          openDate:x.openDate?this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'):'',
-  //          requestedDateType:x.requestedDateType?this.datePipe.transform(x.requestedDateType, 'MMM-dd-yyyy'):'',
-  //          estimatedShipDateType:x.estimatedShipDateType?this.datePipe.transform(x.estimatedShipDateType, 'MMM-dd-yyyy'):'',
-  //          createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-  //           updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
-  //         }
-  //       });
-
-  //       dt._value = vList;
-  //       dt.exportCSV();
-  //       dt.value = this.sales;
-  //       this.isSpinnerVisible = false;
-  //     }, err => {
-  //       this.isSpinnerVisible = false;
-  //       const errorLog = err;
-  //       this.onDataLoadFailed(errorLog);
-  //     });
-
-  // }
-  onDataLoadFailed(log) {
-    this.isSpinnerVisible = false;
-    const errorLog = log;
-    var msg = '';
-    if (errorLog.message) {
-      if (errorLog.error && errorLog.error.errors.length > 0) {
-        for (let i = 0; i < errorLog.error.errors.length; i++) {
-          msg = msg + errorLog.error.errors[i].message + '<br/>'
-        }
-      }
-      this.alertService.showMessage(
-        errorLog.error.message,
-        msg,
-        MessageSeverity.error
-      );
-    }
-    else {
-      this.alertService.showMessage(
-        'Error',
-        log.error,
-        MessageSeverity.error
-      );
-    }
   }
 
   exportCSV(dt) {
@@ -504,10 +464,10 @@ export class SalesOrderListComponent {
         const vList = res[0]['results'].map(x => {
           return {
             ...x,
-            openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MM/dd/yyyy hh:mm a') : '',
-            quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MM/dd/yyyy hh:mm a') : '',
-            createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
-            updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+            openDate: x.openDate ? this.datePipe.transform(x.openDate, 'MMM-dd-yyyy hh:mm a') : '',
+            quoteDate: x.quoteDate ? this.datePipe.transform(x.quoteDate, 'MMM-dd-yyyy hh:mm a') : '',
+            createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+            updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
           }
         });
 
@@ -516,11 +476,8 @@ export class SalesOrderListComponent {
         dt.value = this.sales;
         this.isSpinnerVisible = false;
       }, err => {
-        this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.onDataLoadFailed(errorLog);
+            this.isSpinnerVisible = false;
       });
-
   }
 
   restorerecord: any = {}
@@ -532,15 +489,68 @@ export class SalesOrderListComponent {
       this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
     }, err => {
       this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.onDataLoadFailed(errorLog);
     });
   }
+
   restore(content, rowData) {
     this.restorerecord = rowData;
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-    // this.modal.result.then(() => {           
-    // }, () => { })
   }
 
+  getAuditHistoryById(rowData) {
+    this.isSpinnerVisible = true;
+    this.salesOrderService.getSOHistory(rowData.salesOrderId).subscribe(res => {
+        //this.auditHistory = res;
+                        this.auditHistory  = res.map(x => {
+                          return {
+                              ...x,                    
+                              createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '',
+                              updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '',
+                          }
+                      });  
+        this.isSpinnerVisible = false;
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
+  }
+
+  getColorCodeForHistory(i, field, value) {
+    const data = this.auditHistory;
+    const dataLength = data.length;
+    if (i >= 0 && i <= dataLength) {
+        if ((i + 1) === dataLength) {
+            return true;
+        } else {
+            return data[i + 1][field] === value
+        }
+    }
+  }
+
+
+  closeHistoryModal() {
+    $("#soHistory").modal("hide");
+  }
+
+  auditHistoryHeader = [
+    { field: 'salesOrderQuoteNumber', header: 'Quote Num', isRequired:0 },
+    { field: 'status', header: 'Status', isRequired:1 },     
+    { field: 'salesOrderNumber', header: 'SO Num', isRequired:1 },
+    { field: 'customerName', header: 'Customer Name', isRequired:1 },
+    { field: 'customerType', header: 'Customer Type', isRequired:1 },
+    { field: 'customerReference', header: 'Cust Ref', isRequired:1 },
+    { field: 'priority', header: 'Priority', isRequired:0 },
+    { field: 'salesPerson', header: 'Salesperson', isRequired:1 },
+    { field: 'createdDate', header: 'Created Date', isRequired:1 },
+    { field: 'createdBy', header: 'Created By', isRequired:1 },
+    { field: 'updatedDate', header: 'Updated Date', isRequired:1 },
+    { field: 'updatedBy', header: 'Updated By', isRequired:1 },
+    { field: 'isDeleted', header: 'Is Deleted', isRequired:0 }
+  ]
+
+  clearText(currentStatus) {
+    this.clearStatusText = true;
+    if (currentStatus != "0" && this.filterText != undefined) {
+        this.filterText.nativeElement.value = '';
+    }
+  }
 }

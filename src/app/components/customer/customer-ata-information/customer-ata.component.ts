@@ -5,15 +5,16 @@ import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectByI
 import { AuthService } from '../../../services/auth.service';
 import { CustomerService } from '../../../services/customer.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
-
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
- 
+import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-customer-ata',
     templateUrl: './customer-ata.component.html',
     styleUrls: ['./customer-ata.component.scss'],
-
+    providers: [DatePipe]
 })
 /** anys component*/
 export class CustomerATAInformationComponent implements OnInit {
@@ -30,6 +31,10 @@ export class CustomerATAInformationComponent implements OnInit {
     @Output() refreshCustomerATAMapped = new EventEmitter();
     @Output() getMappedContactByCustomerId = new EventEmitter();
     ataChapter: any;
+    selectedOnly: boolean = false;
+    targetData: any;
+    currentstatus: string = 'Active';
+    currentDeletedstatus:boolean=false;
     atasubchapterValues: any;
     ataChapterList: { value: any; label: string; }[];
     search_SelectedATA = []
@@ -78,6 +83,7 @@ export class CustomerATAInformationComponent implements OnInit {
         public customerService: CustomerService,
         private alertService: AlertService,
         private modalService: NgbModal,
+        private datePipe: DatePipe,
         private activeModal: NgbActiveModal,
     ) {
         this.stopmulticlicks = false;
@@ -163,6 +169,21 @@ export class CustomerATAInformationComponent implements OnInit {
             this.isSpinnerVisible = false;
         },error => this.saveFailedHelper(error))
 
+    }
+
+    closeDeleteModal() {
+		$("#downloadExportPopup").modal("hide");
+    }
+    
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
     }
 
     // get mapped ata by customer id 

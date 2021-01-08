@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable ,forkJoin} from 'rxjs';
-
-
-
+﻿import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AssetIntangibleType } from '../../models/asset-intangible-type.model';
 import { AssetIntangibleTypeEndpointService } from './asset-intangible-type-endpoint.service';
 @Injectable()
@@ -12,37 +12,37 @@ export class AssetIntangibleTypeService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getAllItems<AssetIntangibleType[]>()
         );
     }
 
     getById(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getItemById<AssetIntangibleType>(id)
         );
     }
 
     add(item: AssetIntangibleType) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.addItem<AssetIntangibleType>(item)
         );
     }
 
     update(item: AssetIntangibleType) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.updateItem<AssetIntangibleType>(item)
         );
     }
 
     remove(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.removeItemById(id)
         );
     }
 
     getItemAuditById(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.endpointService.getItemAudit<any[]>(id)
         );
     }

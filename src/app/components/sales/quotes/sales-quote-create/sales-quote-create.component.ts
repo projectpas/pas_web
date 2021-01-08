@@ -2,10 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
 import {
   NgForm,
   FormBuilder,
-  FormGroup,
-  Validators,
-  FormControl,
-  FormArray
+  FormGroup
 } from "@angular/forms";
 import { CustomerSearchQuery } from "../models/customer-search-query";
 import { CustomerService } from "../../../../services/customer.service";
@@ -15,17 +12,13 @@ import {
   MessageSeverity
 } from "../../../../services/alert.service";
 import { ActivatedRoute } from "@angular/router";
-import { map ,  takeUntil } from "rxjs/operators";
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
 import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
-import { SalesOrderQuotePart } from "../../../../models/sales/SalesOrderQuotePart";
-import { SalesOrderQuote } from "../../../../models/sales/SalesOrderQuote";
 import { CommonService } from "../../../../services/common.service";
-import { Currency } from "../../../../models/currency.model";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { AuthService } from "../../../../services/auth.service";
@@ -33,47 +26,39 @@ import { Router } from "@angular/router";
 import { getValueFromArrayOfObjectById } from "../../../../generic/autocomplete";
 
 import {
-  getValueFromObjectByKey,
   getObjectById,
-  editValueAssignByCondition,
-  getObjectByValue,
-  getValueByFieldFromArrayofObject,
-  formatStringToNumber
+  editValueAssignByCondition
 } from "../../../../generic/autocomplete";
 import {
   NgbModal,
-  NgbActiveModal,
-  NgbModalRef,
-  ModalDismissReasons
+  NgbModalRef
 } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerViewComponent } from "../../../../shared/components/customer/customer-view/customer-view.component";
-import { PartDetail } from "../../shared/models/part-detail";
-import { Subject ,  forkJoin } from "rxjs";
+import { Subject } from "rxjs";
 import { ManagementStructureComponent } from "../shared/components/management-structure/management-structure.component";
 import { SalesAddressComponent } from "../shared/components/sales-address/sales-address.component";
 import { DBkeys } from "../../../../services/db-Keys";
 import { CopyConsiderationsForSalesQuote } from "../models/copy-considerations-for-sales-quote";
 import { VerifySalesQuoteModel } from "../models/verify-sales-quote-model";
 import { SalesOrderConversionCritera } from "../models/sales-order-conversion-criteria";
-import { SalesOrder } from "../../../../models/sales/SalesOrder.model";
 import { SalesOrderView } from "../../../../models/sales/SalesOrderView";
 import { MenuItem } from "primeng/api";
-import { SalesOrderCustomerApproval } from "../../order/models/sales-order-customer-approval";
 import { SalesApproveComponent } from "../shared/components/sales-approve/sales-approve.component";
 import { SalesCustomerApprovalsComponent } from "../shared/components/sales-customer-approvals/sales-customer-approvals.component";
+import { forkJoin } from "rxjs/observable/forkJoin";
 import { SalesOrderQuoteFreightComponent } from "../../shared/components/sales-order-quote-freight/sales-order-quote-freight.component";
 import { SalesOrderQuoteChargesComponent } from "../../shared/components/sales-order-quote-charges/sales-order-quote-charges.component";
 import { SOQuoteMarginSummary } from "../../../../models/sales/SoQuoteMarginSummary";
 import { SalesPartNumberComponent } from "../../shared/components/sales-part-number/sales-part-number.component";
 import { SalesQuoteDocumentsComponent } from "../sales-document/salesQuote-document.component";
 import { SalesQuoteAnalysisComponent } from "../sales-quote-analysis/sales-quote-analysis.component";
-//import { AddressComponentComponent } from "../../../../components/address-component/address-component.component";
-import { error } from "@angular/compiler/src/util";
+
 @Component({
   selector: "app-sales-quote-create",
   templateUrl: "./sales-quote-create.component.html",
   styleUrls: ["./sales-quote-create.component.scss"]
 })
+
 export class SalesQuoteCreateComponent implements OnInit {
   query: CustomerSearchQuery;
   communicationItems: MenuItem[];
@@ -105,7 +90,6 @@ export class SalesQuoteCreateComponent implements OnInit {
   allCustomer: any[] = [];
   customerContactList: any[];
   customerWarningData: any = [];
-  // approvers: any[];
   accountTypes: any[] = [];
   selectedParts: any[] = [];
   modal: NgbModalRef;
@@ -120,7 +104,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   salesQuoteForm: FormGroup;
   display: boolean = false;
   id: any;
-  // selectedApprovers: any[] = [];
+  salesOrderQuoteId: number;
   errorMessages: any[] = [];
   isEdit: boolean = false;
   jobTitles: any;
@@ -136,7 +120,6 @@ export class SalesQuoteCreateComponent implements OnInit {
   leadSources = [];
   businessUnitList: any;
   departmentList: any;
-  isEditMode = false;
   divisionList: any;
   bulist: any[] = [];
   divisionlist: any[] = [];
@@ -193,6 +176,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   selectAllForConversion = true;
   validDaysSettingsList = [];
   managementValidCheck: boolean;
+  moduleName: any = "SalesQuote";
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -220,6 +204,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.initCommunication();
     this.customerId = +this.route.snapshot.paramMap.get("customerId");
     this.id = +this.route.snapshot.paramMap.get("id");
+    this.SalesOrderQuoteId = this.id;
     this.salesQuote.priorityId = DBkeys.DEFAULT_PRIORITY_ID;
     this.isCreateModeHeader = false;
     this.salesQuoteService.resetSalesOrderQuote();
@@ -231,7 +216,16 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.selectedParts = data;
     });
     this.managementStructureId = this.currentUserManagementStructureId;
-    this.getInitialDataForSOQ();
+
+    if(!this.isEdit) {
+      this.load(this.managementStructureId);
+    }
+
+    setTimeout(() => {	
+      this.getSOQInstance(true);
+    },							 
+    2200);
+
     if (this.id) {
       this.getMarginSummary()
     }
@@ -267,7 +261,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesOrderConversionCriteriaObj.transferStockline = false;
       this.salesOrderConversionCriteriaObj.reserveStockline = false;
     }
-
   }
 
   initCommunication(): void {
@@ -332,43 +325,61 @@ export class SalesQuoteCreateComponent implements OnInit {
 
   expandHeader() {
     this.toggle_po_header = !this.toggle_po_header;
-    // if (this.toggle_po_header) {
-    //   if (this.managementStructureComponent) {
-    //     this.managementStructureComponent.load(this.currentUserManagementStructureId);
-    //   }
-    // }
   }
 
   getInitialDataForSOQ() {
     this.isSpinnerVisible = true;
+
+    let probabilityId = this.salesQuote.probabilityId ? this.salesQuote.probabilityId : 0;
+    let creditLimitTermsId = this.salesQuote.creditLimitTermsId ? this.salesQuote.creditLimitTermsId : 0;
+    let leadSourceId = this.salesQuote.leadSourceId ? this.salesQuote.leadSourceId : 0;
+    
     forkJoin(
-      this.customerService.getCustomerCommonDataWithContactsById(this.customerId),
-      this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId),
-      // this.employeeService.getEmployeeCommonData(this.currentUserManagementStructureId),
+      this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
+      this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
       this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name'),
-      this.commonservice.smartDropDownList('CustomerType', 'CustomerTypeId', 'Description'),
-      this.commonservice.smartDropDownList("[Percent]", "PercentId", "PercentValue"),
-      this.commonservice.smartDropDownList("CreditTerms", "CreditTermsId", "Name"),
-      this.commonservice.smartDropDownList("LeadSource", "LeadSourceId", "LeadSources"),
+      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join()),
+      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
+      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join()),
+
       this.salesQuoteService.getAllSalesOrderQuoteSettings()).subscribe(result => {
         this.isSpinnerVisible = false;
         this.setAllCustomerContact(result[0]);
-        this.setCSRAndSalesPersonOrAgentList(result[1]);
-        // this.onempDataLoadSuccessful(result[2][0]);
-        this.setTypesOfWarnings(result[2]);
-        this.setAccountTypes(result[3]);
-        this.setPercents(result[4]);
-        this.setCreditTerms(result[5]);
-        this.setLeadSources(result[6]);
-        this.setValidDays(result[7]);
         this.customerDetails = result[0];
-        this.getSOQInstance();
+        this.setCSRAndSalesPersonOrAgentList(result[1]);
+        this.setTypesOfWarnings(result[2]);
+        this.setPercents(result[3]);
+        this.setCreditTerms(result[4]);
+        this.setLeadSources(result[5]);
+        this.setValidDays(result[6]);
+        this.getCustomerDetails();
+        if (this.id) {
+        } else {
+          this.getDefaultContact();
+        }
+        this.setCSR();
+        this.setSalesPerson();
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog);
-        this.getSOQInstance();
       });
+  }
+
+  filterUniqueIds(csrList) {
+    let uniqueList = [];
+    if (csrList && csrList.length > 0) {
+      csrList.forEach(object => {
+        if (uniqueList && uniqueList.length > 0) {
+          let itemFound = uniqueList.find(x => x.employeeId == object.employeeId);
+          if (!itemFound) {
+            uniqueList.push(object);
+          }
+        } else {
+          uniqueList.push(object);
+        }
+
+      });
+    }
+    return uniqueList;
   }
 
   getMarginSummary() {
@@ -376,11 +387,8 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.setSOQMarginSummary(result);
     }, error => {
       const errorLog = error;
-      this.onDataLoadFailed(errorLog);
     })
-
   }
-
 
   setValidDays(result) {
     if (result && result.length > 0) {
@@ -400,26 +408,23 @@ export class SalesQuoteCreateComponent implements OnInit {
     }
   }
 
-  getSOQInstance() {
+  getSOQInstance(isInitialCall) {
     if (this.id) {
-      this.getSalesQuoteInstance(this.id);
+      this.getSalesQuoteInstance(this.id, false, isInitialCall);
       this.isEdit = true;
-      this.getCustomerDetails();
     } else {
-      this.getNewSalesQuoteInstance(this.customerId);
+      this.getNewSalesQuoteInstance(this.customerId, isInitialCall);
       this.isEdit = false;
     }
   }
+
   setCreditTerms(creditTerms) {
     this.creditTerms = creditTerms;
   }
+
   setPercents(percents) {
     this.percents = percents;
     this.markupList = percents;
-  }
-
-  setAccountTypes(accountTypes) {
-    this.accountTypes = accountTypes;
   }
 
   setLeadSources(leadSources) {
@@ -427,7 +432,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   setTypesOfWarnings(warningsData) {
-    if (warningsData.length > 0) {
+    if (warningsData && warningsData.length > 0) {
       warningsData.filter(i => {
         if (i.label == DBkeys.GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_QUOTE) {
           this.getCustomerWarningsData(i.value)
@@ -435,6 +440,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       })
     }
   }
+
   async getCustomerWarningsData(customerWarningListId: number) {
     await this.customerService
       .getCustomerWarningsByCustomerIdandCustomerWarningsListID(this.customerId, customerWarningListId)
@@ -446,19 +452,15 @@ export class SalesQuoteCreateComponent implements OnInit {
         }
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       });
   }
 
   setCSRAndSalesPersonOrAgentList(csrAndSalesPersonList) {
-    this.csrOriginalList = csrAndSalesPersonList.csrEmpList;
-    this.salesPersonAndAgentOriginalList = csrAndSalesPersonList.salesEmpList;
+    this.csrOriginalList = this.filterUniqueIds(csrAndSalesPersonList.csrEmpList);
+    this.salesPersonAndAgentOriginalList = this.filterUniqueIds(csrAndSalesPersonList.salesEmpList);
   }
 
   getCustomerDetails() {
-    // this.isSpinnerVisible = true;
-    // this.customerService.getCustomerCommonDataById(this.customerId).subscribe(res => {
     if (this.customerDetails) {
       this.salesQuote.customerName = this.customerDetails.name;
       this.salesQuote.customerEmail = this.customerDetails.email;
@@ -468,7 +470,10 @@ export class SalesQuoteCreateComponent implements OnInit {
         customerCode: this.customerDetails.customerCode,
         customerId: this.customerDetails.customerId
       }
-
+      if (!this.isEdit) {
+        this.salesQuote.salesPersonId = this.customerDetails.primarySalesPersonId;
+        this.salesQuote.customerServiceRepId = this.customerDetails.csrId;
+      }
       if (!this.id) {
         this.salesQuote.creditLimit = this.customerDetails.creditLimit;
         this.salesQuote.creditLimitTermsId = this.customerDetails.creditTermsId;
@@ -481,54 +486,20 @@ export class SalesQuoteCreateComponent implements OnInit {
       } else {
         this.setValidDaysBasedOnSettings(true);
       }
-      this.setCSR();
-      this.setSalesPerson();
     }
   }
-
-  // private onempDataLoadSuccessful(getEmployeeCerficationList: any[]) {
-  //   this.isSpinnerVisible = false;
-  //   this.allEmployeeinfo = getEmployeeCerficationList;
-  //   this.allEmployeeinfo.filter(x => {
-  //     x.firstName = x.firstName + " " + x.lastName
-  //   })
-  //   if (this.salesOrderQuoteObj.employeeId != undefined) {
-  //     this.salesQuote.employeeName = getObjectById(
-  //       "value",
-  //       this.salesOrderQuoteObj.employeeId,
-  //       this.allEmployeeList
-  //     );
-  //   } else {
-  //     this.salesQuote.employeeName = getObjectById(
-  //       "value",
-  //       this.employeeId,
-  //       this.allEmployeeList
-  //     );
-  //   }
-  // }
 
   enableHeaderSave() {
     this.enableUpdateButton = false;
   }
-  filterfirstName(event) {
-    // this.firstCollection = this.allEmployeeList;
 
-    // const employeeListData = [
-    //   ...this.allEmployeeList.filter(x => {
-    //     if (x.label.toLowerCase().includes(event.query.toLowerCase())) {
-    //       return x.label;
-    //     }
-    //   })
-    // ];
-    // this.firstCollection = employeeListData;
+  filterfirstName(event) {
     if (event.query !== undefined && event.query !== null) {
-      this.employeedata(event.query, this.managementStructureId);
+      this.employeedata(event.query, this.salesQuote.managementStructureId);
     }
-    // else {
-    //   this.employeedata('', 0);
-    // }
     this.enableUpdateButton = false;
   }
+
   filtercsrFirstName(event) {
     this.csrFirstCollection = this.csrOriginalList;
 
@@ -540,6 +511,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.csrFirstCollection = CSRData;
     this.enableUpdateButton = false;
   }
+  
   filterAgentFirstName(event) {
     this.agentFirstCollection = this.agentsOriginalList;
 
@@ -550,6 +522,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     ];
     this.agentFirstCollection = agentData;
   }
+  
   filterSalesFirstName(event) {
     this.salesFirstCollection = this.salesPersonAndAgentOriginalList;
     const employeeListData = [
@@ -596,7 +569,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   filterNames(event) {
     this.customerNames = [];
     if (this.allCustomer) {
-      if (this.allCustomer.length > 0) {
+      if (this.allCustomer && this.allCustomer.length > 0) {
         for (let i = 0; i < this.allCustomer.length; i++) {
           let name = this.allCustomer[i].name;
           if (name.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
@@ -608,15 +581,17 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   getDefaultContact() {
+    let isDefaultContactFound = false;
     if (this.customerContactList) {
-      if (this.customerContactList.length > 0) {
+      if (this.customerContactList && this.customerContactList.length > 0) {
         for (let i = 0; i < this.customerContactList.length; i++) {
           let isDefaultContact = this.customerContactList[i].isDefaultContact;
           if (isDefaultContact) {
+            isDefaultContactFound = true;
             this.salesQuote.customerContactId = this.customerContactList[
               i
-            ].contactId;
-          } else {
+            ].customerContactId;
+          } else if (!isDefaultContactFound) {
             this.salesQuote.customerContactId = 0;
           }
         }
@@ -629,15 +604,23 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (this.customerContactList && this.customerContactList.length > 0) {
       for (let i = 0; i < this.customerContactList.length; i++) {
         this.customerContactList[i]['contactName'] = this.customerContactList[i].firstName + " " + this.customerContactList[i].lastName;
+        this.customerContactList[i]['email'] = this.customerContactList[i].email;
       }
     }
 
-  }
+    if (result !== undefined) {
+      let accountTypeId = result.customerTypeId ? result.customerTypeId : 0;
 
+      this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', 
+      true, 100, [accountTypeId].join()).subscribe(accountTypes => {
+        this.accountTypes = accountTypes;
+      })
+    }
+  }
 
   getManagementStructureDetails(id, empployid = 0, editMSID = 0) {
     empployid = empployid == 0 ? this.employeeId : empployid;
-    editMSID = this.isEditMode ? editMSID = id : 0;
+    editMSID = this.isEdit ? editMSID = id : 0;
     this.isSpinnerVisible = true;
     this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
       this.isSpinnerVisible = false;
@@ -718,24 +701,28 @@ export class SalesQuoteCreateComponent implements OnInit {
   }
 
   employeedata(strText = '', manStructID = 0) {
-    if (this.arrayEmplsit.length == 0) {
+    if (this.arrayEmplsit && this.arrayEmplsit.length == 0) {
       this.arrayEmplsit.push(0);
     }
+    let currentEmployeeId = this.salesQuote.employeeId;
     this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
-    // this.arrayEmplsit.push(this.salesQuote.employeeId);
+    if (this.salesQuote.employeeId) {
+      let employeeObject: any = this.salesQuote.employeeId;
+      if (employeeObject.employeeId) {
+        currentEmployeeId = employeeObject.employeeId;
+        this.arrayEmplsit.push(employeeObject.employeeId);
+      }
+    } else {
+      currentEmployeeId = this.employeeId;
+    }
     this.isSpinnerVisible = true;
     this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
-      this.salesQuote.employeeName = getObjectById(
-        "value",
-        this.salesQuote.employeeId,
-        this.allEmployeeList
-      );
       this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
-      if (!this.isEditMode) {
-        this.getRequisitionerOnLoad(this.employeeId);
+      if (!this.isEdit) {
+        this.getEmployeerOnLoad(currentEmployeeId);
       }
     }, err => {
       this.isSpinnerVisible = false;
@@ -743,9 +730,13 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.errorMessageHandler(errorLog);
     })
   }
-  getRequisitionerOnLoad(id) {
+
+  setEditArray: any = [];
+
+  getEmployeerOnLoad(id) {
     this.salesQuote.employeeId = getObjectById('value', id, this.allEmployeeList);
   }
+
   errorMessageHandler(log) {
     const errorLog = log;
     var msg = '';
@@ -775,6 +766,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.managementValidCheck = false;
     }
   }
+
   load(managementStructureId: number) {
     this.managementStructureId = managementStructureId;
     if (this.id) {
@@ -782,83 +774,6 @@ export class SalesQuoteCreateComponent implements OnInit {
     } else {
       this.getManagementStructureDetails(this.managementStructureId, this.employeeId);
     }
-  }
-
-  getManagementStructureForChildEdit(partChildList) {
-    var editMSID = this.isEditMode ? partChildList.managementStructureId : 0;
-    this.commonService.getManagmentStrctureData(partChildList.managementStructureId, this.employeeId, editMSID).subscribe(response => {
-      if (response) {
-        const result = response;
-        if (result[0] && result[0].level == 'Level1') {
-          partChildList.maincompanylist = result[0].lstManagmentStrcture;
-          partChildList.childCompanyId = result[0].managementStructureId;
-          partChildList.managementStructureId = result[0].managementStructureId;
-          partChildList.childBulist = [];
-          partChildList.childDivisionlist = [];
-          partChildList.childDepartmentlist = [];
-          partChildList.childbuId = 0;
-          partChildList.childDivisionId = 0;
-          partChildList.childDeptId = 0;
-
-        } else {
-          partChildList.maincompanylist = [];
-          partChildList.childBulist = [];
-          partChildList.childDivisionlist = [];
-          partChildList.childDepartmentlist = [];
-          partChildList.childCompanyId = 0;
-          partChildList.childbuId = 0;
-          partChildList.childDivisionId = 0;
-          partChildList.childDeptId = 0;
-        }
-
-        if (result[1] && result[1].level == 'Level2') {
-          partChildList.childBulist = result[1].lstManagmentStrcture;
-          partChildList.managementStructureId = result[1].managementStructureId;
-          partChildList.childbuId = result[1].managementStructureId;
-          partChildList.childDivisionlist = [];
-          partChildList.childDepartmentlist = [];
-          partChildList.childDivisionId = 0;
-          partChildList.childDeptId = 0;
-        } else {
-          if (result[1] && result[1].level == 'NEXT') {
-            partChildList.childBulist = result[1].lstManagmentStrcture;
-          }
-          partChildList.childDivisionlist = [];
-          partChildList.childDepartmentlist = [];
-          partChildList.childbuId = 0;
-          partChildList.childDivisionId = 0;
-          partChildList.childDeptId = 0;
-        }
-
-        if (result[2] && result[2].level == 'Level3') {
-          partChildList.childDivisionlist = result[2].lstManagmentStrcture;
-          partChildList.childDivisionId = result[2].managementStructureId;
-          partChildList.managementStructureId = result[2].managementStructureId;
-          partChildList.childDeptId = 0;
-          partChildList.childDepartmentlist = [];
-        } else {
-          if (result[2] && result[2].level == 'NEXT') {
-            partChildList.childDivisionlist = result[2].lstManagmentStrcture;
-          }
-          partChildList.childDepartmentlist = [];
-          partChildList.childDivisionId = 0;
-          partChildList.childDeptId = 0;
-        }
-
-        if (result[3] && result[3].level == 'Level4') {
-          partChildList.childDepartmentlist = result[3].lstManagmentStrcture;;
-          partChildList.childDeptId = result[3].managementStructureId;
-          partChildList.managementStructureId = result[3].managementStructureId;
-        } else {
-          if (result[3] && result[3].level == 'NEXT') {
-            partChildList.childDepartmentlist = result[3].lstManagmentStrcture;
-          }
-
-          partChildList.childDeptId = 0;
-        }
-
-      }
-    })
   }
 
   getBUList(legalEntityId) {
@@ -880,68 +795,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuote.managementStructureId = 0;
       this.salesQuote.companyId = 0;
     }
-
-  }
-
-  getParentBUList(partList) {
-    partList.parentBulist = [];
-    partList.parentDivisionlist = [];
-    partList.parentDepartmentlist = [];
-    partList.parentbuId = 0;
-    partList.parentDivisionId = 0;
-    partList.parentDeptId = 0;
-    if (partList.childList) {
-      for (let j = 0; j < partList.childList.length; j++) {
-        partList.childList[j].childCompanyId = partList.parentCompanyId;
-        partList.childList[j].childBulist = [];
-        partList.childList[j].childDivisionlist = [];
-        partList.childList[j].childDepartmentlist = [];
-        partList.childList[j].childbuId = 0;
-        partList.childList[j].childDivisionId = 0;
-        partList.childList[j].childDeptId = 0;
-      }
-    }
-
-    if (partList.parentCompanyId != 0 && partList.parentCompanyId != null && partList.parentCompanyId != undefined) {
-      partList.managementStructureId = partList.parentCompanyId;
-      this.commonService.getManagementStructurelevelWithEmployee(partList.parentCompanyId, this.employeeId).subscribe(res => {
-        partList.parentBulist = res;
-        if (partList.childList) {
-          for (let j = 0; j < partList.childList.length; j++) {
-            partList.childList[j].childBulist = partList.parentBulist;
-            partList.childList[j].childCompanyId = partList.parentCompanyId;
-            partList.childList[j].managementStructureId = partList.parentCompanyId;
-          }
-        }
-
-      });
-    }
-    else {
-      partList.managementStructureId = 0;
-      if (partList.childList) {
-        for (let j = 0; j < partList.childList.length; j++) {
-          partList.childList[j].managementStructureId = 0;
-        }
-      }
-    }
-  }
-
-  getChildBUList(partChildList) {
-    partChildList.childBulist = [];
-    partChildList.childDivisionlist = [];
-    partChildList.childDepartmentlist = [];
-    partChildList.childbuId = 0;
-    partChildList.childDivisionId = 0;
-    partChildList.childDeptId = 0;
-    if (partChildList.childCompanyId != 0 && partChildList.childCompanyId != null && partChildList.childCompanyId != undefined) {
-      partChildList.managementStructureId = partChildList.childCompanyId;
-      this.commonService.getManagementStructurelevelWithEmployee(partChildList.childCompanyId, this.employeeId).subscribe(res => {
-        partChildList.childBulist = res;
-      });
-    }
-    else {
-      partChildList.managementStructureId = 0;
-    }
   }
 
   getDivisionlist(buId) {
@@ -956,72 +809,11 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.commonService.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
       });
-      // for (let i = 0; i < this.partListData.length; i++) {
-      // 	this.partListData[i].parentbuId = buId;
-      // 	this.getParentDivisionlist(this.partListData[i]);
-      // }		
-    } else {
+    } 
+    else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
     }
-
-  }
-
-  getParentDivisionlist(partList) {
-
-    partList.parentDivisionlist = [];
-    partList.parentDepartmentlist = [];
-    partList.parentDivisionId = 0;
-    partList.parentDeptId = 0;
-    if (partList.childList) {
-      for (let j = 0; j < partList.childList.length; j++) {
-        partList.childList[j].childbuId = partList.parentbuId;
-        partList.childList[j].childDivisionlist = [];
-        partList.childList[j].childDepartmentlist = [];
-        partList.childList[j].childDivisionId = 0;
-        partList.childList[j].childDeptId = 0;
-      }
-    }
-    if (partList.parentbuId != 0 && partList.parentbuId != null && partList.parentbuId != undefined) {
-      partList.managementStructureId = partList.parentbuId;
-      this.commonService.getManagementStructurelevelWithEmployee(partList.parentbuId, this.employeeId).subscribe(res => {
-        partList.parentDivisionlist = res;
-        if (partList.childList) {
-          for (let j = 0; j < partList.childList.length; j++) {
-            partList.childList[j].childDivisionlist = partList.parentDivisionlist;
-            partList.childList[j].childbuId = partList.parentbuId;
-            partList.childList[j].managementStructureId = partList.parentbuId;
-          }
-        }
-      });
-    }
-    else {
-      partList.managementStructureId = partList.parentCompanyId;
-      if (partList.childList) {
-        for (let j = 0; j < partList.childList.length; j++) {
-          partList.childList[j].managementStructureId = partList.parentCompanyId;
-        }
-      }
-
-    }
-  }
-
-
-
-  getChildDivisionlist(partChildList) {
-    partChildList.childDivisionId = 0;
-    partChildList.childDeptId = 0;
-    partChildList.childDivisionlist = [];
-    partChildList.childDepartmentlist = [];
-    if (partChildList.childbuId != 0 && partChildList.childbuId != null && partChildList.childbuId != undefined) {
-      partChildList.managementStructureId = partChildList.childbuId;
-      this.commonService.getManagementStructurelevelWithEmployee(partChildList.childbuId, this.employeeId).subscribe(res => {
-        partChildList.childDivisionlist = res;
-      });
-    }
-    else {
-      partChildList.managementStructureId = partChildList.childCompanyId;;
-    }
-
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
 
   getDepartmentlist(divisionId) {
@@ -1033,149 +825,31 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
         this.departmentList = res;
       });
-      //    for (let i = 0; i < this.partListData.length; i++) {
-      // 	this.partListData[i].divisionId = divisionId;
-      // 	this.getParentDeptlist(this.partListData[i]);
-      // 	}
     }
     else {
       this.salesQuote.managementStructureId = this.salesQuote.buId;
       this.salesQuote.divisionId = 0;
     }
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
-  getParentDeptlist(partList) {
-    partList.parentDeptId = 0;
-    partList.parentDepartmentlist = [];
-    if (partList.childList) {
-      for (let j = 0; j < partList.childList.length; j++) {
-        partList.childList[j].childDivisionId = partList.parentDivisionId;
-        partList.childList[j].childDepartmentlist = [];
-        partList.childList[j].childDeptId = 0;
-      }
-    }
 
-    if (partList.parentDivisionId != 0 && partList.parentDivisionId != null && partList.parentDivisionId != undefined) {
-      partList.managementStructureId = partList.parentDivisionId;
-      this.commonService.getManagementStructurelevelWithEmployee(partList.parentDivisionId, this.employeeId).subscribe(res => {
-        partList.parentDepartmentlist = res;
-        if (partList.childList) {
-          for (let j = 0; j < partList.childList.length; j++) {
-            partList.childList[j].childDepartmentlist = partList.parentDepartmentlist;
-            partList.childList[j].childDivisionId = partList.parentDivisionId;
-            partList.childList[j].managementStructureId = partList.parentDivisionId;
-          }
-        }
-      });
-    }
-    else {
-      partList.managementStructureId = partList.parentbuId;
-      if (partList.childList) {
-        for (let j = 0; j < partList.childList.length; j++) {
-          partList.childList[j].managementStructureId = partList.parentbuId;
-        }
-      }
-    }
-  }
-  getChildDeptlist(partChildList) {
-    partChildList.childDepartmentlist = [];
-    partChildList.childDeptId = 0;
-    if (partChildList.childDivisionId != 0 && partChildList.childDivisionId != null && partChildList.childDivisionId != undefined) {
-      partChildList.managementStructureId = partChildList.childDivisionId;
-      this.commonService.getManagementStructurelevelWithEmployee(partChildList.childDivisionId, this.employeeId).subscribe(res => {
-        partChildList.childDepartmentlist = res;
-      });
-    }
-    else {
-      partChildList.managementStructureId = partChildList.childbuId;
-    }
-  }
 
   getDepartmentId(departmentId) {
     if (departmentId != 0 && departmentId != null && departmentId != undefined) {
       this.salesQuote.managementStructureId = departmentId;
       this.salesQuote.departmentId = departmentId;
-      //  for (let i = 0; i < this.partListData.length; i++) {
-      // 	this.partListData[i].parentDeptId = departmentId;
-      // 	this.getParentDeptId(this.partListData[i]);			
-      // }
     }
     else {
       this.salesQuote.managementStructureId = this.salesQuote.divisionId;
       this.salesQuote.departmentId = 0;
     }
+    this.employeedata('', this.salesQuote.managementStructureId);
   }
-  getParentDeptId(partList) {
-    if (partList.parentDeptId != 0 && partList.parentDeptId != null && partList.parentDeptId != undefined) {
-      partList.managementStructureId = partList.parentDeptId;
-      if (partList.childList) {
-        for (let j = 0; j < partList.childList.length; j++) {
-          partList.childList[j].childDeptId = partList.parentDeptId;
-          this.getChildDeptId(partList.childList[j]);
-        }
-      }
-    }
-    else {
-      partList.managementStructureId = partList.parentDivisionId;
-      if (partList.childList) {
-        for (let j = 0; j < partList.childList.length; j++) {
-          partList.childList[j].managementStructureId = partList.parentDivisionId;
-          partList.childList[j].childDeptId = partList.parentDeptId;
-        }
-      }
-
-    }
-
-  }
-
-  getChildDeptId(partChildList) {
-    if (partChildList.childDeptId != 0 && partChildList.childDeptId != null && partChildList.childDeptId != undefined) {
-      partChildList.managementStructureId = partChildList.childDeptId;
-    }
-    else {
-      partChildList.managementStructureId = partChildList.childDivisionId;
-    }
-  }
-
-
-
-  onDataLoadFailed(log) {
-    const errorLog = log;
-    var msg = '';
-    if (errorLog.message) {
-      if (errorLog.error && errorLog.error.errors.length > 0) {
-        for (let i = 0; i < errorLog.error.errors.length; i++) {
-          msg = msg + errorLog.error.errors[i].message + '<br/>'
-        }
-      }
-      this.alertService.showMessage(
-        errorLog.error.message,
-        msg,
-        MessageSeverity.error
-      );
-    }
-    else {
-      this.alertService.showMessage(
-        'Error',
-        log.error,
-        MessageSeverity.error
-      );
-    }
-  }
-
 
   onDataLoadFailedCustom(error) {
     this.isSpinnerVisible = false;
   }
 
-  onEmployeeNameSelect(event) {
-    if (this.allEmployeeinfo) {
-      for (let i = 0; i < this.allEmployeeinfo.length; i++) {
-        if (event == this.allEmployeeinfo[i].firstName) {
-          this.salesQuote.employeeId = this.allEmployeeinfo[i].employeeId;
-        }
-      }
-    }
-  }
   parsedText(text) {
     if (text) {
       const dom = new DOMParser().parseFromString(
@@ -1185,6 +859,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       return decodedString;
     }
   }
+
   onWarningSelect(event) {
     if (this.customerWarningData) {
       for (let i = 0; i < this.customerWarningData.length; i++) {
@@ -1197,21 +872,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     }
   }
 
-  updateApproverDetails(approver) {
-    if (this.allEmployeeinfo) {
-      for (let i = 0; i < this.allEmployeeinfo.length; i++) {
-        let employeeId = approver.employeeId;
-        if (employeeId == this.allEmployeeinfo[i].employeeId) {
-          approver.firstName = this.allEmployeeinfo[i].firstName;
-          approver.lastName = this.allEmployeeinfo[i].lastName;
-          approver.employeeCode = this.allEmployeeinfo[i].employeeCode;
-          approver.email = this.allEmployeeinfo[i].email;
-        }
-      }
-    }
-  }
-
-  getSalesQuoteInstance(salesQuoteId: number) {
+  getSalesQuoteInstance(salesQuoteId: number, partsRefresh = false, isInitialCall = false) {
     this.isSpinnerVisible = true;
     if (this.isCopyMode) {
       this.selectedParts = [];
@@ -1227,7 +888,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       }
 
       let partList: any[] = this.salesQuoteView.parts;
-
+      this.selectedParts = [];
       for (let i = 0; i < partList.length; i++) {
         let selectedPart = partList[i];
         let partNumberObj = this.salesQuoteService.marshalSOQPartToView(selectedPart);
@@ -1235,18 +896,20 @@ export class SalesQuoteCreateComponent implements OnInit {
         selectedPartsTemp.push(partNumberObj)
         this.salesQuoteService.selectedParts = selectedPartsTemp;
       }
-
       this.arrayEmplsit.push(this.salesOrderQuoteObj.employeeId);
-      this.load(this.salesOrderQuoteObj.managementStructureId);
-      if (this.salesPartNumberComponent) {
-        this.salesPartNumberComponent.refresh();
+      if (!partsRefresh || !isInitialCall) {
+        this.load(this.salesOrderQuoteObj.managementStructureId);
       }
+
       this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(this.salesQuoteService.selectedParts, this.marginSummary);
       this.salesQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
-      this.salesQuote.priorities = this.salesQuoteView.priorities;
       this.salesQuote.salesQuoteTypes = this.salesQuoteView.salesQuoteTypes;
       this.salesQuote.status = this.salesQuoteView.status;
+      this.salesQuote.priorities = this.salesQuoteView.priorities;
+      if (this.salesPartNumberComponent) {
+        this.salesPartNumberComponent.refresh();
+      }
       this.salesQuote.salesOrderQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
       this.salesQuote.quoteTypeId = this.salesOrderQuoteObj.quoteTypeId;
       this.salesQuote.statusId = this.salesOrderQuoteObj.statusId;
@@ -1259,7 +922,6 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesOrderQuoteObj.quoteExpireDate
       );
 
-      // this.salesOrderQuote.masterCompanyId = this.masterCompanyId;
       this.salesQuote.salesOrderQuoteNumber = this.salesOrderQuoteObj.salesOrderQuoteNumber;
       this.salesQuote.versionNumber = this.salesOrderQuoteObj.versionNumber;
       this.salesQuote.accountTypeId = this.salesOrderQuoteObj.accountTypeId;
@@ -1269,7 +931,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuote.contractReferenceName = this.salesOrderQuoteObj.contractReference;
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
       this.salesQuote.quoteApprovedById = this.salesOrderQuoteObj.quoteApprovedById;
-      this.salesQuote.employeeId = this.salesOrderQuoteObj.employeeId;
+      this.salesQuote.employeeId = getObjectById('value', this.salesOrderQuoteObj.employeeId, this.allEmployeeList)//this.salesOrderQuoteObj.employeeId;
       this.salesOrderQuote.managementStructureId = this.salesOrderQuoteObj.managementStructureId;
       this.salesOrderQuote.shipToUserTypeId = this.salesOrderQuoteObj.shipToUserTypeId;
       this.salesOrderQuote.shipToUserId = this.salesOrderQuoteObj.shipToUserId;
@@ -1301,9 +963,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesOrderQuote.billToPostalCode = this.salesOrderQuoteObj.billToPostalCode;
       this.salesOrderQuote.billToCountry = this.salesOrderQuoteObj.billToCountry;
       this.salesOrderQuote.billToMemo = this.salesOrderQuoteObj.billToMemo;
-
       this.salesOrderQuote.salesOrderQuoteId = this.salesOrderQuoteObj.salesOrderQuoteId;
-
       this.salesQuote.probabilityId = this.salesOrderQuoteObj.probabilityId;
       this.salesQuote.leadSourceId = this.salesOrderQuoteObj.leadSourceId;
       this.salesQuote.creditLimit = this.salesOrderQuoteObj.creditLimit;
@@ -1324,30 +984,22 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuote.notes = this.salesOrderQuoteObj.notes;
       this.salesQuote.statusName = this.salesQuoteView.salesOrderQuote.status;
       this.salesQuote.isApproved = this.salesQuoteView.salesOrderQuote.isApproved;
-      // if (this.managementStructureComponent) {
-      //   this.managementStructureComponent.load(
-      //     this.currentUserManagementStructureId
-      //   );
-      // }
+      this.salesQuote.customerServiceRepId = this.salesOrderQuoteObj.customerSeviceRepId;
+      this.salesQuote.salesPersonId = this.salesOrderQuoteObj.salesPersonId;
       this.isSpinnerVisible = false;
+      if (isInitialCall) {
+        this.getInitialDataForSOQ();
+      }
     }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = error;
-      this.onDataLoadFailed(errorLog)
     });
   }
-  bindCopiedQuoteData(data) {
-    this.salesQuoteView = data[0];
-    this.salesOrderQuoteObj = this.salesQuoteView.salesOrderQuote;
-    this.salesQuote.customerReferenceName = this.salesOrderQuoteObj.customerReference;
-    this.isSpinnerVisible = false;
-  }
 
-  setValidDaysBasedOnSettings(isEditMode) {
-    if (this.validDaysSettingsList.length > 0) {
+  setValidDaysBasedOnSettings(isEdit) {
+    if (this.validDaysSettingsList && this.validDaysSettingsList.length > 0) {
       let validDaysObject = this.validDaysSettingsList[0];
       if (validDaysObject) {
-        if (!isEditMode) {
+        if (!isEdit) {
           this.salesQuote.validForDays = validDaysObject.validDays;
           this.salesQuote.quoteTypeId = validDaysObject.quoteTypeId;
           this.salesQuote.statusId = validDaysObject.defaultStatusId;
@@ -1356,20 +1008,20 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.defaultSettingPriority = validDaysObject.defaultPriorityId;
       } else {
         this.salesQuote.validForDays = 10;
-        if (this.salesQuote.salesQuoteTypes.length > 0) {
+        if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
           this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
 
         }
       }
     } else {
       this.salesQuote.validForDays = 10;
-      if (this.salesQuote.salesQuoteTypes.length > 0) {
+      if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
         this.salesQuote.quoteTypeId = this.salesQuote.salesQuoteTypes[0].id;
       }
     }
   }
 
-  getNewSalesQuoteInstance(customerId: number) {
+  getNewSalesQuoteInstance(customerId: number, isInitialCall = false) {
     this.isSpinnerVisible = true;
     this.salesQuoteService
       .getNewSalesQuoteInstance(customerId)
@@ -1380,27 +1032,17 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesQuote.statusChangeDate = new Date();
         this.salesQuote.managementStructureId = this.currentUserManagementStructureId;
         this.salesQuote.companyId = this.masterCompanyId;
-        this.getCustomerDetails();
-        this.getDefaultContact();
         this.salesQuote.leadSourceId = null;
         this.salesQuote.probabilityId = null;
-        this.salesQuote.employeeName = getObjectById(
-          "value",
-          this.employeeId,
-          this.allEmployeeList
-        );
-        this.salesQuote.salesOrderQuoteNumber = "Generating";
+        this.salesQuote.salesOrderQuoteNumber = "Creating";
         this.load(this.managementStructureId);
-        // if (this.managementStructureComponent) {
-        //   this.managementStructureComponent.load(this.currentUserManagementStructureId);
-        // }
+        this.getInitialDataForSOQ();
         this.isSpinnerVisible = false;
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       });
   }
+
   onChangeValidForDays() {
     let od = new Date(this.salesQuote.openDate);
     let validForDays = +this.salesQuote.validForDays;
@@ -1409,6 +1051,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.salesQuote.quoteExpiryDate = ed;
     this.enableUpdateButton = false;
   }
+
   onChangeQuoteExpiryDate() {
     let od = new Date(this.salesQuote.openDate);
     let ed = new Date(this.salesQuote.quoteExpiryDate);
@@ -1418,6 +1061,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     );
     this.salesQuote.validForDays = Difference_In_Days;
   }
+
   onChangeOpenDate() {
     let od = new Date(this.salesQuote.openDate);
     let validForDays = +this.salesQuote.validForDays;
@@ -1430,34 +1074,12 @@ export class SalesQuoteCreateComponent implements OnInit {
   onChangeInput() {
     this.enableUpdateButton = false;
   }
-
-  searchCustomerByName(event) {
-    this.customerService
-      .getcustomerByNameList(event.query)
-      .subscribe((results: any) => {
-        this.customers = results.length > 0 ? results[0] : [];
-      }, error => {
-        this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
-      });
-  }
-
-  onCustomerNameSelect(customer: any) {
-    this.salesQuote.customerId = customer.customerId;
-    this.salesQuote.customerCode = customer.customerCode;
-  }
-
+  
   viewSelectedRow() {
     this.modal = this.modalService.open(CustomerViewComponent, { size: "lg", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.customerId = this.customerId;
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
   }
+
   onAddDescription(value) {
     this.tempMemo = "";
     if (value == "notes") {
@@ -1492,7 +1114,6 @@ export class SalesQuoteCreateComponent implements OnInit {
 
   onSubmit(submitType: Boolean, createNewVersion: boolean = false) {
     this.errorMessages = [];
-
     let haveError = false;
     if (this.salesQuote.quoteTypeId <= 0) {
       this.errorMessages.push("Please select Quote Type");
@@ -1522,7 +1143,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.errorMessages.push("Please enter Customer Reference Name");
       haveError = true;
     }
-    if (!this.salesQuote.employeeName) {
+    if (!this.salesQuote.employeeId) {
       this.errorMessages.push("Please select employee");
       haveError = true;
     }
@@ -1553,12 +1174,6 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (haveError) {
       let content = this.errorMessagePop;
       this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-      this.errorModal.result.then(
-        () => {
-        },
-        () => {
-        }
-      );
       this.display = true;
     } else {
       this.display = false;
@@ -1599,7 +1214,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesOrderQuote.probabilityId = this.salesQuote.probabilityId;
       this.salesOrderQuote.employeeId = editValueAssignByCondition(
         "value",
-        this.salesQuote.employeeName
+        this.salesQuote.employeeId
       );
       this.salesOrderQuote.billToContactName = editValueAssignByCondition(
         "firstName",
@@ -1626,7 +1241,6 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesOrderQuote.billToUserId
       );
       this.salesOrderQuote.leadSourceId = this.salesQuote.leadSourceId;
-      // this.salesOrderQuote.employeeId = this.salesQuote.employeeId;
       if (this.salesQuote.approvedDate)
         if (this.id) {
           this.salesOrderQuote.statusId = this.salesQuote.statusId;
@@ -1659,44 +1273,68 @@ export class SalesQuoteCreateComponent implements OnInit {
       let invalidDate = false;
       var errmessage = '';
       for (let i = 0; i < this.selectedParts.length; i++) {
+        let partNameAdded = false;
         let selectedPart = this.selectedParts[i];
         if (!selectedPart.customerRequestDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
+          if(!partNameAdded){
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
           errmessage = errmessage + '<br />' + "Please enter Customer Request Date."
         }
         if (!selectedPart.estimatedShipDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
+          if(!partNameAdded){
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
           errmessage = errmessage + '<br />' + "Please enter Estimated Ship Date."
         }
         if (!selectedPart.promisedDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
+          if(!partNameAdded){
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
           errmessage = errmessage + '<br />' + "Please enter Promised Date."
         }
         if (!selectedPart.priorityId) {
           this.isSpinnerVisible = false;
           invalidParts = true;
+          if(!partNameAdded){
+            errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+            partNameAdded = true;
+          }
           errmessage = errmessage + '<br />' + "Please enter priority ID."
         }
-        // if (!selectedPart.customerRequestDate) {
-        //   invalidParts = true;
-        // }
-        // if (!selectedPart.promisedDate) {
-        //   invalidParts = true;
-        // }
-        // if (!selectedPart.estimatedShipDate) {
-        //   invalidParts = true;
-        // }
-        // if (!(selectedPart.priorityId > 0)) {
-        //   invalidParts = true;
-        // }
+        
         if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
           if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
             selectedPart.estimatedShipDate < this.salesQuote.openDate ||
             selectedPart.promisedDate < this.salesQuote.openDate) {
             invalidDate = true;
+          }
+          if (selectedPart.promisedDate < selectedPart.customerRequestDate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if(!partNameAdded){
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Request date cannot be greater than Promised Date."
+          }
+          if (selectedPart.estimatedShipDate < selectedPart.customerRequestDate) {
+            this.isSpinnerVisible = false;
+            invalidParts = true;
+            if(!partNameAdded){
+              errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
+              partNameAdded = true;
+            }
+            errmessage = errmessage + '<br />' + "Request date cannot be greater than Est.Ship Date."
           }
         }
         if (!invalidParts && !invalidDate) {
@@ -1710,7 +1348,6 @@ export class SalesQuoteCreateComponent implements OnInit {
         if (invalidParts) {
           this.isSpinnerVisible = false;
           this.alertService.resetStickyMessage();
-          // this.alertService.showStickyMessage('Sales Order Quote', "Please enter required fields for Sales Order Quote PartsList!", MessageSeverity.error);
           this.alertService.showStickyMessage('Sales Order Quote', errmessage, MessageSeverity.error);
         } else if (invalidDate) {
           this.isSpinnerVisible = false;
@@ -1723,8 +1360,6 @@ export class SalesQuoteCreateComponent implements OnInit {
             this.marginSummary.soQuoteMarginSummaryId = result
           }, error => {
             this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog)
           });
           this.salesQuoteService.update(this.salesQuoteView).subscribe(data => {
             this.SalesOrderQuoteId = data[0].salesOrderQuoteId;
@@ -1735,14 +1370,17 @@ export class SalesQuoteCreateComponent implements OnInit {
               `Quote updated successfully.`,
               MessageSeverity.success
             );
-            this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
-            this.toggle_po_header = false;
-            if (submitType == false) {
+            this.getSalesQuoteInstance(this.id, true);
+            if (createNewVersion) {
+              this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
             }
+            this.toggle_po_header = false;
+            if (this.isEdit) {
+              this.isCreateModeHeader = false;
+            }
+            this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog)
           });
         }
       } else {
@@ -1750,7 +1388,7 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.salesQuoteView.originalSalesOrderQuoteId = parseInt(this.quoteCopyRefId);
           this.salesQuoteView.salesOrderQuote.salesOrderQuoteId = null;
           this.salesQuoteView.salesOrderQuote.salesOrderQuoteNumber = undefined;
-          if (this.salesQuoteView.parts.length > 0) {
+          if (this.salesQuoteView.parts && this.salesQuoteView.parts.length > 0) {
             this.salesQuoteView.parts.filter(x => x.salesOrderQuotePartId = null)
           }
         }
@@ -1768,9 +1406,9 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.toggle_po_header = false;
           this.id = this.SalesOrderQuoteId;
           if (this.SalesOrderQuoteId) {
-            this.getSalesQuoteInstance(this.id);
-            this.getCustomerDetails()
-            this.isEdit = true;
+            this.router.navigateByUrl(
+              `salesmodule/salespages/sales-quote-edit/${this.customerId}/${this.SalesOrderQuoteId}`
+            );
           }
           if (!this.isCreateModeHeader) {
             this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
@@ -1778,14 +1416,12 @@ export class SalesQuoteCreateComponent implements OnInit {
         }
           , error => {
             this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog)
           })
       }
     }
   }
-  saveSalesQuoteHeader() {
 
+  saveSalesQuoteHeader() {
     if (this.headerInfo.companyId == "null") {
       let haveError = false;
       if (this.salesQuote.quoteTypeId <= 0) {
@@ -1816,7 +1452,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.errorMessages.push("Please enter Customer Reference Name");
         haveError = true;
       }
-      if (!this.salesQuote.employeeName) {
+      if (!this.salesQuote.employeeId) {
         this.errorMessages.push("Please select employee");
         haveError = true;
       }
@@ -1828,12 +1464,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       if (haveError) {
         let content = this.errorMessagePop;
         this.errorModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-        this.errorModal.result.then(
-          () => {
-          },
-          () => {
-          }
-        );
         this.display = true;
       } else {
         this.display = false;
@@ -1859,7 +1489,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         agentName: editValueAssignByCondition("name", this.salesQuote.agentId),
         customerSeviceRepId: editValueAssignByCondition("employeeId", this.salesQuote.customerServiceRepName),
         probabilityId: this.salesQuote.probabilityId,
-        employeeId: editValueAssignByCondition("value", this.salesQuote.employeeName),
+        employeeId: editValueAssignByCondition("employeeId", this.salesQuote.employeeId),//editValueAssignByCondition("value", this.salesQuote.employeeName),
         leadSourceId: this.salesQuote.leadSourceId,
         creditLimit: this.salesQuote.creditLimit,
         creditTermId: this.salesQuote.creditLimitTermsId,
@@ -1886,8 +1516,6 @@ export class SalesQuoteCreateComponent implements OnInit {
           }
         }, error => {
           this.isSpinnerVisible = false;
-          const errorLog = error;
-          this.onDataLoadFailed(errorLog)
         })
       } else {
         const poHeaderEdit = { ...headerInfoObj, SalesOrderQuoteId: parseInt(this.qoId) };
@@ -1898,18 +1526,16 @@ export class SalesQuoteCreateComponent implements OnInit {
 
         }, error => {
           this.isSpinnerVisible = false;
-          const errorLog = error;
-          this.onDataLoadFailed(errorLog)
         });
       }
       this.toggle_po_header = true;
     }
   }
+
   quote: any = {
     quoteTypeId: null,
     quoteDate: Date
   };
-
 
   initiateSalesOrderCoversion() {
     this.selectAllForConversion = true;
@@ -1922,18 +1548,9 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.salesOrderConversionCriteriaObj.customerReference = "";
     let content = this.salesQuoteConvertPopup;
     this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-
-      }
-    )
   }
 
   inititateEmailQuote() {
-
     this.selectedCommunicationTab = "Quotemail";
     this.isEmailTabEnabled = true;
   }
@@ -1948,11 +1565,8 @@ export class SalesQuoteCreateComponent implements OnInit {
         );
 
         this.closeModal()
-
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       }
     );
   }
@@ -1964,8 +1578,6 @@ export class SalesQuoteCreateComponent implements OnInit {
 
     this.salesQuoteService.convertfromquote(this.salesOrderConversionCriteriaObj).subscribe(
       results => {
-
-
         this.alertService.showMessage(
           "Success",
           `Quote coverted to Order successfully.`,
@@ -1979,8 +1591,6 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.router.navigateByUrl(`salesmodule/salespages/sales-order-edit/${this.salesOrderView.salesOrder.customerId}/${this.salesOrderView.salesOrder.salesOrderId}`);
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       }
     );
 
@@ -1990,12 +1600,6 @@ export class SalesQuoteCreateComponent implements OnInit {
   initiateQuoteCopying() {
     let content = this.copyQuotePopup;
     this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    )
   }
 
   copySalesOrderQuote() {
@@ -2012,68 +1616,32 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.router.navigate(['/salesmodule/salespages/sales-quote-create/' + results[0].salesOrderQuote.customerId], { queryParams: { copyRef: results[0].originalSalesOrderQuoteId, considerParts: considerParts, considerApprovers: considerApprovers } });
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       }
     );
   }
 
   verifySalesQuoteConversion(results) {
-    // this.salesQuoteService.verifySalesOrderConversion(salesQuoteId).subscribe(
-    // results => {
     const resultsTemp = results;
     this.verifySalesOrderQuoteObj = resultsTemp;
     this.salesOrderConversionCriteriaObj = this.verifySalesOrderQuoteObj.salesOrderConversionCritera;
     this.salesOrderConversionCriteriaObj.customerReference = "";
-
-    // }, error => {
-    // this.isSpinnerVisible = false;
-    // const errorLog = error;
-    // this.onDataLoadFailed(errorLog)
-    //   }
-    // );
-    ;
-
   }
-
-
 
   initiateClosingSalesOrderQuote() {
-
     let content = this.closeQuotePopup;
     this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
-
   }
-  initiateCreatingNewQuote() {
 
+  initiateCreatingNewQuote() {
     let content = this.newQuoteCreatePopup;
     this.modal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
-
   }
 
   initiatePrintProcess() {
     let content = this.salesQuotePrintPopup;
     this.modal = this.modalService.open(content, { size: "lg", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    )
-
   }
+
   print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('quote_print_content').innerHTML;
@@ -2170,9 +1738,8 @@ export class SalesQuoteCreateComponent implements OnInit {
     popupWin.document.close();
   }
 
-
   closeSalesOrderQuote() {
-    this.salesQuoteService.closeSalesOrderQuote(this.id).subscribe(
+    this.salesQuoteService.closeSalesOrderQuote(this.id, this.userName).subscribe(
       results => {
         this.isSpinnerVisible = false;
         this.alertService.showMessage(
@@ -2184,8 +1751,6 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
       }, error => {
         this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
       }
     );
   }
@@ -2194,21 +1759,14 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.closeModal();
     this.router.navigateByUrl('/salesmodule/salespages/sales-quote-create/' + this.customerId);
   }
+
   closeModal() {
     this.modal.close();
   }
 
   openConfirmationModal(submitType: boolean) {
-
     this.submitType = submitType;
-
     this.modal = this.modalService.open(this.updateConfirmationModal, { size: "sm" });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
   }
 
   closeConfirmationModal() {
@@ -2230,7 +1788,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   onPartsApprovedEvent(approved: boolean) {
     if (approved) {
       this.selectedParts = [];
-      this.getSalesQuoteInstance(this.id);
+      this.getSalesQuoteInstance(this.id, true);
     }
   }
 
@@ -2238,6 +1796,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (savedParts) {
       this.marginSummary = this.salesQuoteService.getSalesQuoteHeaderMarginDetails(savedParts, this.marginSummary);
       this.updateMarginSummary();
+      this.getSalesQuoteInstance(this.id, true);
     }
   }
 
@@ -2249,8 +1808,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = error;
-      this.onDataLoadFailed(errorLog)
     })
   }
 
@@ -2264,16 +1821,12 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (event.index == 2) {
       this.salesCustomerApprovalsComponent.refresh(this.marginSummary, this.salesQuote.salesOrderQuoteId);
     }
-    // if (event.index == 3) {
-    //   this.salesAddressComponent.refresh(this.salesOrderQuote);
-    // }
     if (event.index == 4) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
         this.salesOrderQuoteFreightComponent.refresh(false);
       } else {
         this.salesOrderQuoteFreightComponent.refresh(true);
       }
-      // this.salesOrderQuoteFreightComponent.refresh();
     }
     if (event.index == 5) {
       if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
@@ -2281,7 +1834,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       } else {
         this.salesOrderQuoteChargesComponent.refresh(true);
       }
-      // this.salesOrderQuoteChargesComponent.refresh();
     }
     if (event.index == 6) {
       this.salesQuoteDocumentsComponent.refresh();
@@ -2290,7 +1842,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuoteAnalysisComponent.refresh(this.id);
     }
   }
-
 
   setFreightsOrCharges() {
     if (this.salesQuoteService.selectedParts && this.salesQuoteService.selectedParts.length > 0) {

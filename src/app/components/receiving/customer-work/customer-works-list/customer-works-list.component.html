@@ -1,16 +1,4 @@
 ﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
-
-<!-- <div class="card">
-    <div class="card-body">
-        <div class="inline-block display-flex">
-            <h3 class="po-head lead">Receiving - Customer Work List</h3>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <a matTooltip="Create Customer Work" class="plusicon-cstm new-margin" [routerLink]="[
-                '/receivingmodule/receivingpages/app-customer-work-setup'
-              ]">
-                <i class="fa fa-plus-circle fa-lg"></i>
-            </a>
-        </div> -->
         <div class="card new-card">
             <div class="card-header bg-primary new-card-header">
               <div class="row">
@@ -21,84 +9,31 @@
                   <button
                     type="button"
                     class="btn-sm new-btn-primary"
-                    [routerLink]="['/receivingmodule/receivingpages/app-customer-work-setup']"
-                  >
+                    [routerLink]="['/receivingmodule/receivingpages/app-customer-work-setup']">
                     Create Customer Work
                   </button>
                 </div>
               </div>
             </div>
             <div class="card-body new-card-body">
-        
-
-        <p-table #dt class="rpo-table-cstm lastcol-fix" [value]="allRecevinginfo" [lazy]="true"
-                 (onLazyLoad)="loadData($event)" [metaKeySelection]="true" [first]="0" [rows]="pageSize" [paginator]="true"
-                 [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" selectionMode="multiple"
-                 [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
-                 scrollHeight="450px" [totalRecords]="totalRecords">
+            <p-table #dt class="rpo-table-cstm rro-table-cstm lastcol-fix" 
+                [value]="allRecevinginfo" 
+                [lazy]="true"
+                (onLazyLoad)="loadData($event)" 
+                [metaKeySelection]="true" 
+                [first]="0" [rows]="pageSize" 
+                [paginator]="true"
+                [pageLinks]="3" 
+                [rowsPerPageOptions]="[10,20,50,100]" 
+                [columns]="selectedColumns" 
+                selectionMode="multiple"
+                [(selection)]="selectedColumn" 
+                [resizableColumns]="true" 
+                [reorderableColumns]="true" 
+                [scrollable]="true"
+                scrollHeight="450px" 
+                [totalRecords]="totalRecords">
             <ng-template pTemplate="caption">
-                <!-- <div style="text-align: right;margin-left:-6px !important;min-height: 30px;">
-                    <p-multiSelect [maxSelectedLabels]="2" [options]="cols" [(ngModel)]="selectedColumns"
-                                   optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
-                                   defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-                    <div class="inner-addon right-addon w200 inline-block g-filter-search-cstm">
-                        <i class="fa fa-search"></i>
-                        <input type="text" pInputText size="50" class="form-control ui-autocomplete-input"
-                               (input)="globalSearch($event.target.value)" placeholder=" Filter">
-                    </div>
-                    <button class="btn btn-primary" type="button" pButton icon="fa-download" iconPos="left"
-                            label="Export  Data" matTooltip="Download Data" matTooltipPosition="above"
-                            (click)="dt.exportCSV()" style="padding: 5px 10px !important;"></button>
-                    <button class="btn btn-primary" type="button" pButton icon="fa-download" iconPos="left"
-                            label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
-                            (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button> -->
-                    <!--<div class="excel-upload">
-                        <input type="file" name="upload[]" id="upload" class="uploaddoc upload-file" data-multiple-caption="{count} files selected" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                        <label for="upload">
-                            <span matTooltip="Upload Data (Excel)"><i class="fa fa-upload"></i></span>
-                        </label>
-                    </div>-->
-                    <!-- <div class="form-row status-radio">
-                        <div class="col-md-8">
-                            <form>
-                                <div class="form-group">
-                                    <label class="radiobtn-label" style="margin-left: 5px;">Status:</label>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                        <label class="radio-cstm wauto">
-                                            <input type="radio" name="custworkstatus" class="form-control" value="1"
-                                                   (click)="getCustWorkStatus('1')" [ngModel]="currentStatusCW" checked>
-                                            <span class="checkmark"></span>Pending WO Creation
-                                        </label>
-                                    </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                        <label class="radio-cstm wauto">
-                                            <input type="radio" name="custworkstatus" class="form-control" value="2"
-                                                   (click)="getCustWorkStatus('2')" [ngModel]="currentStatusCW">
-                                            <span class="checkmark"></span>Returned to Customers
-                                        </label>
-                                    </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                                        <label class="radio-cstm wauto">
-                                            <input type="radio" name="custworkstatus" class="form-control" value="3"
-                                                   (click)="getCustWorkStatus('3')" [ngModel]="currentStatusCW">
-                                            <span class="checkmark"></span>All
-                                        </label>
-                                    </div>
-                                    <div class="checkbox-cstm" style="margin-left: 0;">
-                                        <label style="width: auto !important;margin-top: 3px;">
-                                           
-                                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Show  Deleted List
-                                        </label>
-                                    </div>
-            
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div> -->
-
                 <div class="row">
                     <div class="col">
                         <p-multiSelect [maxSelectedLabels]="2" [options]="cols" [(ngModel)]="selectedColumns"
@@ -107,74 +42,67 @@
                     </p-multiSelect>
                     </div>
                     <div class="col">
-                        <div
-                          style="width: auto !important; float: right;"
-                          class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                        >
-                        <i class="fa fa-search"></i>
-                        <input type="text" pInputText size="50" class="form-control"
-                        (input)="globalSearch($event.target.value)" placeholder=" Filter">
+                            <div
+                            style="width: auto !important; float: right;"
+                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            <i class="fa fa-search"></i>
+                            <input type="text" pInputText size="50" class="form-control"
+                            (input)="globalSearch($event.target.value)" placeholder=" Filter">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <button class="btn btn-primary new-table-button" type="button" pButton icon="fa-download" iconPos="left"
-                label="Export  Data" matTooltip="Download Data" matTooltipPosition="above"
-                (click)="dt.exportCSV()" style="padding: 5px 10px !important;"></button>
-        <button class="btn btn-primary new-table-button" type="button" pButton icon="fa-download" iconPos="left"
-                label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
-                (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;">
-            </button>
-        </div>
-        <div class="col">
-          <div class="">
-            <div
-              class="col"
-              style="padding:3px 0 0;"
-            >
-              <div class="form-group" style="float: right;width:520px">
-                <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
-                <div
-                  class="pull-left"
-                  style="margin-top: 4px; margin-right: 15px;"
-                >
-                <label class="radio-cstm wauto">
-                    <input type="radio" name="custworkstatus" class="form-control" value="1"
-                           (click)="getCustWorkStatus('1')" [ngModel]="currentStatusCW" checked>
-                    <span class="checkmark"></span>Pending WO Creation
-                </label>
-            </div>
-            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                <label class="radio-cstm wauto">
-                    <input type="radio" name="custworkstatus" class="form-control" value="2"
-                           (click)="getCustWorkStatus('2')" [ngModel]="currentStatusCW">
-                    <span class="checkmark"></span>Returned to Customers
-                </label>
-            </div>
-            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                <label class="radio-cstm wauto">
-                    <input type="radio" name="custworkstatus" class="form-control" value="3"
-                           (click)="getCustWorkStatus('3')" [ngModel]="currentStatusCW">
-                    <span class="checkmark"></span>All
-                </label>
-            </div>
-            <div class="checkbox-cstm" style="margin-left: 0;">
-                <label style="width: auto !important;margin-top: 3px;">
-                   
-                    <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
-                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                    Show  Deleted List
-                </label>
-            </div>
-
-        </div>
-        </div>
-        </div>
-        </div>
-        </div>
-
-
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-primary new-table-button" type="button" pButton icon="fa-download" iconPos="left"
+                            label="Export  Data" matTooltip="Download Data" matTooltipPosition="above"
+                            data-toggle="modal"
+                            (click)="selectedOnly = false; targetData = dt;" 
+                            data-target="#downloadConfirmation"
+                            style="padding: 5px 10px !important;"></button>
+                        <button class="btn btn-primary new-table-button" type="button" pButton icon="fa-download" iconPos="left"
+                            label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
+                            (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;">
+                        </button>
+                    </div>
+                    <div class="col">
+                        <div class="">
+                            <div class="col" style="padding:3px 0 0;">
+                                <div class="form-group" style="float: right;">
+                                    <div
+                                    class="pull-left"
+                                    style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                        <input type="radio" name="custworkstatus" class="form-control" value="1"
+                                            (click)="getCustWorkStatus('1')" [ngModel]="currentStatusCW" checked>
+                                        <span class="checkmark"></span>Pending WO Creation
+                                    </label>
+                                    </div>
+                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="custworkstatus" class="form-control" value="2"
+                                                (click)="getCustWorkStatus('2')" [ngModel]="currentStatusCW">
+                                            <span class="checkmark"></span>Returned to Customers
+                                        </label>
+                                    </div>
+                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <label class="radio-cstm wauto">
+                                            <input type="radio" name="custworkstatus" class="form-control" value="3"
+                                                (click)="getCustWorkStatus('3')" [ngModel]="currentStatusCW">
+                                            <span class="checkmark"></span>All
+                                        </label>
+                                    </div>
+                                    <div class="checkbox-cstm" style="margin-left: 0; display: none;">
+                                        <label style="width: auto !important;margin-top: 3px;">                   
+                                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Show  Deleted List
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
@@ -184,42 +112,31 @@
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <ng-container *ngFor="let col of columns">
-                        <th class="text-center"
+                        <th class="text-center" style="width:auto;"
                             *ngIf="col.field!='levelCode1' && col.field!='levelCode2' && col.field!='levelCode3' && col.field!='levelCode4'"
                             pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="text-center" *ngIf="col.field=='levelCode1'" colspan="4" pResizableColumn
+                        <th class="text-center" style="width:auto;." *ngIf="col.field=='levelCode1'" colspan="4" pResizableColumn
                             pReorderableColumn [pSortableColumn]="col.field">
                             Management Structure
                         </th>
                     </ng-container>
-
                     <th style="width: 130px; position:sticky">Actions</th>
-
                 </tr>
-                <!-- <tr>
-                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                        {{col.header}}
-                        <p-sortIcon [field]="col.field"></p-sortIcon>
-                    </th>
-                    <th style="width:130px;position:sticky">Actions</th>
-                </tr> -->
                 <tr>
                     <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input type="text" *ngIf="col.field !== 'receivedDate'" style="width:100%;" pInputText
+                        <input type="text" *ngIf="col.field !== 'receivedDate' && col.field != 'createdDate' && col.field != 'updatedDate'" style="width:100%;" pInputText
                                (keyup)="dt.filter($event.target.value, col.field, 'contains')">
-                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate'"
-                               name="receivedDate" style="width:100%;"
-                               (change)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
-                        <!-- <input style="width:100%;" pInputText type="text" (keyup)="dt.filter($event.target.value, col.field, 'contains')"> -->
+                        <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'receivedDate'" name="receivedDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains'); enableDateFilter($event.target);">
+                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
+                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForReceivingCustomerList($event.target.value, col.field)" />
                     </th>
                     <th style="width:130px;position:sticky"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <!--id="work_flow_lst_tble"-->
                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                     (dblclick)="viewSelectedRowdbl(rowData)">
 
@@ -227,11 +144,7 @@
                         {{col.field == 'receivedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'woOpenDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
                     </td>
                     <td style="width:130px;">
-                        <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch> -->
                         <div *ngIf="currentDeletedstatus==false">
-
                             <span data-toggle="modal" data-target="#cusView">
                                 <a class="btn nobg" (click)="openView(rowData)"
                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
@@ -240,11 +153,6 @@
                                 <a class="btn nobg" *ngIf="rowData['woNumber'] == '' || rowData['woNumber'] == null"
                                    (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
-                            <!-- <span>
-                                <a class="btn nobg" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </span> -->
                             <span>
                                 <a class="btn nobg" (click)="openHistory(contentAuditHist,rowData)"
                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
@@ -255,34 +163,26 @@
                                    (click)="gotoWorkOrder(rowData)" matTooltip="Create WO" matTooltipPosition="above"><i class="fa fa-plus"></i></a>
                             </span>
                             <span>
-                                <a class="btn nobg btn-ro-cstm" matTooltip="Return to Customer" matTooltipPosition="above">
+                                <a class="btn nobg btn-ro-cstm" (click)="gotoCustomer(rowData)" matTooltip="Return to Customer" matTooltipPosition="above">
                                     <i class="fa fa-list"></i>
                                 </a>
                             </span>
                         </div>
-                        <!-- <span data-toggle="modal" data-target="#view"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openView(view,rowData)" matTooltip="View"><i class="fa fa-eye"></i></a> </span> -->
-                        <!-- <button class="btn-edit" mat-icon-button (click)="openEdits(rowData)" matTooltip="Edit">
-                            <mat-icon>edit</mat-icon>
-                        </button> -->
-                        <!-- <button class="btn-delete" mat-icon-button matTooltip="Delete" (click)="openDelete(content,rowData)">
-                            <mat-icon color="warn">delete</mat-icon>
-                        </button> -->
-                        <!-- <button class="btn-history" mat-icon-button matTooltip="history" (click)="openHistory(contentAuditHist,rowData)">
-                            <mat-icon color="green">history</mat-icon>
-                        </button> -->
-
                         <div *ngIf="currentDeletedstatus==true">
                             <span data-toggle="modal" data-target="#cusView">
                                 <a class="btn nobg" (click)="openView(rowData)"
                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                             </span>
-
                             <span><a class="btn nobg" (click)="restore(restoreIdCW,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
-                            <!-- <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg" (click)="getAuditHistoryById(contentAuditHist,rowData)" matTooltip="History"  matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
-
                         </div>
-
                     </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" *ngIf="totalRecords == 0">
+                <tr>
+                  <td [attr.colspan]="21" class="no-records-cstm">
+                          No records found
+                  </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
@@ -313,114 +213,6 @@
     </div>
 </ng-template>
 
-
-<!-- <div [@fadeInOut] class="page-content">
-    <div class="right_col" role="main">
-        <div class="x_panel">
-            <div class="x_content">
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item" aria-current="page">Receiving</li>
-                        <li class="breadcrumb-item" aria-current="page">Customer Work</li>
-                        <li class="breadcrumb-item active" aria-current="page">Customer Work List</li>
-                    </ol>
-                </nav>
-                <div class="inline-block display-flex">
-
-                    <h3 class="po-head lead">
-                        Receiving - Customer Work List
-                    </h3>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <a matTooltip="Create Customer Work"
-                       class="plusicon-cstm new-margin"
-                       [routerLink]="[
-                '/receivingmodule/receivingpages/app-customer-work-setup'
-              ]">
-                        <i class="fa fa-plus-circle fa-lg"></i>
-                    </a>
-                    </div>
-
-                    <p-table #dt [value]="allRecevinginfo" [lazy]="true"
-                             (onLazyLoad)="loadData($event)"
-                             [metaKeySelection]="true" [rows]="20" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]" [columns]="selectedColumns" selectionMode="multiple" [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true" class="rpo-table-cstm rro-table-cstm">
-                        <ng-template pTemplate="caption">
-                            <div style="text-align: right">
-                                <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
-                                               selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-                                <div class="inner-addon right-addon w200 inline-block">
-                                    <i class="fa fa-search"></i>
-                                    <input type="text" pInputText size="50" class="form-control ui-autocomplete-input" (input)="globalSearch($event.target.value)" placeholder=" Filter">
-                                </div>
-                                <button type="button" pButton icon="fa-download" iconPos="left" label="Export  Data" matTooltip="Download Data" matTooltipPosition="above" (click)="dt.exportCSV()"></button>
-                                <button type="button" pButton icon="fa-download" iconPos="left" label="Export Selection Only" matTooltip="Download Selected Data" matTooltipPosition="above"  (click)="dt.exportCSV({selectionOnly:true})"></button>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                                    {{col.header}}
-                                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                                </th>
-                                <th>Actions</th>
-                            </tr>
-                            <tr>
-                                <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')">
-                                </th>
-                                <th style="width:200px;position:sticky"></th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr [pSelectableRow]="rowData">
-
-                                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                    {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
-                                </td>
-
-
-                                <td style="width:150px">
-                                    <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                    <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                    <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-
-                                    <span data-toggle="modal" data-target="#view"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openView(view,rowData)" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
-                                    <button class="btn-edit" mat-icon-button (click)="openEdits(rowData)" matTooltip="Edit">
-                                        <mat-icon>edit</mat-icon>
-                                    </button>
-                                    <button class="btn-delete" mat-icon-button matTooltip="Delete" (click)="openDelete(content,rowData)">
-                                        <mat-icon color="warn">delete</mat-icon>
-                                    </button>
-
-                                    <button class="btn-history" mat-icon-button matTooltip="history" (click)="openHistory(contentAuditHist,rowData)">
-                                        <mat-icon color="green">history</mat-icon>
-                                    </button>
-
-                                </td>
-
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="summary" id="footer">
-                            <label id="footer" class="footer">No'of records:</label>
-                            <input style="width: 5%;"
-                                   [(ngModel)]="totalRecords"
-                                   [disabled]="true"
-                                   pInputText
-                                   type="text" />
-                            &nbsp;&nbsp;
-                            <label id="footer" class="footer1">Pages Count:</label>
-                            <input style="width: 5%;"
-                                   [(ngModel)]="totalPages"
-                                   [disabled]="true"
-                                   pInputText
-                                   type="text" />
-                        </ng-template>
-
-                    </p-table>
-                </div>
-            </div>
-    </div>
-</div> -->
-
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
@@ -441,162 +233,21 @@
     </div>
 </ng-template>
 
-<!-- <ng-template #view data-backdrop="static">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">×</button>
-            <h4 class="modal-title">Details of Receiving - Customer</h4>
-        </div>
-
-        <div class="modal-body viewform">
-            <div id="" class="table-responsive default-bg clear">
-                  <div class="panel-body">
-                    <div class="col-sm-5">
-                        <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th colspan="15" class="text-center"><strong>Management Structure</strong></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{{compnayname ? compnayname : '-'}}</td>
-                                    <td>{{biuName ? biuName : '-'}}</td>
-                                    <td>{{divsioname ? divsioname : '-'}}</td>
-                                    <td>{{departname ? departname : '-'}}</td>
-
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-sm-1">
-                        </div>
-                        <div class="col-sm-6">
-                            <p><span class="label"><b>Receiving Num: </b></span><span class="value">{{showViewProperties.receivingCustomerNumber}}</span></p>
-                            <p><span class="label"><b>Employee: </b></span><span class="value">{{showViewProperties.employeeId}}</span></p>
-                        </div>
-                        <div class="clear"></div>
-                        <hr class="hr-dark">
-                        <div class="col-sm-6">
-                            <p><span class="label"><b>Name: </b></span><span class="value">{{showViewProperties.customerId}}</span></p>
-                            <p><span class="label"><b>Ref: </b></span><span class="value">{{showViewProperties.customerReference}}</span></p>
-                            <p><span class="label"><b>Contact: </b></span><span class="value">{{showViewProperties.contactFirstName}}</span></p>
-                            <p><span class="label"><b>Contact Phone: </b></span><span class="value">{{showViewProperties.workPhone}}</span></p>
-                            <p><span class="label"><b>PN: </b></span><span class="value">{{showViewProperties.partNumber}}</span></p>
-                            <p><span class="label"><b>PN Description: </b></span><span class="value">{{showViewProperties.partDescription}}</span></p>
-                            <p><span class="label"><b>Change PN: </b></span><span class="value">{{showViewProperties.changePartNumber}}</span></p>
-                            <p><span class="label"><b>Parts Cert Num: </b></span><span class="value">{{showViewProperties.partCertificationNumber}}</span></p>
-                            <p><span class="label"><b>Expiration Date: </b></span><span class="value">{{showViewProperties.expirationDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
-                            <p><span class="label"><b>QTY : </b></span><span class="value">{{showViewProperties.quantity}}</span></p>
-                            <p><span class="label"><b>Condtion : </b></span><span class="value">{{showViewProperties.conditionId}}</span></p>
-                            <p><span class="label"><b>Warehouse : </b></span><span class="value">{{showViewProperties.warehouseId}}</span></p>
-                            <p><span class="label"><b>Location: </b></span><span class="value">{{showViewProperties.locationId}}</span></p>
-                            <p><span class="label"><b>Owner: </b></span><span class="value">{{showViewProperties.owner}}</span></p>
-                        </div>
-                        <div class="col-sm-6">
-                            <p><span class="label"><b>Customer Stock: </b></span><span class="value">{{showViewProperties.isCustomerStock}}</span></p>
-                            <p><span class="label"><b>Traceable to: </b></span><span class="value">{{showViewProperties.traceableToType}}</span></p>
-                            <p><span class="label"><b>Traceable Name: </b></span><span class="value">{{showViewProperties.traceableTo}}</span></p>
-                            <p><span class="label"><b>Obtain From: </b></span><span class="value">{{showViewProperties.obtainFromType}}</span></p>
-                            <p><span class="label"><b>Obtain From Name: </b></span><span class="value">{{showViewProperties.obtainFrom}}</span></p>
-                            <p><span class="label"><b>MFG Date: </b></span><span class="value">{{showViewProperties.manufacturingDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
-                            <p><span class="label"><b>Exp Date: </b></span><span class="value">{{showViewProperties.expirationDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
-                            <p><span class="label"><b>MFG Trace: </b></span><span class="value">{{showViewProperties.manufacturingTrace}}</span></p>
-                            <p><span class="label"><b>MFR Lot #: </b></span><span class="value">{{showViewProperties.manufacturingLotNumber}}</span></p>
-
-                            <h4>Time Life</h4>
-                            <p><span class="label"><b>Date: </b></span><span class="value">{{showViewProperties.timeLifeDate |date: 'MM/dd/yyyy h:mm a '}}</span></p>
-                            <p><span class="label"><b>Origin: </b></span><span class="value">{{showViewProperties.timeLifeOrigin}}</span></p>
-                            <div class="table-responsive form-group col-sm-12" *ngIf="showViewProperties.isTimeLife">
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="15" class="text-center"><strong>TIME LIFE ADJUSTMENTS</strong></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <th></th>
-                                            <th class="text-center">Cycles</th>
-                                            <th class="text-center">Time</th>
-                                            <th class="text-center">Last</th>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Remaining</b></td>
-                                            <td class="clr2 text-center">
-                                                <span>{{showViewProperties.cyclesRemaining}}</span>
-                                            </td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.timeRemaining}}</span></td>
-                                            <td></td>
-
-                                        </tr>
-                                        <tr>
-                                            <td><b>Since New</b></td>
-
-                                            <td class="clr2 text-center"><span>{{showViewProperties.cyclesSinceNew}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.timeSinceNew}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.lastSinceNew}}</span></td>
-
-
-
-                                        </tr>
-                                        <tr>
-                                            <td><b>Since Ovh</b></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.cyclesSinceOVH}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.timeSinceOVH}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.lastSinceOVH}}</span></td>
-
-
-                                        </tr>
-                                        <tr>
-                                            <td><b>Since Insp</b></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.cyclesSinceInspection}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.timeSinceInspection}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.lastSinceInspection}}</span></td>
-
-
-                                        </tr>
-                                        <tr>
-                                            <td><b>Since Repair</b></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.cyclesSinceRepair}}</span></td>
-                                            <td class="clr2 text-center"><span>{{showViewProperties.timeSinceRepair}}</span></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-info" data-dismiss="modal" (click)="dismissModel()">Close</button>
-        </div>
-    </div>
-</ng-template> -->
-
 <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
-
     <div class="modal-header">
-
         <h4 class="modal-title">History of Receive Customer Work</h4>
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
-
-
     </div>
-
     <div class="modal-body">
-
-        <div class="table-responsive">
+        <div class="table-responsive history_hg">
             <table class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Rec.No.</th>
                         <th>Part Number</th>
-                        <th>Change Part Number</th>
+                        <th>Revised PN</th>
                         <th>Employee Name</th>
                         <th>Customer Name</th>
                         <th>Customer Reference</th>
@@ -610,15 +261,12 @@
                         <th>Location</th>
                         <th>Shelf</th>
                         <th>Bin</th>
-                        <th>Updated By</th>
-                        <th>Last Updated Time</th>
+                        <th>Created Date</th>
                         <th>Created By</th>
-                        <th>Created Time</th>
-
+                        <th>Updated date</th>
+                        <th>Updated By</th>
                     </tr>
                 </thead>
-
-
                 <tr *ngFor="let audit of customerWorkHisory; let i = index;">
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'receivingCustomerNumber', audit.receivingCustomerNumber)  ? 'black' : 'red'  }">
                         {{audit.receivingCustomerNumber}}
@@ -626,26 +274,26 @@
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'partNumber', audit.partNumber)  ? 'black' : 'red'  }">
                         {{audit.partNumber}}
                     </td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'changePartNumber', audit.changePartNumber)  ? 'black' : 'red'  }">
-                        {{audit.changePartNumber}}
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'revisedPart', audit.revisedPart)  ? 'black' : 'red'  }">
+                        {{audit.revisedPart}}
                     </td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'firstName', audit.firstName)  ? 'black' : 'red'  }">
-                        {{audit.firstName}}
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'employeeName', audit.employeeName)  ? 'black' : 'red'  }">
+                        {{audit.employeeName}}
                     </td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
-                        {{audit.name}}
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
+                        {{audit.customerName}}
                     </td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
                         {{audit.customerReference}}
                     </td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactTitle', audit.contactFirstName)  ? 'black' : 'red'  }">
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'contactFirstName', audit.contactFirstName)  ? 'black' : 'red'  }">
                         {{audit.contactFirstName}}
                     </td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'workPhone', audit.workPhone)  ? 'black' : 'red'  }">
                         {{audit.workPhone}}
                     </td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'manufacturer', audit.manufacturer)  ? 'black' : 'red'  }">
-                        {{audit.manufacturer}}
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'manufacturerName', audit.manufacturerName)  ? 'black' : 'red'  }">
+                        {{audit.manufacturerName}}
                     </td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'quantity', audit.quantity)  ? 'black' : 'red'  }">
                         {{audit.quantity}}
@@ -653,8 +301,8 @@
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'condition', audit.condition)  ? 'black' : 'red'  }">
                         {{audit.condition}}
                     </td>
-                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'site', audit.site)  ? 'black' : 'red'  }">
-                        {{audit.site}}
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'siteName', audit.siteName)  ? 'black' : 'red'  }">
+                        {{audit.siteName}}
                     </td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'warehouse', audit.warehouse)  ? 'black' : 'red'  }">
                         {{audit.warehouse}}
@@ -667,12 +315,15 @@
                     </td>
                     <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'binName', audit.binName)  ? 'black' : 'red'  }">
                         {{audit.binName}}
-                    </td>
-
-                    <td>{{audit.updatedBy}}</td>
-                    <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                    <td>{{audit.createdBy}}</td>
+                    </td>                    
                     <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                        {{audit.createdBy}}
+                    </td>    
+                    <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                    <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                        {{audit.updatedBy}}
+                    </td>    
                 </tr>
             </table>
         </div>
@@ -681,30 +332,53 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
     </div>
 </ng-template>
-
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span *ngIf="!selectedOnly">
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div id="cusView" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <div class="col-sm-3">
                     <h4 class="modal-title">Details of Receiving - Customer</h4>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3" style="padding-top: 5px;">
                     Customer Name<span class="text-danger"> : {{viewCustWorkInfo.customerName}}</span>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3" style="padding-top: 5px;">
                     Customer Code<span class="text-danger"> : {{viewCustWorkInfo.customerCode}}</span>
                 </div>
             </div>
             <div class="modal-body" *ngIf="viewCustWorkInfo">
                 <div class="form-row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <p>
                             <span class="label"><b>Receiving Num: </b></span><span class="value">{{ viewCustWorkInfo.receivingNumber }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Received Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.receivedDate | date: 'MM/dd/yyyy'}}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Work Scope: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.workScopeName}}</span>
                         </p>
                         <p>
                             <span class="label"><b>Customer Request Date: <span class="text-danger">*</span> </b></span><span class="value">{{ viewCustWorkInfo.custReqDate | date: 'MM/dd/yyyy'}}</span>
@@ -713,16 +387,22 @@
                             <span class="label"><b>Customer Ref: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.reference }}</span>
                         </p>
                         <p >
-                            <!-- *ngIf="viewCustWorkInfo.isExpDate" -->
                             <span class="label"><b>Employee Name: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.employeeName }}</span>
                         </p>
-                        <div class="form-group p-t-10">
-                            <div class="checkbox-cstm">
-                                <label>
-                                    <input type="checkbox" name="isCustomerStock"
-                                           [(ngModel)]="viewCustWorkInfo.isCustomerStock" disabled>
-                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                    Customer Stock
+                        <div class="form-group" >
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-inline" style="pointer-events: none;">
+                                    <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                        [checked]="viewCustWorkInfo.isCustomerStock == true"
+                                        >
+                                    Rotable Customer Stock
+                                </label>
+                            </div>
+                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                <label class="radio-inline" style="pointer-events: none;">
+                                    <input type="radio" value="2" name="assetRadio" 
+                                        [checked]="viewCustWorkInfo.isCustomerStock == false">
+                                    Piece Parts
                                 </label>
                             </div>
                         </div>
@@ -732,25 +412,30 @@
                         <p>
                             <span class="label"><b>Customer Code: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerCode }}</span>
                         </p>
-                       
-                     
-                     
-                       
                         <p>
                             <span class="label"><b>Contact: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.customerContact }}</span>
                         </p>
-                        <!-- <p><span class="label"><b>Contact: <span class="text-danger">*</span></b></span><span
-                        class="value">{{ viewCustWorkInfo.customerContact }}</span></p> -->
                         <p>
                             <span class="label"><b>Contact Phone: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.contactPhone }}</span>
                         </p>
+                        
+                        <p>
+                            <span class="label"><b>WO Num: </b></span><span class="value">{{ viewCustWorkInfo.woNum ? viewCustWorkInfo.woNum : '-' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>WO CreatedBy: </b></span><span class="value">{{ viewCustWorkInfo.woCreatedBy ? viewCustWorkInfo.woCreatedBy : '-' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>WO CreatedDate: </b></span><span class="value">{{ viewCustWorkInfo.woCreatedDate ? (viewCustWorkInfo.woCreatedDate  | date: 'MM/dd/yyyy') : '-' }}</span>
+                        </p>
+                    </div>
+                    <div class="col-md-4">
                         <p>
                             <span class="label"><b>PN: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.partNumber }}</span>
                         </p>
                         <p>
                             <span class="label"><b>PN Description:</b></span><span class="value">{{ viewCustWorkInfo.partDescription ? viewCustWorkInfo.partDescription : '-' }}</span>
                         </p>
-                      
                         <p>
                             <span class="label"><b>Revised PN: </b></span><span class="value">{{ viewCustWorkInfo.revisedPart ? viewCustWorkInfo.revisedPart : '-' }}</span>
                         </p>
@@ -763,57 +448,40 @@
                         <p>
                             <span class="label"><b>QTY: </b></span><span class="value">{{ viewCustWorkInfo.quantity ? viewCustWorkInfo.quantity : '-' }}</span>
                         </p>
-               
-
-                      
                         <p>
                             <span class="label"><b>Condition: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.condition }}</span>
                         </p>
-                      
-                        <div class="form-row">
-                            <div class="col-md-7">
-                                <div class="shadow-Box" style="padding: 3px 10px;">
-                                    <p>
-                                        <span class="label"><b>Site: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.site }}</span>
-                                    </p>
-                                    <p>
-                                        <span class="label"><b>Warehouse: </b></span><span class="value">{{ viewCustWorkInfo.warehouse ? viewCustWorkInfo.warehouse : '-' }}</span>
-                                    </p>
-                                    <p>
-                                        <span class="label"><b>Location: </b></span><span class="value">{{ viewCustWorkInfo.location ? viewCustWorkInfo.location : '-' }}</span>
-                                    </p>
-                                    <p>
-                                        <span class="label"><b>Shelf: </b></span><span class="value">{{ viewCustWorkInfo.shelf ? viewCustWorkInfo.shelf : '-' }}</span>
-                                    </p>
-                                    <p>
-                                        <span class="label"><b>Bin: </b></span><span class="value">{{ viewCustWorkInfo.bin ? viewCustWorkInfo.bin : '-' }}</span>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                        <p>
+                            <span class="label"><b>Site: <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.site }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Warehouse: </b></span><span class="value">{{ viewCustWorkInfo.warehouse ? viewCustWorkInfo.warehouse : '-' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Location: </b></span><span class="value">{{ viewCustWorkInfo.location ? viewCustWorkInfo.location : '-' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Shelf: </b></span><span class="value">{{ viewCustWorkInfo.shelf ? viewCustWorkInfo.shelf : '-' }}</span>
+                        </p>
+                        <p>
+                            <span class="label"><b>Bin: </b></span><span class="value">{{ viewCustWorkInfo.bin ? viewCustWorkInfo.bin : '-' }}</span>
+                        </p>
                         <p>
                             <span class="label"><b>Certify By: </b></span><span class="value">{{ viewCustWorkInfo.certifiedBy ? viewCustWorkInfo.certifiedBy : '-' }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Parts Cert Num: </b></span><span class="value">{{ viewCustWorkInfo.partCertificationNumber ? viewCustWorkInfo.partCertificationNumber : '-' }}</span>
                         </p>
+                       
+                    </div>
+                    <div class="col-md-4">
                         <p>
                             <span class="label"><b>Tag Date: </b></span><span class="value">{{ viewCustWorkInfo.tagDate | date: 'MM/dd/yyyy' }}</span>
                         </p>
                         <p>
                             <span class="label"><b>Tag Type: </b></span><span class="value">{{ viewCustWorkInfo.tagType ? viewCustWorkInfo.tagType : '-' }}</span>
                         </p>
-                        <p>
-                            <span class="label"><b>WO Num: </b></span><span class="value">{{ viewCustWorkInfo.woNum ? viewCustWorkInfo.woNum : '-' }}</span>
-                        </p>
-                        <p>
-                            <span class="label"><b>WO CreatedBy: </b></span><span class="value">{{ viewCustWorkInfo.woCreatedBy ? viewCustWorkInfo.woCreatedBy : '-' }}</span>
-                        </p>
-                        <p>
-                            <span class="label"><b>WO CreatedDate: </b></span><span class="value">{{ viewCustWorkInfo.woCreatedDate ? (viewCustWorkInfo.woCreatedDate  | date: 'MM/dd/yyyy') : '-' }}</span>
-                        </p>
+                    
                      
                        
                         <p class="full-width">
@@ -868,7 +536,7 @@
                             <span class="label"><b>Exp Date:  <span class="text-danger">*</span></b></span><span class="value">{{ viewCustWorkInfo.expDate | date: 'MM/dd/yyyy' }}</span>
                         </p>
                         <div class="form-row managementstr stR_wdt">
-                            <div class="col-md-6">
+                            <div class="col-md-8">
                                 <div class="card" style="margin-top: 20px;">
                                     <div class="card-header" style="padding: 0 10px;">
                                         <h5 style="margin-bottom: 0; font-size: 12px;">
@@ -878,51 +546,32 @@
                                     <div class="card-body" style="padding: 4px 12px 6px;">
                                         <div class="form-group" style="margin-bottom: 4px;">
                                             <input class="form-control" type="text" name="companyName"
-                                                   [(ngModel)]="managementStructure.level1" disabled>
+                                                   [(ngModel)]="viewCustWorkInfo.level1" disabled>
                                         </div>
                                         <div class="form-group" style="margin-bottom: 4px;">
                                             <input class="form-control" type="text" name="BUName"
-                                                   [(ngModel)]="managementStructure.level2" disabled>
+                                                   [(ngModel)]="viewCustWorkInfo.level2" disabled>
                                         </div>
                                         <div class="form-group" style="margin-bottom: 4px;">
                                             <input class="form-control" type="text" name="divisionName"
-                                                   [(ngModel)]="managementStructure.level3" disabled>
+                                                   [(ngModel)]="viewCustWorkInfo.level3" disabled>
                                         </div>
                                         <div class="form-group" style="margin-bottom: 4px;">
                                             <input class="form-control" type="text" name="deptName"
-                                                   [(ngModel)]="managementStructure.level4" disabled>
+                                                   [(ngModel)]="viewCustWorkInfo.level4" disabled>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <p >
-                            <!-- *ngIf="viewCustWorkInfo.isExpDate" -->
+                        <!-- <p >
                             <span class="label"><b>Memo: </b></span><span class="value">{{ viewCustWorkInfo.memo ? viewCustWorkInfo.memo : '-' }}</span>
+                        </p> -->
+                        <p >
+                            <span class="label"><b> Memo: </b></span><span class="value textareaMemos" [innerHTML]="viewCustWorkInfo.memo" matTooltipPosition="above"  [matTooltip]="parsedText(viewCustWorkInfo.memo)"></span>
                         </p>
-
-                        <!-- <div class="form-group">
-                            <div class="table-responsive table-overflow" *ngIf="customerWorkDocumentsList.length> 0">
-                                <h4 class="panel-title" >Attachment Details:</h4>
-                                <table class="table table-bordered ">
-                                    <thead>
-                                        <tr>
-                                            <th>File Name</th>
-                                            <th>Download</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody *ngFor="let f of customerWorkDocumentsList">
-                                        <tr>
-                                            <td>{{f.fileName}}</td>
-                                            <td><a (click)="downloadFileUpload(f)" matTooltip="Download" matTooltipPosition="above" class="btn nobg btn-cstm"><span><i class="fa fa-download"></i></span></a> </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
-
                 <div class="card">
                     <div class="card-body" style="padding: 2px 10px;">
                         <div class="form-row">
@@ -1073,197 +722,11 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-10 tableview">
-                    <h4 class="panel-title">Attachment Details:</h4>
-                    <p-table #table3 class="table-responsive1 rpo-table-cstm"
-                             [paginator]="customerWorkDocumentsList.length > 0"
-                             [value]="customerWorkDocumentsList" [rows]="5" [pageLinks]="3"
-                             [rowsPerPageOptions]="[10,20,50,100]" [columns]="documentTableColumns" [scrollable]="true" scrollHeight="450px"
-                             (onPage)="pageIndexChange($event)">
-                        <ng-template pTemplate="colgroup" let-columns>
-                            <colgroup>
-                                <col *ngFor="let col of columns" style="width:130px" />
-                            </colgroup>
-                        </ng-template>
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                                    [pSortableColumn]="col.field">
-                                    <div>
-                                        {{ col.header }}
-                                        <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'" [field]="col.field">
-                                        </p-sortIcon>
-                                    </div>
-                                </th>
-
-                            </tr>
-                            <tr>
-                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input type="text" (input)="table3.filter($event.target.value, col.field,'contains') "
-                                           *ngIf="col.field !='download' && col.field !='delete' && col.field != 'createdDate' && col.field != 'updatedDate'"
-                                           pInputText>
-                                    <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
-                                           name="createdDate"
-                                           (change)="dateFilterForTable($event.target.value, col.field )">
-                                    <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                    <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
-                                           name="updatedDate"
-                                           (change)="dateFilterForTable($event.target.value, col.field )">
-                                </th>
-                                <!-- <th style="width:140px;position:sticky"></th> -->
-                                <!-- <th></th> -->
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
-                            <tr *ngIf="customerWorkDocumentsList.length > 0">
-                                <td *ngFor="let col of columns">
-                                    <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
-                                    <!-- <ng-container > -->
-                                    <div *ngIf="col.field !='download'">
-                                        <span>
-                                            {{
-                                      col.field == 'createdDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                        : rowData[col.field] && col.field == 'updatedDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                        : rowData[col.field]
-                                            }}
-                                        </span>
-                                        <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
-                                        rowData[col.field]
-                                        </span> -->
-                                    </div>
-                                    <div *ngIf="col.field =='download'" class="align_center">
-                                        <a (click)="downloadFileUpload(rowData)" matTooltip="Download"
-                                           matTooltipPosition="above" class="btn nobg btn-cstm">
-                                            <span>
-                                                <i class="fa fa-download"></i>
-                                            </span>
-                                        </a>
-                                        <span data-toggle="modal" data-target="#contentAuditHistDoc">
-                                            <a class="btn nobg"
-                                               (click)="openHistoryDoc(rowData)"
-                                               matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                                        </span>
-
-                                    </div>
-
-                                    <!-- </ng-container> -->
-                                </td>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="summary" id="footer">
-                            <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
-                                   pInputText type="text" />
-
-                            &nbsp;&nbsp;
-                            <label id="footer" class="footer1">Pages Count:</label>
-
-                            <input style="width: 5%;" [ngModel]="getPageCount(table3._totalRecords, pageSize)"
-                                   name="page count" disabled pInputText type="text" />
-                        </ng-template>
-                        <ng-template pTemplate="emptymessage" let-columns
-                                     *ngIf="customerWorkDocumentsList.length == 0">
-                            <tr>
-                                <td [attr.colspan]="7" style="color: red; font-weight: bold; text-align: center;">
-                                    No records found
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
+                <div class="col-md-12 tableview">
+                    <app-common-documents [moduleName]="moduleName" [referenceId]="rcId" [isViewMode]="true"
+                    [offLineUpload]="true"></app-common-documents>
                 </div>
-                <div class="modal popup-blur"
-                     id="contentAuditHistDoc"
-                     data-backdrop="static">
-                    <div class="modal-dialog modal-xl">
-                        <div class="modal-content">
-
-                            <div class="modal-header">
-                                <h4 class="modal-title">History of  Documents</h4>
-                                <button type="button" class="close" (click)="dismissDocumentPopupModel('#contentAuditHistDoc')">
-                                    &times;
-                                </button>
-
-                            </div>
-                            <div class="modal-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th> Name</th>
-                                                <th>Description</th>
-                                                <th>Memo</th>
-                                                <th>File Name</th>
-                                                <th>File Size</th>
-
-                                                <th>Updated By</th>
-                                                <th>Last Updated Time</th>
-                                                <th>Created By</th>
-                                                <th>Created Time</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
-                                            <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
-                                                <td [ngStyle]="{
-                color: getColorCodeForHistoryDoc(i, 'docName', audit.docName)
-                  ? 'black'
-                  : 'red'
-              }">
-                                                    {{ audit.docName }}
-                                                </td>
-                                                <td [ngStyle]="{
-                color: getColorCodeForHistoryDoc(
-                  i,
-                  'docDescription',
-                  audit.docDescription
-                )
-                  ? 'black'
-                  : 'red'
-              }">
-                                                    {{ audit.docDescription }}
-                                                </td>
-                                                <td [ngStyle]="{
-                color: getColorCodeForHistoryDoc(i, 'docMemo', audit.docMemo)
-                  ? 'black'
-                  : 'red'
-              }">
-                                                    {{ audit.docMemo }}
-                                                </td>
-                                                <td [ngStyle]="{
-                color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName)
-                  ? 'black'
-                  : 'red'
-              }">
-                                                    {{ audit.fileName }}
-                                                </td>
-                                                <td>{{ audit.fileSize }}</td>
-
-                                                <td>{{ audit.updatedBy }}</td>
-                                                <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                                                <td>{{ audit.createdBy }}</td>
-                                                <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button"
-                                        class="btn btn-danger"
-                                        (click)="dismissDocumentPopupModel('#contentAuditHistDoc')">
-                                    Close
-                                </button>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
-
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
@@ -1275,21 +738,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <!-- <h4 class="modal-title warning_color" *ngIf="restrictID == 0">Warning</h4> -->
                 <h4 class="modal-title restrict_color" *ngIf="restrictID != 0">Restriction</h4>
-                <!-- <p id="clockdiv" class="clockdiv"></p> -->
             </div>
             <div class="pad_msf">
-                <!-- <p *ngIf="warningID != 0 && restrictID == 0" class="mar_o warning_color">
-                    {{warningMessage}}</p> -->
-                <!-- <p *ngIf="warningMessage != undefined">Not able to create customer work because cuatomer having restrcitions</p> -->
                 <p *ngIf="restrictID != 0" class="mar_o restrict_color">
                     {{restrictMessage}}
                 </p>
-                <!-- <p *ngIf=" restrictID != 0 && isEditCustomer==true" class="mar_o">Not able to Edit customer work because customer
-                    having restrictions</p>
-                    <p *ngIf=" restrictID != 0 && isAddWorkOrder==true" class="mar_o">Not able to create WO because customer
-                        having restrictions</p> -->
             </div>
             <div class="modal-footer" style="padding:10px;">
                 <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"

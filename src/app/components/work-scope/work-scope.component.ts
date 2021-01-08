@@ -23,8 +23,8 @@ import { SingleScreenBreadcrumbService } from "../../services/single-screens-bre
 import { SingleScreenAuditDetails } from '../../models/single-screen-audit-details.model';
 import { validateRecordExistsOrNot, selectedValueValidate, editValueAssignByCondition, getObjectByValue } from '../../generic/autocomplete';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -421,8 +421,8 @@ export class WorkScopeComponent implements OnInit {
     //     this.breadCrumb.currentUrl = '/singlepages/singlepages/app-work-scope';
     //     this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
     // }
-    // @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    // @ViewChild(MatSort,{static:false}) sort: MatSort;
+    // @ViewChild(MatPaginator) paginator: MatPaginator;
+    // @ViewChild(MatSort) sort: MatSort;
     // Active: string = "Active";
     // displayedColumns = ['workscopeId', 'workscopecode', 'description', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     // dataSource: MatTableDataSource<WorkScope>;

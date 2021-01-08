@@ -9,11 +9,11 @@ import { HttpClient } from '@angular/common/http';
 import { Router, NavigationExtras } from '@angular/router';
 import { MasterCompany } from '../../models/mastercompany.model'
 import { AuthService } from '../../services/auth.service';
- 
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MessageSeverity, AlertService } from '../../services/alert.service';
 import { SiteService } from '../../services/site.service';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { Site } from '../../models/site.model';
 import { LegalEntityService } from '../../services/legalentity.service';
@@ -232,7 +232,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 		// this.loadingIndicator = true;
 
 		this.workFlowtService.getSiteList().subscribe(
-			results => this.onDataLoadSuccessful(results), //Pasing first Array and calling Method
+			results => this.onDataLoadSuccessful(results[0]), //Pasing first Array and calling Method
 			error => this.onDataLoadFailed(error)
 		);
 
@@ -423,7 +423,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 	}
 
 	//OnDataLoadSuccessful
-	private onDataLoadSuccessful(getSiteList) {
+	private onDataLoadSuccessful(getSiteList: Site[]) {
 
 		// this.alertService.stopLoadingMessage();
 		// this.loadingIndicator = false;

@@ -12,13 +12,13 @@ import { AuthService } from '../../services/auth.service';
 
 import { MasterCompany } from '../../models/mastercompany.model';
 import { NodeTypeService } from '../../services/node-Type.service';
- 
+// import { DataTableModule } from 'primeng/datatable'; 
 import { TableModule, Table } from 'primeng/table'
 import { ButtonModule } from 'primeng/button'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
-
+// import { Action } from 'rxjs/scheduler/Action';
 import { AuditHistory } from '../../models/audithistory.model';
 import { MenuItem, LazyLoadEvent } from 'primeng/api';//bread crumb
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
@@ -27,8 +27,8 @@ import { validateRecordExistsOrNot, selectedValueValidate, editValueAssignByCond
 import { ConfigurationService } from '../../services/configuration.service';
 import { listSearchFilterObjectCreation } from '../../generic/autocomplete';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

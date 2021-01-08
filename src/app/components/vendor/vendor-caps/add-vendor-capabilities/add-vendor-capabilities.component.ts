@@ -6,8 +6,8 @@ import { MessageSeverity, AlertService } from '../../../../services/alert.servic
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { VendorService } from '../../../../services/vendor.service';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
@@ -831,27 +831,27 @@ export class AddVendorCapabilitiesComponent implements OnInit {
 	saveVendorCapsGeneralInfo() {
 		this.sselectedVendorName = getValueFromObjectByKey('vendorName', this.sourceVendorCap.vendorId);
 
-		var errmessage = '';
+		// var errmessage = '';
 
-		this.alertService.resetStickyMessage();	
-            if(this.sourceVendorCap.tat == 0 || this.sourceVendorCap.tat == null) {	
-				this.isSpinnerVisible = false;	
-				errmessage = errmessage + "TAT values must be greater than zero."
-            }
-            if(this.sourceVendorCap.cost == 0 || this.sourceVendorCap.cost == null) {	
-                this.isSpinnerVisible = false;	
-                if(errmessage != '') {
-                    errmessage = errmessage + '<br />' + "Cost values must be greater than zero."
-                }
-                else
-                {
-                    errmessage = errmessage + "Cost values must be greater than zero."
-                }				
-            }
-            if(errmessage != '') {
-				this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
-				return;
-		    }
+		// this.alertService.resetStickyMessage();	
+        //     if(this.sourceVendorCap.tat == 0 || this.sourceVendorCap.tat == null) {	
+		// 		this.isSpinnerVisible = false;	
+		// 		errmessage = errmessage + "TAT values must be greater than zero."
+        //     }
+        //     if(this.sourceVendorCap.cost == 0 || this.sourceVendorCap.cost == null) {	
+        //         this.isSpinnerVisible = false;	
+        //         if(errmessage != '') {
+        //             errmessage = errmessage + '<br />' + "Cost values must be greater than zero."
+        //         }
+        //         else
+        //         {
+        //             errmessage = errmessage + "Cost values must be greater than zero."
+        //         }				
+        //     }
+        //     if(errmessage != '') {
+		// 		this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
+		// 		return;
+		//     }
 
 		if (this.vendorId != 0 && this.vendorId != undefined && this.vendorId != null) {
 			this.sselectedVendorName = this.vendorName ? this.vendorName : '';

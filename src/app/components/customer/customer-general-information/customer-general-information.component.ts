@@ -48,6 +48,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
     urlPattern = urlPattern();
     phonePattern = phonePattern();
     customertypes: any[];
+    disableSaveMemo: boolean = true;
     customerNames: { customerId: any; name: any; }[];
     disableSaveForEdit:boolean=true;
     countrycollection: any[];
@@ -128,8 +129,12 @@ export class CustomerGeneralInformationComponent implements OnInit {
     editCountryId: number;
     itemMasterIdPMA: number;
     itemMasterIdDER: number;
+    disableAddPMA: boolean = false;
+    disableAddDER: boolean = false;
     @ViewChild("generalInfoForm",{static:false}) formdata;
     @ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
+    customerCode: any;
+	customerName: any;
 
     constructor(public integrationService: IntegrationService, private modalService: NgbModal, public customerClassificationService: CustomerClassificationService, public ataservice: AtaMainService, private authService: AuthService, private alertService: AlertService,
         public customerService: CustomerService, public itemService: ItemMasterService, public vendorser: VendorService, private currencyService: CurrencyService, private commonService: CommonService, private router: Router) {
@@ -142,7 +147,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
         this.isEdit = this.editMode; 
         
         this.getAllPartListSmartDropDown();         
-        this.loadcustomerData();  
+        this.getAllIntegrations();
 
         if (this.isEdit) {
             this.disableSaveForEdit = true;
@@ -154,6 +159,9 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 this.editData = res;
                 this.selectedCustomer = res.name;
                 this.selectedParentId = res.parentId;
+
+                this.customerCode = res.customerCode;
+			    this.customerName = res.name;
 
                 if(res.customerTypeId > 0)
                     this.arrayCustomerTypelist.push(res.customerTypeId);
@@ -170,7 +178,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
                 if(res.parentId > 0)
                     this.arayCustParentlist.push(res.parentId);
 
-                this.loadcustomerParentsData();
+                this.loadcustomerData();  
+                this.loadcustomerParentsData();                
 
                 this.generalInformation = {
                     ...this.editData,
@@ -207,7 +216,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
             }, 1000);            
         } else {
             this.loadcustomerParentsData();
-            this.getAllIntegrations();
+            //this.getAllIntegrations();
             this.getAllCustomerTypes();
             this.getAllCustomerClassification();
             
@@ -377,6 +386,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
     {
         if (event.itemMasterId !== undefined && event.itemMasterId !== null) {
             this.itemMasterIdDER = event.itemMasterId;
+            this.disableAddDER = true;
         }
     }
 
@@ -384,6 +394,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
     {
         if (event.itemMasterId !== undefined && event.itemMasterId !== null) {
             this.itemMasterIdPMA = event.itemMasterId;
+            this.disableAddPMA = true;
         }
     }
 
@@ -476,6 +487,35 @@ export class CustomerGeneralInformationComponent implements OnInit {
             this.isSpinnerVisible = false;
 		});
     }	 
+
+    async loadcustomerEditData(strText = '') {
+        if(this.id > 0)
+			this.arrayCustlist.push(this.id);
+		if(this.arrayCustlist.length == 0) {			
+            this.arrayCustlist.push(0); }
+        
+        await this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name',strText,true,20,this.arrayCustlist.join()).subscribe(response => {
+            
+            this.customerListOriginal = response.map(x => {
+                return {
+                    name: x.label, value: x.value //, customerId: x.value
+                }
+            })
+            this.customerallListOriginal = response.map(x => {
+                return {
+                    name: x.label, value: x.value //, customerId: x.value
+                }
+            })            
+            this.customerNames = response;
+            this.customerNames = this.customerallListOriginal.reduce((acc, obj) => {
+                return acc.filter(x => x.value !== this.selectedParentId)
+            }, this.customerallListOriginal)
+		},err => {
+			const errorLog = err;
+            this.errorMessageHandler(errorLog);		
+            this.isSpinnerVisible = false;
+		});
+    }
     
     async loadcustomerParentsData(strText = '') {      
 		if(this.arayCustParentlist.length == 0) {			
@@ -559,10 +599,14 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
                         this.restictPMAtempList = [];
                     }
+                    this.itemMasterIdPMA =  0;
+                    this.disableAddPMA = false;
                     this.isSpinnerVisible = false;
                 }     
                 else
                 {
+                    this.itemMasterIdPMA =  0;
+                    this.disableAddPMA = false;
                     this.isSpinnerVisible = false;
                 }           
                 
@@ -671,9 +715,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
                         this.restictDERtempList = [];
                     }
+                    this.itemMasterIdDER = 0;
+                    this.disableAddDER = false;
                     this.isSpinnerVisible = false;
                 }        
                 else{
+                    this.itemMasterIdDER = 0;
+                    this.disableAddDER = false;
                     this.isSpinnerVisible = false;
                 }        
             },error => this.saveFailedHelper(error))
@@ -744,7 +792,7 @@ export class CustomerGeneralInformationComponent implements OnInit {
 
     filterCustomerNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.loadcustomerData(event.query); }
+			this.loadcustomerEditData(event.query); }
 	}	
 
     filterCustomerParentNames(event) {
@@ -759,8 +807,13 @@ export class CustomerGeneralInformationComponent implements OnInit {
     onClickPBHCustomer(value) {
         if (value == 'PBHCustomer') {
             this.memoPopupContent = this.generalInformation.pbhCustomerMemo;
+            this.disableSaveMemo=true;
         }
         this.memoPopupValue = value;
+       
+    }
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
     }
     onClickPopupSave() {
         if (this.memoPopupValue == 'PBHCustomer') {
@@ -784,14 +837,16 @@ export class CustomerGeneralInformationComponent implements OnInit {
         this.isCustomerNameAlreadyExists = false;
         this.disableSaveCustomerName = false;
         if (value != this.selectedCustomer) {
-            for (let i = 0; i < this.customerallListOriginal.length; i++) {
-                if (this.generalInformation.name == this.customerallListOriginal[i].name || value == this.customerallListOriginal[i].name) {
-                    this.isCustomerNameAlreadyExists = true;
-                    this.disableSaveCustomerName = true;
-                    this.selectedActionName = event;
-                    return;
+            if(this.customerallListOriginal != undefined && this.customerallListOriginal != null)
+            {
+                for (let i = 0; i < this.customerallListOriginal.length; i++) {
+                    if (this.generalInformation.name == this.customerallListOriginal[i].name || value == this.customerallListOriginal[i].name) {
+                        this.isCustomerNameAlreadyExists = true;
+                        this.disableSaveCustomerName = true;
+                        return;
+                    }
                 }
-            }
+            }            
         }
     }
 
@@ -888,8 +943,20 @@ export class CustomerGeneralInformationComponent implements OnInit {
     }
 
     saveGeneralInformation() {
+        if(this.generalInformation.customerAffiliationId == "3" || this.generalInformation.customerAffiliationId == "1") {
+            if(this.generalInformation.integrationPortalId == undefined || this.generalInformation.integrationPortalId.length <= 0)
+            {
+                this.alertService.showMessage(
+                    'Validation Error',
+                    `Integration with Selection is Required. When Customer Type is Internal Or Affliliate.`,
+                    MessageSeverity.error)		
+                return;
+            }
+        }
+
         this.isSpinnerVisible = true;
         this.stopmulticlicks = true;
+
         if (!this.isEdit) {
             this.customerService.newAction({
                 ...this.generalInformation,
@@ -919,8 +986,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     this.formdata.reset();
                     this.router.navigateByUrl(`customersmodule/customerpages/app-customer-edit/${this.id}`);
                 }
-
-            },error => this.saveFailedHelper(error))
+            },error => { this.isSpinnerVisible = false; })
+            //},error => this.saveFailedHelper(error))
 
         } else {
 
@@ -953,7 +1020,8 @@ export class CustomerGeneralInformationComponent implements OnInit {
                     );
                     this.disableSaveForEdit = true;    
                 }
-            },error => this.saveFailedHelper(error))
+            },error => { this.isSpinnerVisible = false; })
+            //},error => this.saveFailedHelper(error))
         }
         setTimeout(() => {
             this.stopmulticlicks = false;

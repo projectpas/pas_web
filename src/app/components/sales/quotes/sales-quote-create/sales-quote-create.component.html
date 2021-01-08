@@ -144,14 +144,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        <div class="form-group"> 
                                             <label>Employee<span class="clr-red">*</span></label>
-                                            <p-autoComplete class="autocomp-customer-cstm" name="employeeName"
-                                                id="employeeName" #employeeName="ngModel"
-                                                [(ngModel)]="salesQuote.employeeName" [suggestions]="firstCollection"
+                                            <p-autoComplete field="label" class="autocomp-customer-cstm" name="employeeId"
+                                                [(ngModel)]="salesQuote.employeeId" [suggestions]="firstCollection"
                                                 [forceSelection]="true" emptyMessage="No Match Found" field="label"
                                                 (completeMethod)="filterfirstName($event)" [size]="30" [minLength]="1"
-                                                [dropdown]="true" required>
+                                                [dropdown]="true" #employeeName="ngModel" required>
                                             </p-autoComplete>
                                             <div *ngIf="employeeName.invalid && (employeeName.dirty || employeeName.touched)"
                                                 class="alert alert-danger alert-danger-cstm">
@@ -204,7 +203,7 @@
                                                 #customerContactId="ngModel">
                                                 <option value='0' selected>--Select</option>
                                                 <option *ngFor="let contact of customerContactList"
-                                                    [ngValue]="contact.contactId">
+                                                    [ngValue]="contact.customerContactId">
                                                     {{contact.firstName}} {{contact.lastName}} -
                                                     {{ contact.workPhone }}
                                                 </option>
@@ -450,7 +449,7 @@
                             <div class="col-md-4 main_ar">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
-                                        Notes<i class=" fa fa-pencil" data-toggle="modal" data-target="#add-description"
+                                        Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
                                             matTooltipPosition="above" matTooltip="Notes"
                                             (click)="onAddDescription('notes')"></i>
                                     </label>
@@ -487,7 +486,7 @@
                             <button type="submit" *ngIf="!isEdit && !isCreateModeHeader" (click)="onSubmit(true)"
                                 [disabled]="!newSalesQuoteForm.form.valid"
                                 class="btn pull-right submit-btn btn btn-primary">
-                                Submit
+                                Save
                             </button>
                             <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
                                 (click)="openConfirmationModal(true)" [disabled]="enableUpdateButton"
@@ -512,9 +511,9 @@
                             <a class="btn btn-primary" (click)="initiatePrintProcess()">Print Quote </a>
                             <a class="btn btn-primary" (click)="initiateCreatingNewQuote()">New Quote</a>
                             <span class="btn btn-primary" (click)="initiateClosingSalesOrderQuote()">Close</span>
-                            <p-splitButton label="Communication" class="btn btn-primary btn"
+                            <!-- <p-splitButton label="Communication" class="btn btn-primary btn"
                                 [model]="communicationItems">
-                            </p-splitButton>
+                            </p-splitButton> -->
                         </div>
                     </div>
                     <ng-container *ngIf="((isCreateModeHeader||isEdit) && isEmailTabEnabled)">
@@ -547,11 +546,11 @@
 
                             </p-tabPanel>
                             <p-tabPanel header="Address">
-                                <!--<app-address-component [addressType]="addressType" [id]="id">
+                                <app-address-component [addressType]="addressType" [id]="SalesOrderQuoteId">
 
-                                </app-address-component>-->
-                                <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
-                                    [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address>
+                                </app-address-component>
+                                <!-- <app-sales-address [customerId]="customerId" [salesQuoteView]="salesQuoteView"
+                                    [salesQuote]="salesQuote" [salesOrderQuote]="salesOrderQuote"></app-sales-address> -->
                             </p-tabPanel>
                             <p-tabPanel header="Freight">
                                 <app-sales-order-quote-freight [freightForm]="freight" [customerId]="customerId"
@@ -572,14 +571,21 @@
                                 </app-sales-order-quote-charges>
                             </p-tabPanel>
                             <p-tabPanel header="Document">
-                                <app-salesQuote-documents [viewMode]="false" [salesOrderQuoteId]="id"
+                                <!-- <app-salesQuote-documents [viewMode]="false" [salesOrderQuoteId]="id"
                                     [isEditMode]="true">
-                                </app-salesQuote-documents>
+                                </app-salesQuote-documents> -->
+                                <app-common-documents [moduleName]="moduleName" [referenceId]="id" [isViewMode]="false"
+                                    [offLineUpload]="true"></app-common-documents>
                             </p-tabPanel>
-                            <p-tabPanel header="Analysis">
+                            <p-tabPanel header="Analysis"> 
                                 <app-sales-quote-analysis>
                                 </app-sales-quote-analysis>
                             </p-tabPanel>
+                            <p-tabPanel header="Communication">
+                                <!-- [ContactList]="customerContactList" -->
+                              <app-communication [isViewMode]="false" [type]="1" [moduleName]="moduleName" [idForContact]="customerId"  [referenceId]="id"></app-communication>
+                            </p-tabPanel> 
+
                         </p-tabView>
                     </ng-container>
 

@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, Input } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { FormBuilder } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { fadeInOut } from '../../../services/animations';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { AuditHistory } from '../../../models/audithistory.model';
@@ -13,6 +13,7 @@ import { MasterComapnyService } from '../../../services/mastercompany.service';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
@@ -21,7 +22,8 @@ declare const google: any;
     selector: 'app-vendor-billing-information',
     templateUrl: './vendor-billing-information.component.html',
     styleUrls: ['./vendor-billing-information.component.scss'],
-    animations: [fadeInOut]
+    animations: [fadeInOut],
+    providers: [DatePipe]
 })
 /** VendorBillingInformation component*/
 export class VendorBillingInformationComponent {
@@ -34,6 +36,8 @@ export class VendorBillingInformationComponent {
     vendorbillingAddressdetails: any;
     local: any;
     addressId: any;
+    selectedOnly: boolean = false;
+    targetData: any;
     allAddresses: any[];
     vendorCode: any;
     vendorname: any;
@@ -70,6 +74,8 @@ export class VendorBillingInformationComponent {
     closeResult: string;
     selectedColumn: any[];
     cols: any[] = [
+        { field: 'tagName', header: 'Tag' },
+        { field: 'attention', header: 'Attention' },
         { field: 'siteName', header: 'Site Name' },
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
@@ -128,11 +134,14 @@ export class VendorBillingInformationComponent {
     disableSaveBillingCountry: boolean = true;
     vendorCodeandName: any;
     editSiteName: string = '';
+    arrayTagNamelist:any=[];
+    tagNamesList:any=[];
 
     constructor(private http: HttpClient, private router: Router,private activeRoute: ActivatedRoute,
         private authService: AuthService, private modalService: NgbModal,
         private activeModal: NgbActiveModal, private _fb: FormBuilder,private commonService: CommonService,
         private alertService: AlertService,
+        private datePipe: DatePipe,
         public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
             if(window.localStorage.getItem('vendorService')){
                 var obj = JSON.parse(window.localStorage.getItem('vendorService'));
@@ -211,19 +220,25 @@ export class VendorBillingInformationComponent {
         }
         else{
             this.countrylist();
+            this.vendorId = this.activeRoute.snapshot.params['id'];
+            this.vendorService.vendorId = this.vendorId;
+            this.vendorService.listCollection.vendorId = this.vendorId; 
         }
         this.loadData();        
     }
 
     getVendorCodeandNameByVendorId()
     {
-        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-            res => {
-                    this.vendorCodeandName = res[0];
-            },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+        if(this.vendorId > 0)
+        {
+            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                res => {
+                        this.vendorCodeandName = res[0];
+                },err => {
+                    const errorLog = err;
+                    this.saveFailedHelper(errorLog);
             });
+        }        
     }
 
     private loadData() {
@@ -241,7 +256,20 @@ export class VendorBillingInformationComponent {
             } 
         );
     }
-
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+    }
+    
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
+    }
     private countrylist() {
         this.isSpinnerVisible = true;
         this.vendorService.getCountrylist().subscribe(
@@ -337,6 +365,12 @@ export class VendorBillingInformationComponent {
             countryId: getObjectById('countries_id', row.countryId, this.allCountryinfo)
         };
 
+        if(row.contactTagId > 0)
+        {
+            this.arrayTagNamelist.push(row.contactTagId);
+            this.getAllTagNameSmartDropDown('', row.contactTagId);
+        }
+
         this.arraySiteIdlist.push(row.vendorBillingAddressId); 
         this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorBillingAddress', 'VendorBillingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arraySiteIdlist.join()).subscribe(response => {
             this.sitelistCollectionOriginal = response.map(x => {
@@ -359,7 +393,11 @@ export class VendorBillingInformationComponent {
                 const errorLog = err;
                 this.saveFailedHelper(errorLog);
             });
-
+            if(row.contactTagId > 0)
+            {
+                this.arrayTagNamelist.push(row.contactTagId);
+                this.getAllTagNameSmartDropDown('', row.contactTagId);
+            }
         this.sourceVendor['tempIsPrimary'] = this.sourceVendor.isPrimary;
     }
 
@@ -418,6 +456,7 @@ export class VendorBillingInformationComponent {
                 this.sourceVendor.isPrimary= this.sourceVendor.isPrimary ? this.sourceVendor.isPrimary :false;
                 this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
                 this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
                 this.vendorService.createNewBillinginfo(this.sourceVendor).subscribe(data => {
                     this.localCollection = data;
                     this.isSaving = false;
@@ -425,22 +464,23 @@ export class VendorBillingInformationComponent {
                     this.sourceVendor = {};
                     this.alertService.showMessage("Success", `Biiling Info was added successfully`, MessageSeverity.success);                    
                     this.isSpinnerVisible = false;
-                }, error => this.saveFailedHelper(error))
+                }, error => {this.isSaving = false; this.isSpinnerVisible = false})
             }
             else {
-                //this.sourceVendor.isActive = this.sourceVendor.isActive ? this.sourceVendor.isActive : true;
                 this.sourceVendor.updatedBy = this.userName;
                 this.sourceVendor.isPrimary= this.sourceVendor.isPrimary ? this.sourceVendor.isPrimary :false;
                 this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
                 this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
-                this.sourceVendor.masterCompanyId = this.currentUserMasterCompanyId;
-                this.vendorService.updateBillAddressdetails(this.sourceVendor).subscribe(data => {
-                    this.updatedCollection = data;
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
+                this.sourceVendor.masterCompanyId = this.currentUserMasterCompanyId;                
+                this.vendorService.createNewBillinginfo(this.sourceVendor).subscribe(data => {
+               //this.vendorService.updateBillAddressdetails(this.sourceVendor).subscribe(data => {
+                    this.updatedCollection = data; 
                     this.loadData();
                     this.sourceVendor = {};
                     this.alertService.showMessage("Success", `Biiling Info was Updated successfully`, MessageSeverity.success);
                     this.isSpinnerVisible = false;
-                }, error => this.saveFailedHelper(error))
+                }, error => {this.isSaving = false; this.isSpinnerVisible = false;})
             }
         }
         $('#addBillingInfo').modal('hide');
@@ -786,6 +826,29 @@ export class VendorBillingInformationComponent {
         this.disableSave = false;        
         // this.disableSaveBillingCountry = this.isEditBillingInfo ? false : true;
     }
+    filterTagNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllTagNameSmartDropDown(event.query); }
+    }
+    
+    getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+        if(this.arrayTagNamelist.length == 0) {			
+            this.arrayTagNamelist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+            this.tagNamesList = res.map(x => {
+                return {
+                    tagName: x.label, contactTagId: x.value 
+                }
+            })
 
+            if(contactTagId > 0)
+            {
+                this.sourceVendor = {
+                    ...this.sourceVendor,
+                    tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+                }
+            }
+        })
+    }
 }
 

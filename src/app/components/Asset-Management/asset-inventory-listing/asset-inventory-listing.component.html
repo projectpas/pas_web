@@ -76,9 +76,12 @@
                                 (click)="selectedOnly = false; targetData = dt;" 
                                 data-target="#downloadConfirmation"></button>
                                  <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data" matTooltipPosition="above" matTooltip="Download Selected Data" matTooltipPosition="above"
-                                pButton icon="fa-download" iconPos="left" style="padding: 5px 12px !important;" label="Export Selected Data"  data-toggle="modal"
+                                pButton icon="fa-download" iconPos="left" style="padding: 5px 12px !important;"
+                                 label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
+                                ></button>
+                                <!-- data-toggle="modal"
                                 data-target="#downloadConfirmation"
-                                (click)="selectedOnly = true; targetData = dt;"></button>
+                                (click)="selectedOnly = true; targetData = dt;" -->
                                
                                </div>
                                 <div class="col">

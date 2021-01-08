@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { POROCategory } from '../../models/po-ro-category.model';
 import { POROCategoryEndpoint } from './po-ro-category-endpoint.service';
 
@@ -17,12 +18,12 @@ export class POROCategoryService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.POROCategoryEndpointService.getAllPOROCategory<POROCategory[]>());
     }
 
     getById(poroCategoryId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.POROCategoryEndpointService.getPOROCategoryById<POROCategory>(poroCategoryId)
         );
     }
@@ -44,11 +45,11 @@ export class POROCategoryService {
     }
 
     //getRolesData() {
-    //    return forkJoin(
+    //    return Observable.forkJoin(
     //        this.POROCategoryEndpointService.getRolesData<any[]>());
     //}
     //getRolesDataByUserId(event) {
-    //    return forkJoin(
+    //    return Observable.forkJoin(
     //        this.POROCategoryEndpointService.getRolesDatayRoleId<any[]>(event));
     //}
     getAudit(poroCategoryId: number) {
@@ -60,7 +61,7 @@ export class POROCategoryService {
     }
 
     search(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.POROCategoryEndpointService.getMaster1099searchEndpoint<any[]>(serverSidePagesData));
     }
 }

@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit, ChangeDetectorRef, AfterViewChecked, OnDestroy, HostListener } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -17,10 +17,10 @@ import { MessageSeverity, AlertService } from '../../../../services/alert.servic
 import { MasterComapnyService } from '../../../../services/mastercompany.service';
 import { Router, NavigationExtras, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { GMapModule } from 'primeng/gmap';
 import { AddActionsDialogComponent } from '../../../dialogs/add-actions-dialog/add-actions-dialog.component';
-
+// import { unescapeHtml } from '@angular/platform-browser/src/browser/transfer_state';
 import { FileUploadModule } from 'primeng/fileupload';
 import { Message } from 'primeng/components/common/message';
 import { MenuItem } from 'primeng/components/common/menuitem';

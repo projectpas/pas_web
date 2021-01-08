@@ -1,8 +1,8 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../services/endpoint-factory.service';
 import { ConfigurationService } from '../services/configuration.service';
 import { Dir } from '@angular/cdk/bidi';
@@ -10,7 +10,7 @@ import { Charge } from '../models/charge.model';
 
 //import { EndpointFactory } from './endpoint-factory.service';
 //import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ActionEndpoint extends EndpointFactory {
 
@@ -66,41 +66,40 @@ export class ActionEndpoint extends EndpointFactory {
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
-
         super(http, configurations, injector);
     }
 
     toggleState<T>(workflowId: number): Observable<T> {
         let endpointUrl = `${this.toggleStateURL}/${workflowId}`;
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.toggleState(workflowId));
-            }));
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.toggleState(workflowId));
+            });
     }
 
     getWorkFlow<T>(workflowid: any): Observable<T> {
         let endpointUrl = `${this.getWorkFlowURL}/${workflowid}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getWorkFlow(workflowid));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getWorkFlow(workflowid));
+            });
     }
 
     getWorkFlowWithMaterialList<T>(workflowid: any): Observable<T> {
         let endpointUrl = `${this.getWorkFlowWithMaterialURL}/${workflowid}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getWorkFlowWithMaterialList(workflowid));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getWorkFlowWithMaterialList(workflowid));
+            });
     }
 
     removeWorkFlow<T>(workFlowId: number): Observable<T> {
         let endpointUrl = `${this.RemoveWorkFlowURL}/${workFlowId}`;
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(
+        return this.http.delete(endpointUrl, this.getRequestHeaders())
+            .catch(
                 error => {
-                    return this.handleError(error, () => this.removeWorkFlow(workFlowId));
-                }));
+                    return this.handleErrorCommon(error, () => this.removeWorkFlow(workFlowId));
+                });
     }
 
     addWorkFlowHeader<T>(workflowData: any): Observable<T> {
@@ -127,6 +126,14 @@ export class ActionEndpoint extends EndpointFactory {
             'berThresholdAmount': workflowData.berThresholdAmount,
             'memo': workflowData.memo,
             'customerName': workflowData.customerName,
+            'masterCompanyId': workflowData.masterCompanyId,
+            'createdBy': workflowData.createdBy,
+            'updatedBy': workflowData.updatedBy,
+            'percentageOfMaterial': workflowData.percentageOfMaterial,
+            'percentageOfExpertise': workflowData.percentageOfExpertise,
+            'percentageOfCharges': workflowData.percentageOfCharges,
+            'percentageOfOthers': workflowData.percentageOfOthers,
+            'percentageOfTotal': workflowData.percentageOfTotal,
 
             'workflowId': workflowData.workflowId,
             'workScopeId': workflowData.workScopeId,
@@ -136,15 +143,14 @@ export class ActionEndpoint extends EndpointFactory {
             'otherCost': workflowData.otherCost,
             'isVersionIncrease': workflowData.isVersionIncrease
         };
-        return this.http.post<any>(this.AddWorkFlowHeaderURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getNewWorkFlow(workflowData));
-            }));
+        return this.http.post<T>(this.AddWorkFlowHeaderURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getNewWorkFlow(workflowData));
+            });
 
     }
 
     getNewWorkFlow<T>(workflowData: any): Observable<T> {
-
         let obj = {
             'charges': workflowData.charges,
             'directions': workflowData.directions,
@@ -154,6 +160,9 @@ export class ActionEndpoint extends EndpointFactory {
             'materialList': workflowData.materialList,
             'measurements': workflowData.measurements,
             'publication': workflowData.publication,
+            'masterCompanyId': workflowData.masterCompanyId,
+            'createdBy': workflowData.createdBy,
+            'updatedBy': workflowData.updatedBy,
 
             'workflowDescription': workflowData.workflowDescription,
             'itemMasterId': workflowData.itemMasterId,
@@ -183,17 +192,20 @@ export class ActionEndpoint extends EndpointFactory {
             'isActive': workflowData.isActive,
             'workflowCreateDate': workflowData.workflowCreateDate,
             'otherCost': workflowData.otherCost,
-            'isVersionIncrease': workflowData.isVersionIncrease
-
+            'isVersionIncrease': workflowData.isVersionIncrease,
+            'percentageOfMaterial': workflowData.percentageOfMaterial,
+            'percentageOfExpertise': workflowData.percentageOfExpertise,
+            'percentageOfCharges': workflowData.percentageOfCharges,
+            'percentageOfOthers': workflowData.percentageOfOthers,
+            'percentageOfTotal': workflowData.percentageOfTotal,
         };
-        return this.http.post<any>(this.AddWorkFlowURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getNewWorkFlow(workflowData));
-            }));
+        return this.http.post<T>(this.AddWorkFlowURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getNewWorkFlow(workflowData));
+            });
     }
 
     addCharges<T>(charges: any): Observable<T> {
-
         let obj = {
             'taskId': charges.taskId,
             'workflowId': charges.workflowId,
@@ -215,10 +227,10 @@ export class ActionEndpoint extends EndpointFactory {
 
         }
 
-        return this.http.post<any>(this.AddChargesURL, JSON.parse(JSON.stringify(charges)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addCharges(charges));
-            }));
+        return this.http.post<T>(this.AddChargesURL, JSON.parse(JSON.stringify(charges)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addCharges(charges));
+            });
     }
 
     addDirection<T>(direction: any): Observable<T> {
@@ -231,10 +243,10 @@ export class ActionEndpoint extends EndpointFactory {
             'memo': direction.memo,
             'isDelete': direction.isDelete,
         }
-        return this.http.post<any>(this.AddDirectionURL, JSON.parse(JSON.stringify(direction)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addDirection(direction));
-            }));
+        return this.http.post<T>(this.AddDirectionURL, JSON.parse(JSON.stringify(direction)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addDirection(direction));
+            });
     }
 
     addEquipment<T>(equipment: any): Observable<T> {
@@ -249,10 +261,10 @@ export class ActionEndpoint extends EndpointFactory {
             'isDelete': equipment.isDelete,
             'partNumber': equipment.partNumber
         }
-        return this.http.post<any>(this.AddEquipmentURL, JSON.parse(JSON.stringify(equipment)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addEquipment(equipment));
-            }));
+        return this.http.post<T>(this.AddEquipmentURL, JSON.parse(JSON.stringify(equipment)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addEquipment(equipment));
+            });
     }
 
     addExclusion<T>(exclusion: any): Observable<T> {
@@ -270,10 +282,10 @@ export class ActionEndpoint extends EndpointFactory {
             'isDelete': exclusion.isDelete,
             'memo': exclusion.memo
         }
-        return this.http.post<any>(this.AddExclusionURL, JSON.parse(JSON.stringify(exclusion)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addExclusion(exclusion));
-            }));
+        return this.http.post<T>(this.AddExclusionURL, JSON.parse(JSON.stringify(exclusion)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addExclusion(exclusion));
+            });
     }
 
     addExpertise<T>(expertise: any): Observable<T> {
@@ -291,10 +303,10 @@ export class ActionEndpoint extends EndpointFactory {
             'isDelete': expertise.isDelete,
 
         }
-        return this.http.post<any>(this.AddExpertiseURL, JSON.parse(JSON.stringify(expertise)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addExpertise(expertise));
-            }));
+        return this.http.post<T>(this.AddExpertiseURL, JSON.parse(JSON.stringify(expertise)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addExpertise(expertise));
+            });
     }
 
     addMaterial<T>(material: any): Observable<T> {
@@ -318,10 +330,10 @@ export class ActionEndpoint extends EndpointFactory {
             'isDelete': material.isDelete,
             'partNumber': material.partNumber
         }
-        return this.http.post<any>(this.AddMaterialListURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addMaterial(material));
-            }));
+        return this.http.post<T>(this.AddMaterialListURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addMaterial(material));
+            });
     }
 
     addMeasurement<T>(measurement: any): Observable<T> {
@@ -340,227 +352,205 @@ export class ActionEndpoint extends EndpointFactory {
             'partDescription': measurement.partDescription,
             'workflowId': measurement.workflowId
         }
-        return this.http.post<any>(this.AddMeasurementURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addMeasurement(measurement));
-            }));
+        return this.http.post<T>(this.AddMeasurementURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addMeasurement(measurement));
+            });
     }
 
     addPublication<T>(publication: any): Observable<T> {
-
-        return this.http.post<any>(this.AddPublicationURL, JSON.parse(JSON.stringify(publication)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addPublication(publication));
-            }));
+        return this.http.post<T>(this.AddPublicationURL, JSON.parse(JSON.stringify(publication)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addPublication(publication));
+            });
     }
 
     updateCharges<T>(charges: any): Observable<T> {
-        return this.http.post<any>(this.UpdateChargesURL, JSON.parse(JSON.stringify(charges)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateCharges(charges));
-            }));
+        return this.http.post<T>(this.UpdateChargesURL, JSON.parse(JSON.stringify(charges)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateCharges(charges));
+            });
     }
 
     updateEquipment<T>(equipment: any): Observable<T> {
-        return this.http.post<any>(this.UpdateEquipmentURL, JSON.parse(JSON.stringify(equipment)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateEquipment(equipment));
-            }));
+        return this.http.post<T>(this.UpdateEquipmentURL, JSON.parse(JSON.stringify(equipment)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateEquipment(equipment));
+            });
     }
 
     updateDirection<T>(direction: any): Observable<T> {
-
-        return this.http.post<any>(this.UpdateDirectionURL, JSON.parse(JSON.stringify(direction)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateEquipment(direction));
-            }));
+        return this.http.post<T>(this.UpdateDirectionURL, JSON.parse(JSON.stringify(direction)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateEquipment(direction));
+            });
     }
 
     updateExclusion<T>(exclusion: any): Observable<T> {
-
-        return this.http.post<any>(this.UpdateExclusionURL, JSON.parse(JSON.stringify(exclusion)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateExclusion(exclusion));
-            }));
+        return this.http.post<T>(this.UpdateExclusionURL, JSON.parse(JSON.stringify(exclusion)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateExclusion(exclusion));
+            });
     }
 
     updateExpertise<T>(expertise: any): Observable<T> {
-
-        return this.http.post<any>(this.UpdateExpertiseURL, JSON.parse(JSON.stringify(expertise)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateExclusion(expertise));
-            }));
+        return this.http.post<T>(this.UpdateExpertiseURL, JSON.parse(JSON.stringify(expertise)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateExclusion(expertise));
+            });
     }
 
     updateMeasurement<T>(measurement: any): Observable<T> {
-        return this.http.post<any>(this.UpdateMeasurementURL, JSON.parse(JSON.stringify(measurement)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateMeasurement(measurement));
-            }));
+        return this.http.post<T>(this.UpdateMeasurementURL, JSON.parse(JSON.stringify(measurement)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateMeasurement(measurement));
+            });
     }
 
     updateMaterial<T>(material: any): Observable<T> {
-
-        return this.http.post<any>(this.UpdateMaterialListURL, JSON.parse(JSON.stringify(material)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updateMeasurement(material));
-            }));
+        return this.http.post<T>(this.UpdateMaterialListURL, JSON.parse(JSON.stringify(material)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updateMeasurement(material));
+            });
     }
 
     updatePublication<T>(publication: any): Observable<T> {
-
-        return this.http.post<any>(this.UpdatePublicationURL, JSON.parse(JSON.stringify(publication)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.updatePublication(publication));
-            }));
+        return this.http.post<T>(this.UpdatePublicationURL, JSON.parse(JSON.stringify(publication)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.updatePublication(publication));
+            });
     }
 
     addAction<T>(action: any): Observable<T> {
-
-        return this.http.post<any>(this.getAddActionURL, JSON.parse(JSON.stringify(action)), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.addAction(action));
-            }));
+        return this.http.post<T>(this.getAddActionURL, JSON.parse(JSON.stringify(action)), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.addAction(action));
+            });
     }
 
     getActions<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getActionURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getActions());
-            }));
+        return this.http.get<T>(this.getActionURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getActions());
+            });
     }
 
     getActionAttributes<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getActionAttributesURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getActionAttributes());
-            }));
+        return this.http.get<T>(this.getActionAttributesURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getActionAttributes());
+            });
     }
 
     getChargesCurrency<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getChargesCurrencyURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getChargesCurrency());
-            }));
+        return this.http.get<T>(this.getChargesCurrencyURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getChargesCurrency());
+            });
     }
 
     GetExpertiseType<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getExpertiseTypeURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetExpertiseType());
-            }));
+        return this.http.get<T>(this.getExpertiseTypeURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetExpertiseType());
+            });
     }
 
     getEmployeeExpertiseType<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getEmployeeExpertiseTypeURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getEmployeeExpertiseType());
-            }));
+        return this.http.get<T>(this.getEmployeeExpertiseTypeURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getEmployeeExpertiseType());
+            });
     }
 
 
     getEquipmentAssetType<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getEquipmentAssetTypesURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getEquipmentAssetType());
-            }));
+        return this.http.get<T>(this.getEquipmentAssetTypesURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getEquipmentAssetType());
+            });
     }
 
     GetMaterialMandatory<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getMaterialMandatoryURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetMaterialMandatory());
-            }));
+        return this.http.get<T>(this.getMaterialMandatoryURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetMaterialMandatory());
+            });
     }
 
     GetMaterialUOM<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getMaterialUOMURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetMaterialUOM());
-            }));
+        return this.http.get<T>(this.getMaterialUOMURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetMaterialUOM());
+            });
     }
 
     GetExclusionEstimatedOccurance<T>(): Observable<T> {
-
-        return this.http.get<any>(this.getExclusionEstimatedOccuranceURL, this.getRequestHeaders())
-
-            .pipe(catchError(error => {
-
-                return this.handleError(error, () => this.GetExclusionEstimatedOccurance());
-
-            }));
+        return this.http.get<T>(this.getExclusionEstimatedOccuranceURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetExclusionEstimatedOccurance());
+            });
     }
 
     GetPublicationStatus<T>(): Observable<T> {
-        return this.http.get<any>(this.getPublicationStatusURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetPublicationStatus());
-            }));
+        return this.http.get<T>(this.getPublicationStatusURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetPublicationStatus());
+            });
     }
 
     GetPublicationModel<T>(aircraftTypeId): Observable<T> {
         let endpointUrl = `${this.getPublicationModelURL}/${aircraftTypeId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetPublicationModel(aircraftTypeId));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetPublicationModel(aircraftTypeId));
+            });
     }
 
     GetDashNumberByModelIdURL<T>(modelId: number): Observable<T> {
         let endpointUrl = `${this.getDashNumberByModelIdURL}/${modelId}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetDashNumberByModelIdURL(modelId));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetDashNumberByModelIdURL(modelId));
+            });
     }
 
     getLocations<T>(): Observable<T> {
-        return this.http.get<any>(this.getLocationsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getLocations());
-            }));
+        return this.http.get<T>(this.getLocationsUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getLocations());
+            });
     }
 
     GetPublicationAircraftManufacturer<T>(): Observable<T> {
-        return this.http.get<any>(this.getPublicationAircraftManufacturerURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetPublicationAircraftManufacturer());
-            }));
+        return this.http.get<T>(this.getPublicationAircraftManufacturerURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetPublicationAircraftManufacturer());
+            });
     }
 
     GetPublicationType<T>(): Observable<T> {
-        return this.http.get<any>(this.getPublcationTypeURL, this.getRequestHeaders())
-
-            .pipe(catchError(error => {
-
-                return this.handleError(error, () => this.GetPublicationType());
-
-            }));
+        return this.http.get<T>(this.getPublcationTypeURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetPublicationType());
+            });
     }
 
     getChargesType<T>(): Observable<T> {
-        return this.http.get<any>(this.getChargesTypeURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getChargesType());
-            }));
+        return this.http.get<T>(this.getChargesTypeURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getChargesType());
+            });
     }
     getCharges() {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/Charge/GetAllActive`, this.getRequestHeaders());
     }
 
     GetMaterialCondition<T>(): Observable<T> {
-        return this.http.get<any>(this.getMaterialConditionURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.GetMaterialCondition());
-            }));
+        return this.http.get<T>(this.getMaterialConditionURL, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.GetMaterialCondition());
+            });
     }
-
 }

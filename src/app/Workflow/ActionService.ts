@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { ITask } from "./Action";
 import { IActionAttrbutes } from "./ActionAttributes";
 
-import { Observable,forkJoin } from "rxjs";
+import { Observable } from "rxjs";
 import { tap, catchError } from "rxjs/operators"
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { IChargesType } from "./ChargesType";
@@ -131,17 +131,17 @@ export class ActionService {
     }
 
     getWorkFlow(workflowid: string) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getWorkFlow<any>(workflowid));
     }
 
     getWorkFlowWithMaterialList(workflowid: string) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getWorkFlowWithMaterialList<any>(workflowid));
     }
 
     toggleState(workflowId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.toggleState<any>(workflowId));
     }
 }

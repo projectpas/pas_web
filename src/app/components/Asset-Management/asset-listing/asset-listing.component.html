@@ -60,9 +60,11 @@
                                 matTooltipPosition="above" matTooltip="Download Selected Data"
                                 matTooltipPosition="above" style="padding: 5px 12px !important;" pButton icon="fa-download" iconPos="left"
                                 label="Export Selected Data"
-                                data-toggle="modal"
-                                data-target="#downloadConfirmation"
-                                (click)="selectedOnly = true; targetData = dt;"></button>
+                                (click)="dt.exportCSV({selectionOnly:true})"
+                               ></button>
+                               <!-- data-toggle="modal"
+                               data-target="#downloadConfirmation"
+                               (click)="selectedOnly = true; targetData = dt;" -->
                     </div>
                     <div class="col">
                         <div class="">

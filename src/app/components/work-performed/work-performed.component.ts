@@ -6,14 +6,14 @@ import { WorkPerformedService } from '../../services/workperformed.service';
 import { MasterComapnyService } from '../../services/mastercompany.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
- 
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {  Table } from 'primeng/table';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { SingleScreenAuditDetails, AuditChanges } from "../../models/single-screen-audit-details.model";
 import { validateRecordExistsOrNot, selectedValueValidate, editValueAssignByCondition, getObjectById, getObjectByValue } from '../../generic/autocomplete';
 import { ConfigurationService } from '../../services/configuration.service';
 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 @Component({
     selector: 'app-work-performed',

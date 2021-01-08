@@ -19,7 +19,7 @@
         </p>
         <p><span class="label"><b>Version Num: </b></span>
           <span class="value">
-            {{salesOrder.salesOrderQuoteVersionNumber ? salesQuote.salesOrderQuoteVersionNumber : '-'}}
+            {{salesOrder.versionNumber ? salesQuote.versionNumber : '-'}}
           </span>
         </p>
         <p><span class="label"><b>SO Num: </b></span>
@@ -37,12 +37,16 @@
         </p>
         <p><span class="label"><b>Restrict PMA: </b></span>
           <span class="value">
-            {{salesOrder.restrictPMA == true ? 'Yes' : "No" }}
+            <input type="checkbox" [(ngModel)]="salesOrder.restrictPMA" name="restrictPMA" id="restrictPMA"
+            [disabled]="true" />
+            <!-- {{salesOrder.restrictPMA == true ? 'Yes' : "No" }} -->
           </span>
         </p>
         <p><span class="label"><b>Restrict DER: </b></span>
           <span class="value">
-            {{salesOrder.restrictDER == true ? 'Yes' : "No" }}
+            <input type="checkbox" [(ngModel)]="salesOrder.restrictDER" name="restrictDER" id="restrictDER"
+            [disabled]="true" />
+            <!-- {{salesOrder.restrictDER == true ? 'Yes' : "No" }} -->
           </span>
         </p>
       </div>
@@ -61,7 +65,7 @@
             {{salesOrder.customerContactName}}
           </span>
         </p>
-        <p><span class="label"><b>Contract: </b></span>
+        <p><span class="label"><b>Contract Reference: </b></span>
           <span class="value">
             {{salesOrder.contractReference}}
           </span>
@@ -127,7 +131,7 @@
       <div class="col-md-3">
         <div class="card">
           <div class="card-header" style="padding:.1rem 2rem">
-            <label style="text-align: center">Margin Summary</label>
+            <label style="text-align: center; width:100%">Margin Summary</label>
           </div>
           <div style="padding:5px">
             <p style="padding:0px"><span class="label"><b>Sales</b></span>
@@ -178,7 +182,7 @@
         <div style="padding-top: 10px"></div>
         <div class="card">
           <div class="card-header" style="padding:.1rem 3rem">
-            <label style="text-align: center">Management Structure</label>
+            <label style="text-align: center; width:100%">Management Structure</label>
           </div>
           <div style="padding:5px">
             <div class="form-group" style="margin-bottom: 4px;">
@@ -312,12 +316,21 @@
       <p>Billing/Invoicing under implementation</p>
     </p-tabPanel>
     <p-tabPanel header="Shipping">
-      <app-sales-order-shipping>
+      <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="salesOrder.salesOrderId"
+      [customerDetails]="customerDetails" [salesOrder]="salesOrder"
+      [managementStructureId]="managementStructureId">
       </app-sales-order-shipping>
     </p-tabPanel>
     <p-tabPanel header="Document">
       <app-sales-order-document [salesOrderId]="salesQuote.salesOrderId" [isEditMode]="false" [viewMode]="true">
       </app-sales-order-document>
+    </p-tabPanel>
+    <p-tabPanel header="Analysis">
+      <app-sales-order-analysis></app-sales-order-analysis>
+    </p-tabPanel>
+    <p-tabPanel header="Communication">
+      <app-communication [moduleName]="moduleName" [idForContact]="customerId" [isViewMode]="true" [type]="1"
+        [referenceId]="salesOrder.salesOrderId"></app-communication>
     </p-tabPanel>
   </p-tabView>
   <div class="preloader" *ngIf="isSpinnerVisible">

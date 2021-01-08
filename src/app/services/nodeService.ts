@@ -2,7 +2,7 @@
 import { Router, NavigationExtras, Data } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from './auth.service';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 //import { AppSomeDataComponent } from '../components/roles/roles-list/somedata';
 import { TreeNode } from 'primeng/components/common/treenode';
 

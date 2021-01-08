@@ -10,8 +10,8 @@ import { AlertService, DialogType, MessageSeverity } from '../../services/alert.
 import { Action } from '../../models/action.model';
 import { AuditHistory } from '../../models/audithistory.model';
 import { AuthService } from '../../services/auth.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';

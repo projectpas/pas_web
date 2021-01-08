@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 import { AuthService } from './auth.service';
@@ -29,7 +30,7 @@ export class StocklineAdjustReasonService {
         private stocklineAdjustmentReasonEndpoint: StocklineAdjustmentReasonEndpoint) { }
     //For getting the stockline List
     getStockLineAdjustmentReasonList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.stocklineAdjustmentReasonEndpoint.getStockLineAdjustmentReasonEndpoint<any>());
     }
 

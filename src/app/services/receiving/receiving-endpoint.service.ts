@@ -1,12 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { ReceiveParts, StockLine } from '../../components/receiving/repair-order/receiving-ro/RepairOrder.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ReceivingEndpointService extends EndpointFactory {
 
@@ -42,89 +42,89 @@ export class ReceivingEndpointService extends EndpointFactory {
 
     getAllReceivingData<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getAll, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getAll, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllReceivingData());
-            }));
+            });
     }
 
     addReceivingData<T>(assetObj: any): Observable<T> {
 
-        return this.http.post<any>(this.addURL, JSON.stringify(assetObj), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.addURL, JSON.stringify(assetObj), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addReceivingData(assetObj));
-            }));
+            });
     }
 
     editReceivingData<T>(assetTypeId?: number): Observable<T> {
         let endpointUrl = assetTypeId ? `${this.addURL}/${assetTypeId}` : this.addURL;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.editReceivingData(assetTypeId));
-            }));
+            });
     }
 
     updateReceivingData<T>(assetObj: any): Observable<T> {
         let endpointUrl = this.updateURL;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(assetObj), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(assetObj), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateReceivingData(assetObj));
-            }));
+            });
     }
 
     deleteReceivingData<T>(assetTypeId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${assetTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteReceivingData(assetTypeId));
-            }));
+            });
     }
     
 
     getItemMasterDataById<T>(itemid: any): Observable<T> {
         let url = `${this.itemMasterDataGet}/${itemid}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterDataById(itemid));
-            }));
+            });
     }
 
     getReceivingPODataById<T>(receivingId: any): Observable<T> {
         let url = `${this.receivingPurchaseOrderDataGet}/${receivingId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getReceivingPODataById(receivingId));
-            }));
+            });
     }
 
     getReceivingPODataForEditById<T>(receivingId: any): Observable<T> {
 
         let url = `${this.receivingPurchaseOrderForEditDataGet}/${receivingId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getReceivingPODataForEditById(receivingId));
-            }));
+            });
     }
 
     getReceivingPurchaseForView<T>(receivingId: any): Observable<T> {
 
         let url = `${this.receivingPurchaseOrderForViewDataGet}/${receivingId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getReceivingPurchaseForView(receivingId));
-            }));
+            });
     }
 
     addPartStocklineMapper<T>(mapperObject: any): Observable<T>
     {
         debugger;
-        return this.http.post<any>(this.addStocklineMapperData, JSON.stringify(mapperObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.addStocklineMapperData, JSON.stringify(mapperObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addPartStocklineMapper(mapperObject));
-            }));
+            });
     }
 
     getReceivingPOHeaderById(purchaseOrderId) {
@@ -164,10 +164,10 @@ export class ReceivingEndpointService extends EndpointFactory {
             listObj.push(Obj);
         }
 
-        return this.http.post<any>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.receiveParts(receiveParts));
-            }));
+            });
 
     }
 
@@ -233,10 +233,10 @@ export class ReceivingEndpointService extends EndpointFactory {
         //     listObj.push(Obj);
         // }
 
-        return this.http.post<any>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(receiveParts)), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(receiveParts)), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateStockLine(receiveParts));
-            }));
+            });
     }
 
     CreateStockLine(purchaseOrderId: any) {

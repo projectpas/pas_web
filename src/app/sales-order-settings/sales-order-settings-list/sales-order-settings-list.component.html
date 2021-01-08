@@ -10,7 +10,7 @@
                             <div class="col">
                                 <h4 class="new-card-heading">List of Sales Order settings</h4>
                             </div>
-                            <div>
+                            <div *ngIf="!disableCreateNewSettings">
                                 <button type="button" class="btn-sm new-btn-primary" (click)="AddPage()"
                                     [disabled]="disableCreateNewSettings">
                                     Create New Setting
@@ -36,18 +36,6 @@
                                         </p-multiSelect>
                                     </div>
                                     <div class="col">
-                                        <button type="button" class="btn btn-primary new-table-button" pButton
-                                            icon="fa-download" iconPos="left"
-                                            style="left:-10px;padding: 5px 12px !important;" label="Export Data"
-                                            matTooltip="Download Data" matTooltipPosition="above"
-                                            (click)="dt.exportCSV()"></button>
-                                        <button type="button" class="btn btn-primary new-table-button" pButton
-                                            icon="fa-download" iconPos="left" label="Export Selected Data"
-                                            style="padding: 5px 12px !important;" matTooltip="Download Selected Data"
-                                            matTooltipPosition="above"
-                                            (click)="dt.exportCSV({selectionOnly:true})"></button>
-                                    </div>
-                                    <div class="col">
                                         <div style="width: auto !important; float: right;"
                                             class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
                                             <i class="fa fa-search"></i>
@@ -57,6 +45,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary new-table-button"
+                                            matTooltip="Download Data" matTooltipPosition="above" pButton
+                                            icon="fa-download" iconPos="left" label="Export Data" data-toggle="modal"
+                                            (click)="selectedOnly = false; targetData = dt;"
+                                            data-target="#downloadConfirmation"></button>
+
+                                        <!-- <button type="button" class="btn btn-primary new-table-button" pButton
+                                        icon="fa-download" iconPos="left"
+                                        style="left:-10px;padding: 5px 12px !important;" label="Export Data"
+                                        matTooltip="Download Data" matTooltipPosition="above"
+                                        (click)="dt.exportCSV()"></button> -->
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export Selected Data"
+                                            style="padding: 5px 12px !important;" matTooltip="Download Selected Data"
+                                            matTooltipPosition="above"
+                                            (click)="dt.exportCSV({selectionOnly:true})"></button>
+                                    </div>
+                                </div>
+
 
 
                             </ng-template>
@@ -101,7 +110,27 @@
 
                                     <td class="action-icons-cstm" style="width:200px">
                                         <div>
-                                            <button class="btn-edit" mat-icon-button (click)="edit(rowData)"
+
+                                            <span>
+                                                <a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
+                                                    matTooltipPosition="above">
+                                                    <i class="fa fa-pencil"></i>
+                                                </a>
+                                            </span>
+
+                                            <span>
+                                                <a class="btn nobg" (click)="openDelete(content,rowData)"
+                                                    matTooltip="Delete" matTooltipPosition="above">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </span>
+                                            <span data-toggle="modal" data-target="#history">
+                                                <a class="btn nobg btn-hist-cstm" data-target="#history"
+                                                    (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                            </span>
+
+                                            <!-- <button class="btn-edit" mat-icon-button (click)="edit(rowData)"
                                                 matTooltip="Edit" data-dismiss="modal">
                                                 <mat-icon>edit</mat-icon>
                                             </button>
@@ -114,7 +143,7 @@
                                                 (click)="openDelete(content,rowData)" matTooltip="Delete"
                                                 data-dismiss="modal">
                                                 <mat-icon color="warn">delete</mat-icon>
-                                            </button>
+                                            </button> -->
                                         </div>
                                         <!--<span data-toggle="modal" data-target="#history">
                             <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History" (click)="getAuditHistoryById(rowData)" tooltipPosition="bottom" title="" class="btn btn-success nobg" data-original-title="History">
@@ -225,6 +254,29 @@
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>
+</div>
+
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeModal()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+            </div>
+            <div class="modal-body" *ngIf="targetData && !selectedOnly">
+                <strong>
+                    <span>
+                        You are attempting to export {{targetData.totalRecords}} of records.
+                    </span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeModal();">Confirm</button>
+                <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">

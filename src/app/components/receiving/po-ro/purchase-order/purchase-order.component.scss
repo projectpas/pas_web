@@ -39,3 +39,65 @@ input.hidePlaceHolder:active {
         margin-right: 15px;
     }
 }
+
+
+.red {  
+    color: #ED2939 !important;
+    font-weight: bold !important;
+}
+
+input.hidePlaceHolder {
+    color: transparent !important;
+}
+
+.child-data splitship-child td {
+    background: #fafafa !important;
+}
+
+.roview-table-cstm .child-data td {
+    background: #fafafa !important;
+}
+
+
+#poView .modal-body p .label {
+    width: 40% !important;
+}
+#poView .modal-body p .value {
+    width: 60% !important;
+}
+.roview-table-cstm table.table-bordered thead tr th {
+    min-width: 70px !important;
+}
+
+.host ::ng-deep .ui-table-scrollable-header .ui-widget-header
+{
+    width: 100% !important;
+    overflow: scroll !important;;
+
+}
+.table-child-header-mgmt{
+    min-width: 300px !important;
+}
+
+.check-box-back{
+    background-color: #fff !important;
+}
+.history-body{
+    overflow-y: scroll;
+}
+
+.address-memo-view{
+    vertical-align: top;
+}
+.approver-parent-checkbox{
+    min-width: 90px; align-items: center;
+}
+.approver-memo{
+    float: left !important;
+}
+.approver-total-cost{
+    text-align: right !important;
+}
+.mgmt-sructure-td-width{
+    min-width: 300px !important;
+}

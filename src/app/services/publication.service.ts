@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
@@ -42,23 +43,23 @@ export class PublicationService {
   ) { }
 
   getWorkFlows(data) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationListEndpoint<Publication[]>(data)
     );
   }
   getPublications(data) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationListEndpointNew<Publication[]>(data)
     );
   }
 
   getAllPublications() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationEndpoint<Publication[]>()
     );
   }
   getAllbyIdPublications(id) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationbyIdEndpoint<any>(id)
     );
   }
@@ -89,7 +90,7 @@ export class PublicationService {
   }
 
   historyAcion(actionId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getHistoryActionEndpoin<AuditHistory[]>(actionId)
     );
   }
@@ -232,38 +233,38 @@ export class PublicationService {
   }
 
   getpublicationbyIdView(id) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationbyIdViewEndpoint<any>(id)
     );
   }
 
   getpublicationGlobalSearch(ataChapterId, ataSubChapterId, airCraftId, modelId, dashNumberId, pageNumber, pageSize) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationGlobalSearchEndpoint<any>(ataChapterId, ataSubChapterId, airCraftId, modelId, dashNumberId, pageNumber, pageSize)
     );
   }
 
 
   getpublicationslistadvancesearch(data) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationslistadvancesearchEndPoint<any>(data)
     );
   }
 
   getPublicationTypes() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationTypesEndpoint<any>()
     );
   }
 
   getAllPublicationsDropdown() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getAllPublicationsDropdownEndPoint<any[]>()
     );
   }
 
   getPublicationForWorkFlow(publicationId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getPublicationForWorkFlowEndpoint<any>(publicationId)
     );
   }
@@ -277,7 +278,7 @@ export class PublicationService {
   }
 
   getpublicationListBySearchEndpoint(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.publicationEndpoint.getpublicationListBySearchEndpoint<Publication[]>(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location)
     );
   }

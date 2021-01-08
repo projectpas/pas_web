@@ -166,5 +166,8 @@ export class SalesOrder implements ISalesOrder {
   sOPickTicketNumber: string;
   sOPickTicketBarcode: string;
   salesOrderQuoteVersionNumber: string;
+  buId: number;
+  divisionId: number;
+  departmentId: number;
   constructor() { }
 }

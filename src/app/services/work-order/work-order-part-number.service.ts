@@ -1,14 +1,14 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { WorkOrderPartNumber } from '../../models/work-order-partnumber.model';
 import { WorkOrderType, WorkOrderStatus, WorkScope, WorkOrderStage } from '../../models/work-order-type.model';
 

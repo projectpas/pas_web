@@ -23,8 +23,8 @@ import { Table } from '../../../../node_modules/primeng/table';
 import { validateRecordExistsOrNot, getObjectByValue, selectedValueValidate, editValueAssignByCondition, getObjectById} from '../../generic/autocomplete';
 import { PercentService } from '../../services/percent.service';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

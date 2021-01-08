@@ -8,8 +8,8 @@ import { AlertService, DialogType, MessageSeverity } from '../../services/alert.
 
 import { AuthService } from '../../services/auth.service';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { Integration } from '../../models/integration.model';
 import { AuditHistory } from '../../models/audithistory.model';

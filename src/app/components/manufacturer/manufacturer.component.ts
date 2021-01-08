@@ -6,13 +6,13 @@ import { MenuItem, LazyLoadEvent } from 'primeng/api';//bread crumb
 
 import { MasterCompany } from '../../models/mastercompany.model';
 import { ManufacturerService } from '../../services/manufacturer.service';
-
+// import { DataTableModule } from 'primeng/datatable';
 import { TableModule, Table } from 'primeng/table'
 import { ButtonModule } from 'primeng/button'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { InputTextModule } from 'primeng/inputtext'
 import { MultiSelectModule } from 'primeng/multiselect'
-
+// import { Action } from 'rxjs/scheduler/Action';
 import { AuditHistory } from '../../models/audithistory.model';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { MatTableDataSource, MatDialog, MatPaginator, MatSort } from '@angular/material';
@@ -27,8 +27,8 @@ import { getObjectByValue, validateRecordExistsOrNot, selectedValueValidate, edi
 import { ConfigurationService } from '../../services/configuration.service';
 
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 
@@ -53,8 +53,8 @@ export class ManufacturerComponent implements OnInit {
     // field: any;
     // event: any;
     // auditHisory: any[];
-    // @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    // @ViewChild(MatSort,{static:false}) sort: MatSort;
+    // @ViewChild(MatPaginator) paginator: MatPaginator;
+    // @ViewChild(MatSort) sort: MatSort;
     // cols: any[];
     // selectedColumns: any[];
     // displayedColumns = ['name', 'comments', 'createdDate', 'companyName'];

@@ -122,12 +122,9 @@ export class EmailComponent implements OnInit, OnChanges {
         this.pageIndex = pageIndex;
         this.pageSize = event.rows;
         event.first = pageIndex;
-        // this.getList(event)
     }
     addMemo() {
         this.formData = new FormData();
-        // this.formData.delete()
-        // this.customerContact = "";
         console.log("email", this.customerContactList);
         if (this.customerContactList.length > 0) {
             for (let i = 0; i < this.customerContactList.length; i++) {
@@ -137,8 +134,6 @@ export class EmailComponent implements OnInit, OnChanges {
                 }
             }
         }
-
-        // this.toEmail = "";
         this.bcc = "";
         this.cc = '';
         this.emailBody = '';
@@ -191,14 +186,7 @@ export class EmailComponent implements OnInit, OnChanges {
                 let content = this.emailQuotePopup;
                 this.getQuotePDF()
                 this.modal = this.modalService.open(content, { size: "sm" });
-                this.modal.result.then(
-                    () => {
-                        console.log("When user closes");
-                    },
-                    () => {
-                        console.log("Backdrop click");
-                    }
-                )
+              
             }
             else if (this.SalesOrderId) {
                 let content = this.emailQuotePopup;
@@ -251,10 +239,12 @@ export class EmailComponent implements OnInit, OnChanges {
         for (var key in data) {
             this.formData.append(key, data[key]);
         }
-
+        this.isSpinnerVisible = true;
+        this.closeModal();
         this.communicationService.saveAndUpdateEmailOfSalesQuote(this.formData)
             .subscribe(
                 res => {
+                    this.isSpinnerVisible = false;
                     this.contactBy = null;
                     this.emailType = null;
                     this.cc = '';
@@ -264,9 +254,9 @@ export class EmailComponent implements OnInit, OnChanges {
                     this.subject = '';
                     $('#addNewMemo').modal('hide');
                     this.getAllEmail();
-                    if (this.salesQuoteId) {
+                    // if (this.salesQuoteId) {
                         this.closeModal();
-                    }
+                    // }
                     if (this.fileUploadInput) {
                         this.fileUploadInput.clear();
                     }

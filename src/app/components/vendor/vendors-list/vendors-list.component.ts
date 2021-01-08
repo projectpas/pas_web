@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { FormBuilder, } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { fadeInOut } from '../../../services/animations';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { AuditHistory } from '../../../models/audithistory.model';
@@ -736,6 +736,13 @@ export class VendorsListComponent implements OnInit {
         this.selectedRow = row;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
         this.loadContactDataData(row.vendorId);
+    }
+
+    openVendorCapesList(content, row) {
+        this.vendorId = row.vendorId;
+        this.selectedRow = row;
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        //this.loadContactDataData(row.vendorId);
     }
 
     ExpandAllVenodrDetailsModel() {

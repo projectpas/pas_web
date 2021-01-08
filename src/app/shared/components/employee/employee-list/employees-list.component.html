@@ -87,10 +87,12 @@
                               icon="fa-download"
                               iconPos="left"
                               label="Export Selected Data"
-                              data-toggle="modal"
-                              data-target="#downloadConfirmation"
-                              (click)="selectedOnly = true; targetData = dt;"
+                              (click)="dt.exportCSV({selectionOnly:true})"
+                             
                               ></button>
+                              <!-- data-toggle="modal"
+                              data-target="#downloadConfirmation"
+                              (click)="selectedOnly = true; targetData = dt;" -->
                   </div>
                   <div class="col">
                       <div class="">
@@ -998,8 +1000,7 @@
                                 <span class="label"
                                   ><b>Aircraft Model: </b></span
                                 ><span class="value">{{
-                                  allEmployeelist.employeeTraining[0]
-                                    ?.aircraftModelName
+                                  allEmployeelist.aircraftModelIds
                                 }}</span>
                               </p>
                               <p>

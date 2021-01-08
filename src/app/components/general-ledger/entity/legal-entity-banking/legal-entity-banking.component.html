@@ -48,12 +48,18 @@
                                 <div class="clear"></div>
                                 <div class="payment-info">
                                     <div class="clear"></div>
-                                    <hr class="hr-light-grey">
+                                    <!-- <hr class="hr-light-grey"> -->
                                     <div class="tab-content padding0" id="new-data-form">
                                         <div *ngIf="LockboxValue" class="tab-pane active">
                                             <div class="clear"></div>
+                                         
                                             <div class="col-sm-12">
                                                 <div class="form-row">
+                                                    <h6 data-toggle="modal" *ngIf="!isLockBox" data-target="#contentHist" class="history_crd"> Lockbox History
+                                                        <a class="btn nobg" (click)="getAuditHistoryById(1)" matTooltipPosition="above" matTooltip="History">
+                                                            <i class="fa fa-history"></i>
+                                                        </a>
+                                                    </h6><br>
                                                     <div class="col-md-3 col-lg-3  ">
                                                         <div class="form-group">
                                                             <label class="lable-Adjust">PO Box <span class="clr-red">*</span></label>
@@ -91,8 +97,9 @@
                                                         </div>
 
                                                         <div class="form-group">
+                                                            <!-- (keypress)="numberonly($event)" -->
                                                             <label class="lable-Adjust">Postal Code <span class="clr-red">*</span></label>
-                                                            <input type="text" class="form-control" (keypress)="numberonly($event)" required   name="Postal" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode">
+                                                            <input type="text" class="form-control"  required   name="Postal" (ngModelChange)="getmemo()" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.bankpostalCode">
                                                         </div>
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-primary" [disabled]="!locksave"
@@ -116,6 +123,11 @@
                                         </div>
                                         <div *ngIf="domesticWireValue" class="tab-pane active">
                                             <div class="clear"></div>
+                                            <h6 data-toggle="modal" *ngIf="!isDomesticWire" data-target="#contentHist" class="history_crd"> Domestic Wire History
+                                                <a class="btn nobg" (click)="getAuditHistoryById(2)" matTooltipPosition="above" matTooltip="History">
+                                                    <i class="fa fa-history"></i>
+                                                </a>
+                                            </h6>
                                             <div class="col-sm-12">
                                                 <div class="form-row"> 
                                                     <div class="col-md-3 col-lg-3  "> 
@@ -188,6 +200,11 @@
 
                                         <div *ngIf="internationalValue" class="tab-pane active">
                                             <div class="clear"></div>
+                                            <h6 data-toggle="modal" *ngIf="!isInternationalWire" data-target="#contentHist" class="history_crd"> International Wire History
+                                                <a class="btn nobg" (click)="getAuditHistoryById(3)" matTooltipPosition="above" matTooltip="History">
+                                                    <i class="fa fa-history"></i>
+                                                </a>
+                                            </h6>
                                             <div class="col-sm-12">
                                                 <div class="form-row">
                                                     <div class="col-md-3 col-lg-3  ">
@@ -238,7 +255,7 @@
 
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-primary" [disabled]="!internationalvalid" (click)="savebankinternationalwire()">
-                                                        {{ !isInternationalWire ? 'Update' : 'Save' }}</button>
+                                                        {{ !isInternationalWire ? 'Update' : 'Save' }}</button> 
                                                     
                                                 </div>
                                                 </div>
@@ -259,6 +276,11 @@
 
                                         <div *ngIf="ACHValue" class="tab-pane active">
                                             <div class="clear"></div>
+                                            <h6 data-toggle="modal"  *ngIf="!isAch" data-target="#contentHist" class="history_crd"> ACH History
+                                                <a class="btn nobg" (click)="getAuditHistoryById(4)" matTooltipPosition="above" matTooltip="History">
+                                                    <i class="fa fa-history"></i>
+                                                </a>
+                                            </h6>
                                             <div class="col-sm-12">
                                                 <div class="form-row"> 
                                                  <div class="col-md-3 col-lg-3  ">
@@ -298,7 +320,7 @@
                                                     <input type="text" pattern="\d*" maxlength="20" (keypress)="pattrenValidate($event)" class="form-control"   name="ABA nb" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achABANumber" required  (ngModelChange)="achval()" style="text-align: end;">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="lable-Adjust">SWIFT Id <span class="clr-red">*</span></label>
+                                                    <label class="lable-Adjust">SWIFT Code <span class="clr-red">*</span></label>
                                                      <input type="text" class="form-control"   name="SWIFT b" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceLegalEntity.achSWIFTID" required  (ngModelChange)="achval()">  
                                                 </div>
 
@@ -322,6 +344,72 @@
                                                 <button type="button" class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next','internationalValue')">Previous</button>
 
                                             </div>  -->
+                                        </div>
+
+                                        <!-- audit history -->
+                                        <div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                                            <div class="modal-dialog modal-xlg">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" (click)="CloserCOnatcHistory()">&times;</button>
+                                                        <div class="col-md-12 shadow-box-cstm">
+                                                            <div class="col-md-6">
+                                                                <p class="fs12">
+                                                                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
+                                                                    <span class="span-header-red" style="text-transform: capitalize"> {{companyName }} </span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <p class="fs12">
+                                                                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity Code: </label>
+                                                                    <span class="span-header-red" style="text-transform: capitalize"> {{companyCode }} </span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <h4 class="modal-title">History of Banking Information</h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                                                            <div class="loading">
+                                                                <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="table-responsive rrhistory history_hg">
+                                                            <table class="table table-bordered " *ngIf="auditHistory.length> 0 else noDatavailable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
+                                                                        
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody *ngIf="auditHistory.length> 0">
+                                                                    <tr *ngFor="let audit of auditHistory; let i = index;">
+                                        
+                                                                        <td *ngFor="let auditHead of auditHistoryHeaders; let j = index;" >
+                                                                            <span [ngStyle]="{'color':  getColorCodeForHistory(i, auditHead.field, audit[auditHead.field])  ? 'black' : 'red'  }">
+                                                                         <span *ngIf="auditHead.field=='createdDate' || auditHead.field=='updatedDate'">  {{audit[auditHead.field] | date: 'MM/dd/yyyy h:mm a'}}</span>  
+                                                                         <span *ngIf="auditHead.field!='createdDate' && auditHead.field!='updatedDate'">  {{audit[auditHead.field] }}</span></span>
+                                                                         <!-- <span *ngIf="auditHead.field!='createdDate' && auditHead.field!='updatedDate'">  {{audit[auditHead.field] }}</span></span> -->
+                                                                        </td>
+                                                           </tr>
+                                                                </tbody>
+                                        
+                                        
+                                                            </table>
+                                                            <ng-template #noDatavailable>
+                                                                <div class="text-center">
+                                                                    <h4 style="color: #ff5663;">No History Found </h4>
+                                                                </div>
+                                        
+                                                            </ng-template>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger" (click)="CloserCOnatcHistory()">Close</button>
+                                                    </div>
+                                                </div>
+                                        
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -441,7 +529,7 @@
                             <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{entityViewFeilds.internationalBenficiaryBankName}}</span></p>
                             <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{entityViewFeilds.internationalBankAccountNumber}}</span></p>
                             <p><span class="label"><b>ABA Number: </b></span><span class="value">{{entityViewFeilds.internationalABANumber}}</span></p>
-                            <p><span class="label"><b>SWIFT ID: </b></span><span class="value">{{entityViewFeilds.internationalSWIFTID}}</span></p>
+                            <p><span class="label"><b>SWIFT Code: </b></span><span class="value">{{entityViewFeilds.internationalSWIFTID}}</span></p>
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-3">
@@ -452,7 +540,7 @@
                             <p><span class="label"><b>Benficiary Bank Name: </b></span><span class="value">{{entityViewFeilds.achBenficiaryBankName}}</span></p>
                             <p><span class="label"><b>Bank Account Number: </b></span><span class="value">{{entityViewFeilds.achBankAccountNumber}}</span></p>
                             <p><span class="label"><b>ABA Number: </b></span><span class="value">{{entityViewFeilds.achABANumber}}</span></p>
-                            <p><span class="label"><b>SWIFT ID: </b></span><span class="value">{{entityViewFeilds.achSWIFTID}}</span></p>
+                            <p><span class="label"><b>SWIFT Code: </b></span><span class="value">{{entityViewFeilds.achSWIFTID}}</span></p>
                         </div>
                     </div>
                 </div>

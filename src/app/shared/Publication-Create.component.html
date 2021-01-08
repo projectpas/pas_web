@@ -5,9 +5,7 @@
     <table class="table table-bordered table-fixed workflow-table-pub">
         <thead class="thead-light">
             <tr>
-                <!-- <th> S.No </th> -->
-                <th> Pub ID* </th>
-
+                <th> Pub ID<span class="clr-red">*</span></th>
                 <th> Pub Desc </th>
                 <th> Pub Type </th>
                 <th> Revision Date </th>
@@ -26,56 +24,48 @@
         </thead>
         <tbody>
             <tr [hidden]="publ.isDeleted" *ngFor="let publ of workFlow.publication;let i = index">
-                <!-- <td>{{(currentPage - 1) * itemsPerPage + i + 1}}</td> -->
                 <td>
                     <div style="display: inline-flex;">
-                        <select class="form-control custom-select dropdown-select wf-pub-id"
-                        [(ngModel)]="publ.publicationId"
-                        (change)="onPublicationChange($event, publ); getAircraftByPublicationId($event.target.value, i)">
-                        <option [value]="0">Select</option>
-                        <option *ngFor="let dropdown of publicationDropdown" [value]="dropdown.publicationRecordId">
-                            {{ dropdown.publicationId}}</option>
-                    </select>
-                    <a *ngIf="publ.publicationId !== '0' && publ.publicationId !== '' && publ.publicationId !== undefined" (click)="viewPublicationDetails(publ)" style="margin-top: 4px; margin-left: 4px;">
-                        <i class="fa fa-eye view_icon_adjust"></i>
-                    </a>
+                        <select class="form-control wf-pub-id full-width" 
+                            [(ngModel)]="publ.publicationId"
+                            (change)="onPublicationChange($event, publ); getAircraftByPublicationId($event.target.value, i)"
+                            required>
+                            <option [value]="0">--Select--</option>
+                            <option *ngFor="let dropdown of publicationDropdown" [value]="dropdown.publicationRecordId">
+                                {{ dropdown.publicationId}}</option>
+                        </select>
+                        <a *ngIf="publ.publicationId !== '0' && publ.publicationId !== '' && publ.publicationId !== undefined"
+                            (click)="viewPublicationDetails(publ)" style="margin-top: 4px; margin-left: 4px;">
+                            <i class="fa fa-eye view_icon_adjust"></i>
+                        </a>
                     </div>
                 </td>
                 <td>
                     {{publ.publicationDescription}}
-                    <!-- <input type="text" class="form-control w250" [(ngModel)]="publ.publicationDescription"
-                        [disabled]="true"> -->
                 </td>
                 <td>
-                    <select class="form-control custom-select" id="ddlPublicationTypes"
-                        [(ngModel)]="publ.publicationType" disabled="disabled">
-                        <option value="0">select</option>
+                    <select class="form-control wf-pub-id full-width" id="ddlPublicationTypes"
+                        [(ngModel)]="publ.publicationType" >
+                        <option value="0">--select--</option>
                         <option *ngFor="let type of publicationTypes" value={{type.publicationTypeId}}>
                             {{type.name}}
                         </option>
                     </select>
-
                 </td>
                 <td>
                     {{publ.revisionDate}}
-                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.revisionDate"
-                        value="{{publ.revisionDate}}" [disabled]="true"> -->
                 </td>
                 <td class="text-right">
                     {{publ.sequence}}
-                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.sequence" value="{{publ.sequence}}"
-                        [disabled]="true"> -->
                 </td>
                 <td>
                     {{publ.source}}
-                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.source" value="{{publ.source}}"
-                        [disabled]="true"> -->
                 </td>
                 <td>
-                    <select class="form-control custom-select dropdown-select wf-pub-id" id="ddlAircraftManufacturer"
+                    <select class="form-control wf-pub-id full-width" id="ddlAircraftManufacturer"
                         [(ngModel)]="publ.aircraftManufacturer"
                         (change)="getModelByAircraftId(publ.publicationId, publ.aircraftManufacturer,i)">
-                        <option value="0">select</option>
+                        <option value="0">--select--</option>
                         <option *ngFor="let manufact of getDynamicVariableData('aircraftListByPubId',i) "
                             value="{{manufact.aircraftTypeId}}">
                             {{manufact.description}}
@@ -84,21 +74,18 @@
                 </td>
 
                 <td>
-                    <select class="form-control custom-select dropdown-select wf-pub-id" id="ddlModel"
-                        [(ngModel)]="publ.model"
+                    <select class="form-control wf-pub-id full-width" id="ddlModel" [(ngModel)]="publ.model"
                         (change)="getDashNumberByModelandAircraftIds(publ.publicationId, publ.aircraftManufacturer,publ.model, i)">
-                        <option value="0">select</option>
+                        <option value="0">--select--</option>
                         <option *ngFor="let model of getDynamicVariableData('aircraftModelListByPubId',i)"
                             value="{{model.aircraftModelId}}">
                             {{model.modelName}}
                         </option>
                     </select>
-
                 </td>
-
                 <td>
-                    <ng-multiselect-dropdown class="form-control multiple-custom-select multi-w150 "
-                        [placeholder]="'Select'" [data]="getDynamicVariableData('dashNumberListByModelId',i)"
+                    <ng-multiselect-dropdown class="form-control" [placeholder]="'--Select--'"
+                        [data]="getDynamicVariableData('dashNumberListByModelId',i)"
                         [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings"
                         (onDeSelect)="onDeSelect(publ,$event)" (onSelect)="onItemSelect(publ,$event)"
                         (onSelectAll)="onSelectAll(publ,$event)">
@@ -106,22 +93,18 @@
                 </td>
                 <td>
                     {{publ.location}}
-                    <!-- <input type="text" class="form-control" value="{{publ.location}}" [disabled]="true"> -->
                 </td>
 
                 <td>
                     {{publ.verifiedBy}}
-                    <!-- <input type="text" class="form-control" value="{{publ.verifiedBy}}" [disabled]="true"> -->
                 </td>
                 <td>
                     {{publ.verifiedDate}}
-                    <!-- <input type="text" class="form-control" [(ngModel)]="publ.verifiedDate"
-                        value="{{publ.verifiedDate}}" [disabled]="true"> -->
                 </td>
                 <td>
                     <select class="form-control custom-select dropdown-select wf-pub-id" disabled="disabled"
                         [(ngModel)]="publ.status">
-                        <option value="0">Select</option>
+                        <option value="0">--Select--</option>
                         <option value="true">Active</option>
                         <option value="false">In Active</option>
                     </select>
@@ -130,11 +113,7 @@
                     <a (click)="downloadFileUpload(publ)" class="btn nobg btn-cstm">
                         <span class="blue-href" *ngFor="let x of publ.attachmentDetails"
                             (click)="downloadFileUpload(x)">{{x.fileName}},</span>
-
                     </a>
-                    <!-- <a (click)="downloadFileUpload(publ)" class="btn nobg btn-cstm"><span><i
-                                class="fa fa-download"></i></span></a> -->
-                    <!--<input type="file" id="myFile" value="{{publ.image}}" [(ngModel)]="publ.image">-->
                 </td>
                 <td>
                     <button class="btn btn-danger nobg" (click)="deleteRow(i)">
@@ -149,8 +128,6 @@
 
 <div id="view1" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xl">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">×</button>
@@ -158,9 +135,6 @@
             </div>
             <div class="modal-body">
                 <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
-
-
-                    <!--<a href="#" class="btn btn-primary openall">open all</a> <a href="#" class="btn btn-warning closeall">close all</a>-->
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
                             <div>
@@ -225,7 +199,6 @@
                                                         <p><span class="label"><b>Next Review Date: </b></span><span
                                                                 class="value">{{generalInfo.nextReviewDate | date: 'dd/MM/yyyy'}}</span>
                                                         </p>
-                                                        <!-- <p><span class="label"><b>Employee: </b></span><span class="value">{{generalInfo.employeeName ? generalInfo.employeeName : '-'}}</span></p> -->
                                                         <p><span class="label"><b>Verified By: </b></span><span
                                                                 class="value">{{generalInfo.verifiedBy ? generalInfo.verifiedBy : '-'}}</span>
                                                         </p>
@@ -329,7 +302,6 @@
                                                     [rowsPerPageOptions]="[10, 20, 50, 100]">
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <!-- <th>Sl.No</th> -->
                                                             <th style="padding: 8px 5px !important;"
                                                                 *ngFor="let col of columns"
                                                                 [pSortableColumn]="col.field">
@@ -349,7 +321,6 @@
                                                     <ng-template pTemplate="body" let-rowData let-columns="columns"
                                                         let-rowIndex="rowIndex">
                                                         <tr>
-                                                            <!-- <td>{{ rowIndex + 1 }}</td> -->
                                                             <td *ngFor="let col of columns">
                                                                 {{ rowData[col.field] }}
                                                             </td>
@@ -398,7 +369,6 @@
                                                     [rowsPerPageOptions]="[10, 20, 50, 100]">
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <!-- <th>ID</th> -->
                                                             <th style="padding: 8px 5px !important;"
                                                                 *ngFor="let col of columns"
                                                                 [pSortableColumn]="col.field">
@@ -418,7 +388,6 @@
                                                     <ng-template pTemplate="body" let-rowData let-columns="columns"
                                                         let-rowIndex="rowIndex">
                                                         <tr>
-                                                            <!-- <td>{{ rowIndex + 1 }}</td> -->
                                                             <td *ngFor="let col of columns">
                                                                 {{ rowData[col.field] }}
                                                             </td>
@@ -467,7 +436,6 @@
                                                     [rowsPerPageOptions]="[10, 20, 50, 100]">
                                                     <ng-template pTemplate="header" let-columns>
                                                         <tr>
-                                                            <!-- <th>ID</th> -->
                                                             <th style="padding: 8px 5px !important;"
                                                                 *ngFor="let col of columns"
                                                                 [pSortableColumn]="col.field">
@@ -488,7 +456,6 @@
                                                     <ng-template pTemplate="body" let-rowData let-columns="columns"
                                                         let-rowIndex="rowIndex">
                                                         <tr>
-                                                            <!-- <td>{{ rowIndex + 1 }}</td> -->
                                                             <td *ngFor="let col of columns">
                                                                 {{ rowData[col.field] }}
                                                             </td>
@@ -520,23 +487,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- <div class="panel panel-default">
-                                          <div class="panel-heading">
-                                              <h4 class="panel-title"> <a class="collapsed" data-toggle="collapse" href="#step3">Export Information</a> </h4>
-                                          </div>
-                                          <div id="step3" class="panel-collapse collapse">
-                                              <div class="panel-body">
-                                                  <div class="col-sm-4">
-                                                      <p><span class="label"><b>CountryId: </b></span><span class="value">{{viewItemMaster.exportCountryId}}</span></p>
-                                                      <p><span class="label"><b>Value: </b></span><span class="value">{{viewItemMaster.exportValue}}</span></p>
-                                                      <p><span class="label"><b>Weight: </b></span><span class="value">{{viewItemMaster.exportWeight}}</span></p>
-                                                      <p><span class="label"><b>Size(L,W,H): </b></span><span class="value">{{viewItemMaster.exportSizeLength}} , {{viewItemMaster.exportSizeWidth}} , {{viewItemMaster.exportSizeHeight}}</span></p>
-                                                      <p><span class="label"><b>Classification: </b></span><span class="value">{{viewItemMaster.exportClassificationId}}</span></p>
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </div> -->
                         </div>
                     </div>
                 </div>
@@ -546,5 +496,20 @@
             </div>
         </div>
 
+    </div>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </div>

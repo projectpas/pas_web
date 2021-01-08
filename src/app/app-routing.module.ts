@@ -30,26 +30,9 @@ import { SupervisorComponent } from "./components/supervisor/supervisor.componen
 import { NotFoundComponent } from "./components/not-found/not-found.component";
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './services/auth-guard.service';
-import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
+import { UnauthorizedAccessComponent } from '../unauthorizedaccess/unauthorized-access.component';
 import { UserEditorComponent } from './admin/user-editor.component';
 import { UserListComponent } from './admin/user-list.component';
-import { AccountingPagesModule } from './accounting-pages/accountingpages.module';
-import { AccountsPaybleModule } from './accounts-payble-pages/accounts-payble.module';
-import { AccountsreceivableModule } from './accounts-receivable/accountsreceivable.module';
-import { AssetmanagementModule } from './assetmanagement/assetmanagement.module';
-import { EmployeepagesModule } from './employeepages/employeepages.module';
-import { GeneralledgerPageModule } from './generalledgerpages/generalledgerpages.module';
-import { ItemmasterpagesModule } from './itemmasterpages/itemmasterpages.module';
-import { ReceivingPagesModule } from './receivingpages/receivingpages.module';
-import { RolesPagesModule } from './rolespages/rolespages.module';
-import { SalesOrderSettingsModule } from './sales-order-settings/sales-order-settings.module';
-import { SalesPagesModule } from './salespages/salespages.module';
-import { SinglePgesModule } from './singlepages/singlepages.module';
-import { VendorPagesModule } from './vendorpages/vendorpages.module';
-import { StocklinePagesModule } from './stocklinepages/stocklinepages.module';
-import { WorkOrderSettingsModule } from './work-order-settings/work-order-settings.module';
-import { WorkOrderPagesModule } from './workorderpages/workorderpages.module';
-import { WorkFlowPagesModule } from './workflowpages/workflowpages.module';
 //import { PoRoSetupComponent } from './components/receiving/po-ro/po-ro-setup/po-ro-setup.component';
 //import { PoSetupComponent } from './components/receiving/po-ro/po-setup/po-setup.component';
 //import { ReceivingPoComponent } from './components/receiving/po-ro/receiving-po/receiving-po.component';
@@ -73,44 +56,28 @@ import { WorkFlowPagesModule } from './workflowpages/workflowpages.module';
             { path: "about", component: AboutComponent, data: { title: "About Us" } },
             { path: "unauthorized-access", component: UnauthorizedAccessComponent, data: { title: "Unauthorized Access" } },
             //{ path: "singlescreens", loadChildren: './components/actions/actionslazymodule#ActionsLazyModule' },
-            // { path: "rolesmodule", loadChildren: './rolespages/rolespages.module#RolesPagesModule' },
-            { path: "rolesmodule", loadChildren: ()=>RolesPagesModule },
-            // { path: "workordersettingsmodule", loadChildren: './work-order-settings/work-order-settings.module#WorkOrderSettingsModule' },
-            { path: "workordersettingsmodule", loadChildren: ()=>WorkOrderSettingsModule },
-            //{ path: "salesordersettingsmodule", loadChildren: './sales-order-settings/sales-order-settings.module#SalesOrderSettingsModule' },
-            { path: "salesordersettingsmodule", loadChildren: ()=>SalesOrderSettingsModule },
-            //{ path: "singlepages", loadChildren: './singlepages/singlepages.module#SinglePgesModule' },
-            { path: "singlepages", loadChildren: ()=>SinglePgesModule },
+            { path: "rolesmodule", loadChildren: './rolespages/rolespages.module#RolesPagesModule' },
+            { path: "workordersettingsmodule", loadChildren: './work-order-settings/work-order-settings.module#WorkOrderSettingsModule' },
+            { path: "salesordersettingsmodule", loadChildren: './sales-order-settings/sales-order-settings.module#SalesOrderSettingsModule' },
+            { path: "singlepages", loadChildren: './singlepages/singlepages.module#SinglePgesModule' },
             { path: "customersmodule", loadChildren: './customerpages/customerpages.module#CustomerPagesModule' },
-            { path: "accountmodule", loadChildren: () => AccountingPagesModule},
-//            './accounting-pages/accountingpages.module#AccountingPagesModule' },
-            //{ path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
-            //{ path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule', canLoad: [AuthGuard] },
-            { path: "vendorsmodule", loadChildren: ()=>VendorPagesModule, canLoad: [AuthGuard] },
-            //{ path: "employeesmodule", loadChildren: './employeepages/employeepages.module#EmployeepagesModule' },
-            { path: "employeesmodule", loadChildren: ()=>EmployeepagesModule },
-            // { path: "itemmastersmodule", loadChildren: './itemmasterpages/itemmasterpages.module#ItemmasterpagesModule' },
-            { path: "itemmastersmodule", loadChildren: ()=>ItemmasterpagesModule},
-            //{ path: "stocklinemodule", loadChildren: './stocklinepages/stocklinepages.module#StocklinePagesModule' },
-            { path: "stocklinemodule", loadChildren: ()=>StocklinePagesModule },
-            // { path: "workordersmodule", loadChildren: './workorderpages/workorderpages.module#WorkOrderPagesModule' },
-            { path: "workordersmodule", loadChildren: ()=>WorkOrderPagesModule },
-            // { path: "receivingmodule", loadChildren: './receivingpages/receivingpages.module#ReceivingPagesModule' },
-            { path: "receivingmodule", loadChildren: ()=>ReceivingPagesModule },
-            // { path: "generalledgermodule", loadChildren: './generalledgerpages/generalledgerpages.module#GeneralledgerPageModule' },
-            { path: "generalledgermodule", loadChildren: ()=>GeneralledgerPageModule },
-            //{ path: "workflowmodule", loadChildren: './workflowpages/workflowpages.module#WorkFlowPagesModule' },
-            { path: "workflowmodule", loadChildren: ()=>WorkFlowPagesModule },
-            //{ path: "assetmodule", loadChildren: './assetmanagement/assetmanagement.module#AssetmanagementModule' },
-            { path: "assetmodule", loadChildren: ()=>AssetmanagementModule},
-            //{ path: "accountreceivable", loadChildren: './accounts-receivable/accountsreceivable.module#AccountsreceivableModule' },
-            { path: "accountreceivable", loadChildren: ()=>AccountsreceivableModule },
+            { path: "accountmodule", loadChildren: './accounting-pages/accountingpages.module#AccountingPagesModule' },
+            { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule' },
+            { path: "vendorsmodule", loadChildren: './vendorpages/vendorpages.module#VendorPagesModule', canLoad: [AuthGuard] },
+            { path: "employeesmodule", loadChildren: './employeepages/employeepages.module#EmployeepagesModule' },
+            { path: "itemmastersmodule", loadChildren: './itemmasterpages/itemmasterpages.module#ItemmasterpagesModule' },
+            { path: "stocklinemodule", loadChildren: './stocklinepages/stocklinepages.module#StocklinePagesModule' },
+            { path: "workordersmodule", loadChildren: './workorderpages/workorderpages.module#WorkOrderPagesModule' },
+            { path: "receivingmodule", loadChildren: './receivingpages/receivingpages.module#ReceivingPagesModule' },
+            { path: "generalledgermodule", loadChildren: './generalledgerpages/generalledgerpages.module#GeneralledgerPageModule' },
+            { path: "workflowmodule", loadChildren: './workflowpages/workflowpages.module#WorkFlowPagesModule' },
+            { path: "assetmodule", loadChildren: './assetmanagement/assetmanagement.module#AssetmanagementModule' },
+            { path: "accountreceivable", loadChildren: './accounts-receivable/accountsreceivable.module#AccountsreceivableModule' },
             //{ path: "mastermodule", loadChildren: './mastermaintanacepages/mastermaintanacepages.module#MastermaintanceModule' },
             { path: "accountpayble", loadChildren: './accounts-payble-pages/accounts-payble.module#AccountsPaybleModule' },
-            //{ path: "accountpayble", loadChildren: ()=>AccountsPaybleModule },
             {
                 path: "salesmodule",
-                loadChildren: ()=>SalesPagesModule
+                loadChildren: "./salespages/salespages.module#SalesPagesModule"
             },
             //{ path: "app-receiving-search-po-ro", component: SearchPoRoComponent, data: { title: "Search PO-RO" } },
             //{ path: "app-receiving-po-ro-setup", component: PoRoSetupComponent, data: { title: "PO-RO Setup" } },
@@ -135,7 +102,6 @@ import { WorkFlowPagesModule } from './workflowpages/workflowpages.module';
     ],
     exports: [
         RouterModule
-
     ],
     providers: [
         AuthService, AuthGuard

@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class GLAccountClassEndpoint extends EndpointFactory {
 
@@ -28,80 +28,82 @@ export class GLAccountClassEndpoint extends EndpointFactory {
 
 	getGLAccountclassEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.glaccountclassUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getGLAccountclassEndpoint());
-			}));
+		return this.http.get<T>(this.glaccountclassUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getGLAccountclassEndpoint());
+			});
 	}
 	getNewGatecodeEndpoint<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._glaccountclassUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewGatecodeEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._glaccountclassUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewGatecodeEndpoint(userObject));
+			});
 	}
 
 	getEditGLAccountClassEndpoint<T>(GLAccountClassId?: number): Observable<T> {
 		let endpointUrl = GLAccountClassId ? `${this._glaccountclassUrlNew}/${GLAccountClassId}` : this._glaccountclassUrlNew;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getEditGLAccountClassEndpoint(GLAccountClassId));
-			}));
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getEditGLAccountClassEndpoint(GLAccountClassId));
+			});
 	}
 
 	getUpdateGLAccountClassEndpoint<T>(roleObject: any, glAccountClassId: number): Observable<T> {
 		let endpointUrl = `${this._glaccountclassUrlNew}/${glAccountClassId}`;
 
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getUpdateGLAccountClassEndpoint(roleObject, glAccountClassId));
-			}));
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getUpdateGLAccountClassEndpoint(roleObject, glAccountClassId));
+			});
 	}
 
 	getDeleteGLAccountClassIdEndpoint<T>(glAccountClassId: number): Observable<T> {
 		let endpointUrl = `${this._glaccountclassUrlNew}/${glAccountClassId}`;
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getDeleteGLAccountClassIdEndpoint(glAccountClassId));
-			}));
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getDeleteGLAccountClassIdEndpoint(glAccountClassId));
+			});
 	}
 	getHistoryGLAccountClassIdEndpoint<T>(glAccountClassId: number): Observable<T> {
 		let endpointUrl = `${this._glaccountclassUrlAuditHistory}/${glAccountClassId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getHistoryGLAccountClassIdEndpoint(glAccountClassId));
-			}));
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getHistoryGLAccountClassIdEndpoint(glAccountClassId));
+			});
     }
     getGlAccountAudit<T>(glAccountClassId: number): Observable<T> {
         let endpointUrl = `${this.getGlById}/${glAccountClassId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getGlAccountAudit(glAccountClassId));
-            }));
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getGlAccountAudit(glAccountClassId));
+            });
     }
     
     getGlAccountRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getGlAccountRecords(paginationOption));
-            }));
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getGlAccountRecords(paginationOption));
+            });
     }
 
     GLAccountClassCustomUpload(file) {
-        return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}`, file)
+        return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}`, file).catch(error => {
+			return this.handleErrorCommon(error, () => this.GLAccountClassCustomUpload(file));
+		});
 
 
 	}
 	downloadAllGlList<T>(glAccountClassId): Observable<T> {
 		let url = this.exportData;
-		return this.http.post<any>(url, glAccountClassId, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.downloadAllGlList(glAccountClassId));
-			}));
+		return this.http.post<T>(url, glAccountClassId, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.downloadAllGlList(glAccountClassId));
+			});
 	}
 }

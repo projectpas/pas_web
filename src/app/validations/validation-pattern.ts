@@ -32,3 +32,11 @@ export function geaterThanZeroPattern() {
     return "^$|^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9]|[1-9][0-9][0-9][0-9][0-9]||[1-9][0-9][0-9][0-9][0-9][0-9]||[1-9][0-9][0-9][0-9][0-9][0-9][0-9])?"
 }
 
+export function namePattern() {
+    return "([a-zA-Z0-9.-_/ ])[a-zA-Z0-9.-_ ]*$"
+}
+
+export function timePattern() {
+    return "[0-9]{2,3}:[0-9]{2}";
+}
+

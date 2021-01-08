@@ -956,11 +956,11 @@ export class CustomerWorkEditComponent {
         this.loadingIndicator = true;
 
         this.siteService.getSiteList().subscribe(   //Getting Site List Hear
-            results => this.onSaiteDataLoadSuccessful(results), //Pasing first Array and calling Method
+            results => this.onSaiteDataLoadSuccessful(results[0]), //Pasing first Array and calling Method
             error => this.onDataLoadFailed(error)
         );
     }
-    private onSaiteDataLoadSuccessful(getSiteList) { //Storing Site Data
+    private onSaiteDataLoadSuccessful(getSiteList: Site[]) { //Storing Site Data
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.dataSource.data = getSiteList; //need

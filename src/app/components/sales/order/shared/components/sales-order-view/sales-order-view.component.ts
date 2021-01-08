@@ -6,7 +6,6 @@ import {
 } from "../../../../../../services/alert.service";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
-import { Currency } from "../../../../../../models/currency.model";
 import { CurrencyService } from "../../../../../../services/currency.service";
 import { EmployeeService } from "../../../../../../services/employee.service";
 import { CustomerService } from "../../../../../../services/customer.service";
@@ -19,9 +18,9 @@ import { SalesOrderCustomerApprovalComponent } from "../sales-order-customer-app
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
 import { SalesOrderChargesComponent } from "../sales-order-charges/sales-order-charges.component";
 import { SalesOrderFreightComponent } from "../sales-order-freight/sales-order-freight.component";
-import { forkJoin } from "rxjs";
+import { forkJoin } from "rxjs/observable/forkJoin";
 import { SalesOrderDocumentComponent } from "../sales-document/sales-order-document.component";
-
+import { SalesOrderAnalysisComponent } from "../../../sales-order-analysis/sales-order-analysis.component";
 @Component({
   selector: "app-sales-order-view",
   templateUrl: "./sales-order-view.component.html",
@@ -34,6 +33,7 @@ export class SalesOrderViewComponent implements OnInit {
   @ViewChild(SalesOrderChargesComponent,{static:false}) public salesOrderChargesComponent: SalesOrderChargesComponent;
   @ViewChild(SalesOrderFreightComponent,{static:false}) public salesOrderFreightComponent: SalesOrderFreightComponent;
   @ViewChild(SalesOrderDocumentComponent,{static:false}) public salesOrderDocumentComponent: SalesOrderDocumentComponent;
+  @ViewChild(SalesOrderAnalysisComponent,{static:false}) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
   @Input() salesOrderId: any;
   @Input() customerId;
   @Input() salesOrderView: any;
@@ -71,6 +71,7 @@ export class SalesOrderViewComponent implements OnInit {
   managementStructure: any = {};
   freight = [];
   charge = [];
+  moduleName: any = "SalesOrder";
   constructor(
     private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
@@ -94,11 +95,11 @@ export class SalesOrderViewComponent implements OnInit {
 
   getRequiredData() {
     this.isSpinnerVisible = true;
-    this.managementStructureId = this.currentUserManagementStructureId;
+    this.managementStructureId = this.salesQuote.managementStructureId;
     forkJoin(
       this.employeeService.getEmployeeCommonData(this.managementStructureId),
       this.customerService.getContacts(this.customerId),
-      this.commonservice.getManagementStructureCodes(this.managementStructureId),
+      this.commonservice.getManagementStructureNameandCodes(this.managementStructureId),
       this.salesOrderService.getSOMarginSummary(this.salesOrderView.salesOrder.salesOrderId)).subscribe(result => {
         this.isSpinnerVisible = false;
         this.onempDataLoadSuccessful(result[0][0]);
@@ -111,8 +112,6 @@ export class SalesOrderViewComponent implements OnInit {
         }
       }, err => {
         this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.onDataLoadFailed(errorLog);
       });
   }
 
@@ -144,31 +143,6 @@ export class SalesOrderViewComponent implements OnInit {
         selectedPartsTemp.push(partNumberObj)
       })
       return selectedPartsTemp;
-    }
-  }
-
-  onDataLoadFailed(log) {
-    this.isSpinnerVisible = false;
-    const errorLog = log;
-    var msg = '';
-    if (errorLog.message) {
-      if (errorLog.error && errorLog.error.errors.length > 0) {
-        for (let i = 0; i < errorLog.error.errors.length; i++) {
-          msg = msg + errorLog.error.errors[i].message + '<br/>'
-        }
-      }
-      this.alertService.showMessage(
-        errorLog.error.message,
-        msg,
-        MessageSeverity.error
-      );
-    }
-    else {
-      this.alertService.showMessage(
-        'Error',
-        log.error,
-        MessageSeverity.error
-      );
     }
   }
 
@@ -205,6 +179,9 @@ export class SalesOrderViewComponent implements OnInit {
     }
     if (event.index == 6) {
       this.salesOrderDocumentComponent.refresh();
+    }
+    if (event.index == 9) {
+      this.salesOrderAnalysisComponent.refresh(this.salesOrderView.salesOrder.salesOrderId);
     }
   }
 

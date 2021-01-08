@@ -1,4 +1,4 @@
-﻿// ===============================
+﻿﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,9 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import{ Observable , Subject,forkJoin} from 'rxjs';
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { EmployeeEndpoint } from './employee-endpoint.service';
 import { AuthService } from './auth.service';
@@ -58,21 +60,21 @@ export class EmployeeService {
         private employeeEndpoint: EmployeeEndpoint) { }
 
     getEmployeeList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeEndpoint<any[]>());
     }
 
     getEmployeeCommonData(managementStructureId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeCommonEndpoint<any[]>(managementStructureId));
     }
     getEmployeeNamesList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeNamesEndpoint<any[]>());
     }
 
     getEmployeeListforView(employeeId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeEndpointforView<any[]>(employeeId));
     }
     newActionforLeave(action: EmployeeLeaveType) {
@@ -81,36 +83,36 @@ export class EmployeeService {
 
 
     getshift() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getshiftEndpoint<any[]>());
     }
     getCountries() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getCountriesEndpoint<any[]>());
     }
     getEmployeeLeaveType() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeLeaveTypeEndpoint<any[]>());
     }
 
     getEmployeeTrainingType() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getEmployeeTrainingTypeEndpoint<any[]>());
     }
     //getCertificationList(employeeLicensure: any) {
-    //    return forkJoin(
+    //    return Observable.forkJoin(
     //        this.employeeEndpoint.getCerEmployeeEndpoint<any>(employeeLicensure));
     //}
     getCertificationList(employeeLicensureId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getCerEmployeeEndpoint<any>(employeeLicensureId));
     }
     getTrainingList(employeeTrainingId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getTrainEmployeeEndpoint<any>(employeeTrainingId));
     }
     getTrainingTypes() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getTrainingType<any>());
     }
 
@@ -171,16 +173,16 @@ export class EmployeeService {
 
     }
     historyEmployee(employeeId: number) {
-        return forkJoin(this.employeeEndpoint.getHistoryEmployeeEndpoint<AuditHistory[]>(employeeId));
+        return Observable.forkJoin(this.employeeEndpoint.getHistoryEmployeeEndpoint<AuditHistory[]>(employeeId));
     }
 
     getRolesSetupData() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getRolesSetupEntityData<any[]>());
     }
 
     getUserRolelevel() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getUserRolelevelList<any[]>());
     }
     updateActionforActive(action: any) {
@@ -188,7 +190,7 @@ export class EmployeeService {
     }
 
     getemployeeshiftsList(action: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getemployeeshiftsList<any[]>(action));
     }
     Addmultileaves(action: any) {
@@ -231,7 +233,7 @@ export class EmployeeService {
 
 
     getAllEmployeeList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.getAllEmployeeList(data));
     }
 
@@ -239,7 +241,7 @@ export class EmployeeService {
     //    return this.employeeEndpoint.employeeListGlobalSearch(filterText, pageNumber, pageSize);
     //}
     employeeListGlobalSearch(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeEndpoint.employeeListGlobalSearch(data));
     }
     updateEmployeeMemo(employeeId: any, memo: any) {

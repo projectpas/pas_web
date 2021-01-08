@@ -4,8 +4,8 @@
     </div>
     <table class="table table-bordered table-fixed workflow-table-measment" style="margin-top: 31px;">
         <tr>
-            <!-- <th><label>S.No</label></th> -->
-            <th><label>PN *</label></th>
+            <th><label>PN<span class="clr-red">*</span></label></th>
+            <th><label>PN Description</label></th>
             <th><label>Sequence</label></th>
             <th><label>Stage</label></th>
             <th><label>Min </label></th>
@@ -16,38 +16,113 @@
             <th><label>Action </label></th>
         </tr>
         <tr [hidden]="measurement.isDelete" *ngFor="let measurement of workFlow.measurements;let i= index">
-            <!-- <td>{{(currentPage - 1) * itemsPerPage + i + 1}}</td> -->
             <td>
-                <p-autoComplete (onSelect)="onPartSelect($event,measurement)" [suggestions]="partCollection"
-                    (completeMethod)="filterpartItems($event)" [size]="30" [(ngModel)]="measurement.partDescription"
-                    [minLength]="1" [dropdown]="true" class="workflow-measurement-select">
-
-                    <ng-template let-partName pTemplate="part">
-                        <div class="ui-helper-clearfix">{{partName}}</div>
-                    </ng-template>
+                <p-autoComplete appendTo="body" [(ngModel)]="measurement.partName" [suggestions]="partCollection"
+                    (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
+                    class="workflow-measurement-select" #partNum="ngModel" errorMessage="Records not found"
+                    field="partNumber" (onSelect)="onPartSelect($event,measurement)" [forceSelection]="true"
+                    title="PN" required>
                 </p-autoComplete>
-            </td>
+            </td> 
+            <td style="min-width: 140px;">{{measurement.partDescription}}</td>
             <td><input class="form-control text-right" pInputText pKeyFilter="num" type="text" maxlength="5"
                     (focusout)="checkDuplicateSequence($event, measurement);" [(ngModel)]="measurement.sequence"
                     value="{{measurement.sequence}}"></td>
             <td><input class="form-control" type="text" [(ngModel)]="measurement.stage" value="{{measurement.stage}}">
             </td>
-            <td><input class="form-control text-right" type="text" pInputText pKeyFilter="num" [(ngModel)]="measurement.min" value="{{measurement.min}}"></td>
-            <td><input class="form-control text-right" type="text" pInputText pKeyFilter="num" [(ngModel)]="measurement.max" value="{{measurement.max}}"></td>
+            <td><input class="form-control text-right" type="text" pInputText pKeyFilter="num"
+                    [(ngModel)]="measurement.min" value="{{measurement.min}}"></td>
+            <td><input class="form-control text-right" type="text" pInputText pKeyFilter="num"
+                    [(ngModel)]="measurement.max" (input)="validateMaxMin($event,measurement)" value="{{measurement.max}}"></td>
             <td><input class="form-control" type="text" [(ngModel)]="measurement.expected"
                     value="{{measurement.expected}}"></td>
             <td><input class="form-control" type="text" [(ngModel)]="measurement.diagramURL"
                     value="{{measurement.diagramURL}}"></td>
             <td>
-                <!--<input type="text" class="form-control" pInputText [(ngModel)]="measurement.memo" value="{{measurement.memo}}">-->
-                <textarea style="height: 25px !important; margin-top: 5px;width: 130px;border-radius: 5px;" class="form-control"
-                    [(ngModel)]="measurement.memo" value="{{measurement.memo}}"></textarea>
+                <div class="form-group notes-popup-cstm mat_emo"
+                    style="width: 160px;  display: inline-flex;   margin-bottom: 0;">
+                    <div [innerHTML]="measurement.memo" class="text_editor_box" style="width: 160px;margin-right: 2px !important;"></div>
+                    <i class=" fa fa-pencil" 
+                        style="position: relative;top: 6px; color: royalblue !important;"
+                         matTooltip="Memo" matTooltipPosition="above"
+                        (click)="onAddTextAreaInfo(measurement,i)"></i>
+                        <div class="modal fade" id="textareapopupMemo" role="dialog" data-backdrop="static" data-keyboard="false">
+                            <div class="modal-dialog modal-xs">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" style="font-size: 22px !important;">&times;</button>
+                                        <h4 class="modal-title">Edit {{"Memo"}}</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <table class="table table-bordered table-fixed workflow-table-material">
+                                            <thead>
+                                                <th style="color: #fff;background: #4298ff !important;">{{"Memo"}}</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                                                            required>
+                                                        </p-editor>                        
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div style="float:right">
+                                            <button type="button" class="btn btn-primary adj_cor" data-dismiss="modal"
+                                               
+                                                (click)="onSaveTextAreaInfo(textAreaInfo)">
+                                                Save
+                                            </button>
+                                            <button type="button" class="btn btn-danger adj_cor"
+                                                data-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
             </td>
-            <td>
-                <button class="btn btn-danger nobg" (click)="deleteRow(i)">
+            <td style="text-align: center;">
+                <button class="btn btn-danger nobg"  (click)="openDelete(content,measurement,i)">
                     <i class="fa fa-trash"></i>
                 </button>
             </td>
         </tr>
     </table>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">        
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>      
+    </div>
+    <div class="modal-body">
+        <strong *ngIf="deleteRowRecord && deleteRowRecord.partNumber">
+            EPN:
+            <span class="new-label" >{{deleteRowRecord.partNumber}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteRow()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+</ng-template>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
 </div>

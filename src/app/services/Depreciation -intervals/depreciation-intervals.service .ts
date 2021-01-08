@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { DepreciationIntervalsEndpoint } from './depreciation-intervals-endpoint.service';
 import { DepreciationIntervals } from '../../models/depriciationIntervals.model';
 @Injectable()
@@ -12,12 +12,12 @@ export class DepreciationIntervalsService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.depreciationIntervalsEndpoint.getAlldepreciationIntervals<any>());
     }
 
     getById(assetDepreciationIntervalTypeId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.depreciationIntervalsEndpoint.getdepreciationIntervalById<DepreciationIntervals>(assetDepreciationIntervalTypeId)
         );
     }

@@ -1,16 +1,11 @@
-
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
 @Injectable()
 export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
-
-
 	private readonly _actionsUrl: string = "/api/ReceivingCustomerWork/Get";
 	private readonly _actionsUrlNew: string = "/api/ReceivingCustomerWork/receivingCustomerWork";
 	private readonly _actionsUpdateUrlNew: string = "/api/ReceivingCustomerWork/UpdatereceivingCustomerWork";
@@ -25,71 +20,60 @@ export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
     private readonly _customerGlobalSearch: string = '/api/ReceivingCustomerWork/ListGlobalSearch'
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
     get customerWorkRowById() { return this.configurations.baseUrl + this._customerWorkRowBySearchId; }
-
 	constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
-
 		super(http, configurations, injector);
 	}
-
 	getReasonEndpoint<T>(): Observable<T> {
-
-		return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getReasonEndpoint());
-			}));
+		return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getReasonEndpoint());
+			});
     }
-
     getCustomerWorkListByid<T>(receivingCustomerWorkId: any): Observable<T> {
         let endpointurl = `${this.customerWorkRowById}/${receivingCustomerWorkId}`;
-        return this.http.get<any>(endpointurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCustomerWorkListByid(receivingCustomerWorkId));
-            }));
+        return this.http.get<T>(endpointurl, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCustomerWorkListByid(receivingCustomerWorkId));
+            });
     }
 
-    
     getCustomerWorkAll(data) {
         return this.http.post(this._customerList, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getCustomerWorkAll(data));
-            }));
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getCustomerWorkAll(data));
+            });
     }
 	getNewReasonEndpoint<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewReasonEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewReasonEndpoint(userObject));
+			});
     }
-    
     updateCustomerWorkReceivingEndpoint<T>(userObject: any): Observable<T> {
 
-		return this.http.put<any>(this._actionsUpdateUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.updateCustomerWorkReceivingEndpoint(userObject));
-		}));
+		return this.http.put<T>(this._actionsUpdateUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.updateCustomerWorkReceivingEndpoint(userObject));
+		});
 	}
-
 	getHistoryReasonEndpoint<T>(receivingCustomerWorkId: number): Observable<T> {
 		let endpointUrl = `${this._actionsUrlAuditHistory}/${receivingCustomerWorkId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getHistoryReasonEndpoint(receivingCustomerWorkId));
-			}));
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getHistoryReasonEndpoint(receivingCustomerWorkId));
+			});
 	}
-
 	getEditReasonEndpoint<T>(receivingCustomerWorkId?: number): Observable<T> {
 		let endpointUrl = receivingCustomerWorkId ? `${this._actionsUrl}/${receivingCustomerWorkId}` : this._actionsUrl;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getEditReasonEndpoint(receivingCustomerWorkId));
-			}));
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getEditReasonEndpoint(receivingCustomerWorkId));
+			});
 	}
-
 	getUpdateReasonEndpoint<T>(roleObject: any, receivingCustomerWorkId: number): Observable<T> {
-		//let endpointUrl = `${this._actionsUpdateUrlNew}/${receivingCustomerWorkId}`;
         let json = {
             "receivingCustomerWorkId": roleObject.receivingCustomerWorkId,
             "customerId": roleObject.customerId,
@@ -161,11 +145,10 @@ export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
             "traceableToType": roleObject.traceableToType,
             "workPhone": roleObject.workPhone
         }
-
-        return this.http.put<any>(this._actionsUpdateUrlNew, JSON.stringify(json), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getUpdateReasonEndpoint(roleObject, receivingCustomerWorkId));
-			}));
+        return this.http.put<T>(this._actionsUpdateUrlNew, JSON.stringify(json), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getUpdateReasonEndpoint(roleObject, receivingCustomerWorkId));
+			});
 	}
 
 	//getDeleteReasonEndpoint<T>(receivingCustomerWorkId: number): Observable<T> {
@@ -173,56 +156,59 @@ export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
 
 	//	return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
 	//		.catch(error => {
-	//			return this.handleError(error, () => this.getDeleteReasonEndpoint(receivingCustomerWorkId));
+	//			return this.handleErrorCommon(error, () => this.getDeleteReasonEndpoint(receivingCustomerWorkId));
 	//		});
  //   }
     getDeleteReasonEndpoint<T>(id, updatedBy) {
-        return this.http.get<any>(`${this._actionDeleteUrlNew}?id=${id}&updatedBy=${updatedBy}`)
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getDeleteReasonEndpoint(id, updatedBy));
-            }));
+        return this.http.get<T>(`${this._actionDeleteUrlNew}?id=${id}&updatedBy=${updatedBy}`)
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getDeleteReasonEndpoint(id, updatedBy));
+            });
     }
     getNewTimeAdjustmentEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._actionsTimeUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getNewTimeAdjustmentEndpoint(userObject));
-            }));
+        return this.http.post<T>(this._actionsTimeUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getNewTimeAdjustmentEndpoint(userObject));
+            });
     }
     getUpdatestockLineTimeLifeEndpoint<T>(roleObject: any, timeLifeCyclesId: number): Observable<T> {
-        return this.http.put<any>(this._TimeLifeUpdate, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getUpdatestockLineTimeLifeEndpoint(roleObject, timeLifeCyclesId));
-            }));
+        return this.http.put<T>(this._TimeLifeUpdate, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getUpdatestockLineTimeLifeEndpoint(roleObject, timeLifeCyclesId));
+            });
     }
     //getUpdateActionforActive<T>(roleObject: any, receivingCustomerWorkId: number): Observable<T> {
     //    let endpointUrl = `${this._updateActiveInactive}/${roleObject.receivingCustomerWorkId}`;
 
     //    return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
     //        .catch(error => {
-    //            return this.handleError(error, () => this.getUpdateForActive(roleObject, receivingCustomerWorkId));
+    //            return this.handleErrorCommon(error, () => this.getUpdateForActive(roleObject, receivingCustomerWorkId));
     //        });
     //}
     getUpdateForActive<T>(roleObject: any, receivingCustomerWorkId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNew}/${roleObject.receivingCustomerWorkId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getUpdateForActive(roleObject, receivingCustomerWorkId));
-            }));
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getUpdateForActive(roleObject, receivingCustomerWorkId));
+            });
     }
     getAuditHistory(receivingCustomerWorkId) {
-        return this.http.get(`${this.configurations.baseUrl}/${this._actionsUrlAudit}?receivingCustomerWorkId=${receivingCustomerWorkId}`)
+        return this.http.get(`${this.configurations.baseUrl}/${this._actionsUrlAudit}?receivingCustomerWorkId=${receivingCustomerWorkId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getAuditHistory(receivingCustomerWorkId));
+        });
     }
     getUpdateActionforActive(receivingCustomerWorkId:number,status:string,updatedBy:string) {
-        return this.http.get(`${this.configurations.baseUrl}/${this._updateActiveInactive}?id=${receivingCustomerWorkId}&status=${status}&updatedBy=${updatedBy}`)
+        return this.http.get(`${this.configurations.baseUrl}/${this._updateActiveInactive}?id=${receivingCustomerWorkId}&status=${status}&updatedBy=${updatedBy}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getUpdateActionforActive(receivingCustomerWorkId,status,updatedBy));
+        });
     }
     getGlobalCustomerRecords<T>(value, pageIndex, pageSize): Observable<T> {
-        // let endpointUrl = this.globalSearch;
-        return this.http.get<any>(`${this.configurations.baseUrl}${this._customerGlobalSearch}?value=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getGlobalCustomerRecords(value, pageIndex, pageSize));
-            }));
+        return this.http.get<T>(`${this.configurations.baseUrl}${this._customerGlobalSearch}?value=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getGlobalCustomerRecords(value, pageIndex, pageSize));
+            });
     }
 }
 

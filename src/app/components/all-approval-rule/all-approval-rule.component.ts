@@ -105,6 +105,7 @@ export class AllApprovalRuleComponent implements OnInit {
   ]
   selectedColumns = this.headers;
   isEdit: boolean = false;
+  currentStatus: string = 'Active';
   
   constructor(private poapprovalService: POApprovalService, private datePipe: DatePipe, private modalService: NgbModal, private authService: AuthService, private commonService: CommonService, private alertService: AlertService){       
   }
@@ -580,7 +581,7 @@ addNewApproval(){
 
   getPoApprovalList(taskid){
     this.isSpinnerVisible = true;
-      this.poapprovalService.getAllApprovalDataByTaskId(taskid,this.currentDeletedstatus)
+      this.poapprovalService.getAllApprovalDataByTaskId(taskid,this.currentDeletedstatus, this.currentStatus)
       .subscribe(
           (res: any[]) => {            
               this.poApprovalData  = res.map(x => {

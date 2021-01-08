@@ -65,7 +65,10 @@ import { EntityDocumentsComponent } from "../components/general-ledger/entity/le
 import { LegalEntityGeneralInformationComponent } from "../components/general-ledger/entity/legal-entity-general-information/legal-entity-general-information.component";
 import { AppSharedModule } from "../app-shared.module";
 import {EditorModule} from 'primeng/editor';
-import { CommonDocumentsComponent } from "../components/common-components/common-documents/common-documents.component";
+// import { CommonDocumentsComponent } from "../components/common-components/common-documents/common-documents.component";
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
+
+
 
 
 @NgModule({
@@ -90,7 +93,8 @@ import { CommonDocumentsComponent } from "../components/common-components/common
         FileUploadModule,
         RadioButtonModule,
         AppSharedModule,
-        EditorModule
+        EditorModule,
+        CommonDocumentsModule
     ],
     declarations: [
         GeneralledgerPageComponent,
@@ -121,7 +125,7 @@ import { CommonDocumentsComponent } from "../components/common-components/common
         EntityDocumentsComponent,
         LegalEntityGeneralInformationComponent,
         LegalEntityStepsPrimeNgComponent,
-        CommonDocumentsComponent
+        // CommonDocumentsComponent
     ],
     providers: [
         NodeSetupService,

@@ -3,15 +3,8 @@
         *ngIf="controlSettings && controlSettings.showViewQuote">
         View Quote
     </button>
-    <!-- <button type="button" class="btn btn-primary" (click)="viewSelectedRow(ViewQuote,sale)" matTooltip="view" matTooltipPosition="above">
-         View Quote
-     </button>-->
     <p-splitButton label="Payment" styleClass="btn btn-primary" [model]="paymentItems">
     </p-splitButton>
-    <!-- <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.MakePayment)">
-        Make
-        Payment
-    </button> -->
     <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.NewSalesOrder)">New SO</button>
     <p-splitButton [showTransitionOptions]="'0ms'" [hideTransitionOptions]="'0ms'" label="Print"
         styleClass="btn btn-primary" [model]="printItems">
@@ -27,30 +20,4 @@
         Close
         SO
     </button>
-    <!-- <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.PartialPayment)">
-        Partial
-        Payment
-    </button> -->
-    <!-- <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.CashSales)">Cash Sales</button> -->
-    <!-- <button type="button" class="btn btn-primary" (click)="onClick(salesOrderActionType.Deposit)">Deposit</button> -->
 </div>
-
-
-<!--<ng-template #viewQuote let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <button type="button" class="close" (click)="dismissModel()">
-            &times;
-        </button>
-        <h4 class="modal-title">Details of Quote</h4>
-    </div>
-
-    <div class="modal-body" *ngIf="salesQuote">
-        <app-sales-quote-view [customerId]="customerId" [salesQuoteId]="salesOrderQuoteId" [salesQuoteView]="salesQuoteView"></app-sales-quote-view>
-    </div>
-
-
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
-    </div>
-
-</ng-template>-->

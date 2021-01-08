@@ -1,15 +1,16 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 import { AuthService } from './auth.service';
 import { Role } from '../models/role.model';
-import { PublicationType } from '../models/publicationtype.model';
+import { PublicationType } from '../models/PublicationType.model';
 
 import { publicationTypeEndpointService } from './publication-type-endpoint.service';
 
@@ -32,11 +33,11 @@ export class publicationTypeService {
         private publicationTypeEndpointService: publicationTypeEndpointService) { }
 
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.publicationTypeEndpointService.getDocumentTypeEndpoint<PublicationType[]>());
     }
     getAllWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.publicationTypeEndpointService.getAllDocumentTypeEndpoint<PublicationType[]>());
     }
 

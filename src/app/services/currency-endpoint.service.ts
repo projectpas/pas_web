@@ -1,12 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class CurrencyEndpoint extends EndpointFactory {
 
@@ -33,85 +33,85 @@ export class CurrencyEndpoint extends EndpointFactory {
 
     getCountryEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.CountryAll, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.CountryAll, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCountryEndpoint());
-            }));
+            });
     }
 
     getCurrencyEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.CurrencyUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.CurrencyUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCurrencyEndpoint());
-            }));
+            });
     }
 
     getAllCurrencyEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.CurrencyUrlAll, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.CurrencyUrlAll, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCurrencyEndpoint());
-            }));
+            });
     }
 
     getNewCurrencyEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._currencyPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._currencyPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewCurrencyEndpoint(userObject));
-            }));
+            });
     }
     getEditcurrencyEndpoint<T>(currencyId?: number): Observable<T> {
         let endpointUrl = currencyId ? `${this._currencyPostUrl}/${currencyId}` : this._currencyPostUrl;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditcurrencyEndpoint(currencyId));
-            }));
+            });
     }
 
     getUpdatecurrencyEndpoint<T>(roleObject: any, currencyId: number): Observable<T> {
         let endpointUrl = `${this._currencyPostUrl}/${currencyId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdatecurrencyEndpoint(roleObject, currencyId));
-            }));
+            });
     }
     getDeletecurrencyEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._currencyPostUrl}/${actionId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeletecurrencyEndpoint(actionId));
-            }));
+            });
     }
     getHistorycurrencyEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNewAuditHistory}/${actionId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistorycurrencyEndpoint(actionId));
-            }));
+            });
     }
     
     getCurrencyDataAuditById<T>(currencyId: number): Observable<T> {
         let endpointUrl = `${this.getCurrencyAuditById}/${currencyId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCurrencyDataAuditById(currencyId));
-            }));
+            });
     }
     
     getCurrencyRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
         //let endpointUrl = `${this.getPaginationData}/${data}`;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCurrencyRecords(paginationOption));
-            }));
+            });
     }
 
 

@@ -1,11 +1,11 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { DepreciationIntervals } from '../../models/depriciationIntervals.model';
-import {catchError} from 'rxjs/operators'
+
 @Injectable()
 export class DepreciationIntervalsEndpoint extends EndpointFactory {
 
@@ -39,55 +39,55 @@ export class DepreciationIntervalsEndpoint extends EndpointFactory {
     getAlldepreciationIntervals<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAlldepreciationIntervals());
-            }));
+            });
     }
 
     getdepreciationIntervalById<T>(assetDepreciationIntervalTypeId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${assetDepreciationIntervalTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getdepreciationIntervalById(assetDepreciationIntervalTypeId));
-            }));
+            });
     }
 
     adddepreciationInterval<T>(depreciationInterval: DepreciationIntervals): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(depreciationInterval), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(depreciationInterval), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.adddepreciationInterval(depreciationInterval));
-            }));
+            });
     }
 
     updatedepreciationInterval<T>(depreciationIntervalStatus: DepreciationIntervals): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(depreciationIntervalStatus), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(depreciationIntervalStatus), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updatedepreciationInterval(depreciationIntervalStatus));
-            }));
+            });
     }
 
     removedepreciationIntervalById<T>(assetDepreciationIntervalTypeId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${assetDepreciationIntervalTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removedepreciationIntervalById(assetDepreciationIntervalTypeId));
-            }));
+            });
     }
 
     getAudit<T>(assetDepreciationIntervalId: number): Observable<T> {
         let endpointUrl = `${this.getIntervalsHistById}/${assetDepreciationIntervalId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAudit(assetDepreciationIntervalId));
-            }));
+            });
     }
 
     DepIntervalCustomUpload(file) {

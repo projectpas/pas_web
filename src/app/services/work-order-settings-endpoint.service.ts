@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
@@ -29,42 +29,42 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
     getworkorderEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.workorderUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.workorderUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getworkorderEndpoint());
-            }));
+            });
     }
 
     getAllworkorderEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.workorderAllUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.workorderAllUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllworkorderEndpoint());
-            }));
+            });
     }
     getworkorderLiteEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this._workorderLiteUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this._workorderLiteUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getworkorderLiteEndpoint());
-            }));
+            });
     }
 
     getNewActionEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._workorderPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._workorderPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewActionEndpoint(userObject));
-            }));
+            });
     }
 
     getEditActionEndpoint<T>(actionId?: number): Observable<T> {
         let endpointUrl = actionId ? `${this._workorderPostUrl}/${actionId}` : this._workorderPostUrl;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditActionEndpoint(actionId));
-            }));
+            });
     }
 
     //getUpdateActionEndpoint<T>(roleObject: any, actionId: number): Observable<T> {
@@ -78,19 +78,19 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
     getUpdateActionEndpoint<T>(userObject: any): Observable<T> {
         //  let endpointUrl = `${this._workorderPostUrl}`;
 
-        return this.http.post<any>(this._workorderPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._workorderPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateActionEndpoint(userObject));
-            }));
+            });
     }
 
     getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._workorderPostUrl}/${actionId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteActionEndpoint(actionId));
-            }));
+            });
     }
 
     getworkflowbyidEndpoint(companyid, actionId) {
@@ -110,10 +110,10 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
     getAuditById<T>(workorderPortalId: number): Observable<T> {
         let endpointUrl = `${this._getAuditById}/${workorderPortalId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAuditById(workorderPortalId));
-            }));
+            });
     }
 
 

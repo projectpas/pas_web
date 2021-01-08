@@ -44,4 +44,29 @@ input.hidePlaceHolder:active {
     overflow: scroll !important;;
 
 }
+.table-child-header-mgmt{
+    min-width: 300px !important;
+}
 
+.check-box-back{
+    background-color: #fff !important;
+}
+.history-body{
+    overflow-y: scroll;
+}
+
+.address-memo-view{
+    vertical-align: top;
+}
+.approver-parent-checkbox{
+    min-width: 90px; align-items: center;
+}
+.approver-memo{
+    float: left !important;
+}
+.approver-total-cost{
+    text-align: right !important;
+}
+.mgmt-sructure-td-width{
+    min-width: 300px !important;
+}

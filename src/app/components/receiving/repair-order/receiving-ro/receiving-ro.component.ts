@@ -30,13 +30,12 @@ import { AddressModel } from '../../../../models/address.model';
 import { Warehouse } from '../../../../models/warehouse.model';
 import { Bin } from '../../../../models/bin.model';
 import { Shelf } from '../../../../models/shelf.model';
-
 import { error } from '@angular/compiler/src/util';
 import { Customer } from '../../../../models/customer.model';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 
 import { ShippingService } from '../../../../services/shipping/shipping-service';
-;
+
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
@@ -89,7 +88,7 @@ export class ReceivingRoComponent implements OnInit {
 
     ConditionId: number = 0;
     allPartGLAccountId: number;
-
+    headerMemo: any;
 
     toggleIcon: boolean = false;
     currentSLIndex: number = 0;
@@ -105,6 +104,8 @@ export class ReceivingRoComponent implements OnInit {
     ownercustomer: boolean = false;
     ownerother: boolean = false;
     ownervendor: boolean = false;
+
+    headerNotes:any;
 
     traceabletocustomer: boolean = false;
     traceabletoother: boolean = false;
@@ -624,7 +625,30 @@ export class ReceivingRoComponent implements OnInit {
 
         }
     }
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
 
+    onAddNotes() {
+		this.headerNotes = this.repairOrderHeaderData.notes;
+	}
+	onSaveNotes() {
+		this.repairOrderHeaderData.notes = this.headerNotes;
+		
+	}
+
+    onAddMemo() {
+		this.headerMemo = this.repairOrderHeaderData.memo;
+	}
+	onSaveMemo() {
+		this.repairOrderHeaderData.memo = this.headerMemo;
+	}
     private managementStructureSuccess(managementStructureId: number, managementStructure: ManagementStructure[]) {
 
         this.alertService.stopLoadingMessage();
@@ -1595,7 +1619,7 @@ export class ReceivingRoComponent implements OnInit {
                 for (var i = 0; i < item.stocklineListObj.length; i++) {
                     item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
                     item.stocklineListObj[i].conditionId = item.conditionId;
-                    item.stocklineListObj[i].quantityRejected =parseInt(item.quantityRejected);
+                    item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
                     item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
                     item.stocklineListObj[i].isPMA = item.itemMaster.pma;
                     item.stocklineListObj[i].isDER = item.itemMaster.der;

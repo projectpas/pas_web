@@ -9,12 +9,12 @@ import { HttpClient } from '@angular/common/http';
 import { Router, NavigationExtras } from '@angular/router';
 import { MasterCompany } from '../../../models/mastercompany.model'
 import { AuthService } from '../../../services/auth.service';
- 
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { RolesManagementStructureService } from '../../../services/roles-management-structure.service';
 import { UserRoleLevel } from '../../../models/userRoleLevel.model';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { SingleScreenBreadcrumbService } from "../../../services/single-screens-breadcrumb.service";
 import { LegalEntityService } from '../../../services/legalentity.service';
 import { TreeNode, MenuItem } from 'primeng/api';

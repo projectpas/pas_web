@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { TaxRateEndpointService } from './taxrate-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,7 +37,7 @@ export class TaxRateService {
         private taxRateEndpoint: TaxRateEndpointService) { }
 
     getTaxRateList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.taxRateEndpoint.getTaxRateEndpoint<TaxRate[]>());
     }
 
@@ -45,7 +46,7 @@ export class TaxRateService {
     }
 
     historyTaxRate(taxrateId: number) {
-        return forkJoin(this.taxRateEndpoint.getHistoryTaxRateEndpoint<AuditHistory[]>(taxrateId));
+        return Observable.forkJoin(this.taxRateEndpoint.getHistoryTaxRateEndpoint<AuditHistory[]>(taxrateId));
     }
 
     getTaxRate(taxrateId?: number) {
@@ -64,7 +65,7 @@ export class TaxRateService {
         return this.taxRateEndpoint.getTaxRateAuditById<any>(taxrateId);
     }
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.taxRateEndpoint.getTaxRateRecords<TaxRate[]>(serverSidePagesData));
     }
 }

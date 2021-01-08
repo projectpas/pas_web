@@ -11,8 +11,8 @@ import { AuditHistory } from '../../models/audithistory.model';
 import { AuthService } from '../../services/auth.service';
 import { ATAMain } from '../../models/atamain.model';
 import { AtaMainService } from '../../services/atamain.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 
 import { TableModule } from 'primeng/table';

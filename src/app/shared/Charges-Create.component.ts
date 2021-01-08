@@ -15,7 +15,7 @@ import * as $ from 'jquery';
     selector: 'grd-charges',
     templateUrl: './Charges-Create.component.html',
     styleUrls: ['./Charges-Create.component.css']
-}) 
+})
 export class ChargesCreateComponent implements OnInit, OnChanges {
     vendorCollection: any[] = [];
     ccRegex: RegExp = /[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/;
@@ -32,42 +32,39 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     @Input() isWorkFlow: boolean = false;
     @Output() saveChargesListForWO = new EventEmitter();
     @Output() updateChargesListForWO = new EventEmitter();
-
-
-    @Output() notify: EventEmitter<IWorkFlow> =
-        new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
 
     chargesTypes: any[] = [];
     chargesCurrency: any[] = [];
     row: any;
-
+    isSpinnerVisible = false;
     errorMessage: string;
-
-
     currentPage: number = 1;
     itemsPerPage: number = 10;
     roNumList: any[] = [];
-    constructor(private vendorservice: VendorService, private actionService: ActionService, private currencyService: CurrencyService, private alertService: AlertService, private commonService: CommonService) {
+
+    constructor(private vendorservice: VendorService, private actionService: ActionService, 
+        private currencyService: CurrencyService, private alertService: AlertService, 
+        private commonService: CommonService) {
     }
 
     ngOnInit(): void {
         this.loadAllVendors();
-        this.getRONumberList();
-        
         if (this.isWorkOrder) {
-            // this.row = this.workFlow.charges[0];
-            // this.addRow();
-
-
             this.row = this.workFlow.charges[0];
             if (this.isEdit) {
                 this.workFlow.charges = [];
+                const data = {
+                    ...this.editData,
 
-                const data = { ...this.editData, vendor: this.editData.vendorName }
+                    vendorId: this.editData.vendorId,
+                    vendorName: this.editData.vendorName, vendor: {
+                        vendorId: this.editData.vendorId,
+                        vendorName: this.editData.vendorName
+                    }
+                }
                 this.workFlow.charges.push(data);
                 this.reCalculate()
-                console.log("event df")
-                // this.onChargeTypeChange(event,data)
             } else {
                 this.workFlow.charges = [];
                 this.workFlow.qtySummation = 0;
@@ -75,52 +72,54 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 this.workFlow.totalChargesCost = 0;
 
                 this.row = this.workFlow.charges[0];
+                this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
+
                 this.workFlow.charges = [];
                 this.addRow();
             }
-
-
-
         } else {
             this.row = this.workFlow.charges[0];
             if (this.row == undefined) {
                 this.row = {};
+            } else {
+                this.row.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
             }
             this.row.taskId = this.workFlow.taskId;
+            if (this.workFlow.charges.length > 0) {
+                this.workFlow.charges.forEach((charge, index) => {
+                    this.workFlow.charges[index].vendor = {
+                        vendorId: this.workFlow.charges[index].vendorId,
+                        vendorName: this.workFlow.charges[index].vendorName
+                    }
+                })
+            }
+
         }
-
-        // this.actionService.getCharges().subscribe(
-        //     chargesTypes => {
-        //         this.chargesTypes = chargesTypes;
-        //     },
-        //     error => this.errorMessage = <any>error
-        // );
-        this.commonService.smartDropDownList('Charge', 'ChargeId', 'ChargeType').subscribe(res => {
-            this.chargesTypes = res.map(x => {
-                return {
-                    ...x,
-                    chargeId: x.value,
-                    chargeType : x.label
-                }
+        this.isSpinnerVisible = true;
+        let chargesIds = [];
+        if (this.UpdateMode) {
+            chargesIds = this.workFlow.charges.reduce((acc, x) => {
+                return chargesIds.push(acc.chargeId);
+            }, 0)
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.chargesTypes = res.map(x => {
+                    return {
+                        ...x,
+                        chargeId: x.value,
+                        chargeType: x.label
+                    }
+                });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-        })
-
-        // this.currencyService.getCurrencyList().subscribe(
-        //     chargesCurrencies => {
-        //         this.chargesCurrency = chargesCurrencies[0];
-        //     },
-        //     error => this.errorMessage = <any>error
-        // );
- 
-
-
-        
-
     }
 
     ngOnChanges(): void {
-        if(this.workFlow) {
-            if(this.workFlow.charges.length > 0) {
+        if (this.workFlow) {
+            if (this.workFlow.charges.length > 0) {
                 this.workFlow.charges = this.workFlow.charges.map(x => {
                     return {
                         ...x,
@@ -142,15 +141,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         }
     }
 
-    getRONumberList() {
-        this.commonService.smartDropDownList('RepairOrder', 'RepairOrderId', 'RepairOrderNumber')
-            .subscribe(
-                (res: any[]) => {
-                    this.roNumList = res;
-                }
-            )
-    }
-
     reCalculate() {
 
         this.calculateQtySummation();
@@ -159,6 +149,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     filterVendor(event) {
+
         this.vendorCollection = this.allVendors.filter(x => {
             if (x.vendorName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
                 return x;
@@ -167,59 +158,62 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     onTaskChange(task) {
-        this.taskList.forEach((t)=>{
-            if(t.taskId == task.taskId){
+        this.taskList.forEach((t) => {
+            if (t.taskId == task.taskId) {
                 task['taskName'] = t.description;
             }
         })
     }
 
     onChargeTypeChange(event, charge): void {
-        console.log("current chareg",charge);
+        this.isSpinnerVisible = true;
         var isTypeExist = this.workFlow.charges.filter(x => x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
         this.chargesTypes.forEach((ct) => {
             if (ct.chargeId == charge.workflowChargeTypeId) {
                 charge.chargeType = ct.chargeType;
-              
+
                 this.commonService.getChargeData(charge.workflowChargeTypeId)
                     .subscribe(
                         res => {
+                            this.isSpinnerVisible = false;
                             if (res) {
-                                console.log("service checked");
-                                // charge.description = res.description;
                                 charge.memo = res.memo;
-                                charge.glAccountName=res.glAccountName;
+                                charge.glAccountName = res.glAccountName;
                             }
-                        }
-                    )
+                        }, error => {
+                            this.isSpinnerVisible = false;
+                        });
+            } else {
+                this.isSpinnerVisible = false;
             }
         })
         if (isTypeExist.length > 1) {
             event.target.value = '0';
             charge.workflowChargeTypeId = "0";
             this.alertService.showMessage("Work Flow", "Type is already in use in Charges List.", MessageSeverity.error);
-
         }
     }
 
     private loadAllVendors() {
-        this.vendorservice.getVendorsForDropdown().subscribe(
-            results => {
-                this.allVendors = results;
-                if (this.UpdateMode || this.isEdit) {
-                    for (var charge of this.workFlow.charges) {
-                        var vendor = this.allVendors.filter(x => x.vendorId == charge.vendorId)[0];
-                        if (vendor != undefined) {
-                            console.log('Test')
-                            charge.vendor = {
-                                vendorId: vendor.vendorId,
-                                vendorName: vendor.vendorName
-                            };
-                        }
-                    }
+        this.isSpinnerVisible = true;
+        let arrayVendlsit = []
+        if (this.UpdateMode) {
+            arrayVendlsit = this.workFlow.charges.reduce((acc, x) => {
+                return arrayVendlsit.push(acc.vendorId);
+            }, 0)
+        }
+        this.vendorservice.getVendorNameCodeListwithFilter('', 20, arrayVendlsit).subscribe(res => {
+            this.allVendors = res.map(x => {
+                this.isSpinnerVisible = false;
+                return {
+                    vendorId: x.vendorId,
+                    vendorName: x.vendorName
                 }
-            }
-        );
+            });
+            this.vendorCollection = this.allVendors;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     onVendorSelected(charge, event) {
@@ -234,7 +228,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     addRow(): void {
-        // this.row.isShowDelete=false;
         var newRow = Object.assign({}, this.row);
         newRow.workflowChargesListId = "0";
         newRow.vendor = {};
@@ -263,23 +256,20 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         newRow.vendorName = "";
         newRow.workflowChargeTypeId = "0";
         newRow.isDelete = false;
-        newRow.isShowDelete=(this.workFlow.charges && this.workFlow.charges.length !=0) ? true :false
+        newRow.isShowDelete = (this.workFlow.charges && this.workFlow.charges.length != 0) ? true : false
         this.workFlow.charges.push(newRow);
-        // console.log("aa",this.workFlow.charges)
-        // debugger;
-        if(this.workFlow.charges && this.workFlow.charges.length <1){
+
+        if (this.workFlow.charges && this.workFlow.charges.length < 1) {
             this.workFlow.charges.forEach(element => {
                 element.isShowDelete = false;
             });
         }
     }
 
-
-
     // calculate row wise extended cost
     calculateExtendedCost(charge): void {
         charge.unitCost = charge.unitCost ? formatNumberAsGlobalSettingsModule(charge.unitCost, 2) : '';
-        var value = (parseFloat(charge.quantity.toString().replace(/\,/g,'')) * parseFloat(charge.unitCost.toString().replace(/\,/g,'')));
+        var value = (parseFloat(charge.quantity.toString().replace(/\,/g, '')) * parseFloat(charge.unitCost.toString().replace(/\,/g, '')));
         if (value > 0) {
             charge.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);
         }
@@ -287,11 +277,13 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             charge.extendedCost = "0.00";
         }
         this.calculateExtendedCostSummation();
+        //this.calculateExtendedPriceSummation();
     }
+
     // calculate row wise extended price
     calculateExtendedPrice(charge) {
         charge.unitPrice = charge.unitPrice ? formatNumberAsGlobalSettingsModule(charge.unitPrice, 2) : '';
-        var value = parseFloat(charge.quantity.toString().replace(/\,/g,'')) * parseFloat(charge.unitPrice.toString().replace(/\,/g,''));
+        var value = parseFloat(charge.quantity.toString().replace(/\,/g, '')) * parseFloat(charge.unitPrice.toString().replace(/\,/g, ''));
         if (value > 0) {
             charge.extendedPrice = formatNumberAsGlobalSettingsModule(value, 2);
         }
@@ -302,8 +294,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     validateQuantity(event, charges): void {
-
-        // event.target.value = event.target.value == '' ? '' : parseInt(charges.quantity);
         if (event.target.value != '') {
             charges.quantity = formatNumberAsGlobalSettingsModule(charges.quantity, 0);
         }
@@ -323,7 +313,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     calculateExtendedCostSummation() {
         var charges = this.workFlow.charges.filter(x => x.isDelete != true);
         this.workFlow.extendedCostSummation = charges.reduce((acc, x) => {
-            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.extendedCostSummation = this.workFlow.extendedCostSummation ? formatNumberAsGlobalSettingsModule(this.workFlow.extendedCostSummation, 2) : '0.00';
@@ -333,12 +323,12 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     calculateExtendedPriceSummation() {
         var charges = this.workFlow.charges.filter(x => x.isDelete != true);
         this.workFlow.totalChargesCost = charges.reduce((acc, x) => {
-            return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g,''))
+            //return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g, ''))
+            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.totalChargesCost = formatNumberAsGlobalSettingsModule(this.workFlow.totalChargesCost, 2);
     }
-
 
     deleteRow(index): void {
         if (this.workFlow.charges[index].workflowChargesListId == undefined || this.workFlow.charges[index].workflowChargesListId == "0" || this.workFlow.charges[index].workflowChargesListId == "") {
@@ -349,7 +339,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         }
         this.reCalculate();
     }
-
 
     saveChargesWorkOrder() {
         this.saveChargesListForWO.emit(this.workFlow)
@@ -378,7 +367,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             })
         }
         catch (e) {
-            console.log(e);
         }
     }
 
@@ -398,9 +386,33 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         this.isEdit = false;
         this.editData = undefined;
         this.workFlow.charges = [];
-        this.workFlow.qtySummation =0;
-        this.workFlow.totalChargesCost=0;
-        this.workFlow.extendedCostSummation=0;
+        this.workFlow.qtySummation = 0;
+        this.workFlow.totalChargesCost = 0;
+        this.workFlow.extendedCostSummation = 0;
         $('#addNewCharges').modal('hide');
+    }
+
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
     }
 }

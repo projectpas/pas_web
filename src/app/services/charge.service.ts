@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { ChargeEndpoint } from './charge-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,7 +37,7 @@ export class ChargeService {
         private chargeEndpoint: ChargeEndpoint) { }
 
     getChargeList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.chargeEndpoint.getChargeEndpoint<Charge[]>());
     }
     newCharge(charge: Charge) {
@@ -46,7 +47,7 @@ export class ChargeService {
 	
 
 	getPOData() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.chargeEndpoint.getPOEndpoint<Charge[]>());
 	}
 
@@ -67,7 +68,7 @@ export class ChargeService {
 
     }
     historyCharge(chargeId: number) {
-        return forkJoin(this.chargeEndpoint.getHistoryChargeEndpoint<AuditHistory[]>(chargeId));
+        return Observable.forkJoin(this.chargeEndpoint.getHistoryChargeEndpoint<AuditHistory[]>(chargeId));
     }
     
     getChargeAudit(chargeId: number) {
@@ -75,7 +76,7 @@ export class ChargeService {
     }
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.chargeEndpoint.getChargeRecords<Charge[]>(serverSidePagesData));
     }
 

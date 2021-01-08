@@ -1,214 +1,277 @@
-﻿<div *ngIf="!isWorkOrder">
-
-    <div [@fadeInOut] class="page-content">
-
+﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
+<div *ngIf="!isWorkOrder">
+    <div [@fadeInOut] class="page-content">        
         <div class="right_col" role="main">
-            <div class="x_content">
-               
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                                <li class="breadcrumb-item active" aria-current="page">Workflow</li>
-                                <li class="breadcrumb-item" aria-current="page">Workflow List</li>
-                            </ol>
-                        </nav>
-                   
-                    <!-- <div class="card-body">
-                        <div class="inline-block display-flex">
-                            <h4 class="po-head" style="padding: 0px 10px;">List of Workflows</h4>
-                            <a (click)="AddPage()" matTooltipPosition="above" matTooltip="Create New Workflow"
-                                class="plusicon-cstm ">
-                                <i class="fa fa-plus-circle fa-lg"></i>
-                            </a>
+            <div class="card new-card">
+                <div class="card-header bg-primary new-card-header">
+                    <div class="row">
+                      <div class="col">
+                        <h4 class="new-card-heading">Workflows List</h4>
+                      </div>
+                      <div>
+                        <button
+                           type="button"
+                           class="btn-sm new-btn-primary"
+                           (click)="AddPage()">
+                           Create New Workflow
+                        </button>
+                     </div>
+                    </div>
+                </div>
+                <div class="card-body new-card-body">                                
+                <p-table
+                    #dt
+                    class="rpo-table-cstm rro-table-cstm"
+                    [value]="workflowList"
+                    [first]="0"
+                    [rows]="pageSize"
+                    [paginator]="true"
+                    [pageLinks]="3"
+                    [lazy]="true"
+                    (onLazyLoad)="loadData($event)"
+                    [rowsPerPageOptions]="[10, 20, 50, 100]"
+                    [columns]="selectedGridColumns"
+                    [metaKeySelection]="true"
+                    selectionMode="multiple"
+                    [(selection)]="selectedColumn"
+                    [resizableColumns]="true"
+                    [reorderableColumns]="true"
+                    [scrollable]="true"
+                    scrollHeight="450px"
+                    [totalRecords]="totalRecords"
+                >                            
+                <ng-template pTemplate="caption">
+                    <div class="row">
+                        <div class="col">
+                            <p-multiSelect [options]="gridColumns" [(ngModel)]="selectedGridColumns"
+                                optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                [style]="{minWidth: '200px', paddingRight: '30px'}"
+                                defaultLabel="Choose Columns" style="float:left">
+                            </p-multiSelect>
                         </div>
-                        <div class="right_col" role="main"> -->
-
-                            <div class="card new-card">
-                                <div class="card-header bg-primary new-card-header">
-                                    <div class="row">
-                                      <div class="col">
-                                        <h4 class="new-card-heading">List of Workflows</h4>
-                                      </div>
-                                      <div>
-                                        <button
-                                           type="button"
-                                           class="btn-sm new-btn-primary"
-                                           (click)="AddPage()">
-                                           Create New Workflow
-                                        </button>
-                                     </div>
-                                    </div>
-                                </div>
-                                <div class="card-body new-card-body">
-                            <p-table #dt [value]="workflowList"
-                            class="rpo-table-cstm rro-table-cstm" [rows]="10"
-                                [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
-                                [columns]="selectedGridColumns" [metaKeySelection]="true" selectionMode="multiple"
-                                (onPage)="pageIndexChange($event)" [(selection)]="selectedGridColumn"
-                                [resizableColumns]="true" [reorderableColumns]="true">
-                                <ng-template pTemplate="caption">
-                                    <!-- <div style="text-align: right">
-                                        <p-multiSelect [options]="gridColumns" [(ngModel)]="selectedGridColumns"
-                                            optionLabel="header" selectedItemsLabel="{0} columns selected"
-                                            [style]="{minWidth: '200px', paddingRight: '30px'}"
-                                            defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
-                                        <div class="inner-addon right-addon w200 inline-block wf-search-form">
-                                            <i class="fa fa-search"></i>
-                                            <input type="text" pInputText size="50"
-                                                class="form-control ui-autocomplete-input"
-                                                (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                                placeholder=" Filter" style="height: 28px !important;">
-                                        </div>
-                                        <button type="button" class="btn btn-primary" pButton icon="fa-download"
-                                            iconPos="left" label="Export Data" matTooltip="Download Data"
-                                            matTooltipPosition="above" (click)="dt.exportCSV()"
-                                            style="padding: 5px 12px !important;"></button>
-                                        <button type="button" class="btn btn-primary" pButton icon="fa-download"
-                                            iconPos="left" label="Export Selected Data"
-                                            matTooltip="Download Selected Data" matTooltipPosition="above"
-                                            (click)="dt.exportCSV({selectionOnly:true})"
-                                            style="padding: 5px 12px !important;"></button>
-
-                                       
-                                    </div> -->
-                                     <!-- <div class="excel-upload excel-upload-cstm">
-                                            <input type="file" name="upload[]" id="upload" class="uploaddoc upload-file" data-multiple-caption="{count} files selected" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-                                            <label for="upload">
-                                                <span matTooltipPosition="above" matTooltip="Upload Data (Excel)"  ><i class="fa fa-upload"></i></span>
-                                            </label>
-                                        </div> -->
-
-                                        <div class="row">
-                                            <div class="col">
-                                                <p-multiSelect [options]="gridColumns" [(ngModel)]="selectedGridColumns"
-                                                optionLabel="header" selectedItemsLabel="{0} columns selected"
-                                                [style]="{minWidth: '200px', paddingRight: '30px'}"
-                                                defaultLabel="Choose Columns" style="float:left">
-                                            </p-multiSelect>
-                                        </div>
-                                        <div class="col">
-                                        <div style="width: auto !important; float: right;"
-                                         class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                        >
-                                       <i class="fa fa-search"></i>
-                                       <input type="text" pInputText size="50"
-                                       class="form-control"
-                                       (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                       placeholder=" Filter" style="height: 28px !important;" />
-                                    </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col">
-                                    <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
-                                    iconPos="left" label="Export Data" matTooltip="Download Data"
-                                    matTooltipPosition="above" (click)="dt.exportCSV()"
-                                    style="padding: 5px 12px !important;"></button>
-                                <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download"
-                                    iconPos="left" label="Export Selected Data"
-                                    matTooltip="Download Selected Data" matTooltipPosition="above"
-                                    (click)="dt.exportCSV({selectionOnly:true})"
-                                    style="padding: 5px 12px !important;"></button>
-                                </div>
+                        <div class="col">
+                            <div style="width: auto !important; float: right;"
+                                class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                                >
+                                <i class="fa fa-search"></i>
+                                <input type="text" pInputText size="50"
+                                class="form-control"
+                                (input)="dt.filterGlobal($event.target.value, 'contains')"
+                                placeholder=" Filter" style="height: 28px !important;" />
                             </div>
-
-
-    
-                                </ng-template>
-                                <ng-template pTemplate="header" let-columns>
-                                    <tr>
-                                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                                            [pSortableColumn]="col.field" style="width: auto !important;">
-                                            {{col.header}}
-                                            <p-sortIcon [field]="col.field"></p-sortIcon>
-                                        </th>
-                                        <!--<th style="width: auto !important"></th>-->
-                                        <th style="width: 140px !important;">Actions</th>
-                                    </tr>
-                                    <tr>
-                                        <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <input style="width:100%;" pInputText type="text"
-                                                (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
-                                        </th>
-                                        <th style="width: 140px !important;"></th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                                    <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
-                                        <td *ngFor="let col of columns" class="ui-resizable-column"
-                                            pReorderableRowHandle>
-                                            {{col.field == 'workflowExpirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy') : rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
-                                        </td>
-                                        <td style="width: 140px !important;">
-                                            <p-inputSwitch *ngIf="rowData.workflow.isActive" matTooltipPosition="above"
-                                                matTooltip="Active" tooltipPosition="bottom" onLabel="on" offLabel="off"
-                                                (onChange)="toggleIsActive(rowData,$event)"
-                                                [(ngModel)]="rowData.workflow.isActive"></p-inputSwitch>
-                                            <p-inputSwitch *ngIf="rowData.workflow.isActive == false"
-                                                matTooltipPosition="above" matTooltip="In Active"
-                                                tooltipPosition="bottom" onLabel="on" offLabel="off"
-                                                (onChange)="toggleIsActive(rowData,$event)"
-                                                [(ngModel)]="rowData.workflow.isActive"></p-inputSwitch>
-                                            <p-inputSwitch *ngIf="rowData.workflow.isActive == null"
-                                                matTooltipPosition="above" matTooltip="Active" tooltipPosition="bottom"
-                                                onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)"
-                                                [(ngModel)]="rowData.workflow.isActive"></p-inputSwitch>
-
-                                            <span data-toggle="modal" data-target="#view"
-                                                (click)="onViewWFDetails(rowData)">
-                                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
-                                                    tooltipPosition="bottom" title="" class="btn  nobg"
-                                                    data-original-title="View">
-                                                    <i class="fa fa-eye"></i>
-                                                </a>
-                                            </span>
-                                            <span (click)="openEdit(rowData)" data-toggle="modal" data-target="#edit">
-                                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="Edit"
-                                                    tooltipPosition="bottom" title="" class="btn  nobg"
-                                                    data-original-title="" edit="">
-                                                    <i class="fa fa-pencil"></i>
-                                                </a>
-                                            </span>
-                                            <span data-toggle="modal" data-target="#view-material-lists"
-                                                (click)="onViewMaterialList(rowData)">
-                                                <a data-toggle="tooltip" matTooltipPosition="above"
-                                                    matTooltip="View Material Lists" tooltipPosition="bottom" title=""
-                                                    class="btn  nobg" data-original-title="">
-                                                    <i class="fa fa-list"></i>
-                                                </a>
-                                            </span>
-                                           
-                                            <span data-toggle="modal" data-target="#history">
-                                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
-                                                    tooltipPosition="bottom" title="" class="btn  nobg"
-                                                    data-original-title="History">
-                                                    <i class="fa fa-history"></i>
-                                                </a>
-                                            </span>
-                                            <span (click)="confirmDelete(deleteConfirm, rowData)" data-toggle="modal"
-                                                data-target="#delete">
-                                                <a class="btn btn-danger nobg" matTooltipPosition="above"
-                                                    matTooltip="Delete" tooltipPosition="bottom" data-toggle="tooltip"
-                                                    title="" data-original-title="Delete">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="summary" id="footer">
-                                    <label id="footer" class="footer">Total:</label>
-                                    <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true"
-                                        pInputText type="text" />
-                                    &nbsp;&nbsp;
-                                    <label id="footer" class="footer1">Pages Count:</label>
-                                    <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)"
-                                        [disabled]="true" pInputText type="text" />
-                                </ng-template>
-                            </p-table>
                         </div>
                     </div>
-                <!-- </div> -->
-            </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export All Data"
+                                    data-toggle="modal" 
+                                    (click)="selectedOnly = false; targetData = dt;"
+                                     data-target="#downloadConfirmation">
+                            </button> 
+                            <button type="button"
+                                    class="btn btn-primary new-table-button"
+                                    matTooltip="Download Selected Data"
+                                    matTooltipPosition="above"
+                                    pButton
+                                    icon="fa-download"
+                                    iconPos="left"
+                                    label="Export Selected Data"
+                                    (click)="dt.exportCSV({selectionOnly:true})">
+                            </button>
+                        </div>
+                        <div class="col">
+                            <div class="">
+                              <div
+                                class="col"
+                                style="width: 395px; float: right; padding-top: 3px;">
+                                <div class="form-group">
+                                  <div
+                                    class="pull-left"
+                                    style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                      <input type="radio" name="vendorStatus"
+                                        class="form-control" value="active"
+                                        (click)="getListByStatus('active')"
+                                        checked/>
+                                      <span class="checkmark"></span>Active</label>
+                                  </div>
+                                  <div
+                                    class="pull-left"
+                                    style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                      <input type="radio" name="vendorStatus"
+                                        class="form-control" value="inactive"
+                                        (click)="getListByStatus('inactive')"/>
+                                      <span class="checkmark"></span>In-Active</label>
+                                  </div>
+                                  <div
+                                    class="pull-left"
+                                    style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-cstm wauto">
+                                      <input type="radio" name="vendorStatus"
+                                        class="form-control" value="all"
+                                        (click)="getListByStatus('all')"/>
+                                      <span class="checkmark"></span>All</label>
+                                  </div>
+                                  <div class="checkbox-cstm" style="margin-left: 0;">
+                                    <label style="width: auto !important; margin-top: 3px;">
+                                      <input type="checkbox"[(ngModel)]="currentDeletedstatus"
+                                        name="cparent" id="cparent"
+                                        (click)="getDeleteListByStatus($event.target.checked)"/>
+                                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                      Show Deleted List
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                            [pSortableColumn]="col.field" style="width: 150px !important;">
+                            {{col.header}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                        <th style="width: 140px !important;">Actions</th>
+                    </tr>
+                    <tr>
+                        <th *ngFor="let col of columns" [ngSwitch]="col.field" style="width: 150px !important;">
+                            <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field != 'workflowCreateDate' && col.field != 'workflowExpirationDate'" style="width: 100%;"
+                                   pInputText type="text" (keyup)=" dt.filter($event.target.value, col.field, 'contains'); resetGlobalFilter() " />
+                            <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'workflowCreateDate'" name="workflowCreateDate"  (change)="dateFilterForWorkFlowList($event.target.value, col.field)" />
+                            <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'workflowExpirationDate'" name="workflowExpirationDate"  (change)="dateFilterForWorkFlowList($event.target.value, col.field)" />
+                            <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForWorkFlowList($event.target.value, col.field)" />
+                            <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForWorkFlowList($event.target.value, col.field)" />
+                        </th>
+                        <th style="width: 140px !important;"></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
+                        <td *ngFor="let col of columns" class="ui-resizable-column" style="width: 150px !important;" pReorderableRowHandle>
+                            {{
+                                col.field == 'workflowExpirationDate'?  
+                                (rowData[col.field] | date: 'MM/dd/yyyy') 
+                                : rowData[col.field] && col.field == 'workflowExpirationDate'?  
+                                (rowData[col.field] | date: 'MM/dd/yyyy')
+                                : rowData[col.field] && col.field == 'workflowCreateDate'?  
+                                (rowData[col.field] | date: 'MM/dd/yyyy')
+                                : rowData[col.field] && col.field == 'createdDate'
+                                ? (rowData[col.field] | date: 'MM/dd/yyyy, h:mm a')
+                                : rowData[col.field] && col.field == 'updatedDate'
+                                ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+                                :rowData[col.field]
+                            }}
+                        </td>
+                        <td style="width: 140px !important;">
+                            <div *ngIf="currentDeletedstatus == false">
+                                <p-inputSwitch
+                                    [(ngModel)]="rowData['isActive']"
+                                    name="isActive{{ rowIndex }}"
+                                    matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
+                                    matTooltipPosition="above"
+                                    (onChange)="toggleIsActive(rowData, $event)">
+                                </p-inputSwitch>
+                            <span data-toggle="modal" data-target="#view"
+                                (click)="onViewWFDetails(rowData)">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="View">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </span>
+                            <span (click)="openEdit(rowData)" data-toggle="modal" data-target="#edit">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="Edit"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="" edit="">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </span>
+                            <span data-toggle="modal" data-target="#view-material-lists"
+                                (click)="onViewMaterialList(rowData)">
+                                <a data-toggle="tooltip" matTooltipPosition="above"
+                                    matTooltip="View Material Lists" tooltipPosition="bottom" title=""
+                                    class="btn  nobg" data-original-title="">
+                                    <i class="fa fa-list"></i>
+                                </a>
+                            </span>
+                           
+                            <span data-toggle="modal" data-target="#history">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="History">
+                                    <i class="fa fa-history"></i>
+                                </a>
+                            </span>
+                            <span (click)="confirmDelete(deleteConfirm, rowData)" data-toggle="modal"
+                                data-target="#delete">
+                                <a class="btn btn-danger nobg" matTooltipPosition="above"
+                                    matTooltip="Delete" tooltipPosition="bottom" data-toggle="tooltip"
+                                    title="" data-original-title="Delete">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </span>
+                            </div>
+                            <div *ngIf="currentDeletedstatus == true">
+                                <p-inputSwitch
+                                  [(ngModel)]="rowData['isActive']"
+                                  name="isActive{{ rowIndex }}"
+                                  matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active' }}"
+                                  matTooltipPosition="above"                                                  
+                                  [disabled]="true"></p-inputSwitch>
+                                <span data-toggle="modal" data-target="#view"
+                                  (click)="onViewWFDetails(rowData)">
+                                  <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
+                                      tooltipPosition="bottom" title="" class="btn  nobg"
+                                      data-original-title="View">
+                                      <i class="fa fa-eye"></i>
+                                  </a>
+                                </span>
+                                <span><a
+                                    class="btn nobg"
+                                    (click)="restore(restoreConfirm, rowData)"
+                                    matTooltip="Restore Record"
+                                    matTooltipPosition="above">
+                                    <i class="fa fa-undo" aria-hidden="true"></i></a>
+                                </span>
+                              </div>                                            
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns
+                    *ngIf="workflowList?.length == 0">
+                    <tr>
+                    <td
+                        [attr.colspan]="14"
+                        style="color: red; font-weight: bold; text-align: center;">
+                        No records found
+                    </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="summary" id="footer">
+                    <div style="text-align: right;">
+                      <label id="footer" class="footer">Total:</label>
+                      <input style="width: 5%;" [(ngModel)]="totalRecords"
+                        [disabled]="true" pInputText type="text" />
+                      &nbsp;&nbsp;
+                      <label id="footer" class="footer1">Pages Count:</label>
+                      <input style="width: 5%;" [(ngModel)]="totalPages"
+                        [disabled]="true" pInputText type="text" />
+                    </div>
+                  </ng-template>
+            </p-table>
+        </div>
+    </div>
         </div>
     </div>
     <div class="preloader" *ngIf="isSpinnerVisible">
@@ -216,19 +279,52 @@
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
         </div>
     </div>
-    <ng-template #deleteConfirm let-c="close" let-d="dismiss">
-        <div class="modal-title" style="    padding: 10px 10px 0;">
-            <h4>Confirm workflow delete</h4>
+    <ng-template #deleteConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+        <div class="modal-header">
+          <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+          <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <div style="    padding: 0px 10px;">
-            <p> Are you sure you want to delete Worklflow ACC{{currentWorkflow.workflowId}}?</p>
+        <div class="modal-body">
+          <strong>
+            Worklflow ACC:
+            <span class="new-label">{{ currentWorkflow.workflowId }}</span>
+          </strong>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="removeWorkFlow()">Yes</button>
-            <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+          <button
+            type="button" class="btn btn-success" (click)="removeWorkFlow()">
+            Yes
+          </button>
+          <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            No
+          </button>
         </div>
     </ng-template>
-
+    
+    <ng-template #restoreConfirm let-c="close" let-d="dismiss" data-backdrop="static">
+        <div class="modal-header">
+          <h4 class="modal-title">Are You Sure Want to Restore?</h4>    
+          <button type="button" class="close" aria-label="Close" (click)="dismissModel()">  
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <strong>
+            Worklflow ACC:
+            <span class="new-label">{{ currentWorkflow.workflowId }}</span>
+          </strong>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="restoreRecord()">
+            Yes
+          </button>
+          <button type="button" class="btn btn-danger" (click)="dismissModel()">
+            No
+          </button>
+        </div>
+    </ng-template>
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="view" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-xl">
@@ -422,7 +518,6 @@
                                                 <div class="form-group">
                                                     <label>Other:
                                                     </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
-                                                    <!-- {{sourceWorkFlow.otherCost != undefined && sourceWorkFlow.otherCost != null && sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost.toString() : 0.00 }} -->
                                                 </div>
                                             </div>
                                         </div>
@@ -773,12 +868,6 @@
                             </div>
                         </p-accordionTab>
                     </p-accordion>
-                    <!--<p-accordion [multiple]="true" class="p-accordion-cstm">
-                        <p-accordionTab header="Assemble" [selected]="displayAccord1" (click)="onAccordTabClick1()">
-                            <h5>Total Cost for Assemble Action : $220.00</h5>
-                        </p-accordionTab>
-                    </p-accordion>-->
-
                     <h5>Total Cost for the Workflow : $ {{Total}}</h5>
                 </div>
                 <div class="modal-footer">
@@ -1017,9 +1106,27 @@
 
 </div>
 
-
-
-
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 <div *ngIf="isWorkOrder && responseDataForWorkFlow">
     <div class="card">
@@ -1543,11 +1650,5 @@
             </div>
         </p-accordionTab>
     </p-accordion>
-    <!--<p-accordion [multiple]="true" class="p-accordion-cstm">
-        <p-accordionTab header="Assemble" [selected]="displayAccord1" (click)="onAccordTabClick1()">
-            <h5>Total Cost for Assemble Action : $220.00</h5>
-        </p-accordionTab>
-    </p-accordion>-->
-
     <h5 style="padding: 10px; font-weight: bold;">Total Cost for the Workflow : {{(sourceWorkFlow)?sourceWorkFlow.currencySymbol:''}} {{Total}}</h5>
 </div>

@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { GLAccountCategory } from '../../models/gl-account-category.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class GLAccountCategoryEndpointService extends EndpointFactory {
 
@@ -35,10 +35,10 @@ export class GLAccountCategoryEndpointService extends EndpointFactory {
 
     addItem<T>(userObject: any): Observable<T> {
         let endpointUrl = this.add;
-        return this.http.post<any>(endpointUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addItem(userObject));
-            }));
+            });
     }
 
     bulkItemUpload(file: any): Observable<object> {
@@ -48,45 +48,45 @@ export class GLAccountCategoryEndpointService extends EndpointFactory {
     getAllItems<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllItems());
-            }));
+            });
     }
 
     getItemAudit<T>(id: number): Observable<T> {
         let endpointUrl = `${this.getAudit}/${id}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemAudit(id));
-            }));
+            });
     }
 
     getItemById<T>(id: number): Observable<T> {
         let endpointUrl = `${this.getById}/${id}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemById(id));
-            }));
+            });
     }
 
     removeItemById<T>(id: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${id}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeItemById(id));
-            }));
+            });
     }
 
     updateItem<T>(action: any, glAccountCategoryId: number): Observable<T> {
       //  let endpointUrl = this.update;
         let endpointUrl = `${this._glaccountcategoryUrlNew}/${glAccountCategoryId}`
-        return this.http.put<any>(endpointUrl, JSON.stringify(action), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(action), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItem(action, glAccountCategoryId));
-            }));
+            });
     }
 }

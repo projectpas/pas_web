@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 // import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- 
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { Router } from '@angular/router';
 import { fadeInOut } from '../../../../services/animations';
@@ -16,7 +16,6 @@ import { CommonService } from '../../../../services/common.service';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-vendor-capabilities-list',
@@ -37,6 +36,8 @@ export class VendorCapabilitiesListComponent implements OnInit {
     selectedreason: any;
     disableSave: boolean;
     allComapnies: MasterCompany[];
+    vendorName: any;
+    vendorCode: any;
     modal: any;
     sourceAction: any;
     isSaving: boolean;
@@ -63,6 +64,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
     totalPages: number = 0;
     pageSize: number = 10;
     @Input() isViewMode: boolean = false;
+    isCapesViewMode: boolean = false;
     vendorNameInHistory: any;
     vendorCodeInHistory: any;
     formData: any = new FormData();
@@ -83,7 +85,14 @@ export class VendorCapabilitiesListComponent implements OnInit {
     globalfilter: string;
     selectedRowforDelete: any;
     selectedOnly: boolean = false;
-	targetData: any;
+    targetData: any;
+    showAdvancedSearchCard: boolean = false;
+    search_PartNumberList: any = [];
+    search_CapesTypeList: any = [];
+    arraylistItemMasterId:any[] = [];
+    arrayCapabilityTypelist:any[] = [];
+    selectedPartNumberModel = [];
+    selectedCapesTypeModel = [];
 
     constructor(private vendorService: VendorService, private modalService: NgbModal, private authService: AuthService,
         private _route: Router, private alertService: AlertService,
@@ -103,11 +112,13 @@ export class VendorCapabilitiesListComponent implements OnInit {
         this.cols = [
             { field: 'vendorCode', header: 'Vendor Code' },
             { field: 'vendorName', header: 'Vendor Name' },
-            { field: 'capabilityTypeName', header: 'Vendor Caps' },
-            { field: 'partNumber', header: 'Part Number' },
+            { field: 'capabilityTypeName', header: 'Capability Type' },
+            { field: 'partNumber', header: 'PN' },
             { field: 'partDescription', header: 'PN Description' },
-            { field: 'vendorRanking', header: 'Vendor Ranking' },
-            { field: 'tat', header: 'TAT' },
+            { field: 'vendorRanking', header: 'Vendor Ranking' },            
+            { field: 'tat', header: 'TAT (Days)' },
+            { field: 'cost', header: 'Price' },
+            { field: 'memo', header: 'Memo' },
             { field: 'createdDate', header: 'Created Date' },
 			{ field: 'createdBy', header: 'Created By' },
 			{ field: 'updatedDate', header: 'Updated Date' },
@@ -311,8 +322,23 @@ export class VendorCapabilitiesListComponent implements OnInit {
     openDelete(content, row) {
         this.isEditMode = false;
         this.isDeleteMode = true;
-        this.sourceAction = row;
+        this.sourceAction = row;        
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    openVendorCapes(content, row)
+    {
+        this.isCapesViewMode = true;
+        this.vendorId = row.vendorId;
+        this.sourceAction = row;
+        this.vendorName = row.vendorName;
+        this.vendorCode = row.vendorCode;
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+    }
+
+    dismissCapesModel() {
+        this.isCapesViewMode = false;
+        this.modal.close();
     }
 
     openEdits(row) {
@@ -463,7 +489,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
 
     viewSelectedRow(content,rowData) {
         this.getVendorCapabilitiesView(rowData.vendorCapabilityId);
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     getVendorCapabilitiesView(vendorCapesId) {
@@ -497,23 +523,81 @@ export class VendorCapabilitiesListComponent implements OnInit {
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
+    enableDisableAdvancedSearch(val) {
+        this.showAdvancedSearchCard = val;
+        // reset the dropdowns
+        this.selectedPartNumberModel = [];
+        this.selectedCapesTypeModel = []; 
+        if(val)
+        {
+            this.getItemMasterSmartDropDown();
+            this.capabilityTypeListData();
+        } 
+        else
+        {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, itemMasterId: this.selectedPartNumberModel.toString(), capabilityTypeId: this.selectedCapesTypeModel.toString(), status: this.status,...this.dateObject};
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData); 
+        }
+    }
+
+    getItemMasterSmartDropDown(strText = ''){
+		if(this.arraylistItemMasterId.length == 0) {
+			this.arraylistItemMasterId.push(0); }
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber','',true,50000,this.arraylistItemMasterId.join()).subscribe(response => {
+            if(response)
+            {
+                this.search_PartNumberList = response;
+            }            
+		},err => {
+			const errorLog = err;
+			this.onDataLoadFailed(errorLog);
+		});
+    }
+
+    advanSearchCapesInformation()
+    {
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, itemMasterId: this.selectedPartNumberModel.toString(), capabilityTypeId: this.selectedCapesTypeModel.toString(), status: this.status,...this.dateObject};
+        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+        this.getList(PagingData); 
+    }
+
+    capabilityTypeListData(strText = ''){
+		if(this.arrayCapabilityTypelist.length == 0) {
+			this.arrayCapabilityTypelist.push(0); }
+        this.commonService.autoSuggestionSmartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description','',true,50000,this.arrayCapabilityTypelist.join()).subscribe(response => {
+            if(response)
+            {
+                this.search_CapesTypeList = response;
+            }            
+		},err => {
+			this.onDataLoadFailed(err);
+		});
+    }
+
     customExcelUpload(event) {
         const file = event.target.files;
-
-        for (let file of event.files) {
-			this.formData.append(file.name, file);
-		}
-
         if (file.length > 0) {
-
             this.formData.append('file', file[0])
-            this.vendorCapesService.uploadVendorCapabilitiesList(this.formData).subscribe(res => {
-                event.target.value = '';
+            this.formData.append('masterCompanyId', this.authService.currentUser.masterCompanyId.toString())
+            this.formData.append('createdBy', this.userName);
+            this.formData.append('updatedBy', this.userName);
+            this.formData.append('isActive', 'true');
+            this.formData.append('isDeleted', 'false');
+            const data={'masterCompanyId': this.authService.currentUser.masterCompanyId,
+                        'createdBy':this.userName,
+                        'updatedBy':this.userName,
+                        'isActive':true,
+                        'isDeleted':false
+            }
 
+            this.vendorService.uploadVendorCapsList(this.formData, data).subscribe(res => {
+                event.target.value = '';
                 this.formData = new FormData();
+                this.getVenCapesListByStatus(this.status ? this.status : 'active')
                 this.alertService.showMessage(
                     'Success',
-                    `Successfully Uploaded  `,
+                    `Capability List Uploaded Successfully  `,
                     MessageSeverity.success
                 );
             })
@@ -521,7 +605,7 @@ export class VendorCapabilitiesListComponent implements OnInit {
     }
 
     sampleExcelDownload() {
-        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=VendorCapability&fileName=VendorCapability.xlsx`;
+        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=VendorCapability&fileName=VendorCaps.xlsx`;
         window.location.assign(url);
     }
 }

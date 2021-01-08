@@ -470,12 +470,12 @@ label{
   margin-top: 0;
 }
 
-// :host ::ng-deep .ui-dropdown-label  {
+// :host /deep/ .ui-dropdown-label  {
 //   height: 28px !important;
 //   line-height: 20px !important;
 //   font-weight: bold !important;
 // }
-// :host ::ng-deep .ui-dropdown  {
+// :host /deep/ .ui-dropdown  {
 //   height: 28px !important;
 // }
 :host ::ng-deep .ui-dropdown-clear-icon{

@@ -87,9 +87,12 @@
                       pButton
                       icon="fa-download"
                       iconPos="left"
-                      label="Export Data"
-                      (click)="dt.exportCSV()"
+                      label="Export Data"                      
+                      data-toggle="modal" 
+                      (click)="selectedOnly = false; targetData = dt;"
+                       data-target="#downloadPublication"
                     ></button>
+                    <!-- (click)="dt.exportCSV()" -->
                     <button
                       type="button"
                       class="btn btn-primary new-table-button"
@@ -107,7 +110,7 @@
                     <div class="">
                       <div
                         class="col"
-                        style="width: 700px; float: right; padding-top: 3px;"
+                        style="float: right; padding-top: 3px;"
                       >
                         <div class="form-group atv_cv">
                           <div
@@ -143,8 +146,6 @@
                           </label>
                         </div>
 
-                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
-                        
                           <div
                             class="pull-left"
                             style="margin-top: 4px; margin-right: 15px;"
@@ -174,14 +175,13 @@
                                 value="Inactive"
                                 (click)="getVenListByStatus('InActive')"
                                 [(ngModel)]="currentstatus"
-                                [(ngModel)]="currentstatus"
                               />
                               <span class="checkmark"></span>In-Active</label
                             >
                           </div>
                           <div
                             class="pull-left"
-                            style="margin-top: 4px; margin-right: 15px;"
+                            style="margin-top: 4px; margin-right: 0px;"
                           >
                             <label class="radio-cstm wauto">
                               <input
@@ -212,7 +212,7 @@
                               <span class="cr"
                                 ><i class="cr-icon pi pi-check"></i
                               ></span>
-                              Show Deleted
+                              Show Deleted List
                             </label>
                           </div>
                         </div>
@@ -560,6 +560,29 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="downloadPublication" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">

@@ -112,7 +112,7 @@
 <!--New code for dialogue-->
 <div id="alternateModalPopup" class="modal fade custom-popup" role="dialog" data-backdrop="static"
     data-keyboard="false">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-sm" style="max-width: 800px !important;">
         <!-- Modal content-->
         <div class="modal-content">
             <form #saveNtaeTabForm="ngForm" (submit)="saveAlternate(saveNtaeTabForm)" id="add-customerwork" name=""
@@ -125,7 +125,7 @@
                     <app-pn-header [partData]="partData"></app-pn-header>
 
                     <div class="form-row mt-2">
-                        <div class="col-md-4">
+                        <div class="col-md-10">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">PN <strong class="clr-red">*</strong> </label>
                                 <p-dropdown class="imstock-pddowm item-equiv-pddowm" [options]="pnData" filter="true"
@@ -137,19 +137,17 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-4" style="max-width: 320px;">
+                        <div class="col-md-10" style="max-width: 400px;">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
                                     Description</label>
                                 <input type="text" (keyup)="valuechange1()" class="form-control" disabled name="description"
                                     [(ngModel)]="alternateData.Description">
-
-
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-md-4" style="max-width: 320px;">
+                        <div class="col-md-10" style="max-width: 400px;">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
                                     Manufacturer </label>
@@ -160,7 +158,7 @@
                         </div>
                     </div>
                     <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
-                        <div class="col-md-4" style="max-width: 320px;">
+                        <div class="col-md-10" style="max-width: 400px;">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">
                                     Item Classification </label>
@@ -171,25 +169,21 @@
                         </div>
                     </div>
                     <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
-                        <div class="col-md-12">
+                        <div class="col-md-12" >
                             <div class="form-group">
-                                <label  class="popup-plusicon-cstm" style="float: left !important;">
-                                    Document</label>
-                                    <div class="form-row">
-    
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-    
-                                                <p-fileUpload #fileUploadInput name="gFileupload[]" multiple="multiple"
-                                                    [showCancelButton]="false" [showUploadButton]="false"
-                                                    customUpload="true" (ngModelChange)="enableSave()" (onSelect)="fileUploadNtae($event)"
-                                                    (onRemove)="removeFile($event)"></p-fileUpload>
-    
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 table-responsive table-overflow"
+                                <label class="popup-plusicon-cstm">
+                                    Document </label>
+                                    <p-fileUpload #fileUploadInput name="gFileupload[]" multiple="multiple"
+                                    [showCancelButton]="false" [showUploadButton]="false"
+                                    customUpload="true" (ngModelChange)="enableSave()" (onSelect)="fileUploadNtae($event)"
+                                    (onRemove)="removeFile($event)"></p-fileUpload>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row" *ngIf="selectedTab == 'Equivalency'">
+                        <div class="col-md-12">
+                                <div class="col-md-12 table-responsive table-overflow"
                                     *ngIf="alternateData.attachmentDetails?.length > 0">
                                     <h4 class="panel-title" style="padding-left: 10px;">
                                         Attachment Details:

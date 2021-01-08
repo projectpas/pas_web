@@ -9,13 +9,13 @@ import { HttpClient } from '@angular/common/http';
 import { Router, NavigationExtras } from '@angular/router';
 import { MasterCompany } from '../../models/mastercompany.model'
 import { AuthService } from '../../services/auth.service';
- 
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MessageSeverity, AlertService } from '../../services/alert.service';
 import { SiteService } from '../../services/site.service';
 import { WarehouseService } from '../../services/warehouse.service';
 import { LocationService } from '../../services/location.service';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { Site } from '../../models/site.model';
 import { Warehouse } from '../../models/warehouse.model';
@@ -303,12 +303,12 @@ export class LocationComponent implements OnInit, AfterViewInit {
 		this.loadingIndicator = true;
 
 		this.workFlowtService1.getSiteList().subscribe(   //Getting Site List Hear
-			results => this.onSaiteDataLoadSuccessful(results), //Pasing first Array and calling Method
+			results => this.onSaiteDataLoadSuccessful(results[0]), //Pasing first Array and calling Method
 			error => this.onDataLoadFailed(error)
 		);
 
 	}
-	private onSaiteDataLoadSuccessful(getSiteList) { //Storing Site Data
+	private onSaiteDataLoadSuccessful(getSiteList: Site[]) { //Storing Site Data
 
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;

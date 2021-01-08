@@ -1,22 +1,23 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class WorkFlowEndpoint extends EndpointFactory {
 
 
 	private readonly _workflowActionsUrl: string = "/api/WorkflowAction/Get";
 	private readonly _workflowUrl: string = "/api/WorkflowAction/GetWorkFlows";
+	private readonly _workflowListUrl: string = "/api/WorkflowAction/GetAllWorkFlows";
 	public readonly _workFlowMaterialTypes = "/api/WorkflowAction/GetMaterialType";
 	private readonly _actionAttributes: string = "/api/WorkflowAction/GetActionAttributes";
 	private readonly _workflowactionAttributes: string = "/api/WorkflowAction/GetWorkflowActionAttributes";
@@ -36,6 +37,7 @@ export class WorkFlowEndpoint extends EndpointFactory {
 
 	get workflowActionsUrl() { return this.configurations.baseUrl + this._workflowActionsUrl; }
 	get workflowsUrl() { return this.configurations.baseUrl + this._workflowUrl; }
+	get workflowListUrl() { return this.configurations.baseUrl + this._workflowListUrl; }
 	get workFlowMaterialTypes() { return this.configurations.baseUrl + this._workFlowMaterialTypes; }
 	get workflowactionAttributes() { return this.configurations.baseUrl + this._workflowactionAttributes; }
 	get workflowMaterails() { return this.configurations.baseUrl + this._workflowMaterail; }
@@ -51,160 +53,152 @@ export class WorkFlowEndpoint extends EndpointFactory {
 	}
 
 	getNewWorkFlowEndpoint<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._workflowActionsNewUrl, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._workflowActionsNewUrl, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
+
 	addMatList<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._saveMaterialList, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._saveMaterialList, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
+
 	addchargelist<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._saveChargeList, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._saveChargeList, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
-
 
 	addEquipmentList<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._saveEquipment, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._saveEquipment, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
-	addExclusionsList<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._saveExclusions, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+	addExclusionsList<T>(userObject: any): Observable<T> {
+		return this.http.post<T>(this._saveExclusions, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
 
 	addExpertiseList<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._saveExpertise, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._saveExpertise, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
 
-
-
-
-
 	addWorkflowdetails<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._addWorkFlow, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._addWorkFlow, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
 
 	addWorkflowactionattributes<T>(userObject: any): Observable<T> {
-
-		return this.http.post<any>(this._addworkFlowactionattributes, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getNewWorkFlowEndpoint(userObject));
-			}));
+		return this.http.post<T>(this._addworkFlowactionattributes, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getNewWorkFlowEndpoint(userObject));
+			});
 	}
 
 	getWorkFlowEndpoint<T>(): Observable<T> {
+		return this.http.get<T>(this.workflowsUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getWorkFlowEndpoint());
+			});
+	}
 
-		return this.http.get<any>(this.workflowsUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
+	getAllWorkFlowListEndpoint(data) {
+		return this.http.post(this.workflowListUrl, JSON.stringify(data), this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getAllWorkFlowListEndpoint(data));
+			});
 	}
 
 	getWorkFlowActions<T>(): Observable<T> {
-
-		return this.http.get<any>(this.workflowActionsUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
-
+		return this.http.get<T>(this.workflowActionsUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getWorkFlowEndpoint());
+			});
 	}
+
 	getMaterialTypes<T>(): Observable<T> {
-
-		return this.http.get<any>(this.workFlowMaterialTypes, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
-
+		return this.http.get<T>(this.workFlowMaterialTypes, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getWorkFlowEndpoint());
+			});
 	}
+
 	getworkflowActionAttributesCollection<T>(workflowId: number): Observable<T> {
 		let url = `${this.workflowactionAttributes}/${workflowId}`;
 
-		return this.http.get<any>(url, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
+		return this.http.get<T>(url, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getWorkFlowEndpoint());
+			});
 
 	}
 	getworkflowMaterailCollection<T>(): Observable<T> {
-
-		return this.http.get<any>(this.workflowMaterails, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
-
+		return this.http.get<T>(this.workflowMaterails, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getWorkFlowEndpoint());
+			});
 	}
 
 	getworkflowEquipmentCollection<T>(): Observable<T> {
-
-		return this.http.get<any>(this.workflowEquipment, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
+		return this.http.get<T>(this.workflowEquipment, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getWorkFlowEndpoint());
+			});
 
 	}
 	getPublicationsByItemMasterId(itemMasterId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/publicationlistbyitemmasterId/${itemMasterId}`)
+		.catch(error => {
+			return this.handleErrorCommon(error, () => this.getChargeListcollection());
+		});
 	}
 
 	getChargeListcollection<T>(): Observable<T> {
-
-		return this.http.get<any>(this.workflowCharge, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
-
+		return this.http.get<T>(this.workflowCharge, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getChargeListcollection());
+			});
 	}
+
 	getworkflowExpertiseCollection<T>(): Observable<T> {
-
-		return this.http.get<any>(this.workflowExpertise, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
-
+		return this.http.get<T>(this.workflowExpertise, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getworkflowExpertiseCollection());
+			});
 	}
 
 	getActionAttributesCollection<T>(): Observable<T> {
-
-		return this.http.get<any>(this.actionAttributes, this.getRequestHeaders())
-			.pipe(catchError(error => {
-				return this.handleError(error, () => this.getWorkFlowEndpoint());
-			}));
-
+		return this.http.get<T>(this.actionAttributes, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getActionAttributesCollection());
+			});
 	}
 
 	getWorkFlowDataById(workFlowId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/workflow/getWorkFlow/${workFlowId}`)
+		.catch(error => {
+			return this.handleErrorCommon(error, () => this.getWorkFlowDataById(workFlowId));
+		});
 	}
 
 
 	getWorkFlowDataByIdForEdit(workFlowId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/workflowAction/GetWorkFlowbyIdforEdit?workFlowId=${workFlowId}`)
+		.catch(error => {
+			return this.handleErrorCommon(error, () => this.getWorkFlowDataByIdForEdit(workFlowId));
+		});
 	}
-
-
-
 }

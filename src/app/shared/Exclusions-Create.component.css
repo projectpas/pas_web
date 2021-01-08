@@ -1,6 +1,6 @@
-select {
+/* select {
     background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
-}
+} */
 .workflow-table-exclusion tr th:first-child {
     padding: 0 10px !important;
 }

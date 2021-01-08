@@ -1,5 +1,3 @@
-
-import {throwError as observableThrowError,  Observable , Subject} from 'rxjs';
 // ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
@@ -7,15 +5,18 @@ import {throwError as observableThrowError,  Observable , Subject} from 'rxjs';
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
-
-
-import {catchError,mergeMap,switchMap} from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/catch';
 
 import { AuthService } from './auth.service';
 import { ConfigurationService } from './configuration.service';
 import { AlertService, MessageSeverity } from '../services/alert.service';
-;
+import { environment } from 'src/environments/environment';
+
 
 @Injectable()
 export class EndpointFactory {
@@ -23,7 +24,7 @@ export class EndpointFactory {
 
     private readonly _loginUrl: string = "/connect/token";
 
-    private get loginUrl() { return this.configurations.baseUrl + this._loginUrl; }
+    private get loginUrl() { return environment.baseUrl + this._loginUrl; }
 
     private taskPauser: Subject<any>;
     private isRefreshingLogin: boolean;
@@ -78,10 +79,10 @@ export class EndpointFactory {
             .append('client_id', 'quickapp_spa')
             .append('grant_type', 'refresh_token');
 
-        return this.http.post<any>(this.loginUrl, params, { headers: header })
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.loginUrl, params, { headers: header })
+            .catch(error => {
                 return this.handleError(error, () => this.getRefreshLoginEndpoint());
-            }));
+            });
     }
 
     getRequestHeaders(): { headers: HttpHeaders | { [header: string]: string | string[]; } } {
@@ -104,23 +105,24 @@ export class EndpointFactory {
             this.isRefreshingLogin = true;
 
             return this.authService.refreshLogin()
-                .pipe(mergeMap(data => {
+                .mergeMap(data => {
                     this.isRefreshingLogin = false;
                     this.resumeTasks(true);
 
                     return continuation();
-                }),catchError(refreshLoginError => {
+                })
+                .catch(refreshLoginError => {
                     this.isRefreshingLogin = false;
                     this.resumeTasks(false);
 
                     if (refreshLoginError.status == 401 || (refreshLoginError.url && refreshLoginError.url.toLowerCase().includes(this.loginUrl.toLowerCase()))) {
                         this.authService.reLogin();
-                        return observableThrowError('session expired');
+                        return Observable.throw('session expired');
                     }
                     else {
-                        return observableThrowError(refreshLoginError || 'server error');
+                        return Observable.throw(refreshLoginError || 'server error');
                     }
-                }));
+                });
         }
 
         if (error.status == 422) {
@@ -131,7 +133,7 @@ export class EndpointFactory {
                     msg = msg + error.error[value] + '<br/>';
                 }
             });
-            return observableThrowError(msg);
+            return Observable.throw(msg);
         }
 
         if (error.status == 400) {
@@ -142,7 +144,7 @@ export class EndpointFactory {
                     msg = msg + error.error[value] + '<br/>';
                 }
             });
-            return observableThrowError(msg);
+            return Observable.throw(msg);
         }
 
         if (error.status == 500) {
@@ -153,16 +155,16 @@ export class EndpointFactory {
                     msg = msg + error.error[value] + '<br/>';
                 }
             });
-            return observableThrowError(msg);
+            return Observable.throw(msg);
         }
        
         if (error.url && error.url.toLowerCase().includes(this.loginUrl.toLowerCase())) {
             this.authService.reLogin();
 
-            return observableThrowError((error.error && error.error.error_description) ? `session expired (${error.error.error_description})` : 'session expired');
+            return Observable.throw((error.error && error.error.error_description) ? `session expired (${error.error.error_description})` : 'session expired');
         }
         else {
-            return observableThrowError(error);
+            return Observable.throw(error);
         }
     }
 
@@ -175,47 +177,47 @@ export class EndpointFactory {
             this.isRefreshingLogin = true;
 
             return this.authService.refreshLogin()
-                .pipe(mergeMap(data => {
+                .mergeMap(data => {
                     this.isRefreshingLogin = false;
                     this.resumeTasks(true);
 
                     return continuation();
                 })
-                ,catchError(refreshLoginError => {
+                .catch(refreshLoginError => {
                     this.isRefreshingLogin = false;
                     this.resumeTasks(false);
 
                     if (refreshLoginError.status == 401 || (refreshLoginError.url && refreshLoginError.url.toLowerCase().includes(this.loginUrl.toLowerCase()))) {
                         this.authService.reLogin();
-                        return observableThrowError('session expired');
+                        return Observable.throw('session expired');
                     }
                     else {
-                        return observableThrowError(refreshLoginError || 'server error');
+                        return Observable.throw(refreshLoginError || 'server error');
                     }
-                }));
+                });
         }
 
         if (error.status == 422) {
             this.showErrorMessage(error, "Validation Error");
-            return observableThrowError(error);
+            return Observable.throw(error);
         }
 
         if (error.status == 400) {
             this.showErrorMessage(error, "Validation Error");
-            return observableThrowError(error);
+            return Observable.throw(error);
         }
 
         if (error.status == 500) {
            this.showErrorMessage(error, "Error")
-            return observableThrowError(error);
+            return Observable.throw(error);
         }
         if (error.url && error.url.toLowerCase().includes(this.loginUrl.toLowerCase())) {
             this.authService.reLogin();
 
-            return observableThrowError((error.error && error.error.error_description) ? `session expired (${error.error.error_description})` : 'session expired');
+            return Observable.throw((error.error && error.error.error_description) ? `session expired (${error.error.error_description})` : 'session expired');
         }
         else {
-            return observableThrowError(error);
+            return Observable.throw(error);
         }
     }
 
@@ -241,9 +243,9 @@ export class EndpointFactory {
             this.taskPauser = new Subject();
         }
 
-        return this.taskPauser.pipe(switchMap(continueOp => {
-            return continueOp ? continuation() : observableThrowError('session expired');
-        }));
+        return this.taskPauser.switchMap(continueOp => {
+            return continueOp ? continuation() : Observable.throw('session expired');
+        });
     }
 
     private resumeTasks(continueOp: boolean) {

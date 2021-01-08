@@ -1,13 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
-import {catchError} from 'rxjs/operators';
 @Injectable()
 export class MasterCompanyEndpoint extends EndpointFactory {
 
@@ -24,10 +23,10 @@ export class MasterCompanyEndpoint extends EndpointFactory {
 
     getMasterCompanyEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMasterCompanyEndpoint());
-            }));
+            });
     }
 
 }

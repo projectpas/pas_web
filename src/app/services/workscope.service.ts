@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { WorkScopeEndpointService } from './workscope-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,7 +37,7 @@ export class WorkScopeService {
         private workscopeEndpoint: WorkScopeEndpointService) { }
 
     getWorkScopeList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.workscopeEndpoint.getWorkScopeEndpoint<WorkScope[]>());
     }
     newWorkScope(workscope) {
@@ -44,7 +45,7 @@ export class WorkScopeService {
     }
 
     historyWorkScope(workScopeId: number) {
-        return forkJoin(this.workscopeEndpoint.getHistoryWorkScopeEndpoint<AuditHistory[]>(workScopeId));
+        return Observable.forkJoin(this.workscopeEndpoint.getHistoryWorkScopeEndpoint<AuditHistory[]>(workScopeId));
     }
 
     getWorkScope(workScopeId?: number) {

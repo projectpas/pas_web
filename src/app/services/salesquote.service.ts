@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { Observable ,  Subject ,  BehaviorSubject, ReplaySubject,forkJoin } from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
 import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
@@ -28,6 +29,7 @@ import { SalesOrderQuoteApproverList } from "../models/sales/SalesOrderQuoteAppr
 import { SalesOrderConversionCritera } from "../components/sales/quotes/models/sales-order-conversion-criteria";
 import { SalesOrder } from "../models/sales/SalesOrder.model";
 import { SalesOrderView } from "../models/sales/SalesOrderView";
+import { BehaviorSubject, ReplaySubject } from "rxjs";
 import { MarginSummary } from "../models/sales/MarginSummaryForSalesorder";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
 import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
@@ -63,6 +65,11 @@ export class SalesQuoteService {
   query: ItemMasterSearchQuery;
   totalFreights = 0;
   totalCharges = 0;
+  checkNullValuesList = ['netSalesPriceExtended', 'salesDiscountPerUnit', 'grossSalePrice',
+    'grossSalePricePerUnit', 'marginAmountExtended', 'markupExtended', 'markupPerUnit', 'salesPriceExtended',
+    'salesDiscountExtended', 'salesPriceExtended', 'taxAmount', 'salesPricePerUnit']
+
+
   constructor(private salesQuoteEndPointSevice: SalesQuoteEndpointService) {
     this.salesOrderQuote = new SalesOrderQuote();
     // this.salesOrderView = new SalesOrderView();
@@ -84,7 +91,7 @@ export class SalesQuoteService {
   //   console.log(this.approvers);
   // }
   getNewSalesQuoteInstance(customerId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.getNewSalesQuoteInstance<ISalesQuote>(
         customerId
       )
@@ -164,7 +171,7 @@ export class SalesQuoteService {
   //   this.internalApprovers = data;
   // }
   getCustomerQuotesList(salesQuoteId) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.getCustomerQuotesList(salesQuoteId)
     );
   }
@@ -199,7 +206,7 @@ export class SalesQuoteService {
   }
 
   create(salesquote: ISalesQuoteView): Observable<ISalesOrderQuote[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.create(salesquote)
     );
   }
@@ -213,7 +220,7 @@ export class SalesQuoteService {
   }
 
   saveCustomerQuotesApproved(data) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.saveCustomerQuotesApprovedEndPoint(data)
     );
   }
@@ -221,7 +228,7 @@ export class SalesQuoteService {
     return this.salesQuoteEndPointSevice.sentForInternalApproval(data);
   }
   update(salesquote: ISalesQuoteView): Observable<ISalesOrderQuote[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.update(salesquote)
     );
   }
@@ -229,7 +236,7 @@ export class SalesQuoteService {
   search(
     salesQuoteSearchParameters
   ): Observable<ISalesQuoteListView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.search(salesQuoteSearchParameters)
     );
   }
@@ -237,69 +244,69 @@ export class SalesQuoteService {
   globalSearch(
     salesQuoteSearchParameters: ISalesSearchParameters
   ): Observable<ISalesQuoteListView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.globalSearch(salesQuoteSearchParameters)
     );
   }
 
   delete(salesQuoteId: number): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.delete(salesQuoteId)
     );
   }
 
   deleteSoqSetting(salesQuotesettingsId: number, updatedBy): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.deleteSoqSetting(salesQuotesettingsId, updatedBy)
     );
   }
 
   deletePart(salesQuotePartId: number): Observable<boolean[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.deletePart(salesQuotePartId)
     );
   }
 
   getSalesQuote(salesQuoteId: number): Observable<ISalesQuoteView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.getSalesQuote(salesQuoteId)
     );
   }
 
   getview(salesQuoteId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.getview(salesQuoteId)
     );
   }
   GetTotal(salesQuoteId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.GetTotal(salesQuoteId)
     );
   }
   initiateQuoteCopying(salesQuoteId: number): Observable<ISalesQuoteView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.initiateQuoteCopying(salesQuoteId)
     );
   }
   verifySalesOrderConversion(salesQuoteId: number): Observable<VerifySalesQuoteModel[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.verifySalesOrderConversionEndPoint(salesQuoteId)
     );
   }
 
-  closeSalesOrderQuote(salesQuoteId: number): Observable<ISalesQuoteView[]> {
-    return forkJoin(
-      this.salesQuoteEndPointSevice.closeSalesOrderQuoteEndPoint(salesQuoteId)
+  closeSalesOrderQuote(salesQuoteId: number, updatedBy: string): Observable<ISalesQuoteView[]> {
+    return Observable.forkJoin(
+      this.salesQuoteEndPointSevice.closeSalesOrderQuoteEndPoint(salesQuoteId, updatedBy)
     );
   }
   convertfromquote(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<SalesOrderView[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.convertfromquoteEndPoint(salesQuoteConversionCriteria)
     );
   }
 
   sendQuoteToCustomer(salesQuoteId: number): Observable<any> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.sendQuoteToCustomer(salesQuoteId)
     );
   }
@@ -334,35 +341,35 @@ export class SalesQuoteService {
   }
 
   deletesalesOrderFreightList(friegntId, userName) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.deleteFrieght(friegntId, userName)
     );
   }
 
   deletesalesOrderChargesList(chargesId, userName) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.deleteSOQcharge(chargesId, userName)
     );
   }
 
   createFreight(freightsList: ISalesOrderFreight[]): Observable<ISalesOrderQuote[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.createFreight(freightsList)
     );
   }
 
   createSOQCharge(chargesList: ISalesOrderQuoteCharge[]): Observable<ISalesOrderQuote[]> {
-    return forkJoin(
+    return Observable.forkJoin(
       this.salesQuoteEndPointSevice.createCharges(chargesList)
     );
   }
 
-  getSalesQuoteFreights(id) {
-    return this.salesQuoteEndPointSevice.getSalesQuoteFreights(id);
+  getSalesQuoteFreights(id, isDeleted) {
+    return this.salesQuoteEndPointSevice.getSalesQuoteFreights(id, isDeleted);
   }
 
-  getSalesQuoteCharges(id) {
-    return this.salesQuoteEndPointSevice.getSalesQuoteCharges(id);
+  getSalesQuoteCharges(id, isDeleted) {
+    return this.salesQuoteEndPointSevice.getSalesQuoteCharges(id, isDeleted);
   }
 
   getSalesQuoteHeaderMarginDetails(selectedParts, marginSummary) {
@@ -378,6 +385,11 @@ export class SalesQuoteService {
 
     if (selectedParts && selectedParts.length > 0) {
       selectedParts.forEach(part => {
+        this.checkNullValuesList.forEach(key => {
+          if (!part[key]) {
+            part[key] = 0;
+          }
+        })
         // const miscAmt = parseFloat(part.misc == undefined || part.misc === '' ? 0 : part.misc.toString().replace(/\,/g, ''));
         const netSalesPriceExtended = parseFloat(part.netSalesPriceExtended == undefined || part.netSalesPriceExtended === '' ? 0 : part.netSalesPriceExtended.toString().replace(/\,/g, ''));
         const unitCostExtended = parseFloat(part.unitCostExtended == undefined || part.unitCostExtended === '' ? 0 : part.unitCostExtended.toString().replace(/\,/g, ''));
@@ -419,6 +431,11 @@ export class SalesQuoteService {
   }
 
   marshalSOQPartToSave(selectedPart, userName) {
+    this.checkNullValuesList.forEach(key => {
+      if (!selectedPart[key]) {
+        selectedPart[key] = 0;
+      }
+    })
     let partNumberObj = new SalesOrderQuotePart();
     partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
     partNumberObj.stockLineId = selectedPart.stockLineId;
@@ -567,18 +584,30 @@ export class SalesQuoteService {
   }
   getSOQPartHistory(salesOrderQuotePartId) {
     return this.salesQuoteEndPointSevice.getSOQPartHistory(salesOrderQuotePartId);
-    }
+  }
 
-    getInternalApproversList(approvalTaskId, moduleAmount) {
-        return this.salesQuoteEndPointSevice.getInternalApproversList(approvalTaskId, moduleAmount);
-    }
+  getInternalApproversList(approvalTaskId, moduleAmount) {
+    return this.salesQuoteEndPointSevice.getInternalApproversList(approvalTaskId, moduleAmount);
+  }
 
 
-  
+
   getSOQFreightsHistory(id) {
     return this.salesQuoteEndPointSevice.getSOQFreightsHistory(id);
   }
   getSOQChargesHistory(id) {
     return this.salesQuoteEndPointSevice.getSOQChargesHistory(id);
+  }
+
+  getAllSOQEditID(salesOrderQuoteId) {
+    return this.salesQuoteEndPointSevice.getAllSOQEditID(salesOrderQuoteId);
+  }
+
+  saveSalesOrderQuoteAddress(data) {
+    return this.salesQuoteEndPointSevice.saveSalesOrderQuoteAddress(data);
+  }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.salesQuoteEndPointSevice.approverslistbyTaskId(taskId, id);
   }
 }

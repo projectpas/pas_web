@@ -15,8 +15,8 @@ import { Subject } from "rxjs";
 import { ManagementStructure } from "../../models/managementstructure.model";
 import { validateRecordExistsOrNot, validateRecordExistsOrNotForInput } from "../../generic/autocomplete";
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

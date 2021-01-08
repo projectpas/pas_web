@@ -232,7 +232,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" id="" name="" (click)="resetViewData()">×</button>
+                <button type="button" class="close" data-dismiss="modal" id="" name="">×</button>
                 <h4 class="modal-title">Node Details</h4>
             </div>
             <div class="modal-body viewform ">
@@ -313,7 +313,7 @@
                 <div class="clear"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" id="" name="" (click)="resetViewData()">Close</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="" name="">Close</button>
             </div>
         </div>
 
@@ -336,13 +336,19 @@
                     <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
-
                                 <th>Ledger Name</th>
-                                <th>Account Description</th>
-                                <th>Acccont Code</th>
-                                <th>Active</th>
-                                <th>Last Updated By</th>
-                                <th>Last Updated Time</th>
+                                <th>Node Code</th>
+                                <th>Node Name</th>
+                                <th>Node Description </th>
+                                <!-- <th>Parent Node</th>
+                                <th>Leaf Node</th> -->
+                                <th>Node Type</th>
+                                <th>F/S Type</th>
+                                <th>IsActive</th>
+                                <th>Created By</th>
+                                <th>Created Date</th>
+                                <th>Updated By</th>
+                                <th>Updated Date</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="auditHistory.length> 0">
@@ -353,15 +359,23 @@
                                     [ngStyle]="{'color':  getColorCodeForHistory(i, 'ledgerName', audit.ledgerName)  ? 'black' : 'red'  }">
                                     {{audit.ledgerName}}</td>
                                 <td
-                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'accountDescription', audit.accountDescription)  ? 'black' : 'red'  }">
-                                    {{audit.accountDescription}}</td>
-
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'nodeCode', audit.nodeCode)  ? 'black' : 'red'  }">
+                                    {{audit.nodeCode}}</td>
                                 <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'accountCode', audit.accountCode)  ? 'black' : 'red'  }">
-                                    {{audit.accountCode}}</td>
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'nodeName', audit.nodeName)  ? 'black' : 'red'  }">
+                                    {{audit.nodeName}}</td>
                                 <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">
-                                    {{audit.isActive}}</td>
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+                                    {{audit.description}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'glaccountNodeType', audit.glaccountNodeType)  ? 'black' : 'red'  }">
+                                    {{audit.glAccountNodeType}}</td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'fsType', audit.fsType)  ? 'black' : 'red'  }">
+                                    {{audit.fsType}}</td>                                                              
+                                <td><p style="background-color: #fff !important;"> <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled></p></td>
+                                <td>{{audit.createdBy}}</td>
+                                <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>                                
                                 <td>{{audit.updatedBy}}</td>
                                 <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
                             </tr>
@@ -405,9 +419,14 @@
                                 </label>
                             </div>
                             <div class="col-sm-5">
-                                <select name="aircraftType" [(ngModel)]="addNew.ledgerName" #ledgerNameMgmStructureId="ngModel" (onSelect)="ledgerSelect($event)" required>
+                                <!-- <select name="aircraftType" [(ngModel)]="addNew.ledgerName" #ledgerNameMgmStructureId="ngModel" (onSelect)="ledgerSelect($event)" required>
                                     <option *ngFor="let object of ledgerList" [ngValue]="object.ledgerName">{{object.ledgerName}}</option>
-                                </select>
+                                </select> -->
+                                <p-dropdown class="p-dropdown-100" 
+                                            [options]="ledgerNameObjectData" filter="true" (onSelect)="ledgerSelect($event)"
+                                            [(ngModel)]="addNew.ledgerName" name="ledgerId" required
+                                            [resetFilterOnHide]="true" placeholder="Select" [showClear]="true">
+                               </p-dropdown>
                             </div>
                         </div>
                         <div class="col-sm-12">
@@ -416,8 +435,11 @@
                                 </label>
                             </div>
                             <div class="col-sm-5">
-                                <p-multiSelect [options]="mainCompanylistMultiSelectData" class="imstock-pmselect" name="multidata" [(ngModel)]="addNew.selectedCompanysData"
-                                    style="float:left" [style]="{minWidth: '188px'}"></p-multiSelect>
+                                <!-- <p-multiSelect [options]="mainCompanylistMultiSelectData" class="imstock-pmselect" name="multidata" [(ngModel)]="addNew.selectedCompanysData"
+                                    style="float:left" [style]="{minWidth: '188px'}"></p-multiSelect> -->
+                                    <p-multiSelect [options]="entitiesObj" class="imstock-pmselect" style="float:left" [style]="{minWidth: '188px'}"
+                                            name="entities" [(ngModel)]="addNew.shareWithEntityIds">
+                                    </p-multiSelect>
                             </div>
                         </div>
                         <div class="col-sm-12">

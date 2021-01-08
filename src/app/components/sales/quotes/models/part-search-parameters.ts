@@ -11,7 +11,7 @@ export class PartSearchParamters {
 
     public partNumberObj: {};
 
-    public conditionId?: number = null;
+    public conditionId?: number = 0;
 
     public quantityRequired: number = 0;
 

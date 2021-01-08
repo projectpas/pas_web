@@ -4,7 +4,7 @@ import * as $ from 'jquery';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Router, NavigationExtras } from '@angular/router';
 import {RadioButtonModule} from 'primeng/radiobutton';
- 
+import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, NgForm } from '@angular/forms';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
@@ -16,9 +16,9 @@ import { MatDialog } from '@angular/material';
 import { getObjectByValue, getPageCount, getObjectById, getValueFromObjectByKey, editValueAssignByCondition, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 
-
+import { DatePipe } from '@angular/common';
 import { emailPattern, urlPattern, titlePattern, phonePattern, mobilePattern } from '../../../validations/validation-pattern';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
@@ -28,6 +28,7 @@ import { AtaMainService } from '../../../services/atamain.service';
 	selector: 'app-customer-contacts',
 	templateUrl: './customer-contacts.component.html',
 	styleUrls: ['./customer-contacts.component.scss'],
+	providers: [DatePipe]
 })
 /** CustomerEdit component*/
 export class CustomerContactsComponent implements OnInit {
@@ -47,12 +48,14 @@ export class CustomerContactsComponent implements OnInit {
 	@Input() customerDataFromExternalComponents: any;
 	pageSizeForATA: number = 10;
 	disableSave: boolean = true;
+	disableSaveMemo: boolean = true;
 	formData = new FormData();
 	totalRecords: any;
 	pageIndex: number = 0;
 	pageSize: number = 10;
 	totalPages: number;
-
+	selectedOnly: boolean = false;
+    targetData: any;
 	contactsListOriginal: any;
 	firstNamesList: any;
 	middleNamesList: any;
@@ -93,6 +96,7 @@ export class CustomerContactsComponent implements OnInit {
 	customerContactId: number;
 	contactATAId: number;
 	customerCode: any;
+	memoPopupContent: any;
 	customerName: any;
 	contactName: any;
 	modal: NgbModalRef;
@@ -140,7 +144,6 @@ export class CustomerContactsComponent implements OnInit {
 			ataChapterName: "",
 			ataChapterCode: "",
 			ataSubChapterDescription: "",
-
 		}
 
 	ataChapterEditData = { ...this.ataChapterEditDat };
@@ -156,7 +159,6 @@ export class CustomerContactsComponent implements OnInit {
 	arrayContactlist:any[] = [];
 
 	constructor(private router: ActivatedRoute,
-
 		private route: Router,
 		private authService: AuthService,
 		private modalService: NgbModal,
@@ -170,7 +172,7 @@ export class CustomerContactsComponent implements OnInit {
 		private configurations: ConfigurationService,
 		private commonService: CommonService,
 		private atamain: AtaMainService,
-
+		private datePipe: DatePipe
 	) {
 		this.stopmulticlicks = false;
 	}
@@ -208,8 +210,10 @@ export class CustomerContactsComponent implements OnInit {
 		for (let property in changes) {
 			if (property == 'selectedCustomerTab') {
 				if (changes[property].currentValue != {} && changes[property].currentValue == "Contacts") {
-					this.getAllCustomerContact();
-					//this.getAllContacts();
+					if(this.id > 0)
+					{
+						this.getAllCustomerContact();
+					}	
 					this.getAllATAChapter();
 				}
 			}
@@ -220,11 +224,17 @@ export class CustomerContactsComponent implements OnInit {
 					this.customerCode = this.customerDataFromExternalComponents.customerCode;
 					this.customerName = this.customerDataFromExternalComponents.name;
 					if(this.id > 0)
+					{
 						this.getAllCustomerContact();
+					}						
 					this.isViewMode = true;
 				}
 			}
 		}
+	}
+
+	closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
 	}
 
 	getDeleteListByStatus(value){
@@ -245,6 +255,43 @@ export class CustomerContactsComponent implements OnInit {
 		this.getATACustomerContactMapped();
 	}
 	
+	exportCSV(contact){
+        contact._value = contact._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        contact.exportCSV();
+    }
+  onClickMemo() {
+        this.memoPopupContent = this.contactInformation.notes;
+		this.enableSave();
+		this.disableSaveMemo=true;
+        //this.memoPopupValue = value;
+	}   
+	
+    onClickPopupSave() {
+        this.contactInformation.notes = this.memoPopupContent;
+        this.memoPopupContent = '';
+        $('#memo-popup-Doc').modal("hide");
+	}
+	
+    closeMemoModel() {
+        $('#memo-popup-Doc').modal("hide");
+    }
+
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+
     geListByStatus(status) {
         const newarry=[];
         if(status=='Active'){ 
@@ -345,6 +392,10 @@ export class CustomerContactsComponent implements OnInit {
 		this.disableSave = false;
 	}
 
+	enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
+
 	closeMyModel() {
 		$("#addContactDetails").modal("hide");
 		this.disableSave = true;
@@ -363,9 +414,11 @@ export class CustomerContactsComponent implements OnInit {
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
 	}
+
 	pageIndexChangeForInt(event) {
 		this.pageSizeForATA = event.rows;
 	}
+
 	pageIndexChange(event) {
 		this.pageSize = event.rows;
 	}
@@ -403,7 +456,6 @@ export class CustomerContactsComponent implements OnInit {
 			this.isSpinnerVisible = false;
 		},error => this.saveFailedHelper(error));
 	}
-
 
 	getAllContactMiddleNameSmartDropDown(strText = '', contactName = ''){
 		this.isSpinnerVisible = true;
@@ -488,31 +540,6 @@ export class CustomerContactsComponent implements OnInit {
 			this.getAllContactLastNameSmartDropDown(event.query); }
 	}
 
-	//Need to Detele After Verify
-	// filterFirstNamesOld(event) {
-	// 	this.firstNamesList = this.contactsListOriginal
-	// 	this.firstNamesList = [...this.contactsListOriginal.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// }
-	//Need to Detele After Verify
-	// filterMiddleNamesOld(event) {
-	// 	this.middleNamesList = this.contactsListOriginal
-	// 	this.middleNamesList = [...this.contactsListOriginal.filter(x => {
-
-	// 		if (x.middleName !== null && x.middleName !== "") {
-	// 			return x.middleName.toLowerCase().includes(event.query.toLowerCase())
-	// 		}
-	// 	})]
-	// }
-	//Need to Detele After Verify
-	// filterLastNamesOld(event) {
-	// 	this.lastNamesList = this.contactsListOriginal
-	// 	this.lastNamesList = [...this.contactsListOriginal.filter(x => {
-	// 		return x.lastName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// }
-
 	patternMobilevalidationWithSpl(event: any) {
 		const pattern = /[0-9\+\-()\ ]/;
 
@@ -520,7 +547,6 @@ export class CustomerContactsComponent implements OnInit {
 		if (event.keyCode != 8 && !pattern.test(inputChar)) {
 			event.preventDefault();
 		}
-
 	}
 
 	async saveContactInformation() {
@@ -553,24 +579,6 @@ export class CustomerContactsComponent implements OnInit {
 
 			this.alertService.showMessage('Success',`Sucessfully Created Contact`, MessageSeverity.success);
 
-			// this.customerService.newAddCustomerContact(
-			// 	{ ...responseForCustomerCreate, CustomerId: this.id }).subscribe(res => {
-
-			// 		$("#addContactDetails").modal("hide");
-			// 		this.isEditButton = false;
-			// 		this.contactInformation = new CustomerContactModel()
-			// 		//this.getAllContacts();
-			// 		this.customerContacts = [];
-			// 		this.getAllCustomerContact();
-			// 		this.refreshCustomerContactMapped.emit(this.id);
-
-			// 		this.alertService.showMessage(
-			// 			'Success',
-			// 			`Sucessfully Created Contact`,
-			// 			MessageSeverity.success
-			// 		);
-			// 		this.isSpinnerVisible = false;	
-			// 	},error => this.saveFailedHelper(error))
 		}, err => {
 			this.isEditButton = false;
 			this.alertService.showMessage(
@@ -609,12 +617,6 @@ export class CustomerContactsComponent implements OnInit {
 		this.isPrimatyContactData=rowData.isDefaultContact;
 		this.ediData = { ...rowData };
 		this.isEditButton = true;
-		// this.contactInformation = {
-		// 	...this.ediData,
-		// 	firstName: getObjectByValue('firstName', rowData.firstName, this.firstNamesList),
-		// 	middleName: getObjectByValue('middleName', rowData.middleName, this.middleNamesList),
-		// 	lastName: getObjectByValue('lastName', rowData.lastName, this.lastNamesList),
-		// }
 		this.sourceViewforContact = '';
 	}
 
@@ -657,18 +659,19 @@ export class CustomerContactsComponent implements OnInit {
 		this.disableSave = true
 	}
 
-
-	getAllCustomerContact() {
-
-		// get Customer Contatcs 
+	// get Customer Contatcs 
+	getAllCustomerContact() {		
 		this.isSpinnerVisible = true;
 		this.id = this.id ? this.id :this.router.snapshot.params['id'];
-		this.customerService.getContacts(this.id).subscribe(res => {
-			this.originalTableData=res[0];
-			this.loaderForContacts = false;
-			this.geListByStatus(this.status ? this.status : this.currentstatus);
-			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		if(this.id)
+		{
+			this.customerService.getContacts(this.id).subscribe(res => {
+				this.originalTableData=res[0];
+				this.loaderForContacts = false;
+				this.geListByStatus(this.status ? this.status : this.currentstatus);
+				this.isSpinnerVisible = false;
+			},error => this.saveFailedHelper(error))
+		}		
 	}
 
 	handleChange(rowData) {
@@ -743,7 +746,6 @@ export class CustomerContactsComponent implements OnInit {
 		this.getOriginalATASubchapterList()
 		this.getATACustomerContactMapped();
 		this.getATASubChapter();
-
 	}
 
 	dismissModel() {
@@ -792,6 +794,7 @@ export class CustomerContactsComponent implements OnInit {
 			this.isSpinnerVisible = false;
 		},error => this.saveFailedHelper(error))
 	}
+
 	// post the ata Mapping 
 	async addATAMapping() {
 		if(this.add_SelectedModels !=undefined && this.add_SelectedModels != '' &&  (this.add_SelectedModels && this.add_SelectedModels.length>0)){

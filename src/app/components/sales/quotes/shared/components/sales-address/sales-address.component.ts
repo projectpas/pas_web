@@ -22,7 +22,7 @@ import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView"
 import { SalesOrder } from "../../../../../../models/sales/SalesOrder.model";
 import { ISalesOrder } from "../../../../../../models/sales/ISalesOrder.model";
 import { SalesOrderView } from "../../../../../../models/sales/SalesOrderView";
-import { forkJoin } from "rxjs";
+import { forkJoin } from "rxjs/observable/forkJoin";
 
 
 @Component({

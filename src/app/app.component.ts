@@ -46,7 +46,7 @@ import { SalesOrderReferenceStorage } from './components/sales/shared/sales-orde
 @Component({
   selector: 'quickapp-pro-app',
   templateUrl: './app.component.html',
-  styleUrls: ['./styles.scss', './app.component.scss'],
+  styleUrls: ['./styles.scss', './app.component.scss','./global-styles.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -74,7 +74,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.step = index;
   }
 
-  @ViewChild('fixedButtons',{static:false}) el: ElementRef<HTMLElement>;
+  @ViewChild('fixedButtons',{static:false}) el: ElementRef;
   //   @HostListener('window:scroll', [])
   //     onWindowScroll() {
   //       let number = this.el.nativeElement.offsetTop;
@@ -577,7 +577,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'SO Shipping', routerLink: '/#' },
                 { label: 'SO Billing', routerLink: '/#' },
                 { label: 'SO Confirmation List', routerLink: '/salesmodule/salespages/sales-order-confirmation-list' },
-
+                {
+                  label: 'Sales Order Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/salesmodule/salespages/app-so-approval-rule',
+                }
               ],
             },
             {
@@ -592,7 +596,13 @@ export class AppComponent implements OnInit, AfterViewInit {
                 //   routerLink: '/salesmodule/salespages/sales-quote',
                 // },
                 { label: 'Open SO Quotes', routerLink: '/#' },
-                { label: 'Approved SO Quotes', routerLink: '/#' },],
+                { label: 'Approved SO Quotes', routerLink: '/#' },
+                {
+                  label: 'Sales Order Quote Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/salesmodule/salespages/app-soq-approval-rule',
+                },
+              ],
             },
             {
               label: 'Sales Order Settings',
@@ -831,6 +841,16 @@ export class AppComponent implements OnInit, AfterViewInit {
                   command: () => this.clearStocklineAndSOStorageReference(),
                   routerLink: '/vendorsmodule/vendorpages/app-ro-approval',
                 },
+                {
+                  label: 'RO Approval Rule',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-approval-rule',
+                },   
+                {
+                  label: 'RO Settings',
+                  command: () => this.clearStocklineAndSOStorageReference(),
+                  routerLink: '/vendorsmodule/vendorpages/app-ro-settings',
+                }             
               ],
             },
             {
@@ -1096,7 +1116,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               ],
             },
             {
-              label: 'Customer Work ',
+              label: 'Customer Work List ',
               items: [
                 {
                   label: 'Receive Customer List',

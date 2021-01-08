@@ -35,6 +35,27 @@ mat-spinner {
     display: inline-block;
     margin-right: 16px;
 }
+mat-card {
+    background: #f4f4f4!important;
+    color: rgba(0, 0, 0, 0.87);
+}
+.mat-card-header {
+    display: flex;
+    flex-direction: row;
+    margin-left: 43%;
+}
+.mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary {
+    background-color: #dc6035;
+}
+.mat-card-title {
+    font-size: 24px !important;
+    font-weight: 400;
+}
+
+hr {
+    margin-top: 0px;
+    border: 1px solid #dc6035 !important;
+}
 .card-title {
     margin-left: 180px;
     font-size: 1.2rem;

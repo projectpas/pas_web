@@ -100,7 +100,9 @@
                                                     matTooltipPosition="above"
                                                     iconPos="left"
                                                     label="Export  Data"
-                                                    (click)="documents.exportCSV()"
+                                                    data-toggle="modal" 
+                                                    (click)="selectedOnly = false; targetData = documents;"
+                                                     data-target="#downloadConfirmation" 
                                                     style="padding: 5px 10px !important;"></button>
                                             <button type="button"
                                                     class="btn btn-primary new-table-button"
@@ -261,7 +263,7 @@
                         <div *ngIf="!viewMode">
                             <button type="button" class="btn btn-primary pull-right submit-btn"
                                     (click)="CreateNewClick()">
-                                Create New
+                                Create New Vendor
                             </button>
                             <button type="button" class="btn btn-primary pull-right submit-btn"
                                     (click)="backClick()">
@@ -274,6 +276,27 @@
     </div>
 </div>
 
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">History of Documents</h4>
@@ -551,10 +574,17 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
-                        style="text-align:center" data-dismiss="modal" (click)="saveDocumentInformation()"  [disabled]="!addDocumentForm.valid || disableSave">Save</button>
-                    <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"
-                        style="text-align:center" (click)="saveDocumentInformation()" data-dismiss="modal" [disabled]="!addDocumentForm.valid || disableSave">Update</button>
+                    <button type="button" *ngIf="!isEditButton"
+                     class="btn btn-primary pull-right submit-btn"
+                        style="text-align:center" data-dismiss="modal" 
+                        (click)="saveDocumentInformation()" 
+                         [disabled]="!addDocumentForm.valid">Save</button>
+                    <button type="button" *ngIf="isEditButton"
+                     class="btn btn-primary pull-right submit-btn"
+                        style="text-align:center"
+                         (click)="saveDocumentInformation()"
+                          data-dismiss="modal" 
+                          [disabled]="!addDocumentForm.valid || disableSave">Update</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> 
                 </div>
             </form>
@@ -582,7 +612,7 @@
                                           [(ngModel)]="memoPopupContent"
                                           [style]="{ height: '320px' }"
                                           name="memoPopupContent"
-                                          (ngModelChange)="enableSave()"
+                                          (ngModelChange)="enableSaveMemo()"
                                           required></p-editor>
                             </td>
                         </tr>
@@ -592,7 +622,7 @@
                     <button type="button"
                             class="btn btn-primary"
                             style="padding: 6px 12px !important; margin-top: 10px;"
-                            data-dismiss="modal"
+                            data-dismiss="modal" [disabled]="disableSaveMemo"
                             (click)="onClickPopupSave()">
                         Save
                     </button>

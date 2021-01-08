@@ -11,15 +11,15 @@ import { SingleScreenAuditDetails, AuditChanges } from "../../models/single-scre
 import { PaginatorModule, Paginator } from 'primeng/paginator';
 import { LazyLoadEvent } from "primeng/api";
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
-
+// import { modelGroupProvider } from "../../../../node_modules/@angular/forms/src/directives/ng_model_group";
 import { validateRecordExistsOrNot, selectedValueValidate, editValueAssignByCondition, getObjectByValue } from "../../generic/autocomplete";
 import { FormBuilder } from "../../../../node_modules/@angular/forms";
 import { MatDialog } from "../../../../node_modules/@angular/material";
 import { Table } from "../../../../node_modules/primeng/table";
 import { ConfigurationService } from "../../services/configuration.service";
 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

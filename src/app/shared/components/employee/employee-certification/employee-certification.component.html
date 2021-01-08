@@ -43,12 +43,20 @@
                                           <label>
                                               Certification Type                                              
                                           </label>
-                                          <select class="drp-certification-type" name="employeeCertificationTypeId" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.employeeCertificationTypeId">
+                                          <!-- <select class="form-control" name="employeeCertificationTypeId" (ngModelChange)="enableSave()" [(ngModel)]="sourceEmployee.employeeCertificationTypeId">
                                             <option value="0">-- Select --</option>  
                                              <ng-container *ngFor="let certificationtype of allCertification">                                               
-                                                <option [ngValue]="certificationtype.employeeCertificationTypeId" *ngIf="certificationtype.isActive">{{certificationtype.description}}</option>
+                                                <option [ngValue]="certificationtype.employeeCertificationTypeId">{{certificationtype.description}}</option>
                                               </ng-container>
+                                          </select> -->
+
+                                          <select name="employeeCertificationTypeId" (ngModelChange)="enableSave()" class="form-control" [(ngModel)]="sourceEmployee.employeeCertificationTypeId">
+                                            <option value="0"> -- Select --</option>
+                                            <ng-container *ngFor="let certificationtype of allCertification">
+                                                <option [ngValue]="certificationtype.value">{{certificationtype.label}}</option>
+                                            </ng-container>
                                           </select>
+
                                       </div>
                                       <div class="form-group">
                                           <label>Certifying Institution</label>
@@ -96,7 +104,7 @@
                       <button *ngIf="!isEditContent" 
                        type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()">Save  </button>
                       <button *ngIf="isEditContent" 
-                       [disabled]="(!empform.touched || !enableSaveBtn )" type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()"> {{!sourceEmployee.employeeCertificationId ? 'Save' : 'Update' }}</button>
+                       [disabled]="!empform.valid || !enableSaveBtn " type="button" class="btn btn-primary pull-right" (click)="saveCertificateData()"> {{!sourceEmployee.employeeCertificationId ? 'Save' : 'Update' }}</button>
                       <button type="button" class="btn btn-primary pull-right" (click)="nextClick('Previous')">Previous</button>
                       </div>
                   </form>

@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit, Output, EventEmitter, Input, ElementRef } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { AuthService } from '../../../../services/auth.service';
-
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { FormBuilder } from '@angular/forms';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';
@@ -16,7 +16,7 @@ import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
 import { editValueAssignByCondition } from '../../../../generic/autocomplete';
 import { titlePattern } from '../../../../validations/validation-pattern';
-
+import * as $ from 'jquery';
 @Component({
 	selector: 'app-legal-entity-banking',
 	templateUrl: './legal-entity-banking.component.html',
@@ -89,12 +89,12 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	LegalACHId: any;
 	internalwire; any;
 	locksave: boolean;
-	domesticvalid:boolean;
-	internationalvalid:boolean;
-	achvalid:boolean;
+	domesticvalid: boolean;
+	internationalvalid: boolean;
+	achvalid: boolean;
 	tabscreen: any;
 	titlePattern = titlePattern()
-	isSpinnerVisible:boolean=false;
+	isSpinnerVisible: boolean = false;
 	@ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
 	constructor(
 		private authService: AuthService, private commonService: CommonService, private _fb: FormBuilder, private alertService: AlertService,
@@ -108,21 +108,21 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		if (this.editMode) {
 			this.id = this.editGeneralInformationData.legalEntityId;
 			this.companyCode = this.editGeneralInformationData.companyCode;
-			if(typeof this.editGeneralInformationData.name != 'string'){
-                this.companyName = this.editGeneralInformationData.name.label;
-            }else{
-                this.companyName = this.editGeneralInformationData.name;
-            }
+			if (typeof this.editGeneralInformationData.name != 'string') {
+				this.companyName = this.editGeneralInformationData.name.label;
+			} else {
+				this.companyName = this.editGeneralInformationData.name;
+			}
 		} else {
 			this.id = this.savedGeneralInformationData.legalEntityId;
 			this.companyCode = this.savedGeneralInformationData.companyCode;
-			if(typeof this.savedGeneralInformationData.name != 'string'){
-				this.companyName = this.savedGeneralInformationData.name.label;	
-			}else{
+			if (typeof this.savedGeneralInformationData.name != 'string') {
+				this.companyName = this.savedGeneralInformationData.name.label;
+			} else {
 				this.companyName = this.savedGeneralInformationData.name;
-				
+
 			}
-			
+
 		}
 		this.Lockbox();
 		this.sourceLegalEntity = {};
@@ -176,7 +176,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireStyle = false;
 		this.internationalStyle = false;
 		this.ACHStyle = false;
-		this.locksave=false;
+		this.locksave = false;
 		this.getEntityLockBoxDataById(this.id);
 	}
 	DomesticWire() {
@@ -192,7 +192,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireStyle = true;
 		this.internationalStyle = false;
 		this.ACHStyle = false;
-		this.domesticvalid=false;
+		this.domesticvalid = false;
 		this.getEntityDomesticwireDataById(this.id);
 
 	}
@@ -208,11 +208,11 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireStyle = false;
 		this.internationalStyle = true;
 		this.ACHStyle = false;
-		this.internationalvalid=false;
+		this.internationalvalid = false;
 		this.getInternationalwireDataById(this.id);
 	}
 	ACH() {
-		this.isAchValueUpdate=true;
+		this.isAchValueUpdate = true;
 		this.GeneralInformationValue = false;
 		this.LockboxValue = false;
 		this.domesticWireValue = false;
@@ -224,7 +224,7 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 		this.domesticWireStyle = false;
 		this.internationalStyle = false;
 		this.ACHStyle = true;
-		this.achvalid=false;
+		this.achvalid = false;
 		this.getEntityACHDataById(this.id)
 	}
 	showDomesticWire() {
@@ -232,16 +232,16 @@ export class EntityBankingComponent implements OnInit, AfterViewInit {
 	}
 
 	getEntityLockBoxDataById(id) {
-		this.isSpinnerVisible=true;
+		this.isSpinnerVisible = true;
 		this.workFlowtService.getEntityLockboxDataById(id).subscribe(res => {
 
-if(Array.isArray(res) ==true && res.length==0){
-	this.isLockBox=true;
-}else{
-	this.isLockBox=false;
-}
-this.isSpinnerVisible=false;
-			if (res != null  && res &&  res.length !=0) {
+			if (Array.isArray(res) == true && res.length == 0) {
+				this.isLockBox = true;
+			} else {
+				this.isLockBox = false;
+			}
+			this.isSpinnerVisible = false;
+			if (res != null && res && res.length != 0) {
 				this.legalentitylockingboxid = res[0].legalEntityBankingLockBoxId;
 
 				this.sourceLegalEntity = {
@@ -252,26 +252,26 @@ this.isSpinnerVisible=false;
 					bankCity: res[0].city,
 					bankProvince: res[0].stateOrProvince,
 					bankpostalCode: res[0].postalCode,
-					bankcountryId:res[0].countryId
+					bankcountryId: res[0].countryId
 				};
 				this.CountryData('')
 			}
-			
-		
+
+
 		}, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        })
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);
+		})
 	}
 
 	getEntityDomesticwireDataById(id) {
 		this.workFlowtService.getEntityDomesticDataById(id).subscribe(res => {
-			if(Array.isArray(res) ==true && res.length==0){
-				this.isDomesticWire=true;
-			}else{
-				this.isDomesticWire=false;
+			if (Array.isArray(res) == true && res.length == 0) {
+				this.isDomesticWire = true;
+			} else {
+				this.isDomesticWire = false;
 			}
-			if (res != null && res &&  res.length !=0) {
+			if (res != null && res && res.length != 0) {
 				this.LegalEntityDomesticWireBankingId = res[0].legalEntityDomesticWireBankingId;
 				this.legalentitydomesticid = res[0].domesticWirePaymentId;
 				this.sourceLegalEntity = {
@@ -285,22 +285,22 @@ this.isSpinnerVisible=false;
 			}
 
 		}, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        })
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);
+		})
 	}
-	isLockBox:boolean=false;
-	isDomesticWire:boolean=false;
-	isInternationalWire:boolean=false;
-	isAch:boolean=false;
+	isLockBox: boolean = false;
+	isDomesticWire: boolean = false;
+	isInternationalWire: boolean = false;
+	isAch: boolean = false;
 	getInternationalwireDataById(id) {
 		this.workFlowtService.getEntityInternalDataById(id).subscribe(res => {
-			if(Array.isArray(res) ==true && res.length==0){
-				this.isInternationalWire=true;
-			}else{
-				this.isInternationalWire=false;
+			if (Array.isArray(res) == true && res.length == 0) {
+				this.isInternationalWire = true;
+			} else {
+				this.isInternationalWire = false;
 			}
-			if (res != null && res &&  res.length !=0) {
+			if (res != null && res && res.length != 0) {
 				const response = res;
 				this.LegalEntityInternationalWireBankingId = res[0].legalEntityInternationalWireBankingId
 				this.internalwire = res[0].internationalWirePaymentId;
@@ -308,30 +308,30 @@ this.isSpinnerVisible=false;
 					...this.sourceLegalEntity,
 					internationalBankName: res[0].bankName,
 					internationalIntermediateBank: res[0].intermediaryBank,
-					internationalBenficiaryBankName:res[0].beneficiaryBank,
-					internationalBankAccountNumber:res[0].beneficiaryBankAccount,
-					aba:res[0].aba,
-					internationalSWIFTID:res[0].swiftCode
+					internationalBenficiaryBankName: res[0].beneficiaryBank,
+					internationalBankAccountNumber: res[0].beneficiaryBankAccount,
+					aba: res[0].aba,
+					internationalSWIFTID: res[0].swiftCode
 				}
 			}
 		}, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        })
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);
+		})
 	}
 	backClick() {
 		this.tab.emit('Contacts');
 	}
 	getEntityACHDataById(id) {
 		this.workFlowtService.getEntityAchDataById(id).subscribe(res => {
-			if(Array.isArray(res) ==true && res.length==0){
-				this.isAch=true;
-			}else{
-				this.isAch=false;
+			if (Array.isArray(res) == true && res.length == 0) {
+				this.isAch = true;
+			} else {
+				this.isAch = false;
 			}
-			if (res != null && res &&  res.length !=0) {
+			if (res != null && res && res.length != 0) {
 				const response = res;
-	
+
 				this.LegalACHId = res[0].achId ? res[0].achId : 0;
 				this.sourceLegalEntity = {
 					...this.sourceLegalEntity,
@@ -344,9 +344,9 @@ this.isSpinnerVisible=false;
 				}
 			}
 		}, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        })
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);
+		})
 	}
 	getmemo() {
 		if (this.sourceLegalEntity.poBox != null && this.sourceLegalEntity.bankStreetaddress1 != null &&
@@ -358,25 +358,25 @@ this.isSpinnerVisible=false;
 	}
 	domesticval() {
 		if (this.sourceLegalEntity.domesticBankName != null && this.sourceLegalEntity.domesticIntermediateBank != null &&
-			this.sourceLegalEntity.domesticBenficiaryBankName != null && this.sourceLegalEntity.domesticBankAccountNumber != null && this.sourceLegalEntity.domesticABANumber != null	 
+			this.sourceLegalEntity.domesticBenficiaryBankName != null && this.sourceLegalEntity.domesticBankAccountNumber != null && this.sourceLegalEntity.domesticABANumber != null
 		) {
 			this.domesticvalid = true;
 		}
 	}
 	internationalval() {
 		if (this.sourceLegalEntity.internationalBankName != null && this.sourceLegalEntity.internationalIntermediateBank != null &&
-			this.sourceLegalEntity.internationalBenficiaryBankName != null && this.sourceLegalEntity.internationalBankAccountNumber != null && this.sourceLegalEntity.internationalSWIFTID != null	 
+			this.sourceLegalEntity.internationalBenficiaryBankName != null && this.sourceLegalEntity.internationalBankAccountNumber != null && this.sourceLegalEntity.internationalSWIFTID != null
 		) {
 			this.internationalvalid = true;
 		}
 	}
-	isAchValueUpdate:any=false;
+	isAchValueUpdate: any = false;
 	achval() {
 		if (this.sourceLegalEntity.achBankName != null && this.sourceLegalEntity.achIntermediateBank != null &&
 			this.sourceLegalEntity.achBenficiaryBankName != null && this.sourceLegalEntity.achBankAccountNumber != null && this.sourceLegalEntity.achABANumber != null && this.sourceLegalEntity.achSWIFTID != null
 		) {
 			this.achvalid = true;
-			this.isAchValueUpdate=false;
+			this.isAchValueUpdate = false;
 		}
 	}
 	savebanklockingbox() {
@@ -394,12 +394,13 @@ this.isSpinnerVisible=false;
 			CreatedBy: this.userName,
 			UpdatedBy: this.userName
 		}
-		if (this.isLockBox==true) {
-			this.isSpinnerVisible=true;
+		if (this.isLockBox == true) {
+			this.isSpinnerVisible = true;
 			this.workFlowtService.newAddlockboxEntity(data).subscribe(res => {
-				this.DomesticWire();
-				this.isLockBox=false;
-				this.isSpinnerVisible=false;
+				// this.DomesticWire();
+				this.locksave=false;
+				this.isLockBox = false;
+				this.isSpinnerVisible = false;
 				this.alertService.showMessage(
 					'Success',
 					'Lock Box Saved Successfully',
@@ -411,10 +412,11 @@ this.isSpinnerVisible=false;
 			})
 		}
 		else {
-			this.isSpinnerVisible=true;
+			this.isSpinnerVisible = true;
 			this.workFlowtService.updateLegalEntityLockbox(data).subscribe(res => {
-				this.isSpinnerVisible=false;
-				this.DomesticWire();
+				this.isSpinnerVisible = false;
+				// this.DomesticWire();
+				this.locksave=false;
 				this.alertService.showMessage(
 					'Success',
 					'Lock Box Updated Successfully',
@@ -440,13 +442,14 @@ this.isSpinnerVisible=false;
 			domesticWirePaymentId: this.legalentitydomesticid,
 			LegalEntityDomesticWireBankingId: this.LegalEntityDomesticWireBankingId
 		}
-		if (this.isDomesticWire==true ) {
-			this.isSpinnerVisible=true;
+		if (this.isDomesticWire == true) {
+			this.isSpinnerVisible = true;
 			this.workFlowtService.getNewdomesticwireLegalEntity(data).subscribe(res => {
 				const response = res;
-				this.isSpinnerVisible=false;
-				this.isDomesticWire=false;
-				this.InternationalWire();
+				this.isSpinnerVisible = false;
+				this.isDomesticWire = false;
+				this.domesticvalid=false;
+				// this.InternationalWire();
 				this.alertService.showMessage(
 					'Success',
 					'Domestic wire Saved Successfully',
@@ -458,10 +461,11 @@ this.isSpinnerVisible=false;
 			})
 		}
 		else {
-			this.isSpinnerVisible=true;
+			this.isSpinnerVisible = true;
 			this.workFlowtService.updateLegalDomestic(data).subscribe(res => {
-				this.isSpinnerVisible=false;
-				this.InternationalWire();
+				this.isSpinnerVisible = false;
+				// this.InternationalWire();
+				this.domesticvalid=false;
 				this.alertService.showMessage(
 					'Success',
 					'Domestic wire Updated Successfully',
@@ -472,7 +476,7 @@ this.isSpinnerVisible=false;
 				this.errorMessageHandler(errorLog);
 			});
 		}
-}
+	}
 	savebankinternationalwire() {
 		const data = {
 			LegalEntityId: this.id,
@@ -486,15 +490,15 @@ this.isSpinnerVisible=false;
 			UpdatedBy: this.userName,
 			LegalEntityInternationalWireBankingId: this.LegalEntityInternationalWireBankingId,
 			internationalWirePaymentId: this.internalwire,
-			ABA:this.sourceLegalEntity.aba
+			ABA: this.sourceLegalEntity.aba
 		}
-	if (this.isInternationalWire==true ) {
-			this.isSpinnerVisible=true;
+		if (this.isInternationalWire == true) {
+			this.isSpinnerVisible = true;
 			this.workFlowtService.getNewinternationalwireLegalEntity(data).subscribe(res => {
 				const response = res;
-				this.ACH();
-				this.isSpinnerVisible=false;
-				this.isInternationalWire=false;
+				this.internationalvalid=false;
+				this.isSpinnerVisible = false;
+				this.isInternationalWire = false;
 				this.alertService.showMessage(
 					'Success',
 					'International Saved Successfully',
@@ -508,11 +512,12 @@ this.isSpinnerVisible=false;
 		}
 
 		else {
-			this.isSpinnerVisible=true;
+			this.isSpinnerVisible = true;
 			this.workFlowtService.updateLegalInternational(data).subscribe(res => {
-				this.isSpinnerVisible=false;
+				this.isSpinnerVisible = false;
 				const response = res;
-				this.ACH();
+				// this.ACH();
+				this.internationalvalid=false;
 				this.alertService.showMessage(
 					'Success',
 					'International Updated Successfully',
@@ -539,13 +544,13 @@ this.isSpinnerVisible=false;
 			UpdatedBy: this.userName,
 			ACHId: this.LegalACHId
 		}
-		if (this.isAch==true ) {
-			this.isSpinnerVisible=true;
+		if (this.isAch == true) {
+			this.isSpinnerVisible = true;
 			this.workFlowtService.getNewACHLegalEntity(data).subscribe(res => {
-				this.isSpinnerVisible=false;
-				this.isAchValueUpdate=true;
+				this.isSpinnerVisible = false;
+				this.isAchValueUpdate = true;
 				const response = res;
-				this.isAch=false;
+				this.isAch = false;
 				this.alertService.showMessage(
 					'Success',
 					'ACH Saved Successfully',
@@ -557,18 +562,18 @@ this.isSpinnerVisible=false;
 			})
 		}
 		else {
-			this.isSpinnerVisible=true;
+			this.isSpinnerVisible = true;
 			this.workFlowtService.updateLegalACH(data).subscribe(res => {
-				this.isSpinnerVisible=false;
-				this.isAchValueUpdate=true;
-				this.isAch=false;
+				this.isSpinnerVisible = false;
+				this.isAchValueUpdate = true;
+				this.isAch = false;
 				const response = res;
 				this.alertService.showMessage(
 					'Success',
 					'ACH updated Successfully',
 					MessageSeverity.success
 				);
-				}, err => {
+			}, err => {
 				const errorLog = err;
 				this.errorMessageHandler(errorLog);
 			})
@@ -599,9 +604,9 @@ this.isSpinnerVisible=false;
 	}
 	saveGeneralInformation() {
 		this.isSaving = true;
-			if (this.editGeneralInformationData.name && this.editGeneralInformationData.reportingCurrencyId) {
+		if (this.editGeneralInformationData.name && this.editGeneralInformationData.reportingCurrencyId) {
 			if (!this.editGeneralInformationData.legalEntityId) {
-	this.sourceLegalEntity.createdBy = this.userName;
+				this.sourceLegalEntity.createdBy = this.userName;
 				this.sourceLegalEntity.updatedBy = this.userName;
 				this.sourceLegalEntity.masterCompanyId = 1;
 				this.workFlowtService.getNewACHLegalEntity(this.sourceLegalEntity).subscribe(data => {
@@ -666,7 +671,7 @@ this.isSpinnerVisible=false;
 		if (this.modal1) { this.modal1.close(); }
 
 	}
-	nextClick(nextOrPrevious , event) {
+	nextClick(nextOrPrevious, event) {
 		this.tabscreen = event;
 		this.nextOrPreviousTab = nextOrPrevious;
 		let content = this.tabRedirectConfirmationModal;
@@ -680,7 +685,7 @@ this.isSpinnerVisible=false;
 		if (this.tabscreen == 'ACHValue') {
 			this.ACH();
 		}
-		if (this.tabscreen =='NewTab') {
+		if (this.tabscreen == 'NewTab') {
 			this.tab.emit('Billing');
 		}
 		if (this.tabscreen == 'LockboxValue') {
@@ -698,13 +703,13 @@ this.isSpinnerVisible=false;
 		if (this.tabscreen == 'ACHValue') {
 			this.ACH();
 		}
-		if (this.tabscreen =='NewTab') {
+		if (this.tabscreen == 'NewTab') {
 			this.tab.emit('Billing');
 		}
 		if (this.tabscreen == 'LockboxValue') {
 			this.Lockbox();
 		}
-		
+
 	}
 	openContentEdit(content, row) {
 		this.isEditMode = true;
@@ -714,7 +719,7 @@ this.isSpinnerVisible=false;
 		this.sourceLegalEntity.createdDate = new Date(row.createdDate);
 		this.sourceLegalEntity.modifiedDate = new Date(row.updatedDate);
 		this.modal1 = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
-	
+
 	}
 	openEdit(content, row) {
 		this.GeneralInformation();
@@ -749,11 +754,11 @@ this.isSpinnerVisible=false;
 		this.sourceLegalEntity = row;
 
 	}
-	pattrenValidate(event){   
-		var k;  
+	pattrenValidate(event) {
+		var k;
 		k = event.charCode;
-		return( (k >= 48 && k <= 57)); 
-	 }
+		return ((k >= 48 && k <= 57));
+	}
 	toggleIsActive(rowData, e) {
 		if (e.checked == false) {
 			this.sourceLegalEntity = rowData;
@@ -823,28 +828,145 @@ this.isSpinnerVisible=false;
 		this.entityViewFeilds.achSWIFTID = row.achSWIFTID;
 
 	}
-    onFilterCountry(value){
-        this.CountryData(value);
-    }
-	setEditArray:any=[];
-     CountryData(value) {
-        this.setEditArray = [];
-        if (this.isEditMode == true) {
-            this.setEditArray.push(this.sourceLegalEntity.bankcountryId ? this.sourceLegalEntity.bankcountryId : 0);
-        } else {
-            this.setEditArray.push(0);
-        }
-        const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
-            this.countrycollection = res;
-        }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        });
+	onFilterCountry(value) {
+		this.CountryData(value);
 	}
-	errorMessageHandler(log) { 
-		this.isSpinnerVisible=false;
-	
+	setEditArray: any = [];
+	CountryData(value) {
+		this.setEditArray = [];
+		if (this.isEditMode == true) {
+			this.setEditArray.push(this.sourceLegalEntity.bankcountryId ? this.sourceLegalEntity.bankcountryId : 0);
+		} else {
+			this.setEditArray.push(0);
+		}
+		const strText = value ? value : '';
+		this.commonService.smartDropDownList('Countries', 'countries_id', 'nice_name').subscribe(res => {
+			// this.commonService.autoSuggestionSmartDropDownList('Countries', 'countries_id', 'nice_name', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+			this.countrycollection = res;
+		}, err => {
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);
+		});
 	}
+	errorMessageHandler(log) {
+		this.isSpinnerVisible = false;
 
+	}
+	auditHistoryHeaders: any = [];
+	auditHistory: any = [];
+	isSpinnerVisibleHistory: boolean = false;
+	getAuditHistoryById(type) {
+		if (type == 1) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.workFlowtService.getLeaglLockBoxHistory(this.id).subscribe(
+				res => {
+					this.auditHistory = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					this.isSpinnerVisibleHistory = false;
+					const errorLog = err;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'PO Box', field: 'poBox' },
+				{ header: 'Street Address Line 1', field: 'line1' },
+				{ header: 'Street Address Line 2', field: 'line2' },
+				{ header: 'City', field: 'city' },
+				{ header: 'Province/State', field: 'stateOrProvince' },
+				{ header: 'Country', field: 'countries_name' },
+				{ header: 'Postal Code', field: 'postalCode' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 2) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.workFlowtService.getLeaglDomesticHistory(this.id).subscribe(
+				res => {
+					this.auditHistory = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					const errorLog = err;
+					this.isSpinnerVisibleHistory = false;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediaryBankName' },
+				{ header: 'Benficiary Bank Name', field: 'benificiaryBankName' },
+				{ header: 'Bank Account Number', field: 'accountNumber' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 3) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.workFlowtService.getLeaglInternationalHistory(this.id).subscribe(
+				res => {
+					this.auditHistory = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					const errorLog = err;
+					this.isSpinnerVisibleHistory = false;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediaryBank' },
+				{ header: 'Benficiary', field: 'beneficiaryBank' },
+				{ header: 'Account Number', field: 'beneficiaryBankAccount' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		} else if (type == 4) {
+			this.auditHistoryHeaders = [];
+			this.isSpinnerVisibleHistory = true;
+			this.workFlowtService.getLeaglAchHistory(this.id).subscribe(
+				res => {
+					this.auditHistory = res;
+					this.isSpinnerVisibleHistory = false;
+				}, err => {
+					const errorLog = err;
+					this.isSpinnerVisibleHistory = false;
+					this.errorMessageHandler(errorLog);
+				});
+			this.auditHistoryHeaders = [
+				{ header: 'Bank Name', field: 'bankName' },
+				{ header: 'Intermediate Bank', field: 'intermediateBankName' },
+				{ header: 'Benficiary Bank Name', field: 'beneficiaryBankName' },
+				{ header: 'Bank Account Number', field: 'accountNumber' },
+				{ header: 'ABA Number', field: 'aba' },
+				{ header: 'SWIFT Code', field: 'swiftCode' },
+				{ header: 'Created Date', field: 'createdDate' },
+				{ header: 'Created By', field: 'createdBy' },
+				{ header: 'Updated Date', field: 'updatedDate' },
+				{ header: 'Updated By', field: 'updatedBy' }
+			];
+		}
+	}
+	CloserCOnatcHistory() {
+		$("#contentHist").modal("hide");
+	}
+	getColorCodeForHistory(i, field, value) {
+
+		const data = this.auditHistory;
+		const dataLength = data.length;
+		if (i >= 0 && i <= dataLength) {
+			if ((i + 1) === dataLength) {
+				return true;
+			} else {
+				return data[i + 1][field] === value
+			}
+		}
+	}
 }

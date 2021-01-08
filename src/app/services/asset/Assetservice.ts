@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject, forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { Role } from '../../models/role.model';
 import { AuthService } from '../auth.service';
 import { AssetEndpoint } from './Asset-endpoint.service';
@@ -106,7 +107,7 @@ export class AssetService {
     }
     //To get List from Database//
     getAssetList() {
-        return forkJoin(this.assetEndpoint.getAssetList<any[]>());
+        return Observable.forkJoin(this.assetEndpoint.getAssetList<any[]>());
     }
     getAssetNewList(data) {
         return this.assetEndpoint.getAssetNewList<any>(data);
@@ -115,7 +116,7 @@ export class AssetService {
         return this.assetEndpoint.getAssetListGlobalFilter<any>(data);
     }
     getAssetInventoryList(data) {
-        return forkJoin(this.assetEndpoint.getAssetInventoryList<any[]>(data));
+        return Observable.forkJoin(this.assetEndpoint.getAssetInventoryList<any[]>(data));
    
     } 
 
@@ -128,14 +129,14 @@ export class AssetService {
     }
 
     getAllAssetList() {
-        return forkJoin(this.assetEndpoint.getAllAssetList<any[]>());
+        return Observable.forkJoin(this.assetEndpoint.getAllAssetList<any[]>());
     }
 
     getByAssetId(assetId: number) { 
         return this.assetEndpoint.getByAssetIdDataEndpoint<any>(assetId);
     }
 getIntangibleList(){
-    return forkJoin(this.assetEndpoint.getIntangibleList<any[]>());
+    return Observable.forkJoin(this.assetEndpoint.getIntangibleList<any[]>());
 }
     getByAssetById(assetId: number) {
         return this.assetEndpoint.getByAssetIdByIDDataEndpoint<any>(assetId);
@@ -194,7 +195,7 @@ getIntangibleList(){
     
 
     getcapabilityListData(assetRecordId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetEndpoint.getCapabilityTypeListEndpoint<any[]>(assetRecordId));
     }
 
@@ -221,7 +222,7 @@ getIntangibleList(){
         return this.assetEndpoint.updateCapes(assetcapes, assetcapes.AssetCapesId,username);
     }
     getAssetWarrantyStatus() {
-        return forkJoin(this.assetEndpoint.getAssetWarrantyStatus<any[]>());
+        return Observable.forkJoin(this.assetEndpoint.getAssetWarrantyStatus<any[]>());
     }
     getAssetDataForInventoryById(id: number) {
         return this.assetEndpoint.getAssetDataForInventoryById(id);

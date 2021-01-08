@@ -1,11 +1,12 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable } from '@angular/core';
 import { HttpResponseBase } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
+import { Observable } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
 
 import { AppTranslationService } from '../services/app-translation.service';
 import { Utilities } from '../services/utilities';

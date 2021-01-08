@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, Input,  SimpleChanges } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import {  FormBuilder } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { fadeInOut } from '../../../services/animations';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { AuditHistory } from '../../../models/audithistory.model';
@@ -92,6 +92,8 @@ export class VendorShippingInformationComponent {
     selectedShipViaColumn: any[];
     selectedShipViaColumns: any[];
     cols: any[] = [
+        { field: 'tagName', header: 'TagName' },
+        { field: 'attention', header: 'Attention' },
         { field: 'siteName', header: 'Site Name' },
         { field: 'address1', header: 'Address1' },
         { field: 'address2', header: 'Address2' },
@@ -150,6 +152,10 @@ export class VendorShippingInformationComponent {
     totalPages: number = 0;
     isPrimaryshipvia: any;
     public sourceVendor: any = {};
+    textDomesticMemo:any;
+    textInternationalMemo:any;
+    disableShipVia:boolean=false;
+    disableEditor:any=true;
     
     isvendorEditMode: any;
     internationalShippingData: any = [];
@@ -169,8 +175,12 @@ export class VendorShippingInformationComponent {
     isEditInterShipVia: boolean = false;
     isEditDomesticShipVia: boolean = false;
     interShippingViaView: any = {};
+    currentstatus: string = 'Active';
+    currentDeletedstatus:boolean=false;
     domesticShippingViaView: any = {};
     pageSizeForInt: number = 10;
+    selectedOnly: boolean = false;
+    targetData: any;
     pageSizeForDomestic: number = 10;
     pageSizeForShipViaDomestic: number = 10;
     pageSizeForShipViaInt: number = 10;
@@ -217,6 +227,8 @@ export class VendorShippingInformationComponent {
     disableSaveShippingCountry: boolean = true;
     disableSaveShippingIntCountry: boolean = true;
     editSiteName: string = '';
+    arrayTagNamelist:any=[];
+    tagNamesList:any=[];
 
     constructor(private http: HttpClient, private router: Router,
         private authService: AuthService, private modalService: NgbModal,  private activeRoute: ActivatedRoute,    private commonService: CommonService, private configurations: ConfigurationService, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private datePipe: DatePipe) {
@@ -232,13 +244,16 @@ export class VendorShippingInformationComponent {
                 this.vendorId = this.activeRoute.snapshot.params['id'];
                 this.vendorService.vendorId = this.vendorId;
                 this.vendorService.listCollection.vendorId = this.vendorId; 
-                this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-                    res => {
-                            this.local = res[0];
-                    },err => {
-                        const errorLog = err;
-                        this.saveFailedHelper(errorLog);
+                if(this.vendorId > 0) 
+                {
+                    this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                        res => {
+                                this.local = res[0];
+                        },err => {
+                            const errorLog = err;
+                            this.saveFailedHelper(errorLog);
                     });
+                }                
             }
         }
         if (this.vendorService.listCollection !== undefined) {
@@ -330,6 +345,54 @@ export class VendorShippingInformationComponent {
 		  : null;
     }
 
+    parsedText(text) {
+    
+        if(text){
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+                const decodedString = dom.body.textContent;
+                return decodedString;
+        }
+          }
+    // memoType:any;
+    onSaveDomesticMemo(){
+        this.shipViaObj.memo=this.textDomesticMemo;
+        this.textDomesticMemo='';
+        this.disableShipVia=false;
+        $("#textarea-popup1").modal("hide");
+    
+    }
+    
+    onSaveInternationalMemo(){
+        this.shipViaInterObj.memo=this.textInternationalMemo;
+        this.textInternationalMemo='';
+        $("#textarea-popup2").modal("hide");
+        this.disableShipVia=false;
+    }
+    onAddDomesticMemo(){
+    this.textDomesticMemo=this.shipViaObj.memo;
+    this.disableEditor=true;
+    this.enableSaveDomeSticShipVia();
+    }
+    onAddInternationalmemo(){
+        this.textInternationalMemo=this.shipViaInterObj.memo;
+        this.disableEditor=true;
+    
+    }
+    
+    onCloseTextAreaInfo(type) {
+        if(type==1){
+            $("#textarea-popup1").modal("hide");
+        }else if(type==2){
+            $("#textarea-popup2").modal("hide");
+        }
+    }
+    editorgetmemo(){
+        this.disableEditor=false;
+        this.disableShipVia=false;
+    }
+   
     getshipvialistList(){
         this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(res => {
               this.shipViaDropdownList = res.map(x => {
@@ -398,7 +461,7 @@ export class VendorShippingInformationComponent {
         this.isPrimaryshipvia = rowObject.isPrimary;
         this.shipViaObj = { ...rowObject };
         this.isEditDomesticShipVia = true;
-        this.loadMasterCompanies();
+        //this.loadMasterCompanies();
     }
 
     updateActiveorInActiveShipViaForDS(rowData) {
@@ -412,13 +475,13 @@ export class VendorShippingInformationComponent {
         }, error => this.saveFailedHelper(error))
     }
 
-    private loadMasterCompanies() {
-        this.isSpinnerVisible = true;
-        this.masterComapnyService.getMasterCompanies().subscribe(
-            results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    }
+    // private loadMasterCompanies() {
+    //     this.isSpinnerVisible = true;
+    //     this.masterComapnyService.getMasterCompanies().subscribe(
+    //         results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
 
     openClassification(content) {
     }
@@ -477,10 +540,10 @@ export class VendorShippingInformationComponent {
         this.shippingauditHisory = auditHistory;
     }
 
-    private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
-        this.allComapnies = allComapnies;
-        this.isSpinnerVisible = false;
-    }
+    // private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
+    //     this.allComapnies = allComapnies;
+    //     this.isSpinnerVisible = false;
+    // }
 
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
@@ -490,7 +553,7 @@ export class VendorShippingInformationComponent {
         this.isEditMode = false;
         this.isDeleteMode = false;
         this.isSaving = true;
-        this.loadMasterCompanies();
+        //this.loadMasterCompanies();
         this.actionName = "";
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
@@ -527,6 +590,12 @@ export class VendorShippingInformationComponent {
         this.sourceVendor = { ...row, countryId: getObjectById('countries_id', row.countryId, this.allCountryinfo) };
         this.sourceVendor['tempIsPrimary'] = this.sourceVendor.isPrimary
 
+        if(row.contactTagId > 0)
+        {
+            this.arrayTagNamelist.push(row.contactTagId);
+            this.getAllTagNameSmartDropDown('', row.contactTagId);
+        }
+
         if(this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(row.vendorShippingAddressId); }
         this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
@@ -549,7 +618,7 @@ export class VendorShippingInformationComponent {
                 this.saveFailedHelper(errorLog);
             });
         
-        this.loadMasterCompanies();
+        //this.loadMasterCompanies();
         this.isEditShippingInfo = true;
         this.disableSaveDomesticSite = true;
     }
@@ -568,7 +637,7 @@ export class VendorShippingInformationComponent {
         this.updatedBy = row.updatedBy;
         this.createddate = row.createdDate;
         this.updatedDate = row.updatedDate;
-        this.loadMasterCompanies();
+        //this.loadMasterCompanies();
         this.openShipVia(row);
         this.getVendorBasicData(row.vendorId);
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -601,6 +670,35 @@ export class VendorShippingInformationComponent {
             results => this.onAuditHistoryLoadSuccessful(results, content),
             error => this.saveFailedHelper(error));
     }
+    closeDomesticDeleteModal() {
+		$("#downloadDomesticConfirmation").modal("hide");
+    }
+    closeInternDeleteModal() {
+		$("#downloadInternConfirmation").modal("hide");
+    }
+    
+    exportCSV(domesticShipInfo){
+        domesticShipInfo._value = domesticShipInfo._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        domesticShipInfo.exportCSV();
+    }
+
+    exportInternCSV(interShipInfo){
+        interShipInfo._value = interShipInfo._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        interShipInfo.exportCSV();
+    }
+
 
     editItemAndCloseModel() {
         this.isSaving = true;
@@ -614,6 +712,7 @@ export class VendorShippingInformationComponent {
                 this.sourceVendor.vendorId = this.local.vendorId;
                 this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
                 this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
                 this.vendorService.newShippingAdd(this.sourceVendor).subscribe(data => {
                     this.localCollection = data;
                     this.loadData();
@@ -627,6 +726,7 @@ export class VendorShippingInformationComponent {
                 this.sourceVendor.updatedBy = this.userName;
                 this.sourceVendor.siteName = editValueAssignByCondition('siteName', this.sourceVendor.siteName),
                 this.sourceVendor.countryId = editValueAssignByCondition('countries_id', this.sourceVendor.countryId);
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
                 this.sourceVendor.masterCompanyId = this.currentUserMasterCompanyId;
                 this.sourceVendor.isPrimary= this.sourceVendor.isPrimary ? this.sourceVendor.isPrimary :false;
                 this.vendorService.updateshippinginfo(this.sourceVendor).subscribe(data => {
@@ -736,7 +836,7 @@ export class VendorShippingInformationComponent {
         this.shipViaObj.memo = "";
         this.isSaving = true;
         this.loadShipViaCollection(rowData.vendorShippingAddressId);
-        this.loadMasterCompanies();
+        //this.loadMasterCompanies();
         this.sourceAction.isActive = true;
         this.getVendorBasicData(rowData.vendorId);
     }
@@ -1649,7 +1749,7 @@ export class VendorShippingInformationComponent {
     }
 
     getAllDomesticSiteSmartDropDown(strText = ''){
-        this.isSpinnerVisible = true;
+        //this.isSpinnerVisible = true;
 		if(this.arrayDomesricShipIdlist.length == 0) {
             this.arrayDomesricShipIdlist.push(0); }
         this.commonService.autoSuggestionSmartDropDownListWtihColumn('VendorShippingAddress', 'VendorShippingAddressId', 'SiteName','', 'VendorId', this.vendorId, 20,this.arrayDomesricShipIdlist.join()).subscribe(response => {
@@ -1660,7 +1760,7 @@ export class VendorShippingInformationComponent {
             })
             this.domesticSieList = [...this.domesticSieListOriginal];
             this.arrayDomesricShipIdlist = [];
-            this.isSpinnerVisible = false;
+            //this.isSpinnerVisible = false;
 		},err => {
 			const errorLog = err;
 			this.saveFailedHelper(errorLog);
@@ -1742,7 +1842,33 @@ export class VendorShippingInformationComponent {
     enableSaveDomeSticShipVia() {
 		this.disableSaveForEditShipVia = false;
     }
+
     enableSaveInternationalShipVia() {
 		this.disableSaveForEditShipViaInternational = false;
-	}
+    }
+    
+    filterTagNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllTagNameSmartDropDown(event.query); }
+    }
+   
+    getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+        if(this.arrayTagNamelist.length == 0) {			
+            this.arrayTagNamelist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+            this.tagNamesList = res.map(x => {
+                return {
+                    tagName: x.label, contactTagId: x.value 
+                }
+            })
+
+            if(contactTagId > 0)
+            {
+                this.sourceVendor = {
+                    ...this.sourceVendor,
+                    tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+                }
+            }
+        })
+    }
 }

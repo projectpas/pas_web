@@ -1,32 +1,19 @@
 ﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
-<!-- <div class="card"> -->
-    <!-- <div class="card-header"> -->
-        <!-- <nav aria-label="breadcrumb"> -->
-            <!-- <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;"> -->
-                <!-- <li class="breadcrumb-item active" aria-current="page">
-                    {{isEditMode ? 'Edit' : 'Create'}} Customer Work
-                </li> -->
-            <!-- </ol>
-        </nav>
-    </div> -->
-    <div class="card new-card">
-        <div class="card-header bg-primary new-card-header">
-          <div class="row">
+<div class="card new-card">
+    <div class="card-header bg-primary new-card-header">
+        <div class="row">
             <div class="col">
-              <h4 class="new-card-heading" style="font-size:19px;"> {{isEditMode ? 'Edit' : 'Create'}} Receive Customer Work</h4>
+                <h4 class="new-card-heading" style="font-size:19px;"> {{isEditMode? 'Edit' : ''}} Receive Customer Work</h4>
             </div>
             <div>
-              <button
-                type="button"
-                class="btn-sm new-btn-primary"
-                [routerLink]="['/receivingmodule/receivingpages/app-customer-works-list']"
-              >
-                Receive Customer List
-              </button>
+                <button type="button" class="btn-sm new-btn-primary"
+                    [routerLink]="['/receivingmodule/receivingpages/app-customer-works-list']">
+                    Receive Customer List
+                </button>
             </div>
-          </div>
         </div>
-        <div class="card-body new-card-body">
+    </div>
+    <div class="card-body new-card-body">
         <form #customerWorkForm="ngForm">
             <div class="form-row">
                 <div class="col-md-7">
@@ -35,28 +22,34 @@
                             <div class="form-group">
                                 <label>Receiving Num</label>
                                 <input class="form-control" type="text" name="receivingCusNum"
-                                       [(ngModel)]="receivingForm.receivingNumber" disabled>
+                                    [(ngModel)]="receivingForm.receivingNumber" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Received Date <span class="text-danger">*</span></label>
                                 <p-calendar class="workflow-clder" [maxDate]="currentDate" [showIcon]="true"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                            name="receivedDate" [(ngModel)]="receivingForm.receivedDate"></p-calendar>
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    name="receivedDate" [(ngModel)]="receivingForm.receivedDate"></p-calendar>
+                            </div>
+                            <div class="form-group">
+                                <label>Work Scope <span class="text-danger">*</span></label>
+                                <p-dropdown [showClear]="true" class="p-dropdown-100" required
+                                    (ngModelChange)="getActive()" (input)="onFilterWorkScope($event.target.value)"
+                                    [options]="workScopeList" filter="true" [(ngModel)]="receivingForm.workScopeId"
+                                    name="workScopeId" [resetFilterOnHide]="true" placeholder="--Select--"></p-dropdown>
                             </div>
                             <div class="form-group">
                                 <label>Customer Request Date <span class="text-danger">*</span></label>
                                 <p-calendar class="workflow-clder" [minDate]="receivingForm.receivedDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                            [showIcon]="true" name="custReqDate" [(ngModel)]="receivingForm.custReqDate"
-                                            required></p-calendar>
+                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [showIcon]="true" name="custReqDate"
+                                    [(ngModel)]="receivingForm.custReqDate" required></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Customer Ref <span class="text-danger">*</span></label>
-                                <input class="form-control" type="text" name="referenceId"
-                                       [(ngModel)]="receivingForm.reference" #custRef="ngModel" required>
-                                <!-- <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="receivingForm.referenceId" name="referenceId" [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" #custRef="ngModel" required></p-autoComplete> -->
+                                <input class="form-control" type="text" name="referenceId" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.reference" #custRef="ngModel" required>
                                 <div *ngIf="custRef.invalid && (custRef.dirty || custRef.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
+                                    class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="custRef.errors.required">
                                         <small> Please enter Customer Ref </small>
                                     </div>
@@ -65,43 +58,48 @@
                             <div class="form-group">
                                 <label>Employee Name <span class="text-danger">*</span></label>
                                 <p-autoComplete field="label" class="pautocomp-cstm"
-                                                [(ngModel)]="receivingForm.employeeId" name="employeeId"
-                                                [suggestions]="employeeNames" (completeMethod)="filterEmployees($event)" [size]="30"
-                                                [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [forceSelection]="true" #empName="ngModel" required></p-autoComplete>
+                                    [(ngModel)]="receivingForm.employeeId" name="employeeId"
+                                    (ngModelChange)="getActive()" [suggestions]="allEmployeeList"
+                                    (completeMethod)="filterEmployees($event)" [size]="30" [minLength]="1"
+                                    [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
+                                    #empName="ngModel" required></p-autoComplete>
                                 <div *ngIf="empName.invalid && (empName.dirty || empName.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
+                                    class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="empName.errors.required">
                                         <small> Employee Name is required </small>
                                     </div>
                                 </div>
                             </div>
-                         
-
-
-
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group customer_stock_styel">
-                                <div class="checkbox-cstm m-t-10">
-                                    <label>
-                                        <input type="checkbox" name="isCustomerStock"
-                                               [(ngModel)]="receivingForm.isCustomerStock" checked disabled>
-                                        <span class="cr disabled_color"><i class="cr-icon pi pi-check"></i></span>
-                                        Customer Stock
+                            <div class="form-group" style="float: right;">
+                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" name="assetRadio" class="form-check-inline"
+                                            [checked]="receivingForm.isCustomerStock == true"
+                                            (change)="getStockStatus(0)">
+                                        Rotable Customer Stock
+                                    </label>
+                                </div>
+                                <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="2" name="assetRadio" (change)="getStockStatus(1)"
+                                            [checked]="receivingForm.isCustomerStock == false">
+                                        Piece Parts
                                     </label>
                                 </div>
                             </div>
-                            <div class="form-group"> 
+                            <div class="form-group">
                                 <label>Customer Name <span class="text-danger">*</span></label>
                                 <p-autoComplete field="name" class="pautocomp-cstm" [disabled]="isEditCustomerWork"
-                                                [(ngModel)]="receivingForm.customerId" name="customerId" (keyup)="getCustomers($event.target.value)"
-                                                [suggestions]="customerNamesInfo" (completeMethod)="filterCustNames($event)"
-                                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [forceSelection]="true" (onSelect)="onSelectCustomer(receivingForm.customerId)"
-                                                #custName="ngModel" required></p-autoComplete>
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.customerId"
+                                    name="customerId" (keyup)="getCustomers($event.target.value, 1)"
+                                    [suggestions]="customerNamesInfo" (completeMethod)="filterCustNames($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    [forceSelection]="true" (onSelect)="onSelectCustomer(receivingForm.customerId)"
+                                    #custName="ngModel" required></p-autoComplete>
                                 <div *ngIf="custName.invalid && (custName.dirty || custName.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
+                                    class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="custName.errors.required">
                                         <small> Customer Name is required </small>
                                     </div>
@@ -109,31 +107,21 @@
                             </div>
                             <div class="form-group">
                                 <label>Customer Code <span class="text-danger">*</span></label>
-                                <input type="text"  class="form-control" disabled name="customerCode" [(ngModel)]="receivingForm.customerCode" [value]="receivingForm.customerCode">
-                                <!-- <p-autoComplete field="customerCode" class="pautocomp-cstm"
-                                                [(ngModel)]="receivingForm.customerCode" name="customerCode"
-                                                [suggestions]="customerCodesInfo" (completeMethod)="filterCustCodes($event)"
-                                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [forceSelection]="true" (onSelect)="onSelectCustomer(receivingForm.customerCode)"
-                                                #custCode="ngModel" required></p-autoComplete> -->
-                                <!-- <div *ngIf="custCode.invalid && (custCode.dirty || custCode.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
-                                    <div *ngIf="custCode.errors.required">
-                                        <small> Customer Code is required </small>
-                                    </div>
-                                </div> -->
+                                <input type="text" class="form-control" disabled name="customerCode"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.customerCode"
+                                    [value]="receivingForm.customerCode">
                             </div>
                             <div class="form-group">
                                 <label>Contact <span class="text-danger">*</span></label>
                                 <p-autoComplete (onSelect)="onSelectCustomerContact(receivingForm.customerContactId)"
-                                                field="customerContact" class="pautocomp-cstm" 
-                                                [(ngModel)]="receivingForm.customerContactId" name="customerContactId"
-                                                [suggestions]="customerContactInfo" (completeMethod)="filterCustContacts($event)"
-                                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [forceSelection]="true" [disabled]="custName.invalid" #cusContact="ngModel"
-                                                required></p-autoComplete>
+                                    field="customerContact" class="pautocomp-cstm" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.customerContactId" name="customerContactId"
+                                    [suggestions]="customerContactInfo" (completeMethod)="filterCustContacts($event)"
+                                    [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
+                                    [forceSelection]="true" [disabled]="custName.invalid" #cusContact="ngModel"
+                                    required></p-autoComplete>
                                 <div *ngIf="cusContact.invalid && (cusContact.dirty || cusContact.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
+                                    class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="cusContact.errors.required">
                                         <small> Contact is required </small>
                                     </div>
@@ -142,33 +130,34 @@
                             <div class="form-group">
                                 <label>Contact Phone <span class="text-danger">*</span></label>
                                 <p-autoComplete field="workPhone" class="pautocomp-cstm"
-                                                (onSelect)="onSelectCustomerContactPhone(receivingForm.customerPhone)"
-                                                [(ngModel)]="receivingForm.customerPhone" name="customerPhone"
-                                                [suggestions]="customerPhoneInfo" (completeMethod)="filterCustContactPhone($event)"
-                                                [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found"
-                                                [forceSelection]="true" [disabled]="custName.invalid" #cusPhone="ngModel" required>
+                                    (onSelect)="onSelectCustomerContactPhone(receivingForm.customerPhone)"
+                                    [(ngModel)]="receivingForm.customerPhone" name="customerPhone"
+                                    (ngModelChange)="getActive()" [suggestions]="customerPhoneInfo"
+                                    (completeMethod)="filterCustContactPhone($event)" [size]="30" [minLength]="1"
+                                    [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
+                                    [disabled]="custName.invalid" #cusPhone="ngModel" required>
                                 </p-autoComplete>
                                 <div *ngIf="cusPhone.invalid && (cusPhone.dirty || cusPhone.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
+                                    class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="cusPhone.errors.required">
                                         <small> Contact Phone is required </small>
                                     </div>
                                 </div>
-                                <!-- <input class="form-control" type="text" name="workPhone" [(ngModel)]="receivingForm.workPhone" required> -->
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <div class="form-group"> 
+                            <div class="form-group">
                                 <label>PN <span class="text-danger">*</span></label>
-                                <p-autoComplete field="partNumber" class="pautocomp-cstm"
-                                                [(ngModel)]="receivingForm.itemMasterId" name="partNumber"
-                                                [suggestions]="partNumbersInfo" (completeMethod)="filterPartNumbers($event)"
-                                                [size]="30" [minLength]="1" [dropdown]="true" (keyup)="loadPartNumData($event.target.value)"
-                                                (onSelect)="onPartNumberSelected(receivingForm.itemMasterId); resetSerialNoTimeLife();"
-                                                #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true"
-                                                required></p-autoComplete>
+                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                    [(ngModel)]="receivingForm.itemMasterId" name="partNumber"
+                                    (ngModelChange)="getActive()" [suggestions]="partNumbersInfo"
+                                    (completeMethod)="filterPartNumbers($event)" [size]="30" [minLength]="1"
+                                    [dropdown]="true" (keyup)="loadPartNumData($event.target.value)"
+                                    (onSelect)="onPartNumberSelected(receivingForm.itemMasterId,'html'); resetSerialNoTimeLife();"
+                                    #partNum="ngModel" errorMessage="Records not found" [forceSelection]="true"
+                                    required></p-autoComplete>
                                 <div *ngIf="partNum.invalid && (partNum.dirty || partNum.touched)"
-                                     class="alert alert-danger alert-danger-cstm">
+                                    class="alert alert-danger alert-danger-cstm">
                                     <div *ngIf="partNum.errors.required">
                                         <small> Part Number is required </small>
                                     </div>
@@ -177,39 +166,37 @@
                             <div class="form-group">
                                 <label>PN Description</label>
                                 <input class="form-control" type="text" name="partDescription"
-                                       [(ngModel)]="receivingForm.partDescription" disabled>
+                                    [(ngModel)]="receivingForm.partDescription" disabled>
                             </div>
-
                             <div class="form-group">
                                 <label>Revised PN</label>
-                                <input class="form-control" type="text" name="revisePartId"
-                                       [(ngModel)]="receivingForm.revisePartId" disabled>
+                                <input class="form-control" type="text" name="revisedPart"
+                                    [(ngModel)]="receivingForm.revisedPart" disabled>
                             </div>
                             <div class="form-group">
                                 <label>Item Group</label>
                                 <input class="form-control" disabled type="text" name="itemGroup"
-                                       [(ngModel)]="receivingForm.itemGroup">
+                                    [(ngModel)]="receivingForm.itemGroup">
                             </div>
                             <div class="form-group">
                                 <label>Manufacturer</label>
                                 <input class="form-control" type="text" name="manufacturer"
-                                       [(ngModel)]="receivingForm.manufacturer" disabled>
+                                    [(ngModel)]="receivingForm.manufacturer" disabled>
                             </div>
                             <div class="form-group">
                                 <label>QTY</label>
                                 <input class="form-control" type="number" name="quantity"
-                                       [(ngModel)]="receivingForm.quantity" disabled>
+                                    [(ngModel)]="receivingForm.quantity" disabled>
                             </div>
-
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Condition <span class="text-danger">*</span></label>
                                 <select class="form-control" name="conditionId" [(ngModel)]="receivingForm.conditionId"
-                                        (change)="onSelectCondition()" required>
+                                    (ngModelChange)="getActive()" (change)="onSelectCondition()" required>
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let condition of allConditionInfo"
-                                            [ngValue]="condition.conditionId">
+                                        [ngValue]="condition.conditionId">
                                         {{condition.description}}
                                     </option>
                                 </select>
@@ -217,10 +204,9 @@
                             <div class="form-group">
                                 <label>
                                     Site <span class="text-danger">*</span>
-                                    <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Create Site" matTooltipPosition="above" target="_blank" [routerLink]="['/singlepages/singlepages/app-site']"></a></span> -->
                                 </label>
-                                <select [(ngModel)]="receivingForm.siteId" name="siteId"
-                                        (change)="siteValueChange(receivingForm.siteId)" required>
+                                <select [(ngModel)]="receivingForm.siteId" name="siteId" (ngModelChange)="getActive()"
+                                    (change)="siteValueChange(receivingForm.siteId)" required>
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let site of allSites" [ngValue]="site.siteId">{{site.name}}</option>
                                 </select>
@@ -228,7 +214,8 @@
                             <div class="form-group">
                                 <label>Warehouse</label>
                                 <select [(ngModel)]="receivingForm.warehouseId" name="warehouseId"
-                                        (change)="wareHouseValueChange(receivingForm.warehouseId)">
+                                    (ngModelChange)="getActive()"
+                                    (change)="wareHouseValueChange(receivingForm.warehouseId)">
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let site of allWareHouses" [ngValue]="site.warehouseId">
                                         {{site.name}}
@@ -238,7 +225,8 @@
                             <div class="form-group">
                                 <label>Location</label>
                                 <select [(ngModel)]="receivingForm.locationId" name="locationId"
-                                        (change)="locationValueChange(receivingForm.locationId)">
+                                    (ngModelChange)="getActive()"
+                                    (change)="locationValueChange(receivingForm.locationId)">
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let site of allLocations" [ngValue]="site.locationId">
                                         {{site.name}}
@@ -247,8 +235,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Shelf</label>
-                                <select [(ngModel)]="receivingForm.shelfId" name="shelfId"
-                                        (change)="shelfValueChange(receivingForm.shelfId)">
+                                <select [(ngModel)]="receivingForm.shelfId" name="shelfId" (ngModelChange)="getActive()"
+                                    (change)="shelfValueChange(receivingForm.shelfId)">
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let site of allShelfs" [ngValue]="site.shelfId">
                                         {{site.name}}
@@ -257,14 +245,12 @@
                             </div>
                             <div class="form-group">
                                 <label>Bin</label>
-                                <select [(ngModel)]="receivingForm.binId" name="binId">
+                                <select [(ngModel)]="receivingForm.binId" name="binId" (ngModelChange)="getActive()">
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let site of allBins" [ngValue]="site.binId">{{site.name}}</option>
                                 </select>
                             </div>
-
                         </div>
-
                     </div>
                     <div class="col-md-12">
                         <div [ngClass]="receivingForm.isTimeLife ? 'card card-timelife' : ''">
@@ -275,7 +261,8 @@
                                             <div class="checkbox-cstm m-t-15">
                                                 <label>
                                                     <input type="checkbox" name="isSerialized"
-                                                           [(ngModel)]="receivingForm.isSerialized" disabled>
+                                                        (ngModelChange)="getActive()"
+                                                        [(ngModel)]="receivingForm.isSerialized" disabled>
                                                     <span class="cr disabled_color">
                                                         <i class="cr-icon pi pi-check"></i>
                                                     </span>
@@ -286,17 +273,14 @@
                                     </div>
                                     <div class="col-md-6" *ngIf="receivingForm.isSerialized">
                                         <div class="form-group">
-
-
-
                                             <div class="checkbox-cstm m-t-15">
                                                 <label>
                                                     <input type="checkbox" name="isSkipSerialNo"
-                                                           [(ngModel)]="receivingForm.isSkipSerialNo"
-                                                           (change)="resetSerialNo()">
+                                                        (ngModelChange)="getActive()"
+                                                        [(ngModel)]="receivingForm.isSkipSerialNo"
+                                                        (change)="resetSerialNo()">
                                                     <span class="cr">
                                                         <i class="cr-icon pi pi-check">
-
                                                         </i>
                                                     </span>
                                                     Serial Number info not provided
@@ -308,11 +292,11 @@
                                         <div class="form-group" *ngIf="!receivingForm.isSkipSerialNo">
                                             <label>
                                                 Serial Number <span *ngIf="receivingForm.isSerialized"
-                                                                    class="text-danger">*</span>
+                                                    class="text-danger">*</span>
                                             </label>
                                             <input class="form-control" type="text" name="serialNumber"
-                                                   [(ngModel)]="receivingForm.serialNumber"
-                                                   [required]="receivingForm.isSerialized">
+                                                [(ngModel)]="receivingForm.serialNumber" (ngModelChange)="getActive()"
+                                                [required]="receivingForm.isSerialized">
                                         </div>
                                     </div>
                                 </div>
@@ -328,7 +312,7 @@
                                             <div class="checkbox-cstm m-t-15">
                                                 <label>
                                                     <input type="checkbox" name="isTimeLife"
-                                                           [(ngModel)]="receivingForm.isTimeLife" disabled>
+                                                        [(ngModel)]="receivingForm.isTimeLife" disabled>
                                                     <span class="cr disabled_color">
                                                         <i class="cr-icon pi pi-check"></i>
                                                     </span>
@@ -342,11 +326,11 @@
                                             <div class="checkbox-cstm m-t-15">
                                                 <label>
                                                     <input type="checkbox" name="isSkipTimeLife"
-                                                           [(ngModel)]="receivingForm.isSkipTimeLife"
-                                                           (change)="resetTimelife()">
+                                                        (ngModelChange)="getActive()"
+                                                        [(ngModel)]="receivingForm.isSkipTimeLife"
+                                                        (change)="resetTimelife()">
                                                     <span class="cr">
                                                         <i class="cr-icon pi pi-check">
-
                                                         </i>
                                                     </span>
                                                     Time Life info not provided
@@ -357,30 +341,29 @@
                                     <div class="col-md-3" *ngIf="receivingForm.isTimeLife">
                                         <div class="form-group" *ngIf="!receivingForm.isSkipTimeLife">
                                             <label>
-                                                Date <span *ngIf="receivingForm.isTimeLife"
-                                                           class="text-danger">*</span>
+                                                Date <span *ngIf="receivingForm.isTimeLife" class="text-danger">*</span>
                                             </label>
                                             <p-calendar class="workflow-clder" [showIcon]="true" name="timeLifeDate"
-                                                        [(ngModel)]="receivingForm.timeLifeDate"
-                                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                                        [required]="receivingForm.isTimeLife"></p-calendar>
+                                                [(ngModel)]="receivingForm.timeLifeDate" (ngModelChange)="getActive()"
+                                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                                [required]="receivingForm.isTimeLife"></p-calendar>
                                         </div>
                                     </div>
                                     <div class="col-md-3" *ngIf="receivingForm.isTimeLife">
                                         <div class="form-group" *ngIf="!receivingForm.isSkipTimeLife">
                                             <label>
                                                 Origin <span *ngIf="receivingForm.isTimeLife"
-                                                             class="text-danger">*</span>
+                                                    class="text-danger">*</span>
                                             </label>
                                             <input class="form-control" type="text" name="timeLifeOrigin"
-                                                   [(ngModel)]="receivingForm.timeLifeOrigin"
-                                                   [required]="receivingForm.isTimeLife">
+                                                [(ngModel)]="receivingForm.timeLifeOrigin" (ngModelChange)="getActive()"
+                                                [required]="receivingForm.isTimeLife">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.isTimeLife">
                                     <div class="table-responsive form-group" style="padding: 0 5px;"
-                                         *ngIf="!receivingForm.isSkipTimeLife">
+                                        *ngIf="!receivingForm.isSkipTimeLife">
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -399,98 +382,95 @@
                                                 <tr>
                                                     <td>Remaining</td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="cyclesRemaining"
-                                                               [(ngModel)]="sourceTimeLife.cyclesRemaining">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="cyclesRemaining" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.cyclesRemaining">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="timeRemaining"
-                                                               [(ngModel)]="sourceTimeLife.timeRemaining">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="timeRemaining" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.timeRemaining">
                                                     </td>
                                                     <td></td>
-
                                                 </tr>
                                                 <tr>
                                                     <td>Since New</td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="cyclesSinceNew"
-                                                               [(ngModel)]="sourceTimeLife.cyclesSinceNew">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="cyclesSinceNew" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceNew">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="timeSinceNew"
-                                                               [(ngModel)]="sourceTimeLife.timeSinceNew">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="timeSinceNew" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceNew">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="lastSinceNew"
-                                                               [(ngModel)]="sourceTimeLife.lastSinceNew">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="lastSinceNew" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceNew">
                                                     </td>
-
                                                 </tr>
                                                 <tr>
                                                     <td>Since Ovh</td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="cyclesSinceOVH"
-                                                               [(ngModel)]="sourceTimeLife.cyclesSinceOVH">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="cyclesSinceOVH" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceOVH">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="timeSinceOVH"
-                                                               [(ngModel)]="sourceTimeLife.timeSinceOVH">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="timeSinceOVH" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceOVH">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="lastSinceOVH"
-                                                               [(ngModel)]="sourceTimeLife.lastSinceOVH">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="lastSinceOVH" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceOVH">
                                                     </td>
-
                                                 </tr>
                                                 <tr>
                                                     <td>Since Insp</td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="cyclesSinceInspection"
-                                                               [(ngModel)]="sourceTimeLife.cyclesSinceInspection">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="cyclesSinceInspection" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceInspection">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="timeSinceInspection"
-                                                               [(ngModel)]="sourceTimeLife.timeSinceInspection">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="timeSinceInspection" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceInspection">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="lastSinceInspection"
-                                                               [(ngModel)]="sourceTimeLife.lastSinceInspection">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="lastSinceInspection" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.lastSinceInspection">
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Since Repair</td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="cyclesSinceRepair"
-                                                               [(ngModel)]="sourceTimeLife.cyclesSinceRepair">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="cyclesSinceRepair" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.cyclesSinceRepair">
                                                     </td>
                                                     <td class="clr2 text-center">
-                                                        <input type="number"
-                                                               (keypress)="restrictMinus($event)" class="w60 form-control"
-                                                               placeholder="hours" name="timeSinceRepair"
-                                                               [(ngModel)]="sourceTimeLife.timeSinceRepair">
+                                                        <input type="number" (keypress)="restrictMinus($event)"
+                                                            class="w60 form-control" placeholder="hours"
+                                                            name="timeSinceRepair" (ngModelChange)="getActive()"
+                                                            [(ngModel)]="sourceTimeLife.timeSinceRepair">
                                                     </td>
                                                     <td></td>
                                                 </tr>
@@ -501,303 +481,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-md-12">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <div class="checkbox-cstm m-t-15">
-                                    <label>
-                                        <input type="checkbox" name="isTimeLife1"
-                                               [(ngModel)]="isDocumentsToShow" [value]="isDocumentsToShow==true" >
-                                        <span class="cr disabled_color1">
-                                            <i class="cr-icon pi pi-check"></i>
-                                        </span>
-                                        Attachments 
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="isDocumentsToShow">
-                            <h6  style="padding-left: 10px; margin-top: 20px;">Attachment Details
-                                <a class="plusicon-cstm"
-                                href="#"
-                                data-toggle="modal"
-                                data-target="#addDocumentDetails"
-                                (click)="addDocumentDetails()">
-                                 <i class="fa fa-plus-circle fa-lg"
-                                    matTooltip="Create Documents" matTooltipPosition="above"></i>
-                             </a>
-                            
-                            </h6>
-                            <p-table #table4 class="rpo-table-cstm cus_pf"
-                                     [columns]="selectedColumns"
-                                     [value]="sourceViewforDocumentList"
-                                     [paginator]="true"
-                                     [rows]="3"
-                                     [rowsPerPageOptions]="[3, 6, 9, 15]" (onPage)="pageIndexChange($event)">
-                                <ng-template pTemplate="header" let-columns>
-                                    <tr>
-                                        <th *ngFor="let col of columns" style="width: 100px;">
-                                            {{ col.header }}
-                                        </th>
-                                        <th style="width: 100px;">Actions</th>
-                                     </tr>
-
-                                </ng-template>
-                                <ng-template pTemplate="header" let-columns>
-                                    <tr>
-                                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                                            [pSortableColumn]="col.field">
-                                            {{ col.header }}
-                                            <p-sortIcon [field]="col.field">
-                                            </p-sortIcon>
-                                        </th>
-                                        <th>Action</th>
-                                    </tr>
-                                    <tr>
-                                        <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <input type="text"
-                                                   (input)="table4.filter($event.target.value, col.field,'contains') "
-                                                   *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                   style="width:100%;" pInputText>
-                                            <input type="date" class="hidePlaceHolder"
-                                                   *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                   style="width:100%;"
-                                                   (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                             <input type="date" class="hidePlaceHolder"
-                                                   *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                   style="width:100%;"
-                                                   (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                        </th>
-                                        <th style="width:140px;position:sticky"></th>
-
-                                    </tr>
-                                </ng-template>
-
-                                <ng-template pTemplate="body"
-                                             let-rowData
-                                             let-columns="columns"
-                                             let-rowIndex="rowIndex">
-                                    <tr [pSelectableRow]="rowData">
-                                        <ng-container *ngFor="let col of columns">
-                                            <td *ngIf="col.field != 'fileName'"
-                                                class="ui-resizable-column"
-                                                pReorderableRowHandle>
-                                                {{
-                      col.field == 'createdDate'
-                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                        : rowData[col.field] && col.field == 'updatedDate'
-                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                        : rowData[col.field]
-                                                }}
-                                            </td>
-                                            <td *ngIf="col.field == 'fileName'">
-                                                <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData)">
-                                                    {{ rowData[col.field] }}
-                                                </a>
-                                                <a *ngIf="rowData.isFileFromServer == false"
-                                                   [href]="rowData.link"
-                                                   download="{{rowData.fileName}}"
-                                                   matTooltip="Download" matTooltipPosition="above"
-                                                   class="filelink">
-                                                    {{ rowData[col.field] }}
-
-                                                </a>
-                                            </td>
-                                        </ng-container>
-
-                                        <td style="width: 70px;">
-                                            <span data-toggle="modal"
-                                                  data-target="#addDocumentDetails">
-                                                <a class="btn nobg"
-                                                   (click)="editCustomerDocument(rowData,rowIndex)" matTooltip="Edit"
-                                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
-                                            </span>
-
-                                            <a class="btn btn-danger nobg" (click)="deleteAttachmentRow(rowData, rowIndex,deleteContent)"
-                                               matTooltip="Delete" matTooltipPosition="above" data-target="#delete" data-toggle="modal">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                            <!--<span>
-                    <a class="btn nobg"
-                       (click)="openHistory(contentAuditHist, rowData)"
-                       matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                </span>-->
-                                            <button [disabled]="!rowData.isFileFromServer" class="btn-edit set_proper_align set_position"
-                                                    mat-icon-button (click)="openHistory(contentAuditHist,rowData)"
-                                                    matTooltip="History" matTooltipPosition="above">
-                                                <i class="fa fa-history"
-                                                   [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
-                                            </button>
-
-                                        </td>
-                                    </tr>
-
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage"
-                                             let-columns
-                                             *ngIf="sourceViewforDocumentList.length == 0">
-                                    <tr>
-                                        <td [attr.colspan]="10"
-                                            style="color: red; font-weight: bold; text-align: center">
-                                            No records found
-                                        </td>
-
-                                    </tr>
-                                </ng-template>
-
-                                <ng-template pTemplate="summary" id="footer">
-                                    <label id="footer" class="footer">Total:</label>
-                                    <input style="width: 5%;" [(ngModel)]="totalRecordNew" name="no'of records" disabled
-                                           pInputText type="text" />
-
-                                    &nbsp;&nbsp;
-                                    <label id="footer" class="footer1">Pages Count:</label>
-
-                                    <input style="width: 5%;" [ngModel]="totalPagesNew"
-                                           name="page count" disabled pInputText type="text" />
-                                </ng-template>
-
-                            </p-table>
-                        </div>
-
-
-                        <div class="form-group" *ngIf="receivingForm.isDocs">
-                            <!-- <div class="table-responsive table-overflow" *ngIf="customerWorkDocumentsList.length> 0">
-                                <h4 class="panel-title" >Attachment Details:</h4>
-                                <table class="table table-bordered ">
-                                    <thead>
-                                        <tr>
-                                            <th>File Name</th>
-                                            <th>Download</th>
-                                            <th>Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody *ngFor="let f of customerWorkDocumentsList">
-                                        <tr>
-                                            <td>{{f.fileName}}</td>
-                                            <td><a (click)="downloadFileUpload(f)" matTooltip="Download" class="btn nobg btn-cstm"><span><i class="fa fa-download"></i></span></a> </td>
-                                            <td>  <button class="btn-delete" mat-icon-button matTooltip="Delete" (click)="getEmployeeAttachmentDelete(f)">
-                                            <mat-icon color="warn">delete</mat-icon> </button>
-                                        </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div> -->
-
-                            <p-table #table3 class="table-responsive rpo-table-cstm"
-                                     [paginator]="customerWorkDocumentsList.length > 0" [value]="customerWorkDocumentsList"
-                                     [rows]="5" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
-                                     [columns]="documentTableColumns" (onPage)="pageIndexChange($event)">
-                                <ng-template pTemplate="colgroup" let-columns>
-                                    <colgroup>
-                                        <col *ngFor="let col of columns" style="width:130px" />
-                                    </colgroup>
-                                </ng-template>
-                                <ng-template pTemplate="header" let-columns>
-                                    <tr>
-                                        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                                            [pSortableColumn]="col.field">
-                                            {{ col.header }}
-                                            <p-sortIcon *ngIf="col.field !='download' && col.field !='delete'"
-                                                        [field]="col.field">
-                                            </p-sortIcon>
-                                        </th>
-
-                                    </tr>
-                                    <tr>
-                                        <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <input type="text"
-                                                   (input)="table3.filter($event.target.value, col.field,'contains') "
-                                                   *ngIf="col.field !='download' && col.field !='delete' && col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                   style="width:100%;" pInputText>
-                                            <input type="date" class="hidePlaceHolder"
-                                                   *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                   style="width:100%;"
-                                                   (change)="dateFilterForTable($event.target.value, col.field )">
-                                            <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                            <input type="date" class="hidePlaceHolder"
-                                                   *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                   style="width:100%;"
-                                                   (change)="dateFilterForTable($event.target.value, col.field )">
-                                        </th>
-                                        <th style="width:140px;position:sticky"></th>
-                                        <th></th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
-                                    <tr *ngIf="customerWorkDocumentsList.length > 0">
-                                        <td *ngFor="let col of columns">
-                                            <!-- *ngIf="col.field == 'fileName'   col.field == 'createdDate' || col.field == 'createdBy' || col.field == 'updatedDate' || col.field == 'updatedBy' " -->
-                                            <!-- <ng-container > -->
-                                            <ng-container *ngIf="col.field !='download' && col.field !='delete'">
-                                                <span>
-                                                    {{
-                                      col.field == 'createdDate'
-                                        ? (rowData[col.field] | date: 'dd/MM/yyyy')
-                                        : rowData[col.field] && col.field == 'updatedDate'
-                                        ? (rowData[col.field] | date: 'dd/MM/yyyy')
-                                        : rowData[col.field]
-                                                    }}
-                                                </span>
-                                                <!-- <span *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
-                                                rowData[col.field]
-                                                </span> -->
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field =='download'" class="align_center">
-                                                <a (click)="downloadFileUpload(rowData)" matTooltip="Download"
-                                                   matTooltipPosition="above" class="btn nobg btn-cstm">
-                                                    <span>
-                                                        <i class="fa fa-download"></i>
-                                                    </span>
-                                                </a>
-                                            </ng-container>
-                                            <ng-container *ngIf="col.field =='delete'" class="align_center">
-
-                                                <span moduleName="app-customer-edit" requirePermission="canDelete"
-                                                      data-target="#delete" data-toggle="modal">
-                                                    <a class="btn nobg" (click)="getEmployeeAttachmentDelete(rowData)"
-                                                       matTooltip="Delete" matTooltipPosition="above">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </span>
-
-
-                                                <!-- <button moduleName="app-customer-edit" requirePermission="canDelete"
-                                                  class="btn-delete" mat-icon-button matTooltip="Delete"
-                                                   matTooltipPosition="above"
-                                                  data-target="#delete" data-toggle="modal"
-                                                   (click)="getEmployeeAttachmentDelete(rowData)">
-                                                  <mat-icon color="warn">delete</mat-icon>
-                                                </button> -->
-                                            </ng-container>
-                                            <!-- </ng-container> -->
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="summary" id="footer">
-                                    <label id="footer" class="footer">Total:</label>
-                                    <input style="width: 5%;" [(ngModel)]="table3._totalRecords" name="no'of records"
-                                           disabled pInputText type="text" />
-
-                                    &nbsp;&nbsp;
-                                    <label id="footer" class="footer1">Pages Count:</label>
-
-                                    <input style="width: 5%;" [ngModel]="getPageCount(table3._totalRecords, pageSize)"
-                                           name="page count" disabled pInputText type="text" />
-                                </ng-template>
-                                <ng-template pTemplate="emptymessage" let-columns
-                                             *ngIf="customerWorkDocumentsList.length == 0">
-                                    <tr>
-                                        <td [attr.colspan]="7"
-                                            style="color: red; font-weight: bold; text-align: start;padding-left: 16% !important;">
-                                            No records found
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-md-5">
                     <div class="form-row">
@@ -805,98 +488,79 @@
                             <div class="form-group">
                                 <label>
                                     Certify By
-                                    <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Employee" matTooltipPosition="above" target="_blank" [routerLink]="['/employeesmodule/employeepages/app-employee-general-information']"></a></span> -->
                                 </label>
-                                <input class="form-control" type="text" name="certifiedBy"
-                                       [(ngModel)]="receivingForm.certifiedBy">
-                                <!-- <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="receivingForm.certifiedById" name="certifiedBy" [suggestions]="employeeNames" (completeMethod)="filterEmployees($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"></p-autoComplete> -->
+                                <input class="form-control" type="text" name="certifiedBy" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.certifiedBy">
                             </div>
                             <div class="form-group">
                                 <label>Parts Cert Num</label>
                                 <input class="form-control" type="text" name="partCertificationNumber"
-                                       [(ngModel)]="receivingForm.partCertificationNumber">
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.partCertificationNumber">
                             </div>
                             <div class="form-group">
                                 <label>Tag Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="tagDate"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                            [(ngModel)]="receivingForm.tagDate"></p-calendar>
+                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [(ngModel)]="receivingForm.tagDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Tag Type</label>
-                                <!-- <select [(ngModel)]="receivingForm.tagTypeId" name="tagType">
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let tag of allTagTypes" [ngValue]="tag.tagTypeId">
-                                        {{tag.name}}
-                                    </option>
-                                </select> -->
-                                <p-multiSelect [options]="allTagTypes" [(ngModel)]="receivingForm.tagType" name="tagType"> 
+                                <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
                                 </p-multiSelect>
                             </div>
-
-
                         </div>
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom: 8px;">
                                 <label>Obtain From <span class="text-danger">*</span> </label>
-                                <!-- <select [(ngModel)]="receivingForm.obtainFromTypeId" required name="obtainFromTypeId"
-                                        (change)="onSelectObrainFrom()">
+                                <select [(ngModel)]="receivingForm.obtainFromTypeId" (ngModelChange)="getActive()"
+                                    name="obtainFromTypeId"
+                                    (change)="onSelectObrainFrom(receivingForm.obtainFromTypeId)" required>
                                     <option value="0">-- Select --</option>
-                                    <option value="1">Customer</option> 
-                                    <option value="2">Vendor</option>
-                                    <option value="3">Company</option>
-                                    <option value="4">Other</option>
-                                </select> -->
-                                <select [(ngModel)]="receivingForm.obtainFromTypeId" name="obtainFromTypeId" (change)="onSelectObrainFrom(receivingForm.obtainFromTypeId)" required>
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">{{item.moduleName}}</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
                                 </select>
                             </div>
                             <div class="form-group" style="margin-bottom: 8px !important;">
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 1">
                                     <div class="col-sm-12">
-                                        <label> 
+                                        <label>
                                             Customer <span class="text-danger">*</span>
-                                            <!-- <a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a>  -->
-                                        </label> 
+                                        </label>
                                         <p-autoComplete field="name" class="pautocomp-cstm"
-                                                        [required]="receivingForm.obtainFromTypeId == 1" (keyup)="getCustomers($event.target.value)"
-                                                        [(ngModel)]="receivingForm.obtainFrom" name="obtainFromCustomer"
-                                                        [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
-                                                         </div>
-                                    <!-- <div class="col-sm-1"> -->
-                                    <!-- <div style="cursor:pointer; font-size:14px; margin:2px -7px;"><a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Customer" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a></div> -->
-                                    <!-- </div> -->
+                                            (ngModelChange)="getActive()"
+                                            [required]="receivingForm.obtainFromTypeId == 1"
+                                            (keyup)="getCustomers($event.target.value, 2)"
+                                            [(ngModel)]="receivingForm.obtainFrom" name="obtainFromCustomer"
+                                            [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
+                                    </div>
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 2">
                                     <div class="col-sm-12">
                                         <label>
                                             Vendor <span class="text-danger">*</span>
-                                            <!-- <a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"></a> -->
                                         </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                        [required]="receivingForm.obtainFromTypeId == 2"
-                                                        [(ngModel)]="receivingForm.obtainFrom" name="obtainFromVendor"
-                                                        [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true">
+                                            (ngModelChange)="getActive()"
+                                            [required]="receivingForm.obtainFromTypeId == 2"
+                                            [(ngModel)]="receivingForm.obtainFrom" name="obtainFromVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
-                                    <!-- <div class="col-sm-1">
-                                        <div style="cursor:pointer; font-size:14px; margin:2px -7px;"><a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"></a></div>
-                                    </div> -->
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 9">
                                     <div class="col-sm-12">
                                         <label>Company <span class="text-danger">*</span> </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                        [(ngModel)]="receivingForm.obtainFrom" name="obtainFromCompany"
-                                                        [suggestions]="companyList" (completeMethod)="filterCompanyNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found"
-                                                        [required]="receivingForm.obtainFromTypeId == 9" [forceSelection]="true">
+                                            (ngModelChange)="getActive()" [(ngModel)]="receivingForm.obtainFrom"
+                                            name="obtainFromCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found"
+                                            [required]="receivingForm.obtainFromTypeId == 9" [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
                                 </div>
@@ -904,72 +568,60 @@
                                     <div class="col-sm-12">
                                         <label>Other <span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" name="obtainFromOther"
-                                               [required]="receivingForm.obtainFromTypeId == 4"
-                                               [(ngModel)]="receivingForm.obtainFrom">
+                                            (ngModelChange)="getActive()"
+                                            [required]="receivingForm.obtainFromTypeId == 4"
+                                            [(ngModel)]="receivingForm.obtainFrom">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 8px !important;">
                                 <label>Owner <span class="text-danger">*</span></label>
-                                <!-- <select [(ngModel)]="receivingForm.ownerTypeId" name="ownerType"
-                                        (change)="onSelectOwner()" required>
+                                <select [(ngModel)]="receivingForm.ownerTypeId" name="ownerType"
+                                    (ngModelChange)="getActive()" (change)="onSelectOwner(receivingForm.ownerTypeId)"
+                                    required>
                                     <option value="0">-- Select --</option>
-                                    <option value="1">Customer</option>
-                                    <option value="2">Vendor</option>
-                                    <option value="3">Company</option>
-                                    <option value="4">Other</option>
-                                </select> -->
-                                <select [(ngModel)]="receivingForm.ownerTypeId" name="ownerType" (change)="onSelectOwner(receivingForm.ownerTypeId)" required>
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">{{item.moduleName}}</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
                                 </select>
                             </div>
-
                             <div class="form-group">
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 1">
                                     <div class="col-sm-12">
                                         <label>
                                             Customer <span class="text-danger">*</span>
-                                            <!-- <a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Customer" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a> -->
                                         </label>
                                         <p-autoComplete field="name" class="pautocomp-cstm"
-                                                        [required]="receivingForm.ownerTypeId == 1"
-                                                        [(ngModel)]="receivingForm.owner" name="ownerCustomer" (keyup)="getCustomers($event.target.value)"
-                                                        [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
+                                            [required]="receivingForm.ownerTypeId == 1" (ngModelChange)="getActive()"
+                                            [(ngModel)]="receivingForm.owner" name="ownerCustomer"
+                                            (keyup)="getCustomers($event.target.value, 2)" [suggestions]="customersList"
+                                            (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found" [forceSelection]="true">
+                                        </p-autoComplete>
                                     </div>
-                                    <!-- <div class="col-sm-1">
-                                        <div style="cursor:pointer; font-size:14px; margin:2px -7px;"><a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Customer" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a></div>
-                                    </div> -->
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 2">
                                     <div class="col-sm-12">
                                         <label>
                                             Vendor <span class="text-danger">*</span>
-                                            <!-- <a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"></a>  -->
                                         </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                        [required]="receivingForm.ownerTypeId == 2"
-                                                        [(ngModel)]="receivingForm.owner" name="ownerVendor"
-                                                        [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true">
+                                            (ngModelChange)="getActive()" [required]="receivingForm.ownerTypeId == 2"
+                                            [(ngModel)]="receivingForm.owner" name="ownerVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
-                                    <!-- <div class="col-sm-1">
-                                        <div style="cursor:pointer; font-size:14px; margin:2px -7px;"><a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"></a></div>
-                                    </div> -->
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 9">
                                     <div class="col-sm-12">
                                         <label>Company <span class="text-danger">*</span> </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                        [(ngModel)]="receivingForm.owner" name="ownerCompany"
-                                                        [suggestions]="companyList" (completeMethod)="filterCompanyNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [required]="receivingForm.ownerTypeId == 9"
-                                                        [forceSelection]="true">
+                                            (ngModelChange)="getActive()" [(ngModel)]="receivingForm.owner"
+                                            name="ownerCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found"
+                                            [required]="receivingForm.ownerTypeId == 9" [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
                                 </div>
@@ -977,25 +629,19 @@
                                     <div class="col-sm-12">
                                         <label>Other <span class="text-danger">*</span> </label>
                                         <input class="form-control" type="text" name="ownerOther"
-                                               [required]="receivingForm.ownerTypeId == 4"
-                                               [(ngModel)]="receivingForm.owner">
+                                            (ngModelChange)="getActive()" [required]="receivingForm.ownerTypeId == 4"
+                                            [(ngModel)]="receivingForm.owner">
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <label>Traceble To <span class="text-danger">*</span></label>
-                                <!-- <select [(ngModel)]="receivingForm.traceableToTypeId" name="traceableToType"
-                                        (change)="onSelectTraceableTo()" required>
+                                <select [(ngModel)]="receivingForm.traceableToTypeId" name="traceableToType"
+                                    (ngModelChange)="getActive()"
+                                    (change)="onSelectTraceableTo(receivingForm.traceableToTypeId)" required>
                                     <option value="0">-- Select --</option>
-                                    <option value="1">Customer</option>
-                                    <option value="2">Vendor</option>
-                                    <option value="3">Company</option>
-                                    <option value="4">Other</option>
-                                </select> -->
-                                <select [(ngModel)]="receivingForm.traceableToTypeId" name="traceableToType" (change)="onSelectTraceableTo(receivingForm.traceableToTypeId)" required>
-                                    <option value="0">-- Select --</option>
-                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">{{item.moduleName}}</option>
+                                    <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
+                                        {{item.moduleName}}</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -1003,46 +649,41 @@
                                     <div class="col-sm-12">
                                         <label>
                                             Add Customer <span class="text-danger">*</span>
-                                            <!-- <a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Customer" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a> -->
                                         </label>
                                         <p-autoComplete field="name" class="pautocomp-cstm"
-                                                        [required]="receivingForm.traceableToTypeId == 1" (keyup)="getCustomers($event.target.value)"
-                                                        [(ngModel)]="receivingForm.traceableTo" name="traceableToCustomer"
-                                                        [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
+                                            (ngModelChange)="getActive()"
+                                            [required]="receivingForm.traceableToTypeId == 1"
+                                            (keyup)="getCustomers($event.target.value, 2)"
+                                            [(ngModel)]="receivingForm.traceableTo" name="traceableToCustomer"
+                                            [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true"></p-autoComplete>
                                     </div>
-                                    <!-- <div class="col-sm-1">
-                                        <div style="cursor:pointer; font-size:14px; margin:2px -7px;"><a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Customer" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"></a></div>
-                                    </div> -->
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 2">
                                     <div class="col-sm-12">
                                         <label>
                                             Add Vendor <span class="text-danger">*</span>
-                                            <!-- <a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"></a> -->
                                         </label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                        [required]="receivingForm.traceableToTypeId == 2"
-                                                        [(ngModel)]="receivingForm.traceableTo" name="traceableToVendor"
-                                                        [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true">
+                                            (ngModelChange)="getActive()"
+                                            [required]="receivingForm.traceableToTypeId == 2"
+                                            [(ngModel)]="receivingForm.traceableTo" name="traceableToVendor"
+                                            [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
+                                            [size]="30" [minLength]="1" [dropdown]="true"
+                                            errorMessage="Records not found" [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
-                                    <!-- <div class="col-sm-1">
-                                        <div style="cursor:pointer; font-size:14px; margin:2px -7px;"><a class="fa fa-plus-circle fa-lg" target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"></a></div>
-                                    </div> -->
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 9">
                                     <div class="col-sm-12">
                                         <label> Add Company <span class="text-danger">*</span></label>
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                                        [(ngModel)]="receivingForm.traceableTo" name="traceableToCompany"
-                                                        [suggestions]="companyList" (completeMethod)="filterCompanyNames($event)"
-                                                        [size]="30" [minLength]="1" [dropdown]="true"
-                                                        errorMessage="Records not found" [forceSelection]="true"
-                                                        [required]="receivingForm.traceableToTypeId == 9">
+                                            (ngModelChange)="getActive()" [(ngModel)]="receivingForm.traceableTo"
+                                            name="traceableToCompany" [suggestions]="companyList"
+                                            (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
+                                            [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
+                                            [required]="receivingForm.traceableToTypeId == 9">
                                         </p-autoComplete>
                                     </div>
                                 </div>
@@ -1050,55 +691,55 @@
                                     <div class="col-sm-12">
                                         <label> Add Other <span class="text-danger">*</span></label>
                                         <input class="form-control" type="text" name="traceableToOther"
-                                               [required]="receivingForm.traceableToTypeId == 4"
-                                               [(ngModel)]="receivingForm.traceableTo">
+                                            (ngModelChange)="getActive()"
+                                            [required]="receivingForm.traceableToTypeId == 4"
+                                            [(ngModel)]="receivingForm.traceableTo">
                                     </div>
                                 </div>
                             </div>
-
-
                             <div class="form-group">
                                 <label>MFG Trace</label>
-                                <input class="form-control" type="text" name="MFGTrace"
-                                       [(ngModel)]="receivingForm.mfgTrace">
+                                <input class="form-control" type="text" name="MFGTrace" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.mfgTrace">
                             </div>
                             <div class="form-group">
                                 <label>MFG Lot</label>
-                                <input class="form-control" type="text" name="MFGLotNo"
-                                       [(ngModel)]="receivingForm.mfgLotNo">
+                                <input class="form-control" type="text" name="MFGLotNo" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.mfgLotNo">
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm " style="margin-top: 20px;">
                                     <label>
-                                        <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate">
+                                        <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate"
+                                            (ngModelChange)="getActive()">
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         MFG Date <span class="text-danger" *ngIf="receivingForm.isMFGDate">*</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="receivingForm.isMFGDate">
-                                <p-calendar class="workflow-clder" [showIcon]="true"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                            [required]="receivingForm.isMFGDate" [maxDate]="currentDate"
-                                            name="manufacturingDate" [(ngModel)]="receivingForm.mfgDate"></p-calendar>
+                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" (ngModelChange)="getActive()"
+                                    [required]="receivingForm.isMFGDate" [maxDate]="currentDate"
+                                    name="manufacturingDate" [(ngModel)]="receivingForm.mfgDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <div class="checkbox-cstm m-t-10">
                                     <label>
-                                        <input type="checkbox" name="isExpDate" [(ngModel)]="receivingForm.isExpDate">
+                                        <input type="checkbox" name="isExpDate" [(ngModel)]="receivingForm.isExpDate"
+                                            (ngModelChange)="getActive()">
                                         <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         Exp Date <span class="text-danger" *ngIf="receivingForm.isExpDate">*</span>
                                     </label>
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="receivingForm.isExpDate">
-                                <p-calendar class="workflow-clder" [showIcon]="true"
-                                [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                            [required]="receivingForm.isExpDate" [minDate]="currentDate" name="expDate"
-                                            [(ngModel)]="receivingForm.expDate"></p-calendar>
+                                <p-calendar class="workflow-clder" [showIcon]="true" (ngModelChange)="getActive()"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [required]="receivingForm.isExpDate" [minDate]="currentDate" name="expDate"
+                                    [(ngModel)]="receivingForm.expDate"></p-calendar>
                             </div>
                         </div>
-
                         <div class="col-md-4 main_facture">
                             <div class="card" style="margin-top: 8px;margin-bottom: 8px;">
                                 <div class="card-header" style="padding: 10px 4px;">
@@ -1109,105 +750,131 @@
                                 <div class="card-body" style="padding: 10px 4px 0px 4px !important;">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <!-- <label>CO <span class="text-danger">*</span></label> -->
-                                            <select class="form-control" name="company"
-                                                    [(ngModel)]="managementStructure.companyId"
-                                                    (change)="selectedLegalEntity(managementStructure.companyId);"
-                                                    #companyName="ngModel" required>
-                                                <option value="0">Select Legal Entity</option>
-                                                <option *ngFor="let name of legalEntityList" [ngValue]="name.value">
-                                                    {{name.label}}
-                                                </option>
-                                            </select>
-                                            <div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)"
-                                                 class="alert alert-danger alert-danger-cstm">
-                                                <div *ngIf="companyName.errors.required">
-                                                    <small> Legal Entity Name is required </small>
-                                                </div>
-                                            </div>
+                                            <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                (onChange)="selectedLegalEntity(managementStructure.companyId,'html');"
+                                                required (ngModelChange)="getActive()" [options]="legalEntityList"
+                                                filter="true" [(ngModel)]="managementStructure.companyId"
+                                                name="companyId" [resetFilterOnHide]="true" placeholder="Select">
+                                            </p-dropdown>
                                         </div>
                                         <div class="form-group">
-                                            <!-- <label>BU</label> -->
-                                            <select class="form-control" [(ngModel)]="managementStructure.buId"
-                                                    name="buId" (change)="selectedBusinessUnit(managementStructure.buId)">
-                                                <option value="0">-- Select --</option>
-                                                <option *ngFor="let name of businessUnitList" [ngValue]="name.value">
-                                                    {{name.label}}
-                                                </option>
-                                            </select>
+                                            <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                (onChange)="selectedBusinessUnit(managementStructure.buId,'html')"
+                                                (ngModelChange)="getActive()" [options]="businessUnitList" filter="true"
+                                                [(ngModel)]="managementStructure.buId" name="buId"
+                                                [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                         </div>
                                         <div class="form-group">
-                                            <!-- <label>Div</label> -->
-                                            <select class="form-control" [(ngModel)]="managementStructure.divisionId"
-                                                    name="divisionId"
-                                                    (change)="selectedDivision(managementStructure.divisionId)">
-                                                <option value="0">-- Select --</option>
-                                                <option *ngFor="let name of divisionList" [ngValue]="name.value">
-                                                    {{name.label}}
-                                                </option>
-                                            </select>
+                                            <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                (onChange)="selectedDivision(managementStructure.divisionId,'html')"
+                                                (ngModelChange)="getActive()" [options]="divisionList" filter="true"
+                                                [(ngModel)]="managementStructure.divisionId" name="divisionId"
+                                                [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                         </div>
                                         <div class="form-group">
-                                            <!-- <label>Dept</label> -->
-                                            <select class="form-control" [(ngModel)]="managementStructure.departmentId"
-                                                    name="departmentId"
-                                                    (change)="selectedDepartment(managementStructure.departmentId)">
-                                                <option value="0">-- Select --</option>
-                                                <option *ngFor="let name of departmentList" [ngValue]="name.value">
-                                                    {{name.label}}
-                                                </option>
-                                            </select>
+                                            <p-dropdown [showClear]="true" class="p-dropdown-100"
+                                                (onChange)="selectedDepartment(managementStructure.departmentId,'html' )"
+                                                (ngModelChange)="getActive()" [options]="departmentList" filter="true"
+                                                [(ngModel)]="managementStructure.departmentId" name="departmentId"
+                                                [resetFilterOnHide]="true" placeholder="Select"></p-dropdown>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="form-group memo-popup-cstm">
-                                <label>Memo</label>
-                                <span matTooltip="{{receivingForm.memo}}" matTooltipPosition="above"><input type="text" name="memo" pInputText class="form-control" value="{{receivingForm.memo}}" disabled /></span>
-                            </div>  -->
-                            <div class="form-group">
-                                <label> Memo </label>
-                                <!-- <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#textarea-popup" matTooltip="{{receivingForm.memo}}"  matTooltipPosition="above" (click)="onAddTextAreaInfo('memo')"></i> </label> -->
-                                <textarea class="form-control text-area-cstm" [(ngModel)]="receivingForm.memo"
-                                          name="memo" style="height: 90px;"></textarea>
+                            <div>
+                               <span class="label" style="width: 100%;">Memo
+                                    <span>
+                                        <a style="margin-left: 5px;" class="nobg"  (click)="onClickMemo()" matTooltip="Add Memo"
+                                            matTooltipPosition="above"><i class="fa fa-pencil" style="color: #2275ce;
+                                        font-size: 12px;"></i>
+                                        </a>
+                                    </span>
+                                </span>
+                                <div class="col-sm-12">
+                                    <span>
+                                        <div class="memo-popup-cstm mat_emo">
+                                            <div [innerHTML]=" receivingForm.memo"
+                                                [matTooltip]="parsedText(receivingForm.memo)" style="width: 100%;padding-top: 4px;height: 76px;white-space: initial;
+                                        padding: 10px;" class="text_editor_box"></div>
+                                        </div>
+                                    </span>
+                                </div>
+              
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="form-row pull-right m-t-10">
-                <!-- <p> {{customerWorkForm.valid }}, {{disableMagmtStruct}} , {{disableCondition}} , {{disableSite}}</p> -->
-                <button type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
-                        [disabled]="!customerWorkForm.valid || disableMagmtStruct ||  disableCondition || disableSite">
-                    {{isEditMode ? 'Update' : 'Save'}}
-                </button>
-
-            </div>
-        </form>
-    </div>
-</div>
-<div class="modal fade" id="textarea-popup" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>{{textAreaLabel}}</label>
-                    <textarea class="form-control" name="textAreaInfo" [(ngModel)]="textAreaInfo"
-                              value={{textAreaInfo}}></textarea>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="checkbox-cstm m-t-15">
+                                <label>
+                                    <input type="checkbox" name="isTimeLife1" [(ngModel)]="isDocumentsToShow"
+                                        [value]="isDocumentsToShow==true">
+                                    <span class="cr disabled_color1">
+                                        <i class="cr-icon pi pi-check"></i>
+                                    </span>
+                                    Attachments
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" *ngIf="isDocumentsToShow">
+                        <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="receivingCustomerWorkId"
+                            [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
+                    </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        (click)="onSaveTextAreaInfo()">
-                    Save
+            <div class="form-row pull-right m-t-10">
+                <button *ngIf="!isEditMode" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
+                    [disabled]="!customerWorkForm.valid || disableMagmtStruct ||  disableCondition || disableSite">
+                    Save 
                 </button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button *ngIf="isEditMode" type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
+                    [disabled]="!customerWorkForm.valid  || disableUpdateButton">
+                    Update 
+                </button>
+            </div>
+        </form> 
+        <div class="modal fade" id="textareapopup"  role="dialog" data-backdrop="static"
+       >
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="closeMemoModel()">
+                        &times;
+                    </button>
+                    <h4 class="modal-title">Edit Memo</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-fixed workflow-table-material">
+                        <thead>
+                            <th style="color: #fff;">Memo</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="white-space: inherit">
+                                    <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
+                                        (ngModelChange)="enableSaveMemo()" [style]="{ height: '320px' }"
+                                        name="memoPopupContent" required></p-editor>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="float: right;">
+                        <button type="button" class="btn btn-primary" [disabled]="disabledMemo"
+                            style="padding: 6px 12px !important; margin-top: 10px;" (click)="onClickPopupSave()">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-danger" style="padding: 6px 12px !important; margin-top: 10px;"
+                            (click)="closeMemoModel()">
+                            Close
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
 </div>
 
@@ -1215,29 +882,19 @@
     <div class="modal-dialog modal-sm" style="max-width: 530px !important;">
         <div class="modal-content">
             <div class="modal-header">
-                <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                 <h4 class="modal-title">Customer Work is saved. Would you like to create Work Order ?</h4>
             </div>
-            <!-- <div class="modal-body">
-                <div class="form-group">
-                    <label>{{textAreaLabel}}</label>
-                    <textarea class="form-control" name="textAreaInfo" [(ngModel)]="textAreaInfo" value={{textAreaInfo}}></textarea>
-                </div>
-            </div> -->
-            <div class="modal-footer" style="border-top: transparent;">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        (click)="goToWorkOrder()">
+           <div class="modal-footer" style="border-top: transparent;">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="goToWorkOrder()">
                     Yes
                 </button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal"
-                        (click)="goToCustomerWorkList()">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="goToCustomerWorkList()">
                     No
                 </button>
             </div>
         </div>
     </div>
 </div>
-
 <div id="warnRestrictMesg" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-xsm">
         <div class="modal-content">
@@ -1245,264 +902,25 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title warning_color" *ngIf="restrictID == 0">Warning</h4>
                 <h4 class="modal-title restrict_color" *ngIf="restrictID != 0">Restriction</h4>
-                <!-- <p id="clockdiv" class="clockdiv"></p> -->
             </div>
             <div class="pad_msf">
                 <p *ngIf="warningID != 0 && restrictID == 0" class="mar_o warning_color">
                     {{warningMessage}}
                 </p>
-                <!-- <p *ngIf="warningMessage != undefined">Not able to create customer work because cuatomer having restrcitions</p> -->
                 <p *ngIf="restrictID != 0" class="mar_o restrict_color">
                     {{restrictMessage}}
                 </p>
-                <!-- <p *ngIf=" restrictID != 0" class="mar_o ">Not able to create customer work because this customer
-                    having restrictions</p> -->
             </div>
             <div class="modal-footer" style="padding:10px;">
                 <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="WarnRescticModel()"
-                        style="padding: 6px 12px !important;">
+                    style="padding: 6px 12px !important;">
                     Ok
                 </button>
             </div>
         </div>
     </div>
 </div>
-
-
-<div class="modal fade"
-     id="addDocumentDetails"
-     role="dialog"
-     data-backdrop="static">
-    <div class="modal-dialog modal-sm1">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button"
-                        class="close"
-                        (click)="closeMyModel('#addDocumentDetails')">
-                    &times;
-                </button>
-                <h4 class="modal-title">{{isEditButton ? 'Edit' : 'Add'}} Document Details</h4>
-            </div>
-            <form #addDocumentForm="ngForm" class="form-horizontal">
-                <div class="modal-body">
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Name <span class="clr-red">*</span></label>
-                                <input class="form-control"
-                                       type="text"
-                                       name="name"
-                                       [(ngModel)]="documentInformation.docName"
-                                       (ngModelChange)="enableSave()"
-                                       required />
-                            </div>
-                            <div class="form-group">
-                                <label>Description <span class="clr-red">*</span></label>
-                                <textarea class="form-control"
-                                          name="description"
-                                          [(ngModel)]="documentInformation.docDescription"
-                                          (ngModelChange)="enableSave()"
-                                          required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Memo </label>
-                                <textarea class="form-control"
-                                          name="memo"
-                                          [(ngModel)]="documentInformation.docMemo"
-                                          (ngModelChange)="enableSave()"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label style="float: none;">Attachments <span class="clr-red">*</span></label>
-                                <p-fileUpload #fileUploadInput
-                                              name="fileupload[]" required (ngModelChange)="enableSave()"
-                                              multiple="multiple"
-                                              [showCancelButton]="false"
-                                              [showUploadButton]="false"
-                                              customUpload="true"
-                                              (onSelect)="fileUpload($event)"
-                                              (onRemove)="removeFile($event)"></p-fileUpload>
-                            </div>
-                        </div>
-                        <div class="table-responsive table-overflow"
-                             *ngIf="isEditButton">
-                            <h6 class="panel-title" style="padding-left: 5px;">
-                                Attachment Details:
-                            </h6>
-
-                            <table class="table-responsive ptable-cus-pma">
-                                <tr>
-                                    <th>File Name</th>
-                                    <th>Download</th>
-                                </tr>
-                                <tr>
-                                    <td>{{sourceViewforDocument.fileName}}</td>
-                                    <td style="text-align: center;">
-                                        <a *ngIf="sourceViewforDocument.attachmentDetailId > 0" (click)="downloadFileUpload(sourceViewforDocument)"
-                                           matTooltip="Download" matTooltipPosition="above"
-                                           class="btn nobg btn-cstm">
-                                            <span><i class="fa fa-download"></i></span>
-                                        </a>
-                                        <a *ngIf="sourceViewforDocument.attachmentDetailId==0"
-                                           [href]="sourceViewforDocument.link"
-                                           download="{{sourceViewforDocument.fileName}}"
-                                           matTooltip="Download" matTooltipPosition="above"
-                                           class="filelink">
-                                            <span><i class="fa fa-download"></i></span>
-
-                                        </a>
-
-                                    </td>
-
-                                </tr>
-                            </table>
-                          </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button"
-                            *ngIf="!isEditButton"
-                            class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
-                            (click)="addDocumentInformation('#addDocumentDetails',documentInformation)"
-                            [disabled]="!addDocumentForm.valid || disableSaveadd ">
-                        Add
-                    </button>
-                    <!-- disableFileAttachmentSubmit==false -->
-                    <button type="button"
-                            *ngIf="isEditButton"
-                            class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
-                            (click)="addDocumentInformation('#addDocumentDetails',documentInformation)"
-                            [disabled]="!addDocumentForm.valid || disableSave">
-                        Update
-                    </button>
-                    <button type="button"
-                            class="btn btn-danger"
-                            (click)="dismissDocumentPopupModel('#addDocumentDetails'); closeMyModel('#addDocumentDetails')">
-                        Close
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<ng-template #contentAuditHist
-             let-c="close"
-             let-d="dismiss"
-             style="width:auto"
-             data-backdrop="static">
-    <div class="modal-header">
-        <h4 class="modal-title">History of  Documents</h4>
-        <button type="button"
-                class="close"
-                aria-label="Close"
-                (click)="dismissModel()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Document Name</th>
-                        <th>Description</th>
-                        <th>Memo</th>
-                        <th>File Name</th>
-                        <th>Updated By</th>
-                        <th>Last Updated Time</th>
-                        <th>Created By</th>
-                        <th>Created Time</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let audit of sourceViewforDocumentAudit"></tr>
-                    <tr *ngFor="let audit of sourceViewforDocumentAudit; let i = index">
-                        <td [ngStyle]="{
-                color: getColorCodeForHistory(i, 'docName', audit.docName)
-                  ? 'black'
-                  : 'red'
-              }">
-                            {{ audit.docName }}
-                        </td>
-                        <td [ngStyle]="{
-                color: getColorCodeForHistory(
-                  i,
-                  'docDescription',
-                  audit.docDescription
-                )
-                  ? 'black'
-                  : 'red'
-              }">
-                            {{ audit.docDescription }}
-                        </td>
-                        <td [ngStyle]="{
-                color: getColorCodeForHistory(i, 'docMemo', audit.docMemo)
-                  ? 'black'
-                  : 'red'
-              }">
-                            {{ audit.docMemo }}
-                        </td>
-                        <td [ngStyle]="{
-                color: getColorCodeForHistory(i, 'fileName', audit.fileName)
-                  ? 'black'
-                  : 'red'
-              }">
-                            {{ audit.fileName }}
-                        </td>
-
-                        <td>{{ audit.updatedBy }}</td>
-                        <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                        <td>{{ audit.createdBy }}</td>
-                        <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="dismissModel()">
-            Close
-        </button>
-    </div>
-</ng-template>
-<ng-template #deleteContent
-             let-c="close"
-             let-d="dismiss"
-             data-backdrop="static">
-    <div class="modal-header">
-        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-        <button type="button"
-                class="close"
-                aria-label="Close"
-                (click)="dismissModel()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-
-    <div class="modal-body">
-        <strong>
-            Document Name:
-            <span class="new-label">{{ selectedRowForDelete.docName }}</span>
-        </strong>
-    </div>
-    <div class="modal-footer">
-        <button type="button"
-                class="btn btn-success"
-                (click)="deleteItemAndCloseModel()">
-            Yes
-        </button>
-        <button type="button" class="btn btn-danger" (click)="dismissModel()">
-            No
-        </button>
-    </div>
-</ng-template>
-<div class="preloader" *ngIf="!isSpinnerEnable">
+<div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">
             <div></div>
@@ -1515,4 +933,4 @@
             <div></div>
         </div>
     </div>
-  </div> 
+</div>

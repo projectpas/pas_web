@@ -1,11 +1,12 @@
-
+﻿
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { Master1099Endpoint } from './master-1099-endpoint.services';
 import { AuthService } from './auth.service';
@@ -34,17 +35,17 @@ export class Master1099Service {
         private master1099Endpoint: Master1099Endpoint) { }
 
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.master1099Endpoint.getMaster1099Endpoint<any[]>());
     }
 
     search(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.master1099Endpoint.getMaster1099searchEndpoint<any[]>(serverSidePagesData));
     }
 
     historyGlCashFlowClassification(master1099Id: number) {
-        return forkJoin(this.master1099Endpoint.getHistoryMaster1099Endpoint<AuditHistory[]>(master1099Id));
+        return Observable.forkJoin(this.master1099Endpoint.getHistoryMaster1099Endpoint<AuditHistory[]>(master1099Id));
     }
 
     newGlCashFlowClassification(glclassflowclassification: any) {
@@ -75,7 +76,7 @@ export class Master1099Service {
 
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.master1099Endpoint.getMaster1099Records<any[]>(serverSidePagesData));
     }
 }

@@ -472,6 +472,12 @@ body {
 	background: none;
 	border: 0;
 }
+
+
+.addpn-btn {
+    padding: 5px 10px !important;
+    font-size: 13px;
+}
 /*--custom-popup--*/
 
 

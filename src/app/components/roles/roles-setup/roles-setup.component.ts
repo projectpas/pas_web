@@ -10,7 +10,6 @@ import { TreeNode, MenuItem, MessageService } from 'primeng/api';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { fadeInOut } from '../../../services/animations';
 import { Row } from 'primeng/components/common/shared';
-;
 import { ItemMasterService } from '../../../services/itemMaster.service';
 @Component({
     selector: 'app-roles-setup',

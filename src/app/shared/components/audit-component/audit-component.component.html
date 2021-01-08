@@ -1,0 +1,32 @@
+<div class="tableFixHead">
+<table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+    <thead>
+        <tr>
+            <ng-container *ngFor="let headername of auditHistoryHeader; let z = index;">
+                <th *ngIf="headername.isRequired == true">{{headername.header}}<span style="color: #ff0000;">*</span></th>
+                <th *ngIf="headername.isRequired == false">{{headername.header}}</th>
+            </ng-container>
+        </tr>
+    </thead>
+    <tbody class="audithistory-cstm">
+        <tr *ngFor="let audit of auditHistory; let i = index;">
+            <ng-container *ngFor="let headername of auditHistoryHeader; let j = index;">
+            <td *ngIf="headername.field != 'isDeleted'"
+                [ngStyle]="{'color':  getColorCodeForHistory(i, headername.field, audit[headername.field])  ? 'black' : 'red'  }">
+                {{audit[headername.field]}}</td>
+
+                <td *ngIf="headername.field == 'isDeleted'">
+                    <p style="background-color: #fff !important;"> <input type="checkbox"
+                                            name="isDeleted" [(ngModel)]="audit[headername.field]" disabled></p>
+                </td>
+            </ng-container>
+        </tr>
+    </tbody>
+</table>
+<ng-template #noDatavailable>
+    <div class="text-center">
+        <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+        <h4 style="color: #ff5663;">No History Found </h4>
+    </div>
+</ng-template>
+</div>

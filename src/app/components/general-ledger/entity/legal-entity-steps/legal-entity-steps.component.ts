@@ -106,6 +106,10 @@ export class LegalEntityStepsComponent {
 				this.changeOfTab(localStorage.getItem('currentLETab'))
 			}
 this.updateInformationData(res)
+if(res && localStorage.getItem('currentLETab')=='Documents'){
+	this.legalEntityCode = res.companyCode;
+	this.legalEntityName = res.name;
+}
         }, err => {
         })
     } 
@@ -129,17 +133,29 @@ this.updateInformationData(res)
 		}  else if (value === 'Documents') {
 			this.currentTab = 'Documents';
 			this.activeMenuItem = 6;
+			this.referenceId=this.entityId; 
+			console.log("tabsData",this.editGeneralInformationData)
+		if(this.editGeneralInformationData){
+			this.legalEntityCode = this.editGeneralInformationData.companyCode;
+			if(typeof  this.editGeneralInformationData.name != 'string'){
+				this.legalEntityName = this.editGeneralInformationData.name.label;
+			}else{
+				this.legalEntityName = this.editGeneralInformationData.name;
+			}
+		}
 		}  
-		 else if (value === 'CommonDocuments') {
-			this.currentTab = 'CommonDocuments';
-			this.activeMenuItem = 7;
-			this.referenceId=this.entityId;
-		}  
+		//  else if (value === 'CommonDocuments') {
+		// 	this.currentTab = 'CommonDocuments';
+		// 	this.activeMenuItem = 7;
+		// 	this.referenceId=this.entityId;
+		// }  
 		if(	this.editMode = true){
 			localStorage.setItem('currentLETab', value);  
 		}
     }
 	referenceId:any;
+	legalEntityCode:any;
+	legalEntityName:any;
     GeneralInformation() {
         this.GeneralInformationValue = true;
         this.LockboxValue = false;

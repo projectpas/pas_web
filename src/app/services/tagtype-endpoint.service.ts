@@ -1,12 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class TagTypeEndpointService extends EndpointFactory {
 
@@ -25,37 +25,37 @@ export class TagTypeEndpointService extends EndpointFactory {
 
 	getTagTypeEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.tagTypeUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.tagTypeUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getTagTypeEndpoint());
-			}));
+			});
 	}
 
 	addTagTypeEndpoint<T>(tagType: any): Observable<T> {
 
-        return this.http.post<any>(this._tagTypeNewUrl, JSON.stringify(tagType), this.getRequestHeaders())
-			.pipe(catchError(error => {
+        return this.http.post<T>(this._tagTypeNewUrl, JSON.stringify(tagType), this.getRequestHeaders())
+			.catch(error => {
                 return this.handleError(error, () => this.addTagTypeEndpoint(tagType));
-			}));
+			});
 	}
 
 	updateTagTypeEndpoint<T>(tagType: any): Observable<T> {
 		let endpointUrl = `${this._tagTypeEditUrl}`;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(tagType), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(tagType), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateTagTypeEndpoint(tagType));
-            }));
+            });
 	}
 
 
 	removeTagTypeEndpoint<T>(tagTypeId: number): Observable<T> {
         let endpointUrl = `${this._deleteTagType}/${tagTypeId}`;
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
                 return this.handleError(error, () => this.removeTagTypeEndpoint(tagTypeId));
-			}));
+			});
 	}
 
 }

@@ -21,8 +21,8 @@ import {  getValueFromObjectByKey, getObjectById, getObjectByValue, editValueAss
 import { AuthService } from '../../../../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkFlowtService } from '../../../../services/workflow.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { Billing } from '../../../../models/work-order-billing.model';
 import * as moment from 'moment';
 import { WorkOrderQuoteService } from '../../../../services/work-order/work-order-quote.service';

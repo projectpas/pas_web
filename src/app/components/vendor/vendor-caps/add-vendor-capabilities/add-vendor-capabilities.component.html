@@ -9,7 +9,7 @@
 				</ol>
 			</nav>
 		</div> -->
-		<h4 class="po-head" style="margin: 1%;margin-left:26px;">{{isEditMode ? 'Edit' : 'Create'}} Vendor Capes</h4>
+		<h4 class="po-head" style="margin: 1%;margin-left:26px;">{{isEditMode ? 'Edit' : 'Add'}} Vendor Capes</h4>
 		<div class="card-body">
 			<p-tabView class="pas-tabview">
 				<p-tabPanel header="General Info" [selected]="selectedGeneralInfo">
@@ -78,7 +78,7 @@
 											   value="{{sourceVendorCap.partDescription}}" disabled></span>
 								</div>
 								<div class="form-group">
-									<label>PN Manufacturer</label>
+									<label>Manufacturer</label>
 									<input class="form-control" type="text" name="manufacturerId"
 										   (ngModelChange)="enableSave()" [(ngModel)]="sourceVendorCap.manufacturerName"
 										   disabled>
@@ -86,7 +86,7 @@
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
-									<label>Vendor Capability Type <span class="clr-red">*</span></label>
+									<label>Capability Type <span class="clr-red">*</span></label>
 									<select class="form-control" [ngModelOptions]="{standalone: true}"
 											(change)="bindCapsDesc(sourceVendorCap.capabilityTypeId,sourceVendorCap)"
 											(ngModelChange)="enableSave()" [(ngModel)]="sourceVendorCap.capabilityTypeId"
@@ -104,72 +104,55 @@
 								</div>
 
 								<div class="form-group">
-									<label>Vendor Ranking <span class="clr-red">*</span></label>
+									<label>Vendor Ranking </label>
 									<input class="form-control text-right" type="text" name="vendorRanking" pKeyFilter="pint"
 										   (ngModelChange)="enableSave()" [(ngModel)]="sourceVendorCap.vendorRanking"
-										   #vendorRanking="ngModel" maxlength="7" required>
+										   #vendorRanking="ngModel" maxlength="7">
 								</div>
 								<div class="form-group">
-									<label>TAT (Days)<span class="clr-red">*</span></label>
+									<label>TAT (Days)</label>
 									<input class="form-control text-right" type="text" name="tat" (ngModelChange)="enableSave()"
-										   pKeyFilter="pint" maxlength="7" [(ngModel)]="sourceVendorCap.tat" required>
+										   pKeyFilter="pint" maxlength="7" [(ngModel)]="sourceVendorCap.tat" >
 								</div>
 								<div class="form-group" style="margin-top: 10px;">
-									<label>Cost <span class="clr-red">*</span></label>
+									<label>Cost </label>
 									<input class="form-control text-right" type="text" name="cost" maxlength="12" (ngModelChange)="enableSave()" 
-										   pKeyFilter="num" [ngModel]="sourceVendorCap.cost  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="sourceVendorCap.cost=$event" required>
+										   pKeyFilter="num" [ngModel]="sourceVendorCap.cost  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="sourceVendorCap.cost=$event">
 								</div>
 							</div>
-							<div class="col-md-4" style="padding-left:5%; margin-top: 20px;">
+							<div class="col-md-4" style="padding-left:5%;">
+								<div>
+								<span class="label">Memo </span>
+								</div>
 								<div class="form-group">
 								<!-- <span class="label">Memo </span> -->
-                                <div class="col-sm-11">
-                                    <span>
-                                        <div class="form-group memo-popup-cstm mat_emo">
-                                            <div (ngModelChange)="enableSave()"                                            
-                                            [innerHTML]="sourceVendorCap.memo"
-                                            matTooltipPosition="above"
-                                            [matTooltip]="parsedText(sourceVendorCap.memo)" 
-                                                 class="form-control"
-                                                 style="width: 100%;"
-                                                 class="text_editor_box"></div>
-                                        </div>
-                                    </span>
-                                </div>
-                                <div class="col-sm-1">
-                                    <span>
-                                        <a class="btn nobg btn-edit-cstm"
-                                           data-toggle="modal"
-                                           (ngModelChange)="enableSave()"
-                                           data-target="#add-description"
-										   (click)="onAddDescription('memo')"
-                                           matTooltip="Add Memo"
-                                           matTooltipPosition="above">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-								<div class="form-group">
-									<div class="checkbox-cstm" style="margin-top: 50px;">
-										<label>
-											<input type="checkbox" name="pma" (ngModelChange)="enableSave()"
-												   [(ngModel)]="sourceVendorCap.isPMA" class="form-control">
-											<span class="cr"><i class="cr-icon pi pi-check"></i></span>
-											PMA
-										</label>
+									<div class="col-sm-11">
+										<span>
+											<div class="form-group memo-popup-cstm mat_emo">
+												<div (ngModelChange)="enableSave()"                                            
+												[innerHTML]="sourceVendorCap.memo"
+												matTooltipPosition="above"
+												[matTooltip]="parsedText(sourceVendorCap.memo)" 
+													class="form-control"
+													style="width: 100%;"
+													class="text_editor_box"></div>
+											</div>
+										</span>
 									</div>
-								</div> 
-								<div class="form-group">
-									<div class="checkbox-cstm" style="margin-top: 20px;">
-										<label>
-											<input type="checkbox" name="der" (ngModelChange)="enableSave()"
-												   [(ngModel)]="sourceVendorCap.isDER" class="form-control">
-											<span class="cr"><i class="cr-icon pi pi-check"></i></span>
-											DER
-										</label>
+									<div class="col-sm-1">
+										<span>
+											<a class="btn nobg btn-edit-cstm"
+											data-toggle="modal"
+											(ngModelChange)="enableSave()"
+											data-target="#add-description"
+											(click)="onAddDescription('memo')"
+											matTooltip="Add Memo"
+											matTooltipPosition="above">
+												<i class="fa fa-pencil"></i>
+											</a>
+										</span>
 									</div>
-								</div>
+                            	</div>
 							</div>
 						</div>
 						<div class="form-row pull-right">

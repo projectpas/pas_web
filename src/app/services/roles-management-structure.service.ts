@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { RolesManagementStructureEndpoint } from './roles-management-structure-endpoint.service';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
@@ -32,7 +33,7 @@ export class RolesManagementStructureService
 		private rolesEndpoint: RolesManagementStructureEndpoint) { }
 
 	getRolesList() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.rolesEndpoint.getRolesEndpoint<UserRoleLevel[]>());
 	}
 
@@ -46,7 +47,7 @@ export class RolesManagementStructureService
 	}
 
 	historyRoles(UserRoleLevelId: number) {
-		return forkJoin(this.rolesEndpoint.getHistoryRolesEndpoint<AuditHistory[]>(UserRoleLevelId));
+		return Observable.forkJoin(this.rolesEndpoint.getHistoryRolesEndpoint<AuditHistory[]>(UserRoleLevelId));
 	}
 
 	getRole(UserRoleLevelId?: number) {

@@ -1,7 +1,7 @@
 ﻿import { Component, ViewChild, OnInit, ElementRef, Input } from '@angular/core';
 import {  MatTableDataSource,} from '@angular/material';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { fadeInOut } from '../../../services/animations';
 import { AuthService } from '../../../services/auth.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
@@ -88,13 +88,16 @@ export class VendorWarningsComponent implements OnInit {
                 this.vendorId = this.activeRoute.snapshot.params['id'];
                 this.vendorService.vendorId = this.vendorId;
                 this.vendorService.listCollection.vendorId = this.vendorId; 
-                this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-                    res => {
-                            this.local = res[0];
-                    },err => {
-                        const errorLog = err;
-                        this.saveFailedHelper(errorLog);
+                if(this.vendorId > 0 )
+                {
+                    this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                        res => {
+                                this.local = res[0];
+                        },err => {
+                            const errorLog = err;
+                            this.saveFailedHelper(errorLog);
                     });
+                }                
             }
         }
         if (this.vendorService.listCollection !== undefined) {

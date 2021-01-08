@@ -5,20 +5,23 @@ import { Customer } from "../../../../models/customer.model";
 import { AlertService, MessageSeverity } from "../../../../services/alert.service";
 import { Router } from "@angular/router";
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
-import { TableModule, Table } from 'primeng/table';
-import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Table } from 'primeng/table';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerViewComponent } from '../../../../shared/components/customer/customer-view/customer-view.component';
 import { CommonService } from "../../../../services/common.service";
 import { DBkeys } from "../../../../services/db-Keys";
 import { MenuItem } from "primeng/api";
 import * as moment from 'moment';
-
+import * as $ from "jquery";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: "app-sales-order-create",
   templateUrl: "./sales-order.component.html",
-  styleUrls: ["./sales-order.component.css"]
+  styleUrls: ["./sales-order.component.css"],
+  providers: [DatePipe]
 })
+
 export class SalesOrderComponent implements OnInit {
   query: CustomerSearchQuery;
   customers: Customer[];
@@ -52,6 +55,8 @@ export class SalesOrderComponent implements OnInit {
   ]
   selectedColumns = this.headers;
   customerWarning: any = {};
+  targetData: any ;
+  selectedOnly: boolean = false;
   @ViewChild("warningPopup",{static:false}) public warningPopup: ElementRef;
   @ViewChild("restrictionPopup",{static:false}) public restrictionPopup: ElementRef;
 
@@ -61,7 +66,8 @@ export class SalesOrderComponent implements OnInit {
     private alertService: AlertService,
     private modalService: NgbModal,
     private router: Router,
-    private commonservice: CommonService
+    private commonservice: CommonService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
@@ -82,7 +88,7 @@ export class SalesOrderComponent implements OnInit {
       this.totalRecords = res.totalRecordsCount;
       this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }, error => {
-      this.onDataLoadFailed(error);
+      this.isSpinnerVisible = false;
     })
   }
 
@@ -99,19 +105,17 @@ export class SalesOrderComponent implements OnInit {
 
 
   }
+
   globalSearch(value) {
-    this.isSpinnerVisible = true;
-    this.pageIndex = 0;
+    this.pageIndex = this.lazyLoadEventData.rows > 10 ? parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows : 0;
+    this.pageSize = this.lazyLoadEventData.rows;
+    this.lazyLoadEventData.first = this.pageIndex;
+    this.lazyLoadEventData.globalFilter = value;
     this.filteredText = value;
-    this.customerService.getGlobalSearch(value, this.pageIndex, this.pageSize).subscribe(res => {
-      this.isSpinnerVisible = false;
-      this.data = res.results;
-      this.totalRecords = res.totalRecordsCount;
-      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-    }, error => {
-      this.onDataLoadFailed(error);
-    })
+    this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+    this.getList(this.lazyLoadEventData);
   }
+
   loadData(event) {
 
     this.lazyLoadEventData = event;
@@ -173,7 +177,7 @@ export class SalesOrderComponent implements OnInit {
         })
       }
     }, error => {
-      this.onDataLoadFailed(error);
+      this.isSpinnerVisible =false;
     })
   }
 
@@ -202,7 +206,7 @@ export class SalesOrderComponent implements OnInit {
         // }
 
       }, error => {
-        this.onDataLoadFailed(error);
+        this.isSpinnerVisible =false;
       });
   }
   async getCustomerWarningsData(customerWarningListId: number, customerId) {
@@ -231,7 +235,7 @@ export class SalesOrderComponent implements OnInit {
         // }
 
       }, error => {
-        this.onDataLoadFailed(error);
+        this.isSpinnerVisible =false;
       });
   }
   onDataLoadFailed(error) {
@@ -270,13 +274,42 @@ export class SalesOrderComponent implements OnInit {
       });
   }
 
-
   mouseOverData(key, data) {
     if (key === 'customerClassificationType') {
       return data['customerClassification']
     }
   }
+
   getColorCodeForMultiple(data) {
     return data['customerClassificationType'] === 'Multiple' ? 'green' : 'black';
+  }
+
+  closePopupModal() {
+    $("#downloadConfirmation").modal("hide");
+  }
+
+  exportCSV(dt) {
+    this.isSpinnerVisible = true;
+    let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": true, "isDeleted": false }, "globalFilter": "" };
+    let filters = Object.keys(dt.filters);
+    filters.forEach(x => {
+      PagingData.filters[x] = dt.filters[x].value;
+    })
+
+    this.customerService.getCustomerAll(PagingData).subscribe(res => {
+      dt._value = res['results'].map(x => {
+        return {
+          ...x,
+          createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+          updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+        }
+      });
+      
+      dt.exportCSV();
+      dt.value = this.data;
+      this.isSpinnerVisible = false;
+    },error => {
+      this.isSpinnerVisible =false;
+    });
   }
 }

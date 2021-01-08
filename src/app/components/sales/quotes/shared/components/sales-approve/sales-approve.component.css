@@ -15,6 +15,11 @@
     align-items: center;
     margin-top: 22px;
 }
+.table > thead > tr > th {
+  vertical-align: center;
+  border-bottom: 0 solid #e7ecf1;
+  height: 45px;
+}
 .sales-quote-approver-info p{
   flex: 30%;
   padding: 0;

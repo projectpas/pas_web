@@ -61,9 +61,9 @@ td{
 select:disabled {
    background-color: none !important; 
 }
-.dropdown-select {
+/* .dropdown-select {
     background: url("../assets/images/ddrp-arrow.png") 98% center no-repeat;
-}
+} */
 /*.workflow-table-pub tr td {
     padding: 4px;
 }*/

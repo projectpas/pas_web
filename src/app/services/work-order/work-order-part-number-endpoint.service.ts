@@ -5,13 +5,13 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { WorkOrder } from '../../models/work-order.model';
 import { WorkOrderPartNumber } from '../../models/work-order-partnumber.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class WorkOrderPartNumberEndpointService extends EndpointFactory {
 
@@ -37,56 +37,56 @@ export class WorkOrderPartNumberEndpointService extends EndpointFactory {
     getAllWorkOrders<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllWorkOrders());
-            }));
+            });
     }
 
     getWorkOrderById<T>(workOrderId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${workOrderId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getWorkOrderById(workOrderId));
-            }));
+            });
     }
 
     addWorkOrder<T>(workOrderPartNumber: WorkOrderPartNumber): Observable<T> {
         debugger;
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(workOrderPartNumber), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(workOrderPartNumber), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addWorkOrder(workOrderPartNumber));
-            }));
+            });
     }
 
     updateWorkOrder<T>(workOrderPartNumber: WorkOrderPartNumber): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(workOrderPartNumber), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(workOrderPartNumber), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateWorkOrder(workOrderPartNumber));
-            }));
+            });
     }
 
     removeWorkOrderById<T>(workOrderId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${workOrderId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeWorkOrderById(workOrderId));
-            }));
+            });
     }
 
     getAssetStatusAuditById<T>(workOrderId: number): Observable<T> {
         let endpointUrl = `${this.getAssetAuditById}/${workOrderId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAssetStatusAuditById(workOrderId));
-            }));
+            });
     }
 
 }

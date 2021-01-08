@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+﻿import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
 import * as $ from 'jquery';
@@ -6,8 +6,8 @@ import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { ItemMasterService } from '../../services/itemMaster.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -31,7 +31,7 @@ import { LegalEntityService } from '../../services/legalentity.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition } from '../../generic/autocomplete';
 import { CommonService } from '../../services/common.service';
-import { Subject ,  forkJoin } from 'rxjs'
+import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { StocklineService } from '../../services/stockline.service';
@@ -41,6 +41,7 @@ import { WorkOrderType } from '../../models/work-order-type.model';
 import { WorkOrderSettingsService } from '../../services/work-order-settings.service';
 import { SalesQuoteService } from '../../services/salesquote.service';
 import { SOSettingsModel } from '../../components/sales/quotes/models/verify-sales-quote-model';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { SalesOrderService } from '../../services/salesorder.service';
 
 
@@ -67,8 +68,8 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
         { label: 'Create SO Settings' }
     ];
 
-    salesOrderStatusList = [];
-    salesOrderPriorityList = [];
+    salesOrderStatusList:any = [];
+    salesOrderPriorityList:any = [];
     salesOrderViewList = [{ label: "PN View", value: 1 },
     { label: "SO View", value: 2 }];
 
@@ -89,11 +90,11 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getInitialData();
         if (this.salesOrderService.isEditSOSettingsList) {
             this.isEditMode = true;
             this.receivingForm = this.salesOrderService.soSettingsData;
         }
+        this.getInitialData();
     }
 
 
@@ -116,26 +117,33 @@ export class CreateSalesOrderSettingsComponent implements OnInit {
     }
 
     getInitialData() {
-        this.isSpinnerVisible = true;
-        forkJoin(this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description"),
-            this.customerService.getCustomerTypes(),
-            this.salesOrderService.getAllSalesOrderSettings(),
-            this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
-            this.commonservice.smartDropDownList("Priority", "PriorityId", "Description")
-        ).subscribe(result => {
-            this.isSpinnerVisible = false;
-            this.salesOrderTypes = result[0];
-            this.accountTypes = result[1][0];
-            this.allSettings = result[2];
-            this.salesOrderStatusList = result[3];
-            this.salesOrderPriorityList = result[4];
-            // this.removeDuplicateAccountTypes(this.accountTypes);
+        // this.commonservice.smartDropDownList("MasterSalesOrderQuoteTypes", "Id", "Description"),
+        //     this.customerService.getCustomerTypes(),
+        //     this.salesOrderService.getAllSalesOrderSettings(),
+        //     this.commonservice.smartDropDownList("MasterSalesOrderQuoteStatus", "Id", "Name"),
+        //     this.commonservice.smartDropDownList("Priority", "PriorityId", "Description")
+        let typeId = this.receivingForm.typeId ? this.receivingForm.typeId : 0;
+        let defaultStatusId = this.receivingForm.defaultStatusId ? this.receivingForm.defaultStatusId : 0;
+        let defaultPriorityId = this.receivingForm.defaultPriorityId ? this.receivingForm.defaultPriorityId : 0;
+        let defaultStatus = this.receivingForm.soListStatusId ? this.receivingForm.soListStatusId : 0;
 
-        }, error => {
-            this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadFailed(errorLog)
-        })
+        this.isSpinnerVisible = true;
+        forkJoin(this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteTypes', 'Id', 'Description', '', true, 100, [typeId].join()),
+            this.commonservice.autoSuggestionSmartDropDownList('MasterSalesOrderQuoteStatus', 'Id', 'Name', '', true, 100, [defaultStatusId, defaultStatus].join()),
+            this.commonservice.autoSuggestionSmartDropDownList('Priority', 'PriorityId', 'Description', '', true, 100, [defaultPriorityId].join())).subscribe(result => {
+                this.isSpinnerVisible = false;
+                this.salesOrderTypes = result[0];
+                // this.accountTypes = result[1][0];
+                // this.allSettings = result[2];
+                this.salesOrderStatusList = result[1];
+                this.salesOrderPriorityList = result[2];
+                // this.removeDuplicateAccountTypes(this.accountTypes);
+
+            }, error => {
+                this.isSpinnerVisible = false;
+                const errorLog = error;
+                this.onDataLoadFailed(errorLog)
+            })
     }
 
 

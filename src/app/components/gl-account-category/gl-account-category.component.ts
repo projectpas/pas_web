@@ -10,8 +10,8 @@ import { GLAccountCategoryService } from "../../services/gl-account-category/gl-
 import { ModeOfOperation } from "../../models/ModeOfOperation.enum";
 import { validateRecordExistsOrNot, selectedValueValidate, getObjectById, editValueAssignByCondition } from '../../generic/autocomplete';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

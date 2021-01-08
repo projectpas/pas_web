@@ -1,12 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ChargeEndpoint extends EndpointFactory {
 
@@ -37,102 +37,102 @@ export class ChargeEndpoint extends EndpointFactory {
 
     getChargeEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getChargeEndpoint());
-            }));
+            });
 	}
 
 	getCurrencyEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.actionsCurrency, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.actionsCurrency, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getCurrencyEndpoint());
-			}));
+			});
 	}
 	getPOEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.actionPO, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.actionPO, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getPOEndpoint());
-			}));
+			});
 	}
 	getVendorEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.actionVendor, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.actionVendor, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getVendorEndpoint());
-			}));
+			});
 	}
 	getIntegrationPortalEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.actionIntegrationPortal, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.actionIntegrationPortal, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getIntegrationPortalEndpoint());
-			}));
+			});
 	}
 	
 
     getNewGatecodeEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._workflowActionsNewUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._workflowActionsNewUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewGatecodeEndpoint(userObject));
-            }));
+            });
     }
 
     getEditChargeEndpoint<T>(chargeId?: number): Observable<T> {
         let endpointUrl = chargeId ? `${this._workflowActionsNewUrl}/${chargeId}` : this._workflowActionsNewUrl;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditChargeEndpoint(chargeId));
-            }));
+            });
     }
 
     getUpdateChargeEndpoint<T>(roleObject: any, chargeId: number): Observable<T> {
         let endpointUrl = `${this._workflowActionsNewUrl}/${chargeId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateChargeEndpoint(roleObject, chargeId));
-            }));
+            });
     }
 
     getDeleteChargeEndpoint<T>(chargeId: number,updatedBy: string): Observable<T> {
         let endpointUrl = `${this._workflowActionsNewUrl}/${chargeId}?updatedBy=${updatedBy}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () =>
                  this.getDeleteChargeEndpoint(chargeId,updatedBy));
-            }));
+            });
     }
     getHistoryChargeEndpoint<T>(chargeId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlAuditHistory}/${chargeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryChargeEndpoint(chargeId));
-            }));
+            });
     }
 
     getChargeAuditById<T>(chargeId: number): Observable<T> {
         let endpointUrl = `${this.getChargeAuditDataById}/${chargeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getChargeAuditById(chargeId));
-            }));
+            });
     }
 
     getChargeRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
         //let endpointUrl = `${this.getPaginationData}/${data}`;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getChargeRecords(paginationOption));
-            }));
+            });
     }
 
 

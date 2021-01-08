@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, Input } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { FormBuilder } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { fadeInOut } from '../../../services/animations';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { AuditHistory } from '../../../models/audithistory.model';
@@ -13,10 +13,11 @@ import { MasterComapnyService } from '../../../services/mastercompany.service';
 import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
 import { CustomerService } from '../../../services/customer.service';
 import { ConfigurationService } from '../../../services/configuration.service';
-import { getValueFromArrayOfObjectById, editValueAssignByCondition, getValueFromObjectByKey, getObjectByValue } from '../../../generic/autocomplete';
+import { getValueFromArrayOfObjectById, editValueAssignByCondition, getValueFromObjectByKey, getObjectByValue, getObjectById } from '../../../generic/autocomplete';
 import { emailPattern, titlePattern, phonePattern, mobilePattern } from '../../../validations/validation-pattern';
-
+import { DatePipe } from '@angular/common';
 import * as $ from 'jquery'
+
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import { CommonService } from '../../../services/common.service';
@@ -25,7 +26,8 @@ import { CommonService } from '../../../services/common.service';
     selector: 'app-vendor-contacts',
     templateUrl: './vendor-contacts.component.html',
     styleUrls: ['./vendor-contacts.component.scss'],
-    animations: [fadeInOut]
+    animations: [fadeInOut],
+    providers: [DatePipe]
 })
 /** anys component*/
 export class VendorContactsComponent implements OnInit {
@@ -33,6 +35,8 @@ export class VendorContactsComponent implements OnInit {
     modelValue: boolean;
     display: boolean;
     matSpinner: boolean;
+    selectedOnly: boolean = false;
+    targetData: any;
     activeIndex: any = 3;
     showFirstName: boolean;
     showemail: boolean;
@@ -68,6 +72,7 @@ export class VendorContactsComponent implements OnInit {
     contactTitle: any = "";
     email: any = "";
     mobilePhone: number;
+    disableSaveMemo: boolean = true;
     fax: any;
     sourceVendorforView: any = {};
     selectedFirstName: any;
@@ -78,6 +83,7 @@ export class VendorContactsComponent implements OnInit {
     totalRecords: number = 0;
     memoPopupContent: any;
     pageIndex: number = 0;
+
     pageSize: number = 10;
     totalPages: number = 0;
     @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
@@ -114,11 +120,14 @@ export class VendorContactsComponent implements OnInit {
     vendorContactsColumns = [
         { field: 'firstName', header: 'First Name' },
         { field: 'lastName', header: 'Last Name' },
-        { field: 'contactTitle', header: 'Contact Title' },
+        { field: 'contactTitle', header: 'Contact Title' }, 
         { field: 'email', header: 'Email' },
+        { field: 'tagName', header: 'Tag' },
+        { field: 'attention', header: 'Attention' },
         { field: 'mobilePhone', header: 'Mobile Phone' },
         { field: 'fullContactNo', header: 'Work Phone' },
-        { field: 'fax', header: 'FAX' },
+        { field: 'Notes', header: 'Memo' },
+        //{ field: 'fax', header: 'FAX' },
         { field: 'isDefaultContact', header: 'IsPrimary' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
@@ -140,6 +149,7 @@ export class VendorContactsComponent implements OnInit {
     ataListDataValues: any = [];
     originalATASubchapterData: any = [];
     selectedContact: any;
+   
     ataChapterEditDat = {
         ataChapterId: null,
         ataSubChapterId: null,
@@ -170,9 +180,11 @@ export class VendorContactsComponent implements OnInit {
     search_ataChapterList: { value: number; label: string; }[];
     vendorData :any = {};
     arrayContactlist:any[] = [];
+    arrayTagNamelist:any[] = [];
     firstNamesList: any;
 	middleNamesList: any;
     lastNamesList: any;
+    tagNamesList: any;
     currentATADeletedstatus:boolean=false;
     originalTableData:any=[];
 	currentDeletedstatus:boolean=false;
@@ -191,6 +203,7 @@ export class VendorContactsComponent implements OnInit {
         private alertService: AlertService,
         public vendorService: VendorService,
         private dialog: MatDialog,
+        private datePipe: DatePipe,
         private commonService: CommonService,
         private masterComapnyService: MasterComapnyService,
         private configurations: ConfigurationService, public atasubchapter1service: AtaSubChapter1Service) {
@@ -207,15 +220,18 @@ export class VendorContactsComponent implements OnInit {
                         this.vendorId = this.router.snapshot.params['id'];
                         this.vendorService.vendorId = this.vendorId;
                         this.vendorService.listCollection.vendorId = this.vendorId; 
-                        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-                             res => {
-                                this.local = res[0];
-                                this.vendorCodeandName = res[0];
-                            },err => {
-                                const errorLog = err;
-                                this.saveFailedHelper(errorLog);
-                            });
-                        }
+                        if(this.vendorId > 0)
+                        {
+                            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                                res => {
+                                   this.local = res[0];
+                                   this.vendorCodeandName = res[0];
+                               },err => {
+                                   const errorLog = err;
+                                   this.saveFailedHelper(errorLog);
+                               });
+                        }                        
+                    }
                 }
                 else
                 {
@@ -254,6 +270,11 @@ export class VendorContactsComponent implements OnInit {
         {
             this.getVendorCodeandNameByVendorId();
         }
+        else{
+            this.vendorId = this.router.snapshot.params['id'];
+            this.vendorService.vendorId = this.vendorId;
+            this.vendorService.listCollection.vendorId = this.vendorId; 
+        }
 
         this.router.queryParams.subscribe((params: Params) => {
         });
@@ -264,16 +285,33 @@ export class VendorContactsComponent implements OnInit {
             this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
         }
     }
+    closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+    }
 
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
+    }
+   
     getVendorCodeandNameByVendorId()
     {
-        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-            res => {
-                    this.vendorCodeandName = res[0];
-            },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+        if(this.vendorId > 0)
+        {
+            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                res => {
+                        this.vendorCodeandName = res[0];
+                },err => {
+                    const errorLog = err;
+                    this.saveFailedHelper(errorLog);
             });
+        }        
     }
     
     public allWorkFlows: any[] = [];
@@ -286,10 +324,14 @@ export class VendorContactsComponent implements OnInit {
             error => this.onDataLoadFailed(error)
         );
     }
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
 
     onClickMemo() {
         this.memoPopupContent = this.sourceVendor.notes;
         this.enableSave();
+        this.disableSaveMemo = true;
         //this.memoPopupValue = value;
     }   
     onClickPopupSave() {
@@ -425,9 +467,15 @@ export class VendorContactsComponent implements OnInit {
 		if(row.contactId > 0)
             this.arrayContactlist.push(row.contactId);
 
-		this.getAllContactFirstNameSmartDropDown('', row.firstName)
-		this.getAllContactMiddleNameSmartDropDown('', row.middleName)
-		this.getAllContactLastNameSmartDropDown('', row.lastName)
+		this.getAllContactFirstNameSmartDropDown('', row.firstName);
+		this.getAllContactMiddleNameSmartDropDown('', row.middleName);
+        this.getAllContactLastNameSmartDropDown('', row.lastName);
+
+        if(row.contactTagId > 0)
+        {
+            this.arrayTagNamelist.push(row.contactTagId);
+            this.getAllTagNameSmartDropDown('', row.contactTagId);
+        }
         
         if(this.sourceVendor.isDefaultContact == true) {
             this.sourceVendor['tempIsDefaultContact'] = this.sourceVendor.isDefaultContact;
@@ -508,8 +556,9 @@ export class VendorContactsComponent implements OnInit {
                 this.sourceVendor.firstName = this.sourceVendor.firstName.firstName != undefined ? this.sourceVendor.firstName.firstName : (this.sourceVendor.firstName != undefined ? this.sourceVendor.firstName : '') ;
                 this.sourceVendor.middleName = this.sourceVendor.middleName == undefined ? '' : (this.sourceVendor.middleName.middleName != undefined ? this.sourceVendor.middleName.middleName : this.sourceVendor.middleName) ;
                 this.sourceVendor.lastName = this.sourceVendor.lastName.lastName != undefined ? this.sourceVendor.lastName.lastName : (this.sourceVendor.lastName != undefined ? this.sourceVendor.lastName : '') ;
-
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
                 this.isDefault = this.sourceVendor.isDefaultContact;
+
                 if (!this.sourceVendor.isDefaultContact) {
                     this.sourceVendor.isDefaultContact = false;
                 }
@@ -521,12 +570,12 @@ export class VendorContactsComponent implements OnInit {
                 // before you commit make sure u don't have conlog, debug, commented code...
                 this.vendorService.newAddContactInfo(this.sourceVendor).subscribe(data => {
                     $("#addContactInfo").modal("hide");
-                    this.localCollection = data;
-                    this.sourceVendor = new Object();
+                    this.localCollection = data;                    
                     this.localCollection.VendorId = this.vendorId;
                     this.localCollection.ContactId = this.local.contactId;
                     this.localCollection.isDefaultContact = this.isDefault;
-                    
+                    this.sourceVendor = new Object();
+
                     if (data) {
                         this.updateVendorContact(this.localCollection);
                     }
@@ -546,12 +595,6 @@ export class VendorContactsComponent implements OnInit {
                     this.isEditContactInfo = false;
                     this.disableSave = true;
                     this.sourceVendor.vendorId = undefined;
-                    //this.saveFailedHelper(err);
-                    // this.alertService.showMessage(
-                    //     'Warning',
-                    //     err.error,
-                    //     MessageSeverity.error
-                    // )
                 })
             }
             else {
@@ -561,6 +604,7 @@ export class VendorContactsComponent implements OnInit {
                 this.sourceVendor.firstName = this.sourceVendor.firstName.firstName != undefined ? this.sourceVendor.firstName.firstName : (this.sourceVendor.firstName != undefined ? this.sourceVendor.firstName : '') ;
                 this.sourceVendor.middleName = this.sourceVendor.middleName == undefined ? '' : (this.sourceVendor.middleName.middleName != undefined ? this.sourceVendor.middleName.middleName : this.sourceVendor.middleName) ;
                 this.sourceVendor.lastName = this.sourceVendor.lastName.lastName != undefined ? this.sourceVendor.lastName.lastName : (this.sourceVendor.lastName != undefined ? this.sourceVendor.lastName : '') ;
+                this.sourceVendor.contactTagId = editValueAssignByCondition('contactTagId', this.sourceVendor.tagName);
 
                 this.vendorService.updateContactinfo(this.sourceVendor).subscribe(data => {
                     if (data) { this.sourceVendor = new Object(); }
@@ -569,6 +613,7 @@ export class VendorContactsComponent implements OnInit {
                     this.sourceVendor = {};
                     this.disableSave = true;
                     this.isSpinnerVisible = false;
+                    $("#addContactInfo").modal("hide");
                 }, err => {
                     this.isSpinnerVisible = false;
                     this.saveFailedHelper(err);
@@ -1216,7 +1261,27 @@ export class VendorContactsComponent implements OnInit {
                 }
             },error => this.saveFailedHelper(error));
         }
-        
+
+        getAllTagNameSmartDropDown(strText = '', contactTagId = 0) {
+            if(this.arrayTagNamelist.length == 0) {			
+                this.arrayTagNamelist.push(0); }
+                this.commonService.autoSuggestionSmartDropDownList('ContactTag', 'ContactTagId', 'TagName',strText,true,20,this.arrayTagNamelist.join()).subscribe(res => {
+                this.tagNamesList = res.map(x => {
+                    return {
+                        tagName: x.label, contactTagId: x.value 
+                    }
+                })
+
+                if(contactTagId > 0)
+                {
+                    this.sourceVendor = {
+                        ...this.sourceVendor,
+                        tagName : getObjectById('contactTagId', contactTagId, this.tagNamesList)
+                    }
+                }
+            })
+        }
+
         filterFirstNames(event) {
             if (event.query !== undefined && event.query !== null) {
                 this.getAllContactFirstNameSmartDropDown(event.query); }
@@ -1225,6 +1290,11 @@ export class VendorContactsComponent implements OnInit {
         filterMiddleNames(event) {
             if (event.query !== undefined && event.query !== null) {
                 this.getAllContactMiddleNameSmartDropDown(event.query); }
+        }
+
+        filterTagNames(event) {
+            if (event.query !== undefined && event.query !== null) {
+                this.getAllTagNameSmartDropDown(event.query); }
         }
     
         filterLastNames(event) {

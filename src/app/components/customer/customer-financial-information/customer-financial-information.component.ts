@@ -6,8 +6,8 @@
   EventEmitter,
   ViewChild,
   ElementRef,
+  SimpleChanges,
 } from '@angular/core';
-import { SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
 import { CustomerService } from '../../../services/customer.service';
 import { CurrencyService } from '../../../services/currency.service';
@@ -26,8 +26,12 @@ import {
 } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
 import { PercentService } from '../../../services/percent.service';
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
+import {
+  NgbModal,
+  NgbActiveModal,
+  ModalDismissReasons,
+} from '@ng-bootstrap/ng-bootstrap';
 import { ConfigurationService } from '../../../services/configuration.service';
 import {
   getValueFromObjectByKey,
@@ -60,8 +64,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   stopmulticlicks: boolean;
   taxRatesList: any = [];
   pageSize: number = 10;
-  pageSizeDoc: number = 3;
-  pageSizeTax: number = 3;
+  pageSizeDoc: number = 5;
+  pageSizeTax: number = 5;
   discountList: any;
   discountList1: any;
   totalRecords: number = 0;
@@ -105,6 +109,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   };
   totalRecordNew: number = 0;
   pageSizeNew: number = 3;
+  memoPopupContent: any;
+  memoPopupValue: any;
   totalPagesNew: number = 0;
   sourceViewforDocumentListColumns = [
     { field: 'fileName', header: 'File Name' },
@@ -197,6 +203,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
   disableSave: boolean = true;
   editModeFinance: boolean = false;
   isCountdisable: boolean = false;
+  disableTaxSave: boolean = true;
 
   constructor(
     public taxtypeser: TaxTypeService,
@@ -222,7 +229,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
   ngOnInit(): void {
     this.savedGeneralInformationData = this.savedGeneralInformationData || {};
     this.savedGeneralInformationData.discountId = 0;
-    this.savedGeneralInformationData.markUpPercentageId = 0;
+    this.savedGeneralInformationData.markUpPercentageId = 0;    
 
     if (this.editMode) {
       this.id = this.editGeneralInformationData.customerId;
@@ -232,14 +239,16 @@ export class CustomerFinancialInformationComponent implements OnInit {
       this.customerName = this.editGeneralInformationData.name;
 
     } else {
+      this.savedGeneralInformationData.allowPartialBilling = true;
+      this.savedGeneralInformationData.allowProformaBilling = true;      
       this.customerGeneralInformation = this.savedGeneralInformationData;
       this.id = this.savedGeneralInformationData.customerId;
       this.customerCode = this.savedGeneralInformationData.customerCode;
       this.customerName = this.savedGeneralInformationData.name;
       this.getDefaultCurrency();
     }
+    
   }
-
   ngOnChanges(changes: SimpleChanges) {
     for (let property in changes) {
       if (property == 'selectedCustomerTab') {
@@ -253,7 +262,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
           this.getAllTaxTypes();
           this.getAllTaxRates();
 
-          if (this.editMode) {
+          if (this.editMode) {            
               this.disableSave = true;
               if (this.editGeneralInformationData.currency == null || this.editGeneralInformationData.currency == 0) {
                 this.getDefaultCurrency();
@@ -303,6 +312,10 @@ export class CustomerFinancialInformationComponent implements OnInit {
             ),
             };
         }
+        else{
+          this.savedGeneralInformationData.allowPartialBilling = true;
+          this.savedGeneralInformationData.allowProformaBilling = true;   
+        }
         this.isSpinnerVisible = false;
       },error => this.saveFailedHelper(error))
     }
@@ -325,6 +338,15 @@ export class CustomerFinancialInformationComponent implements OnInit {
       ? this.authService.currentUser.userName
       : '';
   }
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+}
 
   getGlobalSettings() {
     this.globalSettings =
@@ -654,6 +676,18 @@ export class CustomerFinancialInformationComponent implements OnInit {
     this.pageSizeTax = event.rows;
   }
 
+  validateSaveButton()
+  {
+    if(this.selectedTaxRates > 0 && this.selectedTaxType > 0)
+    {
+        this.disableTaxSave = false;
+    }
+    else
+    {
+      this.disableTaxSave = true;
+    }
+  }
+
   getMappedTaxTypeRateDetails() {
     this.isSpinnerVisible = true;
     this.customerService
@@ -689,6 +723,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         );
         this.selectedTaxRates = null;
         this.selectedTaxType = null;
+        this.disableTaxSave = true;        
       } else {
         this.taxTypeRateMapping.push({
           isDisable: true,
@@ -712,6 +747,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
 
         this.selectedTaxRates = null;
         this.selectedTaxType = null;
+        this.disableTaxSave = true;
       }
     }
   }
@@ -806,6 +842,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
       )
       .subscribe((res) => {
         this.onUploadDocumentListNew();
+        this.savedGeneralInformationData.customerFinancialId = res;
         this.alertService.showMessage(
           'Success',
           ` ${
@@ -817,7 +854,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
         this.editModeFinance = true;
         this.disableSave = true;
         this.isSpinnerVisible = false;
-        this.fininfoformdata.reset();
+        //this.fininfoformdata.reset();
       },error => this.saveFailedHelper(error));
   }
 
@@ -1004,6 +1041,21 @@ export class CustomerFinancialInformationComponent implements OnInit {
   backClick() {
     this.tab.emit('Atachapter');
   }
+
+  onClickMemo() {
+    this.memoPopupContent = this.documentInformation.docMemo;
+    this.enableSave();
+    this.enableSaveDoc();
+    //this.memoPopupValue = value;
+}   
+onClickPopupSave() {
+    this.documentInformation.docMemo = this.memoPopupContent;
+    this.memoPopupContent = '';
+    $('#financial-memo-popup').modal("hide");
+}
+closeMemoModel() {
+    $('#financial-memo-popup').modal("hide");
+}
 
   deleteTaxTypeRate(content, rowData, index) {
     this.taxRateIndex = index;
@@ -1226,7 +1278,7 @@ export class CustomerFinancialInformationComponent implements OnInit {
           fileSize: file.size,
         });
 
-        this.formData.append(file.name, file);
+          this.formData.append(file.name, file);
       }
     }
 
@@ -1374,28 +1426,31 @@ export class CustomerFinancialInformationComponent implements OnInit {
   }
 
   onUploadDocumentListNew() {
-    // file upload
-    const vdata = {
+    const data = {
+      ...this.allCustomerFinanceDocumentsList,
       referenceId: this.id,
       masterCompanyId: this.currentUserMasterCompanyId,
-      createdBy: this.userName,
       updatedBy: this.userName,
+      createdBy: this.userName,
       moduleId: 50,
-    };
-    for (var key in vdata) {
-      this.formData.append(key, vdata[key]);
     }
-    this.formData.append(
-      'attachmentdetais',
-      JSON.stringify(this.allCustomerFinanceDocumentsList)
-    );
-
-    this.commonservice
-      .uploadDocumentsEndpoint(this.formData)
-      .subscribe((res) => {
-        this.formData = new FormData();
-        this.toGetDocumentsListNew(this.id);
-      },error => this.saveFailedHelper(error));
+    for (var key in data) {
+        this.formData.append(key, data[key]);
+    }    
+    if(this.allCustomerFinanceDocumentsList != undefined && this.allCustomerFinanceDocumentsList.length > 0)
+    {
+        this.formData.append(
+        'attachmentdetais',
+        JSON.stringify(this.allCustomerFinanceDocumentsList)
+      );
+  
+      this.commonservice
+          .uploadDocumentsEndpoint(this.formData)
+        .subscribe((res) => {
+            this.formData = new FormData();
+          this.toGetDocumentsListNew(this.id);
+        },error => this.saveFailedHelper(error));
+    }    
   }
 
   toGetDocumentsListNew(id) {
@@ -1473,5 +1528,9 @@ export class CustomerFinancialInformationComponent implements OnInit {
   
   enableSave() {
 		this.disableSave = false;
-	}
+  }
+  enableSaveDoc()
+  {
+    this.attachCertificateUpdateFlag = false;
+  }
 }

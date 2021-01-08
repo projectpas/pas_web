@@ -371,25 +371,6 @@ export class SalesOrderBillingComponent implements OnInit {
             this.errorHandling(err);
         });
     }
-    // onChangeWOCostPlus() {
-    //     if (this.billingorInvoiceForm.totalWorkOrder) {
-    //         this.billingorInvoiceForm.grandTotal = Math.round(this.billingorInvoiceForm.totalWorkOrderCostPlus).toFixed(2);
-    //     }
-    //     this.billingorInvoiceForm.totalWorkOrderCostPlus = this.billingorInvoiceForm.totalWorkOrderCostPlus.toFixed(2);
-    //     // this.calculateGrandTotal();
-    // } 
-    // onChangeMaterialCostPlus() {
-    //     this.billingorInvoiceForm.materialCostPlus = this.billingorInvoiceForm.materialCostPlus.toFixed(2);
-    //     // this.calculateGrandTotal();
-    // }
-    // onChangeLaborOHCostPlus() {
-    //     this.billingorInvoiceForm.laborOverHeadCostPlus = this.billingorInvoiceForm.laborOverHeadCostPlus.toFixed(2);
-    //     // this.calculateGrandTotal();
-    // }
-    // onChangeMiscChCostPlus() {
-    //     this.billingorInvoiceForm.miscChargesCostPlus = this.billingorInvoiceForm.miscChargesCostPlus.toFixed(2);
-    //     // this.calculateGrandTotal();
-    // }
 
     convertDate(key, data) {
         // debugger;

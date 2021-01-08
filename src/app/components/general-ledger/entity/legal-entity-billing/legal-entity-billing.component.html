@@ -73,15 +73,21 @@
                                           >
                                 <i class="fa fa-search"></i>
                                 <input type="text" pInputText size="50" 
-                                class="form-control" (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Filter" style="height: 28px !important;">
+                                (input)="globalSearch($event.target.value)"
+                                class="form-control"  placeholder="Filter" style="height: 28px !important;">
                             </div>
+                            <!-- (input)="dt.filterGlobal($event.target.value, 'contains')" -->
                         </div>
                       </div>
                       <div class="row">
                         <div class="col">
                             <button type="button"   *ngIf="isViewMode==false"
-                            class="btn btn-primary  new-table-button" matTooltip="Download  Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"  (click)="openTag(export)" style="padding: 5px 10px !important;"></button>
-                            <button *ngIf="isViewMode==false"  type="button  new-table-button" class="btn btn-primary" matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
+                            class="btn btn-primary  new-table-button" matTooltip="Download  Data" matTooltipPosition="above"
+                             pButton icon="fa-download" iconPos="left" label="Export All Data" 
+                             (click)="openTag(export)" style="padding: 5px 10px !important;"></button>
+                            <button *ngIf="isViewMode==false"  type="button  new-table-button" class="btn btn-primary"
+                             matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download" iconPos="left" 
+                             label="Export Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="padding: 5px 10px !important;"></button>
 
                             <ng-template #export let-c="close" let-d="dismiss">
                                 <div class="modal-header">
@@ -359,7 +365,7 @@
                                         <label> Primary </label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="checkbox" name="isPrimary"
+                                        <input type="checkbox" name="isPrimary" [disabled]="editisPrimary==true"
                                                [(ngModel)]="billingInfo.isPrimary"
                                                (ngModelChange)="enableSave()" />
                                         <!-- <span class="cr">
@@ -386,7 +392,7 @@
                                         <label> Address 1 <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input autocomplete="off" class="form-control" id="csaddress1" type="text" name="address1"
+                                        <input autocomplete="off" class="form-control" id="csaddress1234" type="text" name="address1234"
                                                [(ngModel)]="billingInfo.address1" (ngModelChange)="enableSave()" required />
                                     </div>
                                 </div>
@@ -433,7 +439,8 @@
                                         <label> Postal Code <span class="clr-red">*</span></label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input autocomplete="off" (keypress)="checkvalid($event)" class="form-control" id="cspostal1" type="text" name="postalCode"
+                                        <!-- (keypress)="checkvalid($event)" -->
+                                        <input autocomplete="off"  class="form-control" id="cspostal1" type="text" name="postalCode"
                                                [(ngModel)]="billingInfo.postalCode" (ngModelChange)="enableSave()" required />
                                     </div>
                                 </div>
@@ -489,9 +496,13 @@
                     </p>
                 </div>
             </div>
+            <div class="preloader" *ngIf="isSpinnerVisibleView">
+                <div class="loading">
+                    <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
 
-
-            <div class="modal-body" *ngIf="viewData">
+            <div class="modal-body" *ngIf="viewData"> 
                 <div class="col-sm-12">
                     <p><span class="label"><b>Primary: </b></span><span class="value">
                         <!-- {{viewData.isPrimary === true ? 'Yes' : 'No'}} -->
@@ -532,6 +543,21 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
+        <br>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                </p>
+            </div>
+        </div><br>
     </div>
     <div class="modal-body">
         <strong>
@@ -662,6 +688,21 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
+        <br>
+        <div class="col-md-12 shadow-box-cstm">
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Name: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityName }} </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <p class="fs12">
+                    <label class="control-label labels-font-header" style="width: auto;">Legal Entity  Code: </label>
+                    <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
+                </p>
+            </div>
+        </div><br>
     </div>
     <div class="modal-body">
         <strong>

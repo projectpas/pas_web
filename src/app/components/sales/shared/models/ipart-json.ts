@@ -51,4 +51,6 @@ export interface IPartJson {
     PriorityId?: number;
     StatusId?: number;
     CustomerReference: string;
+    itemMasterId?: number;
+    partId?: number;
 }

@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { FormBuilder } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { fadeInOut } from '../../../services/animations';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { AuditHistory } from '../../../models/audithistory.model';
@@ -67,6 +67,7 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
     disableSaveCurrency: boolean;
     SelectedCurrencyInfo: any;
     vendorProcess1099Data: any;
+    SelectedvendorProcess1099Data: any;
     checkedCheckboxesList: any = [];
     listOfErrors: any[];
     @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
@@ -154,6 +155,8 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             this.sourceVendor = this.local;
         }
         this.dataSource = new MatTableDataSource();
+        this.getVendorProcess1099();
+
         if (this.vendorService.listCollection && this.vendorService.isEditMode == true) {
             this.viewName = "Edit";
             this.local = this.vendorService.listCollection;
@@ -164,7 +167,6 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             }
         }
         else {
-            this.getVendorProcess1099();
             this.sourceVendor.creditLimit = 0;
             this.sourceVendor.creditTermsId = 0;
             this.sourceVendor.currencyId = 0;
@@ -180,8 +182,14 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         this.loadCreditTermsData();
         this.sourceVendor.v1099RentDefault = true;
         this.sourceVendor.is1099Required = false;
-        //this.loadDiscountData();
 
+        if(this.vendorId == undefined || this.vendorId == 0 || this.vendorId == null)
+        {
+            this.vendorId = this.router.snapshot.params['id'];
+            this.vendorService.vendorId = this.vendorId;
+            this.vendorService.listCollection.vendorId = this.vendorId;
+        }
+        
         if (this.local) {
              this.getVendorsList();
         }
@@ -189,7 +197,6 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         {
             this.getAllDiscountDropdownList(0);
             this.loadCurrencyData(0);
-            //this.getAllPercentage(0);
         }
         this.validateCreditTerms(this.sourceVendor.creditTermsId);
         this.validateCurrency(this.sourceVendor.currencyId);
@@ -218,46 +225,19 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
         error => this.saveFailedHelper(error))
     }
 
-    getVendorCodeandNameByVendorId() {
-        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-        res => {
-                this.vendorCodeandName = res[0];
-        },err => {
-            const errorLog = err;
-            this.saveFailedHelper(errorLog);
-        });
+    getVendorCodeandNameByVendorId()
+    {
+        if(this.vendorId > 0)
+        {
+            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                res => {
+                        this.vendorCodeandName = res[0];
+                },err => {
+                    const errorLog = err;
+                    this.saveFailedHelper(errorLog);
+            });
+        }        
     }
-    
-
-    // getAllPercentage(PercentId) {
-    //     if(this.arrayListPercentageId.length == 0) {
-	// 		this.arrayListPercentageId.push(0); }
-    //     this.commonservice.autoSuggestionSmartDropDownList('[Percent]', 'PercentId', 'PercentValue','',true,500,this.arrayListPercentageId.join()).subscribe(res => {
-    //         this.percentageList = res;
-    //         if(PercentId > 0){
-    //             this.sourceVendor.percentId = PercentId;
-    //       }
-    //     },
-    //     error => this.saveFailedHelper(error))
-    // }
-
-    // loadCurrencyDataold(CurrencyId){
-    //     if(this.arrayListCurrancyId.length == 0) {
-	// 		this.arrayListCurrancyId.push(0); }
-    //     this.commonservice.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code','',true,500,this.arrayListCurrancyId.join()).subscribe(res => {
-    //           this.allCurrencyInfo = res.map(x => {
-    //               return {
-    //                   ...x,
-    //                   currencyId: x.value,
-    //                   code: x.label
-    //               }
-    //           });
-    //           this.dataSource.data = this.allCurrencyInfo;
-    //           if(CurrencyId > 0){
-    //                 this.sourceVendor.currencyId = CurrencyId;
-    //           }
-    //     }, error => this.saveFailedHelper(error))
-    // }
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
@@ -365,6 +345,8 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             {
                 this.getAllDiscountDropdownList(0);
                 this.loadCurrencyData(0);
+                this.sourceVendor.creditLimit =  0;
+                this.sourceVendor.creditTermsId =  0;
             }
         }
     }
@@ -490,9 +472,35 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             errmessage = errmessage + "Credit Limit values must be greater than zero."
         }
 
+        if(this.sourceVendor.creditTermsId == 0 || this.sourceVendor.creditTermsId == null) {	
+            this.isSpinnerVisible = false;	
+            if(errmessage != '') {
+                errmessage = errmessage + '<br />' + "Please Select Creadit Tearms."
+            }
+            else
+            {
+                errmessage = errmessage + "Please Select Creadit Tearms."
+            }	
+        }
+
+        if(this.sourceVendor.currencyId == 0 || this.sourceVendor.currencyId == null) {	
+            this.isSpinnerVisible = false;	
+            if(errmessage != '') {
+                errmessage = errmessage + '<br />' + "Please Select Currency"
+            }
+            else
+            {
+                errmessage = errmessage + "Please Select Currency"
+            }	
+        }
+
         if(errmessage != '') {
             this.alertService.showStickyMessage("Validation failed", errmessage, MessageSeverity.error, errmessage);
             return;
+        }
+
+        if(this.sourceVendor.discountId == 0 || this.sourceVendor.discountId == null) {
+            this.sourceVendor.discountId = null;
         }
 
         if (this.sourceVendor.country != null) {
@@ -563,17 +571,13 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
                 if(this.vendorProcess1099Data) {
                     this.sourceVendor.master1099s = [];
                     this.vendorProcess1099Data.map(x => {
-                        if(x.isDefaultCheck) {
+                        //if(x.isDefaultCheck) {
                             this.sourceVendor.master1099s.push(x);
-                        }
+                        //}
                     });
                 }
                 const financialInfo = {
                     master1099s: this.sourceVendor.master1099s,
-                    edi: this.sourceVendor.edi,
-                    ediDescription: this.sourceVendor.ediDescription,
-                    aeroExchange: this.sourceVendor.aeroExchange,
-                    aeroExchangeDescription: this.sourceVendor.aeroExchangeDescription,
                     creditLimit: this.sourceVendor.creditLimit,
                     creditTermsId: this.sourceVendor.creditTermsId,
                     currencyId: this.sourceVendor.currencyId,
@@ -743,6 +747,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
               if(CurrencyId > 0){
                     this.sourceVendor.currencyId = CurrencyId;
               }
+              else{
+                this.sourceVendor.currencyId = 0;
+              }
         }, error => this.saveFailedHelper(error))
     }
 
@@ -847,6 +854,9 @@ export class VendorFinancialInformationComponent implements OnInit, AfterViewIni
             this.discountList = response;
             if(DiscountId > 0){
                 this.sourceVendor.discountId = DiscountId;
+            }
+            else{
+                this.sourceVendor.discountId = 0;
             }
 		},err => {
 			const errorLog = err;

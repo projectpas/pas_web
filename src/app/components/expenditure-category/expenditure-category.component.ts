@@ -9,8 +9,8 @@ import { ExpenditureCategory } from "../../models/expenditure-category.model";
 import { ExpenditureCategoryService } from "../../services/expenditure-category/expenditure-category.service";
 import { ModeOfOperation } from "../../models/ModeOfOperation.enum";
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

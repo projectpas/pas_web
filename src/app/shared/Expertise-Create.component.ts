@@ -4,6 +4,8 @@ import { IExpertiseType } from "../Workflow/ExpertiseType";
 import { ActionService } from "../Workflow/ActionService";
 import { IExpertise } from "../Workflow/Expertise";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
+import { CommonService } from "../services/common.service";
+import { AlertService, MessageSeverity } from "../services/alert.service";
 
 @Component({
     selector: 'grd-expertise',
@@ -20,9 +22,11 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     errorMessage: string;
     currentPage: number = 1;
     itemsPerPage: number = 10;
+    isSpinnerVisible = false;
 
 
-    constructor(private actionService: ActionService) {
+    constructor(private alertService: AlertService,
+        private commonService: CommonService) {
     }
 
     ngOnInit(): void {
@@ -31,21 +35,33 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             this.row = {};
         }
         this.row.taskId = this.workFlow.taskId;
-        this.actionService.GetEmployeeExpertiseType().subscribe(
-            employeeExpertiseTypes => {
-                this.expertiseTypes = employeeExpertiseTypes;
-            },
-            error => this.errorMessage = <any>error
-        );
-        // if (this.UpdateMode) {
-        //     this.reCalculate();
-        // }
+        this.getExpertiseData();
     }
 
+    getExpertiseData() {
+        let expertiseIds = [];
+        expertiseIds = this.workFlow.expertise.reduce((acc, x) => {
+            return expertiseIds.push(acc.expertiseTypeId);
+        }, 0)
+        this.isSpinnerVisible = true;
+        this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', '', true, 100, expertiseIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.expertiseTypes = res.map(x => {
+                    return {
+                        ...x,
+                        employeeExpertiseId: x.value,
+                        description: x.label
+                    }
+                });
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
+    }
 
     ngOnChanges(): void {
-        if(this.workFlow) {
-            if(this.workFlow.expertise.length > 0) {
+        if (this.workFlow) {
+            if (this.workFlow.expertise.length > 0) {
                 this.workFlow.expertise = this.workFlow.expertise.map(x => {
                     return {
                         ...x,
@@ -63,12 +79,14 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             this.reCalculate();
         }
     }
+
     reCalculate() {
         this.calculateEstimatedHoursSummation();
         this.calculateLabourDirectCost();
         this.calculateOHCostSummation();
         this.calculateLabourOHCostSummation();
     }
+
     addRow(): void {
         var newRow = Object.assign({}, this.row);
         newRow.workflowExpertiseListId = "0";
@@ -99,7 +117,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     calculateLabourCost(expertise): void {
         expertise.estimatedHours = expertise.estimatedHours ? formatNumberAsGlobalSettingsModule(expertise.estimatedHours, 2) : '';
         expertise.laborDirectRate = expertise.laborDirectRate ? formatNumberAsGlobalSettingsModule(expertise.laborDirectRate, 2) : '';
-        var value = parseFloat(expertise.estimatedHours.toString().replace(/\,/g,'')) * parseFloat(expertise.laborDirectRate.toString().replace(/\,/g,''));
+        var value = parseFloat(expertise.estimatedHours.toString().replace(/\,/g, '')) * parseFloat(expertise.laborDirectRate.toString().replace(/\,/g, ''));
         if (value > 0) {
             expertise.directLaborRate = formatNumberAsGlobalSettingsModule(value, 2);
         }
@@ -113,7 +131,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     // sum of the estimated Hrs
     calculateEstimatedHoursSummation() {
         this.workFlow.sumofestimatedhrs = this.workFlow.expertise.reduce((acc, x) => {
-            return acc + parseFloat(x.estimatedHours === undefined || x.estimatedHours === '' ? 0 : x.estimatedHours.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.estimatedHours === undefined || x.estimatedHours === '' ? 0 : x.estimatedHours.toString().replace(/\,/g, ''))
         }, 0);
         this.workFlow.sumofestimatedhrs = this.workFlow.sumofestimatedhrs ? formatNumberAsGlobalSettingsModule(this.workFlow.sumofestimatedhrs, 2) : '0.00';
     }
@@ -121,14 +139,14 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     // sum of labour direct cost 
     calculateLabourDirectCost() {
         this.workFlow.sumofLabourDirectCost = this.workFlow.expertise.reduce((acc, x) => {
-            return acc + parseFloat(x.directLaborRate === undefined || x.directLaborRate === '' ? 0 : x.directLaborRate.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.directLaborRate === undefined || x.directLaborRate === '' ? 0 : x.directLaborRate.toString().replace(/\,/g, ''))
         }, 0);
         this.workFlow.sumofLabourDirectCost = this.workFlow.sumofLabourDirectCost ? formatNumberAsGlobalSettingsModule(this.workFlow.sumofLabourDirectCost, 2) : '0.00';
     }
 
     calculateOHCost(expertise): void {
         expertise.overheadBurden = expertise.overheadBurden ? formatNumberAsGlobalSettingsModule(expertise.overheadBurden, 2) : '0.00';
-        const percentageCal = (parseFloat(expertise.directLaborRate.toString().replace(/\,/g,'')) * parseFloat(expertise.overheadBurden.toString().replace(/\,/g,''))) / 100;
+        const percentageCal = (parseFloat(expertise.directLaborRate.toString().replace(/\,/g, '')) * parseFloat(expertise.overheadBurden.toString().replace(/\,/g, ''))) / 100;
         if (percentageCal > 0) {
             expertise.overheadCost = formatNumberAsGlobalSettingsModule(percentageCal, 2);
         }
@@ -142,7 +160,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
 
     calculateOHCostSummation() {
         this.workFlow.sumOfOHCost = this.workFlow.expertise.reduce((acc, x) => {
-            return acc + parseFloat(x.overheadCost === undefined || x.overheadCost === '' ? 0 : x.overheadCost.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.overheadCost === undefined || x.overheadCost === '' ? 0 : x.overheadCost.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.sumOfOHCost = formatNumberAsGlobalSettingsModule(this.workFlow.sumOfOHCost, 2);
@@ -151,7 +169,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     // used to calculate the LabourOH cost 
     calculateLabourOHCost(expertise): void {
         expertise.overheadCost = expertise.overheadCost ? formatNumberAsGlobalSettingsModule(expertise.overheadCost, 2) : '0.00';
-        const sumOfLabourOHCost = parseFloat(expertise.directLaborRate.toString().replace(/\,/g,'')) + parseFloat(expertise.overheadCost.toString().replace(/\,/g,''));
+        const sumOfLabourOHCost = parseFloat(expertise.directLaborRate.toString().replace(/\,/g, '')) + parseFloat(expertise.overheadCost.toString().replace(/\,/g, ''));
         if (sumOfLabourOHCost > 0) {
             expertise.laborOverheadCost = formatNumberAsGlobalSettingsModule(sumOfLabourOHCost, 2);
         }
@@ -161,12 +179,36 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
 
         this.calculateLabourOHCostSummation();
     }
+
     calculateLabourOHCostSummation() {
         this.workFlow.totalExpertiseCost = this.workFlow.expertise.reduce((acc, x) => {
-            return acc + parseFloat(x.laborOverheadCost === undefined || x.laborOverheadCost === '' ? 0 : x.laborOverheadCost.toString().replace(/\,/g,''))
+            return acc + parseFloat(x.laborOverheadCost === undefined || x.laborOverheadCost === '' ? 0 : x.laborOverheadCost.toString().replace(/\,/g, ''))
         }, 0);
 
         this.workFlow.totalExpertiseCost = this.workFlow.totalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.workFlow.totalExpertiseCost, 2) : '';
     }
 
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
+    }
 }

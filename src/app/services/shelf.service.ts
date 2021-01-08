@@ -1,7 +1,8 @@
-import { Injectable } from "@angular/core";
+﻿import { Injectable } from "@angular/core";
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
-import { Observable ,  Subject,forkJoin } from "rxjs";
+import { Observable } from "rxjs/Observable";
+import { Subject } from "rxjs/Subject";
 import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
@@ -38,7 +39,7 @@ export class ShelfService {
   ) {}
 
   getShelfList() {
-    return forkJoin(this.shelfEndpoint.getShelfEndpoint<Shelf[]>());
+    return Observable.forkJoin(this.shelfEndpoint.getShelfEndpoint<Shelf[]>());
   }
 
   getManagementLocationData(locationId?: number) {
@@ -46,7 +47,7 @@ export class ShelfService {
   }
 
   //getCountrylist() {
-  //	return forkJoin(
+  //	return Observable.forkJoin(
   //		this.siteEndpoint.getcountryListEndpoint<any[]>());
   //}
 
@@ -58,7 +59,7 @@ export class ShelfService {
     return this.shelfEndpoint.getnewManagementShelfData<any>(data);
   }
   historyShelf(shelfId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.shelfEndpoint.getHistoryShelfEndpoint<AuditHistory[]>(shelfId)
     );
   }

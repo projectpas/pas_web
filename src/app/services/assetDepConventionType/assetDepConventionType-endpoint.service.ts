@@ -5,12 +5,12 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AssetDepConvention } from '../../models/assetDepConvention.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class AssetDepConventionTypeEndpointService extends EndpointFactory {
 
@@ -37,55 +37,55 @@ export class AssetDepConventionTypeEndpointService extends EndpointFactory {
     getAllAssetDeps<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllAssetDeps());
-            }));
+            });
     }
 
     getAssetDepById<T>(assetDepConventionTypeId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${assetDepConventionTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAssetDepById(assetDepConventionTypeId));
-            }));
+            });
     }
 
     addAssetDep<T>(asset: AssetDepConvention): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(asset), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(asset), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addAssetDep(asset));
-            }));
+            });
     }
 
     updateAssetDep<T>(assetDepConventionType: AssetDepConvention): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(assetDepConventionType), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(assetDepConventionType), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateAssetDep(assetDepConventionType));
-            }));
+            });
     }
 
     removeAssetDepById<T>(assetDepConventionTypeId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${assetDepConventionTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeAssetDepById(assetDepConventionTypeId));
-            }));
+            });
     }
 
     getDepAudit<T>(assetDepConventionTypeId: number): Observable<T> {
         let endpointUrl = `${this.getAuditById}/${assetDepConventionTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDepAudit(assetDepConventionTypeId));
-            }));
+            });
     }
 
     AssetDepConvCustomUpload(file) {

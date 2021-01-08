@@ -19,8 +19,8 @@ import { SingleScreenBreadcrumbService } from "../../services/single-screens-bre
 import { FormBuilder } from "../../../../node_modules/@angular/forms";
 import { MatDialog } from "../../../../node_modules/@angular/material";
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

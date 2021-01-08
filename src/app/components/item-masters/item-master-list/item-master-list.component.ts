@@ -16,14 +16,15 @@ import * as $ from 'jquery';
 import { getValueFromArrayOfObjectById, listSearchFilterObjectCreation, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { TableModule, Table } from 'primeng/table';
-
+import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
-
+// import { DEFAULT_VALUE_ACCESSOR } from '@angular/forms/src/directives/default_value_accessor';
 @Component({
 	selector: 'app-item-master-list',
 	templateUrl: './item-master-list.component.html',
 	styleUrls: ['./item-master-list.component.scss'],
-	animations: [fadeInOut]
+	animations: [fadeInOut],
+	providers: [DatePipe]
 })
 /** item-master-list component*/
 export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterContentChecked {
@@ -258,10 +259,12 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	lazyLoadEventDataInputStock: any;
 	lazyLoadEventDataInputNonStock: any;
 	pageNumber = 0;
+	selectedOnly: boolean = false;
+    targetData: any;
 
 	//selectedColumns: any;
 	/** item-master-list ctor */
-	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
+	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
 		this.itemMasterService.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-list';
 		this.itemMasterService.bredcrumbObj.next(this.itemMasterService.currentUrl);//Bread Crumb
 		this.itemMasterService.listCollection = null;
@@ -348,6 +351,9 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
 
+	closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+	}
 	openEdits(row) {
 
 		this.itemMasterService.isEditMode = true;
@@ -1900,6 +1906,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 						itemType: 'stock',
 						isTimeLife: x.isTimeLife == "1" ? 'true' : 'false',
 						isSerialized: x.isSerialized == "1" ? 'true' : 'false',
+						createdDate:x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+						updatedDate:x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
 					}
 				});	
 				dt.exportCSV();

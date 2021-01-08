@@ -6,8 +6,8 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { MasterComapnyService } from '../../services/mastercompany.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 
 import { ItemClassificationService } from '../../services/item-classfication.service';

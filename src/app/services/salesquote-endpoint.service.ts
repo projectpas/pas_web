@@ -1,7 +1,6 @@
-
-import {throwError as observableThrowError,  Observable } from 'rxjs';
-import { Injectable, Injector } from "@angular/core";
+﻿import { Injectable, Injector } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/operator/map";
 
 import { EndpointFactory } from "./endpoint-factory.service";
@@ -19,8 +18,7 @@ import { SalesOrderFreight } from "../models/sales/SalesOrderFreight";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
 import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
-import {catchError} from 'rxjs/operators';
-import { AnalysisComponent } from '../components/work-order/work-order-setup/work-order-summarizedview/components/analysis/analysis.component';
+
 @Injectable()
 export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly getNewSalesQuoteInstanceUrl: string = "/api/salesquote/new";
@@ -63,8 +61,9 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly getSalesOrderQuoteSetting: string = "/api/SOQuoteSettings/getlist";
   private readonly _geSaleQuoteSettingsHistory: string = "api/SOQuoteSettings/getauditdatabyid";
   private readonly getSalesOrderQuoteAnalysis: string = "/api/SalesQuote/togetsoquoteanalysis";
-  private readonly getFreightAudihistory:string='api/SalesQuote/quote-freight-history';
-  private readonly getChargesAudihistory:string='api/salesquote/quote-charges-history';
+  private readonly getFreightAudihistory: string = 'api/SalesQuote/quote-freight-history';
+  private readonly getChargesAudihistory: string = 'api/salesquote/quote-charges-history';
+  private readonly getAllSOQEditIDUrl: string = 'api/SalesQuote/getAllSOQEditID';
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(
@@ -78,16 +77,16 @@ export class SalesQuoteEndpointService extends EndpointFactory {
 
   getSOQHistory(salesOrderQuoteId) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/salesquote/getSalesOrderQuoteHistory/?salesOrderQuoteId=${salesOrderQuoteId}`)
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getSOQHistory(salesOrderQuoteId));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOQHistory(salesOrderQuoteId));
+      });
   }
 
   getSOQPartHistory(salesOrderQuotePartId) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/SalesQuote/getsalequoteparthistory/${salesOrderQuotePartId}`)
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getSOQPartHistory(salesOrderQuotePartId));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOQPartHistory(salesOrderQuotePartId));
+      });
   }
 
   getNewSalesQuoteInstance<ISalesQuote>(
@@ -95,12 +94,12 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   ): Observable<ISalesQuote> {
     const URL = `${this.getNewSalesQuoteInstanceUrl}/${customerId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () =>
+      .get<ISalesQuote>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () =>
           this.getNewSalesQuoteInstance(customerId)
         );
-      }));
+      });
   }
 
   createSOQMarginSummary(marginSummary: SOQuoteMarginSummary) {
@@ -110,36 +109,36 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         JSON.stringify(marginSummary),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.createSOQMarginSummary(marginSummary));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.createSOQMarginSummary(marginSummary));
+      });
   }
 
   getAllSalesOrderTypes<T>(): Observable<T> {
     let endPointUrl = this.getAllSalesOrderTypesURL;
 
-    return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getAllSalesOrderTypes());
-      }));
+    return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getAllSalesOrderTypes());
+      });
   }
 
   getAllSalesOrderQuoteAnalysis<T>(id): Observable<T> {
     let endPointUrl = `${this.getSalesOrderQuoteAnalysis}/${id}`;;
 
-    return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getAllSalesOrderQuoteAnalysis(id));
-      }));
+    return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getAllSalesOrderQuoteAnalysis(id));
+      });
   }
 
   getAllSalesOrderQuoteSettings<T>(): Observable<T> {
     let endPointUrl = this.getSalesOrderQuoteSetting;
 
-    return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getAllSalesOrderQuoteSettings());
-      }));
+    return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getAllSalesOrderQuoteSettings());
+      });
   }
 
   // saveOrUpdateSOQuoteSettings(data) {
@@ -153,66 +152,66 @@ export class SalesQuoteEndpointService extends EndpointFactory {
         JSON.stringify(data),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.saveOrUpdateSOQuoteSettings(data));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.saveOrUpdateSOQuoteSettings(data));
+      });
   }
 
   getSOQMarginSummary(salesOrderQuoteId: number): Observable<SOQuoteMarginSummary> {
     const URL = `${this.getSoqMarginSummary}/${salesOrderQuoteId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getSOQMarginSummary(salesOrderQuoteId));
-      }));
+      .get<SOQuoteMarginSummary>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSOQMarginSummary(salesOrderQuoteId));
+      });
   }
 
   create(salesQuote: ISalesQuoteView): Observable<ISalesOrderQuote> {
     return this.http
-      .post<any>(
+      .post(
         this.saleQuote,
         JSON.stringify(salesQuote),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleErrorCommon(error, () => this.create(salesQuote));
-      }));
+      });
   }
 
   createFreight(salesOrderFreights: ISalesOrderFreight[]): Observable<ISalesOrderQuote> {
     return this.http
-      .post<any>(
+      .post(
         this.saleQuoteFreightsSave,
         JSON.stringify(salesOrderFreights),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.createFreight(salesOrderFreights));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.createFreight(salesOrderFreights));
+      });
   }
 
   createCharges(salesOrderCharges: ISalesOrderQuoteCharge[]): Observable<ISalesOrderQuote> {
     return this.http
-      .post<any>(
+      .post(
         this.saleQuoteChargesSave,
         JSON.stringify(salesOrderCharges),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.createCharges(salesOrderCharges));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.createCharges(salesOrderCharges));
+      });
   }
 
   saveCustomerQuotesApprovedEndPoint(data): Observable<any> {
     return this.http
-      .post<any>(
+      .post(
         this.saveCustomerQuotesApprovedEndPointUrl,
         data,
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.saveCustomerQuotesApprovedEndPoint(data));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.saveCustomerQuotesApprovedEndPoint(data));
+      });
   }
   sentForInternalApproval(data) {
     return this.http.post<any>(`${this.configurations.baseUrl}/api/salesquote/soquoteapproval`, JSON.stringify(data), this.getRequestHeaders());
@@ -220,164 +219,164 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   update(salesQuote: ISalesQuoteView): Observable<ISalesOrderQuote> {
     let url: string = `${this.saleQuote}/${salesQuote.salesOrderQuote.salesOrderQuoteId}`;
     return this.http
-      .put<any>(url, JSON.stringify(salesQuote), this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.create(salesQuote));
-      }));
+      .put(url, JSON.stringify(salesQuote), this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.create(salesQuote));
+      });
   }
 
   search(
     salesQuoteSearchParameters
   ): Observable<ISalesQuoteListView> {
     return this.http
-      .post<any>(
+      .post(
         this.searchSalesQuote,
         JSON.stringify(salesQuoteSearchParameters),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () =>
+      .catch(error => {
+        return this.handleErrorCommon(error, () =>
           this.search(salesQuoteSearchParameters)
         );
-      }));
+      });
   }
 
   globalSearch(
     salesQuoteSearchParameters: ISalesSearchParameters
   ): Observable<ISalesQuoteListView> {
     return this.http
-      .post<any>(
+      .post(
         this.globalSearchSalesQuote,
         JSON.stringify(salesQuoteSearchParameters),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
-        return this.handleError(error, () =>
+      .catch(error => {
+        return this.handleErrorCommon(error, () =>
           this.globalSearch(salesQuoteSearchParameters)
         );
-      }));
+      });
   }
 
   delete(salesQuoteId: number): Observable<boolean> {
     let endpointUrl = `${this.saleQuote}/${salesQuoteId}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.delete(salesQuoteId));
-      }));
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.delete(salesQuoteId));
+      });
   }
 
   deleteSoqSetting(salesQuoteSettingId: number, updatedBy): Observable<boolean> {
     let endpointUrl = `${this.saleQuoteSettings}?settingsId=${salesQuoteSettingId}&updatedBy=${updatedBy}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.deleteSoqSetting(salesQuoteSettingId, updatedBy));
-      }));
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deleteSoqSetting(salesQuoteSettingId, updatedBy));
+      });
   }
 
   deletePart(salesQuotePartId: number): Observable<boolean> {
     let endpointUrl = `${this.saleQuoteDeletePart}/${salesQuotePartId}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.deletePart(salesQuotePartId));
-      }));
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deletePart(salesQuotePartId));
+      });
   }
 
   deleteFrieght(frieghtId, userName): Observable<boolean> {
     let endpointUrl = `${this._deleteSalesOrderFrignt}/${frieghtId}?updatedBy=${userName}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.deleteFrieght(frieghtId, userName));
-      }));
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deleteFrieght(frieghtId, userName));
+      });
   }
 
   deleteSOQcharge(chargeId, userName): Observable<boolean> {
     let endpointUrl = `${this._deleteSalesOrderCharge}/${chargeId}?updatedBy=${userName}`;
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.deleteSOQcharge(chargeId, userName));
-      }));
+      .delete<boolean>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deleteSOQcharge(chargeId, userName));
+      });
   }
 
   getSalesQuote(salesQuoteId: number): Observable<ISalesQuoteView> {
     const URL = `${this.getSalesQuoteDetails}/${salesQuoteId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getSalesQuote(salesQuoteId));
-      }));
+      .get<ISalesQuote>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getSalesQuote(salesQuoteId));
+      });
   }
   getview(salesQuoteId: number): Observable<any> {
     const URL = `${this.getSalesQuoteViewDetails}/${salesQuoteId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getview(salesQuoteId));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getview(salesQuoteId));
+      });
   }
   GetTotal(salesQuoteId: number): Observable<any> {
     const URL = `${this.getSalesQuoteTotalDetails}/${salesQuoteId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.GetTotal(salesQuoteId));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.GetTotal(salesQuoteId));
+      });
   }
   getCustomerQuotesList(salesQuoteId: number): Observable<ISalesQuoteView> {
 
     const URL = `${this.getCustomerQuotesListUrl}/${salesQuoteId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.getCustomerQuotesList(salesQuoteId));
-      }));
+      .get<ISalesQuote>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getCustomerQuotesList(salesQuoteId));
+      });
   }
   initiateQuoteCopying(salesQuoteId: number): Observable<ISalesQuoteView> {
     const URL = `${this.getCopyEndpointUrl}/${salesQuoteId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.initiateQuoteCopying(salesQuoteId));
-      }));
+      .get(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.initiateQuoteCopying(salesQuoteId));
+      });
   }
 
   verifySalesOrderConversionEndPoint(salesQuoteId: number): Observable<VerifySalesQuoteModel> {
     const URL = `${this.getVerifyEndpointUrl}/${salesQuoteId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.verifySalesOrderConversionEndPoint(salesQuoteId));
-      }));
+      .get(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.verifySalesOrderConversionEndPoint(salesQuoteId));
+      });
   }
 
-  closeSalesOrderQuoteEndPoint(salesQuoteId: number): Observable<ISalesQuoteView> {
-    const URL = `${this.getCloseEndointUrl}/${salesQuoteId}`;
+  closeSalesOrderQuoteEndPoint(salesQuoteId: number, updatedBy: string): Observable<ISalesQuoteView> {
+    const URL = `${this.getCloseEndointUrl}/${salesQuoteId}?updatedBy=${updatedBy}`;
     return this.http
-      .put<any>(URL, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.closeSalesOrderQuoteEndPoint(salesQuoteId));
-      }));
+      .put(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.closeSalesOrderQuoteEndPoint(salesQuoteId, updatedBy));
+      });
   }
   convertfromquoteEndPoint(salesQuoteConversionCriteria: SalesOrderConversionCritera): Observable<SalesOrderView> {
     const URL = `${this.getConvertfromquoteEndPoint}`;
     return this.http
-      .post<any>(URL, salesQuoteConversionCriteria, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.convertfromquoteEndPoint(salesQuoteConversionCriteria));
-      }));
+      .post(URL, salesQuoteConversionCriteria, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.convertfromquoteEndPoint(salesQuoteConversionCriteria));
+      });
   }
 
   sendQuoteToCustomer(salesQuoteId: number) {
     const URL = `${this.getEmailQuoteEndointUrl}/${salesQuoteId}`;
     return this.http
       .post(URL, {}, this.getRequestHeaders())
-      .pipe(catchError(error => {
-        return this.handleError(error, () => this.sendQuoteToCustomer(salesQuoteId));
-      }));
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.sendQuoteToCustomer(salesQuoteId));
+      });
   }
 
 
@@ -405,27 +404,54 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   saveSalesQuoteHeader<T>(param: any): Observable<any> {
     let body = JSON.stringify(param);
     let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
-    return this.http.post<any>(this._savequoteHeader, body, this.getRequestHeaders())
+    return this.http.post(this._savequoteHeader, body, this.getRequestHeaders())
       .map((response: Response) => {
         return <any>response;
 
-      }).pipe(catchError((error: any) => observableThrowError(error.json().error || 'Server error')));
+      }).catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
-  getSalesQuoteFreights(id) {
-    return this.http.get<any>(`${this._geSaleQuoteFreights}?SalesOrderQuoteId=${id}`, this.getRequestHeaders())
+  getSalesQuoteFreights(id, isDeleted) {
+    return this.http.get<any>(`${this._geSaleQuoteFreights}?SalesOrderQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
   }
-  getSalesQuoteCharges(id) {
-    return this.http.get<any>(`${this._geSaleQuoteCharges}?SalesOrderQuoteId=${id}`, this.getRequestHeaders())
-    }
+  getSalesQuoteCharges(id, isDeleted) {
+    return this.http.get<any>(`${this._geSaleQuoteCharges}?SalesOrderQuoteId=${id}&isDeleted=${isDeleted}`, this.getRequestHeaders())
+  }
 
-    getInternalApproversList(approvalTaskId, moduleAmount) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalRule/approverslist?approvalTaskId=${approvalTaskId}&moduleAmount=${moduleAmount}`);
-    }
+  getInternalApproversList(approvalTaskId, moduleAmount) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalRule/approverslist?approvalTaskId=${approvalTaskId}&moduleAmount=${moduleAmount}`);
+  }
   //end nitin
   getSOQFreightsHistory(id) {
     return this.http.get<any>(`${this.getFreightAudihistory}/?SalesOrderQuoteFreightId=${id}`, this.getRequestHeaders())
   }
   getSOQChargesHistory(id) {
     return this.http.get<any>(`${this.getChargesAudihistory}/${id}`, this.getRequestHeaders())
+  }
+
+  getAllSOQEditID(salesOrderQuoteId) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/${this.getAllSOQEditIDUrl}?salesOrderQuoteId=${salesOrderQuoteId}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getAllSOQEditID(salesOrderQuoteId));
+      });
+  }
+
+
+  saveSalesOrderQuoteAddress<T>(param: any): Observable<any> {
+    let url = `${this.configurations.baseUrl}/api/SalesQuote/createsoqaddress`;
+    let body = JSON.stringify(param);
+    return this.http.post(url, body, this.getRequestHeaders())
+      .map((response: Response) => {
+        return <any>response;
+
+      }).catch(error => {
+        return this.handleErrorCommon(error, () => this.saveSalesOrderQuoteAddress<T>(param));
+      });
+  }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+      });
   }
 }

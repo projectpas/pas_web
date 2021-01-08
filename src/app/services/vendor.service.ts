@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,  BehaviorSubject ,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
@@ -18,6 +19,7 @@ import { VendorEndpointService } from './vendor-endpoint.service';
 import { Vendor } from '../models/vendor.model';
 import { DiscountValue } from '../models/discountvalue';
 import { ATASubChapter } from '../models/atasubchapter.model';
+import { BehaviorSubject } from 'rxjs';
 import { VendorProcess1099 } from '../models/vendorprocess1099.model';
 
 
@@ -102,50 +104,50 @@ export class VendorService {
     //     this.stepDataSubject.next(stepVal);
     // }
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getvendorEndpoint<any[]>());
     }
 
     getVendorCapabilityList(status, vendorId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getvendorCapabilityListEndpoint<any[]>(status, vendorId));
     }
 
     getFilteredVendorCapabilityList(obj) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getFilteredVendorCapabilityListEndpoint<any[]>(obj)
         );
     }
 
     getVendorCodeandNameByVendorId(vendorId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorCodeAndNameById<any>(vendorId));
     }
 
     getcapabilityListData() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getCapabilityTypeListEndpoint<any[]>());
     }
 
     getManagementSiteDataByCompanyId(companyId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getManagementSiteDataByCompanyIdEdpoint<any[]>(companyId));
     }
     getpurchasevendorlist(vendorId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getpurchasevendorlist<any[]>(vendorId));
     }
 
     getrepairevendorlist(vendorId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getrepairevendorlist<any[]>(vendorId));
     }
     getPartDetails() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getCompletePartDetails<any[]>());
     }
     getPartDetailsWithid(partId) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getPartDetailsWithid<any>(partId));
     }
     getPartDetailsWithidForSinglePart(partId) {
@@ -165,150 +167,150 @@ export class VendorService {
     }
 
     getCapabilibylist() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getCapabilityEndpoint<any[]>());
     }
 
     getVendordataForPo(details: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorPoDetails<any>(details));
     }
 
     getDomesticvedor(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getDomesticWire<any>(vendorId));
     }
     getInternationalWire(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getInternational<any>(vendorId));
     }
     getDefaultlist(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getDefault<any>(vendorId));
     }
 
     getVendorsBasic() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getvendorBasicEndpoint<any[]>());
     }
     getVendorshipViaDetails() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorShipvia<any[]>());
     }
 
     getVendorShipAddressGet(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorShipAddressdetails<any[]>(vendorId));
     }
     getVendorBillAddressGet(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorBillAddressdetails<any[]>(vendorId));
     }
     getSiteAddresses() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getSiteAddresses<any[]>());
     }
     getVendorWarnings(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorwarnigs<any>(vendorId));
     }
     getVendorShipViaDetails(vendorShippingAddressId: any, currentDeletedstatusShipVia: boolean) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorShipViaDetails(vendorShippingAddressId, currentDeletedstatusShipVia));
     }
     getVendorShipViaInterDetails(id:any, currentDeletedstatusIntShipVia: boolean) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorShipViaInterDetails(id, currentDeletedstatusIntShipVia));
     }
     getVendorBillViaDetails(rowData) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorBillViaDetails(rowData));
     }
     getVendorList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getvendorList<any[]>());
     }
     getVendorListForVendor(isActive) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getvendorListForVendor<any[]>(isActive));
     }
     getVendors() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getvendorList<Vendor[]>());
     }
     getVendordata(vendorid: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorsDatawithid<any>(vendorid));
     }
 
 
     getContacts(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getContcatDetails<any>(vendorId));
     }
     getContactsFirstName() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getContcatCompleteDetails<any>());
     }
 
     getCheckPaymentobj(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getCheckPaymnetDetails<any>(vendorId));
     }
     getBeneficiaryCustomer() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getBeneficiaryCustomerDetails<any>());
     }
     getEmptyObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getEmptyrobj<any>());
     }
 
     getFinalObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getFinalrobj<any>());
     }
 
     getGeneralObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getGeneralrobj<any>());
     }
 
     getPaymentObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getPaymentrobj<any>());
     }
     getAddressDtails() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getAddressDeatails<any[]>());
     }
 
     historyAcion(actionId: number) {
-        return forkJoin(this.actionEndpoint.getHistoryvendorEndpoint<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getHistoryvendorEndpoint<AuditHistory[]>(actionId));
     }
     paymentHist(actionId: number) {
-        return forkJoin(this.actionEndpoint.getCheckPaymentHist<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getCheckPaymentHist<AuditHistory[]>(actionId));
     }
     vendorHistory(actionId: number) {
-        return forkJoin(this.actionEndpoint.getVendndorhistory<any>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getVendndorhistory<any>(actionId));
     }
     historyofcheck(actionId: number) {
-        return forkJoin(this.actionEndpoint.gethistoryOfcheckpayment<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.gethistoryOfcheckpayment<AuditHistory[]>(actionId));
     }
     shipviaHistory(actionId: number) {
-        return forkJoin(this.actionEndpoint.getShipviaHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getShipviaHistory<AuditHistory[]>(actionId));
     }
     getShipviaHistoryInter(actionId: number) {
-        return forkJoin(this.actionEndpoint.getShipviaHistoryInter<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getShipviaHistoryInter<AuditHistory[]>(actionId));
     }
     billviaHistory(actionId: number) {
-        return forkJoin(this.actionEndpoint.getBillviaHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getBillviaHistory<AuditHistory[]>(actionId));
     }
     shipaddressHistory(actionId: number) {
-        return forkJoin(this.actionEndpoint.getShipaddressHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getShipaddressHistory<AuditHistory[]>(actionId));
     }
     billaddressHistory(actionId: number) {
-        return forkJoin(this.actionEndpoint.getBilladdressHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.actionEndpoint.getBilladdressHistory<AuditHistory[]>(actionId));
     }
 
     newAction(action: any) {
@@ -486,7 +488,7 @@ export class VendorService {
     updatefinanceinfo(vendorcntct: any, vendorid: any) {
         return this.actionEndpoint.getUpdateFinanceInfo(vendorcntct, vendorid);
     }
-    newShippingAdd(action: any) {
+    newShippingAdd(action: any): any {
 
         return this.actionEndpoint.getNewShipppinginfo<any>(action);
     }
@@ -540,7 +542,7 @@ export class VendorService {
         return this.actionEndpoint.updateBillingViainfo(vendorbilling, vendorbilling.vendorBillingId);
     }
     getDiscountList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getDiscountEndpoint<DiscountValue[]>());
     }
 
@@ -554,7 +556,7 @@ export class VendorService {
     }
 
     getvendorList(vendorName) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorByNameList<any[]>(vendorName));
     }
     updateActionforActive(action: any) {
@@ -579,27 +581,27 @@ export class VendorService {
     }
 
     getPurchaseOrderlist() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getPurchaseOrderList<any>());
     }
     getPOList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getPOList(data));
     }
 
 
     getCountrylist() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getcountryListEndpoint<any[]>());
     }
 
     getRepaireOrderlist() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getRepaireOrderList<any>());
     }
 
     getATASubchapterData(AtaMainId: any) {
-        return forkJoin(this.actionEndpoint.getATASubchapterDataEndpoint<any>(AtaMainId));
+        return Observable.forkJoin(this.actionEndpoint.getATASubchapterDataEndpoint<any>(AtaMainId));
         //return this.actionEndpoint.getATASubchapterDataEndpoint<ATASubChapter[]>(AtaMainId);
     }
 
@@ -625,17 +627,17 @@ export class VendorService {
     }
 
     getVendorCapabilityListById(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorCapabilityListEndpoint<any[]>(vendorId));
     }
 
     getVendorCapabilityAircraftManafacturerList(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorCapabilityAircraftManafacturerListEndpoint<any[]>(vendorId));
     }
 
     getVendorCapabilityAircraftManafacturerModelList(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorCapabilityAircraftManafacturerModelListEndpoint<any[]>(vendorId));
     }
 
@@ -668,7 +670,7 @@ export class VendorService {
 
     }
     getVendorContactList(vendorId: any, isDContact: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorContactEndpoint<any[]>(vendorId, isDContact));
     }
 
@@ -681,7 +683,7 @@ export class VendorService {
     }
 
     getVendorContactsListByID(vendorId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorContactsByIDEndpoint<any[]>(vendorId));
     }
 
@@ -724,15 +726,15 @@ export class VendorService {
     }
 
     getRepairOrderPartsById(Id: number, workOrderPartNumberId) {
-        return forkJoin(this.actionEndpoint.getRepairOrderPartsById<any>(Id, workOrderPartNumberId));
+        return Observable.forkJoin(this.actionEndpoint.getRepairOrderPartsById<any>(Id, workOrderPartNumberId));
     }
 
     getPurchaseOrderByItemId(Id: number) {
-        return forkJoin(this.actionEndpoint.getPurchaseOrderByItemId<any>(Id));
+        return Observable.forkJoin(this.actionEndpoint.getPurchaseOrderByItemId<any>(Id));
     }
 
     getRepairOrderByItemId(Id: number) {
-        return forkJoin(this.actionEndpoint.getRepiarOrderByItemId<any>(Id));
+        return Observable.forkJoin(this.actionEndpoint.getRepiarOrderByItemId<any>(Id));
     }
 
     getROStatus(repairOrderId, isActive, updatedBy) {
@@ -756,7 +758,7 @@ export class VendorService {
     }
 
     getROList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getROList(data));
     }
 
@@ -873,11 +875,11 @@ export class VendorService {
         return this.actionEndpoint.GetVendorAttachmentDeleteEndpoint(attachmentDetailId, updatedBy);
     }
     getVendorProcess1099Data(companyId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorProcess1099id<any>(companyId));
     }
     getVendorProcess1099DataFromTransaction(vendorId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getVendorProcess1099idFromTransaction<any>(vendorId));
     }
 
@@ -912,7 +914,7 @@ export class VendorService {
 
 
     getAllVendorList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.actionEndpoint.getAllVendorList(data));
     }
 
@@ -1007,8 +1009,8 @@ export class VendorService {
     getVendorNameCodeList() {
         return this.actionEndpoint.getVendorNameCodeList();
     }
-    getVendorNameCodeListwithFilter(filterVal,count,idList?) {
-        return this.actionEndpoint.getVendorNameCodeListwithFilter(filterVal,count,idList);
+    getVendorNameCodeListwithFilter(filterVal,count,idList?,masterCompanyId?) {
+        return this.actionEndpoint.getVendorNameCodeListwithFilter(filterVal,count,idList,masterCompanyId);
     }
 
     getVendorContactDataByVendorId(id) {
@@ -1017,8 +1019,11 @@ export class VendorService {
     getVendorCreditTermsByVendorId(id) {
         return this.actionEndpoint.getVendorCreditTermsByVendorId(id);
     }
-    uploadVendorCapabilitiesList(file, vendorId, data) { //this.vendorId, this.userName, this.currentUserMasterCompanyId
+    uploadVendorCapabilitiesList(file, vendorId, data) { 
         return this.actionEndpoint.uploadVendorCapabilitiesList(file, vendorId, data);
+    }
+    uploadVendorCapsList(file, data) { 
+        return this.actionEndpoint.uploadVendorCapsList(file, data);
     }
 }
 

@@ -5,17 +5,20 @@ import { Customer } from "../../../../models/customer.model";
 import { AlertService, MessageSeverity } from "../../../../services/alert.service";
 import { Router } from "@angular/router";
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
-import { TableModule, Table } from 'primeng/table';
-import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { Table } from 'primeng/table';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CustomerViewComponent } from '../../../../shared/components/customer/customer-view/customer-view.component';
 import { CommonService } from "../../../../services/common.service";
 import { DBkeys } from "../../../../services/db-Keys";
 import { MenuItem } from "primeng/api";
+import * as $ from "jquery";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: "app-sales-quote-create",
   templateUrl: "./sales-quote.component.html",
-  styleUrls: ["./sales-quote.component.css"]
+  styleUrls: ["./sales-quote.component.css"],
+  providers: [DatePipe]
 })
 export class SalesQuoteComponent implements OnInit {
   query: CustomerSearchQuery;
@@ -39,7 +42,8 @@ export class SalesQuoteComponent implements OnInit {
 
   breadcrumbs: MenuItem[];
   home: any;
-
+  targetData: any;
+  selectedOnly: boolean = false;
 
   headers = [
     { field: 'name', header: 'Name' },
@@ -61,12 +65,12 @@ export class SalesQuoteComponent implements OnInit {
     private alertService: AlertService,
     private modalService: NgbModal,
     private router: Router,
-    private commonservice: CommonService
+    private commonservice: CommonService,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit() {
     this.query = new CustomerSearchQuery();
-    //this.getList();
     this.breadcrumbs = [
       { label: 'Sales Order Quote' },
       { label: 'Create Quote' },
@@ -75,11 +79,9 @@ export class SalesQuoteComponent implements OnInit {
 
   getList(data) {
     this.isSpinnerVisible = true;
-    console.log(data.sortField);
     const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
     this.customerService.getCustomerAll(PagingData).subscribe(res => {
       this.isSpinnerVisible = false;
-      console.log(res, "ress_+++++")
       this.data = res['results'];
       if (this.data.length > 0) {
         this.totalRecords = res.totalRecordsCount;
@@ -87,7 +89,7 @@ export class SalesQuoteComponent implements OnInit {
       }
 
     }, error => {
-      this.onDataLoadFailed(error);
+      this.isSpinnerVisible = false;
     })
   }
 
@@ -104,7 +106,7 @@ export class SalesQuoteComponent implements OnInit {
 
 
   }
-  globalSearch(value) {
+  globalSearch1(value) {
     this.pageIndex = 0;
     this.filteredText = value;
     this.isSpinnerVisible = true;
@@ -116,9 +118,24 @@ export class SalesQuoteComponent implements OnInit {
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
       }
     }, error => {
-      this.onDataLoadFailed(error);
+      this.isSpinnerVisible =false;
     })
   }
+
+  globalSearch(value) {
+    this.pageIndex = this.lazyLoadEventData.rows > 10 ? parseInt(this.lazyLoadEventData.first) / this.lazyLoadEventData.rows : 0;
+    this.pageSize = this.lazyLoadEventData.rows;
+    this.lazyLoadEventData.first = this.pageIndex;
+    this.lazyLoadEventData.globalFilter = value;
+    this.filteredText = value;
+    this.lazyLoadEventData.filters = { ...this.lazyLoadEventData.filters };
+    this.getList(this.lazyLoadEventData);
+  }
+
+
+
+
+
   loadData(event) {
 
     this.lazyLoadEventData = event;
@@ -128,27 +145,19 @@ export class SalesQuoteComponent implements OnInit {
     event.first = pageIndex;
     this.getList(event)
 
-    console.log(event);
   }
 
 
 
   filterData(data) {
-    console.log(data);
   }
   getPageCount(totalNoofRecords, pageSize) {
     return Math.ceil(totalNoofRecords / pageSize)
   }
 
   viewSelectedRow(rowData) {
-
-    console.log(rowData);
     this.modal = this.modalService.open(CustomerViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.customerId = rowData.customerId;
-    this.modal.result.then(() => {
-      console.log('When user closes');
-    }, () => { console.log('Backdrop click') })
-
   }
 
   onSearch(event) {
@@ -172,7 +181,7 @@ export class SalesQuoteComponent implements OnInit {
   getTypesOfWarnings(customerId) {
     this.isSpinnerVisible = true;
     this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name').subscribe(data => {
-      console.log(data, "data+++");
+
       this.isSpinnerVisible = false;
       if (data.length > 0) {
         data.filter(i => {
@@ -182,7 +191,7 @@ export class SalesQuoteComponent implements OnInit {
         })
       }
     }, error => {
-      this.onDataLoadFailed(error);
+      this.isSpinnerVisible =false;
     })
   }
   async getCustomerRestrictionsData(customerWarningListId: number, customerId) {
@@ -197,21 +206,11 @@ export class SalesQuoteComponent implements OnInit {
           this.getCustomerWarningsData(customerWarningListId, customerId)
         } else {
           this.modal = this.modalService.open(this.restrictionPopup, { size: 'lg', backdrop: 'static', keyboard: false });
-          this.modal.result.then(() => {
-            console.log('When user closes');
-          }, () => { console.log('Backdrop click') })
-        }
-        console.log(res, "resfrom customer warnigns api");
 
-        // let warningRes = res[0].warningsData || [];
-        // for (let i = 0; i < warningRes.length; i++) {
-        //   if (warningRes[i].customerWarningId == this.globalCustomerWarningId) {
-        //     this.customerWarningData.push(warningRes[i]);
-        //   }
-        // }
+        }
 
       }, error => {
-        this.onDataLoadFailed(error);
+        this.isSpinnerVisible =false;
       });
   }
   async getCustomerWarningsData(customerWarningListId: number, customerId) {
@@ -222,26 +221,14 @@ export class SalesQuoteComponent implements OnInit {
         this.customerWarning = res;
         this.isSpinnerVisible = false;
         this.customerWarning['customerId'] = customerId;
-        console.log(res, "resfrom customer warnigns api");
         if (res.customerWarningId == 0) {
           this.moveToCreate(customerId)
         } else {
           this.modal = this.modalService.open(this.warningPopup, { size: 'lg', backdrop: 'static', keyboard: false });
-          this.modal.result.then(() => {
-            console.log('When user closes');
 
-          }, () => { console.log('Backdrop click') })
         }
-
-        // let warningRes = res[0].warningsData || [];
-        // for (let i = 0; i < warningRes.length; i++) {
-        //   if (warningRes[i].customerWarningId == this.globalCustomerWarningId) {
-        //     this.customerWarningData.push(warningRes[i]);
-        //   }
-        // }
-
       }, error => {
-        this.onDataLoadFailed(error);
+        this.isSpinnerVisible =false;
       });
   }
   moveToCreate(customerId) {
@@ -251,7 +238,6 @@ export class SalesQuoteComponent implements OnInit {
     );
   }
   private searchCustomer() {
-    // this.alertService.startLoadingMessage();
     this.isSpinnerVisible = true;
     this.customerService
       .getServerPages(this.query)
@@ -261,10 +247,8 @@ export class SalesQuoteComponent implements OnInit {
         this.totalRecords = response[0].totalRecordsCount;
         this.totalPages = Math.ceil(this.totalRecords / this.query.rows);
         this.showPaginator = this.totalRecords > 0;
-        // this.alertService.stopLoadingMessage();
-
       }, error => {
-        this.onDataLoadFailed(error);
+        this.isSpinnerVisible =false;
       });
   }
   closeModal() {
@@ -280,7 +264,6 @@ export class SalesQuoteComponent implements OnInit {
     }
     this.alertService.resetStickyMessage();
     this.alertService.showStickyMessage("Sales Order Quote", errorMessage, MessageSeverity.error, error);
-    // this.alertService.showMessage(error);
   }
 
   mouseOverData(key, data) {
@@ -291,5 +274,38 @@ export class SalesQuoteComponent implements OnInit {
 
   getColorCodeForMultiple(data) {
     return data['customerClassificationType'] === 'Multiple' ? 'green' : 'black';
+  }
+
+  closePopupModal() {
+    $("#downloadConfirmation").modal("hide");
+  }
+
+  closeDeleteModal() {
+    $("#downloadConfirmation").modal("hide");
+  }
+
+  exportCSV(dt) {
+    this.isSpinnerVisible = true;
+    let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": true, "isDeleted": false }, "globalFilter": "" };
+    let filters = Object.keys(dt.filters);
+    filters.forEach(x => {
+      PagingData.filters[x] = dt.filters[x].value;
+    })
+
+    this.customerService.getCustomerAll(PagingData).subscribe(res => {
+      dt._value = res['results'].map(x => {
+        return {
+          ...x,
+          createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+          updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+        }
+      });
+      dt.exportCSV();
+      dt.value = this.data;
+      this.isSpinnerVisible = false;
+    }, 
+    error => {
+      this.isSpinnerVisible =false;
+    });
   }
 }

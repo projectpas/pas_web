@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ChangeDetectorRef ,OnInit,OnDestroy, ElementRef, ViewChild, SimpleChanges} from '@angular/core';
+﻿import { Component, Input, Output, EventEmitter, ChangeDetectorRef ,OnInit,OnDestroy, ElementRef, ViewChild, SimpleChanges} from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { VendorService } from '../../../../services/vendor.service';
@@ -10,8 +10,9 @@ import { ActionService } from '../../../../Workflow/ActionService';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import * as $ from 'jquery'
 import { AuthService } from '../../../../services/auth.service';
-import {  Subscription ,  timer } from 'rxjs';
+import {  Subscription } from 'rxjs';
 import { Pipe, PipeTransform } from "@angular/core";
+import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-work-order-complete-material-list',

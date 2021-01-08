@@ -64,9 +64,15 @@ import { TagTypeEndpointService } from "../services/tagtype-endpoint.service";
 import { TagTypeService } from "../services/tagtype.service";
 import { POViewStockDraftListComponent } from "../components/receiving/po-ro/po-view-draftlist/po-view-draftlist.component";
 import { ROViewStockDraftListComponent } from "../components/receiving/repair-order/ro-view-draftlist/ro-view-draftlist.component";
+import { DropdownModule } from "primeng/dropdown";
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
+import {EditorModule} from 'primeng/editor';
+import { VendorPagesModule} from '../vendorpages/vendorpages.module';
+
 
 @NgModule({
     imports: [
+		VendorPagesModule,
 		FlexLayoutModule,
 		FormsModule, ReactiveFormsModule,
 		QuickAppProMaterialModule,
@@ -77,8 +83,11 @@ import { ROViewStockDraftListComponent } from "../components/receiving/repair-or
 		SelectButtonModule,
 		InputTextModule,
 		MultiSelectModule,
+		DropdownModule,
 		ReceivingPagesRoutingModule,
 		AutoCompleteModule,
+		CommonDocumentsModule,
+		EditorModule,
         GMapModule, RadioButtonModule, FileUploadModule, DialogModule, StepsModule, BreadcrumbModule, CalendarModule, InputSwitchModule, CheckboxModule, TreeModule, TreeTableModule, TabViewModule, KeyFilterModule, TooltipModule
 	],
 	declarations: [
@@ -111,7 +120,7 @@ import { ROViewStockDraftListComponent } from "../components/receiving/repair-or
         TagTypeService
 	],
 	entryComponents: [
-	]
+	],
 })
 export class ReceivingPagesModule
 {

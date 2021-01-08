@@ -1,14 +1,14 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {catchError,map} from 'rxjs/operators'
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
 @Injectable()
-export class LegalEntityEndpontService extends EndpointFactory {
+export class LegalEntityEndpontService extends EndpointFactory { 
 
 
 	private readonly _entityurl: string = "/api/legalEntity/Get";
@@ -121,6 +121,12 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	private readonly EntityGlobalSearch: string = '/api/legalentity/ListGlobalSearch';
 
 	private readonly LogogDell: string = '/api/legalentity/LogoDelete';
+	// legal banking History URls
+	private readonly lockBoxURl: string = '/api/legalEntity/GetEntityLockBoxAudit';
+	private readonly DomsticWireUrl: string = '/api/legalEntity/GetEntityDomesticWireAudit';
+	private readonly InternationalWireURL: string = '/api/legalEntity/GetEntityInternationalWireAudit';
+	private readonly ACHUrl: string = '/api/legalEntity/GetEntityACHAudit';
+	   
 	get cusShippingUrl() { return this.configurations.baseUrl + this._cusShippingGeturl; }
 	get cusShippingUrlwithaddressid() { return this.configurations.baseUrl + this._cusShippingGeturlwithId; }
 
@@ -170,105 +176,97 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	updateShippingViainfo<T>(roleObject: any, legalEntityId: any): Observable<T> {
 		let endpointUrl = `${this._updateShippingViaDetails}/${legalEntityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateShippingViainfo(roleObject, legalEntityId));
-			}));
+			});
 	}
 	updateShippinginfo<T>(roleObject: any, legalEntityId: any): Observable<T> {
 		let endpointUrl = `${this._updatshippingAddressDetails}/${roleObject.legalEntityShippingAddressId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateShippinginfo(roleObject, legalEntityId));
-			}));
+			});
 	}
 
 	updateStatusShippinginfo<T>(roleObject: any, legalEntityId: any): Observable<T> {
 		let endpointUrl = `${this._updateStatuslegalEntityShipping}?id=${roleObject.legalEntityShippingAddressId}&updatedby=${roleObject.updatedBy}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateStatusShippinginfo(roleObject, legalEntityId));
-			}));
+			});
 	}
 	getCusHippingaddresdetails<T>(legalEntityId: any): Observable<T> {
 		let endpointurl = `${this.cusShippingUrl}?legalEntityId=${legalEntityId}`;
 		//let endpointUrl = `${this.entityBillViaDetails}?billingAddressId=${id}`;
-		return this.http.get<any>(endpointurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getCusHippingaddresdetails(legalEntityId));
-			}));
+			});
 	}
 	getCusHippingaddresdetailswithid<T>(legalEntityId: any): Observable<T> {
 		let endpointurl = `${this.cusShippingUrlwithaddressid}/${legalEntityId}`;
-		return this.http.get<any>(endpointurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getlegalEntityEndpoint());
-			}));
+			});
 	}
 
 	getlegalEntityEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this._entityUrlNew, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this._entityUrlNew, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getlegalEntityEndpoint());
-			}));
+			});
 	}
 	
 	legalEntityContactFileUpload(file, legalEntityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.ContactexcelUpload}?legalEntityId=${legalEntityId}`, file)
-		.pipe(catchError(error => {
-			return this.handleErrorCommon(error, () => 
-			this.legalEntityContactFileUpload(file, legalEntityId));
-		}));
+		return this.http.post(`${this.configurations.baseUrl}${this.ContactexcelUpload}?legalEntityId=${legalEntityId}`, file).catch(error => {
+			return this.handleErrorCommon(error, () => this.legalEntityContactFileUpload(file, legalEntityId));
+		})
 	
 	}
 	legalEntityShippingFileUpload(file, legalEntityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadShipping}?legalEntityId=${legalEntityId}`, file)
-		.pipe(catchError(error => {
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadShipping}?legalEntityId=${legalEntityId}`, file).catch(error => {
 			return this.handleErrorCommon(error, () => this.legalEntityShippingFileUpload(file, legalEntityId));
-		}));
+		})
 	}
 	legalEntityInternationalShippingFileUpload(file, legalEntityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadInterShipping}?legalEntityId=${legalEntityId}`, file)
-		.pipe(catchError(error => {
+		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadInterShipping}?legalEntityId=${legalEntityId}`, file).catch(error => {
 			return this.handleErrorCommon(error, () => this.legalEntityInternationalShippingFileUpload(file, legalEntityId));
-		}));
+		})
 	}
 	getlegalEntityShippingHistory( legalEntityId,legalEntityShippingAddressId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityShippingHistory}/${legalEntityId}?entityShippingAddressId=${legalEntityShippingAddressId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityShippingHistory}/${legalEntityId}?entityShippingAddressId=${legalEntityShippingAddressId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityShippingHistory( legalEntityId,legalEntityShippingAddressId));
-		}));
+		})
 	}
 	getlegalEntityInterShippingHistory(legalEntityId, legalEntityInterShippingId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityInterShippingHistory}?LegalEntityId=${legalEntityId}&internationalShippingId=${legalEntityInterShippingId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityInterShippingHistory}?LegalEntityId=${legalEntityId}&internationalShippingId=${legalEntityInterShippingId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityInterShippingHistory(legalEntityId, legalEntityInterShippingId));
-		}));
+		})
 	}
 
 	getlegalEntityShipViaHistory(legalEntityId, legalEntityShippingAddressId, legalEntityShippingId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityShipViaHistory}?legalEntityId=${legalEntityId}&legalEntityShippingAddressId=${legalEntityShippingAddressId}&legalEntityShippingId=${legalEntityShippingId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityShipViaHistory}?legalEntityId=${legalEntityId}&legalEntityShippingAddressId=${legalEntityShippingAddressId}&legalEntityShippingId=${legalEntityShippingId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityShipViaHistory(legalEntityId, legalEntityShippingAddressId, legalEntityShippingId));
-		}));
+		})
 	}
 	getlegalEntityInterShipViaHistory(legalEntityId, internationalShippingId, shippingViaDetailsId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityInterShipViaHistory}?legalEntityId=${legalEntityId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityInterShipViaHistory}?legalEntityId=${legalEntityId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityInterShipViaHistory(legalEntityId, internationalShippingId, shippingViaDetailsId));
-		}));
+		})
 	}
 
-	getNewShipppinginfo<T>(param: any): Observable<any> {
+	getNewShipppinginfo<T>(param: any): Observable<T> {
 
 		let body = JSON.stringify(param);
 		let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
 		return this.http
 			.post(this._shippingInfoUrl, body, this.getRequestHeaders())
-			.pipe(map((res: Response) => res),catchError(error => {
+			.map((res: Response) => res).catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewShipppinginfo(param));
-			}));
+			});
 			// .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
 	}
 
@@ -276,24 +274,24 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 
 	getInternationalShipViaByInternationalShippingId<T>(id) {
-		return this.http.get<any>(`${this.InternatioanlShipViaByInternationalShippingId}?legalEntityInternationalShippingId=${id}`, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(`${this.InternatioanlShipViaByInternationalShippingId}?legalEntityInternationalShippingId=${id}`, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getInternationalShipViaByInternationalShippingId(id));
-			}));
+			});
 	}
 
 	postDomesticShipVia<T>(postData) {
-		return this.http.post<any>(this.domesticShipVia, JSON.stringify(postData), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this.domesticShipVia, JSON.stringify(postData), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.postDomesticShipVia(postData));
-			}));
+			});
 	}
 
 	updateShipViaInternational<T>(postData) {
-		return this.http.post<any>(this.UpdateShipViaInternational, JSON.stringify(postData), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this.UpdateShipViaInternational, JSON.stringify(postData), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateShipViaInternational(postData));
-			}));
+			});
 	}
 
 	// updateShipViaInternational<T>(roleObject: any): Observable<T> {
@@ -306,56 +304,56 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 
 	getShipViaByInternationalShippingId<T>(id, pageIndex, pageSize) {
-		return this.http.get<any>(`${this.ShipViaByInternationalShippingId}?internationalShippingId=${id}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(`${this.ShipViaByInternationalShippingId}?internationalShippingId=${id}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getShipViaByInternationalShippingId(id, pageIndex, pageSize));
-			}));
+			});
 	}
 	postInternationalShipVia<T>(postData) {
 
-		return this.http.post<any>(this.InternationalShipVia, JSON.stringify(postData), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this.InternationalShipVia, JSON.stringify(postData), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.postInternationalShipVia(postData));
-			}));
+			});
 	}
 
 	updateInternationalShipping<T>(roleObject: any): Observable<T> {
 		let endpointUrl = `${this.UpdateInternationalshippingUrl}`;
-		return this.http.post<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateInternationalShipping(roleObject));
-			}));
+			});
 	}
 
 	getInternationalShippingById<T>(id) {
-		return this.http.get<any>(`${this.InternationalShippingById}?id=${id}`, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(`${this.InternationalShippingById}?id=${id}`, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getInternationalShippingById(id));
-			}));
+			});
 	}
 
 	deleteInternationalShipping<T>(id, updatedBy) {
 			let endpointUrl = `${this.InternationalShippingDelete}?id=${id}&updatedBy=${updatedBy}`;
-			return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-				.pipe(catchError(error => {
+			return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+				.catch(error => {
 					return this.handleErrorCommon(error, () => this.deleteInternationalShipping(id, updatedBy));
-				}));
+				});
 	}
 	updateStatusForShippingDetails<T>(id, status, updatedBy) {
 		let endpointUrl = `${this.ShippingDetailsStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateStatusForShippingDetails(id, status, updatedBy));
-			}));
+			});
 
 	}
 	updateStatusForInternationalShipping<T>(id, status, updatedBy) {
 
 		let endpointUrl = `${this.InternationalShippingStatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateStatusForInternationalShipping(id, status, updatedBy));
-			}));
+			});
 
 	}
 	// updateStatusForInternationalShippingVia(id, status, updatedBy) {
@@ -367,19 +365,19 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 		let endpointUrl = `${this.configurations.baseUrl}/api/legalEntity/intershippingviadetailsstatus?id=${id}&status=${status}&updatedBy=${updatedBy}`;
 		return this.http.put(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.	updateStatusForInternationalShippingVia(id, status, updatedBy));
-			}));
+			});
 
 	}
 
 	deleteInternationalShipViaId<T>(id, updatedBy) {
 
 		let endpointUrl = `${this._deleteInternationalShippingViaMapUrl}?id=${id}&updatedBy=${updatedBy}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () =>this.deleteInternationalShipViaId(id, updatedBy));
-			}));
+			});
 
 
 		// return this.http.get<T>(``)
@@ -391,42 +389,39 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	deleteShipViaDetails<T>(id, updatedBy) {
 	
 			let endpointUrl = `${this._deleteShipVia}?id=${id}&updatedBy=${updatedBy}`;
-			return this.http.put<any>(endpointUrl,this.getRequestHeaders())
-				.pipe(catchError(error => {
+			return this.http.put<T>(endpointUrl,this.getRequestHeaders())
+				.catch(error => {
 					return this.handleErrorCommon(error, () => this.deleteShipViaDetails(id, updatedBy));
-				}));
+				});
 	}
 
 	postInternationalShippingPost<T>(postData) {
-		return this.http.post<any>(this.InternationalShippingPost, JSON.stringify(postData), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this.InternationalShippingPost, JSON.stringify(postData), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.postInternationalShippingPost(postData));
-			}));
+			});
 	}
 
 
 	GetUploadDocumentsList(attachmentId, legalEntityId, moduleId) {
-		return this.http.get<any>(`${this._getlegalEntityDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${legalEntityId}&moduleId=${moduleId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get<any>(`${this._getlegalEntityDocumentAttachmentslist}?attachmentId=${attachmentId}&referenceId=${legalEntityId}&moduleId=${moduleId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.GetUploadDocumentsList(attachmentId, legalEntityId, moduleId));
-		}));
+		});
 	}
 
 
 	getCustomerContactAuditDetails1<T>(customerContactId, customerId) {
 
 
-		return this.http.get<any>(`${this.configurations.baseUrl}${this._customerContactHistory1}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get<T>(`${this.configurations.baseUrl}${this._customerContactHistory1}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getCustomerContactAuditDetails1<T>(customerContactId, customerId));
-		}));
+		});
 	}
 
 	getDocumentList(legalEntityId,deletedStatus) {
-		return this.http.get(`${this.configurations.baseUrl}/api/legalEntity/getlegalEntityDocumentDetail/${legalEntityId}?isdeleted=${deletedStatus}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get(`${this.configurations.baseUrl}/api/legalEntity/getlegalEntityDocumentDetail/${legalEntityId}?isdeleted=${deletedStatus}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getDocumentList(legalEntityId,deletedStatus));
-		}));
+		});
 	}
 
 	//getDocumentUploadEndpoint<T>(file: any): Observable<T> {
@@ -436,29 +431,29 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	getDocumentUploadEndpoint<T>(file: any): Observable<T> {
 		const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-		return this.http.post<any>(`${this._addDocumentDetails}`, file)
-		.pipe(catchError(error => {
+		return this.http.post<T>(`${this._addDocumentDetails}`, file)
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getDocumentUploadEndpoint(file));
-		}));
+		});
 	}
 	getdeleteDocumentListbyId(legalEntityDocumentId) {
 		return this.http.delete(`${this._deleteLegalEntityDocuments}/${legalEntityDocumentId}`,this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getdeleteDocumentListbyId(legalEntityDocumentId));
-		}));
+		});
 	}
 	getLegalEntityDocumentAuditHistory(id, legalEntityId) {
 		return this.http.get<any>(`${this._getlegalEntityDocumentHistory}?id=${id}&legalEntityId=${legalEntityId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getLegalEntityDocumentAuditHistory(id, legalEntityId));
-		}));
+		});
 }
 
 	LegalEntityBillingFileUpload(file, entityId) {
 		return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}?legalEntityId=${entityId}`, file)
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.LegalEntityBillingFileUpload(file, entityId));
-		}));
+		});
 }
 
 	//deleteBillingAddress<T>(roleObject: any, legalEntityId: any): Observable<T> {
@@ -471,9 +466,9 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	deleteBillingAddress(legalEntityId, moduleId) {
 		return this.http.put<any>(`${this._deleteBillingEntityDettilas}?billingAddressId=${legalEntityId}&updatedBy=${moduleId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.updateBillingViainfo(legalEntityId, moduleId));
-		}));
+		});
 }
 
 	//deleteBillingAddress<T>(roleObject: any, legalEntityId: any): Observable<T> {
@@ -490,42 +485,41 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	updateBillingViainfo<T>(roleObject: any, entityId: any): Observable<T> {
 		let endpointUrl = `${this._updateBillingViaDetails}/${entityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateBillingViainfo(roleObject, entityId));
-			}));
+			});
 	}
 
 	getlegalEntityBillingHistory(legalEntityId, legalEntityBillingAddressId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityBillingHistory}?legalEntityId=${legalEntityId}&legalEntityBillingaddressId=${legalEntityBillingAddressId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityBillingHistory}?legalEntityId=${legalEntityId}&legalEntityBillingaddressId=${legalEntityBillingAddressId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getGeneralrobj());
-		}));
+		});
 	}
 
 
 
 	getGeneralrobj<T>(): Observable<T> {
-		return this.http.get<any>(this.generalurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.generalurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getGeneralrobj());
-			}));
+			});
 	}
 
 	getLegalEntityEndpontService<T>(): Observable<T> {
 
-		return this.http.get<any>(this.entityurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.entityurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-			}));
+			});
 	}
 
 	SearchData<T>(pageSearch: any): Observable<T> {
 		let endpointUrl = this.serach;
-		return this.http.post<any>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.SearchData(pageSearch));
-			}));
+			});
 	}
 
 	//SearchData(data) {
@@ -537,183 +531,180 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	getManagemtentEntityData<T>(): Observable<T> {
 
-		return this.http.get<any>(this.managemententityurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.managemententityurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-			}));
+			});
 	}
 
 	getEntityDataById(entityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntitydatabyid/${entityId}`)
-		.pipe(catchError(error => {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntitydatabyid/${entityId}`).catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDataById(entityId));
-		}));
+		});
 	}
 	getBankingApisData(entityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/Getentitybybanking?legalEntityId=${entityId}`)
-		.pipe(catchError(error => {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/Getentitybybanking?legalEntityId=${entityId}`).catch(error => {
 			return this.handleErrorCommon(error, () => this.getBankingApisData(entityId));
-		}));
+		});
 	}
 	
 
 	getMSHistoryDataById(msID) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/ManagementStrcture/mshistory/?msID=${msID}`)
-		.pipe(catchError(error => {
+		return this.http.get<any>(`${this.configurations.baseUrl}/api/ManagementStrcture/mshistory/?msID=${msID}`).catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDataById(msID));
-		}));
+		});
 	}
 
 	
 
 	updateEntityListDetails<T>(roleObject: any): Observable<T> {
 		let endpointUrl = `${this._entityUpdateUrl}/${roleObject.legalEntityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateEntityListDetails(roleObject));
-			}));
+			});
 	}
 
 
 
 	getcountryListEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.countryUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.countryUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getcountryListEndpoint());
-			}));
+			});
 	}
 
     getManagemtentLengalEntityData<T>(): Observable<T> {
 
-        return this.http.get<any>(this.managementlengalentityurl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.managementlengalentityurl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-            }));
+            });
     }
 
 	loadParentEntities<T>(): Observable<T> {
-		return this.http.get<any>(this.parentEntityUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.parentEntityUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-			}));
+			});
 	}
 
-	getLedgerNamesData<T>(): Observable<T> {
-
-		return this.http.get<any>(this.ledgerNamesurl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+	getLedgerNamesData<T>(): Observable<T> { 
+		
+		return this.http.get<T>(this.ledgerNamesurl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-			}));
+			});
 	}
 	
 
 	getEntityforEdit<T>(): Observable<T> {
 
-		return this.http.get<any>(this.entityediturl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.entityediturl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityEndpontService());
-			}));
+			});
 	}
 	getNewLegalEntityEndpontService<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._entityUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._entityUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewLegalEntityEndpontService(userObject));
-			}));
+			});
 	}
 	updateLegalEntityEndpointService(roleObject: any, id: number) {
 		//alert(JSON.stringify(roleObject));
 		let endpointUrl = `${this._entityUrlNew}/${id}`;
 		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateLegalEntityEndpointService(roleObject, id));
-			}));
+			});
 	}
 	getmanagementPost<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._managementposturl, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._managementposturl, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getmanagementPost(userObject));
-			}));
+			});
 	}
 	updateManagement<T>(userObject: any): Observable<T> {
 		let endpointUrl = `${this._managementposturl}/${userObject.managementStructureId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateManagement(userObject));
-			}));
+			});
 	}
 	getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
 		let endpointUrl = `${this._managementposturl}/${actionId}`;
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getDeleteActionEndpoint(actionId));
-			}));
+			});
 	}
 
 	getrestoreActionEndpoint<T>(actionId: number): Observable<T> {
 		let endpointUrl = `${this._managementrestoreturl}/${actionId}`;
-		return this.http.post<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getrestoreActionEndpoint(actionId));
-			}));
+			});
 	}
 
 	
 	getDeleteActionEndpoint1<T>(actionId: number): Observable<T> {
 		let endpointUrl = `${this._deleteLegalEntity}/${actionId}`;
 
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getDeleteActionEndpoint(actionId));
-			}));
+			});
 	}
 
     getContcatDetails<T>(userObject): Observable<T> {
         let endpointUrl = `${this.contactUrl}/${userObject.legalEntityId}`;
-        return this.http.post<any>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getContcatDetails(userObject));
-            }));
+            });
     }
     getBillingList<T>(userObject): Observable<T> {
         let endpointUrl = `${this.billingLIstUrl}/${userObject.legalEntityId}`;
-        return this.http.post<any>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getBillingList(userObject));
-            }));
+            });
 	}
 	getDomesticShipList<T>(userObject): Observable<T> {
         let endpointUrl = `${this.domesticShipUrl}/${userObject.legalEntityId}`;
-        return this.http.post<any>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getDomesticShipList(userObject));
-            }));
+            });
 	}
 	getDomesticShipViaList<T>(userObject): Observable<T> {
         let endpointUrl = `${this.domesticShipVia1}/${userObject.legalEntityShippingAddressId}`;
-        return this.http.post<any>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getDomesticShipViaList(userObject));
-            }));
+            });
 	}
 	getinternationalShippingData<T>(userObject): Observable<T> {
         let endpointUrl = `${this.InternationalShippingList}/${userObject.legalEntityId}`;
-        return this.http.post<any>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getinternationalShippingData(userObject));
-            }));
+            });
 	}
 	
 	
 	getInternationalShipViaList<T>(userObject): Observable<T> {
         let endpointUrl = `${this.InternationalShipViaList}/${userObject.legalEntityInternationalShippingId}`;
-        return this.http.post<any>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl,  JSON.stringify(userObject),this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getInternationalShipViaList(userObject));
-            }));
+            });
 	}
 
 	
@@ -768,53 +759,53 @@ export class LegalEntityEndpontService extends EndpointFactory {
             'updatedBy': roleObject.updatedBy,
 
 		}
-		return this.http.put<any>(endpointUrl, JSON.stringify(obj), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(obj), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getUpdateLegalEntityEndpontService(roleObject, actionId));
-			}));
+			});
 	}
 
 	getDeleteLegalEntityEndpontService<T>(actionId: number): Observable<T> {
 		let endpointUrl = `${this._entityUrlNew}/${actionId}`;
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getDeleteLegalEntityEndpontService(actionId));
-			}));
+			});
 	}
 
 	getHistoryLegalEntityEndpontService<T>(jobTitleId: number): Observable<T> {
 		let endpointUrl = `${this._JobTilesUrlAuditHistory}/${jobTitleId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getHistoryLegalEntityEndpontService(jobTitleId));
-			}));
+			});
     }
 
     getAccountsInfoById<T>(entityId: number): Observable<T> {
         let endpointUrl = `${this.getEntitySetupAccounts}/${entityId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getAccountsInfoById(entityId));
-            }));
+            });
     }
 
     getUpdateLegalEntityActive<T>(roleObject: any, legalEntityId: number): Observable<T> {
        // let endpointUrl = `${this._entityUrlNew}/${legalEntityId}`;
 
-        return this.http.put<any>(this._activeUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(this._activeUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getUpdateLegalEntityActive(roleObject, legalEntityId));
-            }));
+            });
 	}
 	Shippingdetailsviastatus<T>(id, status, updatedBy) {
 		let endpointUrl = `${this.shippingdetailsviastatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`;
-		return this.http.put<any>(endpointUrl,  this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl,  this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () =>this.Shippingdetailsviastatus(id, status, updatedBy));
-			}));
+			});
 		// return this.http.get<T>(`${this.shippingdetailsviastatus}?id=${id}&status=${status}&updatedBy=${updatedBy}`)
 		// 	.catch(error => {
 		// 		return this.handleErrorCommon(error, () => this.Shippingdetailsviastatus(id, status, updatedBy));
@@ -823,36 +814,36 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	
 	updateLegalEntitytContactStatus<T>(roleObject): Observable<T> {
 		let endpointUrl = `${this._updatelegalContactStatus}?Contactid=${roleObject.contactId}&status=${roleObject.status}&updatedby=${roleObject.updatedBy}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateLegalEntitytContactStatus(roleObject));
-			}));
+			});
 	}
 	updateLegalEntityStatus<T>(id, status, updatedBy): Observable<T> {
         let endpointUrl = `${this._activeUrl}?legalEntityId=${id}&status=${status}&updatedBy=${updatedBy}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.updateLegalEntityStatus(id, status, updatedBy));
-            }));
+            });
     }
 	
 	getLegalEntityAddressById<T>(entityId: number): Observable<T> {
         let endpointUrl = `${this.getLegalEntityAddressByIdURL}/${entityId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleErrorCommon(error, () => this.getLegalEntityAddressById(entityId));
-            }));
+            });
     }
 
 
 	
 	uploadLegalEntityLogoEndpoint<T>(file: any): Observable<T> {
         const headers = new Headers({ 'Content-Type': 'multipart/form-data' });
-        return this.http.post<any>(`${this._uploadlegalEntityLogo}`, file).pipe(catchError(error => {
+        return this.http.post<T>(`${this._uploadlegalEntityLogo}`, file).catch(error => {
 			return this.handleErrorCommon(error, () => this.uploadLegalEntityLogoEndpoint(file));
-		}));
+		});
 	}
 	
 	getNewLegalEntityContactInfo<T>(param: any): Observable<any> { 
@@ -860,13 +851,12 @@ export class LegalEntityEndpontService extends EndpointFactory {
 		let body = JSON.stringify(param);
 		let endpointUrl = `/api/legalentity/LegalEntityContactPost`;
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
-		return this.http.post(endpointUrl, body, this.getRequestHeaders())
-		.pipe(
-            map((response: Response) => {
+        return this.http.post(endpointUrl, body, this.getRequestHeaders())
+            .map((response: Response) => {
                 return <any>response;
-            }),catchError(error => {
+            }).catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewLegalEntityContactInfo(param));
-			}));
+			});
 	}
 	
 	addLegalEntityContactDetails<T>(param: any): Observable<any> {
@@ -874,11 +864,11 @@ export class LegalEntityEndpontService extends EndpointFactory {
 		let endpointUrl = `/api/legalentity/ContactPost`;
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(endpointUrl, body, this.getRequestHeaders())
-            .pipe(map((response: Response) => {
+            .map((response: Response) => {
                 return <any>response;
-            }),catchError(error => {
+            }).catch(error => {
 				return this.handleErrorCommon(error, () => this.addLegalEntityContactDetails(param));
-			}));
+			});
 	}
 
 
@@ -887,197 +877,197 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	getNewlockboxLegalEntityEndpontService<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._entityUrlNewlockbox, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._entityUrlNewlockbox, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewlockboxLegalEntityEndpontService(userObject));
-			}));
+			});
 	}
 
 	
 	getNewdomesticwireLegalEntityEndpontService<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._entityUrlNewdomestic, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._entityUrlNewdomestic, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewdomesticwireLegalEntityEndpontService(userObject));
-			}));
+			});
 	}
 
 
 	getNewinternationaLegalEntityEndpontService<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._entityUrlNewinternationalwire, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._entityUrlNewinternationalwire, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewinternationaLegalEntityEndpontService(userObject));
-			}));
+			});
 	}
 	getNewACHLegalEntityEndpontService<T>(userObject: any): Observable<T> {
 
-		return this.http.post<any>(this._entityUrlNewACH, JSON.stringify(userObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(this._entityUrlNewACH, JSON.stringify(userObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewACHLegalEntityEndpontService(userObject));
-			}));
+			});
 	}
 
 
 
 	getEntityLockboxDataById(legalEntityId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityLockBoxdata?legalEntityId=${legalEntityId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityLockboxDataById(legalEntityId));
-		}));
+		});
 	}
 	getEntityDomesticDataById(entityId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityDomesticWireById?legalEntityId=${entityId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDomesticDataById(entityId));
-		}));
+		});
 	}
 	getEntityInternationalDataById(entityId) {
 		//alert('lol,');
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityInternationalWireById?legalEntityId=${entityId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityInternationalDataById(entityId));
-		}));
+		});
 	}
 	getEntityACHDataById(entityId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityACHById?legalEntityId=${entityId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityACHDataById(entityId));
-		}));
+		});
 	}
 
 
 	updateLegalLockbox<T>(roleObject: any): Observable<T> {
 		let endpointUrl = `${this._updatelegallockbox}/${roleObject.LegalEntityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateLegalLockbox(roleObject));
-			}));
+			});
 	}
 
 
 	updateLegalDomestic<T>(roleObject: any): Observable<T> {
 		let endpointUrl = `${this._updatelegalDomesticwire}/${roleObject.LegalEntityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateLegalDomestic(roleObject));
-			}));
+			});
 	}
 
 	
 	restorebillingRecord<T>(id: any,user): Observable<T> {
 		let endpointUrl = `${this.restoreBillingURl}?billingAddressId=${id}&updatedby=${user}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.restorebillingRecord(id,user));
-			}));
+			});
 	}
 	restoreDocumentLegal<T>(id: any,user): Observable<T> {
 		let endpointUrl = `${this.restoreLegalDocsURl}?id=${id}&updatedby=${user}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.restoreDocumentLegal(id,user));
-			}));
+			});
 	}
 	restoreCOntact<T>(id: any,user): Observable<T> {
 		let endpointUrl = `${this.restoreLegalContactsURl}?id=${id}&updatedby=${user}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.restoreCOntact(id,user));
-			}));
+			});
 	}
 	
 	restoreDomesticShippingRecord<T>(id: any,user): Observable<T> {
 		let endpointUrl = `${this.restoreDomesticHipURl}?id=${id}&updatedby=${user}`;
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.restoreDomesticShippingRecord(id,user));
-			}));
+			});
 	}
 	updateLegalInternational<T>(roleObject: any): Observable<T> {
 		let endpointUrl = `${this._updatelegalInternalwire}/${roleObject.LegalEntityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateLegalInternational(roleObject));
-			}));
+			});
 	}
 
 
 	updateLegalACH<T>(roleObject: any): Observable<T> {
 		let endpointUrl = `${this._updatelegalACH}/${roleObject.LegalEntityId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateLegalACH(roleObject));
-			}));
+			});
 	}
 
 
 	getLegalEntityHistory(customerId) {
 		return this.http.get(`${this.configurations.baseUrl}/${this._customerHistory}?LegalEntityId=${customerId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getLegalEntityHistory(customerId));
-		}));
+		});
 	}
 
 	
 	getLegalEntityContactById(contactId) {
 		return this.http.get(`${this.configurations.baseUrl}${this._getContactById}/${contactId}`, this.getRequestHeaders())
-		.pipe(catchError(error => {
+		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getLegalEntityAddressById(contactId));
-		}));
+		});
 	}
 	getDeleteActionEndpointLogo<T>(actionId: number): Observable<T> {
 		let endpointUrl = `${this._LogogDell}/${actionId}`;
 
 		console.log("Deleting");
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				console.log("Error on Deleting");
 				return this.handleErrorCommon(error, () => this.getDeleteActionEndpointLogo(actionId));
-			}));
+			});
 	}
 
 	getGlobalEntityRecords<T>(pageSearch: any): Observable<T> {
 		let endpointUrl = this._EntityGlobalSearch;
-		return this.http.post<any>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.post<T>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getGlobalEntityRecords(pageSearch));
-			}));
+			});
 	}
-	getNewBillinginfo<T>(param: any): Observable<any> {
+	getNewBillinginfo<T>(param: any): Observable<T> {
 
 		let body = JSON.stringify(param);
 		let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
 		return this.http
-			.post(this._billingInfoUrl, body, this.getRequestHeaders()).pipe(
-			map((res: Response) => res),catchError(error => {
+			.post(this._billingInfoUrl, body, this.getRequestHeaders())
+			.map((res: Response) => res).catch(error => {
 				return this.handleErrorCommon(error, () => this.getNewBillinginfo(param));
-			}));
+			});
 			// .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
 	}
 	getLegalEntityHistoryById(legalEntityId) {
 		//return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistory}?legalEntityId=${legalEntityId}`)
 		return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistory}/${legalEntityId}`)
-			.pipe(catchError(error => {
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityHistoryById(legalEntityId));
-			}));
+			});
 	}
 
 	updateContact<T>(roleObject): Observable<T> {
 		let endpointUrl = `${this._updatelegalContact}/${roleObject.contactId}`;
-		return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.updateContact(roleObject));
-			}));
+			});
 	}
 
 		LegalEntityBillingUpdateforActive<T>(id, status, updatedBy) {
 		let endpointUrl = `${this.legalEntityBillingUpdateforActive}?billingAddressId=${id}&status=${status}&updatedBy=${updatedBy}`
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.LegalEntityBillingUpdateforActive(id, status, updatedBy));
-			}));
+			});
 	}
 
 	// LegalEntityBillingUpdateforActive<T>(roleObject) {
@@ -1089,20 +1079,51 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	// }
 	getLegalEntityContactHistoryById(legalentitycontactId,legalentityId) {
 		return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistoryContact}?legalentitycontactId=${legalentitycontactId}&legalentityId=${legalentityId}`)
-			.pipe(catchError(error => {
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityContactHistoryById(legalentitycontactId,legalentityId));
-			}));
+			});
 	}
 	
 	deleteLegalEntityContact<T>(conatctId: number,updatedBy): Observable<T> {
 		let endpointUrl = `${this._deleteLegalEntityContact}/${conatctId}?updatedBy=${updatedBy}`;
 
-		return this.http.put<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.put<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleErrorCommon(error, () => this.deleteLegalEntityContact(conatctId,updatedBy));
-			}));
+			});
 	}
-	
+	getLeaglLockBoxHistory<T>(legalEntityId: number): Observable<T> {
+		let endpointUrl = `${this.lockBoxURl}/${legalEntityId}`;
+
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getLeaglLockBoxHistory(legalEntityId));
+			});
+	}
+	getLeaglDomesticHistory<T>(legalEntityId: number): Observable<T> {
+		let endpointUrl = `${this.DomsticWireUrl}/${legalEntityId}`;
+
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getLeaglDomesticHistory(legalEntityId));
+			});
+	}
+	getLeaglInternationalHistory<T>(legalEntityId: number): Observable<T> {
+		let endpointUrl = `${this.InternationalWireURL}/${legalEntityId}`;
+
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getLeaglInternationalHistory(legalEntityId));
+			});
+	}
+	getLeaglAchHistory<T>(legalEntityId: number): Observable<T> {
+		let endpointUrl = `${this.ACHUrl}/${legalEntityId}`;
+
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleErrorCommon(error, () => this.getLeaglAchHistory(legalEntityId));
+			});
+    }
 }
 
 

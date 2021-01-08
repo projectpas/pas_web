@@ -23,8 +23,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AssetIntangibleAttributeType } from '../../../../models/asset-intangible-attribute-type.model';
 import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ManufacturerService } from '../../../../services/manufacturer.service';
 import * as $ from 'jquery';
 import * as moment from 'moment';

@@ -289,21 +289,25 @@ export class NTAEAlternateComponent implements OnInit {
         if (event.files.length === 0){
 			return  this.disableSave = true;
 		}else{
-			this.disableSave = false;	
+            this.disableSave = false;	
+            this.updateBtn = false;
 		}
       }
 
       enableSave() {
-          if(this.selectedNTAETabId == 2) {
+          if(this.selectedNTAETabId == 2) {            
             if(this.alternateData.attachmentDetails && this.alternateData.attachmentDetails.length>0){
                 this.disableSave = false;
+                this.updateBtn = false;
             }else if(this.isEditMode == true){
                 this.disableSave = false; 
+                this.updateBtn = false;
             }else{
                 this.disableSave = true; 
             }
           } else {
             this.disableSave = false;
+            this.updateBtn = false;
           }
       }
 
@@ -324,12 +328,10 @@ dismissModel() {
 
 valuechange1(){
     this.updateBtn = false;
-
 }
 
 valuechange2(){
     this.updateBtn = false;
-
 }
     bindPartDataInPopup(event){
         this.updateBtn = false;

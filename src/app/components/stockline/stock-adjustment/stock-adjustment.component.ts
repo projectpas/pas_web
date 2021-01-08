@@ -10,6 +10,8 @@ import * as $ from 'jquery'
 import { takeUntil } from 'rxjs/operators';
 import { formatNumberAsGlobalSettingsModule, getValueFromObjectByKey, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
+import { timePattern } from '../../../validations/validation-pattern';
+
 @Component({
 	selector: 'app-stock-adjustment',
 	templateUrl: './stock-adjustment.component.html',
@@ -24,7 +26,8 @@ export class StockAdjustmentComponent implements OnInit {
 	stockLineId: number;
 	legalEntityList: any;	
 	businessUnitList: any;
-    divisionList: any;
+	timePattern = timePattern();
+	//divisionList: any;
 	departmentList: any;
 	existingMgmentStuc: any = {
 		level1: '',
@@ -106,6 +109,12 @@ export class StockAdjustmentComponent implements OnInit {
 	disableUnitCostAdj: boolean = false;
 	disableSalesPriceAdj: boolean = false;
 	disablelotCostAdj: boolean = false;
+	headerInfo: any = {};
+	maincompanylist: any[] = [];
+	bulist: any[] = [];
+	departmentListOriginal: any[] = [];
+	divisionListOriginal: any[] = [];
+	divisionList: any[] = [];
 
 	constructor(private _actRoute: ActivatedRoute, private stockLineService: StocklineService, private commonService: CommonService, private authService: AuthService, private router: Router, private alertService: AlertService, private datePipe: DatePipe) {
 		this.stockLineService.currentUrl = '/stocklinemodule/stocklinepages/app-stock-adjustment';
@@ -159,39 +168,21 @@ export class StockAdjustmentComponent implements OnInit {
         })
 	}
 
-	// onAddTextAreaInfo(value) {
-	// 	if(value == 'memo') {			
-	// 		this.textAreaLabel = 'Memo';
-	// 		this.textAreaInfo = this.stockLineForm.memo;
-	// 	}
-	// }
-
 	onClickMemo(value,row_no, obj) {
-		//if(value == 'memo') {
-			//this.textAreaLabel = 'Memo';
             this.memoPopupContent = obj;
             this.addrawNo = row_no;
-		//}
     }
 
 	onClickMemoOld() {
         this.memoPopupContent = this.stocklineAdjustmentData.adjustmentMemo;
-        // this.enableSave();
-        //this.memoPopupValue = value;
 	}   
-
-	// onSaveTextAreaInfo() {
-	// 	if(this.textAreaLabel == 'Memo') {
-    //         this.fieldArray[this.addrawNo].memo = this.textAreaInfo;
-    //     }
-    //     $('#capes-memo').modal('hide');
-    // }
 
     onClickPopupSave() {
         this.stocklineAdjustmentData.adjustmentMemo = this.memoPopupContent;
         this.memoPopupContent = '';
         $('#memo-popup-Doc').modal("hide");
-    }
+	}
+	
     closeMemoModel() {
         $('#memo-popup-Doc').modal("hide");
 	}
@@ -223,6 +214,10 @@ export class StockAdjustmentComponent implements OnInit {
 		this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(response => {
 			this.allCurrencyInfo = response;
 		});
+	}
+
+	get employeeId() {
+		return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
 	}
 
 	getAdjReasonData() {
@@ -313,48 +308,124 @@ export class StockAdjustmentComponent implements OnInit {
 		});
 	}
 
-	getManagementStructureCodes(id) {
-        this.commonService.getManagementStructureNameandCodes(id).subscribe(res => {
-			if (res.Level1) {
-				this.existingMgmentStuc.level1 = res.Level1;
-            } else {
-                this.existingMgmentStuc.level1 = '';
-            }
-            if (res.Level2) {
-				this.existingMgmentStuc.level2 = res.Level2;
-            } else {
-                this.existingMgmentStuc.level2 = '';
-            }
-            if (res.Level3) {
-				this.existingMgmentStuc.level3 = res.Level3;
-            } else {
-                this.existingMgmentStuc.level3 = '';
-            }
-            if (res.Level4) {
-				this.existingMgmentStuc.level4 = res.Level4;
-			} else {
-                this.existingMgmentStuc.level4 = '';
+	getManagementStructureCodes(id,empployid=0,editMSID=0) {
+		empployid = empployid == 0 ? this.employeeId : empployid ;
+		//editMSID = this.isEditMode ? editMSID = id : 0;
+		this.commonService.getManagmentStrctureData(id,empployid,editMSID).subscribe(response => {
+			if(response) {
+				const result = response;
+				if(result[0] && result[0].level == 'Level1') {
+					for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
+						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+							this.existingMgmentStuc.level1 = result[0].lstManagmentStrcture[i].label;
+						}
+					}
+					this.maincompanylist =  result[0].lstManagmentStrcture;	
+					this.headerInfo.companyId = result[0].managementStructureId;
+					this.headerInfo.managementStructureId = result[0].managementStructureId;				
+					this.headerInfo.buId = 0;
+					this.headerInfo.divisionId = 0;
+					this.headerInfo.departmentId = 0;	
+					this.bulist = [];
+					this.divisionListOriginal = [];
+					this.departmentListOriginal = [];
+				} else {
+					this.existingMgmentStuc.level1 = '';
+					this.headerInfo.companyId = 0;
+					this.headerInfo.buId = 0;
+					this.headerInfo.divisionId = 0;
+					this.headerInfo.departmentId = 0;	
+					this.maincompanylist = [];
+					this.bulist = [];
+					this.divisionListOriginal = [];
+					this.departmentListOriginal = [];
+				}
+				
+				if(result[1] && result[1].level == 'Level2') {	
+					for(let i = 0; i < result[1].lstManagmentStrcture.length; i++){
+						if(result[1].lstManagmentStrcture[i].value == result[1].managementStructureId) {
+							this.existingMgmentStuc.level2 = result[1].lstManagmentStrcture[i].label;
+						}
+					}
+					this.bulist = result[1].lstManagmentStrcture;
+					this.headerInfo.buId = result[1].managementStructureId;
+					this.headerInfo.managementStructureId = result[1].managementStructureId;
+					this.headerInfo.divisionId = 0;
+					this.headerInfo.departmentId = 0;
+					this.divisionListOriginal = [];
+					this.departmentListOriginal = [];
+				} else {
+					if(result[1] && result[1].level == 'NEXT') {
+						this.bulist = result[1].lstManagmentStrcture;
+					}
+					this.existingMgmentStuc.level2 = '';
+					this.headerInfo.buId = 0;
+					this.headerInfo.divisionId = 0;
+					this.headerInfo.departmentId = 0;					
+					this.divisionListOriginal = [];
+					this.departmentListOriginal = []; 
+				}
+
+				if(result[2] && result[2].level == 'Level3') {		
+					for(let i = 0; i < result[2].lstManagmentStrcture.length; i++){
+						if(result[2].lstManagmentStrcture[i].value == result[2].managementStructureId) {
+							this.existingMgmentStuc.level3 = result[2].lstManagmentStrcture[i].label;
+						}
+					}
+					this.divisionListOriginal =  result[2].lstManagmentStrcture;		
+					this.headerInfo.divisionId = result[2].managementStructureId;		
+					this.headerInfo.managementStructureId = result[2].managementStructureId;			
+					this.headerInfo.departmentId = 0;						
+					this.departmentListOriginal = [];			
+				} else {
+					if(result[2] && result[2].level == 'NEXT') {
+						this.divisionListOriginal = result[2].lstManagmentStrcture;						
+					}
+					this.existingMgmentStuc.level3 = '';
+					this.headerInfo.divisionId = 0; 
+					this.headerInfo.departmentId = 0;	
+					this.departmentListOriginal = [];}
+
+				if(result[3] && result[3].level == 'Level4') {		
+					for(let i = 0; i < result[3].lstManagmentStrcture.length; i++){
+						if(result[3].lstManagmentStrcture[i].value == result[3].managementStructureId) {
+							this.existingMgmentStuc.level4 = result[3].lstManagmentStrcture[i].label;
+						}
+					}
+					this.departmentListOriginal = result[3].lstManagmentStrcture;;			
+					this.headerInfo.departmentId = result[3].managementStructureId;	
+					this.headerInfo.managementStructureId = result[3].managementStructureId;				
+				} else {
+					this.existingMgmentStuc.level4 = '';
+					this.headerInfo.departmentId = 0; 
+					if(result[3] && result[3].level == 'NEXT') {
+						this.departmentListOriginal = result[3].lstManagmentStrcture;						
+					}
+				}	
+
+				this.managementStructureOnLoad = {
+					companyId: result[1].managementStructureId !== undefined ? result[1].managementStructureId : 0,
+					buId: result[2].managementStructureId !== undefined ? result[2].managementStructureId : 0,
+					divisionId: result[3].managementStructureId !== undefined ? result[3].managementStructureId : 0,
+					departmentId: result[4].managementStructureId !== undefined ? result[4].managementStructureId : 0,
+				}
+				this.isSpinnerVisible = false;
 			}
-			
-			this.managementStructureOnLoad = {
-                companyId: res.Level1 !== undefined ? res.Level1 : 0,
-                buId: res.Level2 !== undefined ? res.Level2 : 0,
-                divisionId: res.Level3 !== undefined ? res.Level3 : 0,
-                departmentId: res.Level4 !== undefined ? res.Level4 : 0,
-			}
-		})
+			else
+			{
+				this.isSpinnerVisible = false;
+			}			
+		},err => {
+			this.isSpinnerVisible = false;
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);		
+		});
 	}
 
-	// getTimeLife(timeLifeId) {
-	// 	this.sourceTimeLife = {};
-    //     this.stockLineService.getStockLineTimeLifeList(timeLifeId).subscribe(res => {
-	// 		this.sourceTimeLife = res[0];
-    //     });
-    // }
-
-	isCompanyEnable(item) {		
+	isCompanyEnable(item) {				
 		if(this.companyAllow) {
-			this.getLegalEntity();
+			//this.getLegalEntity();
+			this.legalEntityList = this.maincompanylist ;
 			this.showCompany = true;
 			this.showBusiness = true;
 			this.showDivision = true;
@@ -407,11 +478,8 @@ export class StockAdjustmentComponent implements OnInit {
 		this.managementStructure.departmentId = 0;
 		this.divisionList = [];
 		this.departmentList = [];
-		if(this.managementStructureOnLoad.companyId) {
-			this.commonService.getBusinessUnitListByLegalEntityId(this.managementStructureOnLoad.companyId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-				this.businessUnitList = res;
-			});
-		}
+		this.businessUnitList = this.bulist;
+		
 		if(this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
 			item.checkedItem = true;
 		} else {
@@ -436,11 +504,9 @@ export class StockAdjustmentComponent implements OnInit {
 		this.managementStructure.divisionId = 0;
 		this.managementStructure.departmentId = 0;
 		this.departmentList = [];
-		if(this.managementStructureOnLoad.buId) {
-			this.commonService.getDivisionListByBU(this.managementStructureOnLoad.buId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-                this.divisionList = res;
-            })
-		}
+
+		this.divisionList = this.divisionListOriginal;
+
 		if(this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
 			item.checkedItem = true;
 		} else {
@@ -459,11 +525,8 @@ export class StockAdjustmentComponent implements OnInit {
 			this.disableLevel4 = false;
 		}
 		this.managementStructure.departmentId = 0;
-		if(this.managementStructureOnLoad.divisionId) {
-			this.commonService.getDepartmentListByDivisionId(this.managementStructureOnLoad.divisionId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
-				this.departmentList = res;
-			})
-		}
+		this.departmentList =  this.departmentListOriginal;
+
 		if(this.companyAllow || this.businessAllow || this.divisionAllow || this.deptAllow) {
 			item.checkedItem = true;
 		} else {
@@ -1057,6 +1120,29 @@ export class StockAdjustmentComponent implements OnInit {
 				MessageSeverity.success)
 			this.router.navigateByUrl('/stocklinemodule/stocklinepages/app-stock-line-list');
 		});
+	}
+
+	errorMessageHandler(log) {
+		const errorLog = log;
+		var msg = '';
+		if(errorLog.message) {
+		  if (errorLog.error && errorLog.error.errors.length > 0) {
+					for (let i = 0; i < errorLog.error.errors.length; i++){
+						msg = msg + errorLog.error.errors[i].message + '<br/>'
+					}
+				}
+				this.alertService.showMessage(
+                    errorLog.error.message,
+					msg,
+					MessageSeverity.error
+				);
+		   }
+		   else {
+			this.alertService.showMessage(
+				'Error',
+				log.error,
+				MessageSeverity.error
+			); }
 	}
 }
 

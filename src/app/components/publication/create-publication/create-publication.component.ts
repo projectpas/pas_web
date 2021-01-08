@@ -1,4 +1,4 @@
-import { Router, ActivatedRoute } from '@angular/router';
+﻿import { Router, ActivatedRoute } from '@angular/router';
 import { PublicationService } from '../../../services/publication.service';
 import {
   MatDialog,
@@ -17,7 +17,7 @@ import { ItemMasterService } from '../../../services/itemMaster.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import { AircraftModelService } from '../../../services/aircraft-model/aircraft-model.service';
 import { AircraftManufacturerService } from '../../../services/aircraft-manufacturer/aircraftManufacturer.service';
-
+import { map } from 'rxjs/operator/map';
 import { DashNumberService } from '../../../services/dash-number/dash-number.service';
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { EmployeeService } from '../../../services/employee.service';
@@ -56,6 +56,8 @@ export class CreatePublicationComponent implements OnInit {
   selectedFile: File = null;
   publicationId: number;
   data: any;
+  memoPopupContent: any;
+  attachCertificateUpdateFlag: boolean = false; 
 
   publicationGeneralInformation = {
     entryDate: new Date(),
@@ -165,11 +167,14 @@ export class CreatePublicationComponent implements OnInit {
   active:boolean=false;
   inactive:boolean=false;
   globalFormatDate: string;
+  disableSaveMemo: boolean = true;
   ataPageSize: number = 10;
   showAdvancedSearchCardAta: boolean = false;
   showAdvancedSearchCardAircraft: boolean = false;
   gLocationsList: any[] = [];
   pnData: any = [];
+  selectedOnly: boolean = false;
+  targetData: any;
   selectedPartNumber: string = '';
   pnAircraftData: any = [];
   selectedAircraftPartNumber: string = '';
@@ -182,6 +187,8 @@ export class CreatePublicationComponent implements OnInit {
   publishedByModulesList: any = [];
   publishedByReferences: any = [];
   nextOrPreviousTab: any;
+  arrayIntegrationlist:any[] = [];
+  disableSave: boolean = true;
 
   /** Create-publication ctor */
   constructor(
@@ -258,6 +265,7 @@ export class CreatePublicationComponent implements OnInit {
     allDocumentListOriginal: any = [];
     selectedRowForDelete: any;
     rowIndex: number;
+    disabledPartNumber: boolean = false;
 
 
   ngOnInit() {
@@ -270,7 +278,7 @@ export class CreatePublicationComponent implements OnInit {
       this.sourcePublication.revisionNum = 1;
     }
     this.getAllEmployeeList();
-    this.getPublicationTypes();
+    this.getAllIntegrations();
     this.getFileTagTypesList();
     this.getPublishedByModulesList();
 
@@ -319,19 +327,25 @@ export class CreatePublicationComponent implements OnInit {
     // this.globalFormatDate =  new Intl.DateTimeFormat(globalSettings.cultureName).format(new Date())
     this.globalFormatDate = moment.localeData(globalSettings.cultureName).longDateFormat('L')
   }
+
   getPublicationTypes() {
-    this.publicationService.getPublicationTypes().subscribe(response => {
-      this.publicationTypes = response[0].map(x => {
-        return {
-          label: x.name,
-          value: x.publicationTypeId
-        }
-        // this.publicationTypes.push(pubType);
-      })
-    })
-
-
+    this.commonService.smartDropDownList('PublicationType', 'PublicationTypeId', 'Name').subscribe(res => {
+      this.publicationTypes = res;
+    });
   }
+
+  async getAllIntegrations() {         
+    if(this.arrayIntegrationlist.length == 0) {			
+        this.arrayIntegrationlist.push(0); }
+    await this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name','',true,100, this.arrayIntegrationlist.join()).subscribe(res => {
+        this.publicationTypes = res.map(x => {
+            return {
+                label: x.label, value: x.value
+            }
+        })
+    },error => this.saveFailedHelper(error));
+}
+
   PNMappingPageIndexChange(event) {
 		this.pnMappingPageSize = event.rows;
   }
@@ -378,8 +392,8 @@ export class CreatePublicationComponent implements OnInit {
 
 
       this.sourcePublication = tempsourcepub[0];
-
-
+      this.arrayIntegrationlist.push(this.sourcePublication.publicationTypeId);
+      this.getAllIntegrations();
       this.publicationType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.publicationTypeId, this.publicationTypes);
 
 
@@ -501,7 +515,7 @@ export class CreatePublicationComponent implements OnInit {
     //   MessageSeverity.error,
     //   error
     // );
-    this.alertService.showStickyMessage('Failed', error.error, MessageSeverity.error);
+    this.alertService.showStickyMessage('Already exist', error.error, MessageSeverity.error);
   }
   // onSelect(event) {
   //   //Execute the actual UPDATES here.
@@ -745,6 +759,15 @@ export class CreatePublicationComponent implements OnInit {
       });
     });
   }
+
+  openModelPopups(partNumberList) {
+    if (partNumberList.length > 0) {
+      this.disabledPartNumber = true;
+    } else {
+      this.disabledPartNumber = false;
+    }
+  }
+
   savePNMapping() {
     const mapData = this.selectedPartNumbers.map(obj => {
       return {
@@ -1233,7 +1256,7 @@ if(mapData && mapData.length >0){
     }
     closeMyModel(type) {
         $(type).modal("hide");
-
+        this.disableSave = true;
     }
 
     downloadFileUploadNew(link) {
@@ -1276,9 +1299,6 @@ if(mapData && mapData.length >0){
                     fileName: file.name,
                     isFileFromServer: false,
                     fileSize: file.size,
-
-
-
                 })
 
 
@@ -1317,6 +1337,11 @@ if(mapData && mapData.length >0){
     removeFile(event) {
         //this.formData.delete(event.file.name)
     }
+
+    enableSave() {
+      this.disableSave = false;
+    }
+
     addDocumentInformation(type, documentInformation) {
         if (this.selectedFileAttachment != []) {
             for (var i = 0; i < this.selectedFileAttachment.length; i++) {
@@ -1338,12 +1363,7 @@ if(mapData && mapData.length >0){
 
                     fileSize: ((this.selectedFileAttachment[i].fileSize) / (1024 * 1024)).toFixed(2),
                 })
-
-                // attachmentDetails: filesSelectedTemp
-
             }
-
-            //  this.sourceViewforDocumentList = [...this.sourceViewforDocumentList, this.selectedFileAttachment]
         }
 
         if (documentInformation.attachmentDetailId > 0 || this.index > 0) {
@@ -1355,10 +1375,6 @@ if(mapData && mapData.length >0){
                         this.sourceViewforDocumentList[i].docName = documentInformation.docName;
                         this.sourceViewforDocumentList[i].docMemo = documentInformation.docMemo;
                         this.sourceViewforDocumentList[i].docDescription = documentInformation.docDescription;
-                        //this.sourceViewforDocumentList[i].tagType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList);
-                       // this.sourceViewforDocumentList[i].tagType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList);
-
-                        
                         break;
 
                     }
@@ -1368,25 +1384,16 @@ if(mapData && mapData.length >0){
                         this.sourceViewforDocumentList[i].docName = documentInformation.docName;
                         this.sourceViewforDocumentList[i].docMemo = documentInformation.docMemo;
                         this.sourceViewforDocumentList[i].docDescription = documentInformation.docDescription;
-                       // this.sourceViewforDocumentList[i].tagType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList);
-                        //this.sourceViewforDocumentList[i].tagType = this.sourcePublication.tagTypeId;
                         this.sourceViewforDocumentList[i].tagTypeName = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList);
-
                         break;
                     }
-
                 }
-
             }
 
             this.index = 0;
             this.isEditButton = false;
-
-
             this.disableFileAttachmentSubmit == true;;
-
             this.dismissDocumentPopupModel(type)
-
         }
         this.dismissDocumentPopupModel(type)
         this.sourceViewforDocumentList = [...this.sourceViewforDocumentList]
@@ -1397,12 +1404,55 @@ if(mapData && mapData.length >0){
         this.index = 0;
         this.isEditButton = false;
         this.disableFileAttachmentSubmit == true;;
-
+        this.alertService.showMessage(
+          'Success',
+          `Sucessfully Attached document`,
+          MessageSeverity.success
+      );
         if (this.fileUploadInput) {
             this.fileUploadInput.clear()
         }
-
     }
+
+    onClickMemo() {
+      this.memoPopupContent = this.documentInformation.docMemo;
+      this.enableSave();
+      this.disableSaveMemo=true;
+      //this.memoPopupValue = value;
+  } 
+  enableSaveMemo() {
+    this.disableSaveMemo = false;
+}
+closeDeleteModal() {
+  $("#downloadPublicationConfirmation").modal("hide");
+}
+closeDeleteAircraftModal() {
+  $("#downloadAircraftConfirmation").modal("hide");
+}
+closeDeleteAtaModal() {
+  $("#downloadAtaConfirmation").modal("hide");
+}
+
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+}
+
+    onClickPopupSave() {
+      this.documentInformation.docMemo = this.memoPopupContent;
+      this.memoPopupContent = '';
+      $('#memo-popup-Doc').modal("hide");
+  }
+
+  closeMemoModel() {
+      $('#memo-popup-Doc').modal("hide");
+  }
+
     editCustomerDocument(rowdata, index = 0) {
         this.selectedFileAttachment = [];
         this.isEditButton = true;

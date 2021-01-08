@@ -10,8 +10,8 @@ import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } fro
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { PageHeaderComponent } from '../../shared/page-header.component';
 import { MasterComapnyService } from '../../services/mastercompany.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { Itemgroup } from '../../models/item-group.model';
 import { ItemGroupService } from '../../services/item-group.service';

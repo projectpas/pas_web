@@ -597,12 +597,13 @@
                                 </label>
                                 <p-multiSelect [options]="partNumberList"
                                                [(ngModel)]="selectedPartNumbers"
+                                               (click)="openModelPopups(selectedPartNumbers)"
                                                class="pub-multi align-x"></p-multiSelect>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <button class="btn btn-primary mtop20 btn-cstm" (click)="savePNMapping()">
+                                <button class="btn btn-primary mtop20 btn-cstm" [disabled]="!disabledPartNumber" (click)="savePNMapping()">
                                     Add
                                 </button>
                             </div>
@@ -665,7 +666,9 @@
                                             label="Export  Data"
                                             matTooltip="Download  Data"
                                             matTooltipPosition="above"
-                                            (click)="pnMappingTable.exportCSV()"
+                                            data-toggle="modal" 
+                                            (click)="selectedOnly = false; targetData = pnMappingTable;"
+                                             data-target="#downloadPublicationConfirmation"
                                             style="padding: 5px 10px !important;"></button>
                                     <button type="button"
                                             class="btn btn-primary new-table-button"
@@ -895,7 +898,9 @@
                                             label="Export  Data"
                                             matTooltip="Download  Data"
                                             matTooltipPosition="above"
-                                            (click)="aircraftTable.exportCSV()"
+                                            data-toggle="modal" 
+                                            (click)="selectedOnly = false; targetData = aircraftTable;"
+                                             data-target="#downloadAircraftConfirmation"
                                             style="padding: 5px 10px !important;"></button>
                                     <button type="button"
                                             class="btn btn-primary new-table-button"
@@ -1122,7 +1127,10 @@
                                             label="Export  Data"
                                             matTooltip="Download  Data"
                                             matTooltipPosition="above"
-                                            (click)="ataTable.exportCSV()"
+                                         
+                                            data-toggle="modal" 
+                                            (click)="selectedOnly = false; targetData = ataTable;"
+                                             data-target="#downloadAtaConfirmation"
                                             style="padding: 5px 10px !important;"></button>
                                     <button type="button"
                                             class="btn btn-primary new-table-button"
@@ -1254,6 +1262,74 @@
     </div>
 </div>
 <!-- Add DashNumber Popup -->
+<div class="modal fade" id="downloadPublicationConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="pnMappingTable.exportCSV(); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="downloadAircraftConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteAircraftModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="aircraftTable.exportCSV(); closeDeleteAircraftModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteAircraftModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="downloadAtaConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteAtaModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="ataTable.exportCSV(); closeDeleteAtaModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteAtaModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
 <div id="addDashNumber" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
         <!-- Modal content-->
@@ -1467,7 +1543,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fileupload">Tag Type <span class="clr-red">*</span> </label>
-                                <select name="tagTypeId" [(ngModel)]="sourcePublication.tagTypeId" required>
+                                <select name="tagTypeId" [(ngModel)]="sourcePublication.tagTypeId" (ngModelChange)="enableSave()" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let tagTypeItem of fileTagTypesList" [ngValue]="tagTypeItem.value">
                                         {{ tagTypeItem.label }}
@@ -1479,6 +1555,7 @@
                                 <input class="form-control"
                                        type="text"
                                        name="name"
+                                       (ngModelChange)="enableSave()" 
                                        [(ngModel)]="documentInformation.docName"
                                        required />
                             </div>
@@ -1486,14 +1563,49 @@
                                 <label>Description </label>
                                 <textarea class="form-control"
                                           name="description"
+                                          (ngModelChange)="enableSave()" 
                                           [(ngModel)]="documentInformation.docDescription"></textarea>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label>Memo </label>
                                 <textarea class="form-control"
                                           name="memo"
+                                          (ngModelChange)="enableSave()" 
                                           [(ngModel)]="documentInformation.docMemo"></textarea>
-                            </div>
+                            </div> -->
+                            <div class="form-group">
+                                <span class="label">Memo </span>
+                                <div class="col-sm-11">
+                                  <span>                    
+                                    <div class="form-group memo-popup-cstm mat_emo">
+                                      <div
+                                      (ngModelChange)="enableSave()"
+                                        [innerHTML]="documentInformation.docMemo"
+                                        [matTooltip]="parsedText(documentInformation.docMemo)"
+                                        matTooltipPosition="above"
+                                        (change)="attachCertificateUpdateFlag = false"
+                                        class="form-control"
+                                        style="width: 109%;line-height:1.5"
+                                        class="text_editor_box"
+                                      ></div>
+                                    </div>
+                                  </span>
+                                </div>
+                                <div class="col-sm-1">
+                                  <span style="margin-left:10px">
+                                    <a
+                                    class="btn nobg"
+                                    data-toggle="modal"
+                                    (ngModelChange)="enableSave()"
+                                    data-target="#memo-popup-Doc"
+                                    (click)="onClickMemo()"
+                                    matTooltip="Add Memo"
+                                    matTooltipPosition="above">
+                                    <i style="color: #337ab7" class="fa fa-pencil"></i>
+                                    </a>
+                                  </span>
+                                </div>
+                              </div>
                         </div>
 
                         <div class="col-md-12">
@@ -1502,7 +1614,6 @@
                                 <p-fileUpload #fileUploadInput
                                                name="fileupload[]"
                                               multiple="multiple"
-                                             
                                               [showCancelButton]="false"
                                               [showUploadButton]="false"
                                               customUpload="true"
@@ -1535,15 +1646,11 @@
                                            matTooltip="Download" matTooltipPosition="above"
                                            class="filelink">
                                             <span><i class="fa fa-download"></i></span>
-
                                         </a>
                                     </td>
-
                                 </tr>
                             </table>
-
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1560,7 +1667,7 @@
                             class="btn btn-primary pull-right submit-btn"
                             style="text-align:center"
                             (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
-                            [disabled]="!addDocumentForm.valid">
+                            [disabled]="!addDocumentForm.valid || disableSave">
                         Update
                     </button>
                     <button type="button"
@@ -1575,6 +1682,58 @@
         </div>
     </div>
 </div>
+
+<!-- memo code starts here -->
+<div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            &times;
+          </button>
+          <h4 class="modal-title">Edit Memo</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table table-bordered table-fixed workflow-table-material">
+            <thead>
+              <th style="color: #fff;">Memo</th>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="white-space: inherit">
+                  <p-editor
+                   spellcheck="true"
+                   (ngModelChange)="enableSaveMemo()"
+                    [(ngModel)]="memoPopupContent"
+                    [style]="{ height: '320px' }"
+                    name="memoPopupContent"
+                    required
+                  ></p-editor>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="float: right;">
+            <button
+              type="button"
+              class="btn btn-primary"
+              style="padding: 6px 12px !important; margin-top: 10px;"
+              (click)="onClickPopupSave()" [disabled]="disableSaveMemo">
+              Save
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              style="padding: 6px 12px !important; margin-top: 10px;"
+              (click)="closeMemoModel()" >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- memo code ends here -->
 
 <ng-template #contentAuditHist
              let-c="close"
@@ -1638,8 +1797,8 @@
                 color: getColorCodeForHistory(i, 'docMemo', audit.docMemo)
                   ? 'black'
                   : 'red'
-              }">
-                            {{ audit.docMemo }}
+              }" [innerHTML]="audit.docMemo" >
+                            <!-- {{ audit.docMemo }} -->
                         </td>
                         <td [ngStyle]="{
                 color: getColorCodeForHistory(i, 'fileName', audit.fileName)

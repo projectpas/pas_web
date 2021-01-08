@@ -1,4 +1,4 @@
- // ===============================
+﻿ // ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,  BehaviorSubject , forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 import { AuthService } from './auth.service';
@@ -20,6 +21,7 @@ import { AuditHistory } from '../models/audithistory.model';
 import { Role } from '../models/role.model';
 import { LegalEntityEndpontService } from './legalentity-endpoint.service';
 import { TreeNode } from 'primeng/api';
+import { BehaviorSubject } from 'rxjs';
 
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = { roles: Role[] | string[], operation: RolesChangedOperation };
@@ -67,11 +69,11 @@ export class LegalEntityService {
 	}
 
 	getlegalEntityShipAddressGet(legalEntityId: any) {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getCusHippingaddresdetails<any[]>(legalEntityId));
 	}
 	getlegalEntityShipAddressGetWIthAddressId(legalEntityId: any) {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getCusHippingaddresdetailswithid<any>(legalEntityId));
 	}
 	ShippingFileUpload(file, legalEntityId) {
@@ -206,22 +208,22 @@ export class LegalEntityService {
 	}
 
 	getGeneralObj() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getGeneralrobj<any>());
 	}
 
 	getEntityList() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getLegalEntityEndpontService<any[]>());
 	}
 
 	//getEntityList(serverSidePagesData: any) {
-	//	return forkJoin(
+	//	return Observable.forkJoin(
 	//		this.legalEntityEndpont.SearchData<any[]>(serverSidePagesData));
 	//}
 
 	getEntityLists(data) {
-		return forkJoin(
+		return Observable.forkJoin(
 		 this.legalEntityEndpont.SearchData(data));
 	}
 
@@ -242,29 +244,29 @@ export class LegalEntityService {
 	}
 
 	getCountrylist() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getcountryListEndpoint<any[]>());
 	}
 
 	getManagemententity() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getManagemtentEntityData<any[]>());
     }
 
     getManagemtentLengalEntityData() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getManagemtentLengalEntityData<any[]>());
 	}
 	loadParentEntities() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.loadParentEntities<any[]>());
 	}
 	getLedgerNamesData() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getLedgerNamesData<any[]>());
 	}
 	getEntityforEdit() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.legalEntityEndpont.getEntityforEdit<any[]>());
 	}
 	newAddEntity(action: any) {
@@ -301,27 +303,27 @@ export class LegalEntityService {
 		return this.legalEntityEndpont.getDeleteLegalEntityEndpontService(actionId);
     }
     getContacts(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getContcatDetails<any>(data));
 	}
 	getBillingList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getBillingList<any>(data));
     }
 	getDomesticShipList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getDomesticShipList<any>(data));
 	}
 	getDomesticShipViaList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getDomesticShipViaList<any>(data));
 	}
 	getinternationalShippingData(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getinternationalShippingData<any>(data));
 	}
 	getInternationalShipViaList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.legalEntityEndpont.getInternationalShipViaList<any>(data));
     }
 	getFileSystem() {
@@ -413,11 +415,11 @@ export class LegalEntityService {
 	}
 
 	historyEntity(actionId: number) {
-		return forkJoin(this.legalEntityEndpont.getHistoryLegalEntityEndpontService<AuditHistory[]>(actionId));
+		return Observable.forkJoin(this.legalEntityEndpont.getHistoryLegalEntityEndpontService<AuditHistory[]>(actionId));
     }
 
     getEntityAccounts(entityId: number) {
-        return forkJoin(this.legalEntityEndpont.getAccountsInfoById<any>(entityId));
+        return Observable.forkJoin(this.legalEntityEndpont.getAccountsInfoById<any>(entityId));
     }
 
 
@@ -426,7 +428,7 @@ export class LegalEntityService {
 	}
 	
 	getLegalEntityAddressById(entityId: number) {
-        return forkJoin(this.legalEntityEndpont.getLegalEntityAddressById<any>(entityId));
+        return Observable.forkJoin(this.legalEntityEndpont.getLegalEntityAddressById<any>(entityId));
 	}
 	
 	uploadLegalEntityLogo(action: any) {
@@ -537,6 +539,19 @@ export class LegalEntityService {
 	}
 	deleteLegalEntityContact(conatctId,updatedBy){
 		return this.legalEntityEndpont.deleteLegalEntityContact(conatctId,updatedBy)
+	}
+	
+	getLeaglLockBoxHistory(legalEntityId) {
+		return this.legalEntityEndpont.getLeaglLockBoxHistory(legalEntityId)
+	}
+	getLeaglDomesticHistory(legalEntityId) {
+		return this.legalEntityEndpont.getLeaglDomesticHistory(legalEntityId)
+	}
+	getLeaglInternationalHistory(legalEntityId) {
+		return this.legalEntityEndpont.getLeaglInternationalHistory(legalEntityId)
+	}
+	getLeaglAchHistory(legalEntityId) {
+		return this.legalEntityEndpont.getLeaglAchHistory(legalEntityId)
 	}
 }
 

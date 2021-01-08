@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
@@ -32,17 +33,17 @@ export class ManufacturerService {
         private manufacturerEndpoint: ManufacturerEndpoint) { }
 
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.manufacturerEndpoint.getManufacturerEndpoint<any[]>());
     }
 
     getManufacturers() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.manufacturerEndpoint.getManufacturerEndpoint<Manufacturer[]>());
     }
 
     historyManufacturer(ManufacturerId: number) {
-        return forkJoin(this.manufacturerEndpoint.getHistoryManufacturerIdEndpoint<any>(ManufacturerId));
+        return Observable.forkJoin(this.manufacturerEndpoint.getHistoryManufacturerIdEndpoint<any>(ManufacturerId));
     }
 
     newManufacturer(action: any) {
@@ -69,7 +70,7 @@ export class ManufacturerService {
 
     getServerPages(serverSidePagesData: any)
     {
-        return forkJoin(
+        return Observable.forkJoin(
             this.manufacturerEndpoint.getManufacturerRecords<Manufacturer[]>(serverSidePagesData));
     }
     ManufacturerFileUpload(file){
@@ -77,7 +78,7 @@ export class ManufacturerService {
     }
 
     getSearchData(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.manufacturerEndpoint.SearchData<Manufacturer[]>(serverSidePagesData));
     }
 

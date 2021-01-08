@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AssetDepConvention } from '../../models/assetDepConvention.model';
 import { AssetDepConventionTypeEndpointService } from './assetDepConventionType-endpoint.service';
 @Injectable()
@@ -12,12 +12,12 @@ export class AssetDepConventionTypeService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetDepConventionTypeEndpointService.getAllAssetDeps<any>());
     }
 
     getById(assetDepConventionTypeId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetDepConventionTypeEndpointService.getAssetDepById<AssetDepConvention>(assetDepConventionTypeId)
         );
     }

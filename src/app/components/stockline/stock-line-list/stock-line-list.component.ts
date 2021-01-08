@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
 import { FormBuilder } from '@angular/forms';
-  
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { Router } from '@angular/router';
 import { StocklineService } from '../../../services/stockline.service';
@@ -21,7 +21,6 @@ import { StocklineReference } from '../../../models/stocklineReference';
 import * as $ from 'jquery';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-stock-line-list',
@@ -157,6 +156,7 @@ export class StockLineListComponent implements OnInit {
     adjAuditHistoryList: any = [];
     adjAuditHistoryData: any = [];
     dateObject: any = {};
+    targetData: any;
 
     // To display the values in header and column name values
     headers = [        
@@ -185,7 +185,7 @@ export class StockLineListComponent implements OnInit {
         { field: 'divName', header: 'Level 03' },
         { field: 'deptName', header: 'Level 04' },
     ]
-    selectedColumns = this.headers;
+    selectedGridColumns = this.headers;
     lazyLoadFilterData: any;
     pageIndex: number = 0;
     data: any = [];
@@ -205,7 +205,6 @@ export class StockLineListComponent implements OnInit {
     globalSearchText: string;
     columnInputText: any;
     selectedOnly: boolean = false;
-    targetData: any;
 
     constructor(private workFlowtService: StocklineService, private datePipe: DatePipe, private _route: Router, private authService: AuthService, private commonService: CommonService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private stocklineReferenceStorage: StocklineReferenceStorage) {
         this.dataSource = new MatTableDataSource();

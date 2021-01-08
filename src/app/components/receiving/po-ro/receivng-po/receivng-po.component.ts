@@ -30,7 +30,6 @@ import { AddressModel } from '../../../../models/address.model';
 import { Warehouse } from '../../../../models/warehouse.model';
 import { Bin } from '../../../../models/bin.model';
 import { Shelf } from '../../../../models/shelf.model';
-
 import { error } from '@angular/compiler/src/util';
 import { Customer } from '../../../../models/customer.model';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
@@ -44,7 +43,6 @@ import { LocalStoreManager } from '../../../../services/local-store-manager.serv
 import { DBkeys } from '../../../../services/db-Keys';
 import { AuthService } from '../../../../services/auth.service';
 import { DatePipe } from '@angular/common';
-
 @Component({
     selector: 'app-receivng-po',
     templateUrl: './receivng-po.component.html',
@@ -116,6 +114,8 @@ export class ReceivngPoComponent implements OnInit {
     legalEntityList: any = [];
     isSpinnerVisible: boolean = true;
     moduleListDropdown: any = [];
+    headerMemo: any;
+    headerNotes:any;
     // selectedChildParts: any = [];
     //showGrid: boolean;
     //userName: any;
@@ -553,6 +553,30 @@ export class ReceivngPoComponent implements OnInit {
 
     }
 
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+
+    onAddNotes() {
+		this.headerNotes = this.poDataHeader.notes;
+	}
+	onSaveNotes() {
+		this.poDataHeader.notes = this.headerNotes;
+		
+	}
+
+    onAddMemo() {
+		this.headerMemo = this.poDataHeader.memo;
+	}
+	onSaveMemo() {
+		this.poDataHeader.memo = this.headerMemo;
+	}
     getManagementStructureCodesForPart(part) {
         part.managementStructureName = [];
         this.commonService.getManagementStructureCodes(part.managementStructureId).subscribe(res => {       
@@ -1707,7 +1731,7 @@ export class ReceivngPoComponent implements OnInit {
                 for (var i = 0; i < item.stocklineListObj.length; i++) {
                     item.stocklineListObj[i].gLAccountId = item.itemMaster.glAccountId;
                     item.stocklineListObj[i].conditionId = item.conditionId;
-                    item.stocklineListObj[i].quantityRejected = item.quantityRejected;
+                    item.stocklineListObj[i].quantityRejected = Number(item.quantityRejected);
                     item.stocklineListObj[i].isSerialized = item.itemMaster.isSerialized == undefined ? false : item.itemMaster.isSerialized;
                     item.stocklineListObj[i].isPMA = item.itemMaster.pma;
                     item.stocklineListObj[i].isDER = item.itemMaster.der;

@@ -1,13 +1,14 @@
 ﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 
-<div class="card new-card">
+<div class="card new-card" style="padding: 5px !important;">
     <div class="card-header bg-primary new-card-header">
         <div class="row">
             <div class="col">
-                <h4 class="new-card-heading">GL Account List</h4>
+                <h4 class="new-card-heading" style="font-size: 16px;">GL Account List</h4>
             </div>
             <div>
-                <button type="button" class="btn-sm new-btn-primary" matTooltip="Create GL Account" matTooltipPosition="above" [routerLink]="[
+                <button type="button" class="btn-sm new-btn-primary" style="line-height:1; font-size:12px !important;" matTooltip="Create GL Account"
+                    matTooltipPosition="above" [routerLink]="[
                '/generalledgermodule/generalledgerpage/app-account-listing-create'
               ]">
                     Create GL Account
@@ -17,93 +18,75 @@
     </div>
     <div class="card-body new-card-body">
         <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="GlaccountListdata" [lazy]="true"
-                 (onLazyLoad)="loadCustomerPages($event)" [first]="0" [rows]="pageSize" [paginator]="true" [pageLinks]="3"
-                 [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
-                 [metaKeySelection]="true" [lazy]="true" (onLazyLoad)="loadData($event)"
-                 [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords" [scrollable]="true"
-                 scrollHeight="450px" [responsive]="true">
+            (onLazyLoad)="loadGLAccountlist($event)" [first]="0" [rows]="pageSize" [paginator]="true" [pageLinks]="3"
+            [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
+            [metaKeySelection]="true" [lazy]="true" [resizableColumns]="true" [reorderableColumns]="true"
+            [totalRecords]="totalRecords" [scrollable]="true" scrollHeight="450px" [responsive]="true">
             <ng-template pTemplate="caption">
-                 <div class="row">
+                <div class="row">
                     <div class="col">
                         <p-multiSelect [maxSelectedLabels]="2" [options]="headers" optionLabel="header"
-                                       [(ngModel)]="selectedColumns" [style]="{ minWidth: '200px' }"
-                                       style="float:left; height: auto !important;" (onChange)="columnsChanges()">
+                            [(ngModel)]="selectedColumns" [style]="{ minWidth: '200px' }"
+                            style="float:left; height: auto !important;" (onChange)="columnsChanges()">
                         </p-multiSelect>
                     </div>
                     <div class="col">
                         <div style="width: auto !important; float: right;"
-                             class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
                             <i class="fa fa-search"></i>
                             <input type="text" pInputText size="50" class="form-control"
-                                   (input)="globalSearch($event.target.value)" placeholder="Filter" />
+                                (input)="globalSearch($event.target.value)" placeholder="Filter" />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
-                                matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
-                                data-toggle="modal"
-                     (click)="selectedOnly = false; targetData = dt;" 
-                     data-target="#downloadConfirmation"></button>
+                            matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
+                            data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
+                            data-target="#downloadConfirmation"></button>
                         <button type="button" class="btn btn-primary new-table-button"
                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton icon="fa-download"
                                 iconPos="left" label="Export Selected Data"
-                                data-toggle="modal"
-                                data-target="#downloadConfirmation"
-                                (click)="selectedOnly = true; targetData = dt;" >
+                                (click)="dt.exportCSV({selectionOnly:true})">
                         </button>
+                        <!-- data-toggle="modal"
+                        data-target="#downloadConfirmation"
+                        (click)="selectedOnly = true; targetData = dt;"  -->
                     </div>
-                 
+
                     <div class="row">
                         <div class="col">
                             <div class="">
-                                <div class="col"
-                                     style="width: 390px; float: right; padding-top: 3px;">
+                                <div class="col" style="width: 400px; float: right; padding-top: 3px;">
                                     <div class="form-group">
-                                        <div class="pull-left"
-                                             style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                                             <label class="radio-cstm wauto">
-                                                <input type="radio"
-                                                       name="EmpStatus"
-                                                       class="form-control"
-                                                       value="Active"
-                                                       (click)="getListByStatus('Active')"
-                                                       [(ngModel)]="currentstatus" />
+                                                <input type="radio" name="EmpStatus" class="form-control" value="Active"
+                                                    (click)="getListByStatus('Active')" [(ngModel)]="currentstatus" />
                                                 <span class="checkmark"></span>Active
                                             </label>
                                         </div>
-                                        <div class="pull-left"
-                                             style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                                             <label class="radio-cstm wauto">
-                                                <input type="radio"
-                                                       name="EmpStatus"
-                                                       class="form-control"
-                                                       value="InActive"
-                                                       (click)="getListByStatus('InActive')"
-                                                       [(ngModel)]="currentstatus" />
-                                                <span class="checkmark"></span>In-active
+                                                <input type="radio" name="EmpStatus" class="form-control"
+                                                    value="InActive" (click)="getListByStatus('InActive')"
+                                                    [(ngModel)]="currentstatus" />
+                                                <span class="checkmark"></span>In-Active
                                             </label>
                                         </div>
-                                        <div class="pull-left"
-                                             style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                                             <label class="radio-cstm wauto">
-                                                <input type="radio"
-                                                       name="EmpStatus"
-                                                       class="form-control"
-                                                       value="ALL"
-                                                       (click)="getListByStatus('ALL')"
-                                                       [(ngModel)]="currentstatus" />
+                                                <input type="radio" name="EmpStatus" class="form-control" value="ALL"
+                                                    (click)="getListByStatus('ALL')" [(ngModel)]="currentstatus" />
                                                 <span class="checkmark"></span>All
                                             </label>
                                         </div>
                                         <div class="checkbox-cstm" style="margin-left: 0;">
                                             <label style="width: auto !important; margin-top: 3px;">
-                                                <input type="checkbox"
-                                                       [(ngModel)]="currentDeletedstatus"
-                                                       name="cparent"
-                                                       id="cparent"
-                                                       (click)="getDeleteListByStatus($event.target.checked)" />
+                                                <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
+                                                    id="cparent"
+                                                    (click)="getDeleteListByStatus($event.target.checked)" />
                                                 <span class="cr">
                                                     <i class="cr-icon pi pi-check"></i>
                                                 </span>
@@ -139,30 +122,26 @@
                 </tr>
 
                 <tr>
-                    
+
                     <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input style="width: 100%;"
-                               pInputText
-                               type="text"
-                               *ngIf="col.field !== 'startDate'"
-                               (input)="
+                        <input style="width: 100%;" pInputText type="text" *ngIf="col.field !== 'startDate' && col.field !== 'createdDate' && col.field !== 'updatedDate' " (input)="
                           dt.filter($event.target.value, col.field, 'contains');
                           activeStatus($event.target.value)
                         " />
-                        <input type="date"
-                               *ngIf="col.field == 'startDate'"
-                               name="StartDate"
-                               style="width: 100%;"
-                               (change)="dt.filter($event.target.value, col.field, 'contains')" />
+                        <input type="date" *ngIf="col.field == 'startDate'" name="StartDate" style="width: 100%;"
+                            (change)="dt.filter($event.target.value, col.field, 'contains')" />
+                        <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                             name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+                                (change)="dateFilterForTable($event.target.value,col.field)" />
                     </th>
                     <th style="width: 130px;"></th>
                 </tr>
 
-              
+
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRow]="rowData" pReorderableRowHandle
-                >
+                <tr [pSelectableRow]="rowData" pReorderableRowHandle>
                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
                         pReorderableRowHandle>
                         <ng-container *ngIf="col.field !=='interCompany'">
@@ -173,61 +152,70 @@
                 ? (rowData[col.field] | date: 'MM/dd/yyyy hh:mm a')
                 : rowData[col.field]
                             }}
-                            </ng-container>
-                            <ng-container *ngIf="col.field =='interCompany'">
-                                <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
-                                       style="margin: 0px auto; display: block;" />
-                            </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="col.field =='interCompany'">
+                            <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                                style="margin: 0px auto; display: block;" />
+                        </ng-container>
                     </td>
-            <td class="action-icons-cstm" style="width:150px" *ngIf="selectedColumns.length > 0">
-                <div *ngIf="currentDeletedstatus==false">
-                    <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active"
-                                   matTooltipPosition="above" onLabel="on" offLabel="off"
-                                   (onChange)="changeStatus(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                    <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active"
-                                   matTooltipPosition="above" onLabel="on" offLabel="off"
-                                   (onChange)="changeStatus(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                    <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active"
-                                   matTooltipPosition="above" onLabel="on" offLabel="off"
-                                   (onChange)="changeStatus(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                    <td class="action-icons-cstm" style="width:150px" *ngIf="selectedColumns.length > 0">
+                        <div *ngIf="currentDeletedstatus==false">
+                            <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active"
+                                matTooltipPosition="above" onLabel="on" offLabel="off"
+                                (onChange)="changeStatus(rowData,$event)" [(ngModel)]="rowData['isActive']">
+                            </p-inputSwitch>
+                            <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active"
+                                matTooltipPosition="above" onLabel="on" offLabel="off"
+                                (onChange)="changeStatus(rowData,$event)" [(ngModel)]="rowData['isActive']">
+                            </p-inputSwitch>
+                            <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active"
+                                matTooltipPosition="above" onLabel="on" offLabel="off"
+                                (onChange)="changeStatus(rowData,$event)" [(ngModel)]="rowData['isActive']">
+                            </p-inputSwitch>
 
-                    <span data-toggle="modal" data-target="#view">
-                        <a  class="btn btn-info boxed-float-btn nobg" 
-                           (click)="viewRow(rowData)" matTooltip="View" matTooltipPosition="above" >
-                            <i class="fa fa-eye"></i>
-                    </a>
-                    </span>
+                            <span data-toggle="modal" data-target="#view">
+                                <a class="btn btn-info boxed-float-btn nobg" (click)="viewRow(rowData)"
+                                    matTooltip="View" matTooltipPosition="above">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </span>
 
-                    <span>
-                        <a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
-                           matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
-                    </span>
-                    <span data-toggle="modal" data-target="#contentHist">
-                        <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History"
-                           matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                    </span>
-                    <span data-toggle="modal" data-target="#delete">
-                        <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
-                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
-                    </span>
-                </div>
-                <div *ngIf="currentDeletedstatus==true">
-                    <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                                   matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch>
-                    <span data-toggle="modal" data-target="#view" ><a class="btn nobg"(click)="viewRow(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                    <span><a class="btn nobg" (click)="restore(restorerow,rowData)" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"></i></a> </span>
-                    <span data-target="#contentHist" data-toggle="modal">
-                        <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
-                            <i class="fa fa-history"></i>
-                        </a>
-                    </span>
-                </div>
-            </td>
-            </tr>
+                            <span>
+                                <a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"
+                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                            </span>
+                            <span data-toggle="modal" data-target="#contentHist">
+                                <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                    matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span>
+                            <span data-toggle="modal" data-target="#delete">
+                                <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
+                                    matTooltipPosition="above"><i class="fa fa-trash"></i></a>
+                            </span>
+                        </div>
+                        <div *ngIf="currentDeletedstatus==true">
+                            <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true"
+                                name="isActive{{ rowIndex }}"
+                                matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
+                                (onChange)="changeStatus(rowData)"></p-inputSwitch>
+                            <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewRow(rowData)"
+                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span><a class="btn nobg" (click)="restore(restorerow,rowData)" matTooltip="Restore Record"
+                                    matTooltipPosition="above"><i class="fa fa-undo"></i></a> </span>
+                            <span data-target="#contentHist" data-toggle="modal">
+                                <a class="btn nobg" (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                                    matTooltipPosition="above">
+                                    <i class="fa fa-history"></i>
+                                </a>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns>
                 <tr>
-                    <td [attr.colspan]="15" class="no-records-cstm" style="color: red; font-weight: bold; text-align: center">
+                    <td [attr.colspan]="15" class="no-records-cstm"
+                        style="color: red; font-weight: bold; text-align: center">
                         No records found
                     </td>
                 </tr>
@@ -251,12 +239,13 @@
                     <div class="modal-body" *ngIf="targetData">
                         <strong>
                             <span>
-                                You are attempting to export {{targetData.totalRecords}} of records. 
-                            </span> 
+                                You are attempting to export {{targetData.totalRecords}} of records.
+                            </span>
                         </strong>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+                        <button type="button" class="btn btn-primary"
+                            (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
                         <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
                     </div>
                 </div>
@@ -266,24 +255,19 @@
         <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
             <div class="modal-header">
                 <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-                <button type="button"
-                        class="close"
-                        aria-label="Close"
-                        (click)="dismissModel()">
+                <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <strong>
-                    Ledger Name:
-                    <span class="new-label">{{sourceEmployee.ledgerName}}</span>
+                    GL Account:
+                    <span class="new-label">{{sourceEmployee.accountCode}} - {{sourceEmployee.accountName}} </span>
                 </strong>
             </div>
 
             <div class="modal-footer">
-                <button type="button"
-                        class="btn btn-primary"
-                        (click)="deleteItemAndCloseModel()">
+                <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
                     Yes
                 </button>
                 <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -295,17 +279,14 @@
             <div class="modal-header">
                 <h4 class="modal-title">Are You Sure Want to Restore?</h4>
 
-                <button type="button"
-                        class="close"
-                        aria-label="Close"
-                        (click)="dismissModel()">
+                <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <strong>
-                    Ledger Name:
-                    <span class="new-label">{{restoreRecordData.ledgerName}}</span>
+                    GL Account:
+                    <span class="new-label">{{sourceEmployee.accountCode}} - {{sourceEmployee.accountName}} </span>
                 </strong>
             </div>
 
@@ -316,16 +297,7 @@
                 <button type="button" class="btn btn-danger" (click)="dismissModel()">
                     No
                 </button>
-            </div>
-
-            <div class="preloader" *ngIf="isSpinnerVisible">
-                <div class="loading">
-                    <div class="lds-roller">
-                        <div>
-                        </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-                    </div>
-                </div>
-            </div>
+            </div>            
         </ng-template>
 
     </div>
@@ -334,17 +306,23 @@
     <div class="loading">
         <div class="lds-roller">
             <div>
-            </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
     </div>
 </div>
 
-<div *ngIf="viewRowData"  class="modal fade" id="view" #view role="dialog" data-backdrop="static" data-keyboard="false">
+<div *ngIf="viewRowData" class="modal fade" id="view" #view role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" id="" name=""
-                        (click)="resetViewData()">
+                <button type="button" class="close" data-dismiss="modal" id="" name="" (click)="resetViewData()">
                     ×
                 </button>
                 <div class="col-sm-5">
@@ -353,158 +331,183 @@
                 <div class="col-sm-3">
                     <p>
                         <span class="label ">
-                            <b class="view-Header"> Ledger Name:</b>
+                            <b class="view-Header"> GL Account:  </b>
                         </span>
-                        <span class="value">{{viewRowData.ledgerName}}</span>
+                        <span class="value" style="margin-left:10px">{{ viewRowData[0].accountCode}}-{{viewRowData[0].accountName }}</span>
                     </p>
                 </div>
                 <div class="col-sm-3">
-                    <button type="button" [ngClass]="viewRowData['isActive'] ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'" style="margin: 2px 27px;">
-                        <span class="value">{{viewRowData['isActive'] ? 'Active' : 'In-Active'}}</span>
+                    <button type="button"
+                        [ngClass]="viewIsActive ? 'btn btn-success pull-right' : 'btn btn-danger pull-right'"
+                        style="margin: 2px -35px;">
+                        <span class="value">{{viewIsActive ? 'Active' : 'In-Active'}}</span>
                     </button>
-                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="col-sm-12">
-                           
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header"> Ledger Name: <span class="clr-red">*</span></b>
-                                    </span>
-                                    <span class="value">{{viewRowData.ledgerName}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Account Code:<span class="clr-red">*</span> </b>
-                                    </span>
-                                    <span class="value">{{ viewRowData.accountCode}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Old Account Code: </b>
-                                    </span>
-                                    <span class="value">{{ viewRowData.oldAccountCode}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Account Description: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.accountDescription}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Account Name:<span class="clr-red">*</span> </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.accountName }}</span>
-                                </p>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
 
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Account Type: <span class="clr-red">*</span></b>
-                                    </span>
-                                    <span class="value">{{viewRowData.glAccountClassName }}</span>
-                                </p>
+                   
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Account Code:<span class="clr-red">*</span> </b>
+                        </span>
+                        <span class="value">{{ viewRowData[0].accountCode}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Old Account Code: </b>
+                        </span>
+                        <span class="value">{{ viewRowData[0].oldAccountCode}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Account Name:<span class="clr-red">*</span> </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].accountName }}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Account Type: <span class="clr-red">*</span></b>
+                        </span>
+                        <span class="value">{{viewRowData[0].glAccountClassName }}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Account Description: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].accountDescription}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Leaf Node Name: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].nodeTypeName }}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Inter Company: </b>
+                        </span>
+                        <span class="value">
+                            <input type="checkbox" disabled [checked]="viewRowData[0].interCompany== true" />
+                        </span>
+                    </p>                   
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header"> 1099 Category: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].name }}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header"> Shared Ledger: <span class="clr-red">*</span></b>
+                        </span>
+                        <span class="value">{{viewRowData[0].ledgerNames}}</span>
+                    </p>
+                    <!-- <p>
+                        <span class="label ">
+                            <b class="view-Header"> Share With Entities: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].shareWithEntityNames }}</span>
+                    </p> -->
 
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Inter Company: </b>
-                                    </span>
-                                    <span class="value">
-                                        <input type="checkbox" disabled [checked]="viewRowData.interCompany== true" />
-                                    </span>
-                                </p>
 
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Leaf Node Name: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.nodeTypeName }}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header"> 1099 Category: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.name }}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header"> Share With Entities: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.shareWithEntityNames }}</span>
-                                </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Allow Manual JE: </b>
+                        </span>
+                        <span class="value">
+                            <input type="checkbox" disabled [checked]="viewRowData[0].allowManualJE == true" />
+                        </span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header"> Cash Flows Classification:<span class="clr-red">*</span></b>
+                        </span>
+                        <span class="value">{{viewRowData[0].glClassFlowClassificationName }}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header"> PO Category: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].categoryName }}</span>
+                    </p>
 
 
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Allow Manual JE: </b>
-                                    </span>
-                                    <span class="value">
-                                        <input type="checkbox" disabled [checked]="viewRowData.allowManualJE==true" />
-                                    </span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header"> Cash Flows Classification:<span class="clr-red">*</span></b>
-                                    </span>
-                                    <span class="value">{{viewRowData.glClassFlowClassificationName }}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header"> PO Category: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.categoryName }}</span>
-                                </p>
 
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Created Date: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.createdDate | date: 'MM/dd/yyyy hh:mm a'}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">CreatedBy: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.createdBy}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">Updated Date: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.updatedDate | date: 'MM/dd/yyyy hh:mm a'}}</span>
-                                </p>
-                                <p>
-                                    <span class="label ">
-                                        <b class="view-Header">UpdatedBy: </b>
-                                    </span>
-                                    <span class="value">{{viewRowData.updatedBy}}</span>
-                                </p>
-                               
-                            </div>
-                            <div class="clear"></div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="" name=""
-                                    (click)="resetViewData()">
-                                Close
-                            </button>
-                        </div>
-                    </div>
-        <div class="preloader"  *ngIf="isSpinnerVisible">
+
+                   
+                  
+                  
+
+                   
+
+                    
+                   
+                    <!-- <p>
+                        <span class="label ">
+                            <b class="view-Header">Created Date: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].createdDate | date: 'MM/dd/yyyy hh:mm a'}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">CreatedBy: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].createdBy}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">Updated Date: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].updatedDate | date: 'MM/dd/yyyy hh:mm a'}}</span>
+                    </p>
+                    <p>
+                        <span class="label ">
+                            <b class="view-Header">UpdatedBy: </b>
+                        </span>
+                        <span class="value">{{viewRowData[0].updatedBy}}</span>
+                    </p> -->
+
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="" name=""
+                    (click)="resetViewData()">
+                    Close
+                </button>
+            </div>
+        </div>
+        <div class="preloader" *ngIf="isSpinnerVisible">
             <div class="loading">
                 <div class="lds-roller">
                     <div>
-                    </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
             </div>
         </div>
 
     </div>
-    <div class="preloader"  *ngIf="isSpinnerVisible">
+    <div class="preloader" *ngIf="isSpinnerVisible">
         <div class="loading">
             <div class="lds-roller">
                 <div>
-                </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     </div>
@@ -512,7 +515,7 @@
 
 
 <div *ngIf="auditHistory" id="contentHist" #contentHist class="modal fade" role="dialog" data-backdrop="static"
-     data-keyboard="false">
+    data-keyboard="false">
     <div class="modal-dialog modal-xl">
 
         <!-- Modal content-->
@@ -527,16 +530,17 @@
                         <thead>
                             <tr>
 
-                                <th>Ledger Name <span class="clr-red">*</span></th>
-                                <th>Old Account Code</th>
+                                                               
                                 <th>Account Code <span class="clr-red">*</span></th>
+                                <th>Old Account Code</th>
                                 <th>Account Name <span class="clr-red">*</span></th>
                                 <th>Acccont Type <span class="clr-red">*</span></th>
                                 <th>Account Description</th>
+                                <th>Shared Ledger <span class="clr-red">*</span></th>
                                 <th>Leaf Node Name</th>
                                 <th>Inter Company</th>
                                 <th>1099 Category</th>
-                                <th>Share with Entities</th>
+                                <!-- <th>Share with Entities</th> -->
                                 <th>Allow Manual JE</th>
                                 <th>Cash Flows Classification</th>
                                 <th>PO Category</th>
@@ -550,48 +554,64 @@
                         </thead>
                         <tbody *ngIf="auditHistory.length> 0">
                             <tr *ngFor="let audit of auditHistory; let i = index;">
+
+                               
                                 
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'ledgerName', audit.ledgerName)  ? 'black' : 'red'  }">
-                                    {{audit.ledgerName}}
-                                </td>
-                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'oldAccountCode', audit.oldAccountCode)  ? 'black' : 'red'  }">
-                                    {{audit.oldAccountCode}}
-                                </td>
-                                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'accountCode', audit.accountCode)  ? 'black' : 'red'  }">
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'accountCode', audit.accountCode)  ? 'black' : 'red'  }">
                                     {{audit.accountCode}}
                                 </td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'accountName', audit.accountName)  ? 'black' : 'red'  }">
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'oldAccountCode', audit.oldAccountCode)  ? 'black' : 'red'  }">
+                                    {{audit.oldAccountCode}}
+                                </td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'accountName', audit.accountName)  ? 'black' : 'red'  }">
                                     {{audit.accountName}}
                                 </td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'glAccountClassName', audit.glAccountClassName)  ? 'black' : 'red'  }">
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'glAccountClassName', audit.glAccountClassName)  ? 'black' : 'red'  }">
                                     {{audit.glAccountClassName}}
                                 </td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'accountDescription', audit.accountDescription)  ? 'black' : 'red'  }">
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'accountDescription', audit.accountDescription)  ? 'black' : 'red'  }">
                                     {{audit.accountDescription}}
                                 </td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'nodeTypeName', audit.nodeTypeName)  ? 'black' : 'red'  }">
+                                <td
+                                [ngStyle]="{'color':  getColorCodeForHistory(i, 'ledgerName', audit.ledgerName)  ? 'black' : 'red'  }">
+                                {{audit.ledgerName}}
+                            </td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'nodeTypeName', audit.nodeTypeName)  ? 'black' : 'red'  }">
                                     {{audit.nodeTypeName}}
                                 </td>
-                                <td> <input type="checkbox" name="interCompany" [(ngModel)]=" audit.interCompany" disabled></td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
+                                <td> <input type="checkbox" name="interCompany" [(ngModel)]=" audit.interCompany"
+                                        disabled></td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'name', audit.name)  ? 'black' : 'red'  }">
                                     {{audit.name}}
                                 </td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'shareWithEntityNames', audit.shareWithEntityNames)  ? 'black' : 'red'  }">
+                                <!-- <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'shareWithEntityNames', audit.shareWithEntityNames)  ? 'black' : 'red'  }">
                                     {{audit.shareWithEntityNames}}
-                                </td>
-                                <td> <input type="checkbox" name="allowManualJE" [(ngModel)]=" audit.allowManualJE" disabled></td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'glClassFlowClassificationName', audit.glClassFlowClassificationName)  ? 'black' : 'red'  }">
+                                </td> -->
+                                <td> <input type="checkbox" name="allowManualJE" [(ngModel)]=" audit.allowManualJE"
+                                        disabled></td>
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'glClassFlowClassificationName', audit.glClassFlowClassificationName)  ? 'black' : 'red'  }">
                                     {{audit.glClassFlowClassificationName}}
                                 </td>
-                                <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'categoryName', audit.categoryName)  ? 'black' : 'red'  }">
+                                <td
+                                    [ngStyle]="{'color':  getColorCodeForHistory(i, 'categoryName', audit.categoryName)  ? 'black' : 'red'  }">
                                     {{audit.categoryName}}
                                 </td>
-                                 <td> <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled></td>
+                                <td> <input type="checkbox" name="isActive" [(ngModel)]=" audit.isActive" disabled></td>
                                 <td>{{audit.createdDate | date: 'MM/dd/yyyy hh:mm a '}}</td>
                                 <td>{{audit.createdBy}}</td>
                                 <td>{{audit.updatedDate | date: 'MM/dd/yyyy hh:mm a '}}</td>
                                 <td>{{audit.updatedBy}}</td>
-                                <td> <input type="checkbox" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled></td>
+                                <td> <input type="checkbox" name="isDeleted" [(ngModel)]=" audit.isDeleted" disabled>
+                                </td>
                             </tr>
                         </tbody>
 
@@ -610,32 +630,52 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
-        <div class="preloader"  *ngIf="isSpinnerVisible">
+        <div class="preloader" *ngIf="isSpinnerVisible">
             <div class="loading">
                 <div class="lds-roller">
                     <div>
-                    </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                    </div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
                 </div>
             </div>
         </div>
-            </div>
-    <div class="preloader"  *ngIf="isSpinnerVisible">
+    </div>
+    <div class="preloader" *ngIf="isSpinnerVisible">
         <div class="loading">
             <div class="lds-roller">
                 <div>
-                </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+                </div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     </div>
-   
+
 </div>
 
-<div class="preloader"  *ngIf="isSpinnerVisible">
+<div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">
             <div>
-            </div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
     </div>
 </div>
-

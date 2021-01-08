@@ -5,12 +5,12 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { DepriciationMethod } from '../../models/depriciation-method.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class DepriciationMethodEndpointService extends EndpointFactory {
 
@@ -38,55 +38,55 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
     getAlldepriciationMethod<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAlldepriciationMethod());
-            }));
+            });
     }
 
     getdepriciationMethodById<T>(assetDepreciationMethodId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${assetDepreciationMethodId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getdepriciationMethodById(assetDepreciationMethodId));
-            }));
+            });
     }
 
     adddepriciationMethod<T>(depriciationMethod: DepriciationMethod): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(depriciationMethod), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(depriciationMethod), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.adddepriciationMethod(depriciationMethod));
-            }));
+            });
     }
 
     updatedepriciationMethod<T>(depriciationMethod: DepriciationMethod): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(depriciationMethod), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(depriciationMethod), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updatedepriciationMethod(depriciationMethod));
-            }));
+            });
     }
 
     removedepriciationMethodById<T>(assetDepreciationMethodId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${assetDepreciationMethodId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removedepriciationMethodById(assetDepreciationMethodId));
-            }));
+            });
     }
 
     getAssetDepreciationAudits<T>(assetDepreciationMethodId: number): Observable<T> {
         let endpointUrl = `${this.audits}/${assetDepreciationMethodId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAssetDepreciationAudits(assetDepreciationMethodId));
-            }));
+            });
     }
 
     DepMethodCustomUpload(file) {

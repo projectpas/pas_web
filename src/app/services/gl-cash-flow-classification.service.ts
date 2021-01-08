@@ -1,11 +1,12 @@
-
+﻿
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { GlCashFlowClassificationEndpoint } from './gl-cash-flow-classification-endpoint.service';
 import { AuthService } from './auth.service';
@@ -34,17 +35,17 @@ export class GlCashFlowClassificationService {
         private glCashFlowClassificationEndpoint: GlCashFlowClassificationEndpoint) { }
 
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.glCashFlowClassificationEndpoint.getGlCashFlowClassificationEndpoint<any[]>());
     }
 
     search(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.glCashFlowClassificationEndpoint.getGlCashFlowClassificationsearchEndpoint<any[]>(serverSidePagesData));
     }
 
     historyGlCashFlowClassification(glclassflowclassificationId: number) {
-        return forkJoin(this.glCashFlowClassificationEndpoint.getHistoryGlCashFlowClassificationEndpoint<AuditHistory[]>(glclassflowclassificationId));
+        return Observable.forkJoin(this.glCashFlowClassificationEndpoint.getHistoryGlCashFlowClassificationEndpoint<AuditHistory[]>(glclassflowclassificationId));
     }
 
     newGlCashFlowClassification(glclassflowclassification: any) {
@@ -74,7 +75,7 @@ export class GlCashFlowClassificationService {
     }
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.glCashFlowClassificationEndpoint.getGlCashFlowClassificationRecords<GlCashFlowClassification[]>(serverSidePagesData));
     }
 }

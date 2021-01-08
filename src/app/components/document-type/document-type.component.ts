@@ -8,8 +8,8 @@ import { AlertService, DialogType, MessageSeverity } from '../../services/alert.
 
 import { AuthService } from '../../services/auth.service';
 
-//  
-// import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+// import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { DocumentTypeService } from '../../services/document-type.service';
 import { Integration } from '../../models/integration.model';
@@ -21,8 +21,8 @@ import { getObjectByValue, validateRecordExistsOrNot, selectedValueValidate, edi
 import { Table } from 'primeng/table';
 import { ConfigurationService } from '../../services/configuration.service';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

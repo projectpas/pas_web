@@ -4,7 +4,7 @@ import { ConfigurationService } from '../configuration.service';
 import { Observable } from 'rxjs';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { PurchaseOrderPart, PurchaseOrder, StockLine, ReceiveParts, StockLineDraft } from '../../components/receiving/po-ro/receivng-po/PurchaseOrder.model';
-import {catchError} from 'rxjs/operators'
+
 @Injectable()
 export class ShippingEndpoint extends EndpointFactory {
 
@@ -26,26 +26,26 @@ export class ShippingEndpoint extends EndpointFactory {
 
     getAllShippingReference<T>(): Observable<T> {
 
-        return this.http.get<any>(this.ShippingRefenceURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.ShippingRefenceURL, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllShippingReference<T>());
-            }));
+            });
     }
 
     getAllShippingVia<T>(): Observable<T> {
 
-        return this.http.get<any>(this.ShippingViaURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.ShippingViaURL, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllShippingVia<T>());
-            }));
+            });
     }
 
     getAllShippingAccount<T>(): Observable<T> {
 
-        return this.http.get<any>(this.ShippingAccountURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.ShippingAccountURL, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllShippingAccount<T>());
-            }));
+            });
     }
 
     receiveParts<T>(receiveParts: ReceiveParts[]): Observable<T> {
@@ -66,10 +66,10 @@ export class ShippingEndpoint extends EndpointFactory {
             listObj.push(Obj);
         }
 
-        return this.http.post<any>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.receiveParts(receiveParts));
-            }));
+            });
 
     }
 
@@ -129,10 +129,10 @@ export class ShippingEndpoint extends EndpointFactory {
             listObj.push(Obj);
         }
 
-        return this.http.post<any>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateStockLine(receiveParts));
-            }));
+            });
 
     }
 }

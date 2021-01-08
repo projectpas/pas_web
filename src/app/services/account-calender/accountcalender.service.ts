@@ -1,10 +1,10 @@
-
+﻿
 import { Injectable } from '@angular/core';
-//import { Observable } from 'rxjs';
-import { Observable, Subject, BehaviorSubject,forkJoin } from 'rxjs';
-
-
-
+//import { Observable } from 'rxjs/Observable';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AccountCalenderEndpointService } from './accountcalender-endpoint.service';
 
 
@@ -23,12 +23,12 @@ export class AccountCalenderService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.calendarEndpointService.getCalendarData<any[]>());
     }
 
     getCalendarListData() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.calendarEndpointService.getCalendarListData<any[]>());
     }
 

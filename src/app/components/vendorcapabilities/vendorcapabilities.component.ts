@@ -3,17 +3,17 @@ import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
 import * as $ from 'jquery';
 import { MenuItem } from 'primeng/api';//bread crumb
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { VendorCapabilitiesService } from '../../services/vendorcapabilities.service';
-
+// import { DataTableModule } from 'primeng/datatable';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectModule } from 'primeng/multiselect';
-
+// import { Action } from 'rxjs/scheduler/Action';
 import { AuditHistory } from '../../models/audithistory.model';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { MatTableDataSource, MatDialog, MatPaginator, MatSort } from '@angular/material';

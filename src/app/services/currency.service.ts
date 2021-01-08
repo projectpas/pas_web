@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { CurrencyEndpoint } from './currency-endpoint.service';
 import { AuthService } from './auth.service';
@@ -36,16 +37,16 @@ export class CurrencyService {
         private currencyEndpoint: CurrencyEndpoint) { }
 
     getCurrencyList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.currencyEndpoint.getCurrencyEndpoint<Currency[]>());
     }
 
     getCurrencyListAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.currencyEndpoint.getAllCurrencyEndpoint<Currency[]>());
     }
     getCountryListAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.currencyEndpoint.getCountryEndpoint<any[]>());
     }
 
@@ -61,7 +62,7 @@ export class CurrencyService {
 
     }
     historycurrency(actionId: number) {
-        return forkJoin(this.currencyEndpoint.getHistorycurrencyEndpoint<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.currencyEndpoint.getHistorycurrencyEndpoint<AuditHistory[]>(actionId));
     }
     
     getCurrencyAudit(currencyId: number) {
@@ -69,7 +70,7 @@ export class CurrencyService {
     }
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.currencyEndpoint.getCurrencyRecords<Currency[]>(serverSidePagesData));
     }
 

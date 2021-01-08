@@ -22,9 +22,9 @@
                     <div class="col-md-12">
                         <div class="col-md-3 work_order_teardown">
                             <div class="form-group">
-                                <label>SO List View <span class="text-danger">*</span></label>
+                                <label>SOQ List View <span class="text-danger">*</span></label>
                                 <p-dropdown name="company1" #wocompanyId="ngModel" required
-                                    [options]="salesOrderViewList" placeholder="Select SO List View"
+                                    [options]="salesOrderViewList" placeholder="Select SOQ List View"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.soqListViewId">
                                 </p-dropdown>
 
@@ -33,9 +33,9 @@
                         </div>
                         <div class="col-md-3 work_order_teardown">
                             <div class="form-group">
-                                <label>SO List Status <span class="text-danger">*</span></label>
+                                <label>SOQ List Status <span class="text-danger">*</span></label>
                                 <p-dropdown name="company12" #wocompanyId1="ngModel" required
-                                    [options]="salesOrderStatusList" placeholder="Select SO List Status"
+                                    [options]="salesOrderStatusList" placeholder="Select SOQ List Status"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.soqListStatusId">
                                 </p-dropdown>
                             </div>
@@ -52,9 +52,9 @@
                     <div class="col-md-12">
                         <div class="col-md-3 work_order_teardown">
                             <div class="form-group">
-                                <label>SO Type <span class="clr-red">*</span></label>
+                                <label>SOQ Type <span class="clr-red">*</span></label>
                                 <p-dropdown name="quoteTypeId" #quoteTypeId="ngModel" required
-                                    [options]="salesOrderTypes" placeholder="Select SO Type"
+                                    [options]="salesOrderTypes" placeholder="Select SOQ Type"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.quoteTypeId">
                                 </p-dropdown>
                             </div>
@@ -93,7 +93,7 @@
                             <div class="form-group">
                                 <label>Priority <span class="clr-red">*</span></label>
                                 <p-dropdown name="company12" #company12="ngModel" required
-                                    [options]="salesOrderPriorityList" placeholder="Select SO List Status"
+                                    [options]="salesOrderPriorityList" placeholder="Select SOQ List Priority"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.defaultPriorityId">
                                 </p-dropdown>
                             </div>
@@ -102,7 +102,7 @@
                             <div class="form-group">
                                 <label>SOQ Status <span class="clr-red">*</span></label>
                                 <p-dropdown name="company1" #company1="ngModel" required
-                                    [options]="salesOrderStatusList" placeholder="Select SO List Status"
+                                    [options]="salesOrderStatusList" placeholder="Select SOQ List Status"
                                     class="p-dropdown-custom-md-2" [(ngModel)]="receivingForm.defaultStatusId">
                                 </p-dropdown>
                             </div>

@@ -1,27 +1,22 @@
 <div class="row">
     <div style="overflow-y: auto;">
-        <p-table #dt class="rpo-table-cstm rro-table-cstm sales-quote-part-search-data"
-         [value]="parts" [rows]="10" [lazy]="true"
-            [paginator]="showPaginator" 
-            [rowsPerPageOptions]="[10, 20, 30]"
-             [totalRecords]="totalRecords"
-            [pageLinks]="pageLinks" [columns]="columns" 
-            [scrollable]="true" [resizableColumns]="true"
-            [reorderableColumns]="true" scrollHeight="450px"
-             [style]="{ width: '100%' }"
+        <p-table #dt class="rpo-table-cstm salesquotePart" [value]="parts" [rows]="10" [lazy]="true"
+            [paginator]="showPaginator" [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords"
+            [pageLinks]="pageLinks" [columns]="columns" [scrollable]="true" [resizableColumns]="true"
+            [reorderableColumns]="true" scrollHeight="450px" [style]="{ width: '100%' }"
             (onLazyLoad)="onPaging($event)">
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns"
-                     [ngStyle]="{'width': col.width, 'text-align': col.textalign}" />
+                    <col *ngFor="let col of columns" [ngStyle]="{'width': col.width, 'text-align': col.textalign}" />
                     <col style="width:80px" />
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngIf="!isStockLineViewMode"></th>
-                    <th style="text-align: left !important;" *ngFor="let col of columns" pResizableColumn
-                        pReorderableColumn>
+                    <th style="background-color: #4298ff !important;
+                    color: #fff !important;"></th>
+                    <th style="text-align: left !important; background-color: #4298ff !important;
+                    color: #fff !important;" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
                         <span *ngIf="col.field == 'conditionDescription' || col.field == 'qtyToOrder'">
                             {{ col.header }}<span class="clr-red">*</span>
                         </span>
@@ -29,7 +24,7 @@
                             {{ col.header }}
                         </span>
                     </th>
-                    <th style="width:80px;">Actions</th>
+                    <!-- <th style="width:80px;">Actions</th> -->
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-part let-columns="columns" let-rowIndex="rowIndex">
@@ -45,11 +40,11 @@
                         </a>
                     </td>
                     <td *ngFor="let col of columns" pReorderableRowHandle>
-                        <span *ngIf="col.field == 'select' && !isStockLineViewMode">
+                        <span *ngIf="col.field == 'select'">
                             <!-- <span *ngIf="!getCheckBoxDisplay(part, rowIndex,false)">
                                 <input type="checkbox" (change)="onChange($event, part)" />
                             </span> -->
-                            <input type="checkbox" (change)="onChange($event, part)" />
+                            <input type="checkbox" (change)="onChange($event, part)" [disabled]="isStockLineViewMode" />
                         </span>
                         <span *ngIf="col.field == 'partNumber'">
                             {{part.partNumber}}
@@ -78,35 +73,35 @@
                             </span> -->
                         </span>
                     </td>
-                    <td style="width:80px; text-align:center">
-                        <span>
-                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                    <!-- <td style="width:80px; text-align:center"> -->
+                    <!-- <span> -->
+                    <!-- <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewSelectedRow(part, itemMasterViewTemplate)" matTooltip="View">
                                 <i class="fa fa-list"></i>
-                            </a>
-                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                            </a> -->
+                    <!-- <span data-toggle="modal" data-target="#stockAudit"><a class="btn nobg btn-hist-cstm"
+                                    (click)="openStocklineAudit(part)" matTooltip="History"
+                                    matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
+                    <!-- <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewStockLineHistory(part)" matTooltip="History">
                                 <i class="fa fa-history"></i>
-                            </a>
-                        </span>
-                    </td>
+                            </a> -->
+                    <!-- </span> -->
+                    <!-- </td> -->
 
                 </tr>
                 <tr [hidden]="!hideme[rowIndex]" class="sub-table no-bg">
 
-                    <td *ngIf="!isStockLineViewMode" style="text-align: center;"> </td>
+                    <td style="text-align: center;"> </td>
+                    <!-- *ngIf="!isStockLineViewMode" -->
 
-                    <td colspan="13" class="p-0">
-                        <p-table #dt class="rpo-table-cstm rro-table-cstm 
-                        sales-quote-part-search-data"
-                            [value]="roleUpMaterialList" [rows]="10" 
-                            [lazy]="true" [paginator]="showPaginator"
-                            [rowsPerPageOptions]="[10, 20, 30]" 
-                            [totalRecords]="totalRecords" [pageLinks]="pageLinks"
-                            [columns]="stockLinecolumns" [scrollable]="true"
-                             [resizableColumns]="true"
-                            [reorderableColumns]="true" scrollHeight="450px"
-                             [style]="{ width: '100%' }"
+                    <td colspan="12" class="p-0">
+                        <!-- rpo-table-cstm rro-table-cstm sales-quote-part-search-data -->
+                        <p-table #dt class=" rpo-table-cstm1 rro-table-cstm salesquotePart "
+                            [value]="roleUpMaterialList" [rows]="10" [lazy]="true" [paginator]="showPaginator"
+                            [rowsPerPageOptions]="[10, 20, 30]" [totalRecords]="totalRecords" [pageLinks]="pageLinks"
+                            [columns]="stockLinecolumns" [scrollable]="true" [resizableColumns]="true"
+                            [reorderableColumns]="true" scrollHeight="450px" [style]="{ width: '100%' }"
                             (onLazyLoad)="onPaging($event)">
                             <ng-template pTemplate="colgroup" let-stockLinecolumns>
                                 <colgroup>
@@ -161,18 +156,20 @@
                                     </td> -->
                     <!-- <td *ngIf="getCheckBoxDisplay(part, rowIndex)">&nbsp;</td> -->
                     <td *ngFor="let col of stockLinecolumns" pReorderableRowHandle>
-                        <span *ngIf="col.field == 'selected' && !isStockLineViewMode">
+                        <span *ngIf="col.field == 'selected'">
                             <span *ngIf="!getCheckBoxDisplay(part, rowIndex,true)">
-                                <input type="checkbox" (change)="onChangeStock($event, part)" />
+                                <input type="checkbox" (change)="onChangeStock($event, part)"
+                                    [disabled]="isStockLineViewMode" />
                             </span>
 
                         </span>
 
-                        <span *ngIf=" col.field=='partNumber'">{{ part.partNumber }} <span class="
-                                                alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span> <span
-                                class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span></span>
+                        <span class="float-left" *ngIf=" col.field=='partNumber'">{{ part.partNumber }}
+                            <span class=" alternate-part-label" *ngIf="part.mappingType==1">(Alt)</span>
+                            <span class="alternate-part-label" *ngIf="part.mappingType==2">(Eq)</span>
+                        </span>
 
-                        <span *ngIf="col.field == 'itemClassification'">
+                        <span *ngIf="col.field == 'itemClassification'" class="float-left">
                             {{
                                     part.itemClassification !== null
                                         ? part.itemClassification
@@ -180,9 +177,11 @@
                                                 }}
                         </span>
 
-                        <span
-                            *ngIf="col.field != 'certifiedDate' && col.field != 'tagDate' && col.field != 'unitCost' && col.field != 'qtyOnHand' && col.field != 'qtyAvailable' && col.field != 'partNumber' && col.field != 'selected' && col.field != 'itemClassification'">{{part[col.field] }}</span>
-                        <span *ngIf="col.field == 'tagDate'">
+                        <span class="float-left"
+                            *ngIf="col.field != 'certifiedDate' &&
+                             col.field != 'tagDate' && col.field != 'memo' &&
+                             col.field != 'unitCost' && col.field != 'qtyOnHand' && col.field != 'qtyAvailable' && col.field != 'partNumber' && col.field != 'selected' && col.field != 'itemClassification'">{{part[col.field] }}</span>
+                        <span *ngIf="col.field == 'tagDate'" class="float-left">
                             {{
                                     part.tagDate | date: "MM/dd/yyyy"
                                                 }}
@@ -196,7 +195,7 @@
                                 *ngIf="part.qtyRemainedToQuote != part.qtyAvailable">({{part.qtyRemainedToQuote}})
                             </span>
                         </span>
-                        <span *ngIf="col.field == 'certifiedDate'" class="float-right">
+                        <span *ngIf="col.field == 'certifiedDate'" class="float-left">
                             {{
                                     part.certifiedDate | date: "MM/dd/yyyy"
                                                 }}
@@ -211,6 +210,9 @@
                                     part.unitCost | twoDecimalGlobalNumberFormatPipe
                                                 }}
                         </span>
+                        <span *ngIf="col.field == 'memo'" class="float-right1">
+                            <p class="m-0 p-0 p_textEditor" [innerHTML]=part.memo></p>
+                        </span>
                     </td>
                     <td>
                         <span>
@@ -218,18 +220,20 @@
                                 (click)="viewStockSelectedRow(part)" matTooltip="View">
                                 <i class="fa fa-eye"></i>
                             </a>
-                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                            <!-- <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                 (click)="viewStockLineHistory(part)" matTooltip="History">
                                 <i class="fa fa-history"></i>
-                            </a>
+                            </a> -->
+                            <span data-toggle="modal" data-target="#stockAudit"><a class="btn nobg btn-hist-cstm"
+                                    (click)="openStocklineAudit(part)" matTooltip="History"
+                                    matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                         </span>
                     </td>
-
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="roleUpMaterialList.length == 0">
                 <tr>
-                    <td [attr.colspan]="21" class="no-records-cstm" style="text-align: left;">
+                    <td [attr.colspan]="12" class="no-records-cstm" style="text-align: left;">
                         No Record Exist
                     </td>
                 </tr>
@@ -238,13 +242,502 @@
         </td>
         </tr>
         </ng-template>
-        <!-- <ng-template pTemplate="emptymessage" let-columns *ngIf="parts.length == 0">
+        <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-                <td [attr.colspan]="12" class="no-records-cstm" style="text-align: left;">
+                <td [attr.colspan]="13" class="no-records-cstm" style="text-align: center;">
                     No records found
                 </td>
             </tr>
-        </ng-template> -->
+        </ng-template>
         </p-table>
+    </div>
+</div>
+<div id="stockAudit" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xlg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">History of Stockline</h4>
+            </div>
+            <div class="modal-body pd-10">
+                <div class="table-responsive stockline-audit history_hg tin_cal">
+                    <table class="table table-bordered" *ngIf="auditHistory.length > 0; else noDatavailable">
+                        <thead>
+                            <tr>
+                                <th colspan="16">General</th>
+                                <th colspan="6">Expiration</th>
+                                <th colspan="3">Application</th>
+                                <th colspan="4">Application</th>
+                                <th colspan="12">Acquisition</th>
+                                <th colspan="6">Traceability</th>
+                                <th colspan="2">Export/International</th>
+                                <th colspan="9">Inventory</th>
+                                <th colspan="5">Location</th>
+                                <th colspan="3">Lot & Consignment</th>
+                                <th colspan="6">Warnings</th>
+                                <th colspan="4">Management Structure</th>
+                                <th colspan="9">Certification, Tag and Inspection</th>
+                                <th colspan="1">Other</th>
+                                <th colspan="1">Memo</th>
+                                <th colspan="13">Time Life</th>
+                                <th colspan="5"></th>
+                            </tr>
+                            <tr>
+                                <th>Is Customer Stock</th>
+                                <th>PN</th>
+                                <th>PN Description</th>
+                                <th>Revised PN</th>
+                                <th>OEM</th>
+                                <th>PMA</th>
+                                <th>DER</th>
+                                <th>Item Group</th>
+                                <th>Cond</th>
+                                <th>Is Serialized</th>
+                                <th>Serial Num</th>
+                                <th>Stockline Num</th>
+                                <th>NSN</th>
+                                <th>ESN</th>
+                                <th>Control Num</th>
+                                <th>Control ID Num</th>
+                                <th>Days Since Received</th>
+                                <th>Days Since Mfg</th>
+                                <th>Days Since Tagged</th>
+                                <th>Days Opened</th>
+                                <th>Shelf Life</th>
+                                <th>Shelf Life Exp Date</th>
+                                <th>NHA</th>
+                                <th>TLA</th>
+                                <th>Aircraft Tail Num</th>
+                                <th>Manufacturer</th>
+                                <th>Mfg. Lot Num</th>
+                                <th>Mfg. Batch Num</th>
+                                <th>Mfg. Date</th>
+                                <th>Acquisition Type</th>
+                                <th>Order Date</th>
+                                <th>Entry Date</th>
+                                <th>Expiration Date</th>
+                                <th>Vendor</th>
+                                <th>PO Num</th>
+                                <th>RO Num</th>
+                                <th>Requestor</th>
+                                <th>Received Date</th>
+                                <th>Receiver Num</th>
+                                <th>Reconciliation Num</th>
+                                <th>WO Num</th>
+                                <th>Obtain From Type</th>
+                                <th>Obtain From</th>
+                                <th>Owner Type</th>
+                                <th>Owner</th>
+                                <th>Traceable To Type</th>
+                                <th>Traceable To</th>
+                                <th>ECCN</th>
+                                <th>ITAR</th>
+                                <th>Qty On Hand</th>
+                                <th>Qty Reserved</th>
+                                <th>Qty Issued</th>
+                                <th>Qty Avail</th>
+                                <th>PO Unit Cost</th>
+                                <th>RO Unit Cost</th>
+                                <th>Unit Sale Price</th>
+                                <th>Core Cost/Unit</th>
+                                <th>GL Account</th>
+                                <th>Site</th>
+                                <th>Warehouse</th>
+                                <th>Location</th>
+                                <th>Shelf</th>
+                                <th>Bin</th>
+                                <th>Lot Num</th>
+                                <th>Lot Description</th>
+                                <th>Lot Cost</th>
+                                <th>Black List</th>
+                                <th>Black List Reason</th>
+                                <th>Accident</th>
+                                <th>Accident Reason</th>
+                                <th>Incident</th>
+                                <th>Incident Reason</th>
+                                <th colspan="4"></th>
+                                <th>Part Cert Num</th>
+                                <th>Certify By</th>
+                                <th>Certified Date</th>
+                                <th>Certify Due Date</th>
+                                <th>Tag Type</th>
+                                <th>Tag Num</th>
+                                <th>Tag Date</th>
+                                <th>Inspection By</th>
+                                <th>Inspection Date</th>
+                                <th>Integration With</th>
+                                <th>Memo</th>
+                                <th>Cycles Remaining</th>
+                                <th>Cycles Since New</th>
+                                <th>Cycles Since Ovh</th>
+                                <th>Cycles Since Insp</th>
+                                <th>Cycles Since Repair</th>
+                                <th>Time Remaining</th>
+                                <th>Time Since New</th>
+                                <th>Time Since Ovh</th>
+                                <th>Time Since Insp</th>
+                                <th>Time Since Repair</th>
+                                <th>Last Since New</th>
+                                <th>Last Since Ovh</th>
+                                <th>Last Since Insp</th>
+                                <th>Is Active</th>
+                                <th>Created Date</th>
+                                <th>Created By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="auditHistory.length > 0">
+                            <tr *ngFor="let audit of auditHistory; let i = index">
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="isCustomerStock"
+                                            [(ngModel)]="audit.isCustomerStock" disabled></p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'partNumber', audit.partNumber) ? 'black' : 'red'}">
+                                    {{ audit.partNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'partDescription', audit.partDescription) ? 'black' : 'red'}">
+                                    {{ audit.partDescription }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'revisedPart', audit.revisedPart) ? 'black' : 'red'}">
+                                    {{ audit.revisedPart }}</td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="oem" [(ngModel)]="audit.oem" disabled></p>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="isPMA" [(ngModel)]="audit.isPMA" disabled></p>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="isDER" [(ngModel)]="audit.isDER" disabled></p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'itemGroup', audit.itemGroup) ? 'black' : 'red'}">
+                                    {{ audit.itemGroup }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'condition', audit.condition) ? 'black' : 'red'}">
+                                    {{ audit.condition }}</td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="isSerialized" [(ngModel)]="audit.isSerialized"
+                                            disabled></p>
+                                </td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'serialNumber', audit.serialNumber) ? 'black' : 'red'}">
+                                    {{ audit.serialNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'stockLineNumber', audit.stockLineNumber) ? 'black' : 'red'}">
+                                    {{ audit.stockLineNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'nationalStockNumber', audit.nationalStockNumber) ? 'black' : 'red'}">
+                                    {{ audit.nationalStockNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'engineSerialNumber', audit.engineSerialNumber) ? 'black' : 'red'}">
+                                    {{ audit.engineSerialNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'controlNumber', audit.controlNumber) ? 'black' : 'red'}">
+                                    {{ audit.controlNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'idNumber', audit.idNumber) ? 'black' : 'red'}">
+                                    {{ audit.idNumber }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'daysReceived', audit.daysReceived) ? 'black' : 'red'}">
+                                    {{ audit.daysReceived }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingDays', audit.manufacturingDays) ? 'black' : 'red'}">
+                                    {{ audit.manufacturingDays }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'tagDays', audit.tagDays) ? 'black' : 'red'}">
+                                    {{ audit.tagDays }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'openDays', audit.openDays) ? 'black' : 'red'}">
+                                    {{ audit.openDays }}</td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="shelfLife" [(ngModel)]="audit.shelfLife" disabled>
+                                    </p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'shelfLifeExpirationDate', audit.shelfLifeExpirationDate) ? 'black' : 'red'}">
+                                    {{ audit.shelfLifeExpirationDate | date: 'MM/dd/yyyy' }}</td>
+                                <td [ngStyle]="{color: getColorCodeForHistory(i, 'nha', audit.nha) ? 'black' : 'red'}">
+                                    {{ audit.nha }}</td>
+                                <td [ngStyle]="{color: getColorCodeForHistory(i, 'tla', audit.tla) ? 'black' : 'red'}">
+                                    {{ audit.tla }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'aircraftTailNumber', audit.aircraftTailNumber) ? 'black' : 'red'}">
+                                    {{ audit.aircraftTailNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturer', audit.manufacturer) ? 'black' : 'red'}">
+                                    {{ audit.manufacturer }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturerLotNumber', audit.manufacturerLotNumber) ? 'black' : 'red'}">
+                                    {{ audit.manufacturerLotNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingBatchNumber', audit.manufacturingBatchNumber) ? 'black' : 'red'}">
+                                    {{ audit.manufacturingBatchNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'manufacturingDate', audit.manufacturingDate) ? 'black' : 'red'}">
+                                    {{ audit.manufacturingDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'acquistionTypeName', audit.acquistionTypeName) ? 'black' : 'red'}">
+                                    {{ audit.acquistionTypeName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'orderDate', audit.orderDate) ? 'black' : 'red'}">
+                                    {{ audit.orderDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'entryDate', audit.entryDate) ? 'black' : 'red'}">
+                                    {{ audit.entryDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'expirationDate', audit.expirationDate) ? 'black' : 'red'}">
+                                    {{ audit.expirationDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'vendorName', audit.vendorName) ? 'black' : 'red'}">
+                                    {{ audit.vendorName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderNumber', audit.purchaseOrderNumber) ? 'black' : 'red'}">
+                                    {{ audit.purchaseOrderNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber) ? 'black' : 'red'}">
+                                    {{ audit.repairOrderNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'requestedByName', audit.requestedByName) ? 'black' : 'red'}">
+                                    {{ audit.requestedByName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'receivedDate', audit.receivedDate) ? 'black' : 'red'}">
+                                    {{ audit.receivedDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'receiver', audit.receiver) ? 'black' : 'red'}">
+                                    {{ audit.receiver }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'reconciliationNumber', audit.reconciliationNumber) ? 'black' : 'red'}">
+                                    {{ audit.reconciliationNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'workOrderNumber', audit.workOrderNumber) ? 'black' : 'red'}">
+                                    {{ audit.workOrderNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'obtainFromTypeName', audit.obtainFromTypeName) ? 'black' : 'red'}">
+                                    {{ audit.obtainFromTypeName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'obtainFromName', audit.obtainFromName) ? 'black' : 'red'}">
+                                    {{ audit.obtainFromName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'ownerTypeName', audit.ownerTypeName) ? 'black' : 'red'}">
+                                    {{ audit.ownerTypeName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'ownerName', audit.ownerName) ? 'black' : 'red'}">
+                                    {{ audit.ownerName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'traceableToTypeName', audit.traceableToTypeName) ? 'black' : 'red'}">
+                                    {{ audit.traceableToTypeName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'tracableToName', audit.tracableToName) ? 'black' : 'red'}">
+                                    {{ audit.tracableToName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'exportECCN', audit.exportECCN) ? 'black' : 'red'}">
+                                    {{ audit.exportECCN }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'itarNumber', audit.itarNumber) ? 'black' : 'red'}">
+                                    {{ audit.itarNumber }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'quantityOnHand', audit.quantityOnHand) ? 'black' : 'red'}">
+                                    {{ audit.quantityOnHand }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'quantityReserved', audit.quantityReserved) ? 'black' : 'red'}">
+                                    {{ audit.quantityReserved }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'quantityIssued', audit.quantityIssued) ? 'black' : 'red'}">
+                                    {{ audit.quantityIssued }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'quantityAvailable', audit.quantityAvailable) ? 'black' : 'red'}">
+                                    {{ audit.quantityAvailable }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'purchaseOrderUnitCost', audit.purchaseOrderUnitCost) ? 'black' : 'red'}">
+                                    {{ audit.purchaseOrderUnitCost }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'repairOrderUnitCost', audit.repairOrderUnitCost) ? 'black' : 'red'}">
+                                    {{ audit.repairOrderUnitCost }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'unitSalesPrice', audit.unitSalesPrice) ? 'black' : 'red'}">
+                                    {{ audit.unitSalesPrice }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'coreUnitCost', audit.coreUnitCost) ? 'black' : 'red'}">
+                                    {{ audit.coreUnitCost }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'glAccountName', audit.glAccountName) ? 'black' : 'red'}">
+                                    {{ audit.glAccountName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'siteName', audit.siteName) ? 'black' : 'red'}">
+                                    {{ audit.siteName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'warehouse', audit.warehouse) ? 'black' : 'red'}">
+                                    {{ audit.warehouse }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'location', audit.location) ? 'black' : 'red'}">
+                                    {{ audit.location }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'shelfName', audit.shelfName) ? 'black' : 'red'}">
+                                    {{ audit.shelfName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'binName', audit.binName) ? 'black' : 'red'}">
+                                    {{ audit.binName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'lotNum', audit.lotNum) ? 'black' : 'red'}">
+                                    {{ audit.lotNum }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'lotDescription', audit.lotDescription) ? 'black' : 'red'}">
+                                    {{ audit.lotDescription }}</td>
+                                <td class="text-right"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'lotCost', audit.lotCost) ? 'black' : 'red'}">
+                                    {{ audit.lotCost }}</td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="blackListed" [(ngModel)]="audit.blackListed"
+                                            disabled></p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'blackListedReason', audit.blackListedReason) ? 'black' : 'red'}">
+                                    <p class="p_editor" [innerHTML]="audit.blackListedReason"></p>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="accident" [(ngModel)]="audit.accident" disabled>
+                                    </p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'accidentReason', audit.accidentReason) ? 'black' : 'red'}">
+                                    <p class="p_editor" [innerHTML]="audit.accidentReason"></p>
+                                </td>
+                                <td style="text-align: center;">
+                                    <p> <input type="checkbox" name="incident" [(ngModel)]="audit.incident" disabled>
+                                    </p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'incidentReason', audit.incidentReason) ? 'black' : 'red'}">
+                                    <p class="p_editor" [innerHTML]="audit.incidentReason"></p>
+                                </td>
+                                <td class="min-w-100"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'companyName', audit.companyName) ? 'black' : 'red'}">
+                                    {{ audit.companyName }}</td>
+                                <td class="min-w-100"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'buName', audit.buName) ? 'black' : 'red'}">
+                                    {{ audit.buName }}</td>
+                                <td class="min-w-100"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'divName', audit.divName) ? 'black' : 'red'}">
+                                    {{ audit.divName }}</td>
+                                <td class="min-w-100"
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'deptName', audit.deptName) ? 'black' : 'red'}">
+                                    {{ audit.deptName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'partCertificationNumber', audit.partCertificationNumber) ? 'black' : 'red'}">
+                                    {{ audit.partCertificationNumber }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedByName', audit.certifiedByName) ? 'black' : 'red'}">
+                                    {{ audit.certifiedByName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDate', audit.certifiedDate) ? 'black' : 'red'}">
+                                    {{ audit.certifiedDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'certifiedDueDate', audit.certifiedDueDate) ? 'black' : 'red'}">
+                                    {{ audit.certifiedDueDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'tagTypeName', audit.tagTypeName) ? 'black' : 'red'}">
+                                    {{ audit.tagTypeName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'tagNum', audit.tagNum) ? 'black' : 'red'}">
+                                    {{ audit.tagNum }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'tagDate', audit.tagDate) ? 'black' : 'red'}">
+                                    {{ audit.tagDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionByName', audit.inspectionByName) ? 'black' : 'red'}">
+                                    {{ audit.inspectionByName }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'inspectionDate', audit.inspectionDate) ? 'black' : 'red'}">
+                                    {{ audit.inspectionDate | date: 'MM/dd/yyyy' }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'integrationPortal', audit.integrationPortal) ? 'black' : 'red'}">
+                                    {{ audit.integrationPortal }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'memo', audit.memo) ? 'black' : 'red'}">
+                                    <p class="p_editor" [innerHTML]="audit.memo"></p>
+                                </td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesRemaining', audit.cyclesRemaining) ? 'black' : 'red'}">
+                                    {{ audit.cyclesRemaining }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesSinceNew', audit.cyclesSinceNew) ? 'black' : 'red'}">
+                                    {{ audit.cyclesSinceNew }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesSinceOVH', audit.cyclesSinceOVH) ? 'black' : 'red'}">
+                                    {{ audit.cyclesSinceOVH }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesSinceInspection', audit.cyclesSinceInspection) ? 'black' : 'red'}">
+                                    {{ audit.cyclesSinceInspection }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'cyclesSinceRepair', audit.cyclesSinceRepair) ? 'black' : 'red'}">
+                                    {{ audit.cyclesSinceRepair }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'timeRemaining', audit.timeRemaining) ? 'black' : 'red'}">
+                                    {{ audit.timeRemaining }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'timeSinceNew', audit.timeSinceNew) ? 'black' : 'red'}">
+                                    {{ audit.timeSinceNew }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'timeSinceOVH', audit.timeSinceOVH) ? 'black' : 'red'}">
+                                    {{ audit.timeSinceOVH }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'timeSinceInspection', audit.timeSinceInspection) ? 'black' : 'red'}">
+                                    {{ audit.timeSinceInspection }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'timeSinceRepair', audit.timeSinceRepair) ? 'black' : 'red'}">
+                                    {{ audit.timeSinceRepair }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceNew', audit.lastSinceNew) ? 'black' : 'red'}">
+                                    {{ audit.lastSinceNew }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceOVH', audit.lastSinceOVH) ? 'black' : 'red'}">
+                                    {{ audit.lastSinceOVH }}</td>
+                                <td
+                                    [ngStyle]="{color: getColorCodeForHistory(i, 'lastSinceInspection', audit.lastSinceInspection) ? 'black' : 'red'}">
+                                    {{ audit.lastSinceInspection }}</td>
+                                <td style="background-color: #fff !important; text-align: center;">
+                                    <p> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled>
+                                    </p>
+                                </td>
+
+                                <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                                <td>{{ audit.createdBy }}</td>
+                                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
+                                <td>{{ audit.updatedBy }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #noDatavailable>
+                        <div class="text-center">
+                            <h4 style="color: #ff5663;">No History Found</h4>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </div>
 </div>

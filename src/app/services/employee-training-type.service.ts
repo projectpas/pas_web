@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 import { AuthService } from './auth.service';
@@ -35,7 +36,7 @@ export class EmployeeTrainingTypeService {
         private employeeTrainingTypeEndpointService: EmployeeTrainingTypeEndpointService) { }
 
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.employeeTrainingTypeEndpointService.getEmployeeExpertiseEndpoint<EmployeeExpertise[]>());
     }
 
@@ -58,7 +59,7 @@ export class EmployeeTrainingTypeService {
 
     }
     historyAcion(actionId: number) {
-        return forkJoin(this.employeeTrainingTypeEndpointService.getHistoryActionEndpoint<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.employeeTrainingTypeEndpointService.getHistoryActionEndpoint<AuditHistory[]>(actionId));
     }
     getAudit(employeeExpertiseId: number) {
         return this.employeeTrainingTypeEndpointService.getAuditById<any[]>(employeeExpertiseId);
@@ -70,7 +71,7 @@ export class EmployeeTrainingTypeService {
 
     getSearchData(serverSidePagesData: any)
   {
-      return forkJoin(
+      return Observable.forkJoin(
           this.employeeTrainingTypeEndpointService.SearchData<any[]>(serverSidePagesData));
   }
 }

@@ -1,10 +1,15 @@
 ﻿<div class="x_content" *ngIf="repairOrderHeaderData">
 
-        <div class="card">
-            <div class="card-header">
+        <div class="card new-card">
+            <div class="card-header header">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="header-name">Receiving RO
+                            <button class="btn-sm header-button header-button-alignment" (click)="receiving_ro_header=!receiving_ro_header" style="margin-left: 20px;">
+                                {{receiving_ro_header ? 'Collapse' : 'Expand'}}
+                            </button>
 
-                <div class="pull-left">
-                    <h4 class="po-head m-0">Receiving RO</h4>
+                        </h4>
                 </div>
                 <!-- <nav aria-label="breadcrumb">
                     <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
@@ -13,19 +18,24 @@
                  
                 </nav> -->
 
-                <button class="btn btn-primary" (click)="receiving_ro_header=!receiving_ro_header" style="margin-left: 20px;">
-                    {{receiving_ro_header ? 'Collapse' : 'Expand'}}
-                </button>
-            </div>
-    
-            <div class="card-body">
+                <div>
+                    <button
+                        type="button"
+                        class="btn-sm header-button pull-right"
+                        [routerLink]="['/receivingmodule/receivingpages/app-ro']">
+                        Receiving RO
+                    </button>
+                </div>
+        </div>
+    </div>
+        <div class="card-body">
                 <form id="" class="ro-grid-form createPO-form" name="">
                         <div class="form-row">
-                                <div class="col-md-8">
+                                <div class="col-md-8 ro-status-radios">
                                     <div class="form-group">
-                                        <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
+                                        <label class="status-radios">Status:</label>
                                         <div>
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of roStatus">
+                                            <div class="pull-left status-radios-alignment" *ngFor="let status of roStatus">
                                                 <label class="radio-cstm radio-cstm-d wauto">
                                                     <input type="radio" [checked]="status.value == repairOrderHeaderData.statusId" name="roStatus" class="form-control" value="{{status.value}}" disabled>
                                                     <span class="checkmark"></span>
@@ -60,7 +70,7 @@
                             </div>
                           
                             <hr *ngIf="receiving_ro_header" />
-            <div class="form-row"  *ngIf="receiving_ro_header" style="margin-top: 10px;">
+            <div class="form-row expand-div-alignment"  *ngIf="receiving_ro_header">
                 <div class="col-md-9">
                     <div class="form-row">
                 <div class="col-md-4">
@@ -110,72 +120,115 @@
                     </div>
 
                 </div>
-                <div class="col-md-4">
-                   
-                    <!-- <div class="form-group">
-                        <label>Approver</label>
-                        <input class="form-control" type="text" name="approver" [(ngModel)]="repairOrderHeaderData.approver" disabled>
-                    </div>
+               
+                    <div class="col-md-4">
                     <div class="form-group">
-                        <label>Approved Date</label>
-                        <p-calendar class="pas-clder" [showIcon]="true" name="approvedDate" [(ngModel)]="repairOrderHeaderData.dateApproved" [disabled]="true"></p-calendar>
-                    </div> -->
-                    <div class="form-group memo-popup-cstm">
-                            <label>Memo  <i class="fa fa-info-circle fa-lg"   matTooltipPosition="above" matTooltip="{{repairOrderHeaderData.memo}}"></i></label>
-                            <span   matTooltipPosition="above" matTooltip="{{repairOrderHeaderData.memo}}">
-                                <input type="text" name="memo" pInputText class="form-control" value="{{repairOrderHeaderData.memo}}" disabled /></span>
-                           
-                        </div>
-                    
-                    <div class="form-group">
-                        <div class="checkbox-cstm" style="margin-top: 15px;">
+                        <div class="checkbox-cstm resale-align">
                             <label>
                                 <input type="checkbox" name="resale" class="form-control" [(ngModel)]="repairOrderHeaderData.resale" disabled>
-                                <span class="cr" style="opacity: 0.6;"><i class="cr-icon pi pi-check"></i></span>
+                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                 Resale
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="checkbox-cstm" style="margin-top: 10px;">
+                        <div class="checkbox-cstm receiver-align">
                             <label>
-                                <input type="checkbox" name="deferredReceiver" [(ngModel)]="repairOrderHeaderData.deferredReceiver" disabled>
-                                <span class="cr" style="opacity: 0.6;"><i class="cr-icon pi pi-check"></i></span>
+                                <input type="checkbox" class="receiver-input-back" name="deferredReceiver" [(ngModel)]="repairOrderHeaderData.deferredReceiver" disabled>
+                                <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                 Deferred Receiver
                             </label>
                         </div>
                     </div>
-                </div>
-                </div>
-                <div class="form-row">
-                    <div class="col-md-12" style="max-width: 98%;">
-                        <div class="form-group">
-                            <label>Notes</label>
-                            <textarea name="ponotes" class="form-control head-notes" rows="2" 
-                            disabled></textarea>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group memo-popup-cstm">
+                            <label>Notes
+                                <span class="editor-span"
+                                ><a
+                                  class="btn nobg"
+                                  data-toggle="modal"
+                                  data-target="#add-notes"
+                                  (click)="onAddNotes()"
+                                  matTooltipPosition="above" matTooltip="Notes"
+                                  ><i class="fa fa-pencil" ></i
+                                ></a>
+                                </span>
+                            </label>
+                            <!-- <textarea name="ponotes" class="form-control head-notes" rows="2" 
+                            disabled></textarea> -->
+                            <span>
+                                    <div [innerHTML]="repairOrderHeaderData.notes"
+                                    [matTooltip]="parsedText(repairOrderHeaderData.notes)"
+                                    matTooltipPosition="above"
+                                     class="form-control text-editor-field"
+                                        class="text_editor_box text-editor-width">
+                                    </div>
+                                
+                            </span>
                         </div>
                     </div>
-                </div>
-            </div>
-                <div class="col-md-3">
-                    <div class="card" style="margin-top: 20px;">
-                        <div class="card-header" style="padding: 10px 12px;">
-                            <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure</h5>
+                    <div class="col-md-4">
+                   
+                        <!-- <div class="form-group">
+                            <label>Approver</label>
+                            <input class="form-control" type="text" name="approver" [(ngModel)]="repairOrderHeaderData.approver" disabled>
                         </div>
-                        <div class="card-body" style="padding: 4px 12px 6px;">
-                            <div class="form-group" style="margin-bottom: 2px; margin-top: 5px;">
+                        <div class="form-group">
+                            <label>Approved Date</label>
+                            <p-calendar class="pas-clder" [showIcon]="true" name="approvedDate" [(ngModel)]="repairOrderHeaderData.dateApproved" [disabled]="true"></p-calendar>
+                        </div> -->
+                        <div class="form-group memo-popup-cstm">
+                                <label>Memo 
+                                     <!-- <i class="fa fa-info-circle fa-lg"  
+                                      matTooltipPosition="above"
+                                       matTooltip="{{repairOrderHeaderData.memo}}"></i> -->
+                                       <span class="editor-span"
+                                       ><a
+                                         class="btn nobg"
+                                         data-toggle="modal"
+                                         data-target="#cpo-memo" matTooltipPosition="above" 
+                                         matTooltip="Add Memo" disabled="true"  (click)="onAddMemo()"
+                                         ><i class="fa fa-pencil" ></i
+                                       ></a>
+                                       </span>
+                                   </label>
+                                <!-- <span   matTooltipPosition="above"
+                                 matTooltip="{{repairOrderHeaderData.memo}}">
+                                    <input type="text" name="memo" pInputText class="form-control"
+                                     value="{{repairOrderHeaderData.memo}}" disabled /></span> -->
+                                     <span> <div [innerHTML]="repairOrderHeaderData.memo" 
+                                        [matTooltip]="parsedText(repairOrderHeaderData.memo)"
+                                        matTooltipPosition="above"
+                                         class="form-control " 
+                                        class="text_editor_box text-editor-field" disabled="true"></div> 
+                                         </span>
+                        </div>
+                        </div>
+                </div>
+                </div>
+               
+                   
+            
+                <div class="col-md-3">
+                    <div class="card management-structure-card">
+                        <div class="card-header management-structure-card-header">
+                            <h5 class="management-structure-header">Management Structure</h5>
+                        </div>
+                        <div class="card-body structure-card-body">
+                            <div class="form-group structure-body-input">
                                 <!-- <label>Company</label> -->
                                 <input class="form-control" type="text" name="companyName" [(ngModel)]="headerManagementStructure.level1" disabled>
                             </div>
-                            <div class="form-group" style="margin-bottom: 2px; margin-top: 7px;">
+                            <div class="form-group structure-body-input">
                                 <!-- <label>BU</label> -->
                                 <input class="form-control" type="text" name="BUName" [(ngModel)]="headerManagementStructure.level2" disabled>
                             </div>
-                            <div class="form-group" style="margin-bottom: 2px; margin-top: 7px;">
+                            <div class="form-group structure-body-input">
                                 <!-- <label>Division</label> -->
                                 <input class="form-control" type="text" name="divisionName" [(ngModel)]="headerManagementStructure.level3" disabled>
                             </div>
-                            <div class="form-group" style="margin-bottom: 2px; margin-top: 7px;">
+                            <div class="form-group structure-body-input">
                                 <!-- <label>Dept</label> -->
                                 <input class="form-control" type="text" name="deptName" [(ngModel)]="headerManagementStructure.level4" disabled>
                             </div>
@@ -191,16 +244,21 @@
     </div>
     
     
-    <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
+    <!-- <div class="col-md-12 col-sm-12 col-xs-12 po-ro-setup">
         <div class="x_panel">
             <div>
                 <div>
-                    <div id="adminsearchlocationajax">
-                        <div class="">
+                   
+                        <div class=""> -->
+                            <div id="adminsearchlocationajax">
+                            <div class="card new-card">
+                                <div class="card-body">
+                            <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex" >
+                                <div class="tableFixHead">     
                             <table *ngIf="repairOrderData != undefined && repairOrderData != undefined" class="table table-bordered table-wrap">
                                 <thead>
-                                    <tr class="po-table-tr">
-                                        <th></th>
+                                    <tr>
+                                        <th class="th-width"></th>
                                         <th>Line Num</th>
                                         <th>PN</th>
                                         <th>PN Desc</th>
@@ -228,7 +286,7 @@
                                     <ng-container *ngFor="let part of repairOrderData;let row_index=index">
                                         <!--this row is for the parent part-->
                                         <tr class="basic-info" *ngIf="part.isParent">
-                                            <td class="details-control eachcol" style="padding: 4px 6px;">
+                                            <td class="details-control eachcol plus-icon-align" >
                                                 <section *ngIf="isSplitShipmentPart(part.itemMasterId)">
                                                     <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm btn-xs margin0" (click)="showSplitShipmentParts(part)"></i>
                                                 </section>
@@ -277,7 +335,7 @@
                                                 </section>
                                             </td>
                                             <td style="padding:4px;">
-                                                <input type="text" *ngIf="!part.hasChildren && part.quantityRepaired < part.quantityToRepair" [(ngModel)]="part.quantityActuallyReceived" (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum" class="form-control text-right" [maxLength]="12" style="width: 50px;float: right;" required/>
+                                                <input type="text" *ngIf="!part.hasChildren && part.quantityRepaired < part.quantityToRepair" [(ngModel)]="part.quantityActuallyReceived" (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum" class="form-control text-right" [maxLength]="12" required/>
     
                                                 <!--<a *ngIf="part.quantityBackOrdered" (click)="addDetailsClick(part)" style="color:red">Add Details</a>-->
                                             </td>
@@ -285,7 +343,7 @@
     
                                         </tr>
     
-                                        <tr class="basic-info splitshipment po-sub-tr" [hidden]="repairOrderData[row_index+1] != undefined && !repairOrderData[row_index+1].visible" *ngIf="part.isParent && repairOrderData[row_index+1] != undefined && (!repairOrderData[row_index+1].isParent)">
+                                        <tr class="child-header splitship-head child-header-back" [hidden]="repairOrderData[row_index+1] != undefined && !repairOrderData[row_index+1].visible" *ngIf="part.isParent && repairOrderData[row_index+1] != undefined && (!repairOrderData[row_index+1].isParent)">
                                             <th></th>
                                             <th></th>
                                             <th colspan="5">PN</th>
@@ -306,7 +364,7 @@
                                             <th> </th>
                                         </tr>
     
-                                        <tr class="basic-info splitshipment" [hidden]="!part.visible" *ngIf="!part.isParent">
+                                        <tr  class="child-data splitship-child child-data-back" [hidden]="!part.visible" *ngIf="!part.isParent">
                                             <td>&nbsp;</td>
                                             <td>&nbsp;</td>
                                             <td colspan="5">{{part?.itemMaster?.partNumber}}</td>
@@ -1067,9 +1125,11 @@
                                     </ng-container>
                                 </tbody>
                             </table>
+                          
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
             <div class="clear"></div>
             <hr>
@@ -1079,10 +1139,99 @@
             <br>
             <br>
             <br>
+        <!-- </div>
+    
+    </div> -->
+
+    <div class="modal fade" id="add-notes" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Notes</h4>
+                </div>
+    
+                <div class="modal-body">
+                    <table class="table table-bordered table-fixed workflow-table-material">
+                        <thead>
+                        <th style="color: #fff;">Notes</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p-editor [(ngModel)]="headerNotes" [style]="{'height':'320px'}"
+                                               name="headerNotes" required></p-editor>
+                                    <!-- <textarea [(ngModel)] = "material.description"></textarea> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="editor-buttons">  
+                        <button type="button"  class="btn btn-primary editor-buttons-margin"
+                                data-dismiss="modal" (click)="onSaveNotes()">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
+                                data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+    
+    
+            </div>
         </div>
-    
     </div>
+
+    <div class="modal fade" id="cpo-memo" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit Memo</h4>
+                </div>
     
+                <div class="modal-body">
+                    <table class="table table-bordered table-fixed workflow-table-material">
+                        <thead>
+                        <th style="color: #fff;">Memo</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p-editor [(ngModel)]="headerMemo" [style]="{'height':'320px'}" name="headerMemo" required></p-editor>
+                                    <!-- <textarea [(ngModel)] = "material.description"></textarea> -->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="editor-buttons">
+                        <button type="button" class="btn btn-primary editor-buttons-margin" 
+                                data-dismiss="modal" (click)="onSaveMemo()">
+                            Save
+                        </button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin"
+                                data-dismiss="modal">
+                            Close
+                        </button>
+                    </div>
+                </div>
+    
+    
+    
+                <!-- <div class="modal-body">
+                    <div class="form-group">
+                        <label>Memo</label>
+                        <textarea class="form-control" name="tempMemo" [(ngModel)]="tempMemo" value={{tempMemo}}></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onSaveMemo()">Save</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
     <div class="preloader" *ngIf="isSpinnerVisible">
         <div class="loading">
             <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>

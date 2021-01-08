@@ -1,6 +1,6 @@
 import { ISalesOrderQuoteCharge } from "./ISalesOrderQuoteCharge";
 
-export class SalesOrderQuoteCharge implements ISalesOrderQuoteCharge {
+export class SalesOrderQuoteCharge implements ISalesOrderQuoteCharge { 
     chargesTypeId: number;
     vendorId: number;
     quantity: number;
@@ -25,4 +25,9 @@ export class SalesOrderQuoteCharge implements ISalesOrderQuoteCharge {
     updatedDate?: Date;
     createdDate?: Date;
     headerMarkupPercentageId: number;
+    constructor() {
+this.salesOrderQuoteChargesId=0;
+this.isDeleted=false;
+this.isActive=true;
+    }
 }

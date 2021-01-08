@@ -49,9 +49,13 @@ export class VendorDocumentsComponent implements OnInit {
 	isEditButton: boolean = false;
 	sourceViewforDocument: any;
 	localCollection: any;
+	status:any="Active";
 	sourceViewforDocumentList: any = [];
 	local: any;
+	disableSaveMemo: boolean = true;
 	activeIndex: any = 11;
+	selectedOnly: boolean = false;
+    targetData: any;
 	isDeleteMode: boolean = false;
 	private isEditMode: boolean = false;
 	private isSaving: boolean;
@@ -106,6 +110,9 @@ export class VendorDocumentsComponent implements OnInit {
 		if (this.vendorService.listCollection !== undefined && this.vendorService.listCollection !== null) {
 			this.vendorService.isEditMode = true;
 			this.isViewMode = false;
+			this.vendorId = this.router.snapshot.params['id'];
+			this.vendorService.vendorId = this.vendorId;
+			this.vendorService.listCollection.vendorId = this.vendorId; 
 		}
 		else {
 			this.isViewMode = true;;
@@ -122,13 +129,16 @@ export class VendorDocumentsComponent implements OnInit {
 
 	getVendorCodeandNameByVendorId()
     {
-        this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-            res => {
-                    this.vendorCodeandName = res[0];
-            },err => {
-                const errorLog = err;
-                this.saveFailedHelper(errorLog);
+        if(this.vendorId > 0)
+        {
+            this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+                res => {
+                        this.vendorCodeandName = res[0];
+                },err => {
+                    const errorLog = err;
+                    this.saveFailedHelper(errorLog);
             });
+        }        
     }
 
 	get userName(): string {
@@ -152,11 +162,52 @@ export class VendorDocumentsComponent implements OnInit {
 	clearFileUpload() {
 		this.fileUpload.clear();
 	}
-
+	enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
 	onClickMemo() {
 		this.memoPopupContent = this.documentInformation.docMemo;
+		this.disableSaveMemo = true;
+	}
+	closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
 	}
 
+	// exportCSV(contact) {
+    //     this.isSpinnerVisible = true;
+    //     let PagingData = {"first":0,"rows":contact.totalRecords,"sortOrder":1,"filters":{"status":this.status,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+    //     let filters = Object.keys(contact.filters);
+    //     filters.forEach(x=>{
+	// 		PagingData.filters[x] = contact.filters[x].value;
+    //     })
+    
+    //     this.vendorService.getDocumentListbyId(PagingData).subscribe(res => {
+    //         contact._value = res[0]['results'].map(x => {
+	// 			return {
+    //             ...x,
+    //             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+    //             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+    //             }
+    //         });
+    //         contact.exportCSV();
+    //         contact.value = this.sourceViewforDocumentList;
+    //         this.isSpinnerVisible = false;
+    //     },error => {
+    //             this.saveFailedHelper(error)
+    //         },
+    //     );
+	//   }
+	
+	exportCSV(documents){
+        documents._value = documents._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        documents.exportCSV();
+    }
 	onClickPopupSave() {
 		this.enableUpdateButton = true;
 		this.documentInformation.docMemo = this.memoPopupContent;
@@ -226,8 +277,8 @@ export class VendorDocumentsComponent implements OnInit {
 				arr = arr.map(x => {
 					return {
 						...x,
-						createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-						updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+						createdDate : x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+						updatedDate : x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
 						fileCreatedDate : x.fileCreatedDate ? this.datePipe.transform(x.fileCreatedDate, 'MM/dd/yyyy hh:mm a'): '',
 						fileUpdatedDate : x.fileUpdatedDate ? this.datePipe.transform(x.fileUpdatedDate, 'MM/dd/yyyy hh:mm a'): '',
 					}  
@@ -235,8 +286,8 @@ export class VendorDocumentsComponent implements OnInit {
 				  arr.forEach(x=>{
 					x.attachmentDetails = x.attachmentDetails.map(att => {return {
 						  	...att,
-						  	createdDate : att.createdDate ?  this.datePipe.transform(att.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-							updatedDate : att.updatedDate ?  this.datePipe.transform(att.updatedDate, 'MM/dd/yyyy hh:mm a'): ''
+						  	createdDate : att.createdDate ?  this.datePipe.transform(att.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+							updatedDate : att.updatedDate ?  this.datePipe.transform(att.updatedDate, 'MMM-dd-yyyy hh:mm a'): ''
 					  }})
 				  })
 				this.documentsDestructuredData = arr;
@@ -384,7 +435,15 @@ export class VendorDocumentsComponent implements OnInit {
 	}
 
 	CreateNewClick() {
-		this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendors-list');
+		this.activeIndex = 1;
+		this.vendorService.changeofTab(this.activeIndex);
+		this.vendorService.isEditMode = false;
+        this.vendorService.ShowPtab = true;
+		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-vendor-general-information';
+        this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+        this.vendorService.alertObj.next(this.vendorService.ShowPtab);
+		this.route.navigateByUrl('/vendorsmodule/vendorpages/app-vendor-general-information');
+		this.vendorService.listCollection = undefined;
 	}
 
 	openHistory(content, row) {

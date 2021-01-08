@@ -1,11 +1,10 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AircraftDashNumber } from '../../models/dashnumber.model';
-import {catchError} from 'rxjs/operators';
 
 @Injectable()
 export class DashNumberEndpointService extends EndpointFactory {
@@ -43,108 +42,108 @@ export class DashNumberEndpointService extends EndpointFactory {
     getAllDashNumbers<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllDashNumbers());
-            }));
+            });
     }
 
     getDashNumberById<T>(dashNumberId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${dashNumberId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDashNumberById(dashNumberId));
-            }));
+            });
     }
 
     getDashNumberByModelId<T>(AircraftModelId: number): Observable<T> {
         let endpointUrl = `${this.getByModelId}/${AircraftModelId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDashNumberByModelId(AircraftModelId));
-            }));
+            });
     }
 
     addDashNumber<T>(dashNumber: AircraftDashNumber): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(dashNumber), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(dashNumber), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addDashNumber(dashNumber));
-            }));
+            });
     }
 
     updateDashNumber<T>(dashNumberStatus: AircraftDashNumber): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(dashNumberStatus), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(dashNumberStatus), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateDashNumber(dashNumberStatus));
-            }));
+            });
     }
 
     removeDashNumberById<T>(dashNumberId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${dashNumberId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeDashNumberById(dashNumberId));
-            }));
+            });
     }
 
     getUpdateForActive<T>(roleObject: any, id: number): Observable<T> {
         let endpointUrl = `${this.updateForActive}/${id}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateForActive(roleObject, id));
-            }));
+            });
     }
 
     getDashNumberStatusAuditById<T>(dashNumberId: number): Observable<T> {
         let endpointUrl = `${this.getDashNumberAuditById}/${dashNumberId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDashNumberStatusAuditById(dashNumberId));
-            }));
+            });
     }
     getAircraftDashNumberRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftDashNumberRecords(paginationOption));
-            }));
+            });
     }
     getDASHLISTByID<T>(Mid: string, Tid: number, Did: string): Observable<T> {
         let endpointUrl = `${this.getDashListByIdsURL}/${Mid}/${Tid}/${Did}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDASHLISTByID(Mid, Tid, Did));
-            }));
+            });
     }
     getDashNumberByModelTypeId<T>(Mid: string, Tid: string): Observable<T> {
         let endpointUrl = `${this.getDash}/${Mid}/${Tid}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDashNumberByModelTypeId(Mid, Tid));
-            }));
+            });
     }
     getCapesDashNumberByModelTypeId<T>(Mid: string, Tid: string): Observable<T> {
         let endpointUrl = `${this.getCapesDash}/${Mid}/${Tid}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCapesDashNumberByModelTypeId(Mid, Tid));
-            }));
+            });
     }
     getDASHLISTBy_MultiID<T>(Mid: string, Tid: number, Did: string): Observable<T> {
         let endpointUrl = `${this.getDashListByMultiIdsURL}/${Mid}/${Tid}/${Did}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDASHLISTBy_MultiID(Mid, Tid, Did));
-            }));
+            });
     }
     CustomerDashNumberUpload(file) {
         return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}`, file)
@@ -153,9 +152,9 @@ export class DashNumberEndpointService extends EndpointFactory {
     }
     getDashNumByModelTypeId<T>(Mid: string, Tid: string): Observable<T> {
         let endpointUrl = `${this.getDashNum}/${Mid}/${Tid}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDashNumByModelTypeId(Mid, Tid));
-            }));
+            });
     }
 }

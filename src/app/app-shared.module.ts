@@ -6,11 +6,9 @@ import { SpinnerComponent } from './shared/spinner/spinner.component'
 import { TwoDecimalGlobalNumberFormatPipe } from './pipes/two-decimal-global-number-format-pipe.pipe';
 import { GlobalNumberFormat } from './pipes/Global-Number-Format';
 
-import {FormsModule} from '@angular/forms'
-import {AutoCompleteModule} from 'primeng/autocomplete'
 @NgModule({
     imports: [
-        ProgressSpinnerModule,FormsModule,AutoCompleteModule,
+        ProgressSpinnerModule,
         CommonModule
     ],
     declarations: [

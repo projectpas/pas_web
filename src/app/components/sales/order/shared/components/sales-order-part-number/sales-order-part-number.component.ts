@@ -3,8 +3,6 @@ import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
 import { IPartJson } from "../../../../shared/models/ipart-json";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { PartDetail } from "../../../../shared/models/part-detail";
-
-import { AddSalesPartNumberComponent } from "../../../../shared/components/add-sales-part-number/add-sales-part-number.component";
 import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import {
@@ -17,10 +15,8 @@ import { Router } from "@angular/router";
 import { SalesOrderReference } from "../../../../../../models/sales/salesOrderReference";
 import { SalesOrderReferenceStorage } from "../../../../shared/sales-order-reference-storage";
 import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView";
-import { SalesOrderPart } from "../../../../../../models/sales/SalesOrderPart";
 import { AuthService } from "../../../../../../services/auth.service";
 import { CommonService } from "../../../../../../services/common.service";
-import { getObjectById } from "../../../../../../generic/autocomplete";
 import { ISalesOrderPart } from "../../../../../../models/sales/ISalesOrderPart";
 import * as $ from 'jquery';
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
@@ -80,6 +76,8 @@ export class SalesOrderPartNumberComponent {
   defaultCurrencyDiscription: any;
   legalEntity: number;
   isSpinnerVisible = false;
+  saveButton = false;
+  canSaveParts = false;
   constructor(
     private modalService: NgbModal,
     private salesQuoteService: SalesQuoteService,
@@ -113,7 +111,6 @@ export class SalesOrderPartNumberComponent {
 
     }
 
-    console.log(this.selectedParts, "this.selectedParts")
     this.columns = [];
     this.initColumns();
   }
@@ -127,6 +124,7 @@ export class SalesOrderPartNumberComponent {
       }
     });
     this.filterParts();
+    this.canSaveParts = true;
   }
 
   getDefaultCurrency() {
@@ -221,14 +219,11 @@ export class SalesOrderPartNumberComponent {
       { field: 'marginAmountExtended', header: 'Prod Margin' },
       { field: 'marginPercentageExtended', header: 'Prod Margin%' },
     ]
-    // if (!this.isViewMode) {
-    //   // { header: "Notes", width: "100px" },
-    //   this.summaryColumns.push({ header: "Actions", width: "100px" });
-    // }
   }
 
   onEditPartDetails() {
     this.combineParts(this.summaryParts);
+    this.canSaveParts = false;
   }
 
   onClose(event) {
@@ -239,33 +234,25 @@ export class SalesOrderPartNumberComponent {
     if (this.partActionModal) {
       this.partActionModal.close();
     }
-    console.log("close event");
   }
+
   onCloseReserve(event) {
     this.show = false;
     this.salesReserveModal.close();
-
   }
+
   onCloseMargin(event) {
     this.show = false;
     this.salesMarginModal.close();
-    console.log("close event");
     if (!this.isEdit) {
       this.selectedPart.selected = false;
       this.openPartNumber(false);
     }
   }
+
   onClosePartDelete(event) {
-
     this.deletePartModal.close();
-
   }
-
-
-  // addPartNumber() {
-  //   this.salesQuoteService.resetSearchPart();
-  //   this.openPartNumber();
-  // }
 
   addPartNumber(summaryRow: any = '', rowIndex = null) {
     this.salesQuoteService.resetSearchPart();
@@ -294,31 +281,19 @@ export class SalesOrderPartNumberComponent {
   }
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
-    console.log(this.salesQuote);
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-    this.addPartModal.result.then(
-      () => { },
-      () => { }
-    );
   }
   partsAction(type) {
     this.selectedPartActionType = type;
     let contentPart = this.popupContentforPartAction;
     this.partActionModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
-    this.partActionModal.result.then(
-      () => { },
-      () => { }
-    );
   }
   onPartRowSelect(event) {
     this.selectedPartDataForAction = event.data;
-    console.log(this.selectedPartDataForAction, "selectedPartDataForAction++")
   }
 
   onShowModalReserve(event) {
-    console.log(event);
-    console.log(this.salesQuote);
     this.isEdit = false;
     let contentMargin = this.salesMargin;
     this.selectedPart = event.part;
@@ -327,12 +302,6 @@ export class SalesOrderPartNumberComponent {
       if (checked) {
         this.part = event.part;
         this.salesReserveModal = this.modalService.open(this.salesReserve, { size: "lg", backdrop: 'static', keyboard: false });
-        this.salesReserveModal.result.then(
-          () => { },
-          () => {
-            this.selectedPart.selected = false;
-          }
-        );
       } else {
         this.removePartNamber(this.selectedPart);
       }
@@ -346,8 +315,6 @@ export class SalesOrderPartNumberComponent {
   }
 
   openSalesMargin(event) {
-    console.log(event);
-    console.log(this.salesQuote);
     this.isEdit = false;
     let contentMargin = this.salesMargin;
     this.selectedPart = event.part;
@@ -361,9 +328,10 @@ export class SalesOrderPartNumberComponent {
           this.part.stockLineNumber = this.selectedPart.stockLineNumber;
           this.part.salesPricePerUnit = +this.selectedPart.unitSalePrice;
           this.part.unitCostPerUnit = +this.selectedPart.unitCost;
-          // this.part.itemClassification = this.selectedPart.itemClassification;
+          this.part.itemClassification = this.selectedPart.itemClassification;
           this.part.description = this.selectedPart.description;
-          this.part.itemMasterId = this.selectedPart.itemId;
+          this.part.itemMasterId = this.selectedPart.itemMasterId;
+          this.part.partId = this.selectedPart.partId;
           this.part.stockLineId = this.selectedPart.stockLineId;
           this.part.idNumber = this.selectedPart.idNumber;
           this.part.statusId = this.salesQuote.statusId;
@@ -371,10 +339,6 @@ export class SalesOrderPartNumberComponent {
           this.part.misc = this.salesOrderService.getTotalCharges();
           this.part.priorityId = this.defaultSettingPriority;
           this.part.createdBy = this.userName;
-          let selectedStatus = getObjectById("id", this.part.statusId, this.salesQuote.status);
-          if (selectedStatus) {
-            this.part.statusName = selectedStatus.description;
-          }
           if (this.selectedPart.itemMasterSale) {
             this.part.fixRate = this.selectedPart.itemMasterSale.fxRate;
           }
@@ -387,11 +351,6 @@ export class SalesOrderPartNumberComponent {
           } else {
             this.part.altOrEqType = "";
           }
-          // if (this.selectedPart.itemClassification) {
-          //   this.part.masterCompanyId = this.selectedPart.itemClassification.masterCompanyId;
-          // } else {
-          //   this.part.masterCompanyId = this.salesQuote.masterCompanyId;
-          // }
           this.part.masterCompanyId = this.masterCompanyId;
           this.part.conditionId = this.selectedPart.conditionId;
           this.part.conditionDescription = this.selectedPart.conditionDescription;
@@ -399,7 +358,7 @@ export class SalesOrderPartNumberComponent {
           this.part.currencyDescription = this.defaultCurrencyDiscription;
           this.part.salesQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
           this.part.quoteVesrion = this.salesQuote.versionNumber;
-          this.part.customerRef = this.salesQuote.customerReferenceName;
+          // this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.uom = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
@@ -483,6 +442,7 @@ export class SalesOrderPartNumberComponent {
     }
     this.salesMarginModal.close();
     this.filterParts();
+    this.canSaveParts = false;
     console.log(this.query);
     console.log(this.selectedParts);
     // }
@@ -502,20 +462,12 @@ export class SalesOrderPartNumberComponent {
       });
       // this.addPartModal.close();
       this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
-      this.salesMarginModal.result.then(
-        () => { },
-        () => { }
-      );
     }
   }
 
   openPartDelete(contentPartDelete, part) {
     this.part = part;
     this.deletePartModal = this.modalService.open(contentPartDelete, { size: "sm", backdrop: 'static', keyboard: false });
-    this.deletePartModal.result.then(
-      () => { },
-      () => { }
-    );
   }
   deletePart(): void {
     if (this.part.salesOrderPartId) {
@@ -583,6 +535,7 @@ export class SalesOrderPartNumberComponent {
       }
     }
     this.filterParts();
+    this.checkUpdateOrsaveButton();
     console.log(this.selectedParts);
   }
 
@@ -627,20 +580,9 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
-  // isEditDisabled(quote: ISalesQuote, part: any): boolean {
-  //   return ((quote.isApproved || part.isApproved) && part.methodType != "S")
-  // }
-
-  // isDeleteDisabled(quote: ISalesQuote, part: any) {
-  //   return (quote.isApproved || part.isApproved);
-  // }
   openConfirmationModal() {
 
     this.modal = this.modalService.open(this.updatePNDetailsModal, { size: "sm", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => { },
-      () => { }
-    );
 
   }
 
@@ -711,6 +653,7 @@ export class SalesOrderPartNumberComponent {
     } else {
       this.isSpinnerVisible = true;
       this.salesOrderService.update(this.salesOrderView).subscribe(data => {
+        this.canSaveParts = true;
         this.alertService.stopLoadingMessage();
         this.isSpinnerVisible = false;
         this.alertService.showMessage(
@@ -719,7 +662,10 @@ export class SalesOrderPartNumberComponent {
           MessageSeverity.success
         );
         this.onPartsSavedEvent.emit(this.selectedParts);
-      }, error => this.onDataLoadFailed(error));
+      }, error => {
+        this.isSpinnerVisible = false;
+        const errorLog = error;
+      });
     }
     this.closeConfirmationModal();
 
@@ -753,6 +699,7 @@ export class SalesOrderPartNumberComponent {
 
       // this.selectedParts[this.notesIndex].notes = this.textAreaInfo;
     }
+    this.canSaveParts = false;
     $("#textarea-popupNotes").modal("hide");
   }
   onCloseTextAreaInfo() {
@@ -777,6 +724,7 @@ export class SalesOrderPartNumberComponent {
     this.pageLinks = Math.ceil(
       this.totalRecords / 10
     );
+    this.checkUpdateOrsaveButton();
   }
 
   calculateSummarizedRow(parts: PartDetail[], uniquePart) {
@@ -845,6 +793,25 @@ export class SalesOrderPartNumberComponent {
 
       }
     })
+  }
+
+  checkUpdateOrsaveButton() {
+    let partFoundWithId = false;
+    if (this.summaryParts && this.summaryParts.length > 0) {
+      this.summaryParts.forEach(summaryPart => {
+        if (summaryPart.childParts && summaryPart.childParts.length > 0) {
+          summaryPart.childParts.forEach(part => {
+            if (part.salesOrderPartId && !partFoundWithId) {
+              partFoundWithId = true;
+              this.saveButton = true;
+            }
+          });
+        }
+      })
+    }
+    // if (!partFoundWithId) {
+    //   this.saveButton = false;
+    // }
   }
 
 }

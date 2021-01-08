@@ -5,12 +5,12 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { WorkOrder } from '../../models/work-order.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class WorkOrderEndpointService extends EndpointFactory {
 
@@ -43,10 +43,10 @@ export class WorkOrderEndpointService extends EndpointFactory {
     getAllWorkOrders<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllWorkOrders());
-            }));
+            });
     }
 
     // getWorkOrderById<T>(workOrderId: number): Observable<T> {
@@ -75,60 +75,60 @@ export class WorkOrderEndpointService extends EndpointFactory {
     removeWorkOrderById<T>(workOrderId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${workOrderId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeWorkOrderById(workOrderId));
-            }));
+            });
     }
 
     getAllWorkOrderTypes<T>(): Observable<T> {
         let endPointUrl = this.getAllWorkOrderTypesURL;
 
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllWorkOrderTypes());
-            }));
+            });
     }
 
     getAllWorkOrderStatus<T>(): Observable<T> {
         let endPointUrl = this.getAllWorkOrderStatusURL;
 
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllWorkOrderStatus());
-            }));
+            });
     }
 
     getAllWorkScopes<T>(): Observable<T> {
         let endPointUrl = this.getAllWorkScopesURL;
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllWorkScopes());
-            }));
+            });
     }
 
     getAllWorkOrderStages<T>(): Observable<T> {
         let endPointURL = this.getAllWorkOrderStagesURL;
-        return this.http.get<any>(endPointURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointURL, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllWorkOrderStages());
-            }));
+            });
     }
 
     getAssetStatusAuditById<T>(workOrderId: number): Observable<T> {
         let endpointUrl = `${this.getAssetAuditById}/${workOrderId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAssetStatusAuditById(workOrderId));
-            }));
+            });
     }
     postLabourEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this.addLabourURL, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.addLabourURL, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.postLabourEndpoint(userObject));
-            }));
+            });
     }
 
     getWorkOrderStageAndStatus() {

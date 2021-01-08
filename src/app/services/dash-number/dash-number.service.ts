@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+﻿import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { DashNumberEndpointService } from './dash-number-endpoint.service';
 import { AircraftDashNumber } from '../../models/dashnumber.model';
 
@@ -11,13 +11,13 @@ export class DashNumberService {
   constructor(private dashNumberEndpoint: DashNumberEndpointService) { }
 
   getAll() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.dashNumberEndpoint.getAllDashNumbers<any>()
     );
   }
 
   getById(DashNumberId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.dashNumberEndpoint.getDashNumberById<AircraftDashNumber>(
         DashNumberId
       )
@@ -25,7 +25,7 @@ export class DashNumberService {
     }
 
     getByModelId(AircraftModelId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.dashNumberEndpoint.getDashNumberByModelId<AircraftDashNumber>(
                 AircraftModelId
             )
@@ -60,7 +60,7 @@ export class DashNumberService {
   }
 
   getServerPages(serverSidePagesData: any) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.dashNumberEndpoint.getAircraftDashNumberRecords<
         AircraftDashNumber[]
       >(serverSidePagesData)

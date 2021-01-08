@@ -5,10 +5,10 @@
 
 
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AssetAcquisitionType } from '../../models/asset-acquisition-type.model';
 import { AssetAcquisitionTypeEndpointService } from './asset-acquisition-type-endpoint.service';
 
@@ -19,12 +19,12 @@ export class AssetAcquisitionTypeService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.AssetAcquisitionTypeEndpoint.getAllAssets<any>());
     }
 
     getById(AssetAcquisitionTypeId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.AssetAcquisitionTypeEndpoint.getAssetById<AssetAcquisitionType>(AssetAcquisitionTypeId)
         );
     }

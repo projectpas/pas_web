@@ -19,8 +19,8 @@ import { selectedValueValidate, validateRecordExistsOrNot, getObjectByValue, edi
 import { Table } from 'primeng/table';
 import { ConfigurationService } from '../../services/configuration.service';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({
@@ -108,8 +108,8 @@ export class CurrencyComponent implements OnInit {
     // Active: string = "Active";
     // /** Currency ctor */
    
-    // @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    // @ViewChild(MatSort,{static:false}) sort: MatSort;
+    // @ViewChild(MatPaginator) paginator: MatPaginator;
+    // @ViewChild(MatSort) sort: MatSort;
 
     // displayedColumns = ['currencyId', 'code', 'symbol', 'displayName', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     // dataSource: MatTableDataSource<Currency>;

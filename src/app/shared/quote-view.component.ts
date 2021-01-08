@@ -1,7 +1,4 @@
 
-
-
-
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output, OnDestroy } from "@angular/core";
 import { CommonService } from '../services/common.service';
 import { WorkOrderLabor } from '../models/work-order-labor.modal';
@@ -12,11 +9,13 @@ import {
     multiParts,
     partsDetail
   } from '../models/work-order-quote.modal';
+
 @Component({
     selector: 'grd-quote-view',
     templateUrl: './quote-view.component.html',
     styleUrls: ['./quote-view.component.scss']
 })
+
 export class QuoteViewComponent implements OnInit, OnChanges{
     @Input() workorderid: any;
     @Input() isView: boolean = false;
@@ -65,8 +64,9 @@ export class QuoteViewComponent implements OnInit, OnChanges{
     costPlusType: any;
     selectedPartDescription: string = "";
     selectedStockLineNumber: string = "";
-    constructor(private commonService: CommonService, private workorderMainService: WorkOrderService,private workOrderService: WorkOrderQuoteService){
 
+    constructor(private commonService: CommonService, private workorderMainService: WorkOrderService,
+      private workOrderService: WorkOrderQuoteService){
     }
 
     ngOnInit(){
@@ -77,6 +77,7 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             this.loadCurrency();
           }
     }
+
     ngOnChanges(){
         if(this.workorderid != 0){
             this.getEmployeeList(this.workorderid);
@@ -85,6 +86,7 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             this.loadCurrency();
           }
     }
+
     getEmployeeList(woId){
         this.commonService.smartDropDownList('Employee','EmployeeId','FirstName')
         .subscribe(
@@ -142,8 +144,6 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             this.csr = res.customerDetails.csrName;
             this.customerEmail = res.customerDetails.customerEmail;
             this.customerPhone = res.customerDetails.customerPhone;
-    
-    
             this.creditLimit = res.creditLimit;
             this.workOrderNumber = res.workOrderNum;
             this.quoteForm.WorkOrderId = res.workOrderId;
@@ -159,7 +159,6 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             .subscribe(
               (res : any)=>{
                 if(res){
-                    // this.workOrderQuoteDetailsId = res['workOrderQuote']['workOrderQuoteId'];
                   this.isEdit = true;
                   this.dso = res.workOrderQuote.dso;
                   this.validFor = res.workOrderQuote.validForDays;
@@ -173,7 +172,6 @@ export class QuoteViewComponent implements OnInit, OnChanges{
                   this.warnings = res.warnings;
                   this.memo = res.memo;
                   this.getQuoteTabData();
-    
                 }
               }
             )
@@ -187,8 +185,7 @@ export class QuoteViewComponent implements OnInit, OnChanges{
 
     getMPNDetails(workOrderId){
         this.workOrderService.getPartsDetail(workOrderId)
-        .subscribe(
-          (workOrderParts: partsDetail[])=>{
+        .subscribe((workOrderParts: partsDetail[])=>{
             this.workOrderPartsDetail = workOrderParts;
           }
         )
@@ -199,27 +196,23 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
         });
     }
+
     getQuoteTabData() {
-        // if(this.workOrderQuoteId){
         this.getQuoteExclusionListByWorkOrderQuoteId();
         this.getQuoteMaterialListByWorkOrderQuoteId();
         this.getQuoteChargesListByWorkOrderQuoteId();
         this.getQuoteLaborListByWorkOrderQuoteId();
         this.getQuoteFreightListByWorkOrderQuoteId();
-      
-        // this.calculateTotalWorkOrderCost();
-      
-        // }
-      
       }
+
     getQuoteExclusionListByWorkOrderQuoteId() {
-        if(this.workOrderQuoteDetailsId){
-        
+        if(this.workOrderQuoteDetailsId){        
         this.workOrderService.getQuoteExclusionList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
             this.workOrderExclusionsList = res;
         })
         }
     }
+
     getQuoteMaterialListByWorkOrderQuoteId() {
         if(this.workOrderQuoteDetailsId){
         this.workOrderService.getQuoteMaterialList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
@@ -247,11 +240,11 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             })
         }
     }
+
     getQuoteLaborListByWorkOrderQuoteId() {
         if(this.workOrderQuoteDetailsId){
             this.workOrderService.getQuoteLaborList(this.workOrderQuoteDetailsId, 1).subscribe(res => {
                 if (res) {
-                    // this.workOrderLaborList = res;
                     let wowfId = this.labor.workFlowWorkOrderId;
                     if(res){
                     let laborList = this.labor.workOrderLaborList;
@@ -261,9 +254,6 @@ export class QuoteViewComponent implements OnInit, OnChanges{
                         this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
                         res.laborList.forEach((rt)=>{
                         if(rt['taskId'] == tl['taskId']){
-                            // if(this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0] && this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0]['expertiseId'] == null && this.labor.workOrderLaborList[0][tl['description'].toLowerCase()][0]['employeeId'] == null){
-                            //   this.labor.workOrderLaborList[0][tl['description'].toLowerCase()] = [];
-                            // }
                             let labor = {}
                             labor = {...rt, employeeId: {'label':rt.employeeName, 'value': rt.employeeId}}
                             this.labor.workOrderLaborList[0][tl['description'].toLowerCase()].push(labor);
@@ -275,8 +265,8 @@ export class QuoteViewComponent implements OnInit, OnChanges{
 
             })
         }
-
     }
+
     getCreditTerms(ctermId){
         this.commonService.smartDropDownList('CreditTerms','CreditTermsId','Name')
         .subscribe(
@@ -343,7 +333,6 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             this.labor.workFlowWorkOrderId = mpn;
             this.workFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
             this.selectedWorkFlowWorkOrderId = mpn.value.workOrderWorkFlowId;
-            // this.getTabDataFromWorkOrder();
             this.workOrderService.getSavedQuoteDetails(this.selectedWorkFlowWorkOrderId)
             .subscribe(
               (res)=>{
@@ -358,17 +347,17 @@ export class QuoteViewComponent implements OnInit, OnChanges{
             )
           }
         })
-      
     }
+
     clearQuoteData(){ 
         this.materialListQuotation = [];
     }
+    
     gridTabChange(value) {
         this.gridActiveTab = value;
     }
 
     calculateExpiryDate() {
-
     }
 
     getTotalQuantity(){

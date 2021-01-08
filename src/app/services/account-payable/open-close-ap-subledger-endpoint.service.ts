@@ -1,10 +1,10 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class AccountPaybleAPSubLedgerEndPointService extends EndpointFactory {
 
@@ -21,10 +21,10 @@ export class AccountPaybleAPSubLedgerEndPointService extends EndpointFactory {
 
     addCalendar<T>(calendarObj: any): Observable<T> {
         let endpointUrl = this.add;
-        return this.http.post<any>(endpointUrl, JSON.stringify(calendarObj), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(calendarObj), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addCalendar(calendarObj));
-            }));
+            });
     }
 
 

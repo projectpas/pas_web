@@ -13,7 +13,6 @@ import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
 import { SalesQuote } from "../../../../models/sales/SalesQuote.model";
 import { ISalesOrderQuote } from "../../../../models/sales/ISalesOrderQuote";
 import { ISalesQuoteView } from "../../../../models/sales/ISalesQuoteView";
-import { SalesQuoteView } from "../../../../models/sales/SalesQuoteView";
 
 @Component({
   selector: "app-sales-order-actions",
@@ -298,10 +297,6 @@ export class SalesOrderActionsComponent implements OnInit {
   }
 
   viewSelectedRow(content) {
-    //this.alertService.startLoadingMessage();
-    //this.salesQuoteService.getview(row.salesOrderQuoteId).subscribe(res => {
-    //console.log(res, "view res+++")
-    //this.salesQuoteView = res[0];
     this.modal = this.modalService.open(content, { size: "lg" });
     this.modal.result.then(
       () => {
@@ -311,8 +306,6 @@ export class SalesOrderActionsComponent implements OnInit {
         console.log("Backdrop click");
       }
     );
-    //this.alertService.stopLoadingMessage();
-
   };
   dismissModel() {
     this.modal.close();

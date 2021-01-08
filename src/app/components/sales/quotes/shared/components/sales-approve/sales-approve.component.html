@@ -51,7 +51,7 @@
         </div>
     </div>
 </div> -->
-<div class="approver-tab-cstm">
+<!-- <div class="approver-tab-cstm">
     <h5 class="po-head">Approvers List</h5>
     <div class="table-responsive"
         style="margin-top: 10px; max-height: 600px !important; overflow-y: scroll !important;">
@@ -95,4 +95,51 @@
             </tbody>
         </table>
     </div>
-</div>
+</div> -->
+
+
+<!-- <p-tabPanel *ngIf="!posettingModel.IsEnforceApproval" header="Internal Approvers"> -->
+    <div class="approver-tab-cstm">
+        <div class="table-responsive">
+        <div class="table-responsive" style="margin-top: 10px; max-height: 600px !important; overflow-y: scroll !important;">
+            <table class="table table-bordered table-striped 
+            table-fixed table-sorting mpn-list-table"
+                   id="mpn-list-table">
+                <thead>
+                    <tr class="pad_workflo">
+                        <th>Approver Name</th>
+                        <th>Approver Code</th>
+                        <th>Approver Email</th>
+                        <th>Total Sales Quote Amout</th>
+                        <th>Approver Rule</th>
+                        <th>Memo</th>                                
+                        <th>Message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr  class="mpn-row" *ngFor="let approver of internalApproversList; let i=index;">
+                        <td>{{approver.approverName}}</td>
+                        <td>{{approver.approverCode}}</td>
+                        <td>{{approver.approverEmail}}</td>
+                        <td style="text-align: right;">
+                            <label style="text-align: right !important;">{{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}</label>
+                        </td>
+                        <td>
+                            {{approver.rule}}
+                        </td>
+                        <td>
+                            <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['memo']"></p>
+                        </td>
+                        <td [ngClass]="{red : approver.isExceeded == true}" >{{approver.message}}</td>
+                    </tr>
+                    <tr  *ngIf="internalApproversList.length == 0" >
+                        <td [attr.colspan]="29"   class="no-records-cstm" style="color: red; font-weight: bold; text-align: center">
+                            No records found
+                        </td>	
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+<!-- </p-tabPanel> -->

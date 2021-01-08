@@ -1,14 +1,13 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable } from '@angular/core';
-import { Observable,interval } from 'rxjs';
-import {map,startWith,flatMap} from 'rxjs/operators';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
 
 import { AuthService } from './auth.service';
 import { NotificationEndpoint } from './notification-endpoint.service';
@@ -44,41 +43,41 @@ export class NotificationService
     {
 
         return this.notificationEndpoint.getNotificationEndpoint(notificationId)
-            .pipe(map(response => Notification.Create(response)));
+            .map(response => Notification.Create(response));
     }
 
     getNotifications(page: number, pageSize: number)
     {
 
         return this.notificationEndpoint.getNotificationsEndpoint(page, pageSize)
-            .pipe(map(response =>
+            .map(response =>
             {
                 return this.getNotificationsFromResponse(response);
-            }));
+            });
     }
 
     getUnreadNotifications(userId?: string)
     {
 
         return this.notificationEndpoint.getUnreadNotificationsEndpoint(userId)
-            .pipe(map(response => this.getNotificationsFromResponse(response)));
+            .map(response => this.getNotificationsFromResponse(response));
     }
 
     getNewNotifications()
     {
         return this.notificationEndpoint.getNewNotificationsEndpoint(this.lastNotificationDate)
-            .pipe(map(response => this.processNewNotificationsFromResponse(response)));
+            .map(response => this.processNewNotificationsFromResponse(response));
     }
 
     getNewNotificationsPeriodically()
     {
-        return interval(10000).pipe(
-            startWith(0),
-            flatMap(() =>
+        return Observable.interval(10000)
+            .startWith(0)
+            .flatMap(() =>
             {
                 return this.notificationEndpoint.getNewNotificationsEndpoint(this.lastNotificationDate)
-                    .pipe(map(response => this.processNewNotificationsFromResponse(response)));
-            }));
+                    .map(response => this.processNewNotificationsFromResponse(response));
+            });
     }
 
     pinUnpinNotification(notificationOrNotificationId: number | Notification, isPinned?: boolean): Observable<any>
@@ -106,11 +105,11 @@ export class NotificationService
         if (typeof notificationOrNotificationId === 'number' || notificationOrNotificationId instanceof Number)
         { //Todo: Test me if its check is valid
             return this.notificationEndpoint.getDeleteNotificationEndpoint(<number>notificationOrNotificationId)
-                .pipe(map(response =>
+                .map(response =>
                 {
                     this.recentNotifications = this.recentNotifications.filter(n => n.id != notificationOrNotificationId);
                     return Notification.Create(response);
-                }));
+                });
         }
         else
         {

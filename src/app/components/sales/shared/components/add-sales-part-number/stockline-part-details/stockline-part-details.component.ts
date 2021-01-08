@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, ViewChild, OnChanges, SimpleChanges } from "@angular/core";
 import { ISalesQuote } from "../../../../../../models/sales/ISalesQuote.model";
-
+// import { DataTable } from "primeng/datatable";
 import { SalesQuoteService } from "../../../../../../services/salesquote.service";
 import { IPartJson } from "../../../models/ipart-json";
 import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';

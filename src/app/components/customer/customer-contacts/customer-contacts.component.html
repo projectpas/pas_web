@@ -83,8 +83,10 @@
               <div class="col">
               <button type="button"
                class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
-                label="Export  Data" matTooltip="Download  Data" matTooltipPosition="above"
-                (click)="contact.exportCSV()" style="padding: 5px 10px !important; width: 115px !important;"></button>
+                label="Export  Data" matTooltip="Download  Data" matTooltipPosition="above"               
+                data-toggle="modal" 
+                (click)="selectedOnly = false; targetData = contact;"
+                 data-target="#downloadConfirmation" style="padding: 5px 10px !important; width: 115px !important;"></button>
               <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
                 label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
                 (click)="contact.exportCSV({ selectionOnly: true })" style="padding: 5px 10px !important;"></button>
@@ -509,7 +511,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.notes }}
+                  <p [innerHTML]="audit.notes"></p>
                 </td>
                 <td style="text-align: center;"><p style="width: 50px;"> <input type="checkbox" name="isActive" [(ngModel)]="audit.isActive" disabled></p></td>
                 <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
@@ -548,6 +550,27 @@
   </div>
 </div>
 
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+				<h4 class="modal-title">Are You Sure Want to Download?</h4>
+			</div>
+			<div class="modal-body" *ngIf="targetData">
+				<strong>
+					<span>
+						You are attempting to export {{targetData.totalRecords}} of records. 
+					</span> 
+				</strong>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 <div class="modal fade" id="addContactDetails" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
@@ -726,9 +749,44 @@
                   <span style="color: red;">Please enter atleast 6 digits</span>
                 </div>
               </div>
+             
               <div class="form-group">
+               
                 <label>Memo</label>
-                <textarea name="notes" [(ngModel)]="contactInformation.notes" (ngModelChange)="enableSave()"></textarea>
+                <div class="col-sm-12">
+                <div class="col-sm-11">
+                <!-- <textarea name="notes" 
+                [(ngModel)]="contactInformation.notes"
+                 (ngModelChange)="enableSave()"></textarea> -->
+                 <span>                    
+                  <div class="form-group memo-popup-cstm mat_emo" style="margin-left:-4px">
+                    <div
+                    (ngModelChange)="enableSave()"
+                      [innerHTML]="contactInformation.notes"
+                      [matTooltip]="parsedText(contactInformation.notes)"
+                      matTooltipPosition="above"
+                      class="form-control"
+                      style="width: 111%;"
+                      class="text_editor_box"
+                    ></div>
+                  </div>
+                  </span>
+                </div>
+                <div class="col-sm-1">
+                  <span style="margin-left:11px">
+                  <a
+                  class="btn nobg"
+                  data-toggle="modal"
+                  (ngModelChange)="enableSave()"
+                  data-target="#memo-popup-Doc"
+                  (click)="onClickMemo()"
+                  matTooltip="Add Memo"
+                  matTooltipPosition="above">
+                  <i style="color: #337ab7" class="fa fa-pencil"></i>
+                  </a>
+                </span>
+              </div>              
+              </div>
               </div>
 
               <div class="form-group">
@@ -864,8 +922,12 @@
           <p>
             <span class="label"><b>Fax: </b></span><span class="value">{{ sourceViewforContact.fax }}</span>
           </p>
-          <p>
+          <!-- <p>
             <span class="label"><b>Memo: </b></span><span class="value">{{ sourceViewforContact.notes }}</span>
+          </p> -->
+          <p style="vertical-align: top;">
+            <span class="label" style="vertical-align:top;"><b>Memo: </b></span>
+            <span class="value"><p class="p-0 m-0 p_textEditor" [innerHTML]="sourceViewforContact.notes"></p></span>
           </p>
           <p>
             <span class="label"><b>Email<span class="clr-red">*</span>:</b></span><span
@@ -889,6 +951,56 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          &times;
+        </button>
+        <h4 class="modal-title">Edit Memo</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-fixed workflow-table-material">
+          <thead>
+            <th style="color: #fff;">Memo</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="white-space: inherit">
+                <p-editor
+                 spellcheck="true"
+                 (ngModelChange)="enableSaveMemo()"
+                  [(ngModel)]="memoPopupContent"
+                  [style]="{ height: '320px' }"
+                  name="memoPopupContent"
+                ></p-editor>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="float: right;">
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="padding: 6px 12px !important; margin-top: 10px;"
+            (click)="onClickPopupSave()" [disabled]="disableSaveMemo">
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            style="padding: 6px 12px !important; margin-top: 10px;"
+            (click)="closeMemoModel()" >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <ng-template #viewdbl class="modal fade " id="viewdbl" role="dialog">
   <div role="dialog">
     <div class="modal-content">

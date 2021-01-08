@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 
 import { AuthService } from './auth.service';
@@ -69,17 +70,17 @@ export class StocklineService {
 	}
 
 	getStockLineAdjustmentDatatypeList() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.stocklineEndpoint.getStockLineAdjustmentDatatypeDataEndpoint<any[]>());
 	}
 
 	getStockCompanyList() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.stocklineEndpoint.getStockLineCompanyListEndpoint<any[]>());
 	}
 
 	getManagemtentLengalEntityData() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.stocklineEndpoint.getManagemtentLengalEntityEndpoint<any[]>());
 	}
 	//For entering into the new stockline values
@@ -171,7 +172,7 @@ export class StocklineService {
 	//for Stockline Adjustment Reason for Single Screen
 
 	getStocklineAdjustmentreason() {
-		return forkJoin(
+		return Observable.forkJoin(
 			this.stocklineEndpoint.getStocklineAdjustmentReasonEndpoint<any>());
 	}
 
@@ -215,6 +216,11 @@ export class StocklineService {
 	search(searchParameters: any) {
 		return this.stocklineEndpoint.searchItemMaster(searchParameters);
 	}
+
+	searchstocklinefromsoqpop(searchParameters: any) {
+		return this.stocklineEndpoint.searchstocklinefromsoqpop(searchParameters);
+	}
+
 	multiSearch(searchParameters: any) {
 		return this.stocklineEndpoint.multiSearch(searchParameters);
 	}

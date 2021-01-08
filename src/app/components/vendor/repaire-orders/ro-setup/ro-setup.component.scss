@@ -1,22 +1,31 @@
-﻿label {
-    text-align: left;
-    width: 150px;
-    margin-right: 0;
-    font-weight: normal;
+﻿.red {  
+    color: #ED2939 !important;
+    font-weight: bold !important;
 }
+
+.child-data splitship-child td {
+    background: #fafafa !important;
+}
+
+.roview-table-cstm .child-data td {
+    background: #fafafa !important;
+}
+
 
 .gray-background {
-    input 
-    {
     background-color:#c9c9c9 !important;
-    }
 }
-
 .btn-header-list {
     text-align: right;
     margin-right: -20px !important;
     margin-top: 15px;
     margin-bottom: 0px !important;
+}
+label {
+    text-align: left;
+    width: 150px;
+    margin-right: 0;
+    font-weight: normal;
 }
 input[type="text"], input[type="number"], select {
     height: 24px !important;
@@ -25,6 +34,49 @@ input[type="text"], input[type="number"], select {
 textarea {
     border-radius: 5px !important;
 }
+// table.table-bordered thead tr {
+//     padding: 4px;
+//   }
+//   table.table-bordered thead tr{
+//     position: sticky;
+//     background: #4298ff;
+//     right: 0;
+//     width: 80px;
+  
+//   }
+  
+/*.table-wrapper{
+    overflow-y: scroll;
+  
+  }
+  
+  .table-wrapper th{
+      position: sticky;
+      background: #4298ff;
+      top: 0;
+      z-index: 1000;
+  }*/
+
+
+  
+  /* A bit more styling to make it look better */
+//   .table-wrapper{
+//     background: CadetBlue;
+//   }
+  
+  /*table{
+    border-collapse: collapse;
+    width: 100%;
+  }
+  */
+//   th{
+//       background: #4298ff ;
+//   }
+  
+//   td,th{
+//     padding: 10px;
+//     text-align: center;
+//   }
 .head-notes {
     height: 25px !important;
 }
@@ -36,9 +88,7 @@ textarea {
     font-size: 16px;
     color: #295d92;
 }
-.partsList-table-tr th {
-    min-width: 100px;
-}
+
 .addpn-btn {
     padding: 5px 10px !important;
     font-size: 13px;
@@ -73,9 +123,6 @@ a.fa.fa-plus-circle {
 .approver-tab-cstm .form-row {
     margin-top: 10px;
 }
-.vendor-steps-prime-cstm {
-    display: none;
-}
 .pas-table-cstm thead tr th {
     text-align: center;
 }
@@ -92,16 +139,28 @@ a.fa.fa-plus-circle {
 .approverslist-table tr th {
     padding: 5px 10px;
     text-align: center;
-    min-width: 90px;
+    min-width: 80px;
 }
 .approverslist-table tr td {
     padding: 5px;
 }
-
-.red {
-    background-color:#ED2939 !important;
-    color: white;
+.modal-sc-button{
+    padding: 6px 12px !important;margin-top: 10px;
 }
+.body-alignment{
+margin-bottom: -10px !important;
+}
+.toggle-header-alignment{
+    margin-top: -5px !important;
+}
+
+// .p-autocomplete .ui-autocomplete input.ui-inputtext {
+//     background-color: white;
+// }
+// .approverslist-table label {
+//     width: auto !important;
+// }
+
 @media (min-width: 768px) {
     .col-md-3 {
         max-width: 22%;
@@ -115,5 +174,95 @@ a.fa.fa-plus-circle {
         max-width: 70%;
         margin-right: 15px;
     }
+    #addContactInfo .col-md-6 {
+        max-width: 44%;
+        margin-right: 15px;
+    }
+}
+
+.vendorCapes-generalInfo .label{
+    width: 100px !important;
+}
+.vendorCapes-generalInfo .value{
+    width: calc(100% - 100px) !important;
+}
+
+
+.vendor-contact-icon{
+margin-left:3px;cursor:pointer;
+}
+.po-warning{
+    height: 60px !important; width:100% !important
+}
+.memopopup-notes{
+    width:100%;padding:0px !important;line-height: 2
+}
+.restriction-message{
+    height: 100px !important; width:100% !important
+}
+.resale-alignment{
+    margin-top: 18px !important;
+}
+.receiver-alignment{
+    margin-top: 10px !important;
+}
+.receiver-input-back{
+    background-color: gray !important;
+}
+.toggle-btn-align{
+    margin-top: 10px !important;
+}
+.th-width{
+    min-width: 40px !important; 
+}
+.checkbox-label-width{
+    width: 20px;
+}
+.parts-des-td{
+    min-width: 140px !important;
+}
+
+
+// .parts-list-memo-div{
+//     margin: 3px 0 !important;
+// }
+.child-td-align{
+    padding: 4px !important;
+}
+.memo-left{
+    float: left !important;
+}
+.memo-td-width{
+    min-width: 300px !important;
+}
+.approver-memo-div{
+    margin-top: 4px;float: right;
+}
+
+.status-td{
+    width:120px;
+}
+.minwidth-120{
+min-width: 120px;
+}
+
+.minwidth-80{
+    min-width: 80px;
+}
+.qty-width{
+    width:80px !important;
+}
+.approver-process-td{
+    min-width: 90px; align-items: center;
+}
+.approver-display{
+    display: none;
+}
+
+.approver-btn{
+    margin-bottom: 10px;
+}
+.part-number-td{
+    padding: 6px;
 }
 

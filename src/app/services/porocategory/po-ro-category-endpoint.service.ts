@@ -1,16 +1,16 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { POROCategory } from '../../models/po-ro-category.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class POROCategoryEndpoint extends EndpointFactory {
 
@@ -39,64 +39,64 @@ export class POROCategoryEndpoint extends EndpointFactory {
     getAllPOROCategory<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllPOROCategory());
-            }));
+            });
     }
 
     getPOROCategoryById<T>(poroCategoryId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${poroCategoryId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getPOROCategoryById(poroCategoryId));
-            }));
+            });
     }
 
     addPOROCategory<T>(POROCategory: POROCategory): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(POROCategory), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(POROCategory), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addPOROCategory(POROCategory));
-            }));
+            });
     }
 
     updatePOROCategory<T>(poroCategory: POROCategory): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(poroCategory), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(poroCategory), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updatePOROCategory(poroCategory));
-            }));
+            });
     }
 
     removePOROCategoryById<T>(poroCategoryId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${poroCategoryId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removePOROCategoryById(poroCategoryId));
-            }));
+            });
     }
 
     getUpdatePORPEndpointforActive<T>(poroCategory: POROCategory): Observable<T> {
         let endpointUrl = `${this.updatePOROforActive}/${poroCategory.poroCategoryId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(poroCategory), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(poroCategory), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdatePORPEndpointforActive(poroCategory));
-            }));
+            });
     }
 
     getAudit<T>(poroCategoryId: number): Observable<T> {
         let endpointUrl = `${this.getAuditById}/${poroCategoryId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAudit(poroCategoryId));
-            }));
+            });
     }
 
     getGLCashFlowClassificationFileUpload(file) {
@@ -106,9 +106,9 @@ export class POROCategoryEndpoint extends EndpointFactory {
 
     getMaster1099searchEndpoint<T>(paginationOption: any): Observable<T> {
         // let endpointUrl = this.searchUrl;
-        return this.http.post<any>(this.porosearch, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.porosearch, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMaster1099searchEndpoint(paginationOption));
-            }));
+            });
     }
 }

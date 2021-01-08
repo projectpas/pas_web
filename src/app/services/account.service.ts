@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { AccountEndpoint } from './account-endpoint.service';
 import { AuthService } from './auth.service';
@@ -18,7 +19,6 @@ import { Role } from '../models/role.model';
 import { Permission, PermissionNames, PermissionValues } from '../models/permission.model';
 import { UserEdit } from '../models/user-edit.model';
 
-import {mergeMap,tap} from 'rxjs/operators';
 export type RolesChangedOperation = "add" | "delete" | "modify";
 export type RolesChangedEventArg = { roles: Role[] | string[], operation: RolesChangedOperation };
 
@@ -44,7 +44,7 @@ export class AccountService
 
     getUserAndRoles(userId?: string)
     {
-        return forkJoin(
+        return Observable.forkJoin(
             this.accountEndpoint.getUserEndpoint<User>(userId),
             this.accountEndpoint.getRolesEndpoint<Role[]>());
     }
@@ -57,7 +57,7 @@ export class AccountService
     getUsersAndRoles(page?: number, pageSize?: number)
     {
 
-        return forkJoin(
+        return Observable.forkJoin(
             this.accountEndpoint.getUsersEndpoint<User[]>(page, pageSize),
             this.accountEndpoint.getRolesEndpoint<Role[]>());
     }
@@ -71,11 +71,11 @@ export class AccountService
         else
         {
             return this.accountEndpoint.getUserByUserNameEndpoint<User>(user.userName)
-                .pipe(mergeMap(foundUser =>
+                .mergeMap(foundUser =>
                 {
                     user.id = foundUser.id;
                     return this.accountEndpoint.getUpdateUserEndpoint(user, user.id)
-                }));
+                });
         }
     }
 
@@ -99,7 +99,7 @@ export class AccountService
         if (typeof userOrUserId === 'string' || userOrUserId instanceof String)
         {
             return this.accountEndpoint.getDeleteUserEndpoint<User>(<string>userOrUserId)
-                .pipe(tap(data => this.onRolesUserCountChanged(data.roles)));
+                .do(data => this.onRolesUserCountChanged(data.roles));
         }
         else
         {
@@ -110,7 +110,7 @@ export class AccountService
             else
             {
                 return this.accountEndpoint.getUserByUserNameEndpoint<User>(userOrUserId.userName)
-                    .pipe(mergeMap(user => this.deleteUser(user.id)));
+                    .mergeMap(user => this.deleteUser(user.id));
             }
         }
     }
@@ -139,7 +139,7 @@ export class AccountService
     getRolesAndPermissions(page?: number, pageSize?: number)
     {
 
-        return forkJoin(
+        return Observable.forkJoin(
             this.accountEndpoint.getRolesEndpoint<Role[]>(page, pageSize),
             this.accountEndpoint.getPermissionsEndpoint<Permission[]>());
     }
@@ -149,24 +149,24 @@ export class AccountService
         if (role.id)
         {
             return this.accountEndpoint.getUpdateRoleEndpoint(role, role.id)
-                .pipe(tap(data => this.onRolesChanged([role], AccountService.roleModifiedOperation)));
+                .do(data => this.onRolesChanged([role], AccountService.roleModifiedOperation));
         }
         else
         {
             return this.accountEndpoint.getRoleByRoleNameEndpoint<Role>(role.name)
-                .pipe(mergeMap(foundRole =>
+                .mergeMap(foundRole =>
                 {
                     role.id = foundRole.id;
                     return this.accountEndpoint.getUpdateRoleEndpoint(role, role.id)
                 })
-                ,tap(data => this.onRolesChanged([role], AccountService.roleModifiedOperation)));
+                .do(data => this.onRolesChanged([role], AccountService.roleModifiedOperation));
         }
     }
 
     newRole(role: Role)
     {
         return this.accountEndpoint.getNewRoleEndpoint<Role>(role)
-            .pipe(tap(data => this.onRolesChanged([role], AccountService.roleAddedOperation)));
+            .do(data => this.onRolesChanged([role], AccountService.roleAddedOperation));
     }
 
     deleteRole(roleOrRoleId: string | Role): Observable<Role>
@@ -175,7 +175,7 @@ export class AccountService
         if (typeof roleOrRoleId === 'string' || roleOrRoleId instanceof String)
         {
             return this.accountEndpoint.getDeleteRoleEndpoint<Role>(<string>roleOrRoleId)
-                .pipe(tap(data => this.onRolesChanged([data], AccountService.roleDeletedOperation)));
+                .do(data => this.onRolesChanged([data], AccountService.roleDeletedOperation));
         }
         else
         {
@@ -187,7 +187,7 @@ export class AccountService
             else
             {
                 return this.accountEndpoint.getRoleByRoleNameEndpoint<Role>(roleOrRoleId.name)
-                    .pipe(mergeMap(role => this.deleteRole(role.id)));
+                    .mergeMap(role => this.deleteRole(role.id));
             }
         }
     }
@@ -238,7 +238,7 @@ export class AccountService
     }
     getGlobalData(masterCompanyId: number) 
     {
-        return forkJoin(
+        return Observable.forkJoin(
             this.accountEndpoint.getSavedCountryDataEndPoint<any>(masterCompanyId));
         // return this.accountEndpoint.getSavedCountryDataEndPoint<any>(masterCompanyId);
     }

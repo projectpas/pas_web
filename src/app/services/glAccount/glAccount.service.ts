@@ -1,9 +1,9 @@
-
+﻿
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { GlAccountEndpointService } from './glAccount-endpoint.service';
 import { GlAccount } from '../../models/GlAccount.model';
 
@@ -15,14 +15,8 @@ export class GlAccountService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.glAccountEndpoint.getAllGlAccounts<GlAccount[]>());
-    }
-
-    getById(glAccountId: number) {
-        return forkJoin(
-            this.glAccountEndpoint.getGlAccountById<GlAccount>(glAccountId)
-        );
     }
 
     add(glAccount: any) {
@@ -38,15 +32,31 @@ export class GlAccountService {
         return this.glAccountEndpoint.removeGlAccountById(glAccountId);
     }
     getMiscdata() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.glAccountEndpoint.getMiscData<GlAccount[]>());
+    }    
+    updatestatusactive(id,status, userName)
+    {
+        return this.glAccountEndpoint.updatestatusactive(id,status, userName);
     }
-    search1(serverSidePagesData: any) {
-    return forkJoin(
-        this.glAccountEndpoint.glAccountEndpoint<any[]>(serverSidePagesData));
+    deleteRestoreGL(id,status, userName)
+    {
+        return this.glAccountEndpoint.deleteRestoreGL(id,status, userName);
+    }
 
-}
+    getglAccountList(serverSidePagesData: any) {
+    return this.glAccountEndpoint.getglAccountList(serverSidePagesData);
+    }
+    getHistory(id) {
+        return this.glAccountEndpoint.getHistory(id);
+    }   
+   
+    getById(glAccountId) {       
+       return this.glAccountEndpoint.getGlAccountById(glAccountId);        
+    }       
+    
 
+  
 
     //deleteAssetType(glAccountId: number) {
 

@@ -297,17 +297,22 @@ export class CustomersListComponent implements OnInit {
     }
 
     dateFilterForTableCustomerList(date, field) {
+        const minyear = '1900';
+        const dateyear = moment(date).format('YYYY');;
         this.dateObject={}
                 date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-            if(field=='createdDate'){
-                this.dateObject={'createdDate':date}
-            }else if(field=='updatedDate'){
-                this.dateObject={'updatedDate':date}
-            }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus ,...this.dateObject};
-            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData); 
+            if(dateyear > minyear)
+            {
+                if(field=='createdDate'){
+                    this.dateObject={'createdDate':date}
+                }else if(field=='updatedDate'){
+                    this.dateObject={'updatedDate':date}
+                }
+                this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus ,...this.dateObject};
+                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+                this.getList(PagingData); 
+            }            
         }else{
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,  status: this.currentstatus,...this.dateObject};
             if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){

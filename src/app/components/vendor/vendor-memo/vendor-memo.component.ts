@@ -5,7 +5,7 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { VendorService } from '../../../services/vendor.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
-
+import * as $ from 'jquery';
 
 @Component({
 	selector: 'app-vendor-memo',
@@ -27,6 +27,8 @@ export class VendorMemoComponent implements OnInit {
 	totalRecords: number = 0;
 	pageIndex: number = 0;
 	pageSize: number = 10;
+	selectedOnly: boolean = false;
+    targetData: any;
 	totalPages: number = 0;
 	vendorId:any;
 	memoCols = [
@@ -49,13 +51,16 @@ export class VendorMemoComponent implements OnInit {
                 this.vendorId = this.activeRoute.snapshot.params['id'];
 				this.vendorService.vendorId = this.vendorId;
 				this.vendorService.listCollection.vendorId = this.vendorId; 
-				this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
-					res => {
-							this.local = res[0];
-					},err => {
-						const errorLog = err;
-						this.saveFailedHelper(errorLog);
+				if(this.vendorId > 0)
+				{
+					this.vendorService.getVendorCodeandNameByVendorId(this.vendorId).subscribe(
+						res => {
+								this.local = res[0];
+						},err => {
+							const errorLog = err;
+							this.saveFailedHelper(errorLog);
 					});
+				}				
             }
         }
 		if (this.vendorService.listCollection !== undefined) {
@@ -85,7 +90,9 @@ export class VendorMemoComponent implements OnInit {
 	onClickMemo(rowData) {
 		this.memoPopupContent = {...rowData};
 	}
-
+	closeDeleteModal() {
+		$("#downloadConfirmation").modal("hide");
+	}
 	onClickPopupSave() {
 		for (var i = 0; i < this.allVendorPOList.length; i++) {
 			if (this.allVendorPOList[i].orderNumberId == this.memoPopupContent.orderNumberId){

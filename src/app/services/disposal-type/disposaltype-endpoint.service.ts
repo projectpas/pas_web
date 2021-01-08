@@ -5,12 +5,12 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { DisposalType } from '../../models/disposal-type.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class DisposalTypeEndpointService extends EndpointFactory {
 
@@ -38,55 +38,55 @@ export class DisposalTypeEndpointService extends EndpointFactory {
     getAllDisposalType<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllDisposalType());
-            }));
+            });
     }
 
     getdisposalTypeById<T>(assetDisposalTypeId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${assetDisposalTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getdisposalTypeById(assetDisposalTypeId));
-            }));
+            });
     }
 
     addDisposalType<T>(disposalType: DisposalType): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(disposalType), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(disposalType), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addDisposalType(disposalType));
-            }));
+            });
     }
 
     updateDisposalType<T>(assetDisposalType: DisposalType): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(assetDisposalType), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(assetDisposalType), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateDisposalType(assetDisposalType));
-            }));
+            });
     }
 
     removeDisposalTypeById<T>(assetDisposalTypeId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${assetDisposalTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeDisposalTypeById(assetDisposalTypeId));
-            }));
+            });
     }
 
     getDisposalAudit<T>(assetDisposalTypeId: number): Observable<T> {
         let endpointUrl = `${this.getdisposalTypeHistById}/${assetDisposalTypeId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDisposalAudit(assetDisposalTypeId));
-            }));
+            });
     }
 
     DispTypeCustomUpload(file) {

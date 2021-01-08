@@ -1,12 +1,12 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { DBkeys } from './db-Keys';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class PublicationEndpointService extends EndpointFactory {
   private readonly _publicationGetUrl: string = '/api/Publication/getpublicationslist';
@@ -105,17 +105,17 @@ export class PublicationEndpointService extends EndpointFactory {
 
   getpublicationEndpoint<T>(): Observable<T> {
     return this.http
-      .get<any>(this.getCodeUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(this.getCodeUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationEndpoint());
-      }));
+      });
   }
   getpublicationbyIdEndpoint<T>(id): Observable<T> {
     return this.http
-      .get<any>(`${this._publicationGetByIdUrl}/${id}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(`${this._publicationGetByIdUrl}/${id}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationbyIdEndpoint(id));
-      }));
+      });
   }
 
 
@@ -145,12 +145,12 @@ export class PublicationEndpointService extends EndpointFactory {
       : this._publicationUrlNew;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getEditActionEndpoint(actionId)
         );
-      }));
+      });
   }
 
   getUpdateActionEndpoint<T>(file: any): Observable<T> {
@@ -158,32 +158,32 @@ export class PublicationEndpointService extends EndpointFactory {
     let endpointUrl = `${this._publicationUrlNew}`;
 
     return this.http
-      .put<any>(endpointUrl, file)
-      .pipe(catchError(error => {
+      .put<T>(endpointUrl, file)
+      .catch(error => {
         return this.handleError(error, () =>
           this.getUpdateActionEndpoint(file)
         );
-      }));
+      });
   }
 
   getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
     let endpointUrl = `${this._publicationUrlNew}/${actionId}`;
 
     return this.http
-      .delete<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getDeleteActionEndpoint(actionId)
         );
-      }));
+      });
   }
 
   publicationStatusEndpoint<T>(id, status, updatedBy): Observable<T> {
     return this.http
-      .get<any>(`${this._publicationStatus}?publicationRecordId=${id}&status=${status}&updatedBy=${updatedBy}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(`${this._publicationStatus}?publicationRecordId=${id}&status=${status}&updatedBy=${updatedBy}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.publicationStatusEndpoint(id, status, updatedBy));
-      }));
+      });
   }
 
 
@@ -191,108 +191,108 @@ export class PublicationEndpointService extends EndpointFactory {
     let endpointUrl = `${this._actionsUrlAuditHistory}/${actionId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getHistoryActionEndpoin(actionId)
         );
-      }));
+      });
   }
 
   getPublincationAuditById<T>(publicationId: number): Observable<T> {
     let endpointUrl = `${this.getPublicationAuditById}/${publicationId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getPublincationAuditById(publicationId)
         );
-      }));
+      });
   }
 
   postPNACMapping<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._publicationPNACNEW,
         JSON.stringify(userObject),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () => this.postPNACMapping(userObject));
-      }));
+      });
   }
   postPNATAMapping<T>(userObject: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._publicationPNATANEW,
         JSON.stringify(userObject),
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () => this.postPNATAMapping(userObject));
-      }));
+      });
   }
 
   getPubPNById<T>(PNid: number): Observable<T> {
     let endpointUrl = `${this._publicationPNMappingData}/${PNid}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getPubPNById(PNid));
-      }));
+      });
   }
 
   // Save Part Number Mapping
   postPartNumberMappedData<T>(object): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         this._PostPNMapping,
         JSON.stringify(object),
         this.getRequestHeaders()
       )
-      .pipe(catchError(err => {
+      .catch(err => {
         return this.handleError(err, () =>
           this.postPartNumberMappedData(object)
         );
-      }));
+      });
   }
 
   getAircraftInformationBySearch<T>(searchUrl, publicationId): Observable<T> {
     console.log(searchUrl);
     return this.http
-      .get<any>(
+      .get<T>(
         `${this._AircraftInformationSearch}/${publicationId}?${searchUrl}`
       )
-      .pipe(catchError(err => {
+      .catch(err => {
         return this.handleError(err, () =>
           this.getAircraftInformationBySearch(searchUrl, publicationId)
         );
-      }));
+      });
   }
 
   getAirMappedByPubId<T>(PublicationID: number): Observable<T> {
     let endpointUrl = `${this._getAirMappingByPublicationID}/${PublicationID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAirMappedByPubId(PublicationID)
         );
-      }));
+      });
   }
   getAtaMappedByPubId<T>(PublicationID: number): Observable<T> {
     let endpointUrl = `${this._getAtaMappingByPublicationID}/${PublicationID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByPubId(PublicationID)
         );
-      }));
+      });
   }
   getAirMappedByMultiTypeId<T>(
     PublicationID: number,
@@ -303,12 +303,12 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}${AircraftTypeId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAirMappedByMultiTypeId(PublicationID, AircraftTypeId)
         );
-      }));
+      });
   }
   getAtaMappedByMultiModelId<T>(
     PublicationID: number,
@@ -319,12 +319,12 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}${AircraftModelID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiModelId(PublicationID, AircraftModelID)
         );
-      }));
+      });
   }
   getAtaMappedByMultiDashId<T>(
     PublicationID: number,
@@ -335,12 +335,12 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}${DashNumberId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiDashId(PublicationID, DashNumberId)
         );
-      }));
+      });
   }
   getAtaMappedByMultiTypeIDModelID<T>(
     PublicationID: number,
@@ -352,8 +352,8 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}${AircraftTypeId}/${AircraftModelID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiTypeIDModelID(
             PublicationID,
@@ -361,7 +361,7 @@ export class PublicationEndpointService extends EndpointFactory {
             AircraftModelID
           )
         );
-      }));
+      });
   }
   getAtaMappedByMultiTypeIDModelIDDashID<T>(
     PublicationID: number,
@@ -374,8 +374,8 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}${AircraftTypeId}/${AircraftModelID}/${DashNumberId}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiTypeIDModelIDDashID(
             PublicationID,
@@ -384,7 +384,7 @@ export class PublicationEndpointService extends EndpointFactory {
             DashNumberId
           )
         );
-      }));
+      });
   }
 
   getAtaMappedByMultiATAIDSubChapterID<T>(
@@ -397,8 +397,8 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}/${ChapterID}/${SubChapterID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiATAIDSubChapterID(
             PublicationID,
@@ -406,7 +406,7 @@ export class PublicationEndpointService extends EndpointFactory {
             SubChapterID
           )
         );
-      }));
+      });
   }
   getAtaMappedByMultiChapterID<T>(
     PublicationID: number,
@@ -417,12 +417,12 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}/${ChapterID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiChapterID(PublicationID, ChapterID)
         );
-      }));
+      });
   }
   getAtaMappedByMultiSubChapterID<T>(
     PublicationID: number,
@@ -433,12 +433,12 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}/${SubChapterID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getAtaMappedByMultiSubChapterID(PublicationID, SubChapterID)
         );
-      }));
+      });
   }
   // http://localhost:5050/api/Publication/getFilesBypublication/4(PublicationId)
   getFilesBypublicationEndPoint<T>(
@@ -449,12 +449,12 @@ export class PublicationEndpointService extends EndpointFactory {
       }/${PublicationID}`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getFilesBypublicationEndPoint(PublicationID)
         );
-      }));
+      });
     }
 
     getFilesBypublicationEndPointNew<T>(
@@ -465,12 +465,12 @@ export class PublicationEndpointService extends EndpointFactory {
             }/${PublicationID}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () =>
                     this.getFilesBypublicationEndPointNew(PublicationID)
                 );
-            }));
+            });
     }
 
   getPublishedByModuleListEndPoint<T>() {
@@ -479,42 +479,42 @@ export class PublicationEndpointService extends EndpointFactory {
       }`;
 
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.getPublishedByModuleListEndPoint()
         );
-      }));
+      });
   }
 
 
   deleteitemMasterMappedEndpoint<T>(PublicationItemMasterMappingId: any): Observable<T> {
     return this.http
-      .post<any>(
+      .post<T>(
         `${this._deleteItemMasterMappingByID}/${PublicationItemMasterMappingId}`,
         //JSON.stringify(userObject),
         {},
         this.getRequestHeaders()
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () =>
           this.deleteitemMasterMappedEndpoint(PublicationItemMasterMappingId)
         );
-      }));
+      });
   }
 
   deletepublicationtagtypeEndPoint<T>(tagTypeId: any): Observable<T> {
     return this.http
-      .delete<any>(
+      .delete<T>(
         `${this._deletepublicationtagtypeEndPoint}/${tagTypeId}?updatedBy=` + DBkeys.UPDATED_BY,
         //JSON.stringify(userObject),
         {},
       )
-      .pipe(catchError(error => {
+      .catch(error => {
         return this.handleError(error, () =>
           this.deletepublicationtagtypeEndPoint(tagTypeId)
         );
-      }));
+      });
   }
 
   searchgetAirMappedByMultiTypeIDModelIDDashID<T>(
@@ -524,12 +524,12 @@ export class PublicationEndpointService extends EndpointFactory {
       this._searchgetAirMappingByMultiTypeIDModelIDDashID
       }/${PublicationID}`;
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.searchgetAirMappedByMultiTypeIDModelIDDashID(PublicationID)
         );
-      }));
+      });
   }
   searchgetAtaMappedByMultiSubChapterID<T>(
     searchUrl: string,
@@ -539,72 +539,72 @@ export class PublicationEndpointService extends EndpointFactory {
       this._searchgetATAMappingByMultiChapterIDSubID
       }/${PublicationID}?${searchUrl}`;
     return this.http
-      .get<any>(endpointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () =>
           this.searchgetAtaMappedByMultiSubChapterID(searchUrl, PublicationID)
         );
-      }));
+      });
   }
 
   getpublicationbyIdViewEndpoint<T>(id): Observable<T> {
     return this.http
-      .get<any>(`${this._publicationGetByIdViewUrl}/${id}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(`${this._publicationGetByIdViewUrl}/${id}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationbyIdViewEndpoint(id));
-      }));
+      });
   }
 
   getpublicationListEndpoint<T>(data): Observable<T> {
-    return this.http.post<any>(this.getCodeUrl, JSON.stringify(data), this.getRequestHeaders())
-      .pipe(catchError(error => {
+    return this.http.post(this.getCodeUrl, JSON.stringify(data), this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationListEndpoint(data));
-      }));
+      });
   }
   getpublicationListEndpointNew<T>(data): Observable<T> {
-    return this.http.post<any>(this.getPublicationsListUrl, JSON.stringify(data), this.getRequestHeaders())
-      .pipe(catchError(error => {
+    return this.http.post(this.getPublicationsListUrl, JSON.stringify(data), this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationListEndpointNew(data));
-      }));
+      });
   }
 
   getpublicationGlobalSearchEndpoint<T>(ataChapterId, ataSubChapterId, airCraftId, modelId, dashNumberId, pageNumber, pageSize): Observable<T> {
     return this.http
-      .get<any>(`${this._publicationGlobalSearchUrl}/?ataChapterId=${ataChapterId}&ataSubChapterId=${ataSubChapterId}&airCraftId=${airCraftId}&modelId=${modelId}&dashNumberId=${dashNumberId}&pageNumber=${pageNumber}&pageSize=${pageSize}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(`${this._publicationGlobalSearchUrl}/?ataChapterId=${ataChapterId}&ataSubChapterId=${ataSubChapterId}&airCraftId=${airCraftId}&modelId=${modelId}&dashNumberId=${dashNumberId}&pageNumber=${pageNumber}&pageSize=${pageSize}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationGlobalSearchEndpoint(ataChapterId, ataSubChapterId, airCraftId, modelId, dashNumberId, pageNumber, pageSize));
-      }));
+      });
   }
 
   getpublicationslistadvancesearchEndPoint<T>(data): Observable<T> {
     return this.http
-      .post<any>(this._getpublicationslistadvancesearchUrl, data, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .post<T>(this._getpublicationslistadvancesearchUrl, data, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationslistadvancesearchEndPoint(data));
-      }));
+      });
   }
 
   getpublicationTypesEndpoint<T>(): Observable<T> {
     return this.http
-      .get<any>(`${this._publicationTypes}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(`${this._publicationTypes}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationTypesEndpoint());
-      }));
+      });
   }
 
   getAllPublicationsDropdownEndPoint<T>(): Observable<T> {
     return this.http
-      .get<any>(this.getPublicationForWorkFlowURL, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(this.getPublicationForWorkFlowURL, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getAllPublicationsDropdownEndPoint());
-      }));
+      });
   }
 
   getPublicationForWorkFlowEndpoint<T>(publicationId: number): Observable<T> {
-    return this.http.get<any>(`${this.getPublicationURL}/${publicationId}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+    return this.http.get<T>(`${this.getPublicationURL}/${publicationId}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getPublicationForWorkFlowEndpoint(publicationId));
-      }));
+      });
   }
 
   publicationCustomUpload(file) {
@@ -614,18 +614,18 @@ export class PublicationEndpointService extends EndpointFactory {
   getPublicationAuditDetails<T>(Id: number): Observable<T> {
     let endPointUrl = `${this._auditsUrl}?publicationId=${Id}`;
 
-    return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-      .pipe(catchError(error => {
+    return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getPublicationAuditDetails(Id));
-      }));
+      });
   }
 
   getpublicationListBySearchEndpoint<T>(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location): Observable<T> {
     return this.http
-      .get<any>(`${this.getCodeUrl}?pageNumber=${pageIndex}&pageSize=${pageSize}&publicationId=${publicationId}&description=${description}&publicationType=${publicationType}&publishedBy=${publishby}&employee=${employeeName}&location=${location}`, this.getRequestHeaders())
-      .pipe(catchError(error => {
+      .get<T>(`${this.getCodeUrl}?pageNumber=${pageIndex}&pageSize=${pageSize}&publicationId=${publicationId}&description=${description}&publicationType=${publicationType}&publishedBy=${publishby}&employee=${employeeName}&location=${location}`, this.getRequestHeaders())
+      .catch(error => {
         return this.handleError(error, () => this.getpublicationListBySearchEndpoint(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location));
-      }));
+      });
   }
   getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId) {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftlistbypublicationidanditemmasterid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}`)

@@ -28,6 +28,9 @@ input[type="text"], input[type="number"], select, textarea {
 .btn-cstm {
     padding: 3px 8px !important;
 }
+.ro-status-radios{
+    margin-bottom:15px;
+}
 .btn-cstm:before {
     font-size: 11px;
 }
@@ -109,4 +112,29 @@ input[type="text"], input[type="number"], select, textarea {
         max-width: 22%;
         margin-right: 15px;
     }
+}
+.status-radios{
+    float:left; 
+    width:auto;
+     margin-right:20px;
+      padding-top:3px;
+}
+.status-radios-alignment{
+    margin-top: 4px;
+     margin-right: 15px;
+}
+.expand-div-alignment{
+    margin-top: 10px;
+}
+.resale-align{
+    margin-top: 15px;
+}
+.receiver-align{
+    margin-top:10px;
+}
+.staructure-body-input{
+    margin-bottom: 2px; margin-top: 7px;
+}
+.plus-icon-align{
+    padding: 4px 6px !important;
 }

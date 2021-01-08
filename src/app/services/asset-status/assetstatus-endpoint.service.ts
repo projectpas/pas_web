@@ -5,12 +5,12 @@
 
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AssetStatus } from '../../models/asset-status.model';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class AssetStatusEndpointService extends EndpointFactory {
 
@@ -38,64 +38,64 @@ export class AssetStatusEndpointService extends EndpointFactory {
     getAllAssets<T>(): Observable<T> {
         let endpointUrl = this.getAll;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllAssets());
-            }));
+            });
     }
 
     getAssetById<T>(assetId: number): Observable<T> {
         let endpointUrl = `${this.getById}/${assetId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAssetById(assetId));
-            }));
+            });
     }
 
     addAsset<T>(asset: AssetStatus): Observable<T> {
         let endpointUrl = this.add;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(asset), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(asset), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.addAsset(asset));
-            }));
+            });
     }
 
     updateAsset<T>(assetStatus: AssetStatus): Observable<T> {
         let endpointUrl = this.update;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(assetStatus), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(assetStatus), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateAsset(assetStatus));
-            }));
+            });
     }
 
     removeAssetById<T>(assetId: number): Observable<T> {
         let endpointUrl = `${this.removeById}/${assetId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.removeAssetById(assetId));
-            }));
+            });
     }
 
     getUpdateForActive<T>(roleObject: any, id: number): Observable<T> {
         let endpointUrl = `${this.updateForActive}/${id}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateForActive(roleObject, id));
-            }));
+            });
     }
 
     getAssetStatusAuditById<T>(assetId: number): Observable<T> {
         let endpointUrl = `${this.getAssetAuditById}/${assetId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAssetStatusAuditById(assetId));
-            }));
+            });
     }
 
     AssetStatusCustomUpload(file) {

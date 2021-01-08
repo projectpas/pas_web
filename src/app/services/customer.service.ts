@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject,forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AuthService } from './auth.service';
 import { User } from '../models/user.model';
 import { Role } from '../models/role.model';
@@ -77,40 +78,40 @@ export class CustomerService {
         private authService: AuthService,
         private customerEndpoint: CustomerEndpoint) { }
     //getWorkFlows() {
-    //    return forkJoin(
+    //    return Observable.forkJoin(
     //        this.customerEndpoint.getcustomerEndpoint<any[]>());
     //}
     getWorkFlows() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getcustomerEndpoint<any[]>());
     }
     getCustomers() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getcustomerEndpoint<any[]>());
     }
     getallCustomers() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getAllcustomerEndpoint<any[]>());
     }
     getCountrylist() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getcountryListEndpoint<any[]>());
     }
     //Added by Vishnu:
     getCustomerTypes() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomerTypes<any[]>());
     }
     getAircraftTypes(selectedvalues) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getAirccraftTypes<any>(selectedvalues));
     }
     getATAchapter() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getATAChapters<any[]>());
     }
     getAircraft() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getAircraftmodels<any[]>());
     }
     getMappedAirCraftDetails(customerId: number) {
@@ -138,7 +139,7 @@ export class CustomerService {
         return this.customerEndpoint.restoreATAMappedByContactId(contactId);
     }
     getFinalObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getFinalrobj<any>());
     }
     updatefinanceinfo(customercntct: any, customerId: any) {
@@ -151,11 +152,11 @@ export class CustomerService {
         return this.customerEndpoint.getSalesInfo(customerId);
     }
     getGeneralObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getGeneralrobj<any>());
     }
     getCustomerdata(customerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomersDatawithid<any>(customerId));
     }
     getCustomerdataById(customerId: any) {
@@ -165,15 +166,15 @@ export class CustomerService {
     getCustomerCommonDataById(customerId: any) {
         return this.customerEndpoint.getCustomerCommonDataByid<any>(customerId);
     }
-    getCustomerCommonDataWithContactsById(customerId: any) {
-        return this.customerEndpoint.getCustomerCommonDataWithContactsById<any>(customerId);
+    getCustomerCommonDataWithContactsById(customerId: any, contactIds) {
+        return this.customerEndpoint.getCustomerCommonDataWithContactsById<any>(customerId, contactIds);
     }
     getSalespersondata(customerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getsalespersonwithid<any>(customerId));
     }
     //historyAcion(actionId: number) {
-    //    return forkJoin(this.customerEndpoint.getHistorycustomerEndpoint<AuditHistory[]>(actionId));
+    //    return Observable.forkJoin(this.customerEndpoint.getHistorycustomerEndpoint<AuditHistory[]>(actionId));
     //}
     newAction(action: any) {
         return this.customerEndpoint.getNewcustomerEndpoint<any>(action);
@@ -191,17 +192,17 @@ export class CustomerService {
         return this.customerEndpoint.getEditcustomerEndpoint<any>(actionId);
     }
     getEmptyObj() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getEmptyrobj<any>());
     } getAddressDetails() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getAddressDetails<any[]>());
     }
     shipaddressHistory(actionId: number) {
-        return forkJoin(this.customerEndpoint.getShipaddressHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.customerEndpoint.getShipaddressHistory<AuditHistory[]>(actionId));
     }
     shipviaHistory(actionId: number) {
-        return forkJoin(this.customerEndpoint.getShipviaHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.customerEndpoint.getShipviaHistory<AuditHistory[]>(actionId));
     }
     newShippingAdd(action: any) {
 
@@ -273,26 +274,26 @@ export class CustomerService {
     }
 
     getCustomerShipAddressGet(customerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCusHippingaddresdetails<any[]>(customerId));
     }
     getCustomerShipAddressGetWIthAddressId(customerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCusHippingaddresdetailswithid<any>(customerId));
     }
     getvendorShipAddressGetWIthAddressId(customerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getvenHippingaddresdetailswithid<any>(customerId));
     }
 
 
 
     BillviaHistory(actionId: number) {
-        return forkJoin(this.customerEndpoint.getBillviaHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.customerEndpoint.getBillviaHistory<AuditHistory[]>(actionId));
     }
 
     billaddressHistory(actionId: number) {
-        return forkJoin(this.customerEndpoint.getShipaddressHistory<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.customerEndpoint.getShipaddressHistory<AuditHistory[]>(actionId));
     }
     newAddCustomerContact(Customer: any) {
         return this.customerEndpoint.AddCustomerContactDetails<any>(Customer);
@@ -315,7 +316,7 @@ export class CustomerService {
         return this.customerEndpoint.postDomesticShipVia<any>(action);
     }
     getCustomerShipViaDetails(rowData) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomerShipViaDetails(rowData));
     }
     updateContactinfo(CustomerContact: any) {
@@ -330,7 +331,7 @@ export class CustomerService {
         return this.customerEndpoint.updateBillingViainfo(customerBilling, customerBilling.customerBillingId);
     }
     getContacts(CustomerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getContcatDetails<any>(CustomerId));
     }
 
@@ -352,24 +353,24 @@ export class CustomerService {
     //     return this.customerEndpoint.getDeleteCustomerBillingEndpoint(actionId);
     // }
     getContactsFirstName() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getContcatCompleteDetails<any>());
     }
     getCustomerBillViaDetails(rowData) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomerBillViaDetails(rowData));
     }
     historyAcion(actionId: number) {
-        return forkJoin(this.customerEndpoint.getHistoryCustomerEndpoint<AuditHistory[]>(actionId));
+        return Observable.forkJoin(this.customerEndpoint.getHistoryCustomerEndpoint<AuditHistory[]>(actionId));
 
 
     }
     getAddressDtails() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getAddressDeatails<any[]>());
     }
     getCustomerWarnings(CustomerId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomerwarnigs<any[]>(CustomerId));
     }
     saveCustomerwarnings(action: any) {
@@ -386,7 +387,7 @@ export class CustomerService {
 
 
     getDiscountList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getDiscountEndpoint<DiscountValue[]>());
     }
 
@@ -399,14 +400,14 @@ export class CustomerService {
         return this.customerEndpoint.getupdateDiscount(action, action.discountId);
     }
     getcustomerByNameList(name) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomerByname<any[]>(name));
     }
     saveAircraftinfo(data) {
         return this.customerEndpoint.saveAircraftinfo<any>(data);
     }
     getAircaftList(cusId: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getAircraftList<any[]>(cusId));
     }
     updateActionforActiveforBilling(customerBilling: any) {
@@ -426,12 +427,12 @@ export class CustomerService {
         return this.customerEndpoint.getIntegrationEndpoint<any[]>(customerId);
     }
     getDescriptionbypart(name) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getDescriptionbypart<any[]>(name));
     }
 
     getMarkUpList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getMarkUpEndpoint<MarkUpPercentage[]>());
     }
 
@@ -451,19 +452,19 @@ export class CustomerService {
     }
 
     getServerPages(serverSidePagesData: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.customerEndpoint.getCustomerRecords<Customer[]>(serverSidePagesData));
     }
 
 
     postCustomerAircrafts(data) {
-        return forkJoin(this.customerEndpoint.postCustomerAircraft<any>(data));
+        return Observable.forkJoin(this.customerEndpoint.postCustomerAircraft<any>(data));
     }
     postCustomerATAs(data) {
         return this.customerEndpoint.postCustomerATA(data);
     }
     postCustomerTaxTypeRate(data) {
-        return forkJoin(this.customerEndpoint.postCustomerTaxTypeRate<any>(data));
+        return Observable.forkJoin(this.customerEndpoint.postCustomerTaxTypeRate<any>(data));
     }
     updateCustomerTaxTypeRate(data) {
         return this.customerEndpoint.updateCustomerTaxTypeRate(data);

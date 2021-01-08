@@ -3,8 +3,6 @@ import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import { ISalesOrderCopyParameters } from "../models/isalesorder-copy-parameters";
 import { SalesOrderCopyParameters } from "../models/salesorder-copy-parameters";
 import { ActivatedRoute, NavigationExtras, Router } from "@angular/router";
-import { SalesOrderService } from "../../../../services/salesorder.service";
-import { ISalesOrderView } from "../../../../models/sales/ISalesOrderView";
 
 @Component({
   selector: "app-sales-order-copy",

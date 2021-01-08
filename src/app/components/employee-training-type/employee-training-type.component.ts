@@ -5,7 +5,7 @@ import { fadeInOut } from '../../services/animations';
 import { MasterComapnyService } from '../../services/mastercompany.service';
 import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
-//   
+// import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { getObjectByValue, validateRecordExistsOrNot, selectedValueValidate, editValueAssignByCondition, getObjectById } from '../../generic/autocomplete';
 import { Table } from 'primeng/table';
@@ -15,8 +15,8 @@ import {  listSearchFilterObjectCreation } from '../../generic/autocomplete';
 
 
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 

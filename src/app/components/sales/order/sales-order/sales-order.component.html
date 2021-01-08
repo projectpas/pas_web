@@ -39,7 +39,8 @@
           <div class="col">
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
-              (click)="dt.exportCSV()"></button>
+              data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
+              data-target="#downloadConfirmation"></button>
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
               (click)="dt.exportCSV({ selectionOnly: true })"></button>
@@ -112,6 +113,13 @@
         <label id="footer" class="footer1">Pages Count:</label>
         <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText type="text" />
       </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+          <td colspan="11" style="color: red; font-weight: bold; text-align: center">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
     </p-table>
   </div>
 </div>
@@ -154,6 +162,28 @@
       <div></div>
       <div></div>
       <div></div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" (click)="closePopupModal()">&times;</button>
+        <h4 class="modal-title">Are You Sure Want to Download?</h4>
+      </div>
+      <div class="modal-body" *ngIf="targetData && !selectedOnly">
+        <strong>
+          <span>
+            You are attempting to export {{targetData.totalRecords}} of records.
+          </span>
+        </strong>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary"
+          (click)="(selectedOnly) ? targetData.exportCSV({ selectionOnly: true }) : exportCSV(targetData); closePopupModal();">Confirm</button>
+        <button type="button" class="btn btn-danger" (click)="closePopupModal()">Cancel</button>
+      </div>
     </div>
   </div>
 </div>

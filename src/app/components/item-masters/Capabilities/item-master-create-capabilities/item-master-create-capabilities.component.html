@@ -22,16 +22,13 @@
 				
 				</div>
 			  </div>
-			
-			  
 			  <div class="col-md-2">
 				<button
 				  style="margin-top: 20px;"
 				  type="button"
 				  class="btn btn-primary"
 				  [disabled]="!addCapesForm.valid"
-				  (click)="mapAircraftInformation(); "
-				>
+				  (click)="mapAircraftInformation(); ">
 				  Add
 				</button>
 			  </div>
@@ -46,8 +43,7 @@
 				[resizableColumns]="true"
 				[columns]="selectedColums"
 				[style]="{ width: '100%' }"
-				[paginator]="false"
-			  >
+				[paginator]="false">
 			  	<ng-template pTemplate="colgroup" let-columns>
 					<colgroup>
 						<col style="width: 120px;">
@@ -71,8 +67,7 @@
 				  pTemplate="body"
 				  let-row_no="rowIndex"
 				  let-rowData
-				  let-columns="columns"
-				>
+				  let-columns="columns">
 				<ng-container> <!--*ngFor="let rowData of aircraftData; let row_no = index;"-->
 				  <tr>            
 					<td >{{ rowData.capailityTypeName }}</td>
@@ -87,8 +82,7 @@
 					  (onChange)="selectedLegalEntity($event.value, row_no)"
 					  [(ngModel)]="rowData.companyId"
 					  filter="true" [resetFilterOnHide]="true"
-					  [required]="true"
-					>
+					  [required]="true">
 					</p-dropdown>
 					</td>
 					<td style="width: 120px;">
@@ -101,8 +95,7 @@
 					  class="p-dropdown-custom-sm"
 					  (onChange)="selectedBusinessUnit($event.value, row_no)"
 					  [(ngModel)]="rowData.buId"
-					  filter="true" [resetFilterOnHide]="true"
-					>
+					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
 					<td style="width: 120px;">
@@ -115,8 +108,7 @@
 					  class="p-dropdown-custom-sm"
 					  (onChange)="selectedDivision($event.value, row_no)"
 					  [(ngModel)]="rowData.divisionId"
-					  filter="true" [resetFilterOnHide]="true"
-					>
+					  filter="true" [resetFilterOnHide]="true">
 					</p-dropdown>
 					</td>
 					<td style="width: 120px;">
@@ -147,11 +139,9 @@
 					  <p-checkbox
 					  	class="pcheckbox-cstm"
 						name="isverified{{row_no}}"
-						binary="false"
-						
+						binary="false"						
 						[(ngModel)]="rowData.isVerified"
-						(onChange)="resetVerified(rowData, $event)"
-					
+						(onChange)="resetVerified(rowData, $event)"					
 					  ></p-checkbox>
 					</td>
 					<td style="width: 130px;">
@@ -160,7 +150,7 @@
 						[options]="employeeList"
 						placeholder="Select"
 						appendTo='body' [baseZIndex]="9999"
-						[disabled]="!rowData.isVerified"
+						[disabled]="rowData.isVerified"
 						[required]="rowData.isVerified"
 						name="employeeList{{row_no}}"
 						[(ngModel)]="rowData.verifiedById"
@@ -184,15 +174,14 @@
 						style="margin-left:10px" 
 						[matTooltip]="parsedText(rowData.memo)" (ngModelChange)="enableSave()" class="text_editor_box" disabled></div>
 				   <i class="fa fa-pencil pull-right" 
-				   style="margin-top:-16px; margin-right:30px"
+				   style="margin-top:-16px; margin-right:30px;color: #337ab7"
+				  
 					  data-toggle="modal"
 					  data-target="#capes-memo" matTooltip="Memo"
 					  matTooltipPosition="above"
 					  (click)="onAddTextAreaInfo('memo',row_no); isAdd = true;"
-					  ></i>
-					  
-					</td>  
-					
+					  ></i>					  
+					</td>  					
 				  </tr></ng-container>
 				</ng-template>
 			  </p-table>

@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class StocklineAdjustmentReasonEndpoint extends EndpointFactory {
     private readonly _actionsUrl: string = "/api/StockLineAdjustmentReason/GetAll";
@@ -22,41 +22,41 @@ export class StocklineAdjustmentReasonEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
     getStockLineAdjustmentReasonEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getStockLineAdjustmentReasonEndpoint());
-            }));
+            });
     }
     getNewStocklineAdjReasonEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._stockLineAdjustmentReasonNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._stockLineAdjustmentReasonNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewStocklineAdjReasonEndpoint(userObject));
-            }));
+            });
     }
     getUpdateStocklineAdjReasonEndpoint<T>(roleObject: any, adjustmentReasonId: number): Observable<T> {
         let endpointUrl = `${this._stockLineAdjustmentReasonNew}/${adjustmentReasonId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateStocklineAdjReasonEndpoint(roleObject, adjustmentReasonId));
-            }));
+            });
     }
     getDeleteStocklineAdjustmentReasonEndpoint<T>(iD: number): Observable<T> {
          let endpointUrl = `${this._stockLineAdjustmentReasonDelete}/${iD}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteStocklineAdjustmentReasonEndpoint(iD));
-            }));
+            });
     }
     getStockAdjReasonAudit<T>(iD: number): Observable<T> {
         let endpointUrl = `${this.getstockAdjReasonById}/${iD}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getStockAdjReasonAudit(iD));
-            }));
+            });
     }
 
     stockLineAdjustmentCustomUpload(file) {

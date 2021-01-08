@@ -1,8 +1,8 @@
 ﻿import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog, SELECT_MULTIPLE_PANEL_PADDING_X } from '@angular/material';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { DOCUMENT, DatePipe } from '@angular/common';
-  
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../../models/mastercompany.model';
 import { AuditHistory } from '../../../models/audithistory.model';
 import { AuthService } from '../../../services/auth.service';
@@ -58,7 +58,7 @@ import { AssetAcquisitionTypeService } from "../../../services/asset-acquisition
 import * as $ from 'jquery';
 import * as moment from 'moment';
 import { ConditionService } from '../../../services/condition.service';
-
+// import { e } from '@angular/core/src/render3';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
 
 @Component({
@@ -81,6 +81,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     disable1: boolean = true;
     disabled: boolean = false;
     disableSave: boolean;
+    selectedOnly: boolean = false;
+    targetData: any;
     view: boolean = false;
     unitofmeasureValue: any[];
     disableIntegrationSave: boolean;
@@ -424,10 +426,15 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     conditionList: any;
     revisedPartNumbersList: any = [];
     formData = new FormData();
+    @ViewChild("exportInformatiom",{static:false}) formdataexport : any;
+    @ViewChild("addItemMasterStockForm",{static:false}) formdataexportinfo : any;
+    stopmulticlicks: boolean;
     allUploadedDocumentsList: any = [];
     documentDeleted: boolean;
     allSites: any[] = [];
     wareHouseData: any[] = [];
+    currentstatus: string = 'Active';
+    currentDeletedstatus:boolean=false;
     locationData: any[] = [];
     shelfData: any[] = [];
     binData: any[] = [];
@@ -466,6 +473,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     itemClassificationId: any;
     canAddAircraft: boolean = false;
     @ViewChild('fileUploadInput',{static:false}) fileUploadInput: any;
+    disableSaveMemo: boolean = true;
 
     pageSize: number = 10;
     sourceViewforDocumentListColumns = [
@@ -524,6 +532,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     schematicAttachModuleId: number;
     currentDate: Date = new Date();
     updateBtn : any= true;
+    arrayItemMasterlist:any[] = [];
+    allPartnumbersList: any = [];
+    arrayManufacturelist:any[] = [];
 
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
@@ -625,7 +636,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     showAdvancedSearchCard: boolean = false;
     showAdvancedSearchCardAtaChapter: boolean = false;
 
-
     ngOnInit(): void {
         this.globalDateFormat = DBkeys.GLOBAL_DATE_FORMAT;
         this.defaultRotableId = DBkeys.DEFAULT_ROTABLE_ID;
@@ -647,6 +657,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         ];
 
         this.atasub = [
+            { field: 'partNumber', header: 'Part Number' },
+            { field: 'partDescription', header: 'Part Description' },
             { field: 'ataChapterName', header: 'ATA Chapter' },
             { field: 'ataSubChapterDescription', header: 'ATA Sub-Chapter' },
 
@@ -656,7 +668,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             { field: 'updatedBy', header: 'Updated By' },
         ];
         this.ataSubSelectedCols = this.atasub;
-
+            
         this.manufacturerdata();
         this.getItemTypesList();
         this.itemclass();
@@ -669,24 +681,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.loadSiteData();
         this.getAcquisitionTypeList();
         this.getItemTypeList();
-        //this.getAttachmentModuleIdByName();
 
         //---------Need to CommentS all this-----------------
-        //this.getDefaultCurrency();
-        //this.aircraftManfacturerData();
-        //this.CurrencyData();
-        //this.Purchaseunitofmeasure();
-        //this.getAircraftModelsData();        
-        //this.countrylist();
-        //this.getAllATAChapter();
-        //this.getAllSubChapters();
-        //this.getCapabilityType();
-        //this.getConditionsList();
-        //this.getConditionListAll();
-        //this.getUOMListAll();
-        //this.getCurrencyListAll();       
-        //this.getDiscountTableData();
-        //this.getPercentTableData();
         this.getItemMasterPurchaseSaleMaster();        
         this.getAttachmentModuleIdByName();
         //---------Need to CommentS all this-----------------
@@ -723,6 +719,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 		  ? this.authService.currentUser.masterCompanyId
 		  : null;
     }
+    
     get currentUserLegalEntityId(): number {
 		return this.authService.currentUser
 		  ? this.authService.currentUser.legalEntityId
@@ -799,6 +796,35 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             }
         }
     }
+    closeDeleteModal() {
+		$("#downloadAircraftConfirmation").modal("hide");
+    }
+    closeAtaDownloadModal(){
+        $("#downloadAtaConfirmation").modal("hide");
+
+    }
+
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
+    }
+
+    exportAtaCSV(ataDataTable){
+        ataDataTable._value = ataDataTable._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        ataDataTable.exportCSV();
+    }
 
     //Gneral Infor - Get Acquisition Types List
     getAcquisitionTypeList() {
@@ -851,9 +877,15 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             const responseDataOfEdit = res[0];
             this.isItemMasterCreateGeneralInfoEditMode = true;
             this.isDisabledSteps = true;
+            
+            this.arrayItemMasterlist.push(responseDataOfEdit.revisedPartId);
+            this.arrayItemMasterlist.push(this.sourceItemMaster.isOemPNId);
+
+            this.getEditDataForPN(responseDataOfEdit.revisedPartId, responseDataOfEdit.isOemPNId);
+
             this.sourceItemMaster = {
                 ...responseDataOfEdit,
-                revisedPartId: getObjectById('itemMasterId', responseDataOfEdit.revisedPartId, this.allPartnumbersInfo),
+                //revisedPartId: getObjectById('itemMasterId', responseDataOfEdit.revisedPartId, this.allPartnumbersInfo),
                 isOEM: responseDataOfEdit.isOEM.toString()
             };
             this.selectedPartNumber = this.sourceItemMaster.partNumber;
@@ -870,8 +902,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             if (this.sourceItemMaster.shelfId) {
                 this.shelfValueChange()
             }
+
             this.sourceItemMaster.expirationDate = this.sourceItemMaster.expirationDate ? new Date(this.sourceItemMaster.expirationDate) : null;
-            this.sourceItemMaster.isOemPNId = getObjectById('value', this.sourceItemMaster.isOemPNId, this.oempnCollection);
+            //this.sourceItemMaster.isOemPNId = getObjectById('value', this.sourceItemMaster.isOemPNId, this.oempnCollection);
             this.selectedIntegrationTypes = this.sourceItemMaster.integrationPortalIds;
             this.ItemMasterId = this.itemMasterId;
             // assign the header values
@@ -1240,7 +1273,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         return this.capabilitiesForm.get('exchangeForm') as FormArray;
     }
 
-
     // get All Aircraft 
     private aircraftManfacturerData() {
         this.isSpinnerVisible = true;
@@ -1259,7 +1291,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     onChangeUnitPurchasePriceCurrency(field){
         field.SP_FSP_CurrencyId = field.PP_CurrencyId 
     }
-
 
     markupListPrice() {
         this.markupListPriceValue = true;
@@ -1312,7 +1343,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.getATAMappedDataByItemMasterId();
     }
 
-
     private onAircarftmodelloadsuccessfull(allWorkFlows: any[]) {
         for (let i = 0; i < allWorkFlows.length; i++) {
             allWorkFlows[i].checkbox = true;
@@ -1329,10 +1359,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.isDeleteMode = false;
             this.isEditMode = false;
             this.isEnabeCapes = true;
-
         }
     }
-
 
     alterPnHandler(event) {
         if (event.target.value != "") {
@@ -1389,16 +1417,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     nonStock() {
         this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-non-stock');
     }
-    //equipment() {
-    //    this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-equipment');
-    //}
-    //exchange() {
-    //    this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-exchange');
-    //}
-    //loan() {
-    //    this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-loan');
-    //}
-
 
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
@@ -1416,7 +1434,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
          })
     }
 
-
     private onDataLoadSuccessful(allWorkFlows: ItemClassificationModel[]) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
@@ -1430,20 +1447,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         })
     }
 
-    private manufacturerdata() {
-   
-        this.commonService.smartDropDownWithStatusList('Manufacturer', 'manufacturerId', 'name', 20, 1, 0).subscribe(res => {
+    manufacturerdata() {
+        if(this.arrayManufacturelist.length == 0) {			
+            this.arrayManufacturelist.push(0); }
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'manufacturerId', 'name', '', false, 0, this.arrayManufacturelist.join()).subscribe(res => {
             this.allManufacturerInfo = res;
-            
-        })
-    }
-
-
-    private onmanufacturerSuccessful(allWorkFlows: any[]) {
-
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.allManufacturerInfo = allWorkFlows;
+        });
     }
 
     aircraftModalChange(event, capData) {
@@ -1579,8 +1588,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
 
-
-
     private ptnumberlistdata() {
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
@@ -1591,9 +1598,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         )
     }
 
-
     private onptnmbersSuccessful(allWorkFlows: any[]) {
-
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
 
@@ -1625,8 +1630,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.allpnNumbers = this.allPartnumbersInfo;
     }
 
-
-
     private Purchaseunitofmeasure() {
         this.commonService.smartDropDownWithStatusList('UnitOfMeasure', 'unitOfMeasureId', 'shortname', '', 1, 0).subscribe(res => {
             this.allPurchaseUnitOfMeasureinfo = res;
@@ -1640,20 +1643,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     }
 
-    private onDataPurchaseunitSuccessful(getUnitOfMeasureList: any) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.allPurchaseUnitOfMeasureinfo = getUnitOfMeasureList;
-    }
-
-
-
     unitmeasure(content) {
 
         this.isEditMode = false;
         this.isDeleteMode = false;
         this.isSaving = true;
-        // this.loadMasterCompanies();
         this.sourceUOM = new UnitOfMeasure();
         this.sourceUOM.isActive = true;
         this.unitName = "";
@@ -1678,14 +1672,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     }
 
-
     private priorityData() {
         this.commonService.smartDropDownWithStatusList('Priority', 'priorityId', 'description', '', 1, 0).subscribe(res => {
-            this.allPriorityInfo = res;
-            
+            this.allPriorityInfo = res;            
         })
     }
-
 
      itemgroup(type) {
         this.commonService.smartDropDownWithStatusList('ItemGroup', 'itemGroupId', 'description', 10, 1, 0).subscribe(res => {
@@ -1694,56 +1685,17 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         })
     }
 
-
-    private onprioritySuccessful(getPriorityList: Priority[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.allPriorityInfo = getPriorityList;
-    }
-
-    private provisiondata() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-        this.proService.getProvisionList().subscribe(
-            results => this.onprodataSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-    }
-
-    private onprodataSuccessful(getProvisionList: Provision[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-
-        if (getProvisionList != null) {
-            for (let i = 0; i < getProvisionList.length; i++) {
-                if (getProvisionList[i].isActive === true) {
-                    this.allProvisonInfo.push(getProvisionList[i]);
-                }
-            }
-        }
-    }
-
-
-    private onDataitemSuccessful(allWorkFlows: Itemgroup[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.allitemgroupobjInfo = allWorkFlows;
-    }
-
     private onDataLoadFailed(error: any) {
         this.isSpinnerVisible = false;
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
-
     }
 
     openCapes(content) {
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
-
     saverange(selectedRow) {
-
         let ischange = false;
         if (this.selectedModels.length > 0) {
             this.selectedModels.map((row) => {
@@ -1789,8 +1741,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.modal = this.modalService.open(content, { size: 'sm' });
     }
 
-
-
     item(content) {
         this.isEditMode = false;
         this.isDeleteMode = false;
@@ -1800,7 +1750,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.itemGroupName = "";
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-
 
     waning(content) {
         this.isEditMode = false;
@@ -1891,8 +1840,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
 
     partnmId(event) {
-        if (this.itemclaColl) {
-           
+        if (this.itemclaColl) {           
             for(let i=0; i<this.partCollection.length; i++){
                 if(event == this.partCollection[i] && event != this.selectedPartNumber){
                     this.disableSavepartNumber = true;
@@ -2003,8 +1951,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
 
-
-
     itemGroupCode(event) {
         if (this.allitemgroupobjInfo) {
             for (let i = 0; i < this.allitemgroupobjInfo.length; i++) {
@@ -2013,11 +1959,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     this.disableSaveItemGroup = true;
                     this.selectedItemGroup = event;
                 }
-
             }
         }
     }
-
 
     Manufacturerdescription(event) {
         if (this.allManufacturerInfo) {
@@ -2036,14 +1980,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             if (this.selectedATAChapter) {
                 if (value == this.selectedATAChapter.toLowerCase()) {
                     this.disableSaveATAChapter = true;
-
                 }
                 else {
                     this.disableSaveATAChapter = false;
 
                 }
             }
-
         }
     }
 
@@ -2053,14 +1995,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             if (this.selectedPriority) {
                 if (value == this.selectedPriority.toLowerCase()) {
                     this.disableSavePriority = true;
-
                 }
                 else {
                     this.disableSavePriority = false;
-
                 }
             }
-
         }
     }
 
@@ -2072,15 +2011,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 if (event == this.allPriorityInfo[i].description) {
                     this.sourceItemMaster.description = this.allPriorityInfo[i].description;
                     this.disableSavePriority = true;
-
                     this.selectedPriority = event;
                 }
-
             }
         }
     }
-
-
 
     PurchaseUOMHandler(event) {
         if (event.target.value != "") {
@@ -2088,21 +2023,15 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             if (this.selectedPurchaseUOM) {
                 if (value == this.selectedPurchaseUOM.toLowerCase()) {
                     this.disableSavePurchaseUOM = true;
-
                 }
                 else {
                     this.disableSavePurchaseUOM = false;
-
                 }
             }
-
         }
     }
 
-
-
     PurchaseUOMdescription(event) {
-
         if (this.allPurchaseUnitOfMeasureinfo) {
 
             for (let i = 0; i < this.allPurchaseUnitOfMeasureinfo.length; i++) {
@@ -2116,26 +2045,20 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
 
-
-
     StockUOMHandler(event) {
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
             if (this.selectedStockUOM) {
                 if (value == this.selectedStockUOM.toLowerCase()) {
                     this.disableSaveStockUOM = true;
-
                 }
                 else {
                     this.disableSaveStockUOM = false;
-
                 }
             }
 
         }
     }
-
-
 
     StockUOMdescription(event) {
         if (this.allStockUnitOfMeasureinfo) {
@@ -2155,14 +2078,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             if (this.selectedConsume) {
                 if (value == this.selectedConsume.toLowerCase()) {
                     this.disableSaveConsume = true;
-
                 }
                 else {
                     this.disableSaveConsume = false;
-
                 }
             }
-
         }
     }
 
@@ -3841,8 +3761,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                             createdBy: x.createdBy,
                             createdDate: x.createdDate,
                             updatedDate: x.updatedDate,
-                            updatedBy: x.updatedBy
-                            //ataSubChapterDescription: x.ataSubChapterId ? getValueFromArrayOfObjectById('ataSubChapterCode', 'ataSubChapterId', x.ataSubChapterId, this.orginalAtaSubChapterValues) + ' - ' + x.ataSubChapterDescription : ''
+                            updatedBy: x.updatedBy,
+                            partNumber: x.partNumber,
+                            partDescription: x.partDescription,
                         }
                     })}
             })
@@ -4331,7 +4252,16 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     }
     navigateToAddNewItemMaster(content){
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        
+        if (!this.formdataexport.form.dirty) {
+            this.redirectToAddNewItemMaster();
+        }
+        else
+        {
+            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+            //let content = this.tabRedirectConfirmationModal;
+            //this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        }
     }
 
     selectedOEM(value) {
@@ -4347,8 +4277,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.disableAircraftSaveForEdit=false;
     }
 
-    saveItemMasterGeneralInformation(addCustomerWorkForm) {
-        this.listOfErrors = pulloutRequiredFieldsOfForm(addCustomerWorkForm);
+    saveItemMasterGeneralInformation(addItemMasterStockForm) {
+        this.listOfErrors = pulloutRequiredFieldsOfForm(addItemMasterStockForm);
         if (this.listOfErrors.length > 0) {
 
             this.display = true;
@@ -4356,17 +4286,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             return false;
 
         } else {
-
             this.isSaving = true;
             if (!this.isItemMasterCreated) //for create ItemMaster
-
             {
                 this.oemPnData = this.sourceItemMaster.isOemPNId;
                 this.sourceItemMaster.createdBy = this.userName;
                 this.sourceItemMaster.updatedBy = this.userName;
                 this.sourceItemMaster.masterCompanyId = this.currentUserMasterCompanyId;
                 this.sourceItemMaster.itemTypeId = this.currentItemTypeId;
-
 
                 if (this.selectedIntegrationTypes != null) {
 
@@ -4405,15 +4332,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     reorderQuantiy: this.sourceItemMaster.reorderQuantiy === undefined || this.sourceItemMaster.reorderQuantiy === null ? 0 : this.sourceItemMaster.reorderQuantiy,
                     minimumOrderQuantity: this.sourceItemMaster.minimumOrderQuantity === undefined || this.sourceItemMaster.minimumOrderQuantity === null ? 0 : this.sourceItemMaster.minimumOrderQuantity,
 
-
-                    isOemPNId: editValueAssignByCondition('value', this.sourceItemMaster.isOemPNId),
+                    isOemPNId: editValueAssignByCondition('itemMasterId', this.sourceItemMaster.isOemPNId),
                     expirationDate: this.sourceItemMaster.expirationDate ? this.datePipe.transform(this.sourceItemMaster.expirationDate, "MM/dd/yyyy") : null,
                 }
-                this.itemser.newItemMaster(itemMasterData).subscribe(data => {
-
-                  
-                    if (data != null) {
-                        
+                this.itemser.newItemMaster(itemMasterData).subscribe(data => {                  
+                    if (data != null) {                        
                         this.ItemMasterId = data.itemMasterId;
                         this.itemMasterId = this.ItemMasterId;
                         this.router.navigateByUrl(`/itemmastersmodule/itemmasterpages/app-item-master-stock/edit/${this.itemMasterId}`);
@@ -4429,15 +4352,12 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     this.collectionofItemMaster = data;
                     this.savesuccessCompleted(this.sourceItemMaster);                  
                     this.moveAircraftInformation();
-
                 })
                 this.isDisabledSteps = true;
                 this.isItemMasterCreateGeneralInfoEditMode = true;
             }
             else if (this.isItemMasterCreated || this.itemMasterId) //for Edit Screen
-
             {
-
                 const itemMasterId = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
                 // takes copy of current object to reassign to UI after submit data only on create edit Method
 
@@ -4454,7 +4374,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
                 if (this.sourceItemMaster.isOEM == 'false') {
                     // checks whether the Change of Data is Happened or not if not and its is in edit mode binds the old data id if not edit and no change it will get the old create oemPnID
-                    this.sourceItemMaster.isOemPNId = this.tempOEMpartNumberId === null ? this.isEdit === true ? this.sourceItemMaster.isOemPNId.value : this.oemPnData.value : this.tempOEMpartNumberId;
+                    //this.sourceItemMaster.isOemPNId = this.tempOEMpartNumberId === null ? this.isEdit === true ? this.sourceItemMaster.isOemPNId.itemMasterId : this.oemPnData.itemMasterId : this.tempOEMpartNumberId;
                 }
 
                 this.sourceItemMaster.itemMasterId = itemMasterId;
@@ -4490,44 +4410,22 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     minimumOrderQuantity: this.sourceItemMaster.minimumOrderQuantity === undefined || this.sourceItemMaster.minimumOrderQuantity === null ? 0 : this.sourceItemMaster.minimumOrderQuantity,
 
                     revisedPartId: editValueAssignByCondition('itemMasterId', this.sourceItemMaster.revisedPartId),
+                    isOemPNId: editValueAssignByCondition('itemMasterId', this.sourceItemMaster.isOemPNId),
                     expirationDate: this.sourceItemMaster.expirationDate ? this.datePipe.transform(this.sourceItemMaster.expirationDate, "MM/dd/yyyy") : null,
                 }
                 // Destructing the Object in Services Place Apply Changes there also 
-                this.itemser.updateItemMaster(itemMasterData).subscribe(data => {
-                    
+                this.itemser.updateItemMaster(itemMasterData).subscribe(data => {                    
                     this.sourceItemMaster.isOemPNId = this.oemPnData;
                     this.tempOEMpartNumberId = null;
-                    // this.changeOfTab('AircraftInfo');
                     this.collectionofItemMaster = data;
                     this.getItemMasterDetailsById();
-                    // this.saveCompleted(this.sourceItemMaster);
                     if (data != null) {
                         if (data.partId && data.itemMasterId) {
-                            // if (this.manfacturerAircraftmodelsarray.length >= 0) {
-                            //     this.savemfginfo(data.partId, data.itemMasterId, this.manfacturerAircraftmodelsarray);
-                            // }
-                            // if (this.distributionAircraftmodelsarray.length >= 0) {
-                            //     this.saveDistrbution(data.partId, data.itemMasterId, this.distributionAircraftmodelsarray);
-                            // }
-
-                            // if (this.overhaulAircraftmodelsarray.length >= 0) {
-                            //     this.saveovhinfo(data.partId, data.itemMasterId, this.overhaulAircraftmodelsarray);
-                            // }
-                            // if (this.repairAircraftmodelsarray.length >= 0) {
-                            //     this.saverepairinfo(data.partId, data.itemMasterId, this.repairAircraftmodelsarray);
-                            // }
-                            // if (this.certificationarrayAircraftmodelsarray.length >= 0) {
-                            //     this.savecertification(data.partId, data.itemMasterId, this.certificationarrayAircraftmodelsarray);
-                            // }
-                            // if (this.exchangeAircraftmodelsarray.length >= 0) {
-                            //     this.saveexcahneginfo(data.partId, data.itemMasterId, this.exchangeAircraftmodelsarray);
-                            // }
                             if (this.selectedModels.length > 0) {
                                 this.saveAircraftmodelinfo(data.partId, data.itemMasterId, this.selectedModels);
                             }
                         }
-                        this.onUploadDocumentListNew();
-                        
+                        this.onUploadDocumentListNew();                        
                     }
                     this.isSaving = false;
                     this.isEditMode = true;
@@ -4620,28 +4518,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.manufacturerName = " "
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-    saveManufacturer() {
-        this.isSaving = true;
-        if (this.isEditMode == false) {
-            this.sourceAction.updatedBy = this.userName;
-            this.sourceAction.Name = this.sourcemanufacturer.name;
-            this.sourceAction.createdBy = this.userName;
-            this.sourceAction.masterCompanyId = this.currentUserMasterCompanyId;
-            this.itemser.savemanufacutrer(this.sourceAction).subscribe(
-                data => {
-                    this.alertService.showMessage(
-                        'Success',
-                        `Saved Manufacturer Successfully `,
-                        MessageSeverity.success
-                    );
-                    this.sourceItemMaster.manufacturerId = data.manufacturerId;
-                    this.manufacturerdata()
-                })
-        }
-
-        this.modal.close();
-    }
-
 
     // Provision --- Save
     provisionope(content) {
@@ -4707,10 +4583,61 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }
     }
 
+    filterpn(event) {        
+        if (event.query !== undefined && event.query !== null) {
+			this.loadOemPnPartNumData(event.query);            
+    	}       
+    }
+
+    getEditDataForPN(editRevisedPartId = 0, editIsOemPNId = 0) {
+		if(this.arrayItemMasterlist.length == 0) {			
+            this.arrayItemMasterlist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partNumber', '', true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+			this.allPartnumbersList = response.map(x => {
+                return {
+                    partNumber: x.label, itemMasterId: x.value 
+                }
+            })
+            
+            this.sourceItemMaster = {
+                ...this.sourceItemMaster,
+                revisedPartId : getObjectById('itemMasterId', editRevisedPartId, this.allPartnumbersInfo),
+                isOemPNId : getObjectById('itemMasterId', editIsOemPNId, this.allPartnumbersInfo)
+            }
+
+		}, error => this.saveFailedHelper(error));
+	}
+
+    loadOemPnPartNumData(strText = '') {
+		if(this.arrayItemMasterlist.length == 0) {			
+            this.arrayItemMasterlist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partNumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+			this.allPartnumbersList = response.map(x => {
+                return {
+                    partNumber: x.label, itemMasterId: x.value 
+                }
+			})
+
+			const revisedPartId = this.sourceItemMaster.revisedPartId ? editValueAssignByCondition('itemMasterId', this.sourceItemMaster.revisedPartId) : 0;
+        	this.oempnList = [];
+
+			const oemList = [...this.allPartnumbersList.filter(x => {
+                return x.partNumber.toLowerCase().includes(strText.toLowerCase())
+            })]
+        
+			for (let i = 0; i < oemList.length; i++) {
+				if(oemList[i].partNumber != this.selectedPartNumber && oemList[i].itemMasterId != revisedPartId){
+					this.oempnList.push(oemList[i]);
+				}                
+			};        
+
+		}, error => this.saveFailedHelper(error));
+	}
 
     filterpartItems(event) {
-        this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'PartNumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
-            
+        if(this.arrayItemMasterlist.length == 0) {			
+            this.arrayItemMasterlist.push(0); }
+        this.commonService.autoSuggestionSmartDropDownList('MasterParts', 'MasterPartId', 'PartNumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH, this.arrayItemMasterlist.join()).subscribe(res => {
             this.itemclaColl = [];
             this.partCollection = [];
             for (let i = 0; i < res.length; i++) {
@@ -4718,24 +4645,36 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 this.itemclaColl.push(res[i].label);
             };
         });
-      
     }
 
-    filterpn(event) {
+    // loadOemPnPartNumDataold(strText = '') {
+	// 	if(this.arrayItemMasterlist.length == 0) {			
+    //         this.arrayItemMasterlist.push(0); }
+	// 	this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+	// 		this.allPartnumbersList = response.map(x => {
+    //             return {
+    //                 partnumber: x.label, itemMasterId: x.value 
+    //             }
+	// 		})
+	// 		this.partNumbersCollection = this.allPartnumbersList;
+	// 	}, error => this.saveFailedHelper(error));
+	// }
+
+
+    filterpnOld(event) {
         const revisedPartId = this.sourceItemMaster.revisedPartId ? editValueAssignByCondition('itemMasterId', this.sourceItemMaster.revisedPartId) : 0;
         this.oempnList = [];
-        if (event.query !== undefined && event.query !== null) {
-            const oemList = [...this.oempnCollection.filter(x => {
-                return x.label.toLowerCase().includes(event.query.toLowerCase())
-            })]
-        
-        for (let i = 0; i < oemList.length; i++) {
-            if(oemList[i].partNumber != this.selectedPartNumber && oemList[i].value != revisedPartId){
-                this.oempnList.push(oemList[i]);
-            }                
-        };        
-    }
-       
+            if (event.query !== undefined && event.query !== null) {
+                const oemList = [...this.oempnCollection.filter(x => {
+                    return x.label.toLowerCase().includes(event.query.toLowerCase())
+                })]
+            
+            for (let i = 0; i < oemList.length; i++) {
+                if(oemList[i].partNumber != this.selectedPartNumber && oemList[i].value != revisedPartId){
+                    this.oempnList.push(oemList[i]);
+                }                
+            };        
+        }       
     }
 
 
@@ -4751,8 +4690,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     }
 
     filterRevisedPart(event) {
-       
-        
         this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'partnumber', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {                    
             this.revisedPartNumCollection = [];
             for (let i = 0; i < res.length; i++) {
@@ -5637,9 +5574,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.sourceItemMaster.isOemPNId = undefined;
     }
 
-    onAddTextAreaInfo(value) {
+    onAddTextAreaInfo(value) {    
+         
 		if(value == 'memo') {
-			this.textAreaLabel = 'Memo';
+            this.textAreaLabel = 'Memo';   
+            this.disableSaveMemo = true;            
 			this.textAreaInfo = this.sourceItemMaster.memo;
 		}
 	}
@@ -5733,6 +5672,10 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         }else{
             this.disableDocSave = true; 
         }
+    }
+
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
     }
 
     addDocumentInformation(type, documentInformation) {
@@ -5960,8 +5903,25 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
 
     nextOrPreviousClick(nextOrPrevious) {
         this.nextOrPreviousTab = nextOrPrevious;
-        let content = this.tabRedirectConfirmationModal;
-    this.modal = this.modalService.open(content, { size: "sm" });
+        if (this.formdataexportinfo.form.dirty) {
+            let content = this.tabRedirectConfirmationModal;
+            this.modal = this.modalService.open(content, { size: 'sm' });
+        }
+        else {
+            //this.formdataexportinfo.reset();
+            this.stopmulticlicks = true;
+            if(this.nextOrPreviousTab == "Next"){
+                if(this.activeMenuItem == 1) this.changeOfTab('AircraftInfo');
+                if(this.activeMenuItem == 5) this.changeOfTab('NhaTlaAlternateTab');
+            }
+            if(this.nextOrPreviousTab == "Previous"){
+                if(this.activeMenuItem == 5) this.changeOfTab('Capes');
+                if(this.activeMenuItem == 8) this.changeOfTab('Exchange')
+            }
+            setTimeout(() => {
+                this.stopmulticlicks = false;
+            }, 500)
+        }
 
     }
     redirectToTab(){

@@ -5,10 +5,10 @@
 
 
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { AssetLocation } from '../../models/asset-location.model';
 import { AssetLocationEndpointService } from './asset-location-endpoint.service';
 
@@ -19,17 +19,17 @@ export class AssetLocationService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetLocationEndpoint.getAllAssets<any>());
     }
 
     getDeleted() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetLocationEndpoint.getAllAssets<any>());
     }
 
     getById(assetLocationId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.assetLocationEndpoint.getAssetById<AssetLocation>(assetLocationId)
         );
     }

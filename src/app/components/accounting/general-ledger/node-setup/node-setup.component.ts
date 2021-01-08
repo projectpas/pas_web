@@ -6,12 +6,14 @@ import { NodeSetupService } from "../../../../services/node-setup/node-setup.ser
 import { LegalEntityService } from "../../../../services/legalentity.service";
 import { GLAccountClassService } from "../../../../services/glaccountclass.service";
 import { Table } from 'primeng/table';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { AuthService } from "../../../../services/auth.service";
 import { SingleScreenBreadcrumbService } from "../../../../services/single-screens-breadcrumb.service";
 import { ConfigurationService } from "../../../../services/configuration.service";
 import { getObjectById, validateRecordExistsOrNot, selectedValueValidate } from "../../../../generic/autocomplete";
+import { CommonService } from "../../../../services/common.service";
+
 @Component({
     selector: 'app-node-setup',
     templateUrl: './node-setup.component.html',
@@ -36,6 +38,10 @@ export class NodeSetupComponent implements OnInit {
         { field: 'leafNodeCheck', header: 'Leaf Node' },
         { field: 'glAccountNodeType', header: 'Node Type' },
         { field: 'fsType', header: 'F/S Type' },
+        { field: 'createdBy', header: 'Created By' },
+        { field: 'createdDate', header: 'Created Date' },
+        { field: 'updatedBy', header: 'Updated By' },
+        { field: 'updatedDate', header: 'Updated Date' },
     ]
     selectedColumns = this.headers;
     formData = new FormData()
@@ -55,13 +61,14 @@ export class NodeSetupComponent implements OnInit {
         nodeName: "",
         description: "",
         selectedCompanysData: "",
+        shareWithEntityIds: [],
         parentNodeId: "",
         parentNodeName:"",
-        leafNodeCheck: "",
+        leafNodeCheck: 0,
         glAccountNodeType: "",
         fsType: "",
         masterCompanyId: 1,
-        isActive: true,
+        isActive: true,        
         isdelete: false,
     }
     addNew = { ...this.new };
@@ -102,6 +109,7 @@ export class NodeSetupComponent implements OnInit {
         public legalEntityService: LegalEntityService,
         private alertService: AlertService,
         private nodeSetupService: NodeSetupService,
+        private commonService: CommonService,  
         private authService: AuthService,
         public breadCrumb: SingleScreenBreadcrumbService) {
     }
@@ -111,8 +119,9 @@ export class NodeSetupComponent implements OnInit {
         this.setManagementDesctoList();
         this.currentNodeSetup = new GLAccountNodeSetup();
         this.loadGlAccountClassData();
+        this.loadEntityData('');
         this.getList();
-        this.loadLegalEntitydata();
+        this.loadLegalEntitydata('');
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-node-setup';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
     }
@@ -120,12 +129,18 @@ export class NodeSetupComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
     save() {
+        var LedgerName = "";
+        this.ledgerNameObjectData.forEach(element => {
+            if(element.value == this.addNew.ledgerName){
+               LedgerName = element.label;
+          }
+        });
+        this.addNew.ledgerName = LedgerName;
         const data = {
             ...this.addNew, createdBy: this.userName, updatedBy: this.userName, 
-
-        };
+        };        
         //const data = this.addNew 
-        const { selectedCompanysData, ...rest }: any = data;
+        const { ShareWithEntityIds, ...rest }: any = data;
         if (!this.isEdit) {
             this.nodeSetupService.add(rest).subscribe(() => {
                 this.resetForm();
@@ -199,7 +214,7 @@ export class NodeSetupComponent implements OnInit {
 
                             }
                         }
-                        console.log(companyCodes)
+                        //console.log(companyCodes)
 
                     })
                 }
@@ -210,13 +225,13 @@ export class NodeSetupComponent implements OnInit {
     }
 
     changePage(event: { first: any; rows: number }) {
-        console.log(event);
+        //console.log(event);
 
         this.pageSize = event.rows;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
     changeStatus(rowData) {
-        console.log(rowData);
+        //console.log(rowData);
         const { parentNodeName, ...rest }: any = rowData;
         this.nodeSetupService.update(rest).subscribe(() => {
             this.alertService.showMessage(
@@ -245,14 +260,14 @@ export class NodeSetupComponent implements OnInit {
         }
     }
     viewSelectedRow(rowData) {
-        console.log(rowData);
+        //console.log(rowData);
         this.viewRowData = rowData;
     }
 
     getAuditHistoryById(rowData) {
-    //    this.nodeSetupService.getHistory(rowData.GLAccountNodeId).subscribe(res => {
-    //        this.auditHistory = res;
-    //    })
+       this.nodeSetupService.getHistory(rowData.glAccountNodeId).subscribe(res => {           
+           this.auditHistory = res;
+       })
     }
 
     columnsChanges() {
@@ -278,12 +293,18 @@ export class NodeSetupComponent implements OnInit {
         this.isEdit = true;
         this.disableSaveGroupId = false;
         this.disableSaveForDescription = false;
+        var LedgerName = "";
+        this.ledgerNameObjectData.forEach(element => {            
+            if(element.label == rowData.ledgerName){               
+               LedgerName = element.value;
+          }
+        });
         this.addNew = {
             ...rowData,
             //parentNodeId: getObjectById('parenNodeId', rowData.parenNodeId, this.originalData.parentNode)
-        };
+        };       
         this.selectedRecordForEdit = { ...this.addNew }
-
+        this.addNew.ledgerName = LedgerName;
     }
 
     
@@ -327,7 +348,7 @@ export class NodeSetupComponent implements OnInit {
     }
     setManagementDesctoList() {
         this.nodeSetupService.getAll().subscribe(nodes => {
-            this.nodeSetupListData = nodes[0];
+            this.nodeSetupListData = nodes[0];            
             this.nodeSetupList = nodes[0];
             this.parentNodeList;
             for (let i = 0; i < this.nodeSetupList.length; i++) {
@@ -407,20 +428,60 @@ export class NodeSetupComponent implements OnInit {
         );
     }
 
-    private loadLegalEntitydata() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
+    // private loadLegalEntitydata() {
+    //     this.alertService.startLoadingMessage();
+    //     this.loadingIndicator = true;
 
-        this.legalEntityService.getLedgerNamesData().subscribe(
-            results => this.onloadLegalEntitydata(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
+    //     this.legalEntityService.getLedgerNamesData().subscribe(
+    //         results => this.onloadLegalEntitydata(results[0]),
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+    // private onloadLegalEntitydata(getAtaMainList: any[]) {
+    //     this.alertService.stopLoadingMessage();
+    //     this.loadingIndicator = false;
+    //     this.ledgerList = getAtaMainList;
+    // }
+
+    ledgerNameObjectData: any[];
+    setEditArray: any = [];
+    loadLegalEntitydata(value) {
+        this.setEditArray = [];
+        if (this.updateMode == true) {
+            this.setEditArray.push(this.addNew.ledgerName ? this.addNew.ledgerName: 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.ledgerNameObjectData = res;
+            }            
+        }, err => {
+            const errorLog = err;
+            //this.errorMessageHandler(errorLog);
+        });
     }
 
-    private onloadLegalEntitydata(getAtaMainList: any[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.ledgerList = getAtaMainList;
+    entitiesObj: any[];
+    glAccountObj: any = {};
+    loadEntityData(value) {
+        this.setEditArray = [];
+        if (this.updateMode == true) {
+            this.setEditArray.push(this.glAccountObj.shareWithEntityIds && this.glAccountObj.shareWithEntityIds.lenght > 0 ? this.glAccountObj.shareWithEntityIds : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+            if (res && res.length != 0) {
+                this.entitiesObj = res;                
+            }            
+        }, err => {
+                    const errorLog = err;
+                // this.errorMessageHandler(errorLog);
+       });        
     }
 
     private onManagemtntdataLoadDataList(getAtaMainList: any[]) {
@@ -431,7 +492,7 @@ export class NodeSetupComponent implements OnInit {
         for (let i = 0; i < this.allManagemtninfoData.length; i++) {
             if (this.allManagemtninfoData[i].parentId == null) {
                 this.maincompanylist.push(this.allManagemtninfoData[i]);
-                console.log(this.maincompanylist)
+                //console.log(this.maincompanylist)
             }
         }
 
@@ -461,8 +522,7 @@ export class NodeSetupComponent implements OnInit {
     onDataLoadGlDataSuccessful(glAccountClassList: any) {
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
-        this.allGLAccountClassData = glAccountClassList;
-        console.log(this.allGLAccountClassData);
+        this.allGLAccountClassData = glAccountClassList.columnData;        
     }
 
     addGLAccountNodeShareWithEntityMapper() {
@@ -511,7 +571,7 @@ export class NodeSetupComponent implements OnInit {
         this.currentNodeSetup.isActive = true;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-            console.log('When user closes');
+           // console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
     dismissModel() {
@@ -565,7 +625,7 @@ export class NodeSetupComponent implements OnInit {
         }
     }
 
-    ledgerSelect(event) {
+    ledgerSelect(event) {        
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
             if (this.selectedCodeName) {
@@ -579,9 +639,8 @@ export class NodeSetupComponent implements OnInit {
         }
     }
 
-    codeSelect(event) {
+    codeSelect(event) {        
         if (this.nodeSetupListData) {
-
             for (let i = 0; i < this.nodeSetupListData.length; i++) {
                 if (event == this.nodeSetupListData[i].nodeCode) {
                     this.currentNodeSetup.nodeCode = this.nodeSetupListData[i].nodeCode;
@@ -655,6 +714,18 @@ export class NodeSetupComponent implements OnInit {
             this.modal = this.modalService.open(viewContent, { size: 'lg', backdrop: 'static', keyboard: false });
         })
 
+    }
+
+    getColorCodeForHistory(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
     }
 
 

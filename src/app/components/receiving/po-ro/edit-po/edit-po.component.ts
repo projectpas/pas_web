@@ -55,6 +55,8 @@ export class EditPoComponent implements OnInit {
     rpoEditPF: boolean = true; //remove once add dynamic content
     rpoEditCF: boolean = true; //remove once add dynamic content
     memoNotes: string;
+    headerNotes:any;
+    headerMemo: any;
     purchaseOrderData: any = {};
     pageTitle: string = 'Edit Receieve PO';
     poStatus: any[];
@@ -341,6 +343,31 @@ export class EditPoComponent implements OnInit {
 			this.moduleListDropdown = res;
 		})
     }
+
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+
+    onAddNotes() {
+		this.headerNotes = this.purchaseOrderData.notes;
+	}
+	onSaveNotes() {
+		this.purchaseOrderData.notes = this.headerNotes;
+		
+	}
+
+    onAddMemo() {
+		this.headerMemo = this.purchaseOrderData.memo;
+	}
+	onSaveMemo() {
+		this.purchaseOrderData.memo = this.headerMemo;
+	}
 
     getStockLineDetails(stockline) {
         stockline = stockline.map(x => {

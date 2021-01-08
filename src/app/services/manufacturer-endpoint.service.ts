@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ManufacturerEndpoint extends EndpointFactory {
 
@@ -29,69 +29,69 @@ export class ManufacturerEndpoint extends EndpointFactory {
 
     getManufacturerEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this._manufacturerUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this._manufacturerUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getManufacturerEndpoint());
-            }));
+            });
     }
     getNewGatecodeEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._manufacturerUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._manufacturerUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewGatecodeEndpoint(userObject));
-            }));
+            });
     }
 
     getEditManufacturerEndpoint<T>(ManufacturerId?: number): Observable<T> {
         let endpointUrl = ManufacturerId ? `${this._manufacturerUrlNew}/${ManufacturerId}` : this._manufacturerUrlNew;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditManufacturerEndpoint(ManufacturerId));
-            }));
+            });
     }
 
     getUpdateManufacturerEndpoint<T>(roleObject: any, manufacturerId: number): Observable<T> {
         let endpointUrl = `${this._manufacturerUrlNew}/${manufacturerId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateManufacturerEndpoint(roleObject, manufacturerId));
-            }));
+            });
     }
 
     getDeleteManufacturerIdEndpoint<T>(manufacturerId: number): Observable<T> {
         let endpointUrl = `${this._manufacturerUrlNew}/${manufacturerId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteManufacturerIdEndpoint(manufacturerId));
-            }));
+            });
     }
     getHistoryManufacturerIdEndpoint<T>(manufacturerId: number): Observable<T> {
         let endpointUrl = `${this._manufacturerUrlAuditHistory}/${manufacturerId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryManufacturerIdEndpoint(manufacturerId));
-            }));
+            });
     }
 
     getManufacturerAuditDetails<T>(Id: number): Observable<T> {
         let endPointUrl = `${this._auditUrl}/${Id}`;
-        return this.http.get<any>(endPointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endPointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getManufacturerAuditDetails(Id));
-            }));
+            });
     }
 
     getManufacturerRecords<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.paginate;
         //let endpointUrl = `${this.getPaginationData}/${data}`;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getManufacturerRecords(paginationOption));
-            }));
+            });
     }
     ManufacturerCustomUpload(file){
         return this.http.post( `${this.configurations.baseUrl}${this.excelUpload}`, file)       
@@ -101,10 +101,10 @@ export class ManufacturerEndpoint extends EndpointFactory {
     SearchData<T>(paginationOption: any): Observable<T> {
         let endpointUrl = this.search;
         //let endpointUrl = `${this.getPaginationData}/${data}`;
-        return this.http.post<any>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.SearchData(paginationOption));
-            }));
+            });
     }
 
 }

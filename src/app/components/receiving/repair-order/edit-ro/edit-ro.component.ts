@@ -16,7 +16,7 @@ import { GlAccountService } from '../../../../services/glAccount/glAccount.servi
 import { GlAccount } from '../../../../models/GlAccount.model';
 import { ShippingService } from '../../../../services/shipping/shipping-service';
 import { CommonService } from '../../../../services/common.service';
-;
+
 import { CustomerService } from '../../../../services/customer.service';
 import { Dropdown } from 'primeng/dropdown';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
@@ -70,6 +70,8 @@ export class EditRoComponent implements OnInit {
     SiteList: any[];
     // GLAccountList: any[];
     currentDate: Date;
+    headerNotes:any;
+    headerMemo: any;
     ShippingViaList: DropDownData[];
     repairOrderId: number;
     repairOrderHeaderData: any;
@@ -316,6 +318,30 @@ export class EditRoComponent implements OnInit {
         ]
     }
 
+    parsedText(text) {
+        if (text) {
+            const dom = new DOMParser().parseFromString(
+                '<!doctype html><body>' + text,
+                'text/html');
+            const decodedString = dom.body.textContent;
+            return decodedString;
+        }
+    }
+
+    onAddNotes() {
+		this.headerNotes = this.repairOrderHeaderData.notes;
+	}
+	onSaveNotes() {
+		this.repairOrderHeaderData.notes = this.headerNotes;
+		
+	}
+
+    onAddMemo() {
+		this.headerMemo = this.repairOrderHeaderData.memo;
+	}
+	onSaveMemo() {
+		this.repairOrderHeaderData.memo = this.headerMemo;
+	}
     getLegalEntity() {
         this.commonService.getLegalEntityList().subscribe(res => {
             this.legalEntityList = res;

@@ -1,4 +1,4 @@
-﻿import { Component, Input, EventEmitter, Output } from '@angular/core';
+﻿import { Component, Input, EventEmitter, Output, OnInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { fadeInOut } from '../../../../services/animations';
@@ -7,8 +7,8 @@ import { Action } from '../../../../models/action.model';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { AuthService } from '../../../../services/auth.service';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../../../models/mastercompany.model';
 
 import { TableModule } from 'primeng/table';
@@ -19,7 +19,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
 import { CheckboxModule } from 'primeng/checkbox';
 import { EmployeeService } from '../../../../services/employee.service';
-import { OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppTranslationService } from '../../../../services/app-translation.service';
 import $ from "jquery";

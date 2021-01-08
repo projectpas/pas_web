@@ -1,8 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit, Input, ChangeDetectorRef, ElementRef, SimpleChanges } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl, FormArray } from '@angular/forms';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -52,6 +52,8 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     isEditMode: boolean;
     loadingIndicator: boolean;
     auditHisory: any[];
+    selectedOnly: boolean = false;
+	targetData: any;
     selectedreason: any;
     disableSave: boolean = true;
     allComapnies: MasterCompany[];
@@ -76,7 +78,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     alldashnumberinfo: any[];
     allManagemtninfo: any[] = [];
     maincompanylist: any[] = [];
-    bulist: any[];
+    //bulist: any[];
     departmentList: any[];
     divisionlist: any[] = [];
     manufacturerData: any[] = [];
@@ -129,6 +131,9 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     textAreaInfo: string;
     currentDeleteStatus: boolean = false;
     arraylistCapabilityTypeId:any[] = [];
+    arrayEmplsit:any[] = [];
+    disableIsVerified: boolean = false;
+    disableMagmtStruct: boolean = true;
 
     /** item-master-capabilities-list ctor */
     constructor(private itemMasterService: ItemMasterService,
@@ -149,8 +154,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     };
 
     ngOnInit() {
-        
-
         if(!this.isEnableItemMaster && !this.isEnableItemMasterView) {
             this.itemMasterService.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-capabilities-list';
             this.itemMasterService.bredcrumbObj.next(this.itemMasterService.currentUrl);//Bread Crumb
@@ -159,23 +162,17 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.capabilitiesForm = this.formBuilder.group({
             mfgForm: this.formBuilder.array([])
         });
-        this.getAllEmployees();
+        this.getAllEmployeesByManagmentStructureID();
         this.loadData();
         this.activeIndex = 0;
         this.itemMasterService.capabilityCollection = [];
         this.getCapabilityTypesList();
-        //this.getCapabilityTypeData();
         this.getLegalEntity();
     }
+    
     get mfgFormArray(): FormArray {
         return this.capabilitiesForm.get('mfgForm') as FormArray;
     }
-
-    // getCapabilityTypeData() {
-    //     this.commonservice.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description').subscribe(res => {
-    //         this.capabilityTypeData = res;
-    //     })
-    // }
 
     dataSource: MatTableDataSource<any>;
     cols: any[];
@@ -258,7 +255,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
 
         this.selectedColumns = this.cols;
-
     }
 
     private onDataLoadSuccessful(allWorkFlows: any[]) {
@@ -298,6 +294,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         // Causes the filter to refresh there by updating with recently added data.
         this.applyFilter(this.dataSource.filter);
     }
+
     dismissModel() {
         this.isDeleteMode = false;
         this.isEditMode = false;
@@ -323,7 +320,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
       }
 
     openDelete(content, row) {
-
         this.isEditMode = false;
         this.isDeleteMode = true;
         this.sourceAction = row;
@@ -340,7 +336,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 }
             }
         }
-
     }
 
     setManagementStrucureData(obj) {
@@ -370,19 +365,25 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         if (this.managementStructureData.length == 1) {
             this.capabilityEditForm.companyId = this.managementStructureData[0];
         }
-
     }
+
     getLegalEntity() {
         this.commonservice.getLegalEntityList().subscribe(res => {
             this.legalEntityList = res;
         })
     }
+
     openView(content, row) //this is for Edit Data get
     {
         this.itemMasterService.isCapsEditMode = false;
         this.isEditMode = false;
         this.openPopUpWithData(content, row);
     }
+
+    get employeeId() {
+		return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+	}
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -398,37 +399,139 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         const capData = row;
         this.arraylistCapabilityTypeId.push(row.capabilityTypeId);
         this.getCapabilityTypesList();
-        this.selectedItemMasterCapData = capData;
-        this.selectedLegalEntity(row.levelId1);
-        this.selectedBusinessUnit(row.levelId2);
-        this.selectedDivision(row.levelId3);
-        this.selectedDepartment(row.levelId4);
-        this.getItemMasterDetailsById(row.itemMasterId);
+        this.arrayEmplsit.push(row.verifiedById == null ? 0 : row.verifiedById);
+        this.getManagementStructureDetails(row.managementStrId, this.employeeId);
 
-        if (row.levelId1) {
-            this.selectedItemMasterCapData.levelId1 = row.levelId1;
-        }
-        if (row.levelId2) {
-            this.selectedItemMasterCapData.levelId2 = row.levelId2;
-        }
-        if (row.levelId3) {
-            this.selectedItemMasterCapData.levelId3 = row.levelId3;
-        }
-        if (row.levelId4) {
-            this.selectedItemMasterCapData.levelId4 = row.levelId4;
-        }
+        this.selectedItemMasterCapData = capData;
+        this.selectedDepartment(row.levelId4);
+
+        this.getItemMasterDetailsById(row.itemMasterId);
 
         if(this.selectedItemMasterCapData.verifiedDate){
             this.selectedItemMasterCapData.verifiedDate = new Date(this.selectedItemMasterCapData.verifiedDate);
         } 
         if(this.selectedItemMasterCapData.addedDate){
             this.selectedItemMasterCapData.addedDate = new Date(this.selectedItemMasterCapData.addedDate);
-        }   
-
+        }
     }
+
+    getManagementStructureDetails(id,empployid=0,editMSID=0) {
+		empployid = empployid == 0 ? this.employeeId : empployid ;
+		editMSID = this.isEditMode ? editMSID = id : 0;
+		this.commonservice.getManagmentStrctureData(id,empployid,editMSID).subscribe(response => {
+			if(response) {
+				const result = response;
+				if(result[0] && result[0].level == 'Level1') {
+                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
+						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+							this.selectedItemMasterCapData.levelId1 = result[0].lstManagmentStrcture[i].label;
+						}
+                    }
+					this.maincompanylist =  result[0].lstManagmentStrcture;	
+					this.selectedItemMasterCapData.companyId = result[0].managementStructureId;
+					this.selectedItemMasterCapData.managementStructureId = result[0].managementStructureId;				
+					this.selectedItemMasterCapData.buId = 0;
+					this.selectedItemMasterCapData.divisionId = 0;
+					this.selectedItemMasterCapData.departmentId = 0;	
+                    this.businessUnitList = [];
+					this.divisionlist = [];
+                    this.departmentList = [];
+				} else {
+					this.selectedItemMasterCapData.companyId = 0;
+					this.selectedItemMasterCapData.buId = 0;
+					this.selectedItemMasterCapData.divisionId = 0;
+					this.selectedItemMasterCapData.departmentId = 0;	
+					this.maincompanylist = [];
+					this.businessUnitList = [];
+					this.divisionlist = [];
+					this.departmentList = [];
+				}
+				
+				if(result[1] && result[1].level == 'Level2') {	
+                    this.businessUnitList = result[1].lstManagmentStrcture;
+                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
+						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+							this.selectedItemMasterCapData.levelId2 = result[0].lstManagmentStrcture[i].label;
+						}
+                    }
+					this.selectedItemMasterCapData.buId = result[1].managementStructureId;
+					this.selectedItemMasterCapData.managementStructureId = result[1].managementStructureId;
+					this.selectedItemMasterCapData.divisionId = 0;
+					this.selectedItemMasterCapData.departmentId = 0;
+					this.divisionlist = [];
+					this.departmentList = [];
+				} else {
+					if(result[1] && result[1].level == 'NEXT') {
+                        this.businessUnitList = result[1].lstManagmentStrcture;
+					}
+					this.selectedItemMasterCapData.buId = 0;
+					this.selectedItemMasterCapData.divisionId = 0;
+					this.selectedItemMasterCapData.departmentId = 0;					
+					this.divisionlist = [];
+					this.departmentList = []; 
+				}
+
+				if(result[2] && result[2].level == 'Level3') {		
+                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
+						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+							this.selectedItemMasterCapData.levelId3 = result[0].lstManagmentStrcture[i].label;
+						}
+                    }
+					this.divisionlist =  result[2].lstManagmentStrcture;		
+					this.selectedItemMasterCapData.divisionId = result[2].managementStructureId;		
+					this.selectedItemMasterCapData.managementStructureId = result[2].managementStructureId;			
+					this.selectedItemMasterCapData.departmentId = 0;						
+					this.departmentList = [];			
+				} else {
+					if(result[2] && result[2].level == 'NEXT') {
+						this.divisionlist = result[2].lstManagmentStrcture;						
+					}
+					this.selectedItemMasterCapData.divisionId = 0; 
+					this.selectedItemMasterCapData.departmentId = 0;	
+					this.departmentList = [];}
+
+				if(result[3] && result[3].level == 'Level4') {		
+                    for(let i = 0; i < result[0].lstManagmentStrcture.length; i++){
+						if(result[0].lstManagmentStrcture[i].value == result[0].managementStructureId) {
+							this.selectedItemMasterCapData.levelId4 = result[0].lstManagmentStrcture[i].label;
+						}
+                    }
+					this.departmentList = result[3].lstManagmentStrcture;;			
+					this.selectedItemMasterCapData.departmentId = result[3].managementStructureId;	
+					this.selectedItemMasterCapData.managementStructureId = result[3].managementStructureId;				
+				} else {
+					this.selectedItemMasterCapData.departmentId = 0; 
+					if(result[3] && result[3].level == 'NEXT') {
+						this.departmentList = result[3].lstManagmentStrcture;						
+					}
+				}	
+				//this.employeedata('',this.headerInfo.managementStructureId);	
+				this.onSelectManagementStruc();
+				this.isSpinnerVisible = false;
+			}
+			else
+			{
+				this.isSpinnerVisible = false;
+			}			
+		},err => {
+			this.isSpinnerVisible = false;
+			const errorLog = err;
+			this.errorMessageHandler(errorLog);		
+		});
+    }
+    
+    onSelectManagementStruc() {
+		if (this.selectedItemMasterCapData.companyId != 0) {            
+			this.disableMagmtStruct = false;
+		} else {
+			this.disableMagmtStruct = true;
+		}
+	}
+
     getDynamicVariableData(variable, index) {
         return this[variable + index]
     }
+
     selectedLegalEntity(legalEntityId) {
         if (legalEntityId) {
             this.selectedItemMasterCapData['managementStructureId'] = legalEntityId;
@@ -437,42 +540,40 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 this.businessUnitList = res;
             })
         }
-
     }
+
     selectedBusinessUnit(businessUnitId) {
         if (businessUnitId) {
             this.selectedItemMasterCapData['managementStructureId'] = businessUnitId;
-
             this.commonservice.getDivisionListByBU(businessUnitId).subscribe(res => {
-
                 this.divisionlist = res;
                 this.departmentList = [];
             })
         }
-
     }
+
     selectedDivision(divisionUnitId) {
         if (divisionUnitId) {
             this.selectedItemMasterCapData['managementStructureId'] = divisionUnitId;
-
             this.commonservice.getDepartmentListByDivisionId(divisionUnitId).subscribe(res => {
                 this.departmentList = res;
             })
         }
-
     }
+
     selectedDepartment(departmentId) {
         if (departmentId) {
             this.selectedItemMasterCapData['managementStructureId'] = departmentId;
         }
     }
+
     resetVerified(rowData, value) {
             rowData.verifiedById = null;
             rowData.verifiedDate = new Date();
     }
+
     openPopUpWithData(content, row) //this is for Edit Data get
     {
-
         this.getAircraftModel(row.aircraftTypeId, this.capabilityEditForm);
         this.getPartPublicationByItemMasterId(row.itemMasterId);
         this.setManagementStrucureData(row);
@@ -554,7 +655,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     openModelPopups(capData) {
         if (this.itemMasterService.isEditMode == false) {
-
             //Adding for Aircraft manafacturer List Has empty then List Should be null
             if (capData.selectedAircraftTypes.length > 0) {
                 var arr = capData.selectedAircraftTypes;
@@ -569,6 +669,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             }
         }
     }
+
     getAircraftModel(selectedAircraftType, capData) {
         if (this.itemMasterService.isEditMode == false) {
             this.itemMasterService.getAircraftTypes(selectedAircraftType).subscribe(
@@ -580,14 +681,12 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     private onDataLoadaircrafttypeSuccessful(allWorkFlows: any[], capData) //getting Models Based on Manfacturer Selection
     {
-
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         capData.selectedAircraftDataModels = [];
         allWorkFlows.forEach(element => {
             capData.selectedAircraftDataModels.push({ value: element.aircraftModelId, label: element.modelName, aircraftTypeId: element.aircraftTypeId })
         });
-
     }
 
     getAircraftDashNumber(event): any {
@@ -599,18 +698,13 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             error => this.onDataLoadFailed(error)
         );
     }
+
     private ondashnumberSuccessful(allWorkFlows: any[]) {
 
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.allDashnumberInfo = allWorkFlows;
     }
-    // Not in Use
-    // getCapabilityTypesListOld() {
-    //     this.commonservice.smartDropDownList('CapabilityType', 'CapabilityTypeId', 'Description').subscribe(res => {
-    //         this.capabalityTypeList = res;
-    //     })
-    // }
 
     getCapabilityTypesList() {   
         if(this.arraylistCapabilityTypeId.length == 0) {
@@ -629,7 +723,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             if (this.selectedActionName) {
                 if (value == this.selectedActionName.toLowerCase()) {
                     this.disableSavepartNumber = true;
-
                 }
                 else {
                     this.disableSavepartNumber = false;
@@ -637,9 +730,9 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                     this.disableSavepartDescription = false;
                 }
             }
-
         }
     }
+
     partEventHandler(event) {
         if (event) {
             if (event.target.value != "") {
@@ -656,17 +749,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             }
         }
     }
+
     private onpartnumberloadsuccessfull(allWorkFlows: any[]) //getting Part Description
     {
-
-
         this.descriptionbyPart = allWorkFlows[0]
         this.sourceItemMasterCap.partDescription = allWorkFlows[0].partDescription;
-
-
     }
+
     partnmId(event) {
-        //
         if (this.itemclaColl) {
             for (let i = 0; i < this.itemclaColl.length; i++) {
                 if (event == this.itemclaColl[i][0].partName) {
@@ -680,12 +770,11 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             this.itemMasterService.getDescriptionbypart(event).subscribe(
                 results => this.onpartnumberloadsuccessfull(results[0]),
                 error => this.onDataLoadFailed(error)
-
-
             );
             this.disableSavepartDescription = true;
         }
     }
+
     filterPNpartItems(event) {
 
         this.partCollection = [];
@@ -709,18 +798,11 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             }
         }
     }
-    // onCapabilityTypeSelection(event) {
-    //     if (this.capabilityTypeData) {
-    //         for (let i = 0; i < this.capabilityTypeData.length; i++) {
-    //             if (event == this.capabilityTypeData[i].value) {
-    //                 this.capabilityForm.selectedCap = this.capabilityTypeData[i].label;
-    //             }
-    //         }
-    //     }
-    // }
+
     onPartNumberSelection(event) {
         this.getPartPublicationByItemMasterId(event);
     }
+
     onPartIdselection(event) {
         if (this.itemclaColl) {
 
@@ -754,7 +836,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
     }
 
-
     private loadManagementdataForTree() {
         this.workFlowtService.getManagemententity().subscribe(
             results => this.onManagemtntdataLoadTree(results[0]),
@@ -768,7 +849,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.childManagementInfo = managementInfo;
         for (let i = 0; i < this.allManagemtninfo.length; i++) {
             if (this.allManagemtninfo[i].parentId == null) {
-                this.bulist = [];
+                this.businessUnitList = [];
                 this.divisionlist = [];
                 this.departmentList = [];
                 this.maincompanylist.push(this.allManagemtninfo[i]);
@@ -776,99 +857,70 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
     }
 
-    getBUList(companyId) {
-        if (!this.isEditMode)
-            this.capabilityForm.managementStructureId = companyId;
-        else
-            this.capabilityEditForm.managementStructureId = companyId;
-        this.bulist = [];
-        this.divisionlist = [];
-        this.departmentList = [];
-        for (let i = 0; i < this.allManagemtninfo.length; i++) {
-            if (this.allManagemtninfo[i].parentId == companyId) {
-                this.bulist.push(this.allManagemtninfo[i]);
-            }
-        }
-        for (let i = 0; i < this.partListData.length; i++) {
-            this.partListData[i].parentCompanyId = companyId;
-            this.getParentBUList(this.partListData[i]);
-            if (this.partListData[i].childList) {
-                for (let j = 0; j < this.partListData[i].childList.length; j++) {
-                    this.partListData[i].childList[j].childCompanyId = companyId;
-                    this.getChildBUList(this.partListData[i].childList[j]);
-                }
-            }
-        }
-
-    }
+    getBUList(legalEntityId) {
+		this.selectedItemMasterCapData.buId = 0;
+		this.selectedItemMasterCapData.divisionId = 0;
+		this.selectedItemMasterCapData.departmentId = 0;	
+		this.businessUnitList = [];
+		this.divisionlist = [];
+		this.departmentList = [];
+        if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
+			this.selectedItemMasterCapData.managementStructureId = legalEntityId;	
+			this.selectedItemMasterCapData.companyId = legalEntityId;		
+			this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId,this.employeeId ).subscribe(res => {
+                this.businessUnitList = res;
+			});
+		}
+	    else {
+			 this.selectedItemMasterCapData.managementStructureId  = 0;
+			 this.selectedItemMasterCapData.companyId = 0;
+		 }		
+	}
 
     getDivisionlist(buId) {
-        if (this.isEditMode)
-            this.capabilityForm.managementStructureId = buId;
-        else
-            this.capabilityEditForm.managementStructureId = buId;
-        this.divisionlist = [];
-        this.departmentList = [];
-        for (let i = 0; i < this.allManagemtninfo.length; i++) {
-            if (this.allManagemtninfo[i].parentId == buId) {
-                this.divisionlist.push(this.allManagemtninfo[i]);
-            }
-        }
-        for (let i = 0; i < this.partListData.length; i++) {
-            this.partListData[i].parentbuId = buId;
-            this.getParentDivisionlist(this.partListData[i]);
-            if (this.partListData[i].childList) {
-                for (let j = 0; j < this.partListData[i].childList.length; j++) {
-                    this.partListData[i].childList[j].childbuId = buId;
-                    this.getChildDivisionlist(this.partListData[i].childList[j]);
-                }
-            }
-        }
-    }
+		this.divisionlist = [];
+		this.departmentList = [];
+		this.selectedItemMasterCapData.divisionId = 0;		
+		this.selectedItemMasterCapData.departmentId = 0;		
 
-    getDepartmentlist(divisionId) {
-        if (this.isEditMode)
-            this.capabilityForm.managementStructureId = divisionId;
-        else
-            this.capabilityEditForm.managementStructureId = divisionId;
-        this.departmentList = [];
-        for (let i = 0; i < this.allManagemtninfo.length; i++) {
-            if (this.allManagemtninfo[i].parentId == divisionId) {
-                this.departmentList.push(this.allManagemtninfo[i]);
-            }
-        }
-        for (let i = 0; i < this.partListData.length; i++) {
-            this.partListData[i].parentDivisionId = divisionId;
-            this.getParentDeptlist(this.partListData[i]);
-            if (this.partListData[i].childList) {
-                for (let j = 0; j < this.partListData[i].childList.length; j++) {
-                    this.partListData[i].childList[j].childDivisionId = divisionId;
-                    this.getChildDeptlist(this.partListData[i].childList[j]);
-                }
-            }
-        }
+		if (buId != 0 && buId != null && buId != undefined) {			
+			this.selectedItemMasterCapData.managementStructureId = buId;
+			this.selectedItemMasterCapData.buId = buId;
+			this.commonservice.getManagementStructurelevelWithEmployee(buId,this.employeeId ).subscribe(res => {
+                this.divisionlist = res;
+			});
+		 }  else {
+			 this.selectedItemMasterCapData.managementStructureId  = this.selectedItemMasterCapData.companyId;		
+		 }
     }
+    
+    getDepartmentlist(divisionId) {
+		this.selectedItemMasterCapData.departmentId = 0;
+		this.departmentList = [];
+		if (divisionId != 0 && divisionId != null && divisionId != undefined) {
+		   this.selectedItemMasterCapData.divisionId = divisionId;
+		   this.selectedItemMasterCapData.managementStructureId = divisionId;
+		   this.commonservice.getManagementStructurelevelWithEmployee(divisionId,this.employeeId ).subscribe(res => {
+			this.departmentList = res;
+		});
+		}
+		 else {
+			 this.selectedItemMasterCapData.managementStructureId  = this.selectedItemMasterCapData.buId;
+			 this.selectedItemMasterCapData.divisionId = 0;
+		 }
+	}
 
     getDepartmentId(departmentId) {
-        if (this.isEditMode)
-            this.capabilityForm.managementStructureId = departmentId;
-        else
-            this.capabilityEditForm.managementStructureId = departmentId;
-        for (let i = 0; i < this.partListData.length; i++) {
-            this.partListData[i].parentDeptId = departmentId;
-        }
-        for (let i = 0; i < this.partListData.length; i++) {
-            this.partListData[i].parentDeptId = departmentId;
-            this.getParentDeptId(this.partListData[i]);
-            if (this.partListData[i].childList) {
-                for (let j = 0; j < this.partListData[i].childList.length; j++) {
-                    this.partListData[i].childList[j].childDeptId = departmentId;
-                    this.getChildDeptId(this.partListData[i].childList[j]);
-                }
-            }
-        }
+		if (departmentId != 0 && departmentId != null && departmentId != undefined) {
+			this.selectedItemMasterCapData.managementStructureId = departmentId;
+			this.selectedItemMasterCapData.departmentId = departmentId;			
+		}
+		 else {
+			 this.selectedItemMasterCapData.managementStructureId  = this.selectedItemMasterCapData.divisionId;
+			 this.selectedItemMasterCapData.departmentId = 0;
+		 }		
     }
-
+    
     getParentBUList(partList) {
         partList.managementStructureId = partList.parentCompanyId;
         partList.parentBulist = []
@@ -953,18 +1005,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             });
         })
     }
-    async getAllEmployees() {
-        await this.commonservice.getCertifiedEmpList(this.currentUserManagementStructureId).subscribe(res => {
-            if(res) {
-                this.employeeList = res.map(x => {
-                    return {
-                        value: x.employeeId,
-                        label: x.name
-                    }
-                });
-            }
-        })
-    }
+
+    async getAllEmployeesByManagmentStructureID() {
+		if(this.arrayEmplsit.length == 0) {			
+		this.arrayEmplsit.push(0); }	
+        await this.commonservice.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
+            this.employeeList = res;            
+        }, error => error => this.saveFailedHelper(error))
+	}
 
     addModels(capData) {
         let capbilitiesObj = new ItemMasterCapabilitiesModel;
@@ -1052,21 +1100,14 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                                 this.mfgFormArray.controls[mfgIndex]['buList'] = [];
                                 this.mfgFormArray.controls[mfgIndex]['departmentList'] = [];
                                 this.mfgFormArray.controls[mfgIndex]['divisionlist'] = [];
-
                             }
                         }
-
                     });
-
                 }
-
             });
-
-
-
         });
-
     }
+
     checkIsExisted(capId, type, modal, myForm, capData) {
         let itemExisted = false;
         myForm.controls.forEach(data => {
@@ -1077,19 +1118,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 let typeId = data['controls']['aircraftTypeId'].value;
                 let typeIndex = capData.selectedAircraftTypes.indexOf(typeId);
                 if (typeIndex == -1) {
-                    //  data['controls']['isDelete'].setValue(true);
                 }
                 let modaleId = data['controls']['aircraftModelId'].value;
                 let modalIndex = capData.selectedAircraftModelTypes.indexOf(modaleId);
                 if (modalIndex == -1) {
-                    // data['controls']['isDelete'].setValue(true);
                 }
             }
-
-
         });
         return itemExisted;
     }
+
     saveCapability() {     
         this.selectedItemMasterCapData["updatedBy"]="admin";  
         this.selectedItemMasterCapData["createdBy"]="admin";  
@@ -1109,28 +1147,31 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 'Capes',
                 'Saved Capes Details Successfully',
                 MessageSeverity.success
-            );
-            
+            );            
         })
     }
 
     onAddCapes() {
         this.showCapes = true;
     }
+
     onViewCapes(rowData){
         this.showCapes = true;
         this.selectedItemMasterCapData = rowData;
         //this.getItemMasterDetailsById(rowData.itemMasterId)
     }
+
     closeCapes() {
         this.showCapes = false;
         this.isCapViewMode = false;
         
         $('#capes1').modal('hide');
     }
+
     closeCapesPopup(data) {
         this.closeCapes();
     }
+
     deleteCapability(content, capabilityId, capabilityType) {
         this.selectedForDeleteCapabilityId = capabilityId;
         this.selectedForDeleteContent = content;
@@ -1150,17 +1191,17 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             this.isDeleteCapabilityPopupOpened = true
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         }
-
     }
+
     enableSave() {
 		this.disableSave = false;
-
-	}
+    }
+    
     loadCapesList(data) {
         this.loadData();
     }
-    searchCaps(){
 
+    searchCaps(){
     }
 
     restoreCapabilityRow(capabilityId) {
@@ -1168,8 +1209,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             this.alertService.showMessage("Success", `Action was Restore successfully`, MessageSeverity.success);
             this.loadData();
         },
-        error => error => this.saveFailedHelper(error));
-        
+        error => error => this.saveFailedHelper(error));        
     }
 
     getPageCount(totalNoofRecords, pageSize) {
@@ -1198,7 +1238,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
     }
 
-
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
             if (property == 'selectedTab') {
@@ -1208,15 +1247,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 				}                
             }
           }
-
       }
 
-      dismissCapesViewModal() {
+    dismissCapesViewModal() {
           $('#viewCap').modal('hide');
-      }
-      dismissCapesHistoryModal() {
+    }
+
+    dismissCapesHistoryModal() {
         $('#viewHistory').modal('hide');
     }
+
     getItemMasterDetailsById(itemmasterid){
         this.isSpinnerVisible = true;
         this.itemMasterService.getItemMasterDetailById(itemmasterid).subscribe(res => {
@@ -1227,6 +1267,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             this.onDataLoadFailed(error)
         })
     }
+
     onAddTextAreaInfo(value) {
 		if(value == 'memo') {
 			this.textAreaLabel = 'Memo';
@@ -1245,26 +1286,44 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.loadData();
     }
 
-    exportCSV(capabilityListTable) {
-        this.isSpinnerVisible = true;   
-        this.allItemMasterCapsListDt = capabilityListTable;
-        
-        if (capabilityListTable.totalRecords > 0){
+    closeDeleteModal() {
+        $("#downloadConfirmation").modal("hide");
+    }
 
-            for(let i=0; i < capabilityListTable.totalRecords; i++){
-
-                capabilityListTable._value[i].Verified == 1; //this.allItemMasterCapsList[i].Verified == 1 ? 'check' : 'unchecked';
-
-                //this.allItemMasterCapsListDt[i].verifiedDate == this.datePipe.transform(capabilityListTable.value[i].verifiedDate, 'yyyy-MM-dd, h:mm a');
-                capabilityListTable._value[i].createdDate == this.datePipe.transform(capabilityListTable.value[i].createdDate, 'yyyy-MM-dd, h:mm a');
-                capabilityListTable._value[i].updatedDate == this.datePipe.transform(capabilityListTable.value[i].updatedDate, 'yyyy-MM-dd, h:mm a');
-
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                isVerified: x.isVerified == 1 ? 'check' : 'unchecked',
+                memo: x.memo.replace(/<[^>]*>/g, ''),
+                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
             }
-       
-        capabilityListTable.exportCSV();
-        capabilityListTable = this.allItemMasterCapsListDt;
-        this.isSpinnerVisible = false;
-        }
-	}
+        });
+        dt.exportCSV();
+    }
 
+    errorMessageHandler(log) {
+		const errorLog = log;
+		var msg = '';
+		if(errorLog.message) {
+		  if (errorLog.error && errorLog.error.errors.length > 0) {
+					for (let i = 0; i < errorLog.error.errors.length; i++){
+						msg = msg + errorLog.error.errors[i].message + '<br/>'
+					}
+				}
+				this.alertService.showMessage(
+                    errorLog.error.message,
+					msg,
+					MessageSeverity.error
+				);
+		   }
+		   else {
+			this.alertService.showMessage(
+				'Error',
+				log.error,
+				MessageSeverity.error
+			); }
+	}
 }

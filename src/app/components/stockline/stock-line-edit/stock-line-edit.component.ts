@@ -7,8 +7,8 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Integration } from '../../../models/integration.model';
 import { IntegrationService } from '../../../services/integration-service';
 import { HttpClient } from '@angular/common/http';
-  
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { AtaMainService } from '../../../services/atamain.service';
 import { StocklineService } from '../../../services/stockline.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
@@ -759,7 +759,7 @@ export class StockLineEditComponent implements OnInit, AfterViewInit
 		this.loadingIndicator = true;
 
 		this.siteService.getSiteList().subscribe(   //Getting Site List Hear
-			results => this.onSaiteDataLoadSuccessful(results), //Pasing first Array and calling Method
+			results => this.onSaiteDataLoadSuccessful(results[0]), //Pasing first Array and calling Method
 			error => this.onDataLoadFailed(error)
 		);
 	}
@@ -790,7 +790,7 @@ export class StockLineEditComponent implements OnInit, AfterViewInit
 		this.loadingIndicator = false;
 		this.allBins = getBinList; //cha
 	}
-	private onSaiteDataLoadSuccessful(getSiteList) { //Storing Site Data
+	private onSaiteDataLoadSuccessful(getSiteList: Site[]) { //Storing Site Data
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
 		this.dataSource.data = getSiteList; //need

@@ -1,10 +1,10 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 import { Injectable } from "@angular/core";
-import { Observable,forkJoin } from "rxjs";
+import { Observable } from "rxjs/Observable";
 import "rxjs/add/observable/forkJoin";
 import "rxjs/add/operator/do";
 import "rxjs/add/operator/map";
@@ -16,13 +16,13 @@ export class AircraftModelService {
   constructor(private aircraftModelEndpoint: AircraftModelEndpointService) { }
 
   getAll() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.aircraftModelEndpoint.getAllAircraftModel<AircraftModel[]>()
     );
   }
 
   getById(aircraftModelId: number) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.aircraftModelEndpoint.getAircraftModelById<AircraftModel>(
         aircraftModelId
       )
@@ -54,22 +54,22 @@ export class AircraftModelService {
     return this.aircraftModelEndpoint.getAudit<any[]>(aircraftModelId);
   }
 
-  getAircraftModelListByManufactureId(aircraftModelId: string) {
-    return forkJoin( 
+  getAircraftModelListByManufactureId(aircraftModelId: string,idlist?: string) {   
+    return Observable.forkJoin( 
       this.aircraftModelEndpoint.getAircraftModelListByAircraftManufacturerId<
         AircraftModel[]
-      >(aircraftModelId)
+      >(aircraftModelId,idlist)
     );
   }
   getServerPages(serverSidePagesData: any) {
-    return forkJoin(
+    return Observable.forkJoin(
       this.aircraftModelEndpoint.getAircraftModelsRecords<AircraftModel[]>(
         serverSidePagesData
       )
     );
   }
   getLandingPageList() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.aircraftModelEndpoint.getLandingPageList<AircraftModel[]>()
     );
   }

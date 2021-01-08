@@ -4,15 +4,15 @@ import { AlertService, MessageSeverity } from '../../../../../services/alert.ser
 import { WorkOrderService } from '../../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../../services/auth.service';
 import { CommonService } from '../../../../../services/common.service';
-import { formatNumberAsGlobalSettingsModule, getValueByFieldFromArrayofObject, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition } from '../../../../../generic/autocomplete';
+import { formatNumberAsGlobalSettingsModule, getValueByFieldFromArrayofObject, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition, formatStringToNumber } from '../../../../../generic/autocomplete';
 import { SalesQuoteService } from '../../../../../services/salesquote.service';
 import { SalesOrderQuoteCharge } from '../../../../../models/sales/SalesOrderQuoteCharge';
 import { getModuleIdByName } from '../../../../../generic/enums';
 import { ActionService } from '../../../../../Workflow/ActionService';
 import { VendorService } from '../../../../../services/vendor.service';
-import { forkJoin } from 'rxjs';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-
+import { NgForm } from "@angular/forms";
 
 @Component({
   selector: 'app-sales-order-quote-charges',
@@ -46,7 +46,6 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   ]
   isEdit: boolean = false;
   unitOfMeasureList: any = [];
-  // currencyList: any = [];
   salesOrderChargesLists: any;
   chargesFlatBillingAmount: any;
   isSpinnerVisible = false;
@@ -58,6 +57,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   selectedRowIndexForDelete;
   deleteModal: NgbModalRef;
   modal: NgbModalRef;
+  isUpdate: boolean = false;
+
   constructor(private salesOrderQuoteService: SalesQuoteService,
     private authService: AuthService,
     private alertService: AlertService,
@@ -67,6 +68,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     private modalService: NgbModal,
     private vendorService: VendorService) {
   }
+
   ngOnInit() {
     if (this.chargeForm) {
       let newFreight = new SalesOrderQuoteCharge();
@@ -78,6 +80,7 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.costPlusType = this.salesOrderChargesList[0].markupFixedPrice;
       this.overAllMarkup = Number(this.salesOrderChargesList[0].headerMarkupId);
     }
+    this.isView = this.isView ? this.isView :false;
   }
 
   ngOnChanges() {
@@ -94,40 +97,48 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   }
 
   refresh(isView) {
-    this.isView = isView;
     this.isSpinnerVisible = true;
-    forkJoin(this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId),
-      this.actionService.getCharges(),
-      this.vendorService.getVendorsForDropdown()
+    forkJoin(this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId,this.deletedStatusInfo),
+      this.actionService.getCharges()
     ).subscribe(res => {
       this.isSpinnerVisible = false;
       this.setChargesData(res[0]);
-      this.chargesTypes = res[1];
-      this.allVendors = res[2];
       this.setVendors();
     }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = error;
-      this.onDataLoadFailed(errorLog)
+    });
+    this.getChargesDatya('');
+    this.vendorList('');
+  }
+  setEditArray:any=[];
+  getChargesDatya(value){
+    this.setEditArray = [];
+    if (this.isEdit == true) {
+        this.setEditArray.push(this.chargeForm[0].chargesTypeId ? this.chargeForm[0].chargesTypeId : 0);
+    } else {
+        this.setEditArray.push(0);
+    }
+    const strText = value ? value : '';
+    this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.chargesTypes = res.map(x => {
+          return {
+            chargeType:x.label,
+            chargeId: x.value
+          }
+      });
+    }, 
+    err => {
+        const errorLog = err;
+        this.isSpinnerVisible =false;
     });
   }
 
-  refreshOnDataSaveOrEditORDelete(fromDelete = false) {
-    this.isSpinnerVisible = true;
-    this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId).subscribe(res => {
-      this.isSpinnerVisible = false;
-      this.setChargesData(res);
-      if (fromDelete) {
-        this.getTotalBillingAmount();
-        this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
-      }
-    }, error => {
-      this.isSpinnerVisible = false;
-      const errorLog = error;
-      this.onDataLoadFailed(errorLog)
-    })
-
+  deletedStatusInfo:any=false;
+  getDeleteListByStatus(value){
+    this.deletedStatusInfo=value ? value :false;
+    this.refreshOnDataSaveOrEditORDelete();
   }
+  restorerecord: any = {}
 
   setChargesData(res) {
     if (res && res.length > 0) {
@@ -138,12 +149,13 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       if (Number(this.costPlusType) == 3) {
         this.chargesFlatBillingAmount = res[0].markupFixedPrice;
       }
+      this.isUpdate = true;
     } else {
       this.salesOrderChargesList = [];
+      this.isUpdate = false;
     }
     this.chargeForm = [];
     this.salesOrderChargesLists = [];
-
   }
 
   get userName(): string {
@@ -181,14 +193,16 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   addNewRow() {
     let newFreight = this.getNewChargeObject();
     this.chargeForm = [...this.chargeForm, newFreight];
-  }
+  } 
 
   edit(rowData, mainIndex) {
+    this.isEnableUpdateButton=true;
     this.mainEditingIndex = mainIndex;
     this.isEdit = true;
     rowData.unitCost = this.formateCurrency(rowData.unitCost);
     rowData.extendedCost = this.formateCurrency(rowData.extendedCost);
     this.chargeForm = [rowData];
+    this.vendorList('');
   }
   memoIndex;
   onAddTextAreaInfo(material, index) {
@@ -239,6 +253,9 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       }
       $('#addNewCharges').modal('hide');
     }
+    this.isEnableUpdateButton=true;
+    this.isSaveChargesDesabled=false;
+    this.storedData=[...this.salesOrderChargesList];
   }
 
   createChargesQuote() {
@@ -267,39 +284,12 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.saveChargesListForSO.emit(this.chargesFlatBillingAmount);
     }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = error;
-      this.onDataLoadFailed(errorLog)
     })
+    this.isSaveChargesDesabled=true;
+    this.storedData=[];
   }
 
-  delete() {
-    this.deleteModal.close();
-    this.isSpinnerVisible = true;
-    if (!this.selectedRowForDelete.salesOrderQuoteChargesId) {
-      this.selectedRowForDelete.isDeleted = true;
-      this.isSpinnerVisible = false;
-      this.salesOrderChargesList.splice(this.selectedRowIndexForDelete, 1);
-    } else {
-      let salesOrderQuoteChargesId = this.selectedRowForDelete.salesOrderQuoteChargesId;
-      this.salesOrderQuoteService.deletesalesOrderChargesList(salesOrderQuoteChargesId, this.userName).subscribe(res => {
-        this.alertService.showMessage(
-          '',
-          'Deleted Sales Order Charge Successfully',
-          MessageSeverity.success
-        );
-        this.isSpinnerVisible = false;
-        this.refreshOnDataSaveOrEditORDelete(true);
-      }, error => {
-        this.isSpinnerVisible = false;
-        const errorLog = error;
-        this.onDataLoadFailed(errorLog)
-      })
-    }
 
-    $('#addNewCharges').modal('hide');
-    this.isEdit = false;
-
-  }
 
   onDataLoadError(error) {
     this.isSpinnerVisible = false;
@@ -417,42 +407,20 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     this.calculateExtendedCostSummation();
   }
 
-  filterVendor(event) {
-    this.vendorCollection = this.allVendors;
-    const vendors = [
-      ...this.allVendors.filter(x => {
-        return x.vendorName.toLowerCase().includes(event.query.toLowerCase());
-      })
-    ];
-    this.vendorCollection = vendors;
-  }
 
-  setVendors() {
-    for (var charge of this.salesOrderChargesList) {
-      var vendor = this.allVendors.filter(x => x.vendorId == charge.vendorId)[0];
-      if (vendor != undefined) {
-        charge.vendor = {
-          vendorId: vendor.vendorId,
-          vendorName: vendor.vendorName
-        };
-      }
-    }
-  }
+  dismissModelAlett() {
+    this.modal.close();
+}
   openDelete(content, rowData, rowIndex) {
     this.selectedRowForDelete = rowData;
     this.selectedRowIndexForDelete = rowIndex;
     this.deleteModal = this.modalService.open(content, { size: "sm", backdrop: 'static', keyboard: false });
-    this.deleteModal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
   }
 
   dismissModel() {
     this.deleteModal.close();
   }
+
   onDataLoadFailed(log) {
     const errorLog = log;
     var msg = '';
@@ -482,8 +450,6 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
       this.salesOrderQuoteService.getSOQChargesHistory(rowData.salesOrderQuoteChargesId).subscribe(
           results => this.onAuditInterShipViaHistoryLoadSuccessful(results, content),error => {
               this.isSpinnerVisible = false;
-              const errorLog = error;
-              this.onDataLoadFailed(errorLog)
           });
       }
   }
@@ -506,5 +472,178 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
               return data[i + 1][field] === value
           }
       }
+  }
+  isEnableUpdateButton:boolean=true;
+  enableUpdate(){
+    this.isEnableUpdateButton=false;
+  }
+
+  isSaveChargesDesabled:boolean=true;
+  validated(){
+    this.isSaveChargesDesabled=false;
+  }
+  deleteRow(index, form: NgForm): void {
+        this.chargeForm.splice(index, 1);
+  }
+arrayVendlsit:any=[];
+private vendorList(value) {
+  this.arrayVendlsit=[];
+  if(this.isEdit==true){
+    this.salesOrderChargesList.forEach(element => {
+      this.arrayVendlsit.push(element.vendorId);
+    });
+  }
+  this.arrayVendlsit.push(0); 
+this.vendorService.getVendorNameCodeListwithFilter(value,20,this.arrayVendlsit.join()).subscribe(res => {
+  this.allVendors = res.map(x => {
+      return {
+          vendorId: x.vendorId,
+          vendorName: x.vendorName
+      }
+  }); 
+  this.vendorCollection = this.allVendors;
+},err => {			
+  this.isSpinnerVisible =false;
+})
+}
+filterVendor(event) {
+  if(event && event.query !=undefined){
+    this.vendorList(event.query)
+  }else{
+    this.vendorList('');
+  }
+}
+
+setVendors() {
+  for (var charge of this.salesOrderChargesList) {
+    var vendor = this.allVendors.filter(x => x.vendorId == charge.vendorId)[0];
+    if (vendor != undefined) {
+      charge.vendor = {
+        vendorId: vendor.vendorId,
+        vendorName: vendor.vendorName
+      };
+    }
+  }
+}
+formatStringToNumberGlobal(val) {
+  let tempValue = Number(val.toString().replace(/\,/g, ''));
+  return formatStringToNumber(tempValue)
+}
+delete() {
+  this.deleteModal.close();
+  this.isSpinnerVisible = true;
+  if (!this.selectedRowForDelete.salesOrderQuoteChargesId) {
+    this.selectedRowForDelete.isDeleted = true;
+    this.isSpinnerVisible = false;
+    if(this.storedData && this.storedData.length !=0){
+      this.storedData.forEach(element => {
+          if(
+           JSON.stringify(element) === JSON.stringify(this.selectedRowForDelete)
+           ) {
+           element.isDeleted=true;
+           this.salesOrderChargesList.splice(this.selectedRowIndexForDelete, 1);
+          }
+      });
+  }
+  else{
+      this.salesOrderChargesList.splice(this.selectedRowIndexForDelete, 1);
+  }
+      this.storedData=[...this.storedData];
+      this.alertService.showMessage(
+          '',
+          'Deleted Sales Order Quote Freight Successfully',
+          MessageSeverity.success
+      );
+  } else {
+    let salesOrderQuoteChargesId = this.selectedRowForDelete.salesOrderQuoteChargesId;
+    this.salesOrderQuoteService.deletesalesOrderChargesList(salesOrderQuoteChargesId, this.userName).subscribe(res => {
+      this.alertService.showMessage(
+        '',
+        'Deleted Sales Order Charge Successfully',
+        MessageSeverity.success
+      );
+      this.isSpinnerVisible = false;
+      this.refreshOnDataSaveOrEditORDelete(true);
+    }, error => {
+      this.isSpinnerVisible = false;
+      const errorLog = error;
+    })
+  }
+
+  $('#addNewCharges').modal('hide');
+  this.isEdit = false;
+  this.isSaveChargesDesabled=false;
+}
+restoreRecord() {
+  if(this.restorerecord && this.restorerecord.salesOrderQuoteChargesId>0){
+   this.commonService.updatedeletedrecords('SalesOrderQuoteCharges','SalesOrderQuoteChargesId',this.restorerecord.salesOrderQuoteChargesId).subscribe(res => {
+            this.refreshOnDataSaveOrEditORDelete();
+        this.modal.close();
+        this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+    },
+    err => {
+        this.isSpinnerVisible = false;
+        const errorLog = err;
+    });
+  }
+  else{
+    this.restorerecord.isDeleted = false;
+    this.salesOrderChargesList.splice(this.deletedrowIndex, 1);
+    this.storedData.forEach(element => {
+       if(
+        JSON.stringify(element) === JSON.stringify(this.restorerecord)
+        ) {
+        element.isDeleted=false;
+
+       }
+   });
+   this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+  this.modal.close();
+  }
+}
+
+deletedrowIndex:any;
+restore(content, rowData,index) {
+    this.restorerecord = rowData;
+    this.deletedrowIndex=index;
+    this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+}
+storedData:any=[];
+refreshOnDataSaveOrEditORDelete(fromDelete = false) {
+  this.isSpinnerVisible = true;
+  this.salesOrderChargesList=[];
+  this.salesOrderQuoteService.getSalesQuoteCharges(this.salesOrderQuoteId,this.deletedStatusInfo).subscribe(res => {
+    this.isSpinnerVisible = false;
+
+    //Handeling offline Records also
+    if( this.storedData &&  this.storedData.length!=0){
+      if (this.deletedStatusInfo == true ) {
+       this.deletedStatusInfo = true;
+       this.storedData.forEach(element => {
+           if (element.isDeleted == true && element.salesOrderQuoteChargesId==0) {
+               res.push(element);
+           }
+       });
+      }
+      else {
+       this.deletedStatusInfo = false;
+       this.storedData.forEach(element => {
+           if (element.isDeleted == false && element.salesOrderQuoteChargesId==0) {
+               res.push(element)
+           }
+       });
+      }
+      this.setChargesData(res);
+    }
+    else{
+      this.setChargesData(res);
+    }
+    if (fromDelete) {
+      this.getTotalBillingAmount();
+      this.updateChargesListForSO.emit(this.chargesFlatBillingAmount);
+    }
+  }, error => {
+    this.isSpinnerVisible = false;
+  })
   }
 }

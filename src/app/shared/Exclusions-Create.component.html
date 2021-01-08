@@ -1,18 +1,18 @@
-
-<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed" style="height:380px;">
+<div class="fixed-table-container-inner table-responsive cat4-table fixed-column-table column-r1-fixed"
+  style="height:380px;">
   <div style="z-index: 1;" *ngIf="!isEdit">
-    <span class="cat-heading cat4" style="width: 100% !important;">Add Exclusions <i (click)="addRow()" class="fa fa-plus"></i></span>
+    <span class="cat-heading cat4" style="width: 100% !important;">Add Exclusions <i (click)="addRow()"
+        class="fa fa-plus"></i></span>
   </div>
   <form #exclusionsCreateForm="ngForm">
     <table class="table table-bordered table-fixed workflow-table-exclusion">
-      <tr> 
-        <!-- <th><label>S.No</label></th> -->
+      <tr>
         <th *ngIf="!isWorkFlow"><label>Task*</label></th>
-        <th><label>EPN *</label></th>
-        <th><label style="min-width: 90px;"> Description *</label></th>
+        <th><label>EPN<span class="clr-red">*</span></label></th>
+        <th><label style="min-width: 90px;"> Description<span class="clr-red">*</span></label></th>
         <th> <label>Condition</label></th>
         <th> <label> Item Classification</label></th>
-        <th ><label style="min-width: 90px;"> Stock Type</label></th>
+        <th><label style="min-width: 90px;"> Stock Type</label></th>
         <th><label>Qty </label></th>
         <th><label>Unit Cost</label></th>
         <th><label style="min-width: 90px;">Extended Cost </label></th>
@@ -20,57 +20,41 @@
         <th><label>Memo</label></th>
         <th><label>Action </label></th>
       </tr>
-
       <tr [hidden]="exclusion.isDelete" *ngFor="let exclusion of workFlow.exclusions; let i = index">
-        <!-- <td>{{ (currentPage - 1) * itemsPerPage + i + 1 }}</td> -->
-        <td *ngIf="!isWorkFlow" class="vd_cls">
-          <select class="form-control" [(ngModel)]="exclusion.taskId" name="task_{{i}}" required (change)="onTaskChange(exclusion)">
-            <option value="">Select</option>
+       <td *ngIf="!isWorkFlow" class="vd_cls">
+          <select class="form-control wf-pub-id full-width" [(ngModel)]="exclusion.taskId" name="task_{{i}}" required
+            (change)="onTaskChange(exclusion)">
+            <option value="">--Select--</option>
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
           </select>
         </td>
-        <td>
-          <p-autoComplete (onSelect)="onPartSelect($event, exclusion,i)" [suggestions]="partCollection"
-            (completeMethod)="filterpartItems($event)" [size]="30" [(ngModel)]="exclusion.partNumber" [minLength]="1"
-            (onClear)="clearValue(exclusion, i)" [dropdown]="true" class="p-autocomplete-ctsm-1 p-padding"
-            name="pn_{{i}}" required>
-            <ng-template let-partName pTemplate="part">
-              <div class="ui-helper-clearfix">{{ partName }}</div>
-            </ng-template>
+        <td style="width: 180px;">
+          <p-autoComplete appendTo="body" [(ngModel)]="exclusion.partName" [suggestions]="partCollection"
+            (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
+            class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
+            (onSelect)="onPartSelect($event,exclusion,i)" [forceSelection]="true" title="PN" required name="pn_{{i}}"
+            (onClear)="clearValue(exclusion, i)">
           </p-autoComplete>
         </td>
         <td>
           {{exclusion.partDescription}}
-          <!-- <input type="text" class="form-control" [(ngModel)]="exclusion.partDescription" disabled
-            value="{{ exclusion.partDescription }}" name=" pdesc_{{i}}" required /> -->
-        </td>
-
+       </td>
         <td>
-          <select class="form-control custom-select wf-pub-id" id="ddlMaterialCondition"
-            [(ngModel)]="exclusion.conditionCodeId" name="cond_{{ i }}" (change)="getPNDetails(exclusion)" required>
-            <option value="" selected>Select</option>
-            <option *ngFor="let condition of conditionList"
-              [ngValue]="condition.value">
+          <select class="form-control wf-pub-id full-width" id="ddlMaterialCondition"
+            [(ngModel)]="exclusion.conditionId" name="cond_{{ i }}" (change)="getPNDetails(exclusion)" required>
+            <option value="" selected>--Select--</option>
+            <option *ngFor="let condition of conditionList" [ngValue]="condition.value">
               {{ condition.label }}
             </option>
           </select>
         </td>
         <td>
-          <select class="form-control custom-select  wf-pub-id" [(ngModel)]="exclusion.itemClassificationId"
-            name="classi_{{ i }}" [disabled]="true">
-            <option *ngFor="let item of itemClassInfo" value="{{ item.itemClassificationId }}">
-              {{ item.description }}
-            </option>
-          </select>
-
+          <input type="text" class="form-control" disabled="true" [(ngModel)]="exclusion.itemClassification"
+            value="{{ exclusion.itemClassification }}" name="itemClassification_{{i}}" />
         </td>
         <td>
           {{exclusion.stockType}}
-          <!-- <input type="text" disabled [(ngModel)]="exclusion.stockType" name="stockType{{i}}" style="width: 100px;"
-            disabled> -->
         </td>
-
-
         <td>
           <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum" maxlength="15" (keyup)="
               calculateExtendedCost(exclusion);
@@ -79,18 +63,16 @@
         </td>
         <td>
           <input type="text" class="form-control text-right" pInputText pKeyFilter="money"
-            (change)="calculateExtendedCost(exclusion)" [(ngModel)]="exclusion.unitCost" value="{{ exclusion.unitCost }}"
-            name="unitcost_{{i}}" maxlength="15" />
+            (change)="calculateExtendedCost(exclusion)" [(ngModel)]="exclusion.unitCost"
+            value="{{ exclusion.unitCost }}" name="unitcost_{{i}}" maxlength="15" />
         </td>
         <td class="text-right">
           {{ exclusion.extendedCost }}
-          <!-- <input type="text" class="form-control" pInputText pKeyFilter="money" [(ngModel)]="exclusion.extendedCost"
-            value="{{ exclusion.extendedCost }}" name="exdcost_{{i}}" disabled maxlength="15" /> -->
-        </td>
+       </td>
         <td style="padding: 4px 8px;">
-          <select class="form-control custom-select wf-pub-id" id="ddlEstimatedOccurance"
+          <select class="form-control wf-pub-id full-width" id="ddlEstimatedOccurance"
             [(ngModel)]="exclusion.estimtPercentOccurrance" name="estPercentOcc_{{i}}"> exstimtPercentOccurance
-            <option value="">select</option>
+            <option value="">--Select--</option>
             <option value="{{ occurance.id }}" *ngFor="
                 let occurance of exclusionEstimatedOccurances;
                 let i = index
@@ -98,70 +80,94 @@
           </select>
         </td>
         <td>
-          <!--<input type="text" class="form-control" pInputText [(ngModel)]="exclusion.memo" value="{{exclusion.memo}}" style="width:90px;">-->
-          <!-- <textarea style="height: 25px !important; margin-top: 5px;width: 130px;" class="form-control"
-            [(ngModel)]="exclusion.memo" value="{{ exclusion.memo }}" name="memo_{{index}}"></textarea> -->
-          <div class="form-group memo-popup-cstm mat_emo" style="width: 120px;margin-bottom: 0;display: inline-flex;padding-top: 3px;">
-            <!-- <input type="text" style="width: 100px;" name="memo" pInputText class="form-control aline_de"
-              value="{{exclusion.memo}}" disabled /> -->
-              <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>
-            <i class="fa fa-info-circle fa-lg ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
+       <div class="form-group memo-popup-cstm mat_emo"
+            style="width: 120px;margin-bottom: 0;display: inline-flex;padding-top: 3px;">
+          <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>
+            <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
               matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(exclusion,i)"></i>
           </div>
         </td>
-        <td>
-          <button type="button" class="btn btn-danger nobg buton_back_bordernon" (click)="deleteRow(i)">
+        <td style="text-align: center;">
+          <button type="button" class="btn btn-danger nobg buton_back_bordernon" (click)="openDelete(content,exclusion,i)">
             <i class="fa fa-trash"></i>
           </button>
         </td>
       </tr>
       <tr *ngIf="workFlow.exclusions.length > 0">
-          <td>
-              <b>Total : </b>
-            </td>
-        <!-- <td>Total</td> -->
-        <td *ngIf="isQuote">&nbsp;</td>
+        <td>
+          <b>Total : </b>
+        </td>
+       <td *ngIf="isQuote">&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-
-        <!-- <td>{{ workFlow.sumofQty }}</td> -->
-        <!-- <td></td> -->
-        <td>&nbsp;</td>
+  <td>&nbsp;</td>
         <td class="text-right"><b>{{ workFlow.sumofExtendedCost }}</b></td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
-        <!-- <td>&nbsp;</td> -->
       </tr>
     </table>
   </form>
-  
+  <ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <strong *ngIf="deleteRowRecord && deleteRowRecord.partNumber">
+            EPN:
+            <span class="new-label" >{{deleteRowRecord.partNumber}}</span>
+        </strong>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteRow()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+
+</ng-template>
   <div class="modal fade" id="textarea-popupexclusion" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-sm" style="max-width: 400px !important;">
+    <div class="modal-dialog modal-sm" >
       <div class="modal-content">
+
         <div class="modal-header">
-          <button type="button" class="close" (click)="onCloseTextAreaInfo()">&times;</button>
-          <h4 class="modal-title">Memo</h4>
-        </div>
+          <button type="button" class="close" (click)="onCloseTextAreaInfo()">
+              &times;
+          </button>
+          <h4 class="modal-title">Edit Memo</h4>
+      </div>
         <div class="modal-body">
-          <!-- <div class="form-group">
-            <label>Memo</label>
-            <textarea class="form-control" name="textAreaInfo" [(ngModel)]="textAreaInfo"
-              value={{textAreaInfo}}></textarea>
-          </div> -->
-          <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
-        </div>
+
+        <table class="table table-bordered table-fixed workflow-table-material">
+          <thead>
+              <th style="color: #fff;">Memo</th>
+          </thead>
+          <tbody>
+              <tr>
+                  <td style="white-space: inherit">
+                          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+      
+      
+      </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+          <button type="button" class="btn btn-primary" [disabled]="disabledMemo" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
           <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
         </div>
       </div>
     </div>
   </div>
-</div> 
+</div>
 <div *ngIf="(isWorkOrder && !isEdit) || (isQuote && !isEdit)" style="float:right">
   <button class="btn btn-primary btn-primary" (click)="saveExclusionsWorkOrder()"
     style="padding: 6px 12px !important;margin-top: 10px;" [disabled]="!exclusionsCreateForm.valid">
@@ -182,4 +188,19 @@
     style="padding: 6px 12px !important;margin-top: 10px;">
     Close
   </button>
+</div>
+
+<div class="preloader" *ngIf="isSpinnerVisible">
+  <div class="loading">
+    <div class="lds-roller">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
 </div>

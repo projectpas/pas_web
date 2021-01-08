@@ -28,7 +28,7 @@ export class BannerDemoComponent implements OnInit
             slide: 4,
             speed: 500,
             interval: 5000,
-            point: true,//{ visible: true, pointStyles: '.ngxcarouselPoint{}' },
+            point: { visible: true, pointStyles: '.ngxcarouselPoint{}' },
             load: 2,
             custom: 'banner',
             touch: true,

@@ -1,9 +1,8 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {catchError} from 'rxjs/operators'
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
@@ -95,6 +94,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     private readonly _getPartsDropDown: string = '/api/itemmaster/GetPartDetailsDropDown';
     private readonly _getpartdetailsWithidUrl: string = "/api/ItemMaster/GetpartdetailsWithid";
     private readonly _searchItemMaster: string = "/api/ItemMaster/search";
+    private readonly _searchItemMasterfromsoqpop: string = "/api/ItemMaster/searchItemMasterfromsoqpop";
     private readonly _searchPartNumberAdvanced: string = "/api/ItemMaster/searchpartnumberadvancednew";
     private readonly _searchPartNumberUrl: string = "/api/ItemMaster/searchpartnumber";
     private readonly _searchMulitPartNumberUrl: string = "/api/ItemMaster/searchmultipleparts";
@@ -159,6 +159,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     get getpartdetailsWithidUrl() { return this.configurations.baseUrl + this._getpartdetailsWithidUrl };
     get ExchangeLoanUrl() { return this.configurations.baseUrl + this._getExchangeLoan };
     get getSearchUrl() { return this.configurations.baseUrl + this._searchItemMaster };
+    get getSearchItemMasterfromsoqpopUrl() { return this.configurations.baseUrl + this._searchItemMasterfromsoqpop };
     get getSearchPartNumberAdvancedUrl() { return this.configurations.baseUrl + this._searchPartNumberAdvanced };
     get getSearchMulitPartNumberUrl() { return this.configurations.baseUrl + this._searchMulitPartNumberUrl };
     get getMultiSearchUrl() { return this.configurations.baseUrl + this._multiSearchItemMasterUrl };
@@ -188,190 +189,189 @@ export class ItemMasterEndpoint extends EndpointFactory {
         let endpointUrl = `${this.ExchangeLoanUrl}`;
 
         return this.http.post(endpointUrl, JSON.stringify(currentItem), this.getRequestHeaders())
-            .pipe(
-            catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.AddItemMasterExchangeLoanEndpoint(currentItem));
-            }));
+            });
     }
 
     getUpdateItemMasterExchangeLoanEndpoint<T>(exchObject: any, itemMasterId: number): Observable<T> {
         let endpointUrl = `${this.ExchangeLoanUrl}/${itemMasterId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(exchObject), this.getRequestHeaders())
-        .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(exchObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateItemMasterExchangeLoanEndpoint(exchObject, itemMasterId));
-            }));
+            });
     }
     getItemMasterExchangeLoanEndpointId<T>(id: number): Observable<T> {
-        return this.http.get<any>(`${this.ExchangeLoanUrl}/${id}`, this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.get<T>(`${this.ExchangeLoanUrl}/${id}`, this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.getItemMasterExchangeLoanEndpointId(id));
-            }));
+            })
     }
     getItemMasterDetailsById<T>(id: number): Observable<T> {
-        return this.http.get<any>(`${this.ItemMasterDetails}/${id}`, this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.get<T>(`${this.ItemMasterDetails}/${id}`, this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.getItemMasterDetailsById(id));
-            }));
+            })
     }
 
     getItemMasterById<T>(id: number): Observable<T> {
         let url = `${this._actionsUrl}/${id}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterById(id));
-            }));
+            });
     }
 
     getitemMasterEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.actionsUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemMasterEndpoint());
-            }));
+            });
     }
 
     getitemMasterCapsDataEndpoint<T>(data): Observable<T> {
 
-        return this.http.post<any>(this.actionsUrlCaps, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.actionsUrlCaps, JSON.stringify(data), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemMasterCapsDataEndpoint(data));
-            }));
+            });
     }
 
 
     getAircraftManafacturerList<T>(itemid: any): Observable<T> {
         let url = `${this.aircraftManafacturerurl}/${itemid}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftManafacturerList(itemid));
-            }));
+            });
     }
 
     getAircraftmodels<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getAircraftUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getAircraftUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemMasterEndpoint());
-            }));
+            });
     }
 
     getAircraftList<T>(itemid: any): Observable<T> {
         let url = `${this.aircraftmodelsurl}/${itemid}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftList(itemid));
-            }));
+            });
     }
     getCpaesData<T>(itemid: any): Observable<T> {
         let url = `${this.capesdata}/${itemid}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCpaesData(itemid));
-            }));
+            });
     }
     getitemListEndpoint<T>(value): Observable<T> {
         let url = `${this.listUrl}/${value}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemListEndpoint(value));
-            }));
+            });
     }
     getItemStockListEndPoint<T>(data): Observable<T> {
         let url = `${this.stockListUrl}`;
-        return this.http.post<any>(url, data, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(url, data, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemStockListEndPoint(data));
-            }));
+            });
     }
 
     getAllStockDataforDownload<T>(): Observable<T> {
         let url = `${this.getAllStockListUrl}`;
-        return this.http.post<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllStockDataforDownload());
-            }));
+            });
     }
 
     getItemNonStockListEndPoint<T>(data): Observable<T> {
         let url = `${this.nonStockListUrl}`;
-        return this.http.post<any>(url, data, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(url, data, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemNonStockListEndPoint(data));
-            }));
+            });
     }
     getRolesData<T>(): Observable<T> {
 
-        return this.http.get<any>(this._rolesDataUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this._rolesDataUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getRolesData());
-            }));
+            });
     }
     getRolesDatayRoleId<T>(event): Observable<T> {
         let url = `${this.rolesDataByRoleId}/${event}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getRolesData());
-            }));
+            });
     }
     getStocklist<T>(): Observable<T> {
 
-        return this.http.get<any>(this.liststockUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.liststockUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getStocklist());
-            }));
+            });
     }
 
 
     getitemNonstockListEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.listNonstockUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.listNonstockUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemNonstockListEndpoint());
-            }));
+            });
     }
 
 
 
     getitemStockListEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.liststockUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.liststockUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemStockListEndpoint());
-            }));
+            });
     }
 
     getitemEquipmentListEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.listeqpmntUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.listeqpmntUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemEquipmentListEndpoint());
-            }));
+            });
     }
 
     getManufacturerEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.manufUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.manufUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getManufacturerEndpoint());
-            }));
+            });
     }
 
 
     getPartnumbersEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.partUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.partUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getPartnumbersEndpoint());
-            }));
+            });
     }
 
     getEquipmentEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.equipUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.equipUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEquipmentEndpoint());
-            }));
+            });
     }
 
 
@@ -380,109 +380,109 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
         let url = `${this.getAircraftTypeUrl}/${selectedvalues}`;
 
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemMasterEndpoint());
-            }));
+            });
     }
     updateDeleteStatus<T>(selectedvalues: any): Observable<T> {
 
         let url = `${this._updateDeleteStatus}/${selectedvalues}`;
 
-        return this.http.put<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateDeleteStatus(selectedvalues));
-            }));
+            });
     }
     updateDeleteStatusNonStock<T>(selectedvalues: any): Observable<T> {
 
         let url = `${this._updateDeleteStatusNonStock}/${selectedvalues}`;
 
-        return this.http.put<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateDeleteStatusNonStock(selectedvalues));
-            }));
+            });
     }
 
     getwarningdataEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getwarningUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getwarningUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getwarningdataEndpoint());
-            }));
+            });
     }
 
 
     getCountrysTypes<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getCountryTypeUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getCountryTypeUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCountrysTypes());
-            }));
+            });
     }
 
     getNewitemMasterEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._actionsUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemMasterEndpoint(userObject));
-            }));
+            });
     }
 
     saveItemMasterNonStock<T>(itemMasterNonStockObject: any): Observable<T> {
 
-        return this.http.post<any>(this._itemMasterNonStockpost, JSON.stringify(itemMasterNonStockObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._itemMasterNonStockpost, JSON.stringify(itemMasterNonStockObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.saveItemMasterNonStock(itemMasterNonStockObject));
-            }));
+            });
     }
 
     saveItemmastercapesmaninfo<T>(data: any): Observable<T> {
-        return this.http.post<any>(this._mancapPost, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._mancapPost, JSON.stringify(data), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.saveItemmastercapesmaninfo(data));
-            }));
+            });
     }
 
     saveAircraftinfo<T>(data: any): Observable<T> {
-        return this.http.post<any>(this._aircraftmodelsPost, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._aircraftmodelsPost, JSON.stringify(data), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.saveAircraftinfo(data));
-            }));
+            });
     }
 
     getNewManufacturerEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._manufactureNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._manufactureNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewManufacturerEndpoint(userObject));
-            }));
+            });
     }
 
     getNewEquipmentEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._equipmentNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._equipmentNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewEquipmentEndpoint(userObject));
-            }));
+            });
     }
 
     getHistoryitemMasterEndpoint<T>(itemMasterId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlAuditHistory}/${itemMasterId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryitemMasterEndpoint(itemMasterId));
-            }));
+            });
     }
 
     getEdititemMasterEndpoint<T>(itemMasterId?: number): Observable<T> {
         let endpointUrl = itemMasterId ? `${this._actionsUrlNew}/${itemMasterId}` : this._actionsUrlNew;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEdititemMasterEndpoint(itemMasterId));
-            }));
+            });
     }
 
     getUpdateitemMasterEndpoint<T>(roleObject: any, itemMasterId: number): Observable<T> {
@@ -680,20 +680,20 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
 
         }
-        return this.http.put<any>(endpointUrl, JSON.stringify(finalobj), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(finalobj), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateitemMasterEndpoint(roleObject, itemMasterId));
-            }));
+            });
     }
 
     getUpdateitemMasterNonstockEndpoint<T>(roleObject: any): Observable<T> {
 
         let endpointUrl = `${this._itemMasterNonStockpost}/${roleObject.itemMasterNonStockId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateitemMasterNonstockEndpoint(roleObject));
-            }));
+            });
     }
 
 
@@ -763,453 +763,460 @@ export class ItemMasterEndpoint extends EndpointFactory {
 
 
         }
-        return this.http.put<any>(endpointUrl, JSON.stringify(equipmentobj), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(equipmentobj), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateitemMasterEquipmentEndpoint(roleObject, itemMasterId));
-            }));
+            });
     }
     getDeleteitemMasterEndpoint<T>(itemMasterId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNew}/${itemMasterId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteitemMasterEndpoint(itemMasterId));
-            }));
+            });
     }
     getNewwarningEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._warnUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._warnUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewwarningEndpoint(userObject));
-            }));
+            });
     }
 
     getDescriptionbypart<T>(partNumber): Observable<T> {
         let url = `${this.listsUrl}/${partNumber}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDescriptionbypart(partNumber));
-            }));
+            });
     }
     getUpdatestockEndpointforActive<T>(itemmaster: any): Observable<T> {
         let endpointUrl = `${this._updateActiveInactiveforstock}/${itemmaster.itemMasterId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(itemmaster), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(itemmaster), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdatestockEndpointforActive<T>(itemmaster));
-            }));
+            });
     }
 
     getUpdateNonstockEndpointforActive<T>(itemmaster: any): Observable<T> {
         let endpointUrl = `${this._updateActiveInactiveforNonstock}/${itemmaster.itemMasterId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(itemmaster), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(itemmaster), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateNonstockEndpointforActive<T>(itemmaster));
-            }));
+            });
     }
 
     getUpdatecustomerEndpointforstock<T>(itemmaster: any): Observable<T> {
         let endpointUrl = `${this._stocksUrlNew}/${itemmaster.itemMasterId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(itemmaster), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(itemmaster), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdatecustomerEndpointforstock(itemmaster));
-            }));
+            });
 
     }
 
     getIntegrationEndpoint<T>(ItemMasterId: any): Observable<T> {
         let url = `${this.getIntegrationUrl}/${ItemMasterId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getIntegrationEndpoint(ItemMasterId));
-            }));
+            });
     }
 
     getItemGroupListEndPoint<T>(): Observable<T> {
         let url = `${this.getItemGroupListEndPointUrl}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemGroupListEndPoint());
-            }));
+            });
     }
 
     getMultiIntegrations<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._multiintegrationsdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._multiintegrationsdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMultiIntegrations(userObject));
-            }));
+            });
     }
 
     //For Storing Item Master Aircraft Data
     getItemMasteraircrafttypeEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._ItemMasterAircraftdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._ItemMasterAircraftdataUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasteraircrafttypeEndpoint(userObject));
-            }));
+            });
     }
     getMultileaves<T>(userObject: any): Observable<T> {
 
 
-        return this.http.post<any>(this._multiintegrationurl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._multiintegrationurl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getMultileaves(userObject));
-            }));
+            });
     }
 
     getCapabilityDataEndpoint<T>(ItemMasterId: any): Observable<T> {
         let url = `${this.getCapabilityUrl}/${ItemMasterId}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getCapabilityDataEndpoint(ItemMasterId));
-            }));
+            });
     }
 
     getAudit<T>(ItemMasterId: number): Observable<T> {
         let endpointUrl = `${this.getAuditById}/${ItemMasterId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAudit(ItemMasterId));
-            }));
+            });
     }
 
     getAuditHistory<T>(ItemMasterId: number): Observable<T> {
         let endpointUrl = `${this.getAuditHistoryById}/${ItemMasterId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAuditHistory(ItemMasterId));
-            }));
+            });
     }
 
     getAuditHistoryNonStock<T>(itemMasterNonStockId: number): Observable<T> {
         let endpointUrl = `${this.getItemMasterNonStockAuditHistoryById}/${itemMasterNonStockId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAuditHistoryNonStock(itemMasterNonStockId));
-            }));
+            });
     }
 
     getitemclassificationnonStockEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.getNonstockList, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.getNonstockList, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getitemclassificationnonStockEndpoint());
-            }));
+            });
     }
 
     getNewitemclassificationEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._itemclassificationUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._itemclassificationUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemclassificationEndpoint(userObject));
-            }));
+            });
     }
     getNewitemAircraftEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._ItemMasterAircraftPostUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._ItemMasterAircraftPostUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemAircraftEndpoint(userObject));
-            }));
+            })
     }
 
 
     getNewitemATAEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._ItemMasterATAPostUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._ItemMasterATAPostUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemATAEndpoint(userObject));
-            }));
+            });
     }
     getNewitemPurcSaleEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._ItemMasterPurcSaleUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._ItemMasterPurcSaleUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemPurcSaleEndpoint(userObject));
-            }));
+            });
     }
 
     getUpdateActionEndpoint<T>(roleObject: any, actionId: number): Observable<T> {
         let endpointUrl = `${this._itemclassificationUrlNew}/${actionId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateActionEndpoint(roleObject, actionId));
-            }));
+            });
     }
 
     // get all aircraft models
     getAllAircraftList(): any {
         const getaircraftUrl = `${Url}AircraftManufacturer/getAll`;
         return this.http.get(getaircraftUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getAllAircraftList());
-            }));
+            });
     }
     getPNIMMappingEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._itemPNMappingUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._itemPNMappingUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getPNIMMappingEndpoint(userObject));
-            }));
+            });
     }
 
     getAircraftMappingEndpoint<T>(ItemmasterId: number, deletedStatus): Observable<T> {
         let endpointUrl = `${this._getAircraftMapped}/${ItemmasterId}?isDeleted=${deletedStatus}`;
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAircraftMappingEndpoint(ItemmasterId, deletedStatus));
-            }));
+            });
     }
     getATAMappingEndpoint<T>(ItemmasterId: number, deletedStatus): Observable<T> {
         let endpointUrl = `${this._getATAMapped}/${ItemmasterId}?isDeleted=${deletedStatus}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getATAMappingEndpoint(ItemmasterId, deletedStatus));
-            }));
+            });
     }
     getNewitemExportInfoEndpoint<T>(Object: any): Observable<T> {
         const { ItemMasterId } = Object;
 
-        return this.http.post<any>(`${this._ItemMasterExportInfoUrlNew}/${ItemMasterId}`, JSON.stringify(Object), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._ItemMasterExportInfoUrlNew}/${ItemMasterId}`, JSON.stringify(Object), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewitemExportInfoEndpoint(Object));
-            }));
+            });
     }
     updateItemMasterAircraftEndpoint<T>(ItemMasterAircraftMappingId: number,): Observable<T> {
 
-        return this.http.put<any>(this._ItemMasterAircraftUpdate, JSON.stringify(ItemMasterAircraftMappingId), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(this._ItemMasterAircraftUpdate, JSON.stringify(ItemMasterAircraftMappingId), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterAircraftEndpoint(ItemMasterAircraftMappingId));
-            }));
+            });
     }
     updateItemMasterATAEndpoint<T>(ItemMasterATAMappingId: number,): Observable<T> {
 
-        return this.http.put<any>(this._ItemMasterATAUpdate, JSON.stringify(ItemMasterATAMappingId), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(this._ItemMasterATAUpdate, JSON.stringify(ItemMasterATAMappingId), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterATAEndpoint(ItemMasterATAMappingId));
-            }));
+            });
     }
     updateItemMasterPurchaseSaleEndpoint<T>(ItemMasterPurchaseSaleId: number, data): Observable<T> {
 
-        return this.http.put<any>(`${this._ItemMasterPurcSaleUpdate}/${ItemMasterPurchaseSaleId}`, data, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(`${this._ItemMasterPurcSaleUpdate}/${ItemMasterPurchaseSaleId}`, data, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterPurchaseSaleEndpoint(ItemMasterPurchaseSaleId, data));
-            }));
+            });
     }
 
     saveATAMapping<T>(mappedData: any): Observable<T> {
-        return this.http.post<any>(this._ItemMasterATAPostUrlNew, JSON.stringify(mappedData), this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.post<T>(this._ItemMasterATAPostUrlNew, JSON.stringify(mappedData), this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.saveATAMapping(mappedData));
-            }));
+            })
 
     }
     updateATAMapping<T>(mappedData: any, ItemMasterATAMappingId): Observable<T> {
-        return this.http.put<any>(`${this._ItemMasterATAUpdateUrlNew}/${ItemMasterATAMappingId}`, JSON.stringify(mappedData), this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.put<T>(`${this._ItemMasterATAUpdateUrlNew}/${ItemMasterATAMappingId}`, JSON.stringify(mappedData), this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.saveATAMapping(mappedData));
-            }));
+            })
 
     }
     searchAirMappedByMultiTypeIDModelIDDashID<T>(ItemmasterId: number, searchUrl: string): Observable<T> {
         let endpointUrl = `${this._searchgetItemAirMappingByMultiTypeIDModelIDDashID}/${ItemmasterId}?${searchUrl}`;
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.searchAirMappedByMultiTypeIDModelIDDashID(ItemmasterId, searchUrl));
-            }));
+            });
     }
     searchATAMappedByMultiATAIDATASUBID<T>(ItemmasterId: number, searchUrl: string): Observable<T> {
         let endpointUrl = `${this._searchgetItemATAMappingByMultiTypeIDModelIDDashID}/${ItemmasterId}?${searchUrl}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.searchATAMappedByMultiATAIDATASUBID(ItemmasterId, searchUrl));
-            }));
+            });
     }
     searchItemMasterATAMappedByMultiATAIDATASUBID<T>(ItemmasterId: number, searchUrl: string): Observable<T> {
         let endpointUrl = `${this._advanceSearchGetItemATAMappedByItemMasterIDMultiATAIDATASubID}/${ItemmasterId}?${searchUrl}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.searchItemMasterATAMappedByMultiATAIDATASUBID(ItemmasterId, searchUrl));
-            }));
+            });
     }
 
     getPurcSaleByItemMasterID<T>(ItemmasterId: number): Observable<T> {
         let endpointUrl = `${this._getPurcSaleDetails}/${ItemmasterId}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getPurcSaleByItemMasterID(ItemmasterId));
-            }));
+            });
     }
 
     getItemMasterExportInfoById<T>(ItemmasterId: number): Observable<T> {
         let endpointUrl = `${this._getExportInfoDetails}/${ItemmasterId}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterExportInfoById(ItemmasterId));
-            }));
+            });
     }
 
     deleteitemMasterMappedATAEndpoint<T>(id: any): Observable<T> {
-        return this.http.post<any>(`${this._ItemMasterATAMappedDelete}/${id}`, JSON.stringify({}), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._ItemMasterATAMappedDelete}/${id}`, JSON.stringify({}), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteitemMasterMappedAirEndpoint(id));
-            }));
+            });
     }
 
     restoreATAMappedEndpoint<T>(id: any): Observable<T> {
-        return this.http.post<any>(`${this._ItemMasterATAMappedRestore}/${id}`, JSON.stringify({}), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._ItemMasterATAMappedRestore}/${id}`, JSON.stringify({}), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreATAMappedEndpoint(id));
-            }));
+            });
     }
 
     deleteitemMasterMappedAirEndpoint<T>(id: any): Observable<T> {
-        return this.http.post<any>(`${this._ItemMasterAircraftMappedDelete}/${id}`, JSON.stringify({}), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._ItemMasterAircraftMappedDelete}/${id}`, JSON.stringify({}), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteitemMasterMappedAirEndpoint(id));
-            }));
+            });
     }
 
     restoreAircraftRow<T>(id: any): Observable<T> {
-        return this.http.post<any>(`${this._ItemMasterAircraftMappedRestore}/${id}`, JSON.stringify({}), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(`${this._ItemMasterAircraftMappedRestore}/${id}`, JSON.stringify({}), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreAircraftRow(id));
-            }));
+            });
     }
 
 
     deleteitemMasterMappedPurcSaleEndpoint<T>(userObject: any): Observable<T> {
-        return this.http.post<any>(this._ItemMasterPurcSaleMappedDelete, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._ItemMasterPurcSaleMappedDelete, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteitemMasterMappedPurcSaleEndpoint(userObject));
-            }));
+            });
     }
 
     updateItemMasterSerialized<T>(itemMasterId: number, active: boolean): Observable<T> {
         let endpointUrl = `${this.UpdateItemMasterSerialzedURL}/${itemMasterId}/${active}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterSerialized<T>(itemMasterId, active));
-            }));
+            });
     }
 
     updateItemMasterTimeLife<T>(itemMasterId: number, active: boolean): Observable<T> {
         let endpointUrl = `${this.UpdateItemMasterTimeLifeURL}/${itemMasterId}/${active}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterTimeLife<T>(itemMasterId, active));
-            }));
+            });
     }
 
     getPartDetailsDropdown<T>(): Observable<T> {
-        return this.http.get<any>(this.GetPartsDropDownURL, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.GetPartsDropDownURL, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getPartDetailsDropdown<T>());
-            }));
+            });
     }
 
     getPartDetailsByid<T>(action: any): Observable<T> {
-        return this.http.get<any>(`${this.getpartdetailsWithidUrl}/${action}`, this.getRequestHeaders())
-            .pipe(catchError(err => {
-                return this.handleError(err, () => this.getPartDetailsByid(action));
-            }));
+        return this.http.get<T>(`${this.getpartdetailsWithidUrl}/${action}`, this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.getPartDetailsByid(action));
+            });
     }
 
 
     searchItemMaster<T>(searchParameters: any): Observable<T> {
-        return this.http.post<any>(this.getSearchUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.post<T>(this.getSearchUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.searchItemMaster(searchParameters));
-            }));
+            })
     }
 
+    searchitemmasterfromsoqpop<T>(searchParameters: any): Observable<T> {
+        return this.http.post<T>(this.getSearchItemMasterfromsoqpopUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
+                return this.handleErrorCommon(err, () => this.searchItemMaster(searchParameters));
+            })
+    }
+    
     searchMultiPartNumbers<T>(searchParameters: any): Observable<T> {
-        return this.http.post<any>(this.getSearchMulitPartNumberUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.post<T>(this.getSearchMulitPartNumberUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.searchMultiPartNumbers(searchParameters));
-            }));
+            })
     }
     multiSearch<T>(searchParameters: any): Observable<T> {
-        return this.http.post<any>(this.getMultiSearchUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.post<T>(this.getMultiSearchUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.multiSearch(searchParameters));
-            }));
+            })
     }
 
     searchPartNumberAdvanced<T>(searchParameters: any): Observable<T> {
-        return this.http.post<any>(this.getSearchPartNumberAdvancedUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
-            .pipe(catchError(err => {
+        return this.http.post<T>(this.getSearchPartNumberAdvancedUrl, JSON.stringify(searchParameters), this.getRequestHeaders())
+            .catch(err => {
                 return this.handleError(err, () => this.searchPartNumberAdvanced(searchParameters));
-            }));
+            })
     }
 
     searchPartNumber<T>(partNumber: string): Observable<T> {
         let url = `${this.searchPartNumberUrl}/${partNumber}`;
-        return this.http.get<any>(url, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(url, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.searchPartNumber(partNumber));
-            }));
+            });
     }
 
     getalterqquparts<T>(itemMasterId: number): Observable<T> {
         let endpointUrl = `${this.getalterqqupartsUrl}/?itemMasterId=${itemMasterId}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getalterqquparts(itemMasterId));
-            }));
+            });
     }
 
     createnhatlaaltequpart<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this.saveNtaePartsUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.saveNtaePartsUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.createnhatlaaltequpart(userObject));
-            }));
+            })
 
     }
     updatenhatlaaltequpart<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this.updateNtaePartsUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.updateNtaePartsUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updatenhatlaaltequpart(userObject));
-            }));
+            })
 
     }
 
     getnhatlaaltequpartlis<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this.getnhatlaaltequpartlisUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.getnhatlaaltequpartlisUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getnhatlaaltequpartlis(userObject));
-            }));
+            })
 
     }
 
     getequivalencypartlist<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this.getequivalencypartlistUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this.getequivalencypartlistUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getequivalencypartlist(userObject));
-            }));
+            })
 
     }
 
@@ -1218,61 +1225,61 @@ export class ItemMasterEndpoint extends EndpointFactory {
         let endpointUrl = `${this.deleteNTAERowUrl}?mappingId=${itemMasterId}&updatedBy=${userId}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteNTAERow(itemMasterId, userId));
-            }));
+            });
     }
 
     restoreNTAERow<T>(itemMasterId: number, userId: string): Observable<T> {
         let endpointUrl = `${this.restoreNTAERowUrl}?mappingId=${itemMasterId}&updatedBy=${userId}`;
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreNTAERow(itemMasterId, userId));
-            }));
+            });
     }
 
     // createequivalencypart
     createNTAEFileUploadForEquivalency(file) {
         return this.http.post(`${this.createequivalencypartUrl}`, file)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.createNTAEFileUploadForEquivalency(file));
-            }));
+            });
     }
 
     // updateequivalencypart
     updateNTAEFileUploadForEquivalency(file) {
         return this.http.post(`${this.updateequivalencypartUrl}`, file)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.updateNTAEFileUploadForEquivalency(file));
-            }));
+            });
     }
 
     getPartnumberswithManufacturerEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.partManufacturerUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.partManufacturerUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getPartnumberswithManufacturerEndpoint());
-            }));
+            });
     }
 
 
     saveItemMasterCapes(data) {
         const url = `${this.configurations.baseUrl}/api/itemMaster/createitemmastercapes`;
         return this.http.post(url, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.saveItemMasterCapes(data));
-            }));
+            });
     }
 
     updateItemMasterCapes(capId, data) {
         const url = `${this.configurations.baseUrl}/api/ItemMaster/updateitemmastercapes/${capId}`;
         return this.http.put<any>(url, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterCapes(capId, data));
-            }));
+            });
     }
 
     //deleteCapabilityById
@@ -1280,10 +1287,10 @@ export class ItemMasterEndpoint extends EndpointFactory {
         let endpointUrl = `${this.deleteCapabilityUrl}?itemMasterCapesId=${capabilityId}&updatedBy=${user}`
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteCapabilityById(capabilityId, user));
-            }));
+            });
     }
 
     //restoreCapabilityById
@@ -1291,125 +1298,125 @@ export class ItemMasterEndpoint extends EndpointFactory {
         let endpointUrl = `${this.restoreCapabilityUrl}?itemMasterCapesId=${capabilityId}&updatedBy=${user}`
 
         return this.http
-            .get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.restoreCapabilityById(capabilityId, user));
-            }));
+            });
     }
 
     //getItemMasterCapabilityAuditHistory
     getItemMasterCapabilityAuditHistory(capabilityId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmastercapesAudit/${capabilityId}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterCapabilityAuditHistory(capabilityId));
-            }));
+            });
     }
 
     //getnhatlaaltequparthistory
     getnhatlaaltequparthistory(itemMappingId) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/nhatlaaltequparthistory?itemMappingId=${itemMappingId}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getnhatlaaltequparthistory(itemMappingId));
-            }));
+            });
     }
 
     getItemMasterAircraftAuditHistory(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getItemMasterAircraftMappedAudit?itemMasterAircraftMappingId=${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterAircraftAuditHistory(id));
-            }));
+            });
     }
     getATAMappedAudit(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getATAMappedAudit/${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getATAMappedAudit(id));
-            }));
+            });
     }
 
     getItemMasterAltEquiMappingParts(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/getItemMasterAltEquiMappingParts?itemMasterId=${id}`)
-            .pipe(catchError(error => {
-                return this.handleError(error, () => this.getItemMasterAltEquiMappingParts(id));
-            }));
+            .catch(error => {
+                return this.handleErrorCommon(error, () => this.getItemMasterAltEquiMappingParts(id));
+            });
     }
 
     updateItemMasterAircraftById(data) {
         const url = `${this.configurations.baseUrl}/api/ItemMaster/itemMasterAircraftUpdate/${data.itemMasterAircraftMappingId}`;
         return this.http.put<any>(url, JSON.stringify(data), this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.updateItemMasterAircraftById(data));
-            }));
+            });
     }
 
     getItemMasterNonStockDataById(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/GetNonStockDataById/${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterNonStockDataById(id));
-            }));
+            });
     }
 
     advancedSerachStockListEndPoint<T>(data): Observable<T> {
         let url = `${this.advancedSearchstockListUrl}`;
-        return this.http.post<any>(url, data, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(url, data, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.advancedSerachStockListEndPoint(data));
-            }));
+            });
     }
     advancedSearchNonStockListEndPoint<T>(data): Observable<T> {
         let url = `${this.advancedSearchNonStockListUrl}`;
-        return this.http.post<any>(url, data, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(url, data, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.advancedSearchNonStockListEndPoint(data));
-            }));
+            });
     }
     deleteItemMasterPurcSaleEndpoint<T>(id: number, updatedBy: string): Observable<T> {
         let endpointUrl = `${this.configurations.baseUrl}/api/ItemMaster/itemmasterpurcsaledelete/${id}?updatedBy=${updatedBy}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.deleteItemMasterPurcSaleEndpoint(id, updatedBy));
-            }));
+            });
     }
     getItemMasterNhaMappingParts(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/GetItemMasterNhaMappingParts?itemMasterId=${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterNhaMappingParts(id));
-            }));
+            });
     }
     getItemMasterTlaMappingParts(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/itemmaster/getItemMasterTlaMappingParts?itemMasterId=${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterTlaMappingParts(id));
-            }));
+            });
     }
     getDataForStocklineByItemMasterId(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getdataforstockline/${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getDataForStocklineByItemMasterId(id));
-            }));
+            });
     }
     getItemMasterDataById(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getitemmasterdatabyid/${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterDataById(id));
-            }));
+            });
     }
     getActivePartListByItemType(type) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/getactivepartlist/${type}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getActivePartListByItemType(type));
-            }));
+            });
     }
     getItemMasterClassificationByType(type) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/itemmasterclassificationdropdown?type=${type}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterClassificationByType(type));
-            }));
+            });
     }
     getItemMasterMappingPart(id) {
         return this.http.get<any>(`${this.configurations.baseUrl}/api/ItemMaster/get-itemmaster-mappingpart/${id}`)
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getItemMasterMappingPart(id));
-            }));
+            });
     }
 }

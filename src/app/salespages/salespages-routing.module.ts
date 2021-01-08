@@ -14,7 +14,8 @@ import { SalesOrderListComponent } from "../components/sales/order/sales-order-l
 import { SalesOrderCreateComponent } from "../components/sales/order/sales-order-create/sales-order-create.component";
 import { SalesOrderComponent } from "../components/sales/order/sales-order/sales-order-component";
 import { SalesOrderConfirmationListComponent } from "../components/sales/order/sales-order-confirmation-list/sales-order-confirmation-list.component";
-
+import { SOQApprovalRuleComponent} from  "../components/sales/quotes/shared/components/soq-approval-rule/soq-approval-rule.component";
+import { SOApprovalRuleComponent } from "../components/sales/order/shared/components/so-approval-rule/so-approval-rule.component";
 
 const salesPagesRoutes: Routes = [
   {
@@ -59,6 +60,16 @@ const salesPagesRoutes: Routes = [
            path: "sales-order-confirmation-list",
            component: SalesOrderConfirmationListComponent,
            data: { title: "SO Confirmation List" }
+        },
+        { 
+          path: "app-soq-approval-rule", 
+          component: SOQApprovalRuleComponent, 
+          data: { title: "Sales Order Quote Approval Rule"} 
+        },
+        { 
+          path: "app-so-approval-rule", 
+          component: SOApprovalRuleComponent, 
+          data: { title: "Sales Order Approval Rule"} 
         }
     ]
   }

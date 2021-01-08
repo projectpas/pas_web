@@ -1,17 +1,16 @@
-
-import {throwError as observableThrowError,  Observable } from 'rxjs';
 import { Injectable, Injector } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpResponseBase, HttpErrorResponse } from '@angular/common/http';
 
-
-
-
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 //import { AccountListingEndpointService } from './account-listing-endpoint.service';
 import { map } from 'rxjs/operators';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class AccountListingService extends EndpointFactory {
 
@@ -49,75 +48,66 @@ export class AccountListingService extends EndpointFactory {
    
     public getAll(serverSidePagesData: any): Observable<any> {
         //return this.http.get('dist/assets/data/accountlisting.json').pipe(map((response: any) => response)); 
-        return this.http.post<any>(this.getGlAccountUri, JSON.stringify(serverSidePagesData), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post(this.getGlAccountUri, JSON.stringify(serverSidePagesData), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAll(serverSidePagesData));
-            }));
+            });
       //return this.http.get(`${this.getGlAccountUri}`).pipe(map((response: any) => response)); 
-        //return forkJoin(this.accountListEndpointservice.getData<any[]>());
+        //return Observable.forkJoin(this.accountListEndpointservice.getData<any[]>());
     }
 
     public getLedgerData(): Observable<any> {
         //return this.http.get('dist/assets/data/accountlisting.json').pipe(map((response: any) => response)); 
       return this.http.get(`${this.getLedgerNamesUri}`).pipe(map((response: any) => response)); 
-        //return forkJoin(this.accountListEndpointservice.getData<any[]>());
+        //return Observable.forkJoin(this.accountListEndpointservice.getData<any[]>());
     }
 
     public getLeafNodeData(): Observable<any> {
         //return this.http.get('dist/assets/data/accountlisting.json').pipe(map((response: any) => response)); 
       return this.http.get(`${this.getLeafNodeUri}`).pipe(map((response: any) => response)); 
-        //return forkJoin(this.accountListEndpointservice.getData<any[]>());
+        //return Observable.forkJoin(this.accountListEndpointservice.getData<any[]>());
     }
 
     public getGlAccountById(nodeId): Observable<any> {
         //return this.http.get('dist/assets/data/accountlisting.json').pipe(map((response: any) => response)); 
       return this.http.get(`${this.getGlAccountByIdUri}/${nodeId}`).pipe(map((response: any) => response)); 
-        //return forkJoin(this.accountListEndpointservice.getData<any[]>());
+        //return Observable.forkJoin(this.accountListEndpointservice.getData<any[]>());
     }
 
     public getEntitiesByParentId(parentId): Observable<any> {
         //return this.http.get('dist/assets/data/accountlisting.json').pipe(map((response: any) => response)); 
         return this.http.get(`${this.getEntitiesByParentIdUri}/${parentId}`).pipe(map((response: any) => response));
-        //return forkJoin(this.accountListEndpointservice.getData<any[]>());
+        //return Observable.forkJoin(this.accountListEndpointservice.getData<any[]>());
     }
 
-    createGlAccount1(data: any): Observable<any> {
-        let body = JSON.stringify(data);
-       // alert(body);
-        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
-        return this.http.post(this.createGlAccountUri, body, this.getRequestHeaders())
-            .pipe(map((response: HttpResponseBase) => {
-                return <any>response;
-
-            }),catchError((error: HttpErrorResponse) => observableThrowError(error)));
-    }
+    
 
     createGlAccount<T>(userObject: any): Observable<T> {
     //    alert(JSON.stringify(userObject));
 
-        return this.http.post<any>(this.createGlAccountUri, JSON.stringify(userObject), this.getRequestHeaders())
-                .pipe(catchError(error => {
+        return this.http.post<T>(this.createGlAccountUri, JSON.stringify(userObject), this.getRequestHeaders())
+                .catch(error => {
                     return this.handleError(error, () => this.createGlAccount(userObject));
-                }));
+                });
         }
    // }
 
 
     getGlobalEntityRecords<T>(pageSearch: any): Observable<T> {
         let endpointUrl = this.getGlAccountUrl;
-        return this.http.post<any>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(pageSearch), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getGlobalEntityRecords(pageSearch));
-            }));
+            });
     }
 
     updatestatusactive<T>(userObject: any): Observable<T> {
         //    alert(JSON.stringify(userObject));
         let endpointUrl = `${this.glaccountstatus}?glAccountId=${userObject.glAccountId}&status=${userObject.isActive}&updatedBy=${userObject.updatedBy}`;
-        return this.http.get<any>(endpointUrl,  this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl,  this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updatestatusactive(userObject));
-            }));
+            });
     }
    // }
 
@@ -125,16 +115,18 @@ export class AccountListingService extends EndpointFactory {
         let body = JSON.stringify(data);
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(this.updateGlAccountUri, body, this.getRequestHeaders())
-            .pipe(map((response: HttpResponseBase) => {
+            .map((response: HttpResponseBase) => {
                 return <any>response;
 
-            }),catchError((error: HttpErrorResponse ) => observableThrowError(error)));
+            }).catch(error => {
+                return this.handleError(error, () => this.updateGlAccount(data));
+            });
     }
 
     public editGlAccountById(accountId): Observable<any> {
         //return this.http.get('dist/assets/data/accountlisting.json').pipe(map((response: any) => response)); 
         return this.http.get(`${this.editGlAccountUri}/${accountId}`).pipe(map((response: any) => response)); 
-        //return forkJoin(this.accountListEndpointservice.getData<any[]>());
+        //return Observable.forkJoin(this.accountListEndpointservice.getData<any[]>());
     }
 
     public deleteGlAccountById(accountId): Observable<any> {         
@@ -143,9 +135,9 @@ export class AccountListingService extends EndpointFactory {
         let deleteglIdUrl = `${this.deleteglIdUri}/${accountId}`;
 
         return this.http.delete(deleteglIdUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.deleteGlAccountById(accountId));
-            }));
+            });
     }
 
 
@@ -154,9 +146,9 @@ export class AccountListingService extends EndpointFactory {
         let endpointUrl = `${this._glCashFlowClassificationsUrlAuditHistory}/${accountId}`;
 
         return this.http.get(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+            .catch(error => {
                 return this.handleError(error, () => this.getHistory(accountId));
-            }));
+            });
     }
     
 }

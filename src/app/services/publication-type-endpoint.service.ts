@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class publicationTypeEndpointService extends EndpointFactory {
 
@@ -35,71 +35,71 @@ export class publicationTypeEndpointService extends EndpointFactory {
 
     getDocumentTypeEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.DocumentTypeUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.DocumentTypeUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDocumentTypeEndpoint());
-            }));
+            });
     }
 
     getAllDocumentTypeEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.DocumentTypeUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.DocumentTypeUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllDocumentTypeEndpoint());
-            }));
+            });
     }
     getDocumentTypeLiteEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this._documentTypeLiteUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this._documentTypeLiteUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDocumentTypeLiteEndpoint());
-            }));
+            });
     }
 
     getNewActionEndpoint<T>(userObject: any): Observable<T> {
 
         alert(JSON.stringify(userObject));
-        return this.http.post<any>(this._documentTypePostUrl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._documentTypePostUrl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewActionEndpoint(userObject));
-            }));
+            });
     }
 
     getEditActionEndpoint<T>(actionId?: number): Observable<T> {
         let endpointUrl = actionId ? `${this._documentTypePostUrl}/${actionId}` : this._documentTypePostUrl;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditActionEndpoint(actionId));
-            }));
+            });
     }
 
     getUpdateActionEndpoint<T>(roleObject: any, actionId: number): Observable<T> {
         let endpointUrl = `${this._documentTypeUpdateUrl}/${actionId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateActionEndpoint(roleObject, actionId));
-            }));
+            });
     }
 
     getDeleteActionEndpoint<T>(actionId: number, updatedBy: string): Observable<T> {
         let endpointUrl = `${this._documentTypeDeleteUrl}/${actionId}?updatedBy=${updatedBy}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteActionEndpoint(actionId, updatedBy));
-            }));
+            });
     }
 
 
     getHistoryDocumentTypeEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNewAuditHistory}/${actionId}`;
         alert(JSON.stringify(actionId));
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryDocumentTypeEndpoint(actionId));
-            }));
+            });
     }
 
     //getAuditById<T>(DocumentTypePortalId: number): Observable<T> {

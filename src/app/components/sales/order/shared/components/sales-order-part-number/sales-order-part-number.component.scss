@@ -16,10 +16,6 @@ button:disabled {
   margin-right: 0px;
 }
 
-.ui-table-scrollable-header-box {
-  margin-right: 17px !important;
-}
-
 .zui-table {
   border: none;
   border-right: solid 1px #DDEFEF;
@@ -50,9 +46,16 @@ button:disabled {
 }
 .zui-scroller {
   overflow-y: hidden;
-    padding-bottom: 5px;
-    width: 1279px;
-    border: 1px solid rgba(0,0,0,.125);
+  padding-bottom: 5px;
+  width: 1279px;
+  border: 1px solid rgba(0,0,0,.125);
+}
+
+.zui-scroller-view {
+  overflow-y: hidden;
+  padding-bottom: 5px;
+  width: 1097px;
+  border: 1px solid rgba(0,0,0,.125);
 }
 .zui-table .zui-sticky-col {
   border-left: solid 1px #DDEFEF;
@@ -61,6 +64,10 @@ button:disabled {
   position: absolute;
   top: auto;
   width: 120px;
+}
+
+.ui-table-scrollable-body {
+  margin-right: 17px !important;
 }
 
 .ui-table-scrollable-body {
@@ -91,6 +98,7 @@ button:disabled {
   position: -webkit-sticky;
   position: sticky ;
   right: 0;
+  width:80px !important;
 }
 .sales-quote-part-search-data tr th:first-child {
    background: #4298ff;

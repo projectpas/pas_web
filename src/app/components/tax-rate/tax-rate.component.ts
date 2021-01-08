@@ -12,8 +12,8 @@ import { AuthService } from '../../services/auth.service';
 import { TaxRateService } from '../../services/taxrate.service';
 import { TaxRate } from '../../models/taxrate.model';
 import { CommonService } from '../../services/common.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 
 import { TableModule, Table } from 'primeng/table';
@@ -61,8 +61,8 @@ export class TaxRateComponent implements OnInit {
     //     this.breadCrumb.currentUrl = '/singlepages/singlepages/app-tax-type';
     //     this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
     // }
-    // @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    // @ViewChild(MatSort,{static:false}) sort: MatSort;
+    // @ViewChild(MatPaginator) paginator: MatPaginator;
+    // @ViewChild(MatSort) sort: MatSort;
     // Active: string = "Active";
     // displayedColumns = ['taxTypeId', 'description', 'createdBy', 'By', 'updatedDate', 'createdDate'];
     // dataSource: MatTableDataSource<TaxType>;

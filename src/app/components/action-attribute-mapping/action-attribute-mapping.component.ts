@@ -4,7 +4,7 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { MenuItem } from 'primeng/api';//bread crumb
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { AuthService } from '../../services/auth.service';
- 
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 @Component({

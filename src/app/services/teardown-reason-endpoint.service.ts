@@ -1,11 +1,11 @@
-import { Injectable, Injector } from '@angular/core';
+﻿import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class TeardownReasonEndpointService extends EndpointFactory {
 
@@ -25,64 +25,64 @@ export class TeardownReasonEndpointService extends EndpointFactory {
 
 	getTeardownReasonEndpoint<T>(): Observable<T> {
 
-		return this.http.get<any>(this.TeardownReasonUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(this.TeardownReasonUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getTeardownReasonEndpoint());
-			}));
+			});
 	}
 
 	addTeardownReasonEndpoint<T>(TeardownReason: any): Observable<T> {
 
-        return this.http.post<any>(this._teardownReasonNewUrl, JSON.stringify(TeardownReason), this.getRequestHeaders())
-			.pipe(catchError(error => {
+        return this.http.post<T>(this._teardownReasonNewUrl, JSON.stringify(TeardownReason), this.getRequestHeaders())
+			.catch(error => {
                 return this.handleError(error, () => this.addTeardownReasonEndpoint(TeardownReason));
-			}));
+			});
 	}
 
 	updateTeardownReasonEndpoint<T>(TeardownReason: any): Observable<T> {
         let endpointUrl = `${this._teardownReasonEditUrl}/${TeardownReason.teardownReasonId}`;
 
-        return this.http.post<any>(endpointUrl, JSON.stringify(TeardownReason), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(endpointUrl, JSON.stringify(TeardownReason), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.updateTeardownReasonEndpoint(TeardownReason));
-            }));
+            });
 	}
 
 	getUpdateActionEndpoint<T>(roleObject: any, actionId: number): Observable<T> {
         let endpointUrl = `${this._teardownReasonEditUrl}/${actionId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateActionEndpoint(roleObject, actionId));
-            }));
+            });
     }
 
 
 	removeTeardownReasonEndpoint<T>(TeardownReasonId: number, updatedBy: string): Observable<T> {
         let endpointUrl = `${this._deleteTeardownReason}/${TeardownReasonId}&updatedBy=${updatedBy}`;
 
-		return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
                 return this.handleError(error, () => this.removeTeardownReasonEndpoint(TeardownReasonId,updatedBy));
-			}));
+			});
 	}
 
 	getDeleteActionEndpoint<T>(actionId: number, updatedBy: string): Observable<T> {
         let endpointUrl = `${this._deleteTeardownReason}/${actionId}?updatedBy=${updatedBy}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteActionEndpoint(actionId, updatedBy));
-            }));
+            });
     }
 
 	getHistoryEndpoint<T>(actionId: number): Observable<T> {
 		let endpointUrl = `${this._historyTeardownReason}/${actionId}`;
 
-		return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-			.pipe(catchError(error => {
+		return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+			.catch(error => {
 				return this.handleError(error, () => this.getHistoryEndpoint(actionId));
-			}));
+			});
     }
 
 }

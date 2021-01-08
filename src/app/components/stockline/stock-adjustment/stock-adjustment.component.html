@@ -58,7 +58,7 @@
 										<!-- <td>Management Structure</td> -->
 										<td>{{item.stocklineAdjustmentDataType}}</td>
 										<td>
-											{{existingMgmentStuc.level1 ? existingMgmentStuc.level1 : ''}}									
+											{{existingMgmentStuc.level1 ? existingMgmentStuc.level1 : ''}}		
 										</td>
 										<td>
 											<div *ngIf="showCompany" class="col-md-8">
@@ -77,54 +77,6 @@
 											divisionAllow || deptAllow" class="form-control"
 											 [(ngModel)]="item.adjustmentMemo"
 											  name="ManagementStructureMemo"></textarea>
-
-											  <!-- <div class="col-sm-12" *ngIf="companyAllow || businessAllow || 
-											 	divisionAllow || deptAllow">
-												<div class="form-group memo-popup-cstm col-sm-12" style="margin-bottom:10px">
-													<div class="col-sm-11" style="margin-top:-8px">
-													<span>
-													<div [innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)" class="form-control"
-														style="width:100%;" class="text_editor_box"></div> 
-													</span>
-													</div>
-													<div class="col-sm-1" style="margin-top:-4px">
-													<i class="fa fa-pencil" style="margin-top:-3px" data-toggle="modal"
-													data-target="#textarea-popup" 
-													matTooltip="Add Memo" (ngModelChange)="enableSave()"
-													matTooltipPosition="above" (click)="onAddTextAreaInfo('memo')"></i>
-													</div>
-												</div>
-											  </div> -->
-											  
-
-                                             <!-- <div class="col-sm-12" *ngIf="companyAllow || businessAllow || 
-											 divisionAllow || deptAllow">
-											  <div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												<div 
-												  [innerHTML]="item.adjustmentMemo"
-												  name="ManagementStructureMemo"												  
-												  [matTooltip]="parsedText(item.adjustmentMemo)"
-												  matTooltipPosition="above"
-												  [(ngModel)]="item.adjustmentMemo"
-												  class="form-control"
-												  style="width: 100%;"
-												  class="text_editor_box"
-												></div>
-											  </div>
-											  <div class="col-sm-1">
-												<span>
-												  <a
-												  class="btn nobg"
-												  data-toggle="modal"
-												  data-target="#memo-popup-Doc"												 
-												  (click)="onClickMemo('adjustmentMemo',i, item.adjustmentMemo)"
-												  matTooltip="Add Memo"
-												  matTooltipPosition="above"><i class="fa fa-pencil"></i>
-												  </a>
-												</span>
-											  </div>
-											</div> -->
 										</td>
 									</tr>
 									<tr>
@@ -201,32 +153,6 @@
 										<textarea *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow"
 										 class="form-control" [(ngModel)]="item.adjustmentMemo"
 										  name="siteAdjustmentMemo"></textarea>
-										  <!-- <div class="col-sm-12" *ngIf="siteAllow || warehouseAllow || locationAllow || shelfAllow || binAllow">
-										   <div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-											 <div 
-											   [innerHTML]="item.adjustmentMemo"
-											   [matTooltip]="parsedText(item.adjustmentMemo)"
-											   matTooltipPosition="above"
-											   name="siteAdjustmentMemo{{i}}"
-											   [(ngModel)]="item.adjustmentMemo"
-											   class="form-control"
-											   style="width: 100%;"
-											   class="text_editor_box"
-											 ></div>
-										   </div>
-										   <div class="col-sm-1">
-											 <span>
-											   <a
-											   class="btn nobg"
-											   data-toggle="modal"
-											   data-target="#memo-popup-Doc"
-											   (click)="onClickMemo()"
-											   matTooltip="Add Memo"
-											   matTooltipPosition="above"><i class="fa fa-pencil"></i>
-											   </a>
-											 </span>
-										   </div>
-										   </div> -->
 									</td>
 								</tr>
 								</ng-container>
@@ -319,33 +245,6 @@
 											<textarea *ngIf="categoryAllow" class="form-control"
 											 [(ngModel)]="item.adjustmentMemo"
 											  name="categoryAdjustmentMemo"></textarea>
-
-											  <!-- <div class="col-sm-12" *ngIf="categoryAllow">
-												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="categoryAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above"><i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div>-->
 										</td>
 									</tr>
 								</ng-container>		
@@ -367,33 +266,6 @@
 											<textarea *ngIf="partNumberAllow"
 											 class="form-control" [(ngModel)]="item.adjustmentMemo" 
 											 name="partNumAdjustmentMemo"></textarea>
-
-											 <!-- <div class="col-sm-12" *ngIf="partNumberAllow">
-												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="partNumAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above"><i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div> -->
 										</td>
 									</tr>
 								</ng-container>							
@@ -415,32 +287,6 @@
 											<textarea *ngIf="serialNumAllow" class="form-control" 
 											[(ngModel)]="item.adjustmentMemo" 
 											name="serialNumAdjustmentMemo"></textarea>
-											<!-- <div class="col-sm-12" *ngIf="serialNumAllow">
-												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="serialNumAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above"><i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div>											 -->
 										</td>
 									</tr>
 								</ng-container>	
@@ -477,7 +323,7 @@
 										<td></td>
 										<td>
 											<div *ngIf="quantityOnHandAllow" class="col-md-8">
-												<select class="form-control" name="onHandNumAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeQtyOnHandAdjReason(item.adjustmentReasonId)">
+												<select class="form-control" name="onHandNumAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeQtyOnHandAdjReason(item.adjustmentReasonId)" required>
 													<option value="0">-- Select --</option>
 													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
 												</select>
@@ -487,33 +333,6 @@
 											<textarea *ngIf="quantityOnHandAllow"
 											 class="form-control" [(ngModel)]="item.adjustmentMemo" 
 											 name="onHandAdjustmentMemo"></textarea>
-
-											 <!-- <div class="col-sm-12" *ngIf="quantityOnHandAllow">
-												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="onHandAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above"><i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div> -->
 										</td>
 									</tr>
 								</ng-container>
@@ -542,7 +361,7 @@
 										</td>
 										<td>
 											<div *ngIf="unitCostAllow" class="col-md-8">
-												<select class="form-control" name="unitCostNumAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeUnitCostAdjReason(item.adjustmentReasonId)">
+												<select class="form-control" name="unitCostNumAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeUnitCostAdjReason(item.adjustmentReasonId)" required>
 													<option value="0">-- Select --</option>
 													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
 												</select>
@@ -552,32 +371,6 @@
 											<textarea *ngIf="unitCostAllow" 
 											class="form-control" [(ngModel)]="item.adjustmentMemo"
 											 name="unitCostAdjustmentMemo"></textarea>
-											 <!-- <div class="col-sm-12" *ngIf="unitCostAllow">
-												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="unitCostAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above"><i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div> -->
 										</td>
 									</tr>
 								</ng-container>
@@ -606,7 +399,7 @@
 										</td>
 										<td>
 											<div *ngIf="unitSalesPriceAllow" class="col-md-8">
-												<select class="form-control" name="unitSalesPriceAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeSalesPriceAdjReason(item.adjustmentReasonId)">
+												<select class="form-control" name="unitSalesPriceAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangeSalesPriceAdjReason(item.adjustmentReasonId)" required>
 													<option value="0">-- Select --</option>
 													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
 												</select>
@@ -616,34 +409,6 @@
 											<textarea *ngIf="unitSalesPriceAllow"
 											 class="form-control" [(ngModel)]="item.adjustmentMemo"
 											 name="unitSalesPriceAdjustmentMemo"></textarea>
-
-											 <!-- <div class="col-sm-12" *ngIf="unitSalesPriceAllow">
-												<div class=" col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="unitSalesPriceAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above">
-													<i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div> -->
 										</td>
 									</tr>
 								</ng-container>
@@ -672,7 +437,7 @@
 										</td>
 										<td>
 											<div *ngIf="lotCostAllow" class="col-md-8">
-												<select class="form-control" name="lotCostAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangelotCostAdjReason(item.adjustmentReasonId)">
+												<select class="form-control" name="lotCostAdjustmentReason" [(ngModel)]="item.adjustmentReasonId" (change)="onChangelotCostAdjReason(item.adjustmentReasonId)" required>
 													<option value="0">-- Select --</option>
 													<option *ngFor="let name of allAdjReasonInfo" [ngValue]="name.value">{{name.label}}</option>
 												</select>
@@ -682,34 +447,6 @@
 											<textarea *ngIf="lotCostAllow"
 											 class="form-control" [(ngModel)]="item.adjustmentMemo" 
 											name="lotCostAdjustmentMemo"></textarea>
-
-											<!-- <div class="col-sm-12" *ngIf="lotCostAllow">
-												<div class="col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="lotCostAdjustmentMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above">
-													<i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div> -->
 										</td>
 									</tr>
 								</ng-container>								
@@ -741,11 +478,25 @@
 									<tr>
 										<td>Remaining</td>
 										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesRemaining" name="cyclesRemaining" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesRemaining="ngModel" mask="000:00" name="cyclesRemaining" [(ngModel)]="sourceTimeLife.cyclesRemaining" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="cyclesRemaining.errors">
+                                                <div *ngIf="cyclesRemaining.errors" [ngClass]="'error'">
+                                                    <div *ngIf="cyclesRemaining.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
 										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeRemaining" name="timeRemaining" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
+                                            <input class="form-control" matInput type="text" style="width: 150px;" placeholder="hhh:mm" [pattern]="timePattern" #timeRemaining="ngModel" mask="000:00" name="timeRemaining" [(ngModel)]="sourceTimeLife.timeRemaining" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="timeRemaining.errors">
+                                                <div *ngIf="timeRemaining.errors" [ngClass]="'error'">
+                                                    <div *ngIf="timeRemaining.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>        
 										<td></td>
 										<td rowspan="5" style="vertical-align: top;">
 											<textarea *ngIf="timeLifeAllow" class="form-control" [(ngModel)]="item.adjustmentReason" name="timeLifeReason" required></textarea>
@@ -755,80 +506,129 @@
 												class="form-control"
 											 [(ngModel)]="item.adjustmentMemo"
 											  name="timeLifeMemo"></textarea>
-
-											  <!-- <div class="col-sm-12" *ngIf="timeLifeAllow" >
-												<div class="col-sm-9 form-group memo-popup-cstm mat_emo">
-												  <div 
-													[innerHTML]="item.adjustmentMemo"
-													[matTooltip]="parsedText(item.adjustmentMemo)"
-													[(ngModel)]="item.adjustmentMemo"
-													name="timeLifeMemo{{i}}"
-													matTooltipPosition="above"
-													class="form-control"
-													style="width: 100%;"
-													class="text_editor_box"
-												  ></div>
-												</div>
-												<div class="col-sm-1">
-												  <span>
-													<a
-													class="btn nobg"
-													data-toggle="modal"
-													data-target="#memo-popup-Doc"
-													(click)="onClickMemo()"
-													matTooltip="Add Memo"
-													matTooltipPosition="above">
-													<i class="fa fa-pencil"></i>
-													</a>
-												  </span>
-												</div>
-												</div> -->
 										</td>
 									</tr>
 									<tr>
 										<td>Since New</td>
 										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceNew" name="cyclesSinceNew" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceNew" name="timeSinceNew" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.lastSinceNew" name="lastSinceNew" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceNew="ngModel" mask="000:00" name="cyclesSinceNew" [(ngModel)]="sourceTimeLife.cyclesSinceNew" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="cyclesSinceNew.errors">
+                                                <div *ngIf="cyclesSinceNew.errors" [ngClass]="'error'">
+                                                    <div *ngIf="cyclesSinceNew.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>                  
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceNew="ngModel" mask="000:00" name="timeSinceNew" [(ngModel)]="sourceTimeLife.timeSinceNew" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="timeSinceNew.errors">
+                                                <div *ngIf="timeSinceNew.errors" [ngClass]="'error'">
+                                                    <div *ngIf="timeSinceNew.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>                  
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceNew="ngModel" mask="000:00" name="lastSinceNew" [(ngModel)]="sourceTimeLife.lastSinceNew" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="lastSinceNew.errors">
+                                                <div *ngIf="lastSinceNew.errors" [ngClass]="'error'">
+                                                    <div *ngIf="lastSinceNew.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>  
 									</tr>
 									<tr>
 										<td>Since Ovh</td>
 										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceOVH" name="cyclesSinceOVH" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceOVH" name="timeSinceOVH" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.lastSinceOVH" name="lastSinceOVH" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceOVH="ngModel" mask="000:00" name="cyclesSinceOVH" [(ngModel)]="sourceTimeLife.cyclesSinceOVH" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="cyclesSinceOVH.errors">
+                                                <div *ngIf="cyclesSinceOVH.errors" [ngClass]="'error'">
+                                                    <div *ngIf="cyclesSinceOVH.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>            
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceOVH="ngModel" mask="000:00" name="timeSinceOVH" [(ngModel)]="sourceTimeLife.timeSinceOVH" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="timeSinceOVH.errors">
+                                                <div *ngIf="timeSinceOVH.errors" [ngClass]="'error'">
+                                                    <div *ngIf="timeSinceOVH.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>            
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceOVH="ngModel" mask="000:00" name="lastSinceOVH" [(ngModel)]="sourceTimeLife.lastSinceOVH" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="lastSinceOVH.errors">
+                                                <div *ngIf="lastSinceOVH.errors" [ngClass]="'error'">
+                                                    <div *ngIf="lastSinceOVH.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>   
 									</tr>
 									<tr>
 										<td>Since Insp</td>
 										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceInspection" name="cyclesSinceInspection" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceInspection" name="timeSinceInspection" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.lastSinceInspection" name="lastSinceInspection" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceInspection="ngModel" mask="000:00" name="cyclesSinceInspection" [(ngModel)]="sourceTimeLife.cyclesSinceInspection" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="cyclesSinceInspection.errors">
+                                                <div *ngIf="cyclesSinceInspection.errors" [ngClass]="'error'">
+                                                    <div *ngIf="cyclesSinceInspection.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>            
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceInspection="ngModel" mask="000:00" name="timeSinceInspection" [(ngModel)]="sourceTimeLife.timeSinceInspection" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="timeSinceInspection.errors">
+                                                <div *ngIf="timeSinceInspection.errors" [ngClass]="'error'">
+                                                    <div *ngIf="timeSinceInspection.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>            
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #lastSinceInspection="ngModel" mask="000:00" name="lastSinceInspection" [(ngModel)]="sourceTimeLife.lastSinceInspection" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="lastSinceInspection.errors">
+                                                <div *ngIf="lastSinceInspection.errors" [ngClass]="'error'">
+                                                    <div *ngIf="lastSinceInspection.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>  
 									</tr>
 									<tr>
 										<td>Since Repair</td>
 										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.cyclesSinceRepair" name="cyclesSinceRepair" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
-										<td class="clr2">
-											<p-calendar class="timeLife-time" [(ngModel)]="sourceTimeLife.timeSinceRepair" name="timeSinceRepair" [timeOnly]="true" [defaultDate]="defaultDate" showTime="true" hourFormat="24" [disabled]="!timeLifeAllow"></p-calendar>
-										</td>
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #cyclesSinceRepair="ngModel" mask="000:00" name="cyclesSinceRepair" [(ngModel)]="sourceTimeLife.cyclesSinceRepair" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="cyclesSinceRepair.errors">
+                                                <div *ngIf="cyclesSinceRepair.errors" [ngClass]="'error'">
+                                                    <div *ngIf="cyclesSinceRepair.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>            
+                                        <td class="clr2">
+                                            <input class="form-control" matInput type="text" style="width: 55%;" placeholder="hhh:mm" [pattern]="timePattern" #timeSinceRepair="ngModel" mask="000:00" name="timeSinceRepair" [(ngModel)]="sourceTimeLife.timeSinceRepair" [disabled]="!timeLifeAllow"/>
+                                            <div *ngIf="timeSinceRepair.errors">
+                                                <div *ngIf="timeSinceRepair.errors" [ngClass]="'error'">
+                                                    <div *ngIf="timeSinceRepair.errors.pattern">
+                                                        <span style="color: red;">Please enter valid time format.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td> 
 										<td></td>
 									</tr>
 								</tbody>

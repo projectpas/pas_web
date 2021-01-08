@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { RepairOrderEndpoint } from './repair-order-endpoint.service';
 
 
@@ -28,12 +28,16 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.saverRepairOrderParts(data);    
   }
 
+  getRepairOrderAllPartsById(repairOrderId, employeeID, workOrderPartNumberId) {
+    return this.repairOrderEndpoint.getRepairOrderAllPartsById(repairOrderId, employeeID, workOrderPartNumberId);
+ }
+ 
   getRepairOrderPartsById(Id: number, workOrderPartNumberId) {
-    return forkJoin(this.repairOrderEndpoint.getRepairOrderPartsById<any>(Id, workOrderPartNumberId));
+    return Observable.forkJoin(this.repairOrderEndpoint.getRepairOrderPartsById<any>(Id, workOrderPartNumberId));
   }
   
   getROList(data) {
-    return forkJoin(
+    return Observable.forkJoin(
         this.repairOrderEndpoint.getROList(data));
   } 
  
@@ -93,10 +97,22 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.getROTotalCostById(repairOrderId);
   }
 
+  saveRepaireOrderSettings(data) {
+    return this.repairOrderEndpoint.saveRepaireOrderSettings<any>(data);
+  }
+  
+  getRepairOrderSettingMasterData() {
+    return this.repairOrderEndpoint.getRepairOrderSettingMasterData();
+  }
+
+  getAllEditID(reairOrderId) {
+    return this.repairOrderEndpoint.getAllEditID(reairOrderId);
+}
+
   ///////
 /*****
   getRepairOrdersBasic() {
-    return forkJoin(
+    return Observable.forkJoin(
       this.repairOrderEndpoint.getRepairOrderBasicList<any[]>());
   }
 

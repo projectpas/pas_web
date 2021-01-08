@@ -10,27 +10,28 @@ import { EmployeeService } from "../services/employee.service";
 import { PublicationService } from "../services/publication.service";
 import { Publication } from "../models/publication.model";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
 import * as $ from 'jquery';
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { WorkFlowtService } from "../services/workflow.service";
 import { ConfigurationService } from "../services/configuration.service";
 import { getObjectById } from "../generic/autocomplete";
+import { AuthService } from "../services/auth.service";
+import { CommonService } from "../services/common.service";
 
 @Component({
     selector: 'grd-publication',
     templateUrl: './Publication-Create.component.html',
     styleUrls: ['./Publication-Create.component.css']
 })
+
 export class PublicationCreateComponent implements OnInit, OnChanges {
     allEmployeeinfo: any[] = [];
     firstCollection: any[] = [];
     @Input() itemMasterId = 0;
     @Input() workFlow: IWorkFlow;
     @Input() UpdateMode: boolean;
-    @Output() notify: EventEmitter<IWorkFlow> =
-        new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> =new EventEmitter<IWorkFlow>();
     publicationTypes: IPublicationType[];
     publicationAircraftManufacturers: IPublicationAircraftManufacturer[];
     publicationModels: IPublicationModel[];
@@ -57,6 +58,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     aircraftPageSize: number = 10;
     ataPageSize: number = 10;
     first: number = 0;
+    isSpinnerVisible = false;
 
     headersforPNMapping = [
         { field: 'partNumber', header: 'PN ID/Code' },
@@ -74,7 +76,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         { field: 'aircraft', header: 'Aircraft' },
         { field: 'model', header: 'Model' },
         { field: 'dashNumber', header: 'Dash Numbers' },
-        //{ field: 'memo', header: 'Memo' }
     ];
     atacols = [
         { field: 'partNumber', header: 'PN Number' },
@@ -86,7 +87,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     ];
     headersforAttachment = [
         { field: 'tagTypeName', header: 'Tag Type' }
-        //{ field: 'link', header: 'Action' },
     ];
     publicationDropdown: any;
     aircraftListByPubId: any = [];
@@ -95,22 +95,17 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     isEditModeBinding: boolean = false;
 
     constructor(private actionService: ActionService,
+        private authService: AuthService,
         private masterComapnyService: MasterComapnyService,
         private _workflowService: WorkFlowtService,
         private modalService: NgbModal, private employeeService: EmployeeService,
         private configurations: ConfigurationService,
-        private publicationService: PublicationService, private alertService: AlertService) {
-
+        private publicationService: PublicationService,
+        private alertService: AlertService,
+        private commonService: CommonService) {
     }
 
-
     ngOnInit(): void {
-        console.log(this.UpdateMode);
-        console.log(this.itemMasterId);
-        console.log(this.workFlow);
-
-
-
         this.dropdownSettings = {
             singleSelection: false,
             idField: 'dashNumberId',
@@ -121,8 +116,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             allowSearchFilter: false
         };
         this.getPublicationByItemMasterId(this.itemMasterId);
-
-        // this.getAllPublicationTypes();
 
         this.row = this.workFlow.publication[0];
         if (this.row == undefined) {
@@ -136,23 +129,35 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 
                 this.bindEditModeData(this.workFlow.publication);
             }
-            // for (let i = 0; i < this.workFlow.publication.length; i++) {
-            //     this.isEditModeBinding = true;
-            //     // this.loadPublicationById(this.workFlow.publication[i], false);
-            // }
         }
         else {
             this.row.publicationId = "0";
             this.row.publicationRecordId = "0";
         }
+        this.loadPublicationTypes();
+    }
 
-        this.actionService.GetPublicationType().subscribe(
-            type => {
-                this.publicationTypes = type;
-            },
-            error => this.errorMessage = <any>error()
-        );
-
+    loadPublicationTypes() {
+        let publicationTypeIds = [];
+        if (this.UpdateMode) {
+            publicationTypeIds = this.workFlow.publication.reduce((acc, x) => {
+                return publicationTypeIds.push(acc.publicationTypeId);
+            }, 0)
+        }
+        this.isSpinnerVisible = true;
+        this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 20, publicationTypeIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.publicationTypes = res.map(x => {
+                    return {
+                        ...x,
+                        publicationTypeId: x.value,
+                        name: x.label
+                    }
+                });
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     Browse(): void {
@@ -160,12 +165,9 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(): void {
-
     }
 
-
     filterfirstName(event) {
-
         this.firstCollection = [];
         for (let i = 0; i < this.allEmployeeinfo.length; i++) {
             let firstName = this.allEmployeeinfo[i].firstName;
@@ -202,6 +204,10 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         this.workFlow.publication.push(newRow);
     }
 
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
     deleteRow(index): void {
         if (this.workFlow.publication[index].id == "0" || this.workFlow.publication[index].id == "") {
             this.workFlow.publication.splice(index, 1);
@@ -212,27 +218,18 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     getPublicationByItemMasterId(itemMasterId) {
+        this.isSpinnerVisible = true;
         this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
             this.publicationDropdown = res;
-        })
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
 
-    // publicationDropdown: any[];
-    // private getAllPublicationTypes(): void {
-    //     if (this.publications == undefined || this.publications.length == 0) {
-    //         this.publicationService.getAllPublicationsDropdown().subscribe(
-    //             result => {
-    //                 this.publicationDropdown = result[0];
-    //             });
-    //     }
-    // }
-
     private onPublicationChange(event, wfPublication) {
-
         const pubData = this.publicationDropdown;
         for (var i = 0; i < pubData.length; i++) {
-
-            // console.log(parseInt(pubData[i].publicationRecordId), parseInt(wfPublication.publicationId));
             if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {
                 wfPublication.attachmentDetails = pubData[i].attachmentDetails;
                 break
@@ -257,37 +254,41 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.publications = [];
             this.loadPublicationById(wfPublication, true);
         }
-
     }
 
     getAircraftByPublicationId(publicationRecordId, index) {
+        this.isSpinnerVisible = true;
         this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, publicationRecordId).subscribe(res => {
             this['aircraftListByPubId' + index] = res;
-        })
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     getModelByAircraftId(publicationRecordId, aircraftTypeId, index) {
         this.publicationService.getAircraftModelByAircraftManfacturerId(this.itemMasterId, publicationRecordId, aircraftTypeId).subscribe(res => {
             this['aircraftModelListByPubId' + index] = res;
-        })
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     getDashNumberByModelandAircraftIds(publicationRecordId, aircraftTypeId, aircraftModelId, index) {
-        console.log(publicationRecordId, aircraftTypeId, aircraftModelId, index);
-
+        this.isSpinnerVisible = true;
         this.publicationService.getDashNumberByModelandAircraftIds(this.itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId).subscribe(res => {
+            this.isSpinnerVisible = false;
             this['dashNumberListByModelId' + index] = res.map(x => {
                 return {
                     dashNumberId: x.dashNumberId,
                     dashNumber: x.dashNumber
                 }
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-            // this.dashNumber = [
-            //     { item_id: 1, item_text: 'Mumbai' },
-            //     { item_id: 2, item_text: 'Bangaluru' },
-            // ]
         })
     }
+
     getDynamicVariableData(variable, index) {
         return this[variable + index]
     }
@@ -295,7 +296,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     private getUniqueAircraft(aircraftMapping: any[]): any[] {
         var aircraft = [];
         var distinctAircraftIds = [];
-
         for (var i = 0; i < aircraftMapping.length; i++) {
             if (aircraftMapping[i].aircraftTypeId != undefined && distinctAircraftIds.indexOf(aircraftMapping[i].aircraftTypeId) == -1) {
                 aircraft.push(aircraftMapping[i]);
@@ -339,40 +339,25 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 
         return aircraftDashNumbers;
     }
+
     bindEditModeData(data) {
         this.workFlow.publication = data.map((x, index) => {
-            this.getAircraftByPublicationId(x.publicationId, index);
-            this.getModelByAircraftId(x.publicationId, x.aircraftManufacturer, index);
-            this.getDashNumberByModelandAircraftIds(x.publicationId, x.aircraftManufacturer, x.model, index);
+            if (x.publicationId) {
+                this.getAircraftByPublicationId(x.publicationId, index);
+                this.getModelByAircraftId(x.publicationId, x.aircraftManufacturer, index);
+                this.getDashNumberByModelandAircraftIds(x.publicationId, x.aircraftManufacturer, x.model, index);
+            }
             return {
                 ...x
             }
-
-
         })
-        // if (data.length > 0) {
-
-        //     const data: any = res[0];
-        //     console.log(data);
-        //     const itemData = data.itemMasterAircraftMapping;
-        //     itemData.map((x, index) => {
-        //         console.log(x, index);
-
-        //         this.getAircraftByPublicationId(data.publicationRecordId, index);
-        //         this.getModelByAircraftId(data.publicationRecordId, x.aircraftTypeId, index);
-        //         this.getDashNumberByModelandAircraftIds(data.publicationRecordId, x.aircraftTypeId, x.aircraftModelId, index);
-        //         // x.attachmentDetails
-        //     })
-        // }
     }
 
     private loadPublicationById(wfPublication: any, isDropdownChange: boolean) {
+        this.isSpinnerVisible = true;
         this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
-            // result => {
             res => {
-
-
-
+                this.isSpinnerVisible = false;
                 if (res[0] != undefined && res[0] != null) {
                     this.publications.push(res[0]);
 
@@ -397,16 +382,16 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
                         }
                     }
                 }
-            }
-        );
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     downloadFileUpload(rowData) {
-        console.log(rowData);
-
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }
+
     private filterUniqueCombination(publication: any): void {
         var pubs = [];
 
@@ -419,7 +404,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             if (existingPublication.length == 0) {
                 pubs.push(imm);
             }
-
         }
         publication.itemMasterAircraftMapping = pubs;
     }
@@ -462,10 +446,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         }
     }
 
-
-
     public getAircraftModels(publication) {
-        publication.aircraftModels = this.getUniqueAircraftModels(publication);// publication.aircraft.filter(x => x.aircraftTypeId == publication.aircraftManufacturer);
+        publication.aircraftModels = this.getUniqueAircraftModels(publication);
         publication.model = '0';
         publication.workflowPublicationDashNumbers = [];
         publication.allDashNumbers = [];
@@ -482,34 +464,18 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             return;
         }
 
-        publication.allDashNumbers = this.getUniqueAircraftDashNumbers(publication);// publication.aircraft.filter(x => x.aircraftModelId == publication.model);
+        publication.allDashNumbers = this.getUniqueAircraftDashNumbers(publication);
     }
 
 
     onDeSelect(publication, item: any) {
-
     }
 
     onItemSelect(publication, item: any) {
-
-
     }
 
     onSelectAll(publication, items: any) {
-
     }
-    // viewPublicationDetails(data) {
-
-
-    //     console.log(data);
-
-    //     // this.modal = this.modalService.open(PublicationCreateComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-    //     // this.modal.componentInstance.pubId = data.publicationId;
-    //     // this.modal.result.then(() => {
-    //     //     console.log('When user closes');
-    //     // }, () => { console.log('Backdrop click') })
-
-    // }
 
     openAllCollapse() {
         $('#step1').collapse('show');
@@ -517,6 +483,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         $('#step3').collapse('show');
         $('#step4').collapse('show');
     }
+
     closeAllCollapse() {
         $('#step1').collapse('hide');
         $('#step2').collapse('hide');
@@ -525,19 +492,22 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     loadMasterCompanies() {
+        this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
-
             res => {
+                this.isSpinnerVisible = false;
                 this.allComapnies = res;
             }
-        );
-
+            , error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     getFilesByPublicationId(publicationRecordId) {
-
+        this.isSpinnerVisible = true;
         this.publicationService.getFilesBypublication(publicationRecordId).subscribe(res => {
             this.attachmentList = res || [];
+            this.isSpinnerVisible = false;
             if (this.attachmentList.length > 0) {
                 this.attachmentList.forEach(item => {
                     item["isFileFromServer"] = true;
@@ -546,57 +516,32 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
                     })
                 })
             }
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
 
     viewPublicationDetails(row) {
         row = { ...row, publicationRecordId: row.publicationId };
         this.closeAllCollapse();
-
-
-        console.log(row)
-        //this.generalInfo = row;
-        // this.sourceAction = row;
-        // this.publication_Name = row.publicationId;
-        // this.description = row.description;
-        // this.partNumber = row.partNumber;
-        // this.model = row.model;
-        // this.ataMain = row.ataMain;
-        // this.ataSubChapter = row.ataSubChapter;
-        // this.ataPositionZone = row.ataPositionZone;
-        // this.platform = row.platform;
-        // this.memo = row.memo;
-        // this.createdBy = row.createdBy;
-        // this.updatedBy = row.updatedBy;
-        // this.createdDate = row.createdDate;
-        // this.updatedDate = row.updatedDate;
         this.isActive = row.isActive;
-        console.log(this.isActive);
         this.loadMasterCompanies();
         this.getFilesByPublicationId(row.publicationRecordId);
-        // this.modal = this.modalService.open(content, { size: 'lg' });
-        // this.modal.result.then(() => {
-        //     console.log('When user closes');
-        // }, () => { console.log('Backdrop click') })
 
         //get general info
+        this.isSpinnerVisible = true;
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {
             this.generalInfo = res[0];
-
-            // this.attachmentList = res[0].attachmentDetails.map(x => {
-            //     return {
-            //         ...x,
-            //         fileName: x.fileName,
-            //         //link: x.link
-            //     }
-            // })
-            // console.log(this.attachmentList);
-        })
+            this.isSpinnerVisible = false;
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
 
         //get PN Mapping info
+        this.isSpinnerVisible = true;
         this.publicationService.getPublicationPNMapping(row.publicationRecordId)
             .subscribe(res => {
-                console.log(res);
+                this.isSpinnerVisible = false;
                 this.pnMappingList = res.map(x => {
                     return {
                         ...x,
@@ -605,47 +550,75 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
                         itemClassification: x.itemClassification
                     };
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
 
         //get aircraft info
+        this.isSpinnerVisible = true;
         this.publicationService
             .getAircraftMappedByPublicationId(row.publicationRecordId)
             .subscribe(res => {
+                this.isSpinnerVisible = false;
                 this.aircraftList = res.map(x => {
                     return {
                         ...x,
                         aircraft: x.aircraftType,
                         model: x.aircraftModel,
                         dashNumber: x.dashNumber,
-                        //memo: x.memo
                     };
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
 
         // get ata chapter info
+        this.isSpinnerVisible = true;
         this.publicationService
             .getAtaMappedByPublicationId(row.publicationRecordId)
             .subscribe(res => {
+                this.isSpinnerVisible = false;
                 const responseData = res;
                 this.ataList = responseData.map(x => {
                     return {
                         ...x,
                         ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
                         ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
-                        // ataChapter: x.ataChapterName,
-                        // ataSubChapter: x.ataSubChapterDescription,
-                        // ataChapterCode: x.ataChapterCode,
-                        // ataSubChapterId: x.ataSubChapterId,
-                        // ataChapterId: x.ataChapterId
                     };
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
         $('#view1').modal('show');
-        // this.generalInfo = true;
         $('#step1').collapse('show');
     }
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
+    }
+
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
     }
 
 }

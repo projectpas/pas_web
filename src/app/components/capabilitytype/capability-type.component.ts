@@ -11,8 +11,8 @@ import { ConfigurationService } from '../../services/configuration.service';
 import { CapabilityTypeService } from '../../services/capability-type.service';
 import { editValueAssignByCondition, selectedValueValidate, getObjectById } from '../../generic/autocomplete';
 
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { CommonService } from '../../services/common.service';
 
 @Component({

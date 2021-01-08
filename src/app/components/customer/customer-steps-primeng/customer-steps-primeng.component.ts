@@ -50,7 +50,7 @@ export class CustomerStepsPrimengComponent {
 	ngOnInit() {
 		this.customerId = this.acRouter.snapshot.params['id'];
 		this.getAllCountries();
-		//this.loadcustomerData()
+		this.loadcustomerData()
 		this.breadcrumbs = [
 			{ label: 'Customers' },
 		];

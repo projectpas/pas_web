@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-
+import { retry } from 'rxjs/operator/retry';
 import { WorkFlowEndpoint } from '../../../services/workflow-endpoint.service';
 import { WorkFlowtService } from '../../../services/workflow.service';
 import { ItemMasterService } from '../../../services/itemMaster.service';
@@ -12,11 +12,14 @@ import { WorkScopeService } from '../../../services/workscope.service';
 import { CurrencyService } from '../../../services/currency.service';
 import { CustomerService } from '../../../services/customer.service';
 import { EmployeeExpertiseService } from '../../../services/employeeexpertise.service';
+import { MenuItem } from 'primeng/api';
+
 @Component({
     selector: 'app-workflow-create',
     templateUrl: './workflow-create.component.html',
     styleUrls: ['./workflow-create.component.scss']
 })
+
 /** workflow-create component*/
 export class WorkflowCreateComponent implements OnInit {
 	employeeExplist: any[]=[];
@@ -34,9 +37,6 @@ export class WorkflowCreateComponent implements OnInit {
 	partWithId: any;
 	partCollection: any[]=[];
 	itemclaColl: any[]=[];
-	/** workflow-create ctor */
-    // Variables Declaration
-
 	workflowCharges: any[][];
 	workflowEquipment: any[][];
 	workflowMaterails: any[][];
@@ -53,10 +53,8 @@ export class WorkflowCreateComponent implements OnInit {
 	equipmentListObj: any[] = [];
 	expertiseListObj: any[] = [];
 	expertiseList: boolean;
-
 	directionListObj: any[] = [];
 	directionList: boolean;
-
 	exclusionListObj: any[] = [];
 	exclusionList: boolean;
 	equipmentList: boolean;
@@ -66,7 +64,6 @@ export class WorkflowCreateComponent implements OnInit {
 	materialList: boolean;
 	materialListObj: any[] = [];
 	chargeListObj: any[] = [];
-	/** workflow-create ctor */
 	cars: SelectItem[];
 	selectedValues: any[] = [];
     isWorkFlowEdit: boolean = false;
@@ -75,10 +72,8 @@ export class WorkflowCreateComponent implements OnInit {
     loadedDDs: any = {};
     selectedActionAttributes: any[] = [];//For DropDown
     actionValue: any;//dropdown selected value
-
     addedActionIds: number[] = [];
-    selectedAction: any;//selected tab value
-    
+    selectedAction: any;//selected tab value    
     actionsDD: any[] = [];
     actionsAttributesDD: SelectItem[] = [];
     chargesDL: any[] = [];
@@ -89,7 +84,6 @@ export class WorkflowCreateComponent implements OnInit {
     materialListDL: any[] = [];
     measurementsDL: any[] = [];
     publicationsDL: any[] = [];
-
     actionAttributeTabs: any[] = [
         { visible: false, selected: false, label: "Material List" },
         { visible: false, selected: false, label: "Charges" },
@@ -99,13 +93,19 @@ export class WorkflowCreateComponent implements OnInit {
         { visible: false, selected: false, label: "Exclusions" },
         { visible: false, selected: false, label: "Publications" },
         { visible: false, selected: false, label: "Measurements" }
-    ];
+	];
+	breadcrumbs: MenuItem[] = [
+        { label: 'Work Flow' },
+		{ label: 'Work Flow List' },
+		{ label: 'Create Work Flow' }
+	];
+	
     // Class Constructor
-
 	constructor(private expertiseService:EmployeeExpertiseService,private cusservice:CustomerService,public workscopeService: WorkScopeService, public currencyService: CurrencyService,public itemClassService: ItemClassificationService, public unitofmeasureService: UnitOfMeasureService, private conditionService: ConditionService, private _workflowService: WorkFlowtService, private itemser: ItemMasterService, private vendorService: VendorService) {
         this.getActionsDD();
         this.getActionAttributesDD();
-    }
+	}
+	
 	ngOnInit() {
 		this.loadCurrencyData();
 		this.loadCurrencyData();
@@ -120,6 +120,7 @@ export class WorkflowCreateComponent implements OnInit {
 		this.loadcustomerData();
 		this.loadExpertiseData();
 	}
+
     //Get Drop Downs
     getActionsDD() {
         this._workflowService.getWorkFlowActions().subscribe((data:any) => {
@@ -131,15 +132,15 @@ export class WorkflowCreateComponent implements OnInit {
                 this.getSelectedWorkflowActions();
         });
 	}
+
 	getMaterialType() {
 		this._workflowService.getMaterialType().subscribe(data => { this.materailTypeList = data;});
 	}
+
 	private loadExpertiseData() {
-		
-
 		this.expertiseService.getWorkFlows().subscribe(data => { this.employeeExplist = data; });
-
 	}
+
     getActionAttributesDD() {
         this._workflowService.getActionAttributes().subscribe((data:any) => {
             if (data && data[0].length > 0) {
@@ -159,9 +160,9 @@ export class WorkflowCreateComponent implements OnInit {
             if (this.loadedDDs["actions"])
                 this.getSelectedWorkflowActions();
         });
-    }
+	}
+	
 	filterpartItems(event) {
-
 		this.partCollection = [];
 		this.itemclaColl = [];
 		if (this.allPartnumbersInfo) {
@@ -183,9 +184,8 @@ export class WorkflowCreateComponent implements OnInit {
 				}
 			}
 		}
-
-
 	}
+
 	public isCalculatedBERThreshold(event) {
 		if (event == 'calculate') {
 			this.isCalculate = true;
@@ -214,43 +214,26 @@ export class WorkflowCreateComponent implements OnInit {
 		}
 	}
 
-	private loadWorkScopedata() {
-	
+	private loadWorkScopedata() {	
 		this.workscopeService.getWorkScopeList().subscribe(
-			data => { this.worksScopeCollection=data[0]})
-	
+			data => { this.worksScopeCollection=data[0]})	
 	}
+
 	private loadCurrencyData() {
-		// debugger;
-
-
 		this.currencyService.getCurrencyList().subscribe(currencydata => {
 			this.allCurrencyData = currencydata[0];
 		})
-
-
 	}
 
-	onCustomerNameselected(event) //Customer Ship Address Data
-	{
-		//debugger;
+	onCustomerNameselected(event) {
 		for (let i = 0; i < this.customerNamecoll.length; i++) {
 			if (event == this.customerNamecoll[i][0].name) {
-
 				this.sourceWorkFlow.customerId = this.customerNamecoll[i][0].customerId;
-				//this.cusservice.getCustomerShipAddressGet(this.customerNamecoll[i][0].customerId).subscribe(returnedcusdata => {
-				//	this.spiltshipmentData = returnedcusdata[0];
-				//	partChildList["addressData"] = returnedcusdata[0];
-				//});
-
-
 			}
-
 		}
-
 	}
-	filterNames(event) {
 
+	filterNames(event) {
 		this.customerNames = [];
 		if (this.allCustomers) {
 			if (this.allCustomers.length > 0) {
@@ -266,13 +249,11 @@ export class WorkflowCreateComponent implements OnInit {
 						}
 					}
 					else {
-						//if (name.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
 						this.customerNamecoll.push([{
 							"customerId": this.allCustomers[i].customerId,
 							"name": name
 						}]),
 							this.customerNames.push(name);
-						//}
 					}
 				}
 			}
@@ -280,51 +261,26 @@ export class WorkflowCreateComponent implements OnInit {
 	}
 
 	private loadcustomerData() {
-		
-
 		this.cusservice.getWorkFlows().subscribe(data => { this.allCustomers=data[0]});
 	}
+
 	onPartSelect(event) {
 		if (this.itemclaColl) {
 			for (let i = 0; i < this.itemclaColl.length; i++) {
 				if (event == this.itemclaColl[i][0].partName) {
 					this.sourceWorkFlow.itemMasterId = this.itemclaColl[i][0].partId;
 					this.sourceWorkFlow.partNumberDescription = this.itemclaColl[i][0].description;
-					//this.allSelectedParts.push(this.itemclaColl[i][0].partId);
-					//this.selectedActionName = event;
-					//this.partWithId = [];
-
-					//this.vendorService.getPartDetailsWithidForSinglePart(this.sourceWorkFlow.itemMasterId).subscribe(
-					//	data1 => {
-					//		//if (data1[0][0]) {
-					//		//	this.partWithId = data1[0][0];
-					//		//	parentdata.partAlternatePartId = this.partWithId.partAlternatePartId;
-					//		//	parentdata.partId = this.partWithId.itemMasterId;
-					//		//	parentdata.partdescription = this.partWithId.partDescription;
-					//		//	parentdata.partNumber = this.partWithId.partNumber;
-					//		//	parentdata.itemTypeId = this.partWithId.itemTypeId;
-					//		//	parentdata.name = this.partWithId.name;
-					//		//	parentdata.itemMasterId = this.partWithId.itemMasterId;
-					//		//	parentdata.glAccountId = this.partWithId.glAccountId;
-					//		//	parentdata.shortName = this.partWithId.shortName;
-					//		//}
-
-					//	})
 				}
 			};
 		}
 	}
+
 	partnmId(parentdata, event) {
-		//debugger;
-		
 		if (this.itemclaColl) {
 			for (let i = 0; i < this.itemclaColl.length; i++) {
 				if (event == this.itemclaColl[i][0].partName) {
 					this.sourceWorkFlow.itemMasterId = this.itemclaColl[i][0].partId;
-					//this.allSelectedParts.push(this.itemclaColl[i][0].partId);
-					//this.selectedActionName = event;
-					this.partWithId = [];
-				
+					this.partWithId = [];				
 					this.vendorService.getPartDetailsWithidForSinglePart(this.sourceWorkFlow.itemMasterId).subscribe(
 						data1 => {
 							if (data1[0][0]) {
@@ -362,9 +318,9 @@ export class WorkflowCreateComponent implements OnInit {
 			{ workflowId: "", actionId: 4, workflowActionAttributeIds: "16,17,36" }
         ];
         this.addedActionIds = [2, 3, 4];
-        // select First Action
         this.displaySelectedAction(this.workflowActions[0]);
-    }
+	}
+	
     //On Action Dropdown value change
     onActionValueChange(selectedvalue) {
         if (Number(selectedvalue.target.value) > 0) {
@@ -375,7 +331,8 @@ export class WorkflowCreateComponent implements OnInit {
         } else {
             this.selectedActionAttributes = [];
         }
-    }
+	}
+	
     //one of the Actions Tab Click
     onActionSelect(action) {
 		let selAction = this.workflowActions.find(obj => obj.actionId == action.actionId);
@@ -383,9 +340,7 @@ export class WorkflowCreateComponent implements OnInit {
             this.displaySelectedAction(selAction);
     }
 
-    //ex: accepted format -> selAction = { workflowId: "1", actionId: 2, workflowActionAttributeIds: "11,12,13" }
     displaySelectedAction(selAction,loadAttrData=false) {
-        //Display Action Label
 		let action = this.actionsDD.find(action => action["actionId"] == selAction["actionId"]);
         if (this.selectedAction != action) {
             this.selectedAction = action;
@@ -417,9 +372,6 @@ export class WorkflowCreateComponent implements OnInit {
 			let currAction = { workflowId: "", actionId: Number(this.actionValue), workflowActionAttributeIds: this.selectedActionAttributes.join(",") }
 			let selAction = this.workflowActions.find(obj => obj.actionId == this.actionValue)
             if (selAction) {
-                //let selEle = selAction.workflowActionAttributeIds.split(",");
-                //let newEle = this.selectedActionAttributes.filter(ele => !selEle.includes(ele));
-                //selAction["workflowActionAttributeIds"] = selEle.push(newEle).join(",")
                 selAction["workflowActionAttributeIds"] = currAction["workflowActionAttributeIds"]
             } else {
                 this.workflowActions.push(currAction);
@@ -428,23 +380,22 @@ export class WorkflowCreateComponent implements OnInit {
             }
             this.displaySelectedAction(selAction);
         }
-        
 	}
+
 	onPercentOfNew(myValue, percentValue) {
-		// this.sourceItemMaster.salesBaselineSalesPrice = "";
 		let afterpercent = percentValue / 100;
 		let test = afterpercent * myValue;
 		this.sourceWorkFlow.percentOfNew = myValue - test;
 	}
+
 	onPercentOfReplcaement(myValue, percentValue) {
-		// this.sourceItemMaster.salesBaselineSalesPrice = "";
 		let afterpercent = percentValue / 100;
 		let test = afterpercent * myValue;
 		this.sourceWorkFlow.percentOfReplaceMent = myValue - test;
 	}
+
     private defualtChargesListobj() {
         let partListObj = {
-            //ifSplitShip: false, //partListObj: this.allPartDetails, //itemTypeId: ''
             type: '', qty: '', unitcost: '', extcost: '', actionId: ''            
         }
         return partListObj;
@@ -491,57 +442,39 @@ export class WorkflowCreateComponent implements OnInit {
 	getWorkFlowMaterial() {
 		this._workflowService.getWorkFlowMaterial().subscribe(data => {
 			this.workflowMaterails = data;
-
-
 		});
-
 	}
+
 	getWorkFlowChargeList() {
 		this._workflowService.getChargeList().subscribe(data => {
 			this.workflowCharges = data;
-
-
 		});
-
 	}
 
 	getWorkFlowEquipment() {
 		this._workflowService.getWorkFlowEquipmentList().subscribe(data => {
 			this.workflowEquipment = data;
-
-
 		});
-
 	}
 
 	getWorkFlowExpertise() {
 		this._workflowService.getWorkflowExpertise().subscribe(data => {
 			this.workflowExpertise = data;
-
-
 		});
-
 	}
-	private ptnumberlistdata() {
-		
 
+	private ptnumberlistdata() {
 		this.itemser.getPrtnumberslistList().subscribe(
 			results => this.onptnmbersSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
 		);
 	}
+
 	private onptnmbersSuccessful(allWorkFlows: any[]) {
-
-
-
 		this.allPartnumbersInfo = allWorkFlows;
-
-
-
 	}
+
 	private loadPartData() {
-
-
 		this.vendorService.getPartDetails().subscribe(
 			data => {
 				this.allPartDetails = data[0];
@@ -553,55 +486,28 @@ export class WorkflowCreateComponent implements OnInit {
 					}
 				}
 			})
-
-
-
 	}
-	private loadConditionData() {
-		// debugger;
 
+	private loadConditionData() {
 		this.conditionService.getConditionList().subscribe(data => {
 			this.allconditioninfo = data[0];
 		})
-
-
 	}
+
 	private loadUOMData() {
-
-
 		this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
 			this.allUomdata = uomdata[0];
 		})
-
-
 	}
+
 	private loadItemClassData() {
-
-
 		this.itemClassService.getWorkFlows().subscribe(data => { this.itemClassInfo = data });
-
 	}
+
 	private loadPartListData() {
-		//if (this.workFlowtService.purchasepartcollection) {
-		//	if (this.workFlowtService.purchasepartcollection.length > 0) {
-		//		this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
-		//			this.allUomdata = uomdata[0];
-		//		});
-		//	}
-		//	else {
-		//		let parentObj = this.defaultPartListObj(true);
-		//		//parentObj["childList"] = [this.emptyPartListObj(false)];
-		//		this.partListData = [parentObj];
-		//	}
-		//} else {
-		//	let parentObj = this.defaultPartListObj(true);
-		//	//parentObj["childList"] = [this.emptyPartListObj(false)];
-		//	this.partListData = [parentObj];
-		//}
 	}
+
 	private onDataLoadFailed(error: any) {
-
-
     }
 
 }

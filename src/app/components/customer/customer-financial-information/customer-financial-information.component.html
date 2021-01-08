@@ -45,6 +45,7 @@
                       </label>
                       <select style="text-align: left;" name="markUpPercentageId" (ngModelChange)="enableSave()"
                         [(ngModel)]="savedGeneralInformationData.markUpPercentageId">
+                        <!-- <option value="0">-- Select --</option> -->
                         <option *ngFor="let Percentlist of percentageList" [ngValue]="Percentlist.value">
                           {{ Percentlist.label }}
                         </option>
@@ -55,6 +56,7 @@
                         <span class="pull-left">Discount % </span>
                       </label>
                       <select name="discountId" [(ngModel)]="savedGeneralInformationData.discountId" (ngModelChange)="enableSave()">
+                        <!-- <option value="0">-- Select --</option> -->
                         <option style="text-align: right;" *ngFor="let discontValue of discountList1"
                           [ngValue]="discontValue.value">
                           {{ discontValue.label }}
@@ -101,7 +103,7 @@
                     <div class="form-group">
                       <label>Currency <span class="clr-red">*</span></label>
                       <select name="currencyId" [(ngModel)]="savedGeneralInformationData.currencyId" (ngModelChange)="enableSave()" required>
-                        <!-- <option>--Select--</option> [ngModelOptions]="{standalone: true}" -->
+                        <!-- <option value="0">-- Select --</option> -->
                         <option class="form-control" *ngFor="let currencyName of allCurrencyInfo"
                           [ngValue]="currencyName.currencyId">
                           {{ currencyName.code }}
@@ -162,6 +164,14 @@
                           </label>
                         </span>
                       </div>
+                      <!-- <div class="form-group tax-certificate" *ngIf="savedGeneralInformationData.isTaxExempt">
+                        <app-common-documents [generalInformtionData]="viewDataGeneralInformation" 
+                            (tab)="changeOfTab($event)" [moduleName]="moduleName" 
+                            [referenceId]="referenceId" [isViewMode]="true" 
+                            [offLineUpload]="false">
+                          </app-common-documents>
+                      </div> -->
+                      
                       <div class="form-group tax-certificate" *ngIf="savedGeneralInformationData.isTaxExempt">
                         <label>Attach Certificate</label>
                         <a class="plusicon-cstm" style="margin-left: 10px;" href="#" data-toggle="modal"
@@ -176,7 +186,7 @@
                           <p-table #doc class="rpo-table-cstm" [columns]="taxExemptTableColumns"
                             [value]="allCustomerFinanceDocumentsList" [paginator]="true" [resizableColumns]="true"
                             [first]="0" [reorderableColumns]="true" (onPage)="pageIndexChangeForDoc($event)" name="doc"
-                            [rows]="pageSizeDoc" [rowsPerPageOptions]="[3, 6, 9, 15]">
+                            [rows]="pageSizeDoc" [rowsPerPageOptions]="[5, 10, 15, 20]">
                             <ng-template pTemplate="header" let-columns>
                               <tr>
                                 <th *ngFor="let col of columns" style="width: 100px;">
@@ -228,7 +238,8 @@
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                               <tr [pSelectableRow]="rowData">
                                 <ng-container *ngFor="let col of columns">
-                                  <td *ngIf="col.field != 'fileName'" class="ui-resizable-column" pReorderableRowHandle>
+                                  <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                                   class="ui-resizable-column" pReorderableRowHandle>
                                     {{
                                       col.field == 'createdDate'
                                         ? (rowData[col.field]
@@ -240,6 +251,9 @@
                                         : rowData[col.field]
                                     }}
                                   </td>
+                                  <td *ngIf="col.field == 'docMemo'">
+                                    <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
+                                </td>
                                   <td *ngIf="col.field == 'fileName'">
                                     <a class="filelink" *ngIf="rowData.isFileFromServer == true"
                                       (click)="downloadFileUpload(rowData)">
@@ -309,7 +323,7 @@
                                     <label class="fs12" style="padding-right: 5px;">
                                       Tax Type
                                     </label>
-                                    <select style="width:75% !important;" name="taxType" (ngModelChange)="enableSave()" [(ngModel)]="selectedTaxType">
+                                    <select style="width:75% !important;" name="taxType" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxType">
                                       <option value="">-- Select --</option>
                                       <option *ngFor="let Percentlist of taxTypeList" [ngValue]="Percentlist.value">
                                         {{ Percentlist.label }}
@@ -323,7 +337,7 @@
                                   <label class="fs12" style="padding-right: 5px;">
                                     Tax Rate
                                   </label>
-                                  <select style="width:75% !important;" name="taxRates" (ngModelChange)="enableSave()" [(ngModel)]="selectedTaxRates">
+                                  <select style="width:75% !important;" name="taxRates" (ngModelChange)="enableSave()" (change)="validateSaveButton()" [(ngModel)]="selectedTaxRates">
                                     <option value="">-- Select --</option>
                                     <option *ngFor="let Percentlist of taxRatesList" [ngValue]="Percentlist.value">
                                       {{ Percentlist.label }}
@@ -333,8 +347,8 @@
                               </div>
                               <div class="col-md-3">
                                 <div class="form-group">
-                                  <button class="btn btn-primary" style="margin-top: 10px !important;" [disabled]="currentDeletedstatus" (ngModelChange)="enableSave()" (click)="mapTaxTypeandRate()">
-                                    Add
+                                  <button class="btn btn-primary" style="margin-top: 10px !important;" [disabled]="currentDeletedstatus" [disabled]="disableTaxSave"   (ngModelChange)="enableSave()" (click)="mapTaxTypeandRate()">
+                                    Add 
                                   </button>
                                 </div>
                               </div>                            
@@ -356,7 +370,7 @@
                       </table>
                       <!-- *ngIf="taxTypeRateMapping.length > 0" -->
                       <p-table #taxTable class="rpo-table-cstm" [value]="taxTypeRateMapping" [first]="0"
-                        [rows]="pageSizeTax" [paginator]="true" [rowsPerPageOptions]="[3, 6, 9, 15]"
+                        [rows]="pageSizeTax" [paginator]="true" [rowsPerPageOptions]="[5, 10, 15, 20]"
                         [columns]="taxInfoTableColumns" (onPage)="pageIndexChangeForTax($event)"
                         [resizableColumns]="true" [reorderableColumns]="true" 
                         name="taxTable">
@@ -389,7 +403,7 @@
                             </td>
 
                             <td style="text-align: center;">
-                              <div *ngIf="currentDeletedstatus==false">
+                              <div *ngIf="!currentDeletedstatus">
                                 <span data-toggle="modal" data-target="#editTarget">
                                   <a class="btn nobg" (click)="editTaxtRate(rowData)" matTooltip="Edit" 
                                   matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
@@ -410,7 +424,7 @@
                                   </button>
                               </div>
 
-                              <div *ngIf="currentDeletedstatus==true">
+                              <div *ngIf="currentDeletedstatus">
                                     <button style="margin-right: 5px;" [disabled]="rowData.isDisable"
                                     class="btn-edit set_proper_align set_position" mat-icon-button (click)="
                                     getAuditHistoryById(contentAuditHist, rowData)
@@ -511,7 +525,7 @@
                 </label>
 
                 <select name="taxType" [(ngModel)]="taxRateEditData.taxTypeId" disabled>
-                  <option value="">select</option>
+                  <option value="">-- Select --</option>
                   <option *ngFor="let Percentlist of taxTypeList" [ngValue]="Percentlist.value">
                     {{ Percentlist.label }}
                   </option>
@@ -525,7 +539,7 @@
                 </label>
 
                 <select name="taxRates" [(ngModel)]="taxRateEditData.taxRateId" (change)="taxAndRateUpdateFlag = false">
-                  <option value="">select</option>
+                  <option value="">-- Select --</option>
                   <option *ngFor="let Percentlist of taxRatesList" [ngValue]="Percentlist.value">
                     {{ Percentlist.label }}
                   </option>
@@ -1193,9 +1207,41 @@
                   (change)="attachCertificateUpdateFlag = false"></textarea>
               </div>
               <div class="form-group">
-                <label>Memo </label>
-                <textarea class="form-control" name="memo" [(ngModel)]="documentInformation.docMemo"
-                  (change)="attachCertificateUpdateFlag = false"></textarea>
+                <span class="label">Memo </span>
+                <!-- <textarea class="form-control" name="memo" 
+                [(ngModel)]="documentInformation.docMemo"
+                  (change)="attachCertificateUpdateFlag = false">
+                </textarea> -->
+                <div class="col-sm-11">
+                  <span>                    
+                    <div class="form-group memo-popup-cstm mat_emo">
+                      <div
+                      (ngModelChange)="enableSaveDoc()"
+                        [innerHTML]="documentInformation.docMemo"
+                        [matTooltip]="parsedText(documentInformation.docMemo)"
+                        matTooltipPosition="above"
+                        (change)="attachCertificateUpdateFlag = false"
+                        class="form-control"
+                        style="width: 109%;"
+                        class="text_editor_box"
+                      ></div>
+                    </div>
+                  </span>
+                </div>
+                <div class="col-sm-1">
+                  <span style="margin-left:10px">
+                    <a
+                    class="btn nobg"
+                    data-toggle="modal"
+                    (ngModelChange)="enableSaveDoc()"
+                    data-target="#financial-memo-popup"
+                    (click)="onClickMemo()"
+                    matTooltip="Add Memo"
+                    matTooltipPosition="above">
+                    <i style="color: #337ab7" class="fa fa-pencil"></i>
+                    </a>
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -1269,6 +1315,58 @@
   </div>
 </div>
 
+<div class="modal fade" id="financial-memo-popup" style="z-index: 15000 !important;"  role="dialog"
+ data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close">
+          &times;
+        </button>
+        <h4 class="modal-title">Edit Memo</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered table-fixed workflow-table-material">
+          <thead>
+            <th style="color: #fff;">Memo</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="white-space: inherit">
+                <p-editor
+                 spellcheck="true"
+                 (ngModelChange)="enableSave()"
+                  [(ngModel)]="memoPopupContent"
+                  [style]="{ height: '320px' }"
+                  name="memoPopupContent"
+                  required
+                ></p-editor>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="float: right;">
+          <button
+            type="button"
+            class="btn btn-primary"
+            style="padding: 6px 12px !important; margin-top: 10px;"
+            (click)="onClickPopupSave()" [disabled]="disableSave">
+            Save
+          </button>
+          <button
+            type="button"
+            class="btn btn-danger"
+            style="padding: 6px 12px !important; margin-top: 10px;"
+            (click)="closeMemoModel()" >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <ng-template #contentAuditHistDoc let-c="close" let-d="dismiss" style="width: auto;" data-backdrop="static">
   <div class="modal-header">
     <h4 class="modal-title">History of Documents</h4>
@@ -1337,7 +1435,7 @@
                   ? 'black'
                   : 'red'
               }">
-              {{ audit.docMemo }}
+              <p [innerHTML]="audit.docMemo"></p>
             </td>
             <td [ngStyle]="{
                 color: getColorCodeForHistoryDoc(i, 'fileName', audit.fileName)
@@ -1373,6 +1471,9 @@
     </button>
   </div>
 </ng-template>
+
+
+
 
 <ng-template #deleteContentDoc let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
@@ -1417,6 +1518,7 @@
     </button>
   </div>
 </ng-template>
+
 <div class="preloader" *ngIf="isSpinnerVisible">
   <div class="loading">
     <div class="lds-roller">

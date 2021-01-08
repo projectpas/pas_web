@@ -1,14 +1,14 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
 
 
 import { Injectable } from '@angular/core';
-import { Observable,forkJoin } from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 import { NodeSetupEndpointService } from './nodeSetup-endpoint.service';
 import { GLAccountNodeSetup } from '../../models/node-setup.model';
 
@@ -19,23 +19,23 @@ export class NodeSetupService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.nodeSetupEndpoint.getAllNodesSetup<GLAccountNodeSetup[]>());
     }
 
     getById(nodeId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.nodeSetupEndpoint.getNodeSetupById<GLAccountNodeSetup>(nodeId)
         );
     }
     getShareWithOtherEntitysData(nodeId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.nodeSetupEndpoint.getShareWithOtherEntitysDataEndPoint<any>(nodeId)
         );
     }
 
     add(assetStatus) {
-        return this.nodeSetupEndpoint.addNode<GLAccountNodeSetup>(assetStatus);
+        return this.nodeSetupEndpoint.addNode<any>(assetStatus);
     }
     addGLAccountNodeShareWithEntityMapper(data: any) {
         return this.nodeSetupEndpoint.addGLAccountNodeShareWithEntityMapper<any>(data);
@@ -51,6 +51,10 @@ export class NodeSetupService {
 
     removeNodeShareEntityMapper(nodeId: number) {
         return this.nodeSetupEndpoint.removeNodeShareEntityMapper(nodeId);
+    }
+
+    getHistory(GLAccountNodeId) {
+        return this.nodeSetupEndpoint.getHistory(GLAccountNodeId);
     }
 
 }

@@ -13,16 +13,19 @@ import { MatDialog } from '@angular/material';
 import { getObjectByValue, getObjectById, getValueFromObjectByKey } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import * as $ from 'jquery';
+import { DatePipe } from '@angular/common';
 import { Table } from 'primeng/table';
 import * as moment from 'moment';
 @Component({
     selector: 'app-customer-documents',
     templateUrl: './customer-documents.component.html',
     styleUrls: ['./customer-documents.component.scss'],
+    providers: [DatePipe]
 })
 /** Customer component*/
 export class CustomerDocumentsComponent implements OnInit {
     disableSave: boolean = true;
+    disableSaveMemo: boolean = true;
     @Input() savedGeneralInformationData;
     @Input() editMode;
     @Input() editGeneralInformationData;
@@ -60,6 +63,8 @@ export class CustomerDocumentsComponent implements OnInit {
     isSpinnerVisible: boolean = false;
     isEditButton: boolean = false;
     isDeleteMode: boolean = false;
+    selectedOnly: boolean = false;
+    targetData: any;
     id: number;
     customerCode: any;
     customerName: any;
@@ -80,13 +85,14 @@ export class CustomerDocumentsComponent implements OnInit {
     //loader: boolean = true;
     lastValueItegrated: any;
     currentDeletedstatus:boolean=false;
+    currentstatus: string = 'Active';
     restorerecord:any={}
     memoPopupContent: any;
     memoPopupValue: any;
     isPopup:boolean=false;
 
     constructor(private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
-        private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
+        private dialog: MatDialog,private datePipe: DatePipe, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
     }
 
     ngOnInit() {
@@ -159,16 +165,19 @@ export class CustomerDocumentsComponent implements OnInit {
     }
 
     enableSave() {
-
         if ((this.sourceViewforDocumentList && this.sourceViewforDocumentList.length > 0)) {
             this.disableSave = false;
         }else if(this.isEditButton == true){
             this.disableSave = false; 
         } else {
             this.disableSave = this.uploadedFileLength === 0; 
-        }
-       
+        }       
     }
+
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
@@ -192,7 +201,11 @@ export class CustomerDocumentsComponent implements OnInit {
 		  ? this.authService.currentUser.masterCompanyId
 		  : null;
     }
+    closeDeleteModal() {
+		$("#downloadDocuments").modal("hide");
+	}
 
+   
     fileUpload(event) {
         if (event.files.length === 0) {
 			return  this.disableSave = true;
@@ -205,6 +218,41 @@ export class CustomerDocumentsComponent implements OnInit {
             this.formData.append(file.name, file);
         }
     }
+    // exportCSV(documents) {
+    //     this.isSpinnerVisible = true;
+    //     let PagingData = {"first":0,"rows":documents.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
+    //     let filters = Object.keys(documents.filters);
+    //     filters.forEach(x=>{
+	// 		PagingData.filters[x] = documents.filters[x].value;
+    //     })
+    
+    //     this.customerService.getContacts(PagingData).subscribe(res => {
+    //         documents._value = res[0]['results'].map(x => {
+	// 			return {
+    //             ...x,
+    //             createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+    //             updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+    //             }
+    //         });
+    //         documents.exportCSV();
+    //         documents.value = this.customerdocumentsDestructuredData;
+    //         this.isSpinnerVisible = false;
+    //     },error => {
+    //             this.saveFailedHelper(error)
+    //         },
+    //     );
+    //   }
+    exportCSV(documents){
+        documents._value = documents._value.map(x => {
+            return {
+                ...x,
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        documents.exportCSV();
+    }
+
     removeFile(event) {
         this.formData.delete(event.file.name)
         this.uploadedFileLength--;
@@ -283,7 +331,6 @@ export class CustomerDocumentsComponent implements OnInit {
             this.customerService.documentUploadAction(this.formData).subscribe(res => {
                 this.formData = new FormData()
                 this.documentInformation = {
-
                     docName: '',
                     docMemo: '',
                     docDescription: ''
@@ -445,6 +492,7 @@ export class CustomerDocumentsComponent implements OnInit {
         }
     }
     private saveFailedHelper(error: any) {
+        this.formData = new FormData();
         this.isSpinnerVisible = false;
         this.alertService.stopLoadingMessage();
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
@@ -471,14 +519,14 @@ export class CustomerDocumentsComponent implements OnInit {
     onClickMemo() {
         this.memoPopupContent = this.documentInformation.docMemo;
         this.enableSave();
-        //this.memoPopupValue = value;
+        this.disableSaveMemo = true;
     }   
     onClickPopupSave() {
         this.documentInformation.docMemo = this.memoPopupContent;
         this.memoPopupContent = '';
-        $('#memo-popup-Doc').modal("hide");
+        $('#doc-memo-popup').modal("hide");
     }
     closeMemoModel() {
-        $('#memo-popup-Doc').modal("hide");
+        $('#doc-memo-popup').modal("hide");
     }
 }

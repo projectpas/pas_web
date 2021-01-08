@@ -5,8 +5,8 @@ import { fadeInOut } from '../../services/animations';
 import { MasterComapnyService } from '../../services/mastercompany.service';
 import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { Publication } from '../../models/publication.model';
 import { PublicationService } from '../../services/publication.service';
@@ -21,6 +21,7 @@ import { AircraftModelService } from '../../services/aircraft-model/aircraft-mod
 import { DashNumberService } from '../../services/dash-number/dash-number.service';
 import { AtaMainService } from '../../services/atamain.service';
 import * as $ from 'jquery'
+import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';
 
@@ -28,7 +29,8 @@ import { CommonService } from '../../services/common.service';
     selector: 'app-publication',
     templateUrl: './publication.component.html',
     styleUrls: ['./publication.component.scss'],
-    animations: [fadeInOut]
+    animations: [fadeInOut],
+    providers: [DatePipe]
 })
 /** Actions component*/
 export class PublicationComponent implements OnInit, AfterViewInit {
@@ -70,6 +72,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     platform: any = "";
     memo: any = "";
     createdBy: any = "";
+    selectedOnly: boolean = false;
+    targetData: any;
     updatedBy: any = "";
     createdDate: any = "";
     updatedDate: any = "";
@@ -190,7 +194,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private configurations: ConfigurationService,
-        private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public publicationService: PublicationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public employeeService: EmployeeService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Dashnumservice: DashNumberService, private ataMainSer: AtaMainService, private commonService: CommonService,
+        private authService: AuthService, private datePipe: DatePipe, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public publicationService: PublicationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public employeeService: EmployeeService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Dashnumservice: DashNumberService, private ataMainSer: AtaMainService, private commonService: CommonService,
     ) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
@@ -237,9 +241,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     public allWorkFlows: Publication[] = [];
 
     private loadData(data) {
+        this.isSpinnerVisible = true;
         this.lazyLoadEventDataInput = data;
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
         const isdelete=this.currentDeletedstatus ? true:false;
         data.filters['viewType'] = this.viewType;
         data.filters['status'] = this.status ? this.status :this.currentstatus;
@@ -247,18 +250,29 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.publicationService.getPublications(PagingData).subscribe(
             results => {
-                //this.onDataLoadSuccessful(results[0]['paginationList']);
                 this.onDataLoadSuccessful(results[0]['results']);
                 this.totalRecords = results[0]['totalRecordsCount']
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
-            },
-            error => this.onDataLoadFailed(error)
-        );
+                this.isSpinnerVisible = false;
+            }, err => {
+                this.isSpinnerVisible = false;           
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
 
     }
+
+    errorMessageHandler(log) {
+		this.alertService.showMessage(
+			'Error',
+			log.error,
+			MessageSeverity.error
+		);
+	}
     changeOfStatus(status, viewType) {
         const lazyEvent = this.lazyLoadEventDataInput;
         this.viewType = viewType === '' ? this.viewType : viewType;
+        this.isSpinnerVisible = true;  
         this.loadData({
             ...lazyEvent,
             filters: {
@@ -272,6 +286,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.status = status;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+        this.isSpinnerVisible = true;  
         this.loadData(PagingData);
     }
     // geListByStatus(status) {
@@ -289,13 +304,14 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
         this.status = status;
+        this.isSpinnerVisible = true;
         if(value==true){
             this.currentstatus="ALL";
          
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL" };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData)
-        }else{
+        } else {
             this.currentDeletedstatus=false;
             this.currentstatus="ALL"
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL"};
@@ -462,7 +478,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         // this.createdDate = row.createdDate;
         // this.updatedDate = row.updatedDate;
         this.isActive = row.isActive;
-        console.log(this.isActive);
+        this.isSpinnerVisible = true;
         this.loadMasterCompanies();
         this.getFilesByPublicationId(row.publicationRecordId);
         this.toGetDocumentsList(row.publicationRecordId);
@@ -533,13 +549,33 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     };
                 });
             });
+            this.isSpinnerVisible = false;
     }
 
     viewSelectedRowdbl(rowData) {
         this.openView(rowData);
         $('#view').modal('show');
     }
+   
+    
+    closeDeleteModal() {
+        $("#downloadPublication").modal("hide");
+    }
+ 
+    exportCSV(dt){
+        dt._value = dt._value.map(x => {
+            return {
+                ...x,
+                revisionDate: x.revisionDate ?  this.datePipe.transform(x.revisionDate, 'MMM-dd-yyyy hh:mm a'): '',
+                nextReviewDate: x.nextReviewDate ?  this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a'): '',
+                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a'): '',
+                verifiedDate:x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        dt.exportCSV();
+    }
 
+   
     openDocumentsList(content, rowData) {
         this.openDocumentsList = rowData;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
@@ -551,6 +587,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     //     }, () => { console.log('Backdrop click') })
     // }
     openEdit(row) {
+        this.isSpinnerVisible = true;
         const { publicationRecordId } = row;
         this.router.navigateByUrl(`/singlepages/singlepages/app-create-publication/edit/${publicationRecordId}`);
         // // this.router.navigateByUrl(`/singlepages/singlepages/app-publication/app-create-publication/edit/${publicationRecordId}`);

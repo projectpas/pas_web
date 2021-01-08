@@ -12,8 +12,8 @@ import { AuthService } from '../../../services/auth.service';
 import { EmployeeService } from '../../../services/employee.service';
 import { AtaMainService } from '../../../services/atamain.service';
 import {  Inject, Input, Output, EventEmitter, ElementRef } from '@angular/core';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal,ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { CreditTermsService } from '../../../services/Credit Terms.service';
 import { CommonService } from '../../../services/common.service';

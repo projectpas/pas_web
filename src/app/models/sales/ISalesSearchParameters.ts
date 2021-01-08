@@ -8,7 +8,7 @@ export interface ISalesSearchParameters {
     sortField: number;
     salesQuoteNumber: number;
     columnFilters: {};
-    filters: {};
+    filters: any;
     globalFilter: string;
     customerName: string;
     status: string;

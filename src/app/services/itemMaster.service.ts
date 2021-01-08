@@ -1,4 +1,4 @@
-// ===============================
+﻿// ===============================
 // info@ebenmonney.com
 // www.ebenmonney.com/quickapp-pro
 // ===============================
@@ -6,10 +6,11 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Observable , Subject, forkJoin} from 'rxjs';
-
-
-
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
 
 import { ItemMasterEndpoint } from './itemMaster-endpoint.service';
 import { AuthService } from './auth.service';
@@ -65,7 +66,7 @@ export class ItemMasterService {
 
 
     getExchangeLoan(itemMasterId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getItemMasterExchangeLoanEndpointId<ItemMasterLoanExchange>(itemMasterId));
     }
     updateExchangeLoan(item: ItemMasterLoanExchange) {
@@ -75,72 +76,72 @@ export class ItemMasterService {
         return this.itemMasterEndpoint.AddItemMasterExchangeLoanEndpoint(currentItem);
     }
     getItemMasterById(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getItemMasterById<any[]>(id));
     }
 
     getItemMasterByItemMasterId(id: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getItemMasterById<any>(id));
     }
 
     getItemMasterList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemMasterEndpoint<any[]>());
     }
 
     getItemMasterCapsList(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemMasterCapsDataEndpoint<any[]>(data));
     }
 
     getAircaftManafacturerList(itemid: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getAircraftManafacturerList<any[]>(itemid));
     }
 
     getAircaftList(itemid: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getAircraftList<any[]>(itemid));
     }
     getCpaesData(itemid: any) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getCpaesData<any[]>(itemid));
     }
     getItemStockList(value) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemListEndpoint<any[]>(value));
     }
     getItemMasterStockListData(data){
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getItemStockListEndPoint<any[]>(data));
     }
 
     getAllStockDataforDownload(){
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getAllStockDataforDownload<any[]>());
     }
 
     getItemMasterNonStockListData(data){
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getItemNonStockListEndPoint<any[]>(data));
     }
     getRolesData() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getRolesData<any[]>());
     }
     getRolesDataByUserId(event) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getRolesDatayRoleId<any[]>(event));
     }
     getItemstock() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getStocklist<any[]>());
     }
 
 
     getItemNonstockList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemNonstockListEndpoint<any[]>());
     }
 
@@ -153,49 +154,49 @@ export class ItemMasterService {
     }
 
     getItemeStockList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemStockListEndpoint<any[]>());
     }
 
     getItemEquipmentList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemEquipmentListEndpoint<any[]>());
     }
 
     getManufacturerList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getManufacturerEndpoint<any[]>());
     }
 
     getPrtnumberslistList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getPartnumbersEndpoint<any>());
     }
 
     geteuipmentList() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getEquipmentEndpoint<any[]>());
     }
 
 
     getAircraft() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getAircraftmodels<any[]>());
     }
 
     getAircraftTypes(selectedvalues) {
 
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getAirccraftTypes<any>(selectedvalues));
     }
 
     getWarningdata() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getwarningdataEndpoint<any[]>());
     }
 
     getCountrydata() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getCountrysTypes<any>());
     }
     newItemMaster(itemMaster: any) {
@@ -221,7 +222,7 @@ export class ItemMasterService {
 
 
     historyItemMaster(itemMasterId: number) {
-        return forkJoin(this.itemMasterEndpoint.getHistoryitemMasterEndpoint<AuditHistory[]>(itemMasterId));
+        return Observable.forkJoin(this.itemMasterEndpoint.getHistoryitemMasterEndpoint<AuditHistory[]>(itemMasterId));
     }
 
     getItemMaster(itemMasterId?: number) {
@@ -251,7 +252,7 @@ export class ItemMasterService {
     }
 
     getDescriptionbypart(partNumber) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getDescriptionbypart<any[]>(partNumber));
     }
 
@@ -297,7 +298,7 @@ export class ItemMasterService {
     }
 
     getAllNonStockitems() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getitemclassificationnonStockEndpoint<any[]>());
     }
 
@@ -419,6 +420,9 @@ export class ItemMasterService {
     searchPartNumberAdvanced(searchParameters: any) {
         return this.itemMasterEndpoint.searchPartNumberAdvanced(searchParameters);
     }
+    searchitemmasterfromsoqpop(searchParameters: any) {
+        return this.itemMasterEndpoint.searchitemmasterfromsoqpop(searchParameters);
+    }
     searchMultiPartNumbers(searchParameters: any) {
         return this.itemMasterEndpoint.searchMultiPartNumbers(searchParameters);
     }
@@ -427,12 +431,12 @@ export class ItemMasterService {
     }
 
     searchPartNumber(partNumber: string) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.searchPartNumber<any[]>(partNumber));
     }
 
     getalterqquparts(ItemMasterId: number){
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getalterqquparts<any>(ItemMasterId));
     }
 
@@ -466,7 +470,7 @@ export class ItemMasterService {
         return this.itemMasterEndpoint.getequivalencypartlist<any>(data);
     }
     getPrtnumberslistListwithManufacturer() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.getPartnumberswithManufacturerEndpoint<any>());
     }
 
@@ -503,12 +507,12 @@ export class ItemMasterService {
     }
 
     advancedSearchStockListData(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.advancedSerachStockListEndPoint<any[]>(data));
     }
     
     advancedSearchNonStockListData(data) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.itemMasterEndpoint.advancedSearchNonStockListEndPoint<any[]>(data));
     }
 

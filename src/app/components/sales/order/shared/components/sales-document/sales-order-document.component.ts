@@ -1,15 +1,13 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
-import { fadeInOut } from '../../../../../../services/animations';
 import { Params, ActivatedRoute } from '@angular/router';
-import { Router, NavigationExtras } from '@angular/router';
-import { NgbModal, NgbActiveModal, ModalDismissReasons, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
+import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../../../services/auth.service';
-import { FormBuilder, NgForm } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { MasterComapnyService } from '../../../../../../services/mastercompany.service';
 
 import { MatDialog } from '@angular/material';
-import { getObjectByValue, getObjectById, getValueFromObjectByKey, editValueAssignByCondition } from '../../../../../../generic/autocomplete';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { ConfigurationService } from '../../../../../../services/configuration.service';
 import { AuditHistory } from '../../../../../../models/audithistory.model';
@@ -175,9 +173,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 
 		var moduleId = 46;
 		this.isSpinnerVisible = true;
-		//this.commonService.GetDocumentsListNew(salesOrderId, moduleId).subscribe(res => {
-		//	this.documentsDestructuredData  = res;
-		//})
 
 		this.loaderForDocuments = true;
 		//const SalesOrderId = this.SalesOrderId;
@@ -205,10 +200,6 @@ export class SalesOrderDocumentComponent implements OnInit {
 				}
 				this.documentsDestructuredData = arr;
 				this.documentsDestructuredDataListOriginal = arr;
-				// console.log(arr);
-				// console.log(this.documentsDestructuredData);
-
-
 			})
 			this.loaderForDocuments = false;
 		}, err => {

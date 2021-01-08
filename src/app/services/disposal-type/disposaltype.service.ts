@@ -5,10 +5,10 @@
 
 
 import { Injectable } from '@angular/core';
-
-
-
-import { Observable,forkJoin } from 'rxjs';
+import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
 import { DisposalType } from '../../models/disposal-type.model';
 import { DisposalTypeEndpointService } from './disposaltype-endpoint.service';
 
@@ -19,12 +19,12 @@ export class DisposalTypeService {
     }
 
     getAll() {
-        return forkJoin(
+        return Observable.forkJoin(
             this.disposalTypeEndpoint.getAllDisposalType<any>());
     }
 
     getById(assetDisposalTypeId: number) {
-        return forkJoin(
+        return Observable.forkJoin(
             this.disposalTypeEndpoint.getdisposalTypeById<DisposalType>(assetDisposalTypeId)
         );
     }

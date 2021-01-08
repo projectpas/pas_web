@@ -1,12 +1,12 @@
-
+﻿
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-import {catchError} from 'rxjs/operators';
+
 @Injectable()
 export class ConditionEndpoint extends EndpointFactory {
 
@@ -26,68 +26,68 @@ export class ConditionEndpoint extends EndpointFactory {
     }
     
     getAllConditionEndpoint<T>(): Observable<T> {
-        return this.http.get<any>(this._actionUrlAll, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this._actionUrlAll, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getAllConditionEndpoint());
-            }));
+            });
     }
 
     getConditionEndpoint<T>(): Observable<T> {
 
-        return this.http.get<any>(this.ConditionUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(this.ConditionUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getConditionEndpoint());
-            }));
+            });
     }
     getNewConditionEndpoint<T>(userObject: any): Observable<T> {
 
-        return this.http.post<any>(this._conditionPosturl, JSON.stringify(userObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.post<T>(this._conditionPosturl, JSON.stringify(userObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getNewConditionEndpoint(userObject));
-            }));
+            });
     }
 
     getEditConditionEndpoint<T>(conditionId?: number): Observable<T> {
         let endpointUrl = conditionId ? `${this._conditionPosturl}/${conditionId}` : this._conditionPosturl;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getEditConditionEndpoint(conditionId));
-            }));
+            });
     }
 
     getUpdateConditionEndpoint<T>(roleObject: any, conditionId: number): Observable<T> {
         let endpointUrl = `${this._conditionPosturl}/${conditionId}`;
 
-        return this.http.put<any>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getUpdateConditionEndpoint(roleObject, conditionId));
-            }));
+            });
     }
     getDeleteConditionEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._conditionPosturl}/${actionId}`;
 
-        return this.http.delete<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getDeleteConditionEndpoint(actionId));
-            }));
+            });
     }
     getHistoryConditionEndpoint<T>(actionId: number): Observable<T> {
         let endpointUrl = `${this._actionsUrlNewAuditHistory}/${actionId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getHistoryConditionEndpoint(actionId));
-            }));
+            });
     }
     
     getConditionAuditById<T>(conditionId: number): Observable<T> {
         let endpointUrl = `${this.getConditionDataAuditById}/${conditionId}`;
 
-        return this.http.get<any>(endpointUrl, this.getRequestHeaders())
-            .pipe(catchError(error => {
+        return this.http.get<T>(endpointUrl, this.getRequestHeaders())
+            .catch(error => {
                 return this.handleError(error, () => this.getConditionAuditById(conditionId));
-            }));
+            });
     }
 
     ConditionCustomUpload(file) {

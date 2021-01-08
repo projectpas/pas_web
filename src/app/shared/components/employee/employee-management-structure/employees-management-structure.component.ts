@@ -1,14 +1,13 @@
-﻿import { Component, ElementRef,ViewChild } from '@angular/core';
+﻿import { Component, ElementRef,ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
- 
-import { NgbModal,NgbModalRef, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { EmployeeService } from '../../../../services/employee.service';
-import { OnInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { AuthService } from '../../../../services/auth.service';
-import {filter} from 'rxjs/operators';
+
 @Component({
     selector: 'app-employees-management-structure',
     templateUrl: './employees-management-structure.component.html',
@@ -109,7 +108,7 @@ export class EmployeesManagementStructureComponent implements OnInit,AfterViewIn
 
     ngAfterViewInit() {
         this.route.queryParams
-        .pipe(filter(params => params.order))
+        .filter(params => params.order)
         .subscribe(params => {
             this.empId = params.order;
 
@@ -406,10 +405,13 @@ export class EmployeesManagementStructureComponent implements OnInit,AfterViewIn
     }
      
     nextClick(nextOrPrevious) {
-        this.nextOrPreviousTab = nextOrPrevious;
-        let content = this.tabRedirectConfirmationModal4;
-        this.modal = this.modalService.open(content, { size: "sm" });    
-		
+        if(this.employeeService.enableUpdateButton == true) {
+            this.nextOrPreviousTab = nextOrPrevious;
+            let content = this.tabRedirectConfirmationModal4;
+            this.modal = this.modalService.open(content, { size: "sm" });    
+        } else {
+            this.previousClick();
+        }
     }
     dismissModel() {
         this.modal.close();
