@@ -8,6 +8,7 @@ import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { Url } from '../app.settings';
 import { ItemMasterLoanExchange } from '../models/item-master-loan-exchange.model';
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class ItemMasterEndpoint extends EndpointFactory {
 

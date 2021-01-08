@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { Vendor } from '../models/vendor.model';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class VendorEndpointService extends EndpointFactory {
@@ -108,9 +108,9 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _getshipaddresshistory: string = "/api/Vendor/getshipaddresshistory";
 	private readonly _getbilladdresshistory: string = "/api/Vendor/getbilladdresshistory";
 	private readonly _updateVendorIsDelete: string = "/api/Vendor/updateVendorIsDelete";
-	private readonly _actionsUrl: string = "api/Vendor/Getdiscount";
-	private readonly _discountPutUrl: string = "api/Vendor/updatediscount";
-	private readonly _newDiscount: string = "api/Vendor/insertDiscount";
+	private readonly _actionsUrl: string = environment.baseUrl + "/api/Vendor/Getdiscount";
+	private readonly _discountPutUrl: string = environment.baseUrl + "/api/Vendor/updatediscount";
+	private readonly _newDiscount: string = environment.baseUrl + "/api/Vendor/insertDiscount";
 	private readonly _listUrl: string = "/api/Vendor/GetvendorList";
 	private readonly _updateActiveInactive: string = "/api/Vendor/vendorUpdateforActive";
 	private readonly _updateActiveInactiveforContact: string = "/api/Vendor/vendorUpdateforActiveforcontact";

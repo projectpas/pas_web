@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class ItemClassificationEndpointService extends EndpointFactory {
 
@@ -14,7 +14,7 @@ export class ItemClassificationEndpointService extends EndpointFactory {
     private readonly _itemclassificationGetUrl: string = "/api/ItemClassification/Get";
     private readonly _itemclassificationUrlNew: string = "/api/ItemClassification/itemclasspost";
     private readonly _actionsUrlAuditHistory: string = "/api/ItemClassification/auditHistoryById";
-    private readonly _altEquPartlist: string = "api/workorder/woaltequpartlist";
+    private readonly _altEquPartlist: string = environment.baseUrl + "/api/workorder/woaltequpartlist";
     private readonly getItemClassificationAuditById: string = "/api/ItemClassification/audits";
     private readonly getItemClassification: string = "/api/ItemClassification/pagination";
     private readonly excelUpload: string = "/api/ItemClassification/UploadItemClassCustomData";

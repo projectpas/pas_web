@@ -10,7 +10,7 @@ import { Charge } from '../models/charge.model';
 
 //import { EndpointFactory } from './endpoint-factory.service';
 //import { ConfigurationService } from './configuration.service';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class ActionEndpoint extends EndpointFactory {
 
@@ -20,48 +20,48 @@ export class ActionEndpoint extends EndpointFactory {
     private readonly _actionsUrlAuditHistory: string = "/api/Action/auditHistoryById";
     private getActionURL: string = "/api/Task/Get";
     private getActionAttributesURL: string = "/api/taskattribute/taskattributelist";
-    private getChargesTypeURL: string = 'api/mastertest/ChargesType';
-    private getChargesCurrencyURL: string = 'api/mastertest/ChargesCurrency';
-    private getEquipmentAssetTypesURL: string = 'api/mastertest/EquipmentAssetType';
-    private getExpertiseTypeURL: string = 'api/mastertest/ExpertiseType';
-    private getEmployeeExpertiseTypeURL: string = 'api/mastertest/EmployeeExpertiseType';
-    private getMaterialConditionURL: string = 'api/mastertest/MaterialCondition';
-    private getMaterialUOMURL: string = 'api/mastertest/MaterialUOM';
-    private getMaterialMandatoryURL: string = 'api/mastertest/MaterialMandatory';
+    private getChargesTypeURL: string = environment.baseUrl + '/api/mastertest/ChargesType';
+    private getChargesCurrencyURL: string = environment.baseUrl + '/api/mastertest/ChargesCurrency';
+    private getEquipmentAssetTypesURL: string = environment.baseUrl + '/api/mastertest/EquipmentAssetType';
+    private getExpertiseTypeURL: string = environment.baseUrl + '/api/mastertest/ExpertiseType';
+    private getEmployeeExpertiseTypeURL: string = environment.baseUrl + '/api/mastertest/EmployeeExpertiseType';
+    private getMaterialConditionURL: string = environment.baseUrl + '/api/mastertest/MaterialCondition';
+    private getMaterialUOMURL: string = environment.baseUrl + '/api/mastertest/MaterialUOM';
+    private getMaterialMandatoryURL: string = environment.baseUrl + '/api/mastertest/MaterialMandatory';
 
-    private getPublcationTypeURL: string = 'api/mastertest/PublicationType';
-    private getPublicationAircraftManufacturerURL: string = 'api/mastertest/PublicationAircraftManufacturer';
-    private getPublicationModelURL: string = 'api/mastertest/PublicationModel';
-    private getDashNumberByModelIdURL: string = 'api/mastertest/getDashNumberByModelId';
+    private getPublcationTypeURL: string = environment.baseUrl + '/api/mastertest/PublicationType';
+    private getPublicationAircraftManufacturerURL: string = environment.baseUrl + '/api/mastertest/PublicationAircraftManufacturer';
+    private getPublicationModelURL: string = environment.baseUrl + '/api/mastertest/PublicationModel';
+    private getDashNumberByModelIdURL: string = environment.baseUrl + '/api/mastertest/getDashNumberByModelId';
 
-    private getLocationsUrl: string = 'api/Location/Get';
-    private getPublicationStatusURL: string = 'api/mastertest/PublicationStatus';
-    private getExclusionEstimatedOccuranceURL: string = 'api/mastertest/ExclusionEstimatedOccurance';
-    private getAddActionURL: string = "api/Task/add";
-    private AddWorkFlowURL: string = "api/workflow/addWorkFlow";
-    private AddWorkFlowHeaderURL: string = "api/workflow/addWorkFlowHeader";
+    private getLocationsUrl: string = environment.baseUrl + '/api/Location/Get';
+    private getPublicationStatusURL: string = environment.baseUrl + '/api/mastertest/PublicationStatus';
+    private getExclusionEstimatedOccuranceURL: string = environment.baseUrl + '/api/mastertest/ExclusionEstimatedOccurance';
+    private getAddActionURL: string = environment.baseUrl + "/api/Task/add";
+    private AddWorkFlowURL: string = environment.baseUrl + "/api/workflow/addWorkFlow";
+    private AddWorkFlowHeaderURL: string = environment.baseUrl + "/api/workflow/addWorkFlowHeader";
 
-    private AddChargesURL: string = "api/workflow/addCharges";
-    private AddDirectionURL: string = "api/workflow/addDirection";
-    private AddEquipmentURL: string = "api/workflow/addEquipment";
-    private AddExclusionURL: string = "api/workflow/addExclusion";
-    private AddExpertiseURL: string = "api/workflow/addExpertise";
-    private AddMaterialListURL: string = "api/workflow/addMaterial";
-    private AddMeasurementURL: string = "api/workflow/addMeasurement";
-    private AddPublicationURL: string = "api/workflow/addPublication";
-    private getWorkFlowURL: string = "api/workflow/getworkflow";
-    private getWorkFlowWithMaterialURL: string = "api/workflow/getWorkFlowWithMaterialList";
-    private toggleStateURL: string = "api/workflow/toggleState";
+    private AddChargesURL: string = environment.baseUrl + "/api/workflow/addCharges";
+    private AddDirectionURL: string = environment.baseUrl + "/api/workflow/addDirection";
+    private AddEquipmentURL: string = environment.baseUrl + "/api/workflow/addEquipment";
+    private AddExclusionURL: string = environment.baseUrl + "/api/workflow/addExclusion";
+    private AddExpertiseURL: string = environment.baseUrl + "/api/workflow/addExpertise";
+    private AddMaterialListURL: string = environment.baseUrl + "/api/workflow/addMaterial";
+    private AddMeasurementURL: string = environment.baseUrl + "/api/workflow/addMeasurement";
+    private AddPublicationURL: string = environment.baseUrl + "/api/workflow/addPublication";
+    private getWorkFlowURL: string = environment.baseUrl + "/api/workflow/getworkflow";
+    private getWorkFlowWithMaterialURL: string = environment.baseUrl + "/api/workflow/getWorkFlowWithMaterialList";
+    private toggleStateURL: string = environment.baseUrl + "/api/workflow/toggleState";
 
-    private UpdateChargesURL: string = "api/workflow/updateCharges";
-    private UpdateDirectionURL: string = "api/workflow/updateDirection";
-    private UpdateEquipmentURL: string = "api/workflow/updateEquipment";
-    private UpdateExclusionURL: string = "api/workflow/updateExclusion";
-    private UpdateExpertiseURL: string = "api/workflow/updateExpertise";
-    private UpdateMaterialListURL: string = "api/workflow/updateMaterial";
-    private UpdateMeasurementURL: string = "api/workflow/updateMeasurement";
-    private UpdatePublicationURL: string = "api/workflow/updatePublication";
-    private RemoveWorkFlowURL: string = "api/workflow/remove";
+    private UpdateChargesURL: string = environment.baseUrl + "/api/workflow/updateCharges";
+    private UpdateDirectionURL: string = environment.baseUrl + "/api/workflow/updateDirection";
+    private UpdateEquipmentURL: string = environment.baseUrl + "/api/workflow/updateEquipment";
+    private UpdateExclusionURL: string = environment.baseUrl + "/api/workflow/updateExclusion";
+    private UpdateExpertiseURL: string = environment.baseUrl + "/api/workflow/updateExpertise";
+    private UpdateMaterialListURL: string = environment.baseUrl + "/api/workflow/updateMaterial";
+    private UpdateMeasurementURL: string = environment.baseUrl + "/api/workflow/updateMeasurement";
+    private UpdatePublicationURL: string = environment.baseUrl + "/api/workflow/updatePublication";
+    private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/remove";
 
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 

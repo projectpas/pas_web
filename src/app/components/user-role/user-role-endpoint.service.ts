@@ -4,20 +4,20 @@ import { ConfigurationService } from '../../services/configuration.service';
 import { Observable } from 'rxjs';
 import { EndpointFactory } from '../../services/endpoint-factory.service';
 import { UserRole, UserRoleMapper } from './ModuleHierarchyMaster.model';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class UserRoleEndPointService extends EndpointFactory {
 
-    private readonly getAllModuleURL: string = "api/userrolepermission/getAllModuleHierarchy";
-    private readonly addUserRoleURL: string = "api/userrolepermission/addUserRole";
-    private readonly updateUserRoleURL: string = "api/userrolepermission/updateUserRole";
-    private readonly getAllUsersURL: string = "api/account/users";
-    private readonly getAllUserRolesURL: string = "api/userrolepermission/getAllUserRole";
-    private readonly assignRoleToUserURL: string = "api/userrolepermission/assignRoleToUser";
-    private readonly getUserRolesByUserIdURL: string = "api/userrolepermission/getUserRolesByUserId";
-    private readonly getSavedCountryDataURL: string = "api/globalsettings/globalsettings?masterCompanyId="
-    private readonly getSavedEmployeeDataURL: string = "api/common/loginuserdetails"
+    private readonly getAllModuleURL: string = environment.baseUrl + "/api/userrolepermission/getAllModuleHierarchy";
+    private readonly addUserRoleURL: string = environment.baseUrl + "/api/userrolepermission/addUserRole";
+    private readonly updateUserRoleURL: string = environment.baseUrl + "/api/userrolepermission/updateUserRole";
+    private readonly getAllUsersURL: string = environment.baseUrl + "/api/account/users";
+    private readonly getAllUserRolesURL: string = environment.baseUrl + "/api/userrolepermission/getAllUserRole";
+    private readonly assignRoleToUserURL: string = environment.baseUrl + "/api/userrolepermission/assignRoleToUser";
+    private readonly getUserRolesByUserIdURL: string = environment.baseUrl + "/api/userrolepermission/getUserRolesByUserId";
+    private readonly getSavedCountryDataURL: string = environment.baseUrl + "/api/globalsettings/globalsettings?masterCompanyId="
+    private readonly getSavedEmployeeDataURL: string = environment.baseUrl + "/api/common/loginuserdetails"
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
     }

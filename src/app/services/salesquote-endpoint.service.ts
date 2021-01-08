@@ -18,12 +18,12 @@ import { SalesOrderFreight } from "../models/sales/SalesOrderFreight";
 import { ISalesOrderFreight } from "../models/sales/ISalesOrderFreight";
 import { ISalesOrderQuoteCharge } from "../models/sales/ISalesOrderQuoteCharge";
 import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly getNewSalesQuoteInstanceUrl: string = "/api/salesquote/new";
   private readonly saleQuote: string = "/api/salesquote";
-  private readonly saleQuoteSettings: string = "api/SOQuoteSettings/delete";
+  private readonly saleQuoteSettings: string = environment.baseUrl + "/api/SOQuoteSettings/delete";
   private readonly soqMarginSummary: string = "/api/SalesQuote/create-quote-margin-data";
   private readonly getSoqMarginSummary: string = "/api/SalesQuote/get-sales-quote-margin-data";
   private readonly saleQuoteChargesSave: string = "/api/SalesQuote/createsalesorderquotecharges";
@@ -53,13 +53,13 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly _getsalesquoteDocslist: string = "/api/salesquote/getSalesQuoteDocumentDetailList";
   private readonly _getsalesquoteDocumentAttachmentslist: string = "/api/FileUpload/getattachmentdetails";
   private readonly _geSaleQuoteDocumentHistory: string = "/api/salesquote/getSaleQuoteDocumentAudit";
-  private readonly _geSaleQuoteFreights: string = "api/SalesQuote/salesorderquotefreightlist";
-  private readonly _geSaleQuoteCharges: string = "api/SalesQuote/gesalesorderquotechargeslist";
+  private readonly _geSaleQuoteFreights: string = environment.baseUrl + "/api/SalesQuote/salesorderquotefreightlist";
+  private readonly _geSaleQuoteCharges: string = environment.baseUrl + "/api/SalesQuote/gesalesorderquotechargeslist";
   private readonly _savequoteHeader: string = "/api/salesquote/saveSalesQuoteHeader";
   private readonly getAllSalesOrderTypesURL: string = "/api/WorkOrder/workOrderTypes";
   private readonly saveSOQSetting: string = "/api/SOQuoteSettings/save";
   private readonly getSalesOrderQuoteSetting: string = "/api/SOQuoteSettings/getlist";
-  private readonly _geSaleQuoteSettingsHistory: string = "api/SOQuoteSettings/getauditdatabyid";
+  private readonly _geSaleQuoteSettingsHistory: string = environment.baseUrl + "/api/SOQuoteSettings/getauditdatabyid";
   private readonly getSalesOrderQuoteAnalysis: string = "/api/SalesQuote/togetsoquoteanalysis";
   private readonly getFreightAudihistory: string = 'api/SalesQuote/quote-freight-history';
   private readonly getChargesAudihistory: string = 'api/salesquote/quote-charges-history';
