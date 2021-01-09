@@ -5976,4 +5976,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         },
         error => this.saveFailedHelper(error))
     }
+
+    ConsumeUOMdescription($event) {}
+    SOLDUOMdescription($event) {}
+    savewarnings() {}
+    dismissModelNew() {}
 }

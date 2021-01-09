@@ -155,11 +155,11 @@ col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[co
                                         (onChange)="changeStatus(rowData)" matTooltip="Active" matTooltipPosition="above"></p-inputSwitch>-->
                                         <div *ngIf="currentDeletedstatus==false">
                                        
-                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData,$event)"
+                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData)"
                                                        [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData,$event)"
+                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData)"
                                                        [(ngModel)]="rowData['isActive']"></p-inputSwitch>
-                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData,$event)"
+                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="changeStatus(rowData)"
                                                        [(ngModel)]="rowData['isActive']"></p-inputSwitch>
 
                                         <span data-toggle="modal" data-target="#view">

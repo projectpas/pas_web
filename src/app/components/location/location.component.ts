@@ -76,7 +76,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	siteName: any;
 
 	name: any;
-	private isEditMode: boolean = false;
+	public isEditMode: boolean = false;
 	private isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;

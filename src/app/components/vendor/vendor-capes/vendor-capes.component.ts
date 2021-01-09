@@ -93,6 +93,7 @@ export class VendorCapesComponent implements OnInit {
         memo: null,
         isEditable: false,
     }
+    isAdd: boolean;
 
     constructor(public vendorService: VendorService, private datePipe: DatePipe, private configurations: ConfigurationService, private modalService: NgbModal, private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private alertService: AlertService) {
         if(window.localStorage.getItem('vendorService')){
@@ -735,4 +736,8 @@ export class VendorCapesComponent implements OnInit {
         const data: Blob = new Blob([buffer], {type: this.fileType});
         FileSaver.saveAs(data, fileName + this.fileExtension);
       }
+
+      enableSave() {}
+
+      onChangeItemMasterId(field) {}
 }

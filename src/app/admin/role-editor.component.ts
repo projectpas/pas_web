@@ -23,7 +23,7 @@ export class RoleEditorComponent {
     @ViewChild('form',{static:false})
     private form: NgForm;
 
-    private selectedPermissions: SelectionModel<Permission>
+    public selectedPermissions: SelectionModel<Permission>
     private isNewRole = false;
     private isSaving: boolean;
     private onRoleSaved = new Subject<Role>();

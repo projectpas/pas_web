@@ -145,7 +145,7 @@
                                     <th style="width:200px;position:sticky"></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
                                     <td style="width:200px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{

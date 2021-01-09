@@ -17,6 +17,8 @@ export class PoSettingsComponent implements OnInit {
 	isSpinnerVisible: boolean = true;
     posettingModel: any = {};
     enableHeaderSaveBtn: boolean = false;
+    errorMessages: any;
+
     constructor(private vendoreService: VendorService,
         private alertService: AlertService, private authService: AuthService,
         private purchaseOrderService:PurchaseOrderService) {
@@ -122,5 +124,5 @@ export class PoSettingsComponent implements OnInit {
     //        );
     //    }
     //}
-
+    closeErrorMessage() {}
 }

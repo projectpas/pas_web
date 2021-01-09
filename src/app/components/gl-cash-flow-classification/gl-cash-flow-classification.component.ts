@@ -78,7 +78,7 @@ export class GlCashFlowClassificationComponent implements OnInit {
     disableSaveGLCFNameSave: boolean=false;
 
     currentstatus: string = 'Active';
-   
+    AuditDetails: any;
 	
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,

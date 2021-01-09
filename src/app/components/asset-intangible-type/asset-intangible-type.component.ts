@@ -52,7 +52,8 @@ export class AssetIntangibleTypeComponent implements OnInit {
     code_Name: any = "";
     disableSaveForEdit: boolean = false;
     currentstatus: string = 'Active';
-
+    AuditDetails: any;
+    viewSelectedRow: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService, private configurations: ConfigurationService, private alertService: AlertService, private coreDataService: AssetIntangibleTypeService, private modalService: NgbModal, private authService: AuthService) {
     }

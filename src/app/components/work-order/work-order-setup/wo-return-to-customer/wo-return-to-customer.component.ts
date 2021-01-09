@@ -29,7 +29,7 @@ export class WOReturnToCustomerComponent implements OnInit {
         { field: 'qtyReserved', header: 'QTY Reserved' }
     ];
     moduleName = "Return to customer";
-
+    isView: boolean;
     selectedColumns = this.headers;
     constructor(private workOrderService: WorkOrderService, private alertService: AlertService){
 
@@ -70,4 +70,8 @@ export class WOReturnToCustomerComponent implements OnInit {
             MessageSeverity.error
         );
     }
+
+    edit(rowData) {}
+
+    deleteMemo(rowDate) {}
 }

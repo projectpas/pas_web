@@ -175,4 +175,6 @@ export class ViewBatchTsComponent implements OnInit{
         this.loadingIndicator = false;
         this.allCurrencyInfo = getCreditTermsList;
     }
+
+    removeManualJournel() {}
 }

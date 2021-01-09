@@ -85,7 +85,8 @@ export class AssetAttributeTypeComponent implements OnInit {
     assetWriteDownList: any[] = [];
     filteredAssetWriteDownList: any[] = [];
     formData: FormData;
-
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
          private alertService: AlertService, private configurations: ConfigurationService,

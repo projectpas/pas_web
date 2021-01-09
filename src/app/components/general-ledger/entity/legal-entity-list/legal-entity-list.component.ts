@@ -119,6 +119,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	moduleName:any="LegalEntity";
 	referenceId:any;
 	pageNumber = 0;
+	isViewMode: boolean;
+
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -513,7 +515,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 		if (this.modal1) { this.modal1.close(); }
 	}
 
-	openContentEdit(content, row) {
+	openContentEdit(row) {
 		const { legalEntityId } = row;
 		localStorage.removeItem('currentLETab');
 		this.route.navigateByUrl(`generalledgermodule/generalledgerpage/app-legal-entity-edit/${legalEntityId}`);
@@ -1054,4 +1056,6 @@ this.isLockBox=false;
 			}
 		}
 	}
+
+	changeOfTab(event) {}
 }

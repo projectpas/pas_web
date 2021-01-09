@@ -799,4 +799,6 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     //         }
     //     })
     // }
+
+    enableSave() {}
 }

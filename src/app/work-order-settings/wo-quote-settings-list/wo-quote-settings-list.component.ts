@@ -77,7 +77,7 @@ export class WOQuoteSettingsListComponent {
     filteredText: string;
     totalRecords: number = 0;
     totalPages: number = 0;
-
+    noDatavailable: any;
     constructor(private workOrderService: WorkOrderService,
         private router: ActivatedRoute,
         private route: Router,

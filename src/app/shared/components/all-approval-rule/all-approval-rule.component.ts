@@ -843,4 +843,5 @@ getAuditHistoryById(data) {
       )
   }
   
+  handleChanges(rowData, $event) {}
 }

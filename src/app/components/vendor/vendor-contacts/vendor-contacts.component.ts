@@ -456,7 +456,7 @@ export class VendorContactsComponent implements OnInit {
         }
     }
 
-    openEdit(content, row) {
+    openEdit(row) {
         this.isEditContactInfo=true;
         this.isEditMode = true;
         this.disableSave = true;

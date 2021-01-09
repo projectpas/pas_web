@@ -97,7 +97,7 @@ export class RoleListComponent implements OnInit, AfterViewInit {
             });
     }
 
-    private editRole(role?: Role) {
+    public editRole(role?: Role) {
         this.sourceRole = role;
 
         let dialogRef = this.dialog.open(EditRoleDialogComponent,
@@ -112,7 +112,7 @@ export class RoleListComponent implements OnInit, AfterViewInit {
         });
     }
 
-    private confirmDelete(role: Role) {
+    public confirmDelete(role: Role) {
         this.snackBar.open(`Delete ${role.name} role?`, "DELETE", { duration: 5000 })
             .onAction().subscribe(() => {
                 this.alertService.startLoadingMessage("Deleting...");

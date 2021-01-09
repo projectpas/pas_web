@@ -97,7 +97,7 @@ export class WorkOrderSettingsListComponent {
     publications: any[];
     allVendors: any[];
     responseDataForWorkFlow: Object;
-
+    noDatavailable: any;
     constructor(private workOrderService: WorkOrderService,
         private router: ActivatedRoute,
         private route: Router,

@@ -608,4 +608,6 @@ export class VendorCapabilitiesListComponent implements OnInit {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=VendorCapability&fileName=VendorCaps.xlsx`;
         window.location.assign(url);
     }
+
+    handleChanges(rowData, $event) {}
 }

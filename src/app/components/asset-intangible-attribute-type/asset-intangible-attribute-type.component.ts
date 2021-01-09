@@ -89,7 +89,8 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
 
 
     currentstatus: string = 'Active';
-
+    AuditDetails: any;
+    viewSelectedRow: any;
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService, private commonservice: CommonService, private glAccountService: GlAccountService, public legalEntityService: LegalEntityService, private configurations: ConfigurationService, private alertService: AlertService, private coreDataService: AssetIntangibleAttributeTypeService, private modalService: NgbModal, private authService: AuthService, private assetIntangibleTypeService: AssetIntangibleTypeService) {
@@ -1045,5 +1046,16 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
         }
- 
+
+    getColorCodeForHistory(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
+    }
 }

@@ -79,7 +79,8 @@ export class SalesQuoteListComponent implements OnInit {
     isSettingsReceived = false;
     @ViewChild("filterStatusInput",{static:false}) public filterText: ElementRef;
     clearStatusText: boolean = false;
-
+    salesOrderQuoteId: any;
+    
     constructor(
         private salesQuoteService: SalesQuoteService,
         private alertService: AlertService,
@@ -254,10 +255,10 @@ export class SalesQuoteListComponent implements OnInit {
 
     openQuoteToEdit(row) {
         this.isSpinnerVisible = true;
-        const { salesOrderQuoteId } = row;
+        this.salesOrderQuoteId = row;
         let customerId = row.customerId;
         this.router.navigateByUrl(
-            `salesmodule/salespages/sales-quote-edit/${customerId}/${salesOrderQuoteId}`
+            `salesmodule/salespages/sales-quote-edit/${customerId}/${this.salesOrderQuoteId}`
         );
     }
 

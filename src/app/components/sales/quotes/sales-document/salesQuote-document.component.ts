@@ -366,7 +366,7 @@ export class SalesQuoteDocumentsComponent implements OnInit {
 		})
 	}
 
-	openView(content, row) {
+	openView(row) {
 
 		this.salesQuoteService.toGetUploadDocumentsList(row.attachmentId, row.salesOrderQuoteId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;

@@ -184,7 +184,7 @@ export class ItemMasterNonStockComponent {
     filteredBrands: any[];
     sourceItemMaster: any = {};
     legalEntityId: number;
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     currentItemTypeId: number;
 

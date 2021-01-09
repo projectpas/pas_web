@@ -40,8 +40,8 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
     selectedData: any;
     formData = new FormData();
     public auditHisory: AuditHistory[] = [];
-    private isDeleteMode: boolean = false;
-    private isEditMode: boolean = false;
+    public isDeleteMode: boolean = false;
+    public isEditMode: boolean = false;
     modal: NgbModalRef;
     public sourceAction: DepriciationMethod;
     display: boolean = false;

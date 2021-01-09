@@ -227,7 +227,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         });
     }
 
-    private onPublicationChange(event, wfPublication) {
+    public onPublicationChange(event, wfPublication) {
         const pubData = this.publicationDropdown;
         for (var i = 0; i < pubData.length; i++) {
             if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {

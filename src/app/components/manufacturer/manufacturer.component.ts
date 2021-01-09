@@ -565,7 +565,7 @@ export class ManufacturerComponent implements OnInit {
     currentstatus: string = 'Active';
 
     isDeleted: Boolean = false;
-
+    AuditDetails: any;
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService, private modalService: NgbModal, private commonService: CommonService,
          private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, public manufacturerService: ManufacturerService) {

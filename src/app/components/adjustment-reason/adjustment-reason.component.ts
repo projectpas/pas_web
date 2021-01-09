@@ -104,7 +104,7 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
 
     /** Actions ctor */
         
-    private isEdit: boolean = false;
+    public isEdit: boolean = false;
     private isDeleteMode: boolean = false;
 
     /** stockline-adjustment-reason ctor */

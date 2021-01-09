@@ -148,7 +148,8 @@ export class TaxRateComponent implements OnInit {
     // originalData: any;
     existingRecordsResponse = [];
     disableSaveForEdit:boolean=false;
-
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

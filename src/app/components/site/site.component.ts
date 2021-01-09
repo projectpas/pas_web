@@ -61,7 +61,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 	totalRecords: number;
 	rows: number;
 
-	private isEditMode: boolean = false;
+	public isEditMode: boolean = false;
 	private isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;

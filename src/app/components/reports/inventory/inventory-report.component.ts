@@ -179,7 +179,8 @@ export class InventoryReportComponent implements OnInit {
         }
 	}
 	
-
+    fieldSearch(value, field) {
+    }
     // downloadStockLineReport() {
         
     //     this.stocklineService.downloadStockLineReport();

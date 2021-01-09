@@ -75,7 +75,8 @@ export class TaxTypeComponent implements OnInit {
     selectedRowforDelete: any;
     existingRecordsResponse: Object;
    // existingRecordsResponse = []
-
+   AuditDetails: any;
+   
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private commonService: CommonService,

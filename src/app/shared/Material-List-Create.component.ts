@@ -1271,4 +1271,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             );
         }
     }
+
+    onTaskChange(material) {}
+    downloadFileUpload(f) {}
+    onViewAircraft(rowData) {}
+    getAircraftAuditHistory(rowData) {}
+    onViewAircraftonDbl(rowData) {}
 } 

@@ -269,7 +269,7 @@ export class SalesPartNumberComponent {
       this.openPartNumber(false);
     }
   }
-  onClosePartDelete(event) {
+  onClosePartDelete() {
 
     this.deletePartModal.close();
 

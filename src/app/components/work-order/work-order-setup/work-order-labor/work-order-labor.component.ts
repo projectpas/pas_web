@@ -63,7 +63,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   basicLabourDetail: any;
   defaultBurdenRate: any = 0;
   deletingLabourObj: any;
-
+  taskIndexToggle: any;
 
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,

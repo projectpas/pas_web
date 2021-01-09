@@ -185,7 +185,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	localCollection: any[] = [];
 	sourceItemMaster: any = {};
 	standAlone: any;
-	private isEditMode: boolean = false;
+	public isEditMode: boolean = false;
 	private isDeleteMode: boolean = false;
 	allManagemtninfo: any[] = [];
 	allAircraftManufacturer: any[] = [];
@@ -2585,7 +2585,17 @@ export class ItemMasterEquipmentComponent implements OnInit {
 		}
     }
    
+	deletecertificateindex(i) {}
 
+	deleterepairindex(i) {}
+
+	deleteexcahngeindex(i) {}
+
+	deletehomeFormIndex(homeFormIndex) {}
+
+	deleteovhindex(ovhindex) {}
+
+	deletedisindex(disindex) {}
 }
 
 

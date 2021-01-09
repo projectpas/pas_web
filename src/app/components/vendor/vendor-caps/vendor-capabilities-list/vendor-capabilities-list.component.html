@@ -264,7 +264,7 @@
       </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-rowData let-columns="columns">
+      <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
         <tr
           [pSelectableRow]="rowData"
           [pSelectableRowDblClick]="rowData"
@@ -290,7 +290,7 @@
               <ng-container *ngIf="!isViewMode">
                 <p-inputSwitch
                   *ngIf="!isViewMode"
-                  name="isActive{{ i }}"
+                  name="isActive{{ rowIndex }}"
                   matTooltip="Active"
                   [disabled]="rowData.isDefaultContact == true"
                   matTooltipPosition="above"
@@ -367,7 +367,7 @@
             <div *ngIf="currentDeletedstatus == true">
               <p-inputSwitch
                 *ngIf="!isViewMode"
-                name="isActive{{ i }}"
+                name="isActive{{ rowIndex }}"
                 matTooltip="Active"
                 matTooltipPosition="above"
                 onLabel="on"

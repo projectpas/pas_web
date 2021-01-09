@@ -879,7 +879,7 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    private getStockLineWareHouse(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineWareHouse(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.WareHouseList = [];
         stockLine.LocationList = [];
         stockLine.ShelfList = [];
@@ -907,7 +907,7 @@ export class EditPoComponent implements OnInit {
 		}
     }
 
-    private getStockLineLocation(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineLocation(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.LocationList = [];
         stockLine.ShelfList = [];
         stockLine.BinList = [];
@@ -932,7 +932,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    private getStockLineShelf(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineShelf(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.ShelfList = [];
         stockLine.BinList = [];
 
@@ -955,7 +955,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    private getPartWareHouse(part: PurchaseOrderPart, onLoad?): void {
+    public getPartWareHouse(part: PurchaseOrderPart, onLoad?): void {
         part.WareHouseList = [];
         part.LocationList = [];
         part.ShelfList = [];
@@ -1002,7 +1002,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    private getPartLocation(part: PurchaseOrderPart, onLoad?): void {
+    public getPartLocation(part: PurchaseOrderPart, onLoad?): void {
         part.LocationList = [];
         part.ShelfList = [];
         part.BinList = [];
@@ -1042,7 +1042,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    private getPartShelf(part: PurchaseOrderPart, onLoad?): void {
+    public getPartShelf(part: PurchaseOrderPart, onLoad?): void {
         part.ShelfList = [];
         part.BinList = [];
 
@@ -1079,7 +1079,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    private getPartBin(part: PurchaseOrderPart, onLoad?): void {
+    public getPartBin(part: PurchaseOrderPart, onLoad?): void {
         part.BinList = [];
         part.binId = 0;
 
@@ -1110,7 +1110,7 @@ export class EditPoComponent implements OnInit {
         );
     }
 
-    private setPartBinIdToStockline(part: PurchaseOrderPart): void {
+    public setPartBinIdToStockline(part: PurchaseOrderPart): void {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
                 SL.binId = part.binId;
@@ -1118,7 +1118,7 @@ export class EditPoComponent implements OnInit {
         }
     }
 
-    private conditionChange(part: PurchaseOrderPart) {
+    public conditionChange(part: PurchaseOrderPart) {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
                 SL.conditionId = part.conditionId;
@@ -1127,7 +1127,7 @@ export class EditPoComponent implements OnInit {
 
     }
 
-    private getStockLineBin(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineBin(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.BinList = [];
 
         if (!onPageLoad) {

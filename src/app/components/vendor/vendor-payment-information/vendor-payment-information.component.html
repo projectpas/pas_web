@@ -162,7 +162,7 @@
                                                 </tr>
                                             </ng-template>
 
-                                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                                                     pReorderableRowHandle (dblclick)="openView(view,rowData)">
                                                     <td style="width: 40px;">

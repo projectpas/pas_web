@@ -106,7 +106,7 @@ export class StockLineEditComponent implements OnInit, AfterViewInit
 	QuantityOnHandError: boolean;
 	hasSerialized: boolean;
 	showSerialNumberError: boolean;
-
+	glAccountName: any;
     stocklineEditForm = new FormGroup({
         companyId: new FormControl('companyId', Validators.minLength(1)),
 

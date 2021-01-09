@@ -56,7 +56,7 @@ export class VendorClassificationComponent implements OnInit {
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     shortNameList: any;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private modalService: NgbModal,
          private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, private vendorclassificationService: VendorClassificationService, private commonService: CommonService) {

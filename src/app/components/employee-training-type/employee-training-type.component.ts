@@ -53,7 +53,7 @@ export class EmployeeTrainingTypeComponent implements OnInit  {
     EmpTrainingTypeList: any;
     actionamecolle: any[] = [];
     selectedSite: any;
-
+    AuditDetails: any;
     new = {
         description: "",
         masterCompanyId: 1,

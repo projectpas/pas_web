@@ -339,7 +339,8 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     mainIndex: any;
     subIndex: any;
     quoteStatusList: any = [];
-
+    isWorkOrder: any;
+    
     constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,) { }
     ngOnInit() {
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -2096,7 +2097,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    editMaterialList(matData, index) {
+    editMaterialList(matData) {
         this.editMatData = [matData];
     }
 

@@ -104,7 +104,7 @@
                     <th style="width: 50px;" *ngIf="!isView"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-columns="columns">
                     <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                         <ng-container *ngFor="let col of columns" >
                                 <td  style="width:auto"
@@ -129,7 +129,7 @@
                             <!-- <button class="btn btn-danger nobg" (click)="deleteMemo(rowData)">
                                 <i class="fa fa-trash" style="font-size: 14px;"></i>
                             </button> -->
-                            <span data-toggle="modal" data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, i)" matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a> </span>
+                            <span data-toggle="modal" data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, rowIndex)" matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i class="fa fa-pencil"></i></a> </span>
                             <span><a class="btn nobg btn-delete-cstm" (click)="deleteMemo(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                         </td>
                     </tr>

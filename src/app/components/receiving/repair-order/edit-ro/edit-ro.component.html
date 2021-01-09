@@ -309,7 +309,7 @@
                             <td class="text-right">{{part.discountPerUnit}}</td>
                             <td>
                                 <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum"
-                                       (focusout)="calculatePartExtendedCost(part, SL);"
+                                       (focusout)="calculatePartExtendedCost(part);"
                                        [disabled]="!part.isEnabled"
                                        [(ngModel)]="part.unitCost"> <!--SetStockLineUnitCost(part);-->
                             </td>

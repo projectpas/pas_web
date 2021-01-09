@@ -394,7 +394,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
     }
 
-    openEdits(row, index) //this is for Edit Data get
+    openEdits(row) //this is for Edit Data get
     {
         const capData = row;
         this.arraylistCapabilityTypeId.push(row.capabilityTypeId);
@@ -1325,5 +1325,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 				log.error,
 				MessageSeverity.error
 			); }
-	}
+    }
+    
+    columnsChanges() {}
 }

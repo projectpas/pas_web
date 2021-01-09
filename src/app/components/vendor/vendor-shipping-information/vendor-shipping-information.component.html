@@ -168,7 +168,7 @@
                                                     <th style="width: 140px !important;"></th>
                                                 </tr>
                                             </ng-template>
-                                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                                     (dblclick)="openView(view,rowData)">
                                                     <td style="width: 50px !important;">
@@ -1344,7 +1344,7 @@
                                                     <th></th>
                                                 </tr>
                                             </ng-template>
-                                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                                     (dblclick)="openInternationalView(rowData)">
                                                     <td>

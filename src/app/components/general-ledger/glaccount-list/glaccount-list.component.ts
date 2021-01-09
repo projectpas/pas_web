@@ -68,7 +68,7 @@ export class GlaccountListComponent implements OnInit {
         this.allGLCashFlowClassInfo = cahsFlowClassdata[0];
       });
   }
-  private glAccountEdit(glAccount) {
+  public glAccountEdit(glAccount) {
     this.glAccountService.glAccountEditCollection = glAccount;
     this.router.navigateByUrl(
       "/generalledgermodule/generalledgerpage/app-glaccount-create"

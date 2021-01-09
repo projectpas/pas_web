@@ -183,7 +183,7 @@ export class AssetInventoryListingComponent implements OnInit {
     capesSelectedColumns = this.capesCols;
     isIntangible: any;
 
-    constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,private assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
+    constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,public assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
         // this.assetService.isEditMode = false;
         // this.assetService.listCollection = null;
         // this.currentAsset.isTangible = 1;

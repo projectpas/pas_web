@@ -1871,4 +1871,6 @@ export class VendorShippingInformationComponent {
             }
         })
     }
+
+    updateActiveorInActiveForShipping(rowData) {}
 }

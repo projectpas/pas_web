@@ -158,7 +158,7 @@
                                     <th style="width:150px;position: sticky"></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(invView,rowData)" >
 
                                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"

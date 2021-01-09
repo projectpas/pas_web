@@ -66,7 +66,7 @@ export class ProvisionComponent implements OnInit{
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     manufacturerList: any;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private modalService: NgbModal,
         private commonService: CommonService,

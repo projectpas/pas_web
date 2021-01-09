@@ -203,7 +203,7 @@
                         </tr>
 
                     </ng-template>
-                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                         <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewSelectedRowdbl(viewdbl,rowData)" >
                             <td style="width: 40px;">
                                 <span class="flag" style="width: 40px;">

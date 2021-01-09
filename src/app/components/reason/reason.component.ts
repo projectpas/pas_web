@@ -86,7 +86,7 @@ disableReason:boolean=false;
     AuditDetails: SingleScreenAuditDetails[];
   
     public allWorkFlows: Reason[] = [];
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
 
     pageSearch: { query: any; field: any; };

@@ -383,4 +383,6 @@ export class AccountListingComponent implements OnInit {
             this.isSpinnerVisible = false;           
         });
     }
+
+    columnsChanges() {}
 }

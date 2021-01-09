@@ -743,7 +743,7 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    private showSplitShipmentParts(repairOrderPart : RepairOrderPart): void {
+    public showSplitShipmentParts(repairOrderPart : RepairOrderPart): void {
         var selectedParts = this.repairOrderData.filter(function (part) {
             return part.itemMasterId == repairOrderPart.itemMasterId;
         });
@@ -764,7 +764,7 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    private isSplitShipmentPart(itemMasterId: number): boolean {
+    public isSplitShipmentPart(itemMasterId: number): boolean {
         return this.repairOrderData.filter(x => x.itemMasterId == itemMasterId && !x.isParent).length > 0;
     }
 
@@ -804,7 +804,7 @@ export class ReceivingRoComponent implements OnInit {
         this.isSpinnerVisible = false;
     }
 
-    private toggleStockLine(event: any, part: RepairOrderPart): void {
+    public toggleStockLine(event: any, part: RepairOrderPart): void {
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
         }
@@ -1010,7 +1010,7 @@ export class ReceivingRoComponent implements OnInit {
         return stock.siteId;
     }
 
-    private paginatorFocusOut(event: any, part: RepairOrderPart): void {
+    public paginatorFocusOut(event: any, part: RepairOrderPart): void {
         if (event.target.value == '') {
             if (!part.isSameDetailsForAllParts) {
                 part.currentSLIndex = 0;
@@ -1114,7 +1114,7 @@ export class ReceivingRoComponent implements OnInit {
         // }
     }
 
-    private gotoStockLineMainPage(event: any, part: RepairOrderPart): void {
+    public gotoStockLineMainPage(event: any, part: RepairOrderPart): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {
@@ -1141,7 +1141,7 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    private gotoStockLinePage(event: any, part: RepairOrderPart): void {
+    public gotoStockLinePage(event: any, part: RepairOrderPart): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {
@@ -1938,7 +1938,7 @@ export class ReceivingRoComponent implements OnInit {
         
     }
 
-    private moveByKey(event, part) {
+    public moveByKey(event, part) {
         // CTRL + Down Arrow
         if (event.ctrlKey && event.keyCode == 40) {
             this.moveStockLinePage('stockline', part.currentSERIndex + 1, part);

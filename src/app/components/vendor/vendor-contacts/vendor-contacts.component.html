@@ -188,7 +188,7 @@
                               <th style="width: 150px;"></th>
                           </tr>
                       </ng-template>
-                      <ng-template pTemplate="body" let-rowData let-columns="columns">
+                      <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                           <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                               (dblclick)="opencontactView(view, rowData)">
                               <td style="width: 30px;">
@@ -210,7 +210,7 @@
                               </td>
                               <td class="text-center" style="width: 150px;">
                                   <div *ngIf="currentDeletedstatus==false">
-                                      <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ i }}" matTooltip="Active" [disabled]="rowData.isDefaultContact == true"
+                                      <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ rowIndex }}" matTooltip="Active" [disabled]="rowData.isDefaultContact == true"
                                                   matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChanges(rowData, $event)"
                                                      [(ngModel)]="rowData['isActive']">
                                       </p-inputSwitch>
@@ -222,7 +222,7 @@
                                       </span>
                                       <span *ngIf="!isViewMode" data-target="#addContactInfo" data-toggle="modal">
                                           <a class="btn nobg"
-                                             (click)="openEdit(contentEdit, rowData)" matTooltip="Edit"
+                                             (click)="openEdit(rowData)" matTooltip="Edit"
                                              matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                                       </span>
                                       <span *ngIf="!isViewMode" requirePermission="canDelete" >
@@ -247,7 +247,7 @@
                                   </div>
                                   <div *ngIf="currentDeletedstatus==true">
                                     <ng-container *ngIf="!isViewMode">
-                                          <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ i }}" matTooltip="Active" 
+                                          <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ rowIndex }}" matTooltip="Active" 
                                           matTooltipPosition="above" onLabel="on" [disabled]="true" offLabel="off" 
                                           [(ngModel)]="rowData['isActive']">
                                           </p-inputSwitch>

@@ -108,7 +108,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     localCollection: any[] = [];
     private isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
-    private isActive: boolean = false;
+    public isActive: boolean = false;
     viewCheck:boolean=true;
     // totalRecords: any=0;
     generalInfo: any;

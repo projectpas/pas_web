@@ -39,7 +39,7 @@ export class POViewListComponent implements OnInit {
         }
     }
 
-    private gotoStockLinePage(event: any, part: PurchaseOrderPart): void {
+    public gotoStockLinePage(event: any, part: PurchaseOrderPart): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {
@@ -79,4 +79,6 @@ export class POViewListComponent implements OnInit {
     addStockLine() {
         this.toggleAddDetails = !this.toggleAddDetails;
     }
+
+    paginatorFocusOut($event, part) {}
 }

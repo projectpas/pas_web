@@ -17,6 +17,8 @@ export class JournelStepsComponent implements OnInit
     items: MenuItem[];
     showComponentPTab: boolean;
     msgs: Message[] = [];
+    ifvalue: any;
+    
     constructor(private router: ActivatedRoute, private route: Router, private journelService: JournelService)
     {
         let currentUrl = this.route.url;

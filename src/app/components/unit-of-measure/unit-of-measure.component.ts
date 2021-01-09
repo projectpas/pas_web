@@ -74,7 +74,7 @@ export class UnitOfMeasureComponent implements OnInit {
     disableSaveForUOMMsg: boolean = false;
     disableSaveForShortNameMsg: boolean = false;
     shortNameList: any;
-    
+    AuditDetails: any;
     
     constructor(private breadCrumb: SingleScreenBreadcrumbService, private modalService: NgbModal,
         private commonService: CommonService,

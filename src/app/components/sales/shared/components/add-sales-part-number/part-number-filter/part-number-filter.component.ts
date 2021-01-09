@@ -49,7 +49,10 @@ export class PartNumberFilterComponent {
   isSpinnerVisible: boolean = false;
   columns: any[];
   partEditDisable = false;
-
+  salesMargin: any;
+  showPaginator: any;
+  pageLinks: any;
+  
   constructor(
     private modalService: NgbModal,
     private itemMasterService: ItemMasterService,
@@ -451,4 +454,6 @@ export class PartNumberFilterComponent {
     this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock')
 
   }
+
+  onChange($event, part,salesMargin) {}
 }

@@ -198,7 +198,7 @@
                     <th style="width:200px;position:sticky;border-left: 2px solid #c3c3c3 !important;"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns"> 
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex"> 
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(invView,rowData)">
                     <td style="width:160px"
                         *ngFor="let col of columns"
@@ -217,7 +217,7 @@
                             <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span> 
                                 <a class="btn nobg"
-                                   (click)="openContentEdit(contentEdit,rowData)" matTooltip="Edit"
+                                   (click)="openContentEdit(rowData)" matTooltip="Edit"
                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
                             <span>

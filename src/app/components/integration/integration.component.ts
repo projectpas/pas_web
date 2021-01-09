@@ -71,6 +71,8 @@ export class IntegrationComponent implements OnInit {
     selectedRecordForEdit: any;
     viewRowData: any;
     selectedRowforDelete: any;  
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,        
         private commonService: CommonService,

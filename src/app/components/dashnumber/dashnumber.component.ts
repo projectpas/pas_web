@@ -58,8 +58,7 @@ export class DashnumberComponent implements OnInit {
     descriptionList: any;
     workPerformedCodeList: any;
     currentstatus: string = 'Active';
-
-
+    AuditDetails: any;
     new = {
         aircraftTypeId: "",
         aircraftModelId: "",

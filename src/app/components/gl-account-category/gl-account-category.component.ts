@@ -54,6 +54,7 @@ export class GLAccountCategoryComponent implements OnInit {
     disableSaveCatagotytypeMsg:boolean=false;
     originalData: any;
     isEdit: boolean = false;
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
          private alertService: AlertService, private coreDataService: GLAccountCategoryService, private modalService: NgbModal, private authService: AuthService) {

@@ -18,6 +18,7 @@ export class RoSettingsComponent implements OnInit {
   isSpinnerVisible: boolean = false;
   rosettingModel: any = {};
   enableHeaderSaveBtn: boolean = false;
+  errorMessages: any;
 
   constructor(
     private vendoreService: VendorService,
@@ -107,4 +108,5 @@ export class RoSettingsComponent implements OnInit {
     this.enableHeaderSaveBtn = true;
   }
 
+  closeErrorMessage() {}
 }

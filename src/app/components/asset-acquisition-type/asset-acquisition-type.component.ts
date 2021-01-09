@@ -38,7 +38,7 @@ export class AssetAcquisitionTypeComponent implements OnInit {
     formData = new FormData();
     public auditHisory: AuditHistory[] = [];
     private isDeleteMode: boolean = false;
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     modal: NgbModalRef;
     public sourceAction: AssetAcquisitionType;
     display: boolean = false;
@@ -619,4 +619,6 @@ export class AssetAcquisitionTypeComponent implements OnInit {
         else
             this.disableSave = true;
     }
+
+    changeStatus(rowData) {}
 }

@@ -336,4 +336,8 @@ export class AssetDisposalSaleComponent implements OnInit {
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
+
+    toggleIsActive(rowData,$event) {}
+    openSaleHistory(rowData) {}
+    openView(rowData) {}
 }

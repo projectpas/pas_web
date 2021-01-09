@@ -169,7 +169,7 @@ export class EntityDocumentsComponent implements OnInit {
 
     }
 
-    openDocument(content, row) {
+    openDocument(row) {
 
         this.legalEntityService.toGetUploadDocumentsList(row.attachmentId, row.legalEntityId, 30).subscribe(res => {
             this.sourceViewforDocumentList = res;

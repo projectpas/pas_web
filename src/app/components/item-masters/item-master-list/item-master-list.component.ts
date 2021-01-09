@@ -328,7 +328,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			{ field: 'updatedBy', header: 'Updated By' },
 		];
 	}
-	openHist(row) {
+	openHist() {
 		
 	}
 	
@@ -461,7 +461,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		}
 	}
 
-	private loadStockData(event, dt?) {
+	public loadStockData(event, dt?) {
 	this.isSpinnerVisible = true;
 		this.lazyLoadEventData = event;
 		this.lazyLoadEventDataInputStock = event;
@@ -543,7 +543,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		);
 	}
 
-	private loadNonStockData(event) {
+	public loadNonStockData(event) {
 		this.isSpinnerVisible = true;
 		this.lazyLoadEventDataForNonStock = event;
 		this.lazyLoadEventDataInputNonStock = event;
@@ -1938,4 +1938,10 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			error => this.onDataLoadFailed(error)
 		);
 	}
+
+	edit(rowData) {}
+
+	getAuditHistoryById(rowData) {}
+
+	changeStatus(rowData) {}
 }

@@ -146,7 +146,9 @@ export class CertificationTypeComponent implements OnInit {
 	viewRowData: any;
 	selectedRowforDelete: any;
 	// originalData: any;
-	existingRecordsResponse = []
+	existingRecordsResponse = [];
+	AuditDetails: any;
+	
 	constructor(private breadCrumb: SingleScreenBreadcrumbService,
 		private authService: AuthService,
         private commonService: CommonService,
@@ -199,7 +201,9 @@ export class CertificationTypeComponent implements OnInit {
         // this.isDeleteMode = false;
         // this.isEditMode = false;
         this.modal.close();
-    }
+	}
+	columnsChanges() {}
+	
 	// columnsChanges() {
 	// 	this.refreshList();
 	// }
@@ -412,7 +416,7 @@ export class CertificationTypeComponent implements OnInit {
 			this.selectedRowforDelete = undefined;
 		}
 	}
-
+	getAuditHistoryById(rowData) {}
 	// getAuditHistoryById(rowData) {
 	//     this.itemGroupService.historyAcion(rowData.itemGroupId).subscribe(res => {
 	//         this.auditHistory = res;

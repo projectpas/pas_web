@@ -135,7 +135,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     allManagemtninfo: any[] = [];
     alllegalEntityInfo: any[] = [];
     maincompanylist: any[] = [];
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     desableJobTypeSave: boolean = true;
     departmentList: any[] = [];

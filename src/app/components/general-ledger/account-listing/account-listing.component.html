@@ -140,7 +140,7 @@
 
 
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRow]="rowData" pReorderableRowHandle>
                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
                         pReorderableRowHandle>
@@ -197,7 +197,7 @@
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true"
                                 name="isActive{{ rowIndex }}"
                                 matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
-                                (onChange)="changeStatus(rowData)"></p-inputSwitch>
+                                (onChange)="changeStatus(rowData, $event)"></p-inputSwitch>
                             <span data-toggle="modal" data-target="#view"><a class="btn nobg" (click)="viewRow(rowData)"
                                     matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span><a class="btn nobg" (click)="restore(restorerow,rowData)" matTooltip="Restore Record"

@@ -186,4 +186,8 @@ export class AccountingListingCalendarComponent implements OnInit {
     ngOnDestroy() {
         
     }
+
+    viewSelectedRow(rowData) {}
+
+    getAuditHistoryById(rowData) {}
 }

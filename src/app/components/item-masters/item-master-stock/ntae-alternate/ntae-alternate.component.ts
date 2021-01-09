@@ -110,6 +110,7 @@ export class NTAEAlternateComponent implements OnInit {
     viewNTAEDc: any = {};
     displayPdfView: boolean = false;
     showDeletedList: boolean = false;
+    isEnableItemMasterView: boolean;
 
     constructor(public itemser: ItemMasterService, private _actRoute: ActivatedRoute, private alertService: AlertService,  private configurations: ConfigurationService, private modalService: NgbModal, private authService: AuthService, private commonService: CommonService){
         this.itemMasterId = this._actRoute.snapshot.params['id'];

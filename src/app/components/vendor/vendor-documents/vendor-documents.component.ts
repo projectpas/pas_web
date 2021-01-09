@@ -371,7 +371,7 @@ export class VendorDocumentsComponent implements OnInit {
 		}, error => this.saveFailedHelper(error))
 	}
 
-	openView(content, row) {
+	openView(row) {
 		this.isSpinnerVisible = true;
 		this.vendorService.toGetUploadDocumentsList(row.attachmentId, row.vendorId, 3).subscribe(res => {
 			this.sourceViewforDocumentList = res;

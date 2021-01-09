@@ -157,7 +157,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	arrayCountrylist:any[] = [];
 	disableSavePaymentCountry: boolean = true;
 	vendorCodeandName: any;
-
+	contact: any;
+	
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));

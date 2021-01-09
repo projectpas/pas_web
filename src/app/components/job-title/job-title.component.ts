@@ -56,7 +56,8 @@ export class JobTitleComponent implements OnInit {
     auditHistory: any[] = [];
     existingRecordsResponse: Object;
     selectedRecordForEdit: any;
-
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private modalService: NgbModal,

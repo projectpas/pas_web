@@ -92,6 +92,9 @@ export class CustomerWorkEditComponent {
     departmentList: any[] = [];
     partListData: any[] = [];
     custcodes: { customerId: any; name: any; }[];
+    localCollection: any;
+    employeeName: any;
+
     constructor(private router: Router, private conditionService: ConditionService, public workFlowtService1: LegalEntityService, private siteService: SiteService, private binService: BinService, private vendorservice: VendorService, public employeeService: EmployeeService, private alertService: AlertService, public itemser: ItemMasterService, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, public receivingCustomerWorkService: ReceivingCustomerWorkService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private customerservices: CustomerService, private workOrderService: WorkOrderService) {
         this.dataSource = new MatTableDataSource();
 
@@ -1182,5 +1185,6 @@ export class CustomerWorkEditComponent {
 		partChildList.managementStructureId = partChildList.childDeptId;
 	}
 
-
+    editItemExpertiesCloseModel() {}
+    filterEmployeeNames($event) {}
 }

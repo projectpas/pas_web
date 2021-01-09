@@ -559,7 +559,7 @@
                         <div class="bhoechie-tab-content active">
                             <div class="custom-pill">
                                 <ul class="nav nav-pills">
-                                    <li *ngFor="let item of workFlow.selectedItems" (click)="setCurrentPanel(item.Name)"
+                                    <li *ngFor="let item of workFlow.selectedItems" (click)="setCurrentPanel(item.Name, 0)"
                                         [class.active]="item.Id == currentPanelId">
                                         <a data-toggle="pill" href="#tab{{item.Name}}">{{item.Name}}</a>
                                     </li>
@@ -695,7 +695,7 @@
             <p> Are you sure you want to delete Worklflow Task?</p>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="removeTask()">Yes</button>
+            <button type="button" class="btn btn-success" (click)="removeTask(null)">Yes</button>
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>

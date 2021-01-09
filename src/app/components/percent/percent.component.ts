@@ -70,6 +70,8 @@ export class PercentComponent implements OnInit {
     viewRowData: any;
     selectedRowforDelete: any;
     existingRecordsResponse = []
+    AuditDetails: any;
+    rowIndex: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private commonService: CommonService,

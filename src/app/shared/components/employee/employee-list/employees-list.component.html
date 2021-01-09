@@ -231,7 +231,7 @@
               </tr>
           </ng-template>
 
-          <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
               <tr
                   [pSelectableRow]="rowData"
                   pReorderableRowHandle
@@ -275,7 +275,7 @@
                               <a
                                  class="btn btn-info boxed-float-btn nobg"
                                  data-toggle="tooltip"
-                                 (click)="openView(view, rowData)"
+                                 (click)="openView(rowData)"
                                  matTooltip="View"
                                  ><i class="fa fa-eye"></i
                               ></a>
@@ -333,7 +333,7 @@
                               <a
                                  class="btn btn-info boxed-float-btn nobg"
                                  data-toggle="tooltip"
-                                 (click)="openView(view, rowData)"
+                                 (click)="openView(rowData)"
                                  matTooltip="View"
                                  ><i class="fa fa-eye"></i
 ></a>

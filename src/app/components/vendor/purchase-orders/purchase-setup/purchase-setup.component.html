@@ -546,7 +546,7 @@
                                     </td>
                                     <td class="mgmt-td-align">
                                         <!-- <label style="width:90px;">BU:</label> -->
-                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList,row_index)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                             <option value="0">Select</option>
                                             <option *ngFor="let businessUnit of partList.parentBulist" value="{{businessUnit.value}}">{{businessUnit.label}}</option>
                                         </select>

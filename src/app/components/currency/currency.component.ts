@@ -76,7 +76,8 @@ export class CurrencyComponent implements OnInit {
     disableSaveCurrency:boolean=false;
 
     currentstatus: string = 'Active';
-
+    rowIndex: any;
+    AuditDetails: any;
     // curreencyPaginationList: any[] = [];
     // totelPages
     // event: any;

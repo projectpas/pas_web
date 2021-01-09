@@ -375,7 +375,7 @@
                         <label class="control-label">Job Type<span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobTypeName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onJobTypeKeyUP($event) (onSelect)="onSelectJob($event)" [suggestions]="localCollection" (completeMethod)="filterJobs($event)" [size]="30"
+                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobTypeName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onJobTypeKeyUP() (onSelect)="onSelectJob($event)" [suggestions]="localCollection" (completeMethod)="filterJobs($event)" [size]="30"
                                         [minLength]="1" [dropdown]="true">
                             <ng-template let-jobName pTemplate="item">
                                 <div class="ui-helper-clearfix">{{jobName}}</div>
@@ -699,7 +699,7 @@
                         <label class="control-label">Employee Expertise <span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <p-autoComplete id="memo" class="p-autoComplete-ctsm" [(ngModel)]="employeeName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onEmpExpertiseKeyUP($event) (onSelect)="onSelectEmpExpertise($event)" [suggestions]="localCollection" (completeMethod)="filterEMpExpertise($event)" [size]="30"
+                        <p-autoComplete id="memo" class="p-autoComplete-ctsm" [(ngModel)]="employeeName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onEmpExpertiseKeyUP() (onSelect)="onSelectEmpExpertise($event)" [suggestions]="localCollection" (completeMethod)="filterEMpExpertise($event)" [size]="30"
                                         [minLength]="1" [dropdown]="true">
                             <ng-template let-jobName pTemplate="item">
                                 <div class="ui-helper-clearfix">{{jobName}}</div>

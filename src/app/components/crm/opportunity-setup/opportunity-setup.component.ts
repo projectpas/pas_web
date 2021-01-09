@@ -180,6 +180,10 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 	formData = new FormData();
 	disableSave: boolean = true;
 	loaderForPaymentCheck: boolean;
+	auditHistory: any;
+	isPrimary: any;
+	restorerecord: any;
+	
 	constructor(private http: HttpClient, private commonService: CommonService,
 		 
 		 private authService: AuthService, private modalService: NgbModal,
@@ -418,4 +422,24 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 		this.disableSave = false;
 
 	}
-}
+
+	getColorCodeForHistory(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
+	}
+	
+	dismissModel() {}
+
+	saveCheckPaymentInfo() {}
+
+	deleteConformation(str) {}
+
+	getVendorName() {}
+ }

@@ -51,7 +51,7 @@ export class JobTypeComponent implements OnInit {
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     shortNameList: any;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, private jobTypeService: JobTypeService) {

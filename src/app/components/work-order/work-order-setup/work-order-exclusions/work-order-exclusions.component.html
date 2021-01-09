@@ -89,7 +89,7 @@
                   </p-radioButton>
                   <div>
                     <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                      [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                      [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                     </select>
@@ -111,7 +111,7 @@
                   </p-radioButton>
                   <div>
                     <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                      [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                      [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
                       <option value="">Select</option>
                       <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                     </select>

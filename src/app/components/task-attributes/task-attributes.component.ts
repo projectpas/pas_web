@@ -66,7 +66,9 @@ export class TaskAttributesComponent implements OnInit {
     selectedRecordForEdit: any;
     viewRowData: any;
     selectedRowforDelete: any;
-    existingRecordsResponse = []
+    existingRecordsResponse = [];
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -279,7 +281,7 @@ export class TaskAttributesComponent implements OnInit {
         }
     }
   
-
+    dismissModel() {}
 }
 
 

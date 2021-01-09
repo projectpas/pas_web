@@ -65,8 +65,8 @@ export class FindingsComponent {
     modal: NgbModalRef;
     /** Actions ctor */
 
-    private isEditMode: boolean = false;
-    private isDeleteMode: boolean = false;
+    public isEditMode: boolean = false;
+    public isDeleteMode: boolean = false;
     /** Currency ctor */
 	constructor(private breadCrumb: SingleScreenBreadcrumbService,private masterComapnyService: MasterComapnyService,private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService,public findingService: FindingService, private dialog: MatDialog) {
         this.displayedColumns.push('action');

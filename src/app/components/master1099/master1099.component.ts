@@ -84,7 +84,7 @@ export class Master1099Component implements OnInit {
     lazyLoadEventData: any;
     loadingIndicator: boolean;
     disableSaveGLCFNameSave: boolean = false;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
          private authService: AuthService, private modalService: NgbModal,

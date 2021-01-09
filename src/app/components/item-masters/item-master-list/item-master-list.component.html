@@ -194,7 +194,6 @@
                         *ngIf="col.field !== 'startDate'"
                         (input)="
                           dt.filter($event.target.value, col.field, 'contains');
-                          activeStatus($event.target.value)
                         "
                       />
                       <input
@@ -208,7 +207,7 @@
                     <th style="width: 130px;"></th>
                   </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle
                     (dblclick)="viewSelectedRow(rowData)" data-toggle="modal" data-target="#view">
                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
@@ -393,7 +392,7 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage"
                                      let-columns
-                                     *ngIf="allStockInfo.length == 0 || allStockInfo.length ==''">
+                                     *ngIf="allStockInfo.length == 0">
                             <tr>
                                 <td [attr.colspan]="7" class="no-records-cstm">
                                     No records found
@@ -671,7 +670,7 @@
                                                matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                         </span>
                                         <span data-toggle="modal" data-target="#nonStockHistory">
-                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)"
+                                            <a class="btn nobg btn-hist-cstm" (click)="openHist()"
                                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                         </span>
                                     </div>
@@ -927,7 +926,7 @@
                                     </button>
 
                                     <button class="btn-history" mat-icon-button matTooltip="History"
-                                            (click)="openHist(contentHist,rowData)">
+                                            (click)="openHist()">
                                         <mat-icon color="green">history</mat-icon>
                                     </button>
 

@@ -71,6 +71,8 @@ export class LeadSourceComponent implements OnInit {
     selectedRecordForEdit: any;
     viewRowData: any;
     selectedRowforDelete: any;  
+    AuditDetails: any;
+    rowIndex: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

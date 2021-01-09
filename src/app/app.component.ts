@@ -73,7 +73,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   setStep(index: number) {
     this.step = index;
   }
-
+  isSticky: any;
   @ViewChild('fixedButtons',{static:false}) el: ElementRef;
   //   @HostListener('window:scroll', [])
   //     onWindowScroll() {

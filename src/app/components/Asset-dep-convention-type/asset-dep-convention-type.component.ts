@@ -37,7 +37,7 @@ export class AssetDepConventionTypeComponent implements OnInit {
     existingRecordsResponse: Object;
     public auditHisory: AuditHistory[] = [];
     private isDeleteMode: boolean = false;
-    private isEdit: boolean = false;
+    public isEdit: boolean = false;
     modal: NgbModalRef;
     public sourceAction: AssetDepConvention;
     display: boolean = false;

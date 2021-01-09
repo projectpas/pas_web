@@ -80,7 +80,9 @@ export class AtaSubChapter1Component implements OnInit {
 	selectedRowforDelete: any;
 	currentstatus: string = 'Active';
 
-	existingRecordsResponse = []
+	existingRecordsResponse = [];
+	AuditDetails: any;
+	
 	constructor(private breadCrumb: SingleScreenBreadcrumbService,
 		private authService: AuthService,
 		

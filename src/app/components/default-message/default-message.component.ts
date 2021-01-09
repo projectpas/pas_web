@@ -69,10 +69,10 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
     errorMessage: any;
     cols: any[];
     selectedColumns: any[];
-    private isEdit: boolean = false;
-    private isDeleteMode: boolean = false;
+    public isEdit: boolean = false;
+    public isDeleteMode: boolean = false;
     allComapnies: MasterCompany[];
-    private isSaving: boolean;
+    public isSaving: boolean;
    
     selectedColumn: DefaultMessage[];
     messageName: string;

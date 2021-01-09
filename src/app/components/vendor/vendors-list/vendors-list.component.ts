@@ -1096,5 +1096,5 @@ export class VendorsListComponent implements OnInit {
     //     }
 
     // }
-    
+    changeCheck1099Required($event, i) {}
 }

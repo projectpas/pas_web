@@ -70,7 +70,7 @@ export class ShelfComponent {
 	siteName: any;
 	disableSaveForEdit: boolean = false;
 	name: any;
-	private isEditMode: boolean = false;
+	public isEditMode: boolean = false;
 	private isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;
@@ -623,11 +623,10 @@ export class ShelfComponent {
 		}, () => { console.log('Backdrop click') })
 	}
 
-	getmemo($event) {
-     
+	getmemo() {
 		this.disableSaveForEdit = false;
+	}
 	
-}
 	openHist(content, row) {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;

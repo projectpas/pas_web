@@ -69,6 +69,7 @@ export class TeardownReasonComponent implements OnInit {
     viewRowData: any;
     selectedRowforDelete: any;  
     teadownTypesList: any;
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

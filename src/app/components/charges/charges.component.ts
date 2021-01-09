@@ -89,7 +89,8 @@ export class ChargesComponent implements OnInit {
     auditHistory:any[]=[];
     @ViewChild('dt',{static:false})
     private table: Table;
-
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,private modalService: NgbModal,
         private commonService: CommonService, private configurations: ConfigurationService,
         private authService: AuthService, private alertService: AlertService, public chargeService: ChargeService ,

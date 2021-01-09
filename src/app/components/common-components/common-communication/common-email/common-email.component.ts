@@ -589,4 +589,6 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     errorMessageHandler() {
         this.isSpinnerVisible = false;
     }
+
+    downloadFile(x) {}
 }

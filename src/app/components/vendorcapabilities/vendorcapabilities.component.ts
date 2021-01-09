@@ -61,7 +61,7 @@ export class VendorcapabilitiesComponent implements OnInit, AfterViewInit {
     errorMessage: any;
     modal: NgbModalRef;
     /** Actions ctor */
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     filteredBrands: any[];
     localCollection: any[] = [];

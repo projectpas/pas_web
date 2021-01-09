@@ -764,7 +764,7 @@ export class VendorBillingInformationComponent {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
    
-    restoreRecord(value) {
+    restoreRecord() {
         this.vendorService.GetVendorBillingAddressRestore(this.restorerecord.vendorBillingAddressId, this.userName).subscribe(() => {
             this.loadData();
             this.modal.close();

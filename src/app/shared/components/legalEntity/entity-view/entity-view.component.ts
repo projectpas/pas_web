@@ -392,5 +392,7 @@ sourceViewforContact:any;
                 return data[i + 1][field] === value
             }
         }
-    }    
+    }   
+    
+    deleteItemAndCloseModel() {}
 }

@@ -74,8 +74,8 @@ export class BinComponent {
 	showManagement: boolean;
 
 	name: any;
-	private isEditMode: boolean = false;
-	private isDeleteMode: boolean = false;
+	public isEditMode: boolean = false;
+	public isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	totalRecords: number;
 	showLable: boolean;
@@ -83,7 +83,7 @@ export class BinComponent {
 	loadingIndicator: boolean;
 	modal: NgbModalRef;
 	action_name: any = "";
-	private isSaving: boolean;
+	public isSaving: boolean;
 	actionName: string;
 	allComapnies: MasterCompany[] = [];
 	public auditHisory: AuditHistory[] = [];

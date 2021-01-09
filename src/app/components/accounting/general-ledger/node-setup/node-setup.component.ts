@@ -103,6 +103,14 @@ export class NodeSetupComponent implements OnInit {
     disablesave: boolean;
     localCollection: any[];
     codeCollection: any;
+    AuditDetails: any;
+    auditHisory: any;
+    action_name: any;
+    createdBy: any;
+    createddate: any;
+    updatedBy: any;
+    updatedDate: any;
+    
     constructor(private modalService: NgbModal,
         private configurations: ConfigurationService,
         public glAccountService: GLAccountClassService,
@@ -728,5 +736,6 @@ export class NodeSetupComponent implements OnInit {
         }
     }
 
-
+    customExcelUpload(event) {}
+    deleteItemAndCloseModel(){}
 }

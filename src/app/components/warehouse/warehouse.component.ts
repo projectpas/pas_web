@@ -71,15 +71,15 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 	localCollection: any[] = [];
 
-	private isEditMode: boolean = false;
-	private isDeleteMode: boolean = false;
+	public isEditMode: boolean = false;
+	public isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;
 	closeCmpny: boolean = true;
 	loadingIndicator: boolean;
 	modal: NgbModalRef;
 	action_name: any = "";
-	private isSaving: boolean;
+	public isSaving: boolean;
 	actionName: string;
 	allComapnies: MasterCompany[] = [];
 	public auditHisory: AuditHistory[] = [];

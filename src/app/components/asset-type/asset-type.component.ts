@@ -62,7 +62,8 @@ export class AssetTypeComponent implements OnInit {
         memo: "",
     }
     addNew = { ...this.new };
-
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private alertService: AlertService,

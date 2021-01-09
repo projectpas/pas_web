@@ -407,4 +407,6 @@ export class TextCommonComponent implements OnInit, OnChanges {
     errorMessageHandler() {
         this.isSpinnerVisible = false;
     }
+
+    enableSave() {}
 }

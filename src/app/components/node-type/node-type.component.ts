@@ -87,7 +87,7 @@ export class NodeTypeComponent implements OnInit {
     lazyLoadEventData: any;
     loadingIndicator: boolean;
     disableSaveGLCFNameSave: boolean = false;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
          private authService: AuthService,
          private commonService: CommonService,

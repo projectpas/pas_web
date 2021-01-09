@@ -107,7 +107,7 @@
                     <th style="width: 50px;" *ngIf="!isView"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                     <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                         <ng-container *ngFor="let col of columns">
                             <td style="width:auto"
@@ -133,7 +133,7 @@
                         
                         <td style="width:50px;position:sticky" class="ui-resizable-column" *ngIf="!isView">
                             <span data-target="#addNewPhone" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
-                                (click)="edit(rowData, i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                (click)="edit(rowData, rowIndex)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                             <span data-toggle="modal" data-target="#viewPhone"><a class="btn nobg btn-view-cstm"
                                 (click)="phoneView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span><a class="btn nobg btn-delete-cstm" (click)="deletePhone(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>

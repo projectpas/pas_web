@@ -751,7 +751,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         });
     }
 
-    private filterpartItems(event) {
+    public filterpartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loapartItems(event.query);
         }
@@ -830,13 +830,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             })
     }
 
-    private filterChangedPartItems(event) {
+    public filterChangedPartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.loadChangePartItems(event.query);
         }
     }
 
-    private onPartSelect(event) {
+    public onPartSelect(event) {
         this.isSpinnerVisible = true;
         this.itemser.getItemMasterDetailById(this.sourceWorkFlow.part.partId).subscribe(res => {
 
@@ -873,7 +873,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         }
     }
 
-    private onChangedPartSelect(event) {
+    public onChangedPartSelect(event) {
 
         this.isSpinnerVisible = true;
         this.itemser.getItemMasterDetailById(this.sourceWorkFlow.changedPart.partId).subscribe(res => {

@@ -117,7 +117,8 @@ export class WorkflowListComponent implements OnInit {
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'UpdatedBy' }
     ];
-
+    selectedColumn: any;
+    
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
