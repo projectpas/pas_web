@@ -159,7 +159,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset let-rowIndex="rowIndex">
-                                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(invView,rowData)" >
+                                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)" >
 
                                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
                                         pReorderableRowHandle>
@@ -182,7 +182,7 @@
                                         <div *ngIf="currentDeletedstatus==false">
                                         <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
-                                                           <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                                           <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                             <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                             <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
                                             <span><a class="btn nobg btn-adjhist-cstm" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
@@ -193,7 +193,7 @@
                                         <div *ngIf="currentDeletedstatus==true">
                                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
-                                            <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                                            <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                             <span ><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                             <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                         </div>

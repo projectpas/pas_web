@@ -131,7 +131,7 @@
                                     <td class="text-center" *ngIf="viewMode">
                                         <span data-toggle="modal" data-target="#docView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                (click)="openView(docView,rowData)" matTooltip="View"
+                                                (click)="openView(rowData)" matTooltip="View"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </a>
@@ -140,7 +140,7 @@
                                     <td class="text-center" *ngIf="!viewMode">
                                         <span data-toggle="modal" data-target="#docView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                (click)="openView(docView,rowData)" matTooltip="View"
+                                                (click)="openView(rowData)" matTooltip="View"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-eye"></i>
                                             </a>

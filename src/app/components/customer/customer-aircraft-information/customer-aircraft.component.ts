@@ -571,7 +571,7 @@ export class CustomerAircraftComponent implements OnInit {
         }
     }
 
-    saveAircraft(form) {
+    saveAircraft() {
         this.isSpinnerVisible = true;
         const data = this.inventoryData.map(obj => {
             return {

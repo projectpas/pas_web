@@ -31,7 +31,7 @@ import { CommonService } from '../../services/common.service';
     animations: [fadeInOut]
 })
 /** DepriciationMethod component*/
-export class DepriciationMethodComponent implements OnInit, AfterViewInit{
+export class DepriciationMethodComponent implements OnInit, AfterViewInit {
     currentDepriciationmethod: DepriciationMethod;
     dataSource: MatTableDataSource<DepriciationMethod>;
     depriciationMethodList: DepriciationMethod[] = [];
@@ -86,13 +86,13 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
     sequenceList: any;
     disableSaveForSequence: boolean = false;
     disableSaveForCondition: boolean;
-     disableSaveForEdit: boolean = false;
+    disableSaveForEdit: boolean = false;
 
     currentstatus: string = 'Active';
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
-/** DepriciationMethod ctor */
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    /** DepriciationMethod ctor */
 
     paginatorState: { rows: number; first: number; };
     totalRecords: number;
@@ -109,7 +109,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
     }
 
     ngOnInit(): void {
-        this.loadData();        
+        this.loadData();
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-depriciation-method';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
     }
@@ -122,15 +122,15 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
     }
-   
+
 
     private loadData() {
         // this.alertService.startLoadingMessage();
         // this.loadingIndicator = true;
         this.depriciationMethodService.getAll().subscribe(data => {
 
-             this.originalTableData=data[0].columnData;
-             this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = data[0].columnData;
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
             this.allunitData = data[0].columHeaders;
             // this.depriciationMethodList = data[0].columnData;
@@ -164,10 +164,10 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
         );
     }
     getmemo() {
-     
+
         this.disableSaveForEdit = false;
-    
-}
+
+    }
     public applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue;
     }
@@ -175,7 +175,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
     private refresh() {
         // Causes the filter to refresh there by updating with recently added data.
         this.applyFilter(this.dataSource.filter);
-}
+    }
 
     public allWorkFlows: DepriciationMethod[] = [];
 
@@ -278,7 +278,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
         for (let i = 0; i < this.depriciationMethodList.length; i++) {
             if ((value == this.depriciationMethodList[i].sequenceNo && !this.isEditMode) ||
                 (value == this.depriciationMethodList[i].sequenceNo && this.isEditMode == true
-                && this.depriciationMethodList[i].assetDepreciationMethodId != this.sourceAction.assetDepreciationMethodId)
+                    && this.depriciationMethodList[i].assetDepreciationMethodId != this.sourceAction.assetDepreciationMethodId)
             ) {
                 this.disableSaveForSequence = true;
                 this.selectedreason1 = value;
@@ -312,7 +312,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
                     "sequenceNo": this.depriciationMethodList[i].sequenceNo,
                     "codeName": codeName
                 }]),
-                this.localSequenceList.push(codeName);
+                    this.localSequenceList.push(codeName);
             }
         }
     }
@@ -346,9 +346,8 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
 
             if ((this.isEditMode == true && this.sourceAction.sequenceNo == this.depriciationMethodList[i].sequenceNo
                 && this.sourceAction.assetDepreciationMethodId != this.depriciationMethodList[i].assetDepreciationMethodId)
-                || (value == this.depriciationMethodList[i].sequenceNo && !this.isEditMode) 
-            )
-            {
+                || (value == this.depriciationMethodList[i].sequenceNo && !this.isEditMode)
+            ) {
                 this.disableSaveForSequence = true;
 
                 return;
@@ -360,7 +359,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
         this.disableSaveForCondition = false;
 
     }
-      
+
     resetdepriciationmethod(): void {
         this.updateMode = false;
         this.currentDepriciationmethod = new DepriciationMethod();
@@ -398,7 +397,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
         this.isSaving = true;
         this.loadMasterCompanies();
         //this.sourceAction = { ...row, sequenceNo: getObjectById('sequenceNo', row.assetDepreciationMethodId, this.depriciationMethodList) };
-        this.sourceAction = {...row };
+        this.sourceAction = { ...row };
         this.codeName = this.sourceAction.code;
         this.sequenceNo = this.sourceAction.sequenceNo;
         this.loadMasterCompanies();
@@ -407,7 +406,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
-    
+
     SaveandEditDepreciationMethod() {
         // debugger;
         this.isSaving = true;
@@ -423,7 +422,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
             IsDeleted: this.isDelete,
             masterCompanyId: 1
         };
-        if (this.isEditMode == false) {            
+        if (this.isEditMode == false) {
             this.depriciationMethodService.add(params).subscribe(
                 role => this.saveSuccessHelper(role),
                 error => this.saveFailedHelper(error));
@@ -520,7 +519,7 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
-     
+
 
     openDelete(content, row) {
         this.isEditMode = false;
@@ -536,9 +535,9 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
 
     getAuditHistoryById(rowData) {
         this.depriciationMethodService.getAssetDepriciationMethodAudits
-        (rowData.assetDepreciationMethodId).subscribe(res => {
-            this.auditHistory = res;
-        })
+            (rowData.assetDepreciationMethodId).subscribe(res => {
+                this.auditHistory = res;
+            })
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -591,91 +590,95 @@ export class DepriciationMethodComponent implements OnInit, AfterViewInit{
         this.loadData();
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.depriciationMethodList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.depriciationMethodList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.depriciationMethodList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.depriciationMethodList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.depriciationMethodList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.depriciationMethodList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.depriciationMethodList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.depriciationMethodList = newarry;
+            }
         }
-        this.totalRecords = this.depriciationMethodList.length ;
+        this.totalRecords = this.depriciationMethodList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-		}
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('AssetDepreciationMethod',
-            'AssetDepreciationMethodId',this.restorerecord.assetDepreciationMethodId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('AssetDepreciationMethod',
+            'AssetDepreciationMethodId', this.restorerecord.assetDepreciationMethodId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
+    }
+
+    SaveandEditDepreciaionMethod() {}
+    changeStatus(rowData) {}
+    updatedepriciationmethod() {}
 }

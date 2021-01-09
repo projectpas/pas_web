@@ -62,7 +62,7 @@ export class ProvisionComponent implements OnInit{
     @ViewChild('dt',{static:false})
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     manufacturerList: any;

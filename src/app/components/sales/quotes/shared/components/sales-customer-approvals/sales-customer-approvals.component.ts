@@ -49,7 +49,7 @@ export class SalesCustomerApprovalsComponent {
     isSpinnerVisible = false;
     quotesListPageSize: number = 10;
     defaultApprovalId = DBkeys.DEFAULT_SALES_QUOTE_APPROVAL_ID;
-
+    fields: any;
     columns: any = [
         { field: 'actionStatus', header: 'Action', width: "150px" },
         { field: 'internalSentDate', header: 'Internal Sent Date', width: "100px" },

@@ -58,7 +58,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   deleteModal: NgbModalRef;
   modal: NgbModalRef;
   isUpdate: boolean = false;
-
+  frieghtsCreateForm: any;
+  
   constructor(private salesOrderQuoteService: SalesQuoteService,
     private authService: AuthService,
     private alertService: AlertService,

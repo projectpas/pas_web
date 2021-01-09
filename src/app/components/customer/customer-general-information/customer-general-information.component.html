@@ -801,7 +801,7 @@
                                   [rows]="3"
                                   [columns]="restrictHeaders"
                                 >
-                                  <ng-template pTemplate="header" let-columns>
+                                  <ng-template pTemplate="header" let-columns let-rowIndex="rowIndex">
                                     <tr>
                                       <th
                                         *ngFor="let col of columns"
@@ -830,10 +830,10 @@
                                       </td>
                                       <td style="text-align: center;">
                                         <span *ngIf="!currantDeletedStatusDER" ><a class="btn nobg"
-                                          (click)="openPopupForDeleteRestrictDER( i, rowData, deleteRestrictDERContent);" matTooltip="Delete"
+                                          (click)="openPopupForDeleteRestrictDER(rowIndex, rowData, deleteRestrictDERContent);" matTooltip="Delete"
                                           matTooltipPosition="above"><i class="fa fa-trash"></i></a>
                                         </span>
-                                        <span *ngIf="currantDeletedStatusDER" ><a class="btn nobg" (click)="openPopupForRestoreRestrictDER(i, rowData, restoreRestrictDERContent);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span *ngIf="currantDeletedStatusDER" ><a class="btn nobg" (click)="openPopupForRestoreRestrictDER(rowIndex, rowData, restoreRestrictDERContent);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                       </td>
                                     </tr>
                                   </ng-template>
@@ -914,8 +914,8 @@
   data-backdrop="static"
 >
   <div class="modal-header">
-    <h4 class="modal-title" *ngIf="isEditMode">Edit Integration</h4>
-    <h4 class="modal-title" *ngIf="!isEditMode">Add Integration</h4>
+    <h4 class="modal-title" *ngIf="editMode">Edit Integration</h4>
+    <h4 class="modal-title" *ngIf="!editMode">Add Integration</h4>
     <button
       type="button"
       class="close"
@@ -938,7 +938,7 @@
             [(ngModel)]="integrationName"
             [ngModelOptions]="{ standalone: true }"
             [suggestions]="integrationCollection"
-            (completeMethod)="filterintegrations($event)"
+            (completeMethod)="filterIntegrations($event)"
             [size]="30"
             [minLength]="1"
             [dropdown]="true"

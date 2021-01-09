@@ -206,7 +206,7 @@ export class ListJournelComponent implements OnInit {
         this.router.navigate(['accountmodule/accountpages/app-create-journel']);
     }
 
-    openView(view,rowData) {}
+    
     openContentEdit(rowData){}
     openDelete(content,rowData) {}
 }

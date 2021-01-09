@@ -28,6 +28,6 @@ export class ATASubChapter2 {
 	public masterCompany?: MasterCompany;
 	public isActive: boolean;
 	public memo: string;
-
+	public ataMainId: any;
 
 }

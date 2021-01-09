@@ -83,6 +83,8 @@ export class SalesOrderListComponent {
   @ViewChild("filterStatusInput",{static:false}) public filterText: ElementRef;
   clearStatusText: boolean = false;
   selectedSalesOrderToDelete:any;
+  customerId: any;
+  salesOrderId: any;
   
   constructor(
     private salesQuoteService: SalesQuoteService,

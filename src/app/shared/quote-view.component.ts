@@ -66,7 +66,9 @@ export class QuoteViewComponent implements OnInit, OnChanges {
   selectedStockLineNumber: string = "";
   workOrderLaborList: any;
   workFlowObject: any;
-
+  freight: any;
+  isWorkOrder: any;
+  
   constructor(private commonService: CommonService, private workorderMainService: WorkOrderService,
     private workOrderService: WorkOrderQuoteService) {
   }

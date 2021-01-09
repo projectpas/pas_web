@@ -73,7 +73,7 @@ export class TaxTypeComponent implements OnInit {
     viewRowData: any;
     disableSaveTaxtypeMsg:boolean;
     selectedRowforDelete: any;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
    // existingRecordsResponse = []
    AuditDetails: any;
    

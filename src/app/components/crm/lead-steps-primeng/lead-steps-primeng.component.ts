@@ -225,6 +225,7 @@ export class LeadStepsPrimengComponent implements OnInit, AfterViewInit {
 		Memo:"",
 		customerId:0,
 		addressId:0,
+		classification: ""
     }
 
 
@@ -256,7 +257,7 @@ export class LeadStepsPrimengComponent implements OnInit, AfterViewInit {
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
 	}
-	addATAChapter(rowData) {
+	addATAChapter() {
 		
 
 	}
@@ -420,4 +421,61 @@ export class LeadStepsPrimengComponent implements OnInit, AfterViewInit {
 	}
 
 	dismissModel() {}
+
+	manufacturerData: any;
+	selectAircraftManfacturer: any;
+	aircraftModelList: any;
+	selectedAircraftModel: any;
+	dashNumberList: any;
+	selectedDashNumbers: any;
+	selectedDashnumber: any;
+	currentDeletedstatus: any;
+	LoadAtachapter: any;
+	selectedATAchapter: any;
+	atasubchapterValues: any;
+	selectedATASubChapter: any;
+	DisabledMode: any;
+	isTangible: any;
+	AssetAcquisitionTypeList: any;
+	currentstatus: any;
+	leadName: any;
+	leadCode: any;
+	LoadValues: any;
+	selectedModelId: any;
+	LoadDashnumber: any;
+	dashNumberUnknown: any;
+	add_ataChapterList: any;
+	add_SelectedId: any;
+	add_ataSubChapterList: any;
+	add_SelectedModels: any;
+	auditHisory: any;
+	isPrimary: any;
+	restorerecord: any;
+	getAircraftModelByManfacturerType() {}
+	getDashNumberByManfacturerandModel() {}
+	searchAircraftInformation() {}
+	sampleExcelDownload() {}
+	customExcelUpload($event) {}
+	handleChanges(rowData,$event) {}
+	openHist(rowData) {}
+	openEdit(rowData) {}
+	openView(view,rowData) {}
+	restore(restoreId,rowData) {}
+	getSubChapterByATAChapter() {}
+	searchATA() {}
+	onAddPaymentInfo() {}
+	geListByStatus(sttus) {}
+	getDeleteListByStatus(event) {}
+	pageIndexChange($event) {}
+	nextClick() {}
+	previousClick() {}
+	getATASubChapterByATAChapter() {}
+	addATAMapping() {}
+	editContactATAChapters(rowData) {}
+	deleteATAMapped(rowData) {}
+	getATAAuditHistoryById(rowData) {}
+	getColorCodeForHistory(i, siteName, audit) { return true; }
+	deleteConformation(Yes) {}
+	getVendorName() {}
+	restoreRecord() {}
 }

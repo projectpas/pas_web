@@ -78,6 +78,7 @@ export class SalesOrderPartNumberComponent {
   isSpinnerVisible = false;
   saveButton = false;
   canSaveParts = false;
+  inputValidCheckHeader: any;
   constructor(
     private modalService: NgbModal,
     private salesQuoteService: SalesQuoteService,

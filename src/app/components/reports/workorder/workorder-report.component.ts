@@ -29,7 +29,7 @@ export class WorkOrderReportComponent implements OnInit {
     totalPages: number;
  workorderReportList = [];
 
-
+ legalEntityList: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     managementStructure = {
         companyId: 0,
@@ -177,4 +177,6 @@ export class WorkOrderReportComponent implements OnInit {
     //    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
     //    this.stocklineService.downloadStockLineReport(PagingData);
     //}
+
+    downloadStockLineReport() {}
 }

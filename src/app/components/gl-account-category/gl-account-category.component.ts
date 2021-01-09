@@ -51,13 +51,13 @@ export class GLAccountCategoryComponent implements OnInit {
     addNew = { ...this.new };
     selectedRecordForEdit: any;
     viewRowData: any;
-    disableSaveCatagotytypeMsg:boolean=false;
+    disableSaveCatagotytypeMsg: boolean = false;
     originalData: any;
     isEdit: boolean = false;
     AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
-         private alertService: AlertService, private coreDataService: GLAccountCategoryService, private modalService: NgbModal, private authService: AuthService) {
+        private alertService: AlertService, private coreDataService: GLAccountCategoryService, private modalService: NgbModal, private authService: AuthService) {
     }
     ngOnInit(): void {
         //gather up all the required data to be displayed on the screen 
@@ -75,8 +75,8 @@ export class GLAccountCategoryComponent implements OnInit {
         //  this.currentRow = new GLAccountCategory();
         this.disableSaveGLCategoryName = false;
         this.currentModeOfOperation = ModeOfOperation.Add;
-       // this.isEditMode = false;
-       // this.selectedRecordForEdit = undefined;
+        // this.isEditMode = false;
+        // this.selectedRecordForEdit = undefined;
         this.addNew = { ...this.new };
     }
 
@@ -88,7 +88,7 @@ export class GLAccountCategoryComponent implements OnInit {
         this.pageSize = event.rows;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
-   
+
     //Check if asset type exists before add/delete
     checkItemExists(rowData): boolean {
         this.getItemList();
@@ -137,8 +137,8 @@ export class GLAccountCategoryComponent implements OnInit {
     getItemList() {
         this.coreDataService.getAll().subscribe(res => {
 
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
 
             // const responseData = res[0];
@@ -175,7 +175,7 @@ export class GLAccountCategoryComponent implements OnInit {
 
 
     dismissModel() {
-       
+
         this.viewRowData = undefined;
     }
 
@@ -185,9 +185,9 @@ export class GLAccountCategoryComponent implements OnInit {
             name: editValueAssignByCondition('name', this.addNew.glAccountCategoryName)
 
         };
-       // this.currentModeOfOperation = ModeOfOperation.Add;
-      //  this.currentRow.glcid = this.addNew.glcid;
-       // this.currentRow.glAccountCategoryName = this.addNew.glAccountCategoryName;
+        // this.currentModeOfOperation = ModeOfOperation.Add;
+        //  this.currentRow.glcid = this.addNew.glcid;
+        // this.currentRow.glAccountCategoryName = this.addNew.glAccountCategoryName;
         this.coreDataService.add(data).subscribe(response => {
             this.alertService.showMessage('Success', this.rowName + " added successfully.", MessageSeverity.success);
             this.getItemList();
@@ -209,11 +209,11 @@ export class GLAccountCategoryComponent implements OnInit {
 
         alert(JSON.stringify(data));
         this.coreDataService.update(data).subscribe(response => {
-                this.getItemList();
-                this.alertService.showMessage('Success', " updated successfully.", MessageSeverity.success);
-               
-            });
-  
+            this.getItemList();
+            this.alertService.showMessage('Success', " updated successfully.", MessageSeverity.success);
+
+        });
+
         this.dismissModal();
     }
 
@@ -241,12 +241,12 @@ export class GLAccountCategoryComponent implements OnInit {
 
     //turn the item active/inActive
     toggleActiveStatus(rowData) {
-       // this.currentRow = rowData as GLAccountCategory;
+        // this.currentRow = rowData as GLAccountCategory;
         const data = { ...rowData }
-       // this.saveExistingItem(this.currentRow);
+        // this.saveExistingItem(this.currentRow);
         this.coreDataService.update(data).subscribe(response => {
             //this.alertService.showMessage('Success', this.rowName + " updated successfully.", MessageSeverity.success);
-           // this.getItemList();
+            // this.getItemList();
             this.alertService.showMessage(
                 'Success',
                 `Updated Status Successfully  `,
@@ -291,7 +291,7 @@ export class GLAccountCategoryComponent implements OnInit {
         this.selectedColumns = this.columnHeaders;
         this.currentRow = new GLAccountCategory();
     }
-    
+
 
     checkGLACategoryTypeExists(field, value) {
         console.log('this.selectedRecordForEdit', this.selectedRecordForEdit);
@@ -348,98 +348,101 @@ export class GLAccountCategoryComponent implements OnInit {
 
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.itemList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.itemList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            }
         }
-        this.totalRecords = this.itemList.length ;
+        this.totalRecords = this.itemList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('GLAccountCategory',
-            'GLAccountCategoryId',this.restorerecord.glAccountCategoryId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('GLAccountCategory',
+            'GLAccountCategoryId', this.restorerecord.glAccountCategoryId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
+    }
 
     //get validateAutocompleteText() {
 
     //    return this.addNew.glAccountCategoryName !== '' ? false : true;
     //}
 
-
+    viewSelectedRow(rowData) {}
+    changeStatus(rowData) {}
+    sampleExcelDownload() {}
+    bulkUpload($event) {}
 }

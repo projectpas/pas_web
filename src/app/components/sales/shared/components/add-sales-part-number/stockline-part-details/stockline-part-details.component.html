@@ -24,7 +24,7 @@
         <tr [pSelectableRow]="part" [ngClass]="{'row-bg1':part.alternateFor.length==0}" pReorderableRowHandle>
 
           <td *ngFor="let col of columns" pReorderableRowHandle>
-            <span *ngIf="col.field == 'selected'"><input type="checkbox" (change)="onChange($event, part)" /></span>
+            <span *ngIf="col.field == 'selected'"><input type="checkbox" (change)="onChange($event, part, 0)" /></span>
             <span *ngIf="col.field == 'partNumber'">{{ part.partNumber }} <span class="alternate-part-label"
                 *ngIf="part.mappingType==1">(Alt)</span> <span class="alternate-part-label"
                 *ngIf="part.mappingType==2">(Eq)</span></span>

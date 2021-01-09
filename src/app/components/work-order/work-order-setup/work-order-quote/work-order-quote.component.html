@@ -868,7 +868,7 @@
                                 </td>
                                 <td class="content-to-end">{{ formateCurrency(matQuotation.billingRate) }}</td>
                                 <td>
-                                    <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(Number(matQuotation.billingAmount.toString().split(',').join('')))" />
+                                    <input type="text" pInputText pKeyFilter="money" class="form-control text-right" value="{{formateCurrency(matQuotation.billingAmount)}}" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2 || isViewForApprovedPart" (change)="matQuotation.billingAmount = formateCurrency(parseToInt(matQuotation.billingAmount.toString().split(',').join('')))" />
                                 </td>
                                 <td *ngIf="!isView">
                                     <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
@@ -946,7 +946,7 @@
                         </ng-container>
                         <ng-container *ngIf="costPlusType == 3">
                             <td>
-                                <input type="number" class="form-control font-weight-bold" [(ngModel)]="materialFlatBillingAmount" (change)="materialFlatBillingAmount = Number(materialFlatBillingAmount.toString().split(',').join('')).toFixed(2)" [disabled]="isView" />
+                                <input type="number" class="form-control font-weight-bold" [(ngModel)]="materialFlatBillingAmount" (change)="materialFlatBillingAmount = parseToInt(materialFlatBillingAmount.toString().split(',').join('')).toFixed(2)" [disabled]="isView" />
                             </td>
                         </ng-container>
                         <td *ngIf="!isView && !isViewForApprovedPart"></td>

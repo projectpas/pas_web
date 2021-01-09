@@ -52,7 +52,7 @@ export class LeadSourceComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForDescription: boolean = false;
     disableSaveForDescriptionMsg: boolean=false;

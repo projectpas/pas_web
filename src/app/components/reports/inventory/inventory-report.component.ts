@@ -20,13 +20,13 @@ export class InventoryReportComponent implements OnInit {
     departmentList: any;
     stockLineForm: any = {};
     disableMagmtStruct: boolean = true;
-    
+
     public stockLineReportList: any[];
     pageSize: number = 10;
     pageIndex: number = 0;
     totalRecords: any;
     totalPages: number;
-    inventoryReportList=[]
+    inventoryReportList = []
 
     private onDestroy$: Subject<void> = new Subject<void>();
     managementStructure = {
@@ -34,10 +34,11 @@ export class InventoryReportComponent implements OnInit {
         buId: 0,
         divisionId: 0,
         departmentId: 0,
-	}
+    }
+
+    legalEntityList: any;
     
-    
-    constructor(private router: ActivatedRoute, 
+    constructor(private router: ActivatedRoute,
         // private stocklineService: StocklineService,
         private commonService: CommonService) { }
     ngOnInit() {
@@ -55,10 +56,10 @@ export class InventoryReportComponent implements OnInit {
         { field: 'qtyOnHand', header: 'Quantity On Hand' },
         { field: 'qtyReserved', header: 'Quantity Reserved' },
         { field: 'qtyAvailable', header: 'Quantity Available' },
-        { field: 'qtyScrapped', header: 'Quantity Scrapped' },       
+        { field: 'qtyScrapped', header: 'Quantity Scrapped' },
         { field: 'qtyAdjusted', header: 'Qty Adjusted' },
         { field: 'poUnitCost', header: 'PO Unit Cost' },
-       
+
         { field: 'extendedCost', header: 'Extended Cost' },
         { field: 'obtainFrom', header: 'Obtain From' },
         { field: 'owner', header: 'Owner' },
@@ -80,9 +81,9 @@ export class InventoryReportComponent implements OnInit {
         { field: 'receiverNumber', header: 'Receiver Num' },
         { field: 'reconciliationNumber', header: 'Reconciliation No' },
 
-        
+
     ]
-    loadData(event){}
+    loadData(event) { }
 
     // loadData(event) {
     //     const pageIndex = parseInt(event.first) / event.rows;;
@@ -118,42 +119,42 @@ export class InventoryReportComponent implements OnInit {
                 buId: res.Level2 !== undefined ? res.Level2 : 0,
                 divisionId: res.Level3 !== undefined ? res.Level3 : 0,
                 departmentId: res.Level4 !== undefined ? res.Level4 : 0,
-			}
-			this.onSelectManagementStruc();
+            }
+            this.onSelectManagementStruc();
         })
     }
 
 
     selectedLegalEntity(legalEntityId) {
-		this.businessUnitList = [];
-		this.divisionList = [];
-		this.departmentList = [];
-		this.managementStructure.buId = 0;
-		this.managementStructure.divisionId = 0;
-		this.managementStructure.departmentId = 0;
+        this.businessUnitList = [];
+        this.divisionList = [];
+        this.departmentList = [];
+        this.managementStructure.buId = 0;
+        this.managementStructure.divisionId = 0;
+        this.managementStructure.departmentId = 0;
 
         if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
             this.stockLineForm.managementStructureId = legalEntityId;
             this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
                 this.businessUnitList = res;
-			});
-		}	
-		this.onSelectManagementStruc();
-	}
+            });
+        }
+        this.onSelectManagementStruc();
+    }
 
-	onSelectManagementStruc() {
-		if (this.managementStructure.companyId != 0) {            
-			this.disableMagmtStruct = false;
-		} else {
-			this.disableMagmtStruct = true;
-		}
-	}	
+    onSelectManagementStruc() {
+        if (this.managementStructure.companyId != 0) {
+            this.disableMagmtStruct = false;
+        } else {
+            this.disableMagmtStruct = true;
+        }
+    }
 
     selectedBusinessUnit(businessUnitId) {
-		this.divisionList = [];
-		this.departmentList = [];
-		this.managementStructure.divisionId = 0;
-		this.managementStructure.departmentId = 0;
+        this.divisionList = [];
+        this.departmentList = [];
+        this.managementStructure.divisionId = 0;
+        this.managementStructure.departmentId = 0;
 
         if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
             this.stockLineForm.managementStructureId = businessUnitId;
@@ -163,8 +164,8 @@ export class InventoryReportComponent implements OnInit {
         }
     }
     selectedDivision(divisionUnitId) {
-		this.departmentList = [];
-		this.managementStructure.departmentId = 0;
+        this.departmentList = [];
+        this.managementStructure.departmentId = 0;
 
         if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
             this.stockLineForm.managementStructureId = divisionUnitId;
@@ -177,12 +178,12 @@ export class InventoryReportComponent implements OnInit {
         if (departmentId != 0 && departmentId != null && departmentId != undefined) {
             this.stockLineForm.managementStructureId = departmentId;
         }
-	}
-	
+    }
+
     fieldSearch(value, field) {
     }
     // downloadStockLineReport() {
-        
+
     //     this.stocklineService.downloadStockLineReport();
     // }
 
@@ -200,4 +201,6 @@ export class InventoryReportComponent implements OnInit {
     //    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
     //    this.stocklineService.downloadStockLineReport(PagingData);
     //}
+
+    downloadStockLineReport() {}
 }

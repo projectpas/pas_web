@@ -52,7 +52,7 @@ export class PublicationTypeComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForDescription: boolean = false;
     descriptionList: any;
@@ -457,4 +457,6 @@ export class PublicationTypeComponent implements OnInit {
     //    }
 
     //}
+
+    customExcelUpload($event) {}
 }

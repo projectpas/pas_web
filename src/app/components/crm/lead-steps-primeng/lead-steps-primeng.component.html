@@ -154,14 +154,14 @@
                                                     <div class="form-group">
                                                         <label>Contact Tag</label>
                                                         <input class="form-control" type="text" name="contactTag"
-                                                    [(ngModel)]="leadInfo.contactTag" required />
+                                                    [(ngModel)]="leadInfo.ContactTag" required />
                                                     </div>
                                                     <div class="form-group">
                                                         <label>Contact Name</label>
                                                         <div class="col-md-12">
                                                             <div class="col-md-11">
                                                                 <input class="form-control" type="text" name="contactName"
-                                                    [(ngModel)]="leadInfo.contactName" required />
+                                                    [(ngModel)]="leadInfo.ContactName" required />
                                                             </div>
                                                             <div class="col-md-1">
                                                                     <span class="btn btn-primary" data-dismiss="modal" data-toggle="modal"
@@ -440,7 +440,7 @@
                                         </tr>
                                     </ng-template>
 
-                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                                             pReorderableRowHandle (dblclick)="openView(view,rowData)">
 
@@ -487,7 +487,7 @@
                                                         
                                                         
                                                              <span data-toggle="modal">
-                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)" 
+                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(rowData)" 
                                                             matTooltip="History" matTooltipPosition="above">
                                                             <i class="fa fa-history"></i></a></span>
 
@@ -556,7 +556,7 @@
                                             ATA Chapters
                                             <a class="plusicon-cstm" data-target="#ATAADD" data-toggle="modal">
                                                 <i class="fa fa-plus-circle fa-lg"
-                                                (click)="addATAChapter(rowData)" matTooltip="ATA Chapter"
+                                                (click)="addATAChapter()" matTooltip="ATA Chapter"
                                                     matTooltipPosition="above"></i></a>
                                         </h4>
                                     </div>
@@ -715,7 +715,7 @@
                                         </tr>
                                     </ng-template>
 
-                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                                             pReorderableRowHandle (dblclick)="openView(view,rowData)">
 
@@ -763,7 +763,7 @@
                                                         
                                                         
                                                              <span data-toggle="modal">
-                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)" 
+                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(rowData)" 
                                                             matTooltip="History" matTooltipPosition="above">
                                                             <i class="fa fa-history"></i></a></span>
 
@@ -876,7 +876,7 @@
                                                 (click)="openView(view,rowData)" matTooltip="View"
                                                 matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                         <button class="btn-history" mat-icon-button matTooltip="history"
-                                            matTooltipPosition="above" (click)="openHist(contentHist,rowData)">
+                                            matTooltipPosition="above" (click)="openHist(rowData)">
                                             <mat-icon color="green">history</mat-icon>
                                         </button>
                                     </td>
@@ -1053,7 +1053,7 @@
                               class="fa fa-pencil"></i></a>
                         </span>
   
-                        <button *ngIf="isViewMode == false" class="btn btn-danger nobg" (click)="deleteATAMapped(deleteContent1, rowData)"
+                        <button *ngIf="isViewMode == false" class="btn btn-danger nobg" (click)="deleteATAMapped(rowData)"
                           matTooltip="Delete" matTooltipPosition="above">
                           <i class="fa fa-trash"></i>
                         </button>

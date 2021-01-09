@@ -120,18 +120,18 @@ export class ShelfComponent {
 	localCollection: any[] = [];
 	shelfName: any;
 	AuditDetails: any[];
-	HasAuditDetails:boolean = false;
+	HasAuditDetails: boolean = false;
 	AuditHistoryTitle: string = 'History of Shelf';
-	formData:FormData = null;
+	formData: FormData = null;
 	uploadedRecords: Object = null;
 	totalPages: number;
 	pageSize: number = 10;
-	
+
 	currentstatus: string = 'Active';
 
-    isDeleted: Boolean = false;
+	isDeleted: Boolean = false;
 	shelfData: any[] = [];
-	
+
 	ngOnInit(): void {
 		this.cols = [
 			{ field: 'name', header: 'Shelf Name' },
@@ -160,11 +160,11 @@ export class ShelfComponent {
 		this.selectedColumns = this.cols;
 	}
 
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 
-    constructor(public manageMentService: LegalEntityService,
-        private commonService: CommonService, private configurations: ConfigurationService, public workFlowtService: ShelfService, public locationService: LocationService, public wareHouseService: WarehouseService, public siteService: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
+	constructor(public manageMentService: LegalEntityService,
+		private commonService: CommonService, private configurations: ConfigurationService, public workFlowtService: ShelfService, public locationService: LocationService, public wareHouseService: WarehouseService, public siteService: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
 		this.dataSource = new MatTableDataSource();
 		this.sourceShelf = new Shelf();
 
@@ -172,14 +172,14 @@ export class ShelfComponent {
 
 	closethis() {
 		this.closeCmpny = false;
-    }
-    sampleExcelDownload() {
-        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Shelf&fileName=Shelf.xlsx`;
+	}
+	sampleExcelDownload() {
+		const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Shelf&fileName=Shelf.xlsx`;
 
-        window.location.assign(url);
-    }
+		window.location.assign(url);
+	}
 
-	
+
 	handleChange(rowData, e) {
 		if (e.checked == false) {
 			this.sourceShelf = rowData;
@@ -204,8 +204,8 @@ export class ShelfComponent {
 
 	}
 	getPageCount(totalNoofRecords, pageSize) {
-        return Math.ceil(totalNoofRecords / pageSize)
-    }
+		return Math.ceil(totalNoofRecords / pageSize)
+	}
 
 	ngAfterViewInit() {
 		this.dataSource.paginator = this.paginator;
@@ -485,9 +485,9 @@ export class ShelfComponent {
 		// this.dataSource.data = getSelfList;
 		// this.allSelfs = getSelfList;
 		// this.originalTableData = this.allSelfs;
-		this.workFlowtService.getShelfList().subscribe(res=>{
-		this.originalTableData=res[0];
-		this.getListByStatus(this.status ? this.status :this.currentstatus)
+		this.workFlowtService.getShelfList().subscribe(res => {
+			this.originalTableData = res[0];
+			this.getListByStatus(this.status ? this.status : this.currentstatus)
 		});
 
 
@@ -626,7 +626,7 @@ export class ShelfComponent {
 	getmemo() {
 		this.disableSaveForEdit = false;
 	}
-	
+
 	openHist(content, row) {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
@@ -809,116 +809,118 @@ export class ShelfComponent {
 		this.uploadedRecords = null;
 
 		const file = event.target.files;
-		
-        console.log(file);
-		
+
+		console.log(file);
+
 		if (file.length > 0) {
 
 			this.formData.append('file', file[0])
-			
-            this.workFlowtService.bulkUpload(this.formData).subscribe(response => {
-				
+
+			this.workFlowtService.bulkUpload(this.formData).subscribe(response => {
+
 				event.target.value = '';
 
-                this.uploadedRecords = response;
-				
+				this.uploadedRecords = response;
+
 				this.loadData();
-				
-                this.alertService.showMessage(
-                    'Success',
-                    `Successfully Uploaded  `,
-                    MessageSeverity.success
-                );
-            })
-        }
+
+				this.alertService.showMessage(
+					'Success',
+					`Successfully Uploaded  `,
+					MessageSeverity.success
+				);
+			})
+		}
 
 	}
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
-        }
-        this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
-    getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.shelfData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
+		}
+		this.getListByStatus(this.status ? this.status : this.currentstatus)
+	}
+
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	status: any = "Active";
+	getListByStatus(status) {
+		const newarry = [];
+		if (status == 'Active') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
 				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.shelfData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
+					if (element.isActive == true && element.isDeleted == false) {
 						newarry.push(element);
 					}
 				});
-				this.shelfData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == true) {
 						newarry.push(element);
 					}
 				});
-				this.shelfData= newarry;
 			}
-        }
-        this.totalRecords = this.shelfData.length ;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+			this.shelfData = newarry;
+		} else if (status == 'InActive') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.shelfData = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				// this.billingInfoList=this.originalTableData;
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.shelfData = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.shelfData = newarry;
+			}
 		}
-		restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Shelf',
-            'ShelfId',this.restorerecord.shelfId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
-                this.modal.close();
-                // this.geListByStatus(this.status ? this.status : 'Active');
-                this.loadData();
-    
-                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-            })
-        }
-   
+		this.totalRecords = this.shelfData.length;
+		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+	}
+	restore(content, rowData) {
+		this.restorerecord = rowData;
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+	restorerecord: any = {}
+	restoreRecord() {
+		this.commonService.updatedeletedrecords('Shelf',
+			'ShelfId', this.restorerecord.shelfId).subscribe(res => {
+				this.currentDeletedstatus = true;
+				this.modal.close();
+				// this.geListByStatus(this.status ? this.status : 'Active');
+				this.loadData();
+
+				this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+			})
+	}
+
+	openEdits(rowData) {}
+	changeStatus(rowData) {}
 }

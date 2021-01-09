@@ -131,7 +131,7 @@
         <tr >
           <td>
             <select class="form-control custom-select wf-pub-id" id="hideDisabled" [(ngModel)]="charge.chargesTypeId"
-              style="width: 130px;" name="type_{{i}}" [disabled]="true">
+              style="width: 130px;" name="type_{{rowIndex}}" [disabled]="true">
               <option [value]="0">Select</option>
               <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
                 ctype.chargeType

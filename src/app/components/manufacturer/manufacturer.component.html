@@ -433,7 +433,7 @@ col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[co
                                 <th>Memo</th>
                             </tr>
                         </thead>
-                        <tbody *ngIf="existingRecordsResponse.length> 0">
+                        <tbody *ngIf="existingRecordsResponse.length > 0">
                             <tr *ngFor="let ext of existingRecordsResponse; let i = index;">
 
                                 <!-- <td >{{audit.unitOfMeasureAuditId}}</td> -->

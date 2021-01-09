@@ -1,4 +1,4 @@
-﻿import { Component, Input, Output, EventEmitter, ChangeDetectorRef ,OnInit,OnDestroy, ElementRef, ViewChild, SimpleChanges} from '@angular/core';
+﻿import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnDestroy, ElementRef, ViewChild, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { VendorService } from '../../../../services/vendor.service';
@@ -10,7 +10,7 @@ import { ActionService } from '../../../../Workflow/ActionService';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import * as $ from 'jquery'
 import { AuthService } from '../../../../services/auth.service';
-import {  Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Pipe, PipeTransform } from "@angular/core";
 import { timer } from 'rxjs/observable/timer';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -22,8 +22,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 })
 /** WorkOrderCompleteMaterialList component*/
 export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy {
-    @ViewChild("timerAlertNotfi",{static:false}) public timerAlertNotfi: ElementRef;
-    @ViewChild("tabRedirectConfirmationModal",{static:false}) public tabRedirectConfirmationModal: ElementRef;
+    @ViewChild("timerAlertNotfi", { static: false }) public timerAlertNotfi: ElementRef;
+    @ViewChild("tabRedirectConfirmationModal", { static: false }) public tabRedirectConfirmationModal: ElementRef;
     @Input() isView: boolean = false;
     @Input() workOrderMaterialList;
     @Input() employeesOriginalData;
@@ -34,10 +34,10 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     @Input() materialStatus;
     @Input() mpnId;
     @Input() workOrderId;
-    @Input() fromWoList:false;
+    @Input() fromWoList: false;
     @Input() mpnPartNumbersList: any = [];
-    @Input() isSubWorkOrder:any=false;
-    @Input() subWorkOrderDetails:any={};
+    @Input() isSubWorkOrder: any = false;
+    @Input() subWorkOrderDetails: any = {};
     @Input() subWOPartNoId;
     @Output() saveMaterialListForWO = new EventEmitter();
     @Output() updateMaterialListForWO = new EventEmitter();
@@ -58,7 +58,7 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     isShowAlternatePN: boolean = false;
     eqPartData: any[] = [];
     pageIndex: number = 1;
-    pageSize: number = 10; 
+    pageSize: number = 10;
     interTotalRecords: number = 0;
     interTotalPages: number = 0;
 
@@ -72,25 +72,25 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'stockLineNumber', header: 'SL Num' },
         { field: 'mandatoryOrSupplemental', header: 'Request Type' },
         { field: 'provision', header: 'Provision' },
-        { field: 'quantity', header: 'Qty Req' , align:1},
-        { field: 'quantityReserved', header: 'Qty Res' , align:1 },
-        { field: 'quantityIssued', header: 'Qty Iss' , align:1},
+        { field: 'quantity', header: 'Qty Req', align: 1 },
+        { field: 'quantityReserved', header: 'Qty Res', align: 1 },
+        { field: 'quantityIssued', header: 'Qty Iss', align: 1 },
         { field: 'qunatityTurnIn', header: 'Qty Turned In' },
-        { field: 'partQuantityOnHand', header: 'Qty OH' , align:1},
-        { field: 'partQuantityAvailable', header: 'Qty Avail' , align:1},
-        { field: 'qunatityRemaining', header: 'Qty Rem' , align:1},
+        { field: 'partQuantityOnHand', header: 'Qty OH', align: 1 },
+        { field: 'partQuantityAvailable', header: 'Qty Avail', align: 1 },
+        { field: 'qunatityRemaining', header: 'Qty Rem', align: 1 },
         { field: 'uom', header: 'UOM' },
         { field: 'stockType', header: 'Stk Type' }, //oem
         { field: 'altEquiv', header: 'Alt/Equiv' },
         { field: 'itemClassification', header: 'Classification' },
-        { field: 'partQuantityOnOrder', header: 'Qty On Order' , align:1},
-        { field: 'qunatityBackOrder', header: 'Qty on BK Order' , align:1},
+        { field: 'partQuantityOnOrder', header: 'Qty On Order', align: 1 },
+        { field: 'qunatityBackOrder', header: 'Qty on BK Order', align: 1 },
         { field: 'needDate', header: 'Need Date' },
         { field: 'controlNo', header: 'Cntl Num' },
         { field: 'controlId', header: 'Cntl ID' },
         { field: 'currency', header: 'Curr' },
-        { field: 'unitCost', header: 'Unit Cost' , align:1},
-        { field: 'extendedCost', header: 'Extended Cost', align:1 },
+        { field: 'unitCost', header: 'Unit Cost', align: 1 },
+        { field: 'extendedCost', header: 'Extended Cost', align: 1 },
         { field: 'costDate', header: 'Cost Date' },
         { field: 'purchaseOrderNumber', header: 'PO Num' },
         { field: 'poNextDlvrDate', header: 'PO Next Dlvr Date' },
@@ -108,19 +108,21 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         { field: 'bin', header: 'Bin' },
         { field: 'defered', header: 'Deferred' },
         { field: 'memo', header: 'Memo' }
-]
-    savebutonDisabled: boolean =false;
-    roleUpMaterialList: any=[];
-    isAllow: any=false;
+    ]
+    savebutonDisabled: boolean = false;
+    roleUpMaterialList: any = [];
+    isAllow: any = false;
     parentInputvalue: any;
     totalChildValuesSum: any;
     totalChildValuesSum2: any;
     totalChildValuesSum1: any;
-    countDownDate:any;
+    countDownDate: any;
     releasePartsList: any[];
     parentMaterialList: any[];
-    employeeList:any=[];
+    employeeList: any = [];
     modal: NgbModalRef;
+    showEqParts: any;
+    workOrderGeneralInformation: any;
     /** WorkOrderCompleteMaterialList ctor */
     constructor(private actionService: ActionService, private itemser: ItemMasterService,
         private vendorService: VendorService,
@@ -138,46 +140,46 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
     }
     ngOnInit() {
         // handel work order and sub work order for subWOPartNoId and  workFlowWorkOrderId
-        if(this.savedWorkOrderData && this.isSubWorkOrder==false){
-            if(!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList){
-                for(let mpn of this.mpnPartNumbersList){
-                    if(mpn['value']['workOrderPartNumberId'] == this.mpnId){
+        if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
+            if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
+                for (let mpn of this.mpnPartNumbersList) {
+                    if (mpn['value']['workOrderPartNumberId'] == this.mpnId) {
                         this.workFlowWorkOrderId = mpn['value']['workOrderWorkFlowId'];
                     }
                 }
             }
-            else{
+            else {
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
             }
-        }else{
+        } else {
             // console.log("sub woprk order id",this.subWOPartNoId);
-            this.workFlowWorkOrderId=this.subWOPartNoId;
+            this.workFlowWorkOrderId = this.subWOPartNoId;
         }
     }
-    ngOnChanges(changes: SimpleChanges){
+    ngOnChanges(changes: SimpleChanges) {
         // console.log("changes",changes)
-          // handel work order and sub work order for subWOPartNoId and  workFlowWorkOrderId for sub wo key is subWOPartNoId
-        if(this.savedWorkOrderData && this.isSubWorkOrder==false){
-            if(!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList){
-                for(let mpn of this.mpnPartNumbersList){
-                    if(mpn['value']['workOrderPartNumberId'] == this.mpnId){
+        // handel work order and sub work order for subWOPartNoId and  workFlowWorkOrderId for sub wo key is subWOPartNoId
+        if (this.savedWorkOrderData && this.isSubWorkOrder == false) {
+            if (!this.savedWorkOrderData.isSinglePN && this.mpnPartNumbersList) {
+                for (let mpn of this.mpnPartNumbersList) {
+                    if (mpn['value']['workOrderPartNumberId'] == this.mpnId) {
                         this.workFlowWorkOrderId = mpn['value']['workOrderWorkFlowId'];
                     }
                 }
             }
-            else{
+            else {
                 this.workFlowWorkOrderId = this.savedWorkOrderData.workFlowWorkOrderId;
             }
-        }else{
+        } else {
             // console.log("sub woprk order id",this.subWOPartNoId);
-            this.workFlowWorkOrderId=this.subWOPartNoId;
+            this.workFlowWorkOrderId = this.subWOPartNoId;
             // console.log("sub woprk order id",this.workFlowWorkOrderId);
         }
     }
 
-    ngOnDestroy(){
-        this.countDown=null;
-      }
+    ngOnDestroy() {
+        this.countDown = null;
+    }
     closeAddNew() {
         this.addNewMaterial = false;
     }
@@ -194,20 +196,20 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
         this.addNewMaterial = true;
         this.editData = { ...rowData };
     }
-    currentRow:any={};
+    currentRow: any = {};
     openDelete(content, row) {
         console.log("delete model")
-  this.currentRow=row;
-      this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-      this.modal.result.then(() => {
-          
-      }, () => {  })
-  }
-  
+        this.currentRow = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+
+        }, () => { })
+    }
+
 
     delete() {
         // const { workOrderMaterialsId } = rowData;
-        if(this.isSubWorkOrder==true){
+        if (this.isSubWorkOrder == true) {
             this.workOrderService.deleteSubWorkOrderMaterialList(this.currentRow.subWorkOrderMaterialsId, this.userName).subscribe(res => {
                 this.refreshData.emit();
                 this.alertService.showMessage(
@@ -216,123 +218,123 @@ export class WorkOrderCompleteMaterialListComponent implements OnInit, OnDestroy
                     MessageSeverity.success
                 );
             },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.errorHandling(err);
-            })
-        }else{
-        this.workOrderService.deleteWorkOrderMaterialList(this.currentRow.workOrderMaterialsId, this.userName).subscribe(res => {
-            this.refreshData.emit();
-            this.alertService.showMessage(
-                '',
-                'Deleted WorkOrder Material Successfully',
-                MessageSeverity.success
-            );
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        })
-    }
-    this.modal.close();
-    }
-    getRollupMaterialList(currentRecord,materialindex) {
-        currentRecord.isShowPlus=false;
-if(this.isSubWorkOrder==true){
-    this.isSpinnerVisible = true;
-    this.workOrderService.getSubWoMaterialRoleUps(currentRecord.subWorkOrderMaterialsId).subscribe((res:any[]) => {
-        res.forEach((element,index) => {
-            element.myindex=materialindex;
-            if(element.currency)element.currency= element.currency.symbol;
-            element.quantity =null;
-            element.qunatityRemaining=null;
-            element.line=(materialindex+1)+'.' + (index +1)
-            this.getValues(element);
-            this.isSpinnerVisible = false;
-           }, err => {
-            this.isSpinnerVisible = false;
-        });
-        
-        this.roleUpMaterialList=res;
-       for(var i = 0;i<this.roleUpMaterialList.length;i++) { 
-           this.workOrderMaterialList.splice(materialindex+i+1,0, this.roleUpMaterialList[i])
-        }
-   },
-   err => {
-       // this.isSpinnerVisible = false;
-       this.errorHandling(err);
-   })
-}else{
-    this.isSpinnerVisible = true;
-        this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res:any[]) => {
-             res.forEach((element,index) => {
-                 element.myindex=materialindex;
-                 if(element.currency)element.currency= element.currency.symbol;
-                 element.quantity =null;
-                 element.qunatityRemaining=null;
-                 element.line=(materialindex+1)+'.' + (index +1)
-                 this.getValues(element);
-                });
-             
-             this.roleUpMaterialList=res;
-            for(var i = 0;i<this.roleUpMaterialList.length;i++) { 
-                this.workOrderMaterialList.splice(materialindex+i+1,0, this.roleUpMaterialList[i])
-             }
-             this.isSpinnerVisible = false;
-        },
-        err => {
-            this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        })
-    }
-    }
-    removeRollUpList(currentRecord,index){
-        currentRecord.isShowPlus=true;
-        if(this.isSubWorkOrder==true){
-            this.workOrderService.getSubWoMaterialRoleUps(currentRecord.subWorkOrderMaterialsId).subscribe((res:any[]) => {
-                this.workOrderMaterialList.splice(index+1,res.length);
-                },
                 err => {
                     // this.isSpinnerVisible = false;
                     this.errorHandling(err);
                 })
-        }else{
-        this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res:any[]) => {
-        this.workOrderMaterialList.splice(index+1,res.length);
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            this.errorHandling(err);
-        })
+        } else {
+            this.workOrderService.deleteWorkOrderMaterialList(this.currentRow.workOrderMaterialsId, this.userName).subscribe(res => {
+                this.refreshData.emit();
+                this.alertService.showMessage(
+                    '',
+                    'Deleted WorkOrder Material Successfully',
+                    MessageSeverity.success
+                );
+            },
+                err => {
+                    // this.isSpinnerVisible = false;
+                    this.errorHandling(err);
+                })
+        }
+        this.modal.close();
     }
+    getRollupMaterialList(currentRecord, materialindex) {
+        currentRecord.isShowPlus = false;
+        if (this.isSubWorkOrder == true) {
+            this.isSpinnerVisible = true;
+            this.workOrderService.getSubWoMaterialRoleUps(currentRecord.subWorkOrderMaterialsId).subscribe((res: any[]) => {
+                res.forEach((element, index) => {
+                    element.myindex = materialindex;
+                    if (element.currency) element.currency = element.currency.symbol;
+                    element.quantity = null;
+                    element.qunatityRemaining = null;
+                    element.line = (materialindex + 1) + '.' + (index + 1)
+                    this.getValues(element);
+                    this.isSpinnerVisible = false;
+                }, err => {
+                    this.isSpinnerVisible = false;
+                });
+
+                this.roleUpMaterialList = res;
+                for (var i = 0; i < this.roleUpMaterialList.length; i++) {
+                    this.workOrderMaterialList.splice(materialindex + i + 1, 0, this.roleUpMaterialList[i])
+                }
+            },
+                err => {
+                    // this.isSpinnerVisible = false;
+                    this.errorHandling(err);
+                })
+        } else {
+            this.isSpinnerVisible = true;
+            this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
+                res.forEach((element, index) => {
+                    element.myindex = materialindex;
+                    if (element.currency) element.currency = element.currency.symbol;
+                    element.quantity = null;
+                    element.qunatityRemaining = null;
+                    element.line = (materialindex + 1) + '.' + (index + 1)
+                    this.getValues(element);
+                });
+
+                this.roleUpMaterialList = res;
+                for (var i = 0; i < this.roleUpMaterialList.length; i++) {
+                    this.workOrderMaterialList.splice(materialindex + i + 1, 0, this.roleUpMaterialList[i])
+                }
+                this.isSpinnerVisible = false;
+            },
+                err => {
+                    this.isSpinnerVisible = false;
+                    this.errorHandling(err);
+                })
+        }
     }
-    getValues(element){
-        if(element.stockLineNumber){
-            if (element.stockLineNumber.indexOf(',') > -1){
-                element.isMultipleStockLine=  'Multiple';
-            }else{
-                element.isMultipleStockLine=  'Single';
+    removeRollUpList(currentRecord, index) {
+        currentRecord.isShowPlus = true;
+        if (this.isSubWorkOrder == true) {
+            this.workOrderService.getSubWoMaterialRoleUps(currentRecord.subWorkOrderMaterialsId).subscribe((res: any[]) => {
+                this.workOrderMaterialList.splice(index + 1, res.length);
+            },
+                err => {
+                    // this.isSpinnerVisible = false;
+                    this.errorHandling(err);
+                })
+        } else {
+            this.workOrderService.getWorkOrderRolMaterialList(currentRecord.workOrderMaterialsId).subscribe((res: any[]) => {
+                this.workOrderMaterialList.splice(index + 1, res.length);
+            },
+                err => {
+                    // this.isSpinnerVisible = false;
+                    this.errorHandling(err);
+                })
+        }
+    }
+    getValues(element) {
+        if (element.stockLineNumber) {
+            if (element.stockLineNumber.indexOf(',') > -1) {
+                element.isMultipleStockLine = 'Multiple';
+            } else {
+                element.isMultipleStockLine = 'Single';
             }
         }
-        if(element.controlNo){
-            if (element.controlNo.indexOf(',') > -1){
-                element.isMultipleControlNo=  'Multiple';
-            }else{
-                element.isMultipleControlNo=  'Single';
+        if (element.controlNo) {
+            if (element.controlNo.indexOf(',') > -1) {
+                element.isMultipleControlNo = 'Multiple';
+            } else {
+                element.isMultipleControlNo = 'Single';
             }
         }
-        if(element.controlId){
-            if (element.controlId.indexOf(',') > -1){
-                element.isMultiplecontrolId=  'Multiple';
-            }else{
-                element.isMultiplecontrolId=  'Single';
+        if (element.controlId) {
+            if (element.controlId.indexOf(',') > -1) {
+                element.isMultiplecontrolId = 'Multiple';
+            } else {
+                element.isMultiplecontrolId = 'Single';
             }
         }
-        if(element.receiver){
-            if (element.receiver.indexOf(',') > -1){
-                element.isMultiplereceiver=  'Multiple';
-            }else{
-                element.isMultiplereceiver=  'Single';
+        if (element.receiver) {
+            if (element.receiver.indexOf(',') > -1) {
+                element.isMultiplereceiver = 'Multiple';
+            } else {
+                element.isMultiplereceiver = 'Single';
             }
         }
     }
@@ -349,66 +351,66 @@ if(this.isSubWorkOrder==true){
         this.updateMaterialListForWO.emit(event);
         $('#addNewMaterials').modal('hide');
     }
-    restrictMinus(e){
+    restrictMinus(e) {
         var inputKeyCode = e.keyCode ? e.keyCode : e.which;
         if (inputKeyCode != null) {
             if (inputKeyCode == 45) e.preventDefault();
         }
     }
-    validatePartsQuantity(event,data) {
-        if(event.target.value == null || event.target.value == '' || event.target.value == undefined || event.target.value == 0){
-this.savebutonDisabled=false;
-        }else{
-            this.savebutonDisabled=true;  
+    validatePartsQuantity(event, data) {
+        if (event.target.value == null || event.target.value == '' || event.target.value == undefined || event.target.value == 0) {
+            this.savebutonDisabled = false;
+        } else {
+            this.savebutonDisabled = true;
         }
         if (this.statusId === 1) {
-            if(data.quantityReserved >data.quantityAvailable){
-               
+            if (data.quantityReserved > data.quantityAvailable) {
+
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Reserving Cant be greater than Qty Available',
                     MessageSeverity.warn
                 );
                 data.quantityReserved = null;
-                this.savebutonDisabled=false;
-            }else if(data.quantityReserved >data.qtyToBeReserved){
+                this.savebutonDisabled = false;
+            } else if (data.quantityReserved > data.qtyToBeReserved) {
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Reserving Cant be greater than Qty To Be Reserved',
                     MessageSeverity.warn
                 );
                 data.quantityReserved = null;
-                this.savebutonDisabled=false;
+                this.savebutonDisabled = false;
             }
         } else if (this.statusId === 2) {
-             if(data.quantityIssued >data.quantityAlreadyReserved){
+            if (data.quantityIssued > data.quantityAlreadyReserved) {
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Issuing Cant be greater than Qty Reserved',
                     MessageSeverity.warn
                 );
                 data.quantityIssued = 0;
-                this.savebutonDisabled=false;
+                this.savebutonDisabled = false;
             }
         } else if (this.statusId === 3) {
-            if(data.quantityIssued >data.quantityAvailable){
+            if (data.quantityIssued > data.quantityAvailable) {
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Resver & Issue Cant be greater than Qty Available',
                     MessageSeverity.warn
                 );
                 data.quantityIssued = null;
-                this.savebutonDisabled=false;
-            }else if(data.quantityIssued >data.qtyToBeReserved){
+                this.savebutonDisabled = false;
+            } else if (data.quantityIssued > data.qtyToBeReserved) {
                 this.alertService.showMessage(
                     '',
                     ' Qty Actually Resver & Issue Cant be greater than Qty To Be Reserved',
                     MessageSeverity.warn
                 );
                 data.quantityIssued = null;
-                this.savebutonDisabled=false;
+                this.savebutonDisabled = false;
             }
-        }else if(this.statusId === 4){
+        } else if (this.statusId === 4) {
             if (data.quantityIssued > data.quantityAlreadyIssued) {
                 this.alertService.showMessage(
                     '',
@@ -416,103 +418,103 @@ this.savebutonDisabled=false;
                     MessageSeverity.warn
                 );
                 data.quantityIssued = null;
-                this.savebutonDisabled=false;
+                this.savebutonDisabled = false;
             }
-        }else if(this.statusId === 5){
-             if (data.quantityReserved > data.quantityAlreadyReserved ) { 
+        } else if (this.statusId === 5) {
+            if (data.quantityReserved > data.quantityAlreadyReserved) {
                 this.alertService.showMessage(
                     '',
                     'Qty Actually Reserving Cant be greater the Qty Reserved',
                     MessageSeverity.warn
                 );
                 data.quantityReserved = null;
-                this.savebutonDisabled=false;
+                this.savebutonDisabled = false;
             }
         }
 
     }
-    childPartValidate(value,currentRecord,type){
-        if (this.statusId == 1 || this.statusId ==3) {
-            this.parentInputvalue=0;
-            this.totalChildValuesSum=0;
+    childPartValidate(value, currentRecord, type) {
+        if (this.statusId == 1 || this.statusId == 3) {
+            this.parentInputvalue = 0;
+            this.totalChildValuesSum = 0;
             this.reservedList.map(x => {
-               if(x.partNumber==currentRecord.parentPartNo){
-                   if(this.statusId==1){
+                if (x.partNumber == currentRecord.parentPartNo) {
+                    if (this.statusId == 1) {
 
-                       this.parentInputvalue=x.quantityReserved;
-                   } else{
-                    this.parentInputvalue=x.quantityIssued; 
-                   }
-               } 
+                        this.parentInputvalue = x.quantityReserved;
+                    } else {
+                        this.parentInputvalue = x.quantityIssued;
+                    }
+                }
             });
-            if(this.statusId==1){
+            if (this.statusId == 1) {
 
-                this.totalChildValuesSum1 = this.alternatePartData.reduce(function(prev, cur) {
+                this.totalChildValuesSum1 = this.alternatePartData.reduce(function (prev, cur) {
                     return prev + cur.quantityReserved;
-                  }, 0);
-                  this.totalChildValuesSum2=this.eqPartData.reduce(function(prev, cur) {
+                }, 0);
+                this.totalChildValuesSum2 = this.eqPartData.reduce(function (prev, cur) {
                     return prev + cur.quantityReserved;
-                  }, 0);
-                  
-            } else{
-                this.totalChildValuesSum1 = this.alternatePartData.reduce(function(prev, cur) {
+                }, 0);
+
+            } else {
+                this.totalChildValuesSum1 = this.alternatePartData.reduce(function (prev, cur) {
                     return prev + cur.quantityIssued;
-                  }, 0);
-                  this.totalChildValuesSum2 = this.eqPartData.reduce(function(prev, cur) {
+                }, 0);
+                this.totalChildValuesSum2 = this.eqPartData.reduce(function (prev, cur) {
                     return prev + cur.quantityIssued;
-                  }, 0);
+                }, 0);
             }
-            this.totalChildValuesSum=(this.totalChildValuesSum1?this.totalChildValuesSum1:0)+(this.totalChildValuesSum2?this.totalChildValuesSum2:0)
-              if((this.parentInputvalue + this.totalChildValuesSum)>currentRecord.quantity){
+            this.totalChildValuesSum = (this.totalChildValuesSum1 ? this.totalChildValuesSum1 : 0) + (this.totalChildValuesSum2 ? this.totalChildValuesSum2 : 0)
+            if ((this.parentInputvalue + this.totalChildValuesSum) > currentRecord.quantity) {
                 this.alertService.showMessage(
                     '',
                     ' Total Qty Actually Reserving Cant be greater than Qty Required',
                     MessageSeverity.warn
                 );
-                currentRecord.quantityReserved=0;
-              }
+                currentRecord.quantityReserved = 0;
+            }
         }
     }
     allowAll(value) {
-		if (value) {
-			this.reservedList = this.reservedList.map(x => {
-                if(x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length>0){
+        if (value) {
+            this.reservedList = this.reservedList.map(x => {
+                if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                     x.woReservedIssuedAltParts.map(x => {
-                    x.isChildSelected=true;
+                        x.isChildSelected = true;
                     })
-                }else if(x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length>0){
+                } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
                     x.woReservedIssuedEquParts.map(x => {
-                        x.isChildSelected=true;
-                        })
+                        x.isChildSelected = true;
+                    })
                 }
-				return {
-					...x,
-					isParentSelected: true,
-				}
+                return {
+                    ...x,
+                    isParentSelected: true,
+                }
             });
-            
-			this.isAllow = value; 
-		} else {
-			this.reservedList = this.reservedList.map(x => {
-                if(x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length>0){
+
+            this.isAllow = value;
+        } else {
+            this.reservedList = this.reservedList.map(x => {
+                if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
                     x.woReservedIssuedAltParts.map(x => {
-                    x.isChildSelected=false;
+                        x.isChildSelected = false;
                     })
-                }else if(x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length>0){
+                } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
                     x.woReservedIssuedEquParts.map(x => {
-                        x.isChildSelected=false;
-                        })
+                        x.isChildSelected = false;
+                    })
                 }
-				return {
-					...x,
-					isParentSelected: false,
-				}
-			});
-			this.isAllow = value;
+                return {
+                    ...x,
+                    isParentSelected: false,
+                }
+            });
+            this.isAllow = value;
         }
-        this.savebutonDisabled=true;
+        this.savebutonDisabled = true;
     }
-    
+
     filterEmployee(event): void {
         this.employeeList = this.employeesOriginalData;
         if (event.query !== undefined && event.query !== null) {
@@ -525,11 +527,11 @@ this.savebutonDisabled=false;
 
     // used to get Parts from the Servers Bases on the Status Id
     partsIssueRI(statusId) {
-        this.countDown=null;
+        this.countDown = null;
         this.counter = 600;
         this.tick = 1000;
         this.startTimerplus();
-        
+
         this.statusId = statusId;
         this.reservedList = [];
         this.alternatePartData = [];
@@ -537,54 +539,54 @@ this.savebutonDisabled=false;
         this.isShowEqPN = false;
         this.isShowAlternatePN = false;
         // console.log("sub woprk order id",this.workFlowWorkOrderId);
-        if (this.workFlowWorkOrderId){
+        if (this.workFlowWorkOrderId) {
             // console.log("saved Data",this.savedWorkOrderData)
-            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId,this.savedWorkOrderData.workOrderId, statusId,this.authService.currentUser.userName,this.isSubWorkOrder).subscribe(res => {
-            //   console.log("current User",this.authService.currentUser)
+            this.workOrderService.getReservedPartsByWorkFlowWOId(this.workFlowWorkOrderId, this.savedWorkOrderData.workOrderId, statusId, this.authService.currentUser.userName, this.isSubWorkOrder).subscribe(res => {
+                //   console.log("current User",this.authService.currentUser)
                 this.reservedList = res.map(x => {
                     // if(this.isSubWorkOrder==true){
                     //     x.mandatoryOrSupplementalId=1
 
                     // }
-                    x.masterCompanyId=this.authService.currentUser.masterCompanyId
+                    x.masterCompanyId = this.authService.currentUser.masterCompanyId
                     this.setdefaultValues(x);
-                    if(this.statusId==2 || this.statusId==4 || this.statusId==5){
-                    this.savebutonDisabled=true;
-                    if(x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length>0){
-                        this.isShowAlternatePN=true;
-                        x.isParentSelected= true;
-                        x.showAlternateParts= true;
-                    }else if(x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length>0){
-                        this.isShowEqPN=true;
-                        x.isParentSelected= true;
-                        // x.showAlternateParts= false;
-                        x.showEqParts= true;
-                    }else{
-                        x.isParentSelected= false;
-                        x.showAlternateParts= false;
-                        x.showEqParts= false;
+                    if (this.statusId == 2 || this.statusId == 4 || this.statusId == 5) {
+                        this.savebutonDisabled = true;
+                        if (x.woReservedIssuedAltParts && x.woReservedIssuedAltParts.length > 0) {
+                            this.isShowAlternatePN = true;
+                            x.isParentSelected = true;
+                            x.showAlternateParts = true;
+                        } else if (x.woReservedIssuedEquParts && x.woReservedIssuedEquParts.length > 0) {
+                            this.isShowEqPN = true;
+                            x.isParentSelected = true;
+                            // x.showAlternateParts= false;
+                            x.showEqParts = true;
+                        } else {
+                            x.isParentSelected = false;
+                            x.showAlternateParts = false;
+                            x.showEqParts = false;
+                        }
+                    } else if (this.statusId == 1 || this.statusId == 3) {
+                        x.isParentSelected = false;
+                        x.showAlternateParts = false;
+                        x.showEqParts = false;
                     }
-                }else  if(this.statusId==1 || this.statusId==3){
-                    x.isParentSelected= false;
-                    x.showAlternateParts= false;
-                    x.showEqParts= false;
-                }
                     return {
                         ...x,
-                            // mandatoryOrSupplementalId:1,  // for  sub work order pupose
+                        // mandatoryOrSupplementalId:1,  // for  sub work order pupose
                         reservedDate: new Date(),
                         issuedDate: new Date(),
-                        reservedById:this.authService.currentEmployee,
-                        issuedById:this.authService.currentEmployee,
+                        reservedById: this.authService.currentEmployee,
+                        issuedById: this.authService.currentEmployee,
                         woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
                             this.setdefaultValuesForChild(y);
                             return {
                                 ...y,
                                 reservedDate: new Date(),
                                 issuedDate: new Date(),
-                                reservedById:this.authService.currentEmployee,
-                                issuedById:this.authService.currentEmployee,
-                                masterCompanyId:this.authService.currentUser.masterCompanyId,
+                                reservedById: this.authService.currentEmployee,
+                                issuedById: this.authService.currentEmployee,
+                                masterCompanyId: this.authService.currentUser.masterCompanyId,
                                 // mandatoryOrSupplementalId:1, 
                             }
                         }),
@@ -594,9 +596,9 @@ this.savebutonDisabled=false;
                                 ...y,
                                 reservedDate: new Date(),
                                 issuedDate: new Date(),
-                                reservedById:this.authService.currentEmployee,
-                                issuedById:this.authService.currentEmployee,
-                                masterCompanyId:this.authService.currentUser.masterCompanyId,
+                                reservedById: this.authService.currentEmployee,
+                                issuedById: this.authService.currentEmployee,
+                                masterCompanyId: this.authService.currentUser.masterCompanyId,
                                 // mandatoryOrSupplementalId:1,
                             }
                         })
@@ -604,48 +606,48 @@ this.savebutonDisabled=false;
 
                 });
             },
-            err => {
-                // this.isSpinnerVisible = false;
-                this.reservedList = []
-                this.errorHandling(err);
-            })
+                err => {
+                    // this.isSpinnerVisible = false;
+                    this.reservedList = []
+                    this.errorHandling(err);
+                })
         }
     }
-    setdefaultValues(currentRecord){
-        if(this.statusId==1){
-                if(currentRecord.qtyToBeReserved > currentRecord.quantityAvailable){
-                    currentRecord.quantityReserved=currentRecord.quantityAvailable ? currentRecord.quantityAvailable :0;
-                }else{
-                    currentRecord.quantityReserved=currentRecord.qtyToBeReserved ? currentRecord.qtyToBeReserved:0;
-                }
-        }else if(this.statusId==2){
-            currentRecord.quantityIssued=currentRecord.quantityAlreadyReserved ?currentRecord.quantityAlreadyReserved :0;    
+    setdefaultValues(currentRecord) {
+        if (this.statusId == 1) {
+            if (currentRecord.qtyToBeReserved > currentRecord.quantityAvailable) {
+                currentRecord.quantityReserved = currentRecord.quantityAvailable ? currentRecord.quantityAvailable : 0;
+            } else {
+                currentRecord.quantityReserved = currentRecord.qtyToBeReserved ? currentRecord.qtyToBeReserved : 0;
+            }
+        } else if (this.statusId == 2) {
+            currentRecord.quantityIssued = currentRecord.quantityAlreadyReserved ? currentRecord.quantityAlreadyReserved : 0;
         }
-        else if(this.statusId==3){ 
-            if(currentRecord.qtyToBeReserved > currentRecord.quantityAvailable){
-                currentRecord.quantityIssued=currentRecord.quantityAvailable ? currentRecord.quantityAvailable :0;
-            }else{
-                currentRecord.quantityIssued=currentRecord.qtyToBeReserved ? currentRecord.qtyToBeReserved:0;
+        else if (this.statusId == 3) {
+            if (currentRecord.qtyToBeReserved > currentRecord.quantityAvailable) {
+                currentRecord.quantityIssued = currentRecord.quantityAvailable ? currentRecord.quantityAvailable : 0;
+            } else {
+                currentRecord.quantityIssued = currentRecord.qtyToBeReserved ? currentRecord.qtyToBeReserved : 0;
             }
         }
-        else if(this.statusId==4){
-            currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued ? currentRecord.quantityAlreadyIssued :0;           
+        else if (this.statusId == 4) {
+            currentRecord.quantityIssued = currentRecord.quantityAlreadyIssued ? currentRecord.quantityAlreadyIssued : 0;
         }
-        else if(this.statusId==5){
-            currentRecord.quantityReserved=currentRecord.quantityAlreadyReserved ? currentRecord.quantityAlreadyReserved :0;   
+        else if (this.statusId == 5) {
+            currentRecord.quantityReserved = currentRecord.quantityAlreadyReserved ? currentRecord.quantityAlreadyReserved : 0;
         }
     }
-    setdefaultValuesForChild(currentRecord){
-         if(this.statusId==2){
-currentRecord.quantityIssued=currentRecord.qtyToBeIssued;
+    setdefaultValuesForChild(currentRecord) {
+        if (this.statusId == 2) {
+            currentRecord.quantityIssued = currentRecord.qtyToBeIssued;
 
         }
 
-        else if(this.statusId==4){
-               currentRecord.quantityIssued=currentRecord.quantityAlreadyIssued;
+        else if (this.statusId == 4) {
+            currentRecord.quantityIssued = currentRecord.quantityAlreadyIssued;
         }
-        else if(this.statusId==5){
-              currentRecord.quantityReserved=currentRecord.qtyToBeIssued;
+        else if (this.statusId == 5) {
+            currentRecord.quantityReserved = currentRecord.qtyToBeIssued;
         }
     }
     resetAlternateParts(event) {
@@ -654,7 +656,7 @@ currentRecord.quantityIssued=currentRecord.qtyToBeIssued;
             return {
                 ...x,
                 showAlternateParts: false,
-                woReservedIssuedAltParts:x.woReservedIssuedAltParts.map(y => {
+                woReservedIssuedAltParts: x.woReservedIssuedAltParts.map(y => {
                     return {
                         ...y,
                         isChildSelected: false
@@ -679,120 +681,120 @@ currentRecord.quantityIssued=currentRecord.qtyToBeIssued;
             }
         });
     }
-uncheckAltEqlPartCall(data){
-    this.parentMaterialList=[];
-                data.map(x => {
-            this.parentMaterialList.push({parentWorkOrderMaterialsId:x.parentWorkOrderMaterialsId});
-    this.workOrderService.reservereleasestoclineqty(this.parentMaterialList).subscribe((res:any[]) => {
-    },
-    err => {
-        // this.isSpinnerVisible = false;
-        this.errorHandling(err);
-    })
- 
-})
-}
-handelParts:any=[]
-    showAlternateParts(isChecked,childPart ) {
-        // debugger;
-        this.handelParts=[];
-        this.alternatePartData = [];
-        this.alternatePartData = childPart;
-        this.handelParts=childPart;
-        childPart.forEach(element => {
-            element.reservedById=this.authService.currentEmployee,
-            element.issuedById=this.authService.currentEmployee,
-            element.createdBy=this.authService.currentUser.userName,
-            element.updatedBy=this.authService.currentUser.userName
-        });
-      this.handelParts.map(element => {
-            element.reservedById=this.authService.currentEmployee.value,
-            element.issuedById=this.authService.currentEmployee.value
-        });
-if((isChecked === true) && (this.statusId ==1 || this.statusId ==3)){
-    if(this.isSubWorkOrder==true){
-        this.workOrderService.reserveSubWoAltPartData(this.handelParts).subscribe((res:any[]) => {
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            // this.errorHandling(err); 
-        })
-    }else{
-        this.workOrderService.reserveAltPartData(this.handelParts).subscribe((res:any[]) => {
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            // this.errorHandling(err);
+    uncheckAltEqlPartCall(data) {
+        this.parentMaterialList = [];
+        data.map(x => {
+            this.parentMaterialList.push({ parentWorkOrderMaterialsId: x.parentWorkOrderMaterialsId });
+            this.workOrderService.reservereleasestoclineqty(this.parentMaterialList).subscribe((res: any[]) => {
+            },
+                err => {
+                    // this.isSpinnerVisible = false;
+                    this.errorHandling(err);
+                })
+
         })
     }
-  
-}
-childPart.forEach(element => {
-    element.reservedById=this.authService.currentEmployee,
-    element.issuedById=this.authService.currentEmployee,
-    element.createdBy=this.authService.currentUser.userName,
-    element.updatedBy=this.authService.currentUser.userName
-});
-this.alternatePartData = childPart;
+    handelParts: any = []
+    showAlternateParts(isChecked, childPart) {
+        // debugger;
+        this.handelParts = [];
+        this.alternatePartData = [];
+        this.alternatePartData = childPart;
+        this.handelParts = childPart;
+        childPart.forEach(element => {
+            element.reservedById = this.authService.currentEmployee,
+                element.issuedById = this.authService.currentEmployee,
+                element.createdBy = this.authService.currentUser.userName,
+                element.updatedBy = this.authService.currentUser.userName
+        });
+        this.handelParts.map(element => {
+            element.reservedById = this.authService.currentEmployee.value,
+                element.issuedById = this.authService.currentEmployee.value
+        });
+        if ((isChecked === true) && (this.statusId == 1 || this.statusId == 3)) {
+            if (this.isSubWorkOrder == true) {
+                this.workOrderService.reserveSubWoAltPartData(this.handelParts).subscribe((res: any[]) => {
+                },
+                    err => {
+                        // this.isSpinnerVisible = false;
+                        // this.errorHandling(err); 
+                    })
+            } else {
+                this.workOrderService.reserveAltPartData(this.handelParts).subscribe((res: any[]) => {
+                },
+                    err => {
+                        // this.isSpinnerVisible = false;
+                        // this.errorHandling(err);
+                    })
+            }
+
+        }
+        childPart.forEach(element => {
+            element.reservedById = this.authService.currentEmployee,
+                element.issuedById = this.authService.currentEmployee,
+                element.createdBy = this.authService.currentUser.userName,
+                element.updatedBy = this.authService.currentUser.userName
+        });
+        this.alternatePartData = childPart;
         if (isChecked === false) {
             this.alternatePartData = []
             this.uncheckAltEqlPartCall(childPart)
         }
     }
 
-    showEquantParts(isChecked, childPart) { 
+    showEquantParts(isChecked, childPart) {
         this.eqPartData = [];
         this.eqPartData = childPart;
         childPart.forEach(element => {
-            element.reservedById= this.authService.currentEmployee,
-            element.issuedById=this.authService.currentEmployee,
-            element.createdBy=this.authService.currentUser.userName,
-            element.updatedBy=this.authService.currentUser.userName
+            element.reservedById = this.authService.currentEmployee,
+                element.issuedById = this.authService.currentEmployee,
+                element.createdBy = this.authService.currentUser.userName,
+                element.updatedBy = this.authService.currentUser.userName
         });
         this.eqPartData.map(element => {
             element.reservedById = this.authService.currentEmployee.value,
                 element.issuedById = this.authService.currentEmployee.value
         });
-        if((isChecked === true) && (this.statusId ==1 || this.statusId ==3)){
-            if(this.isSubWorkOrder==true){
-                this.workOrderService.reserveSubWoEqlPartData(this.eqPartData).subscribe((res:any[]) => {
+        if ((isChecked === true) && (this.statusId == 1 || this.statusId == 3)) {
+            if (this.isSubWorkOrder == true) {
+                this.workOrderService.reserveSubWoEqlPartData(this.eqPartData).subscribe((res: any[]) => {
                 },
-                err => {
-                    // this.isSpinnerVisible = false;
-                    //this.errorHandling(err);
-                })
-            }else{
-                this.workOrderService.reserveEqlPartData(this.eqPartData).subscribe((res:any[]) => {
+                    err => {
+                        // this.isSpinnerVisible = false;
+                        //this.errorHandling(err);
+                    })
+            } else {
+                this.workOrderService.reserveEqlPartData(this.eqPartData).subscribe((res: any[]) => {
                 },
-                err => {
-                    // this.isSpinnerVisible = false;
-                    //this.errorHandling(err);
-                })
+                    err => {
+                        // this.isSpinnerVisible = false;
+                        //this.errorHandling(err);
+                    })
             }
 
-          
+
         }
         if (isChecked === false) {
             this.eqPartData = [];
             this.uncheckAltEqlPartCall(childPart)
         }
     }
-    selectedParts(currentRecord,event) {
-        if(this.statusId === 1 || this.statusId === 5){
-            if(currentRecord.isParentSelected==true && currentRecord.quantityReserved !=0){
-                this.savebutonDisabled=true;
-        }else{
-            this.savebutonDisabled=false;
+    selectedParts(currentRecord, event) {
+        if (this.statusId === 1 || this.statusId === 5) {
+            if (currentRecord.isParentSelected == true && currentRecord.quantityReserved != 0) {
+                this.savebutonDisabled = true;
+            } else {
+                this.savebutonDisabled = false;
+            }
         }
+        if (this.statusId === 2 || this.statusId === 3 || this.statusId === 4) {
+            if (currentRecord.isParentSelected == true && currentRecord.quantityIssued != 0) {
+                this.savebutonDisabled = true;
+            } else {
+                this.savebutonDisabled = false;
+            }
         }
-        if(this.statusId === 2 || this.statusId === 3 || this.statusId === 4){
-            if(currentRecord.isParentSelected==true && currentRecord.quantityIssued !=0){
-                this.savebutonDisabled=true;
-        }else{
-            this.savebutonDisabled=false;
-        }
-        }
-   
+
         this.checkedParts = [];
         this.reservedList.map(x => {
             if (x.isParentSelected) {
@@ -834,21 +836,21 @@ this.alternatePartData = childPart;
 
     }
 
-    releaseStock(){
-        if(this.statusId ==1 || this.statusId ==3){
-            this.releasePartsList=[];
-            if(this.isSubWorkOrder==true){
+    releaseStock() {
+        if (this.statusId == 1 || this.statusId == 3) {
+            this.releasePartsList = [];
+            if (this.isSubWorkOrder == true) {
                 this.reservedList.map(x => {
-                        this.releasePartsList.push({subWorkOrderMaterialId:x.subWorkOrderMaterialsId});
+                    this.releasePartsList.push({ subWorkOrderMaterialId: x.subWorkOrderMaterialsId });
                 })
-            }else{
+            } else {
                 this.reservedList.map(x => {
                     // if(x.isParentSelected ==true){  comment becaues of chnages by suresh
-                        
-                        this.releasePartsList.push({workOrderMaterialsId:x.workOrderMaterialsId});
-                    
+
+                    this.releasePartsList.push({ workOrderMaterialsId: x.workOrderMaterialsId });
+
                     // x.woReservedIssuedAltParts.map(y => {
-    
+
                     //     // if(y.showAlternateParts==true){
                     //         this.releasePartsList.push({workOrderMaterialsId:y.workOrderMaterialsId});
                     //     // }
@@ -858,27 +860,27 @@ this.alternatePartData = childPart;
                     //             this.releasePartsList.push({workOrderMaterialsId:z.workOrderMaterialsId});
                     //         // }
                     //     })
-                  
-    
-                // }
+
+
+                    // }
                 })
             }
 
-            if(this.isSubWorkOrder==true){
-        this.workOrderService.reservereleaseSubWostoclineqty(this.releasePartsList).subscribe((res:any[]) => {
-        },
-        err => {
-            // this.isSpinnerVisible = false;
-            // this.errorHandling(err);
-        })
-            }else{
-            this.workOrderService.reservereleasestoclineqty(this.releasePartsList).subscribe((res:any[]) => {
-            },
-            err => {
-                // this.isSpinnerVisible = false;
-                // this.errorHandling(err);
-            })
-        }
+            if (this.isSubWorkOrder == true) {
+                this.workOrderService.reservereleaseSubWostoclineqty(this.releasePartsList).subscribe((res: any[]) => {
+                },
+                    err => {
+                        // this.isSpinnerVisible = false;
+                        // this.errorHandling(err);
+                    })
+            } else {
+                this.workOrderService.reservereleasestoclineqty(this.releasePartsList).subscribe((res: any[]) => {
+                },
+                    err => {
+                        // this.isSpinnerVisible = false;
+                        // this.errorHandling(err);
+                    })
+            }
         }
     }
     saveRIPart() {
@@ -905,15 +907,15 @@ this.alternatePartData = childPart;
         // })
         this.checkedParts = [];
         this.reservedList.map(x => {
-            x.issuedById=x.issuedById.value
-            x.reservedById=x.reservedById.value
+            x.issuedById = x.issuedById.value
+            x.reservedById = x.reservedById.value
             if (x.isParentSelected) {
                 const { woReservedIssuedAltParts, ...rest } = x
-                this.checkedParts.push({ ...rest, partStatusId: this.statusId, createdBy: (rest.createdBy)?rest.createdBy:this.authService.currentUser.userName, updatedBy: this.authService.currentUser.userName });
+                this.checkedParts.push({ ...rest, partStatusId: this.statusId, createdBy: (rest.createdBy) ? rest.createdBy : this.authService.currentUser.userName, updatedBy: this.authService.currentUser.userName });
             }
             x.woReservedIssuedAltParts.map(c => {
-                c.issuedById=c.issuedById.value
-                c.reservedById=c.reservedById.value
+                c.issuedById = c.issuedById.value
+                c.reservedById = c.reservedById.value
                 if (c.isChildSelected) {
                     this.checkedParts.push({
                         ...c,
@@ -924,8 +926,8 @@ this.alternatePartData = childPart;
                 }
             })
             x.woReservedIssuedEquParts.map(c => {
-                c.issuedById=c.issuedById.value
-                c.reservedById=c.reservedById.value
+                c.issuedById = c.issuedById.value
+                c.reservedById = c.reservedById.value
                 if (c.isChildSelected) {
                     this.checkedParts.push({
                         ...c,
@@ -937,157 +939,159 @@ this.alternatePartData = childPart;
             })
         })
         this.saveRIParts.emit(this.checkedParts);
-        this.isAllow=false;
-        this.savebutonDisabled=false;
+        this.isAllow = false;
+        this.savebutonDisabled = false;
     }
     createNewPoWorkOrder(rowData) {
         // const { workOrderMaterialsId } = rowData;
-        if(this.isSubWorkOrder==true){
+        if (this.isSubWorkOrder == true) {
             window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${0}/${rowData.subWorkOrderMaterialsId}`)
-        }else{
+        } else {
             window.open(`/vendorsmodule/vendorpages/workorder-po-create/${0}/${rowData.workOrderMaterialsId}`)
         }
     }
 
-closeMaterial(){
-    
-    if(this.countDown){
-        this.countDown.unsubscribe();
+    closeMaterial() {
+
+        if (this.countDown) {
+            this.countDown.unsubscribe();
+        }
+        this.countDown = null;
+        this.savebutonDisabled = false;
+        this.isAllow = false;
+        this.releaseStock();
     }
-    this.countDown=null;
-    this.savebutonDisabled=false;
-    this.isAllow=false;
-    this.releaseStock();
-}
-  countDown: Subscription;
-  counter = 600;
-  tick = 1000;
-  startTimerplus(){
-    this.countDown = timer(0, this.tick).subscribe(() => {
-        --this.counter
-    if(this.counter==80){
-        this.opentimerAlertModel()
-    }
-    if(this.counter==0){
-        setTimeout(()=>{
-            $('#reserve').modal("hide");
-            if(this.countDown){
-                this.countDown.unsubscribe();
+    countDown: Subscription;
+    counter = 600;
+    tick = 1000;
+    startTimerplus() {
+        this.countDown = timer(0, this.tick).subscribe(() => {
+            --this.counter
+            if (this.counter == 80) {
+                this.opentimerAlertModel()
             }
-            this.countDown=null;
-            $('#timerAlertNotfi').modal("hide");
-            this.modal.close();
-            this.releaseStock();
-        },1000)
+            if (this.counter == 0) {
+                setTimeout(() => {
+                    $('#reserve').modal("hide");
+                    if (this.countDown) {
+                        this.countDown.unsubscribe();
+                    }
+                    this.countDown = null;
+                    $('#timerAlertNotfi').modal("hide");
+                    this.modal.close();
+                    this.releaseStock();
+                }, 1000)
+            }
+        },
+            err => {
+                // this.isSpinnerVisible = false;
+                this.errorHandling(err);
+            });
     }
-    },
-    err => {
-        // this.isSpinnerVisible = false;
-        this.errorHandling(err);
-    });
-}
 
-opentimerAlertModel(){
-    let content = this.timerAlertNotfi;
-this.modal = this.modalService.open(content, { size: "sm" });
-this.modal.result.then(
-  () => {
-  },
-  () => {
-  }
-);
-}
-actionTimerReset(){
-    this.counter = 600;
-    this.tick = 1000;
-    this.countDown.unsubscribe();
-    this.startTimerplus();
-    $('#timerAlertNotfi').modal("hide");
-    this.modal.close();
-}
-dismissTimerAlert(){
-    $('#timerAlertNotfi').modal("hide");
-    this.modal.close();
-}
-// create sub work order
-editSubWo(currentRecord){
-    const subworkorderid=currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId :0
-    //  =currentRecord.isSubWorkOrderCreaetd ?currentRecord.subWorkOrderId : 0;
+    opentimerAlertModel() {
+        let content = this.timerAlertNotfi;
+        this.modal = this.modalService.open(content, { size: "sm" });
+        this.modal.result.then(
+            () => {
+            },
+            () => {
+            }
+        );
+    }
+    actionTimerReset() {
+        this.counter = 600;
+        this.tick = 1000;
+        this.countDown.unsubscribe();
+        this.startTimerplus();
+        $('#timerAlertNotfi').modal("hide");
+        this.modal.close();
+    }
+    dismissTimerAlert() {
+        $('#timerAlertNotfi').modal("hide");
+        this.modal.close();
+    }
+    // create sub work order
+    editSubWo(currentRecord) {
+        const subworkorderid = currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId : 0
+        //  =currentRecord.isSubWorkOrderCreaetd ?currentRecord.subWorkOrderId : 0;
         window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
-}
-public dismissModel() {
-    this.modal.close();
-}
-public dismissModel2() {
-    this.modal.close();
-   setTimeout(()=>{
-    this.viewSubWolist=false;
-   },1000)
-}
-subWoRecord:any={}
-subWoClick(currentRecord) {
-    this.subWoRecord={};
-    this.subWoRecord=currentRecord;
-    let content = this.tabRedirectConfirmationModal;
-this.modal = this.modalService.open(content, { size: "sm" });
-this.modal.result.then(
-  () => {
-  },
-  () => {
-  }
-);
-    
+    }
+    public dismissModel() {
+        this.modal.close();
+    }
+    public dismissModel2() {
+        this.modal.close();
+        setTimeout(() => {
+            this.viewSubWolist = false;
+        }, 1000)
+    }
+    subWoRecord: any = {}
+    subWoClick(currentRecord) {
+        this.subWoRecord = {};
+        this.subWoRecord = currentRecord;
+        let content = this.tabRedirectConfirmationModal;
+        this.modal = this.modalService.open(content, { size: "sm" });
+        this.modal.result.then(
+            () => {
+            },
+            () => {
+            }
+        );
 
-}
-createNewSubWo(){
-    this.dismissModel();
-    const subworkorderid=0;
+
+    }
+    createNewSubWo() {
+        this.dismissModel();
+        const subworkorderid = 0;
         window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.subWoRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${this.subWoRecord.workOrderMaterialsId}`);
 
-}
-viewSubWolist:boolean=false;
-addToExistingSubWo(){
-this.viewSubWolist=true;
-    this.dismissModel();
-    // const subworkorderid=currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId :0
-    //     window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
-}
-moduleName:any='';
-errorHandling(err){
-    if(err['error']['errors']){
-        err['error']['errors'].forEach(x=>{
+    }
+    viewSubWolist: boolean = false;
+    addToExistingSubWo() {
+        this.viewSubWolist = true;
+        this.dismissModel();
+        // const subworkorderid=currentRecord.subWorkOrderId ? currentRecord.subWorkOrderId :0
+        //     window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${currentRecord.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${subworkorderid}&workOrderMaterialsId=${currentRecord.workOrderMaterialsId}`);
+    }
+    moduleName: any = '';
+    errorHandling(err) {
+        if (err['error']['errors']) {
+            err['error']['errors'].forEach(x => {
+                this.alertService.showMessage(
+                    this.moduleName,
+                    x['message'],
+                    MessageSeverity.error
+                );
+            })
+        }
+        else {
             this.alertService.showMessage(
                 this.moduleName,
-                x['message'],
+                'Saving data Failed due to some input error',
                 MessageSeverity.error
             );
-        })
+        }
     }
-    else{
-        this.alertService.showMessage(
-            this.moduleName,
-            'Saving data Failed due to some input error',
-            MessageSeverity.error
-        );
-    }
-}
-handleError(err){
-    if(err['error']['errors']){
-        err['error']['errors'].forEach(x=>{
+    handleError(err) {
+        if (err['error']['errors']) {
+            err['error']['errors'].forEach(x => {
+                this.alertService.showMessage(
+                    this.moduleName,
+                    x['message'],
+                    MessageSeverity.error
+                );
+            })
+        }
+        else {
             this.alertService.showMessage(
                 this.moduleName,
-                x['message'],
+                'Saving data Failed due to some input error',
                 MessageSeverity.error
             );
-        })
+        }
     }
-    else{
-        this.alertService.showMessage(
-            this.moduleName,
-            'Saving data Failed due to some input error',
-            MessageSeverity.error
-        );
-    }
-}
+
+    clearautoCompleteInput(workOrderGeneralInformation, employeeId) {}
 }
 

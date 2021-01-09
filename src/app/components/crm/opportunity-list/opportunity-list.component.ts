@@ -62,6 +62,11 @@ export class OpportunityListComponent implements OnInit {
     currentstatus: string = 'Active';
     currentDeletedstatus:boolean=false;
     lazyLoadEventDataInput: any;
+    allContacts: any;
+    selectedContactColumns: any;
+    restorerecord: any;
+    customerauditHisory: any;
+    
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,

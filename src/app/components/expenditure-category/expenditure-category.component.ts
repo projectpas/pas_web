@@ -42,6 +42,8 @@ export class ExpenditureCategoryComponent implements OnInit {
     AuditDetails: any;
     changeStatus: any;
     bulkUpload: any;
+    selectedRowforDelete: any;
+    check: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
          private alertService: AlertService, private coreDataService: ExpenditureCategoryService, private modalService: NgbModal, private authService: AuthService) {

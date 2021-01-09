@@ -1533,4 +1533,6 @@ closeMemoModel() {
   {
     this.attachCertificateUpdateFlag = false;
   }
+
+  dateFilterForTableNew(event, field) {}
 }

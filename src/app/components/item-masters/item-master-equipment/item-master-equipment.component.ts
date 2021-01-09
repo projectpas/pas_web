@@ -145,7 +145,7 @@ export class ItemMasterEquipmentComponent implements OnInit {
 	createdDate: any = "";
 	updatedDate: any = "";
 	auditHisory: AuditHistory[];
-
+	model: any;
 	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
 	@ViewChild(MatSort,{static:false}) sort: MatSort;
 	cols: any[];

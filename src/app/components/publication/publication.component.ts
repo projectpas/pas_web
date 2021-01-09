@@ -191,7 +191,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     viewType: any = 'mpn';
     advanceSearchReq: any = {};
     status: string = 'active';
-
+    documentsContent: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private configurations: ConfigurationService,
         private authService: AuthService, private datePipe: DatePipe, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public publicationService: PublicationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private router: Router, public employeeService: EmployeeService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Dashnumservice: DashNumberService, private ataMainSer: AtaMainService, private commonService: CommonService,

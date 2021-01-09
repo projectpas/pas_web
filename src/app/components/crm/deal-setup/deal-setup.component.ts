@@ -78,8 +78,10 @@ export class DealSetupComponent implements OnInit {
 	activeNTAEMenuItem: number = 1;
 	isNTAEDisabledSteps = true;
 	
-
+	sourceItemMaster: any;
 	isSpinnerVisible: boolean = true;
+	CustomerType: any;
+	ItemMasterId: any;
 
 	constructor(private route: Router,
 
@@ -124,8 +126,7 @@ export class DealSetupComponent implements OnInit {
 		outCome:"",
 		memo:null,	
 		dealLossReasonIds:[],
-	
-
+		dealInfo: null
     }
 
 

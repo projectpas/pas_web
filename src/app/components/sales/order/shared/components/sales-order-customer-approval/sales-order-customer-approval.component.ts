@@ -56,7 +56,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   salesQuoteId: number;
   statusList: any[] = [];
   defaultContactId: any;
-
+  fields: any;
 
   columns: any = [
     { field: 'actionStatus', header: 'Action', width: "100px" },

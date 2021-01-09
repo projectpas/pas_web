@@ -323,7 +323,7 @@ export class SalesOrderDocumentComponent implements OnInit {
 		})
 	}
 
-	openView(content, row) {
+	openView(row) {
 
 		this.salesOrderService.toGetUploadDocumentsList(row.attachmentId, row.salesOrderId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;

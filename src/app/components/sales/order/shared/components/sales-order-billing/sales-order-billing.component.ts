@@ -48,6 +48,8 @@ export class SalesOrderBillingComponent implements OnInit {
     shipCustomerSiteList = [];
     billCustomerSiteList = [];
     customerNamesList: Object;
+    isEditBilling: any;
+
     constructor(public salesOrderService: SalesOrderService,
         public commonService: CommonService,
         public alertService: AlertService,
@@ -384,4 +386,6 @@ export class SalesOrderBillingComponent implements OnInit {
     loadData(event) {
 
     }
+
+    updateWorkOrderBilling() {}
 }

@@ -35,7 +35,7 @@ import { CommonService } from '../../services/common.service';
 /** site component*/
 export class SiteComponent implements OnInit, AfterViewInit {
 	countrycollection: any[];
-	countryListOriginal:any[];
+	countryListOriginal: any[];
 	disableSaveSiteName: boolean;
 	sourceSite: Site;
 	siteId: any;
@@ -104,7 +104,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 	HasAuditDetails: boolean;
 	AuditHistoryTitle: string = 'History of Site'
 	// totelPages: number;
-	formData: FormData; 
+	formData: FormData;
 	uploadedRecords: Object;
 	private table: Table;
 	viewRowData: any;
@@ -147,17 +147,17 @@ export class SiteComponent implements OnInit, AfterViewInit {
 		this.formData = new FormData();
 	}
 
-	
+
 	ngAfterViewInit() {
 		this.dataSource.paginator = this.paginator;
 		this.dataSource.sort = this.sort;
 	}
 
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 	/** site ctor */
-    constructor(public manageMentService: LegalEntityService,
-        private commonService: CommonService,private customerService: CustomerService,private configurations: ConfigurationService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, public ataservice: AtaMainService, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public workFlowtService: SiteService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
+	constructor(public manageMentService: LegalEntityService,
+		private commonService: CommonService, private customerService: CustomerService, private configurations: ConfigurationService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, public ataservice: AtaMainService, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public workFlowtService: SiteService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
 		this.dataSource = new MatTableDataSource();
 		this.sourceSite = new Site();
 
@@ -167,27 +167,27 @@ export class SiteComponent implements OnInit, AfterViewInit {
 			this.countryListOriginal = res[0];
 		})
 	}
-	
+
 	columnsChanges() {
-        this.refreshList();
-    }
-    refreshList() {
-         this.table.reset();
+		this.refreshList();
+	}
+	refreshList() {
+		this.table.reset();
 
-        // this.table.sortOrder = 0;
-        // this.table.sortField = '';
+		// this.table.sortOrder = 0;
+		// this.table.sortField = '';
 
-        this.loadManagementdata();
-    }
-    filterCountries(event) {
-        this.countrycollection = this.countryListOriginal;
+		this.loadManagementdata();
+	}
+	filterCountries(event) {
+		this.countrycollection = this.countryListOriginal;
 
-        this.countrycollection = [...this.countryListOriginal.filter(x => {
-            return x.nice_name.toLowerCase().includes(event.query.toLowerCase())
-        })]
+		this.countrycollection = [...this.countryListOriginal.filter(x => {
+			return x.nice_name.toLowerCase().includes(event.query.toLowerCase())
+		})]
 
-    }
- loadAllSiteData(event) {
+	}
+	loadAllSiteData(event) {
 		this.lazyLoadEventData = event;
 		const pageIndex = parseInt(event.first) / event.rows;;
 		this.pageIndex = pageIndex;
@@ -201,9 +201,9 @@ export class SiteComponent implements OnInit, AfterViewInit {
 		this.workFlowtService.getSearchData(PagingData).subscribe(
 			results => {
 				// this.allSites = results[0]['results'];
-				this.originalTableData=results[0]['results'];
-				this.getListByStatus(this.status ? this.status :this.currentstatus)
-					// this.totalRecords = results[0]['totalRecordsCount']
+				this.originalTableData = results[0]['results'];
+				this.getListByStatus(this.status ? this.status : this.currentstatus)
+				// this.totalRecords = results[0]['totalRecordsCount']
 				// this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 			},
 			error => this.onDataLoadFailed(error)
@@ -216,12 +216,12 @@ export class SiteComponent implements OnInit, AfterViewInit {
 
 	closethis() {
 		this.closeCmpny = false;
-    }
-    sampleExcelDownload() {
-        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Site&fileName=Site.xlsx`;
+	}
+	sampleExcelDownload() {
+		const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Site&fileName=Site.xlsx`;
 
-        window.location.assign(url);
-    }
+		window.location.assign(url);
+	}
 
 
 	public allWorkFlows: Site[] = [];
@@ -285,7 +285,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 				`Updated Status Successfully  `,
 				MessageSeverity.success
 			);
-			
+
 		})
 
 	}
@@ -371,8 +371,8 @@ export class SiteComponent implements OnInit, AfterViewInit {
 		console.log("selected node", event, event.node);
 	}
 	resetViewData() {
-        this.viewRowData = undefined;
-    }
+		this.viewRowData = undefined;
+	}
 
 	managementStructureClick(data) {
 		console.log(this.selectedNodeTest);
@@ -430,11 +430,11 @@ export class SiteComponent implements OnInit, AfterViewInit {
 		// this.dataSource.data = getSiteList;
 		//need
 
-		this.workFlowtService.getSiteList().subscribe(res=>{
+		this.workFlowtService.getSiteList().subscribe(res => {
 
-			this.originalTableData=res[0];
-			this.getListByStatus(this.status ? this.status :this.currentstatus)
-			});
+			this.originalTableData = res[0];
+			this.getListByStatus(this.status ? this.status : this.currentstatus)
+		});
 
 		// this.allSites = getSiteList; //Contain first array of Loaded table Data will put in Html as [value]
 		// this.totalRecords = this.allSites.length;
@@ -522,15 +522,15 @@ export class SiteComponent implements OnInit, AfterViewInit {
 	}
 	//OpenEdit
 	openEdit(content, row) {
-		console.log("row",row);
-		row.countryId= getObjectById('countries_id', row.countryId, this.countryListOriginal),
-		this.isEditMode = true;
-		this.disableSaveForEdit= true;
+		console.log("row", row);
+		row.countryId = getObjectById('countries_id', row.countryId, this.countryListOriginal),
+			this.isEditMode = true;
+		this.disableSaveForEdit = true;
 		this.isSaving = true;
 		this.loadMasterCompanies();
 		this.disableSaveManufacturer = false;
 		this.sourceSite = row;
-		console.log("source Data",this.sourceSite)
+		console.log("source Data", this.sourceSite)
 		//Getting ManagementSite Data
 		this.workFlowtService.getManagementSiteEditData(this.sourceSite.siteId).subscribe(data11 => {
 			this.localManagementSiteEditCollection = data11; //local SiteManagement Data for Edit Collection
@@ -564,10 +564,10 @@ export class SiteComponent implements OnInit, AfterViewInit {
 	}
 
 	getmemo() {
-     
+
 		this.disableSaveForEdit = false;
-	
-}
+
+	}
 	//OpenView
 	openView(content, row) {
 		this.sourceSite = row;
@@ -723,7 +723,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 
 	public saveManagement(siteId, data1) //retriving SiteManagement Array
 	{
-		
+
 		for (let i = 0; i < data1.length; i++) {
 			if (data1[i].data.managementStructureId != null) {
 				data1[i].data.siteId = siteId;
@@ -763,7 +763,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 			this.sourceSite.updatedBy = this.userName;
 			this.sourceSite.masterCompanyId = 1;
 			this.sourceSite.name = this.name;
-			this.sourceSite.countryId= getValueFromObjectByKey('countries_id', this.sourceSite.countryId)
+			this.sourceSite.countryId = getValueFromObjectByKey('countries_id', this.sourceSite.countryId)
 			this.workFlowtService.newSite(this.sourceSite).subscribe(data => {
 				this.siteInfo = data;
 				this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
@@ -784,10 +784,10 @@ export class SiteComponent implements OnInit, AfterViewInit {
 			this.sourceSite.updatedBy = this.userName;
 			this.sourceSite.name = this.name;
 			this.sourceSite.masterCompanyId = 1;
-			this.sourceSite.countryId= getValueFromObjectByKey('countries_id', this.sourceSite.countryId),
-			this.workFlowtService.updateSite(this.sourceSite).subscribe(		
+			this.sourceSite.countryId = getValueFromObjectByKey('countries_id', this.sourceSite.countryId),
+				this.workFlowtService.updateSite(this.sourceSite).subscribe(
 
-				this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success));
+					this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success));
 
 			if (this.selectedNodeTest && this.selectedNodeTest.length > 0) {
 				this.workFlowtService.deleteManagementSite(this.selectedNodeTest).subscribe(data => {
@@ -812,7 +812,7 @@ export class SiteComponent implements OnInit, AfterViewInit {
 
 	auditAssetStatus(siteId: number): void {
 
-		
+
 
 		//.//this.AuditDetails  = [];
 		//this.HasAuditDetails = this.AuditDetails.length > 0;
@@ -849,118 +849,118 @@ export class SiteComponent implements OnInit, AfterViewInit {
 		this.uploadedRecords = null;
 
 		const file = event.target.files;
-		
-        console.log(file);
-		
+
+		console.log(file);
+
 		if (file.length > 0) {
 
 			this.formData.append('file', file[0])
-			
-            this.workFlowtService.bulkUpload(this.formData).subscribe(response => {
-				
+
+			this.workFlowtService.bulkUpload(this.formData).subscribe(response => {
+
 				event.target.value = '';
 
-                this.uploadedRecords = response;
-				
+				this.uploadedRecords = response;
+
 				this.loadAllSiteData(this.constantFilters());
-				
-                this.alertService.showMessage(
-                    'Success',
-                    `Successfully Uploaded  `,
-                    MessageSeverity.success
-                );
-            })
-        }
+
+				this.alertService.showMessage(
+					'Success',
+					`Successfully Uploaded  `,
+					MessageSeverity.success
+				);
+			})
+		}
 
 	}
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
-        }
-        this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
-    getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.siteData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
 		}
-              this.siteData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.siteData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.siteData= newarry;
-			}
-        }
-        this.totalRecords = this.siteData.length ;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-		}
+		this.getListByStatus(this.status ? this.status : this.currentstatus)
+	}
 
-		restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Site',
-            'SiteId',this.restorerecord.siteId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
-                this.modal.close();
-                // this.geListByStatus(this.status ? this.status : 'Active');
-                this.loadAllSiteData(this.lazyLoadEventData);
-    
-                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-            })
-        }
-   
-	
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	status: any = "Active";
+	getListByStatus(status) {
+		const newarry = [];
+		if (status == 'Active') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.siteData = newarry;
+		} else if (status == 'InActive') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.siteData = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				// this.billingInfoList=this.originalTableData;
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.siteData = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.siteData = newarry;
+			}
+		}
+		this.totalRecords = this.siteData.length;
+		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+	}
+
+	restore(content, rowData) {
+		this.restorerecord = rowData;
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+	restorerecord: any = {}
+	restoreRecord() {
+		this.commonService.updatedeletedrecords('Site',
+			'SiteId', this.restorerecord.siteId).subscribe(res => {
+				this.currentDeletedstatus = true;
+				this.modal.close();
+				// this.geListByStatus(this.status ? this.status : 'Active');
+				this.loadAllSiteData(this.lazyLoadEventData);
+
+				this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+			})
+	}
+
+	changeStatus(rowData) {}
 }

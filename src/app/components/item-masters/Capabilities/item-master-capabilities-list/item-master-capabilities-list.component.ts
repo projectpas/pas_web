@@ -1216,7 +1216,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
-    getAuditHistory(content, row){
+    getAuditHistory(row){
         this.getItemMasterDetailsById(row.itemMasterId)
             this.isSaving = true;
             this.itemMasterService.getItemMasterCapabilityAuditHistory(row.itemMasterCapesId).subscribe(

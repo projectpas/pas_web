@@ -53,7 +53,7 @@ export class DocumentTypeComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForDescription: boolean = false;
     descriptionList: any;

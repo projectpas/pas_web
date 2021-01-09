@@ -142,6 +142,9 @@ export class WorkOrderListComponent implements OnInit {
     showTabsGrid: boolean;
     showGridMenu: boolean;
     subWorkOrderId: any = 0;
+    quoteExclusionList: any;
+    freight: any;
+    isContractAvl: any;
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private authService: AuthService,
@@ -1122,4 +1125,6 @@ export class WorkOrderListComponent implements OnInit {
             );
         }
     }
+
+    saveWorkOrderBilling($event) {}
 } 

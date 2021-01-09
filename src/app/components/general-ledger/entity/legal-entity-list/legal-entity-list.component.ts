@@ -627,7 +627,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 	sourceViewforDocumentList:any=[];
 	isSpinnerVisibleHistory:any=false;
 	showViewForTabs:any=false;
-	openView(content, row) {
+	openView(row) {
 // 		            $('.show').add();
 //             $('.modal').add();
 // $('.modal-backdrop').add(); 

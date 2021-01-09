@@ -63,7 +63,7 @@ export class AssetTypeComponent implements OnInit {
     }
     addNew = { ...this.new };
     AuditDetails: any;
-    
+
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private alertService: AlertService,
@@ -493,4 +493,5 @@ export class AssetTypeComponent implements OnInit {
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
     }
+    changeStatus(rowData) {}
 }

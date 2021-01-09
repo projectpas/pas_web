@@ -840,8 +840,8 @@
                                                                         </button>
                                                                     </span>
                                                                     <span>
-                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia,rowData)"
-                                                                           data-target="#contentAuditHistShipVia" data-toggle="modal"
+                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia1,rowData)"
+                                                                           data-target="#contentAuditHistShipVia1" data-toggle="modal"
                                                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                                     </span>
                                                                 </div>
@@ -870,8 +870,8 @@
                                                                     </span>
                                                                     <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restoreDomesticShippingVia(restoreDomesticShippingViaId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                                     <span>
-                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia,rowData)"
-                                                                           data-target="#contentAuditHistShipVia" data-toggle="modal"
+                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia1,rowData)"
+                                                                           data-target="#contentAuditHistShipVia1" data-toggle="modal"
                                                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                                     </span>
                                                                 </div>
@@ -1241,7 +1241,7 @@
                                                         <button type="button" class="btn btn-primary new-table-button"
                                                                 matTooltip="Download Selected Data" matTooltipPosition="above" pButton
                                                                 icon="fa-download" iconPos="left" label="Export Selected Data"
-                                                                (click)="interShipInfo.exportInternCSV({selectionOnly:true})"
+                                                                (click)="interShipInfo.exportCSV({selectionOnly:true})"
                                                                 style="padding:5px 10px !important;"></button>
                                                         <div class="col"
                                                              style="width: 370px; float: right; padding-top: 3px;">

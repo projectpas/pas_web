@@ -554,7 +554,7 @@ export class ManufacturerComponent implements OnInit {
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     manufacturerList: any;

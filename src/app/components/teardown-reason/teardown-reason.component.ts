@@ -51,7 +51,7 @@ export class TeardownReasonComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForEdit: boolean = false;
     descriptionList: any;

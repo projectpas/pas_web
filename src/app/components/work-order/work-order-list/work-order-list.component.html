@@ -952,7 +952,7 @@
                         </div>
                         <div *ngIf="selectedOtherSubTask === 'freight'">
                             <app-work-order-freight [freightForm]="freight" [workOrderFreightList]="workOrderFreightList"
-                                                    [savedWorkOrderData]="savedWorkOrderData" (refreshData)="getFreightListByWorkOrderId()" [taskList]="taskList" [isView]="isView">
+                                                    [savedWorkOrderData]="savedWorkOrderData" [taskList]="taskList" [isView]="isView">
                             </app-work-order-freight>
                         </div>
                     </p-tabPanel>

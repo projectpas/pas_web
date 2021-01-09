@@ -123,35 +123,35 @@ export class SalesOrderCreateComponent implements OnInit {
   selectedCommunicationTab: any = '';
   customerInfoFromSalesQuote: any = {};
   marginSummary: MarginSummary = new MarginSummary();
-  @ViewChild("newSalesOrderForm",{static:false}) public newSalesOrderForm: NgForm;
-  @ViewChild("errorMessagePop",{static:false}) public errorMessagePop: ElementRef;
-  @ViewChild("newSalesQuoteForm",{static:false}) public newSalesQuoteForm: NgForm;
-  @ViewChild(SalesOrderFreightComponent,{static:false}) public salesOrderFreightComponent: SalesOrderFreightComponent;
-  @ViewChild(SalesOrderChargesComponent,{static:false}) public salesOrderChargesComponent: SalesOrderChargesComponent;
-  @ViewChild(SalesOrderPartNumberComponent,{static:false}) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
-  @ViewChild(ManagementStructureComponent,{static:false}) managementStructureComponent: ManagementStructureComponent;
-  @ViewChild(SalesAddressComponent,{static:false}) public salesAddressComponent: SalesAddressComponent;
-  @ViewChild(SalesOrderConfirmationModalComponent,{static:false}) salesOrderConfirmationModalComponent: SalesOrderConfirmationModalComponent;
-  @ViewChild(SalesOrderBillingComponent,{static:false}) public salesOrderBillingComponent: SalesOrderBillingComponent;
-  @ViewChild(SalesOrderShippingComponent,{static:false}) public salesOrderShippingComponent: SalesOrderShippingComponent;
-  @ViewChild(SalesOrderAnalysisComponent,{static:false}) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
+  @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
+  @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
+  @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
+  @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
+  @ViewChild(SalesOrderChargesComponent, { static: false }) public salesOrderChargesComponent: SalesOrderChargesComponent;
+  @ViewChild(SalesOrderPartNumberComponent, { static: false }) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
+  @ViewChild(ManagementStructureComponent, { static: false }) managementStructureComponent: ManagementStructureComponent;
+  @ViewChild(SalesAddressComponent, { static: false }) public salesAddressComponent: SalesAddressComponent;
+  @ViewChild(SalesOrderConfirmationModalComponent, { static: false }) salesOrderConfirmationModalComponent: SalesOrderConfirmationModalComponent;
+  @ViewChild(SalesOrderBillingComponent, { static: false }) public salesOrderBillingComponent: SalesOrderBillingComponent;
+  @ViewChild(SalesOrderShippingComponent, { static: false }) public salesOrderShippingComponent: SalesOrderShippingComponent;
+  @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
   employeesList: any = [];
   customerWarning: any = {};
   status: IStatus[] = [];
   freight = [];
   charge = [];
   @Input() salesQuoteId: number = 0;
-  @ViewChild(SalesOrderApproveComponent,{static:false}) public salesOrderApproveComponent: SalesOrderApproveComponent;
-  @ViewChild(SalesOrderCustomerApprovalComponent,{static:false}) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
+  @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
+  @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
   copyData: string;
   isCreateModeHeader: boolean = false;
   isHeaderSubmit: boolean = false;
-  @ViewChild("updateConfirmationModal",{static:false})
+  @ViewChild("updateConfirmationModal", { static: false })
   public updateConfirmationModal: ElementRef;
-  @ViewChild("viewQuote",{static:false})
+  @ViewChild("viewQuote", { static: false })
   public viewQuoteModal: ElementRef;
   submitType: boolean = true;
   totalFreights = 0;
@@ -227,15 +227,15 @@ export class SalesOrderCreateComponent implements OnInit {
     });
 
     this.managementStructureId = this.currentUserManagementStructureId;
-    
-    if(!this.isEdit) {
+
+    if (!this.isEdit) {
       this.load(this.managementStructureId);
     }
-    
+
     setTimeout(() => {
       this.getSoInstance(true);
-    },							 
-    2200);
+    },
+      2200);
 
     this.salesQuoteService.salesOrderViewSubj$.subscribe(data => {
       this.salesOrderView = data;
@@ -308,17 +308,17 @@ export class SalesOrderCreateComponent implements OnInit {
 
   getSOMarginSummary() {
     this.salesOrderService.getSOMarginSummary(this.id).subscribe(result => {
-        if (result) {
-          let summary: any = result;
-          this.marginSummary = summary;
-          this.totalCharges = this.marginSummary.misc;
-          this.totalFreights = this.marginSummary.freightAmount;
-          this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
-          this.salesOrderService.setTotalCharges(this.marginSummary.misc);
-        } else {
-          this.marginSummary = new MarginSummary();
-        }
+      if (result) {
+        let summary: any = result;
+        this.marginSummary = summary;
+        this.totalCharges = this.marginSummary.misc;
+        this.totalFreights = this.marginSummary.freightAmount;
+        this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
+        this.salesOrderService.setTotalCharges(this.marginSummary.misc);
+      } else {
+        this.marginSummary = new MarginSummary();
       }
+    }
     )
   }
 
@@ -1594,4 +1594,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.isSpinnerVisible = false;
     });
   }
+
+  getChargesList() {}
+  getFreightList() {}
 }

@@ -246,6 +246,8 @@ isSpinnerVisible: boolean = false;
     subWOPartNoId: any=0;
     defaultTab = 'materialList';
     isViewForApprovedPart: boolean = false;
+    customerId: any;
+    
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,

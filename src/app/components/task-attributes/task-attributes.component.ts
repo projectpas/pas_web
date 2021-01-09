@@ -46,7 +46,7 @@ export class TaskAttributesComponent implements OnInit {
     selectedColumns = this.headers;
     formData = new FormData()
     @ViewChild('dt',{static:false})
-
+    modal: any;
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;

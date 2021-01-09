@@ -29,7 +29,7 @@ export class WorkOrderDocumentsComponent implements OnInit {
  disableSave: Boolean = true;
   formData = new FormData();
   isEditButton = false;
-  sourceViewforDocumentList = [];
+  sourceViewforDocumentList: any = [];
   workOrderId: any;
  
   sourceViewforDocumentListColumns = [

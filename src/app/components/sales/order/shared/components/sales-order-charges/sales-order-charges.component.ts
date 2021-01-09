@@ -64,6 +64,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     deletedrowIndex: any;
     isEnableUpdateButton: boolean = true;
     isSaveChargesDesabled: boolean = true;
+    frieghtsCreateForm: any;
 
     constructor(private salesOrderService: SalesOrderService,
         private authService: AuthService,
@@ -309,7 +310,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.storedData = [];
     }
 
-    delete(rowData, rowIndex) {
+    delete() {
         this.deleteModal.close();
         this.isSpinnerVisible = true;
         if (!this.selectedRowForDelete.salesOrderChargesId) {
@@ -610,4 +611,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     validated() {
         this.isSaveChargesDesabled = false;
     }
+
+    formatStringToNumberGlobal($event) {}
 }

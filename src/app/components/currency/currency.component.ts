@@ -70,7 +70,7 @@ export class CurrencyComponent implements OnInit {
     selectedRowforDelete: any;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     countrycollection: any[];
     countryListOriginal: any[];
     disableSaveCurrency:boolean=false;

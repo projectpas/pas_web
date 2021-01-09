@@ -183,7 +183,7 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 	auditHistory: any;
 	isPrimary: any;
 	restorerecord: any;
-	
+
 	constructor(private http: HttpClient, private commonService: CommonService,
 		 
 		 private authService: AuthService, private modalService: NgbModal,
@@ -259,10 +259,6 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 	}
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
-	}
-	addATAChapter(rowData) {
-		
-
 	}
 
 	enableDisableAdvancedSearch(val) {
@@ -434,6 +430,31 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
             }
         }
 	}
+	manufacturerData: any;
+	selectAircraftManfacturer: any;
+	aircraftModelList: any;
+	selectedAircraftModel: any;
+	dashNumberList: any;
+	selectedDashNumbers: any;
+	currentDeletedstatus: boolean;
+	LoadAtachapter:any;
+	selectedATAchapter: any;
+	selectedATASubChapter: any;
+	atasubchapterValues: any;
+	DisabledMode: any;
+	isTangible: any;
+	AssetAcquisitionTypeList: any;
+	currentstatus: any;
+	LoadValues: any;
+	selectedModelId: any;
+	getDashNumberByTypeandModel: any;
+	LoadDashnumber: any;
+	selectedDashnumber: any;
+	dashNumberUnknown: any;
+	add_ataChapterList: any;
+	add_ataSubChapterList: any;
+	add_SelectedId: any;
+	add_SelectedModels: any;
 	
 	dismissModel() {}
 
@@ -442,4 +463,10 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 	deleteConformation(str) {}
 
 	getVendorName() {}
+
+	restoreRecord() {}
+	getATAAuditHistoryById(rowData){} 
+	deleteContent1: any;
+	nextClick() {}
+	previousClick() {}
  }

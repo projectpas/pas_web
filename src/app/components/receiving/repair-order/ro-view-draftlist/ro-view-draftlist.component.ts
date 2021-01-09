@@ -118,4 +118,6 @@ export class ROViewStockDraftListComponent implements OnInit {
     addStockLine() {
         this.toggleAddDetails = !this.toggleAddDetails;
     }
+
+    paginatorFocusOut($event, part) {}
 }

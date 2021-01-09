@@ -38,7 +38,11 @@ export class SubWorkOrderListComponent implements OnInit {
     workOrderAssetList: any;
     workOrderMaterialList: any;
     pageSize: number = 10;
-
+    selectedOtherSubTask: any;
+    workFlowId: any;
+    isWorkOrder: any;
+    otherOptionShow: any;
+    
     constructor(public _router: Router, private workOrderService: WorkOrderService) { }
 
     ngOnInit() {
@@ -195,4 +199,7 @@ export class SubWorkOrderListComponent implements OnInit {
         const subworkorderid=0;
         window.open(`/workordersmodule/workorderspages/app-sub-work-order?workorderid=${this.workOrderId}&mpnid=${this.mpnId}&subworkorderid=${rowData.subWorkOrderId}&workOrderMaterialsId=${this.workOrderMaterialsId}&exist=${1}`);
     }
+
+    showOtherOptions() {}
+    otherOptionSelected(option) {}
 }

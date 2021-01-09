@@ -47,6 +47,8 @@ export class PhoneComponent implements OnInit, OnChanges {
     addList: any = [];
     cusContactList: any;
     customerContact: any;
+    firstName: any;
+    
     constructor(private activeModal: NgbActiveModal, private communicationService: CommunicationService, private employeeService: EmployeeService, private commonService: CommonService) {}
     
     ngOnInit(): void {

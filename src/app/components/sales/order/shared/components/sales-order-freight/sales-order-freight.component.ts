@@ -30,7 +30,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     @Output() refreshData = new EventEmitter();
     @Input() view: boolean = false;
     @Input() isQuote = false;
-    markupList:any = [];
+    markupList: any = [];
     @Input() isView: boolean = false;
     shipViaList: any = [];
     mainEditingIndex: any;
@@ -81,7 +81,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             this.costPlusType = this.salesOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.salesOrderFreightList[0].headerMarkupId);
         }
-        this.isView = this.isView ? this.isView :false;
+        this.isView = this.isView ? this.isView : false;
     }
 
     ngOnChanges() {
@@ -147,7 +147,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 this.getTotalBillingAmount();
                 this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
             }
-        },error => {
+        }, error => {
             this.isSpinnerVisible = false;
         })
     }
@@ -310,10 +310,10 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             this.refreshFreightsOnSaveOrDelete();
             this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
         }, error => {
-                this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadError(error)
-            })
+            this.isSpinnerVisible = false;
+            const errorLog = error;
+            this.onDataLoadError(error)
+        })
         this.isSaveChargesDesabled = true;
         this.storedData = [];
     }
@@ -575,4 +575,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     deleteRow(index, form: NgForm): void {
         this.freightForm.splice(index, 1);
     }
+
+    dismissModelAlettRestore() {}
+    formatStringToNumberGlobal($event) {}
 }

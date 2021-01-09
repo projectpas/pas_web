@@ -199,7 +199,7 @@
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex"> 
-                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(invView,rowData)">
+                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(rowData)">
                     <td style="width:160px"
                         *ngFor="let col of columns"
                         class="ui-resizable-column"
@@ -214,7 +214,7 @@
                         <div *ngIf="currentDeletedstatus==false">
                          <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"  (onChange)="toggleIsActive(rowData,$event)" [disabled]="rowData.isPrimary || isViewMode==true"></p-inputSwitch> 
-                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span> 
                                 <a class="btn nobg"
                                    (click)="openContentEdit(rowData)" matTooltip="Edit"
@@ -235,7 +235,7 @@
                         <div *ngIf="currentDeletedstatus==true">
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"   [disabled]="true"></p-inputSwitch> 
-                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span data-toggle="modal" data-target="#legalEntityHistory">
                                 <a class="btn nobg btn-hist-cstm"
                                    (click)="getLegalEntityHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>

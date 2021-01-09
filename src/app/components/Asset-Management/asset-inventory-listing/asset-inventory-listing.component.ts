@@ -473,14 +473,14 @@ get userName(): string {
         }
     }
 
-    viewSelectedRowdbl(content,rowData) {
-        this.openView(content,rowData);
+    viewSelectedRowdbl(rowData) {
+        this.openView(rowData);
         $('#invView').modal('show');
     }
 
     // isSpinnerVisibleView:any=false;
     assetInventoryId:any;
-    openView(content,row) {
+    openView(row) {
         
         this.isSpinnerVisibleHistory = true;
         if(row && row.assetInventoryId !=undefined){
