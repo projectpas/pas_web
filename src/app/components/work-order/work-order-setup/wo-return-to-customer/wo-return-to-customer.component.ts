@@ -71,7 +71,7 @@ export class WOReturnToCustomerComponent implements OnInit {
         );
     }
 
-    edit(rowData) {}
+    edit(rowData, rowIndex) {}
 
     deleteMemo(rowDate) {}
 }

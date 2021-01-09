@@ -161,7 +161,7 @@
                     <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                     <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                         <ng-container *ngFor="let col of columns" >
                             <td class="table-column-width"
@@ -185,7 +185,7 @@
                             <span data-toggle="modal" data-target="#viewPhone"><a class="btn nobg btn-view-cstm"
                                 (click)="phoneView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span  *ngIf="deletedStatusInfo==false  && !isView" data-target="#addNewPhone" data-toggle="modal"><a class="btn nobg btn-edit-cstm"
-                                (click)="edit(rowData, i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                (click)="edit(rowData, rowIndex)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                           
                             <span *ngIf="deletedStatusInfo==false  && !isView" ><a class="btn nobg btn-delete-cstm" (click)="showDeletePhoneConfirmation(rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                             <span *ngIf="deletedStatusInfo==true && !isView"><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>

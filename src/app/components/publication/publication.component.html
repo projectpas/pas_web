@@ -485,7 +485,7 @@
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}"
                         matTooltipPosition="above"
-                        (onChange)="handleChange(rowData)"
+                        (onChange)="handleChange(rowData, $event)"
                       ></p-inputSwitch>
                       <span>
                         <a

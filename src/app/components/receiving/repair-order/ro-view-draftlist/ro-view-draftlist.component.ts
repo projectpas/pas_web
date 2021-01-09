@@ -76,7 +76,7 @@ export class ROViewStockDraftListComponent implements OnInit {
 
     }
 
-    private gotoStockLinePage(event: any, part: RepairOrderPart, stockline): void {
+    public gotoStockLinePage(event: any, part: RepairOrderPart, stockline): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {

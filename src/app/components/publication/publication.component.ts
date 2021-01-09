@@ -326,7 +326,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.modal.result.then(() => {
         }, () => { console.log('Backdrop click') })
     }
-    restoreRecord(record){
+    restoreRecord(){
         this.commonService.updatedeletedrecords('Publication','PublicationRecordId',this.restorerecord.publicationRecordId).subscribe(res => {
             this.modal.close();
             this.getDeleteListByStatus(true)

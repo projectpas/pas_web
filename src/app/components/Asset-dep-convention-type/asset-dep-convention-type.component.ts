@@ -20,8 +20,8 @@ import { CommonService } from '../../services/common.service';
 @Component({
     selector: 'app-asset-dep-convention-type',
     templateUrl: './asset-dep-convention-type.component.html',
-        styleUrls: ['./asset-dep-convention-type.component.scss'],
-        animations: [fadeInOut]
+    styleUrls: ['./asset-dep-convention-type.component.scss'],
+    animations: [fadeInOut]
 })
 
 export class AssetDepConventionTypeComponent implements OnInit {
@@ -75,8 +75,8 @@ export class AssetDepConventionTypeComponent implements OnInit {
 
     currentstatus: string = 'Active';
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     /** DepConvension ctor */
 
     paginatorState: { rows: number; first: number; };
@@ -86,8 +86,8 @@ export class AssetDepConventionTypeComponent implements OnInit {
     loading: boolean;
     disposalTypePagination: AssetDepConvention[];
 
-    constructor(private breadCrumb: SingleScreenBreadcrumbService, 
-        private commonService: CommonService,private alertService: AlertService, private assetDepConventionTypeService: AssetDepConventionTypeService, private modalService: NgbModal, private authService: AuthService, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
+    constructor(private breadCrumb: SingleScreenBreadcrumbService,
+        private commonService: CommonService, private alertService: AlertService, private assetDepConventionTypeService: AssetDepConventionTypeService, private modalService: NgbModal, private authService: AuthService, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
         this.sourceAction = new AssetDepConvention();
@@ -96,10 +96,10 @@ export class AssetDepConventionTypeComponent implements OnInit {
     ngOnInit(): void {
         this.loadData();
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-asset-dep-convention-type';
-        this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);       
+        this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
     }
 
-   
+
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
@@ -114,8 +114,8 @@ export class AssetDepConventionTypeComponent implements OnInit {
         // this.loadingIndicator = true;
         this.assetDepConventionTypeService.getAll().subscribe(data => {
 
-            this.originalTableData=data[0].columnData;
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = data[0].columnData;
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
             this.allunitData = data[0].columHeaders;
             // this.assetDepList = data[0].columnData;
@@ -457,92 +457,93 @@ export class AssetDepConventionTypeComponent implements OnInit {
 
         this.loadData();
     }
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.assetDepList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.assetDepList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.assetDepList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.assetDepList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.assetDepList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.assetDepList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.assetDepList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.assetDepList = newarry;
+            }
         }
-        this.totalRecords = this.assetDepList.length ;
+        this.totalRecords = this.assetDepList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('AssetDepConvention',
-            'AssetDepConventionId',this.restorerecord.assetDepConventionId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('AssetDepConvention',
+            'AssetDepConventionId', this.restorerecord.assetDepConventionId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
+    changeStatus(rowData) {}
 }

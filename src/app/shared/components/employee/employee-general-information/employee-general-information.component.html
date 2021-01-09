@@ -482,7 +482,7 @@
                         <label class="control-label">Job Title <span class="clr-red">*</span></label>
                     </div>
                     <div class="col-sm-5">
-                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onjobTitleKeyUP($event) (onSelect)="onSelectJob($event)" [suggestions]="localCollection" (completeMethod)="filterJObTitles($event)" [size]="30"
+                        <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="jobName" [ngModelOptions]="{standalone: true}" (onKeyUp)=onjobTitleKeyUP() (onSelect)="onSelectJob($event)" [suggestions]="localCollection" (completeMethod)="filterJObTitles($event)" [size]="30"
                                         [minLength]="1" [dropdown]="true">
                             <ng-template let-jobName pTemplate="item">
                                 <div class="ui-helper-clearfix">{{jobName}}</div>

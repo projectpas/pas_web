@@ -250,7 +250,7 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
-  onClosePartDelete(event) {
+  onClosePartDelete() {
     this.deletePartModal.close();
   }
 

@@ -444,7 +444,7 @@ export class PartNumberFilterComponent {
     }
 
   }
-  onCloseMultiPartNumbers(event) {
+  onCloseMultiPartNumbers() {
 
     this.multiPartModal.close();
 

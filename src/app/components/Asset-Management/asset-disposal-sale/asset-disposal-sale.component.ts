@@ -338,6 +338,6 @@ export class AssetDisposalSaleComponent implements OnInit {
     }
 
     toggleIsActive(rowData,$event) {}
-    openSaleHistory(rowData) {}
+    openSaleHistory(history, rowData) {}
     openView(rowData) {}
 }

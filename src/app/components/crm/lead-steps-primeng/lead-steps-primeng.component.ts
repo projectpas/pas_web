@@ -418,4 +418,6 @@ export class LeadStepsPrimengComponent implements OnInit, AfterViewInit {
 		this.disableSave = false;
 
 	}
+
+	dismissModel() {}
 }

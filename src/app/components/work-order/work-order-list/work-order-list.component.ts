@@ -382,7 +382,7 @@ export class WorkOrderListComponent implements OnInit {
         })
 
     }
-    fieldSearch(value, field) {
+    fieldSearch(field) {
         this.isGlobalFilter = false;
         if (field === 'workOrderStatus') {
             this.currentStatus = 'open';

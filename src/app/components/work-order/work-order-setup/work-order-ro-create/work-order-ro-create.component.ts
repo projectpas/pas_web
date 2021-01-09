@@ -52,7 +52,7 @@ export class WorkOrderROCreateComponent implements OnInit {
         })
     }
 
-    createNewRoWorkOrder() {
+    createNewRoWorkOrder(rowData) {
         if(this.isSubWorkOrder==true){
             window.open(`/vendorsmodule/vendorpages/workorder-ro-create/${0}/${0}/${0}/${0}/${this.subWOPartNoId}`)
         }else{

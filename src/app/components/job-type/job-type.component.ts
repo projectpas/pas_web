@@ -281,5 +281,6 @@ export class JobTypeComponent implements OnInit {
             }
         }
     }
-
+    
+    dismissModel() {}
 }
