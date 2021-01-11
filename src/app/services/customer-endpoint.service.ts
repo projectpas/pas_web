@@ -98,18 +98,18 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly getGlobalCustomer: string = "/api/customer/globalSearch";
 
 
-    private readonly _getAircraftMapped: string = "/api/Customer/getCustomerAircraftMapped";
+    private readonly _getAircraftMapped: string = environment.baseUrl +  "/api/Customer/getCustomerAircraftMapped";
     private readonly _getAircraftMappedAudit: string = "/api/Customer/getCustomerAircraftMappedAudit";
     private readonly _CustomerAircraftPostUrl: string = "/api/Customer/CustomerAircraftPost";
-    private readonly _getTaxTypeRateMapped: string = "/api/Customer/getCustomerTaxTypeRateMapped";
+    private readonly _getTaxTypeRateMapped: string = environment.baseUrl + "/api/Customer/getCustomerTaxTypeRateMapped";
     private readonly _CustomerTaxTypeRatePostUrl: string = "/api/Customer/CustomerTaxTypeRatePost";
 
     private readonly _CustomerAircraftSearchUrl: string = '/api/Customer/searchCustomerAircraftMappingDataByMultiTypeIdModelIDDashID';
     private readonly _CustomerATAPostUrl: string = "/api/Customer/CustomerContactATAPost";
     private readonly _getATAMappedByContactId: string = "/api/Customer/getCustomerContactATAMapped";
-    private readonly _getATAMappedByCustomerId: string = "/api/Customer/getCustomerATAMapped";
-    private readonly _getContactsByCustomerId: string = "/api/Customer/GetCustomerContacts";
-    private readonly _getCustomerContactGet: string = "/api/Customer/customer-contact-get";
+    private readonly _getATAMappedByCustomerId: string = environment.baseUrl + "/api/Customer/getCustomerATAMapped";
+    private readonly _getContactsByCustomerId: string = environment.baseUrl + "/api/Customer/GetCustomerContacts";
+    private readonly _getCustomerContactGet: string = environment.baseUrl + "/api/Customer/customer-contact-get";
 
 
     private readonly _deleteATAMappedByContactId: string = "/api/Customer/DeleteCustomerContactATAMapping"
