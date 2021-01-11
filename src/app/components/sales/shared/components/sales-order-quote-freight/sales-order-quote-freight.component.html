@@ -187,8 +187,8 @@
           </ng-container>
           <td class="btn-spaces text-center" >
             <div *ngIf="deletedStatusInfo==false">
-            <span data-target="#addNewFreight" data-toggle="modal" *ngIf="!isView">
-              <a class="btn nobg btn-edit-cstm" (click)="edit(freight, rowIndex)" matTooltip="Edit">
+            <span data-toggle="modal" *ngIf="!isView">
+              <a class="btn nobg btn-edit-cstm" (click)="openFreight(addNewFreight); edit(freight, rowIndex)" matTooltip="Edit">
                 <i class="fa fa-pencil"></i>
               </a>
             </span>
@@ -272,14 +272,12 @@
 
 </div>
 
-
-<ng-template #addNewFreight let-c="close" let-d="dismiss" data-backdrop="static">
-<div *ngIf="!view" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-xlg">
+<ng-template #addNewFreight let-c="close" let-d="dismiss" data-backdrop="static" data-keyboard="false">
+  <div *ngIf="!view">
     <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">
+        <button type="button" class="close" aria-label="Close" (click)="onCloseTextAreaInfo()">
           &times;
         </button>
         <h4 class="modal-title"> {{isEdit ? 'Edit' : 'Add'}} Freight</h4>
@@ -304,7 +302,7 @@
                     <th rowspan="2">Weight</th>
                     <th rowspan="2">UOM</th>
                     <th colspan="4">Dimensions</th>
-                   
+                  
                     <th rowspan="2">Currency</th>
                     <th rowspan="2">Amount<span class="clr-red">*</span></th>
                     <th rowspan="2">Memo</th>
@@ -368,7 +366,7 @@
                         <i class="fa fa-pencil" data-toggle="modal"
                           style="position: relative;top: 6px;" data-target="#textarea-popupFreight" matTooltip="Memo"
                           matTooltipPosition="above" (click)="onAddTextAreaInfo(f,i)"></i>
-                         
+                        
                       </div>
                     </td>
                     <td>
@@ -427,14 +425,14 @@
         <button class="btn btn-primary pull-right " (click)="saveFreightList()" [disabled]="!frieghtsCreateForm.valid ||  isEnableUpdateButton">
           {{ isEdit ? 'Update' : 'Save' }}
         </button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">
+        <button type="button" class="btn btn-danger" data-dismiss="modal"  (click)="onCloseTextAreaInfo()">
           Close
         </button>
       </div>
     </div>
   </div>
-</div>
 </ng-template>
+
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Are You Sure Want to Delete?</h4>

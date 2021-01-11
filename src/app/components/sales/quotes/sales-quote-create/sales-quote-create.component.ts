@@ -52,6 +52,7 @@ import { SOQuoteMarginSummary } from "../../../../models/sales/SoQuoteMarginSumm
 import { SalesPartNumberComponent } from "../../shared/components/sales-part-number/sales-part-number.component";
 import { SalesQuoteDocumentsComponent } from "../sales-document/salesQuote-document.component";
 import { SalesQuoteAnalysisComponent } from "../sales-quote-analysis/sales-quote-analysis.component";
+declare var $ : any;
 
 @Component({
   selector: "app-sales-quote-create",
@@ -1099,6 +1100,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuote.memo = this.tempMemo;
     }
     this.enableUpdateButton = false;
+    this.modal.close();
   }
 
   closeErrorMessage() {
@@ -1766,6 +1768,10 @@ export class SalesQuoteCreateComponent implements OnInit {
   openConfirmationModal(submitType: boolean) {
     this.submitType = submitType;
     this.modal = this.modalService.open(this.updateConfirmationModal, { size: "sm" });
+  }
+
+  openDescription(content) {
+    this.modal = this.modalService.open(content, { size: "sm" });
   }
 
   closeConfirmationModal() {
