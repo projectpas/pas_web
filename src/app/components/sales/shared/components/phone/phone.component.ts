@@ -4,7 +4,7 @@ import { CommunicationService } from '../../../../../shared/services/communicati
 import { EmployeeService } from '../../../../../services/employee.service';
 import { CommonService } from '../../../../../services/common.service'
 
-import * as $ from 'jquery';
+declare var $ : any;
 import { getObjectById } from '../../../../../generic/autocomplete';
 import { DBkeys } from '../../../../../services/db-Keys';
 

@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { MenuItem, LazyLoadEvent } from 'primeng/api';//bread crumb
 // import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';

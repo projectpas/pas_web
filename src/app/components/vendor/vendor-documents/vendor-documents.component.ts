@@ -11,7 +11,7 @@ import { editValueAssignByCondition } from '../../../generic/autocomplete';
 import { VendorService } from '../../../services/vendor.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { AuditHistory } from '../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Documents } from '../../../models/documents.model';
 import { CustomerService } from '../../../services/customer.service';
 import * as moment from 'moment';

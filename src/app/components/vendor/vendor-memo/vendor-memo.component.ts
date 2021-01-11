@@ -5,7 +5,7 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { VendorService } from '../../../services/vendor.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { editValueAssignByCondition } from '../../../generic/autocomplete';
-import * as $ from 'jquery';
+declare var $ : any;
 
 @Component({
 	selector: 'app-vendor-memo',

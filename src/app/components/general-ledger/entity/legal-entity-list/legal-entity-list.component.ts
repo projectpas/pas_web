@@ -1,7 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { fadeInOut } from '../../../../services/animations';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { AuthService } from '../../../../services/auth.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
@@ -847,10 +848,11 @@ this.isLockBox=false;
 
 
 
-	getLegalEntityHistoryById(rowData) {
+	getLegalEntityHistoryById(content,rowData) {
 		this.isSpinnerVisible = true;
 		this.entityService.getLeaglEntityHistoryById(rowData.legalEntityId).subscribe(res => {
 			this.auditHistory = res;
+			this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' }); 
 			this.isSpinnerVisible = false;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -858,7 +860,7 @@ this.isLockBox=false;
 			this.errorMessageHandler(errorLog);
 		});
 	}
-	restorerecord: any = {}
+	restorerecord: any = {} 
 	downloadFileUpload(rowData) {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
@@ -889,7 +891,8 @@ this.isLockBox=false;
 	}
 
 	closeHistoryModal() {
-		$("#legalEntityHistory").modal("hide");
+		// $("#legalEntityHistory").modal("hide");
+		this.modal.close();
 	}
 
 	openStep1() {

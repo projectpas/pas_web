@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MenuItem } from 'primeng/api';//bread crumb
@@ -13,6 +14,7 @@ import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { DatePipe } from '@angular/common';
 import { StocklineService } from '../../../../services/stockline.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'app-customer-work-setup',
     templateUrl: './customer-work-setup.component.html',
@@ -20,7 +22,9 @@ import { StocklineService } from '../../../../services/stockline.service';
     animations: [fadeInOut],
     providers: [DatePipe]
 })
+// 
 export class CustomerWorkSetupComponent implements OnInit {
+    
     modal: NgbModalRef;
     receivingForm: any = {};
     isEditMode: boolean = false;
@@ -114,9 +118,11 @@ export class CustomerWorkSetupComponent implements OnInit {
         private _actRoute: ActivatedRoute,
         private receivingCustomerWorkService: ReceivingCustomerWorkService,
         private authService: AuthService,
-        private router: Router,
+        private router: Router,		private modalService: NgbModal,
         private alertService: AlertService,
+        
         private stocklineService: StocklineService) {
+            
         this.receivingForm.receivingNumber = 'Creating';
         this.receivingForm.conditionId = 0;
         this.receivingForm.siteId = 0;
@@ -981,7 +987,7 @@ export class CustomerWorkSetupComponent implements OnInit {
     const mcId= this.authService.currentUser
     ? this.authService.currentUser.masterCompanyId
     : null;
-        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId ', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name', strText, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
          res.forEach(element => {
                 if (element.label == 'Receive MPN') {
                     this.customerWarningListId = element.value;
@@ -1034,7 +1040,7 @@ export class CustomerWorkSetupComponent implements OnInit {
 
     showAlertMessage() {
         $('#warnRestrictMesg').modal("show");
-    }
+   }
 
     WarnRescticModel() {
         this.isEditCustomerWork = false;

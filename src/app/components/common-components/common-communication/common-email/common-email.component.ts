@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ViewChild, Input, OnChanges, ElementRef, ViewEncapsulation } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';

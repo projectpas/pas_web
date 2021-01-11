@@ -50,7 +50,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	//private readonly _entityUrlNewACHList: string = "/api/legalEntity/getEntityACHById"; 
 
 	private readonly _legalEntityHistory: string =this.baseUrl + "/api/legalEntity/legalEntityHistoryById"; 
-	private readonly _legalEntityHistoryContact: string =this.baseUrl + "api/legalEntity/Legalcontactauditdetails"; 
+	private readonly _legalEntityHistoryContact: string =this.baseUrl + "/api/legalEntity/Legalcontactauditdetails"; 
 	private readonly _managementposturl: string =this.baseUrl + "/api/ManagementStrcture/managementEntitypost";
 	private readonly _managementrestoreturl: string =this.baseUrl + "/api/ManagementStrcture/managementrestore";
 	private readonly _deleteLegalEntity: string =this.baseUrl + "/api/legalEntity/deleteLegalEntity";
@@ -83,7 +83,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	private readonly _updateShippingViaDetails: string = this.baseUrl +"/api/legalEntity/updateShipViaDetails";
 	private readonly _legalEntityShipAddressdetails: string = this.baseUrl +"/api/legalEntity/legalEntityShippingAddressDetails";
 	private readonly _legalEntityShippingUrlNew: string = this.baseUrl +"/api/legalEntity/updateStatuslegalEntityShipping";
-	private readonly _getShipViaByShippingId: string = "/api/legalEntity/DomesticShipviaList";
+	private readonly _getShipViaByShippingId: string = this.baseUrl +"/api/legalEntity/DomesticShipviaList";
 	private readonly _getShipViaHistory: string =this.baseUrl + "/api/legalEntity/getShipViaHistory";
 	private readonly _shippingInfoUrl: string =this.baseUrl + "/api/legalEntity/LegalEntityShippingPost";
 	private readonly _saveShipViaDetails: string = this.baseUrl +"/api/legalEntity/addShipViaDetails";
@@ -177,39 +177,39 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 	
 	legalEntityContactFileUpload(file, legalEntityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.ContactexcelUpload}?legalEntityId=${legalEntityId}`, file).catch(error => {
+		return this.http.post(`${this.ContactexcelUpload}?legalEntityId=${legalEntityId}`, file).catch(error => {
 			return this.handleErrorCommon(error, () => this.legalEntityContactFileUpload(file, legalEntityId));
 		})
 	
 	}
 	legalEntityShippingFileUpload(file, legalEntityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadShipping}?legalEntityId=${legalEntityId}`, file).catch(error => {
+		return this.http.post(`${this.excelUploadShipping}?legalEntityId=${legalEntityId}`, file).catch(error => {
 			return this.handleErrorCommon(error, () => this.legalEntityShippingFileUpload(file, legalEntityId));
 		})
 	}
 	legalEntityInternationalShippingFileUpload(file, legalEntityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUploadInterShipping}?legalEntityId=${legalEntityId}`, file).catch(error => {
+		return this.http.post(`${this.excelUploadInterShipping}?legalEntityId=${legalEntityId}`, file).catch(error => {
 			return this.handleErrorCommon(error, () => this.legalEntityInternationalShippingFileUpload(file, legalEntityId));
 		})
 	}
 	getlegalEntityShippingHistory( legalEntityId,legalEntityShippingAddressId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityShippingHistory}/${legalEntityId}?entityShippingAddressId=${legalEntityShippingAddressId}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get(`${this._legalEntityShippingHistory}/${legalEntityId}?entityShippingAddressId=${legalEntityShippingAddressId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityShippingHistory( legalEntityId,legalEntityShippingAddressId));
 		})
 	}
 	getlegalEntityInterShippingHistory(legalEntityId, legalEntityInterShippingId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityInterShippingHistory}?LegalEntityId=${legalEntityId}&internationalShippingId=${legalEntityInterShippingId}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get(`${this._legalEntityInterShippingHistory}?LegalEntityId=${legalEntityId}&internationalShippingId=${legalEntityInterShippingId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityInterShippingHistory(legalEntityId, legalEntityInterShippingId));
 		})
 	}
 
 	getlegalEntityShipViaHistory(legalEntityId, legalEntityShippingAddressId, legalEntityShippingId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityShipViaHistory}?legalEntityId=${legalEntityId}&legalEntityShippingAddressId=${legalEntityShippingAddressId}&legalEntityShippingId=${legalEntityShippingId}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get(`${this._legalEntityShipViaHistory}?legalEntityId=${legalEntityId}&legalEntityShippingAddressId=${legalEntityShippingAddressId}&legalEntityShippingId=${legalEntityShippingId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityShipViaHistory(legalEntityId, legalEntityShippingAddressId, legalEntityShippingId));
 		})
 	}
 	getlegalEntityInterShipViaHistory(legalEntityId, internationalShippingId, shippingViaDetailsId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityInterShipViaHistory}?legalEntityId=${legalEntityId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get(`${this._legalEntityInterShipViaHistory}?legalEntityId=${legalEntityId}&internationalShippingId=${internationalShippingId}&shippingViaDetailsId=${shippingViaDetailsId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getlegalEntityInterShipViaHistory(legalEntityId, internationalShippingId, shippingViaDetailsId));
 		})
 	}
@@ -319,7 +319,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	updateStatusForInternationalShippingVia(id, status, updatedBy) {
 
-		let endpointUrl = `${this.configurations.baseUrl}/api/legalEntity/intershippingviadetailsstatus?id=${id}&status=${status}&updatedBy=${updatedBy}`;
+		let endpointUrl = `${this.baseUrl}/api/legalEntity/intershippingviadetailsstatus?id=${id}&status=${status}&updatedBy=${updatedBy}`;
 		return this.http.put(endpointUrl, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.	updateStatusForInternationalShippingVia(id, status, updatedBy));
@@ -369,13 +369,13 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	getCustomerContactAuditDetails1<T>(customerContactId, customerId) {
 
 
-		return this.http.get<T>(`${this.configurations.baseUrl}${this._customerContactHistory1}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get<T>(`${this._customerContactHistory1}?customerContactId=${customerContactId}&customerId=${customerId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getCustomerContactAuditDetails1<T>(customerContactId, customerId));
 		});
 	}
 
 	getDocumentList(legalEntityId,deletedStatus) {
-		return this.http.get(`${this.configurations.baseUrl}/api/legalEntity/getlegalEntityDocumentDetail/${legalEntityId}?isdeleted=${deletedStatus}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get(`${this.baseUrl}/api/legalEntity/getlegalEntityDocumentDetail/${legalEntityId}?isdeleted=${deletedStatus}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getDocumentList(legalEntityId,deletedStatus));
 		});
 	}
@@ -406,7 +406,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 }
 
 	LegalEntityBillingFileUpload(file, entityId) {
-		return this.http.post(`${this.configurations.baseUrl}${this.excelUpload}?legalEntityId=${entityId}`, file)
+		return this.http.post(`${this.excelUpload}?legalEntityId=${entityId}`, file)
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.LegalEntityBillingFileUpload(file, entityId));
 		});
@@ -448,7 +448,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 
 	getlegalEntityBillingHistory(legalEntityId, legalEntityBillingAddressId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._legalEntityBillingHistory}?legalEntityId=${legalEntityId}&legalEntityBillingaddressId=${legalEntityBillingAddressId}`, this.getRequestHeaders()).catch(error => {
+		return this.http.get(`${this._legalEntityBillingHistory}?legalEntityId=${legalEntityId}&legalEntityBillingaddressId=${legalEntityBillingAddressId}`, this.getRequestHeaders()).catch(error => {
 			return this.handleErrorCommon(error, () => this.getGeneralrobj());
 		});
 	}
@@ -494,19 +494,19 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 
 	getEntityDataById(entityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntitydatabyid/${entityId}`).catch(error => {
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntitydatabyid/${entityId}`).catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDataById(entityId));
 		});
 	}
 	getBankingApisData(entityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/Getentitybybanking?legalEntityId=${entityId}`).catch(error => {
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/Getentitybybanking?legalEntityId=${entityId}`).catch(error => {
 			return this.handleErrorCommon(error, () => this.getBankingApisData(entityId));
 		});
 	}
 	
 
 	getMSHistoryDataById(msID) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/ManagementStrcture/mshistory/?msID=${msID}`).catch(error => {
+		return this.http.get<any>(`${this.baseUrl}/api/ManagementStrcture/mshistory/?msID=${msID}`).catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDataById(msID));
 		});
 	}
@@ -805,7 +805,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	getNewLegalEntityContactInfo<T>(param: any): Observable<any> { 
         delete param.contactId;
 		let body = JSON.stringify(param);
-		let endpointUrl = `/api/legalentity/LegalEntityContactPost`;
+		let endpointUrl = this.baseUrl +`/api/legalentity/LegalEntityContactPost`;
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(endpointUrl, body, this.getRequestHeaders())
             .map((response: Response) => {
@@ -817,7 +817,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	
 	addLegalEntityContactDetails<T>(param: any): Observable<any> {
 		let body = JSON.stringify(param);
-		let endpointUrl = `/api/legalentity/ContactPost`;
+		let endpointUrl = this.baseUrl +`/api/legalentity/ContactPost`;
         let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
         return this.http.post(endpointUrl, body, this.getRequestHeaders())
             .map((response: Response) => {
@@ -867,26 +867,26 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 
 	getEntityLockboxDataById(legalEntityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityLockBoxdata?legalEntityId=${legalEntityId}`, this.getRequestHeaders())
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntityLockBoxdata?legalEntityId=${legalEntityId}`, this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityLockboxDataById(legalEntityId));
 		});
 	}
 	getEntityDomesticDataById(entityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityDomesticWireById?legalEntityId=${entityId}`, this.getRequestHeaders())
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntityDomesticWireById?legalEntityId=${entityId}`, this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityDomesticDataById(entityId));
 		});
 	}
 	getEntityInternationalDataById(entityId) {
 		//alert('lol,');
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityInternationalWireById?legalEntityId=${entityId}`, this.getRequestHeaders())
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntityInternationalWireById?legalEntityId=${entityId}`, this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityInternationalDataById(entityId));
 		});
 	}
 	getEntityACHDataById(entityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/api/legalEntity/getEntityACHById?legalEntityId=${entityId}`, this.getRequestHeaders())
+		return this.http.get<any>(`${this.baseUrl}/api/legalEntity/getEntityACHById?legalEntityId=${entityId}`, this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getEntityACHDataById(entityId));
 		});
@@ -959,7 +959,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 
 	getLegalEntityHistory(customerId) {
-		return this.http.get(`${this.configurations.baseUrl}/${this._customerHistory}?LegalEntityId=${customerId}`, this.getRequestHeaders())
+		return this.http.get(`${this._customerHistory}?LegalEntityId=${customerId}`, this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getLegalEntityHistory(customerId));
 		});
@@ -967,7 +967,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 
 	
 	getLegalEntityContactById(contactId) {
-		return this.http.get(`${this.configurations.baseUrl}${this._getContactById}/${contactId}`, this.getRequestHeaders())
+		return this.http.get(`${this._getContactById}/${contactId}`, this.getRequestHeaders())
 		.catch(error => {
 			return this.handleErrorCommon(error, () => this.getLegalEntityAddressById(contactId));
 		});
@@ -1004,7 +1004,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	}
 	getLegalEntityHistoryById(legalEntityId) {
 		//return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistory}?legalEntityId=${legalEntityId}`)
-		return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistory}/${legalEntityId}`)
+		return this.http.get<any>(`${this._legalEntityHistory}/${legalEntityId}`)
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityHistoryById(legalEntityId));
 			});
@@ -1034,7 +1034,7 @@ export class LegalEntityEndpontService extends EndpointFactory {
 	// 		});
 	// }
 	getLegalEntityContactHistoryById(legalentitycontactId,legalentityId) {
-		return this.http.get<any>(`${this.configurations.baseUrl}/${this._legalEntityHistoryContact}?legalentitycontactId=${legalentitycontactId}&legalentityId=${legalentityId}`)
+		return this.http.get<any>(`${this._legalEntityHistoryContact}?legalentitycontactId=${legalentitycontactId}&legalentityId=${legalentityId}`)
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getLegalEntityContactHistoryById(legalentitycontactId,legalentityId));
 			});

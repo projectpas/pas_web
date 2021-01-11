@@ -37,7 +37,7 @@ import { editValueAssignByCondition, getObjectById, getValueFromObjectByKey, sel
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
 import { emailPattern, urlPattern, phonePattern, namePattern } from '../../../validations/validation-pattern';
 declare const google: any;
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 import * as moment from 'moment';

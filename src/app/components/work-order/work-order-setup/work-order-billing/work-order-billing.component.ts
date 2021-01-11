@@ -1,6 +1,6 @@
 ﻿import { Component, Input, OnInit, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import { CommonService } from '../../../../services/common.service';
 import { AddressModel } from '../../../../models/address.model';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';

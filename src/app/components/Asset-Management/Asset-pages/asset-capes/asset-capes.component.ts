@@ -18,7 +18,8 @@ import { AuthService } from '../../../../services/auth.service';
 import { listSearchFilterObjectCreation, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { ConfigurationService } from '../../../../services/configuration.service';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 @Component({

@@ -6,7 +6,7 @@
 import { Component, ViewChild, AfterViewInit } from "@angular/core";
 
 import { LoginControlComponent } from './login-control.component';
-import * as $ from 'jquery';
+declare var $ : any;
 @Component({
     selector: "app-login",
     templateUrl: './login.component.html',
