@@ -105,18 +105,31 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
     }
 
+    arrayVendlsit: any = [];
+    arrayPercentList: any = [];
+
     refresh(isView) {
+        this.arrayVendlsit = [];
+        this.arrayPercentList.push(0);
         // this.isView = isView;
         this.isSpinnerVisible = true;
         forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId,this.deletedStatusInfo),
             this.actionService.getCharges(),
-            this.vendorService.getVendorsForDropdown(),
-            this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")
+            //this.vendorService.getVendorsForDropdown(),
+            this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join()),
+            //this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
             this.chargesTypes = res[1];
-            this.allVendors = res[2];
+            let vendorList : any = res[2]; 
+            this.allVendors = vendorList.map(x => {
+                return {
+                    vendorId: x.vendorId,
+                    vendorName: x.vendorName
+                }
+            }); 
             this.markupList = res[3];
             this.setVendors();
         }, error => this.onDataLoadError(error));
@@ -260,7 +273,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             this.salesOrderChargesList[this.mainEditingIndex] = this.chargeForm[0];
 
             $('#addNewCharges').modal('hide');
-            this.isEdit = false;
+            this.isEdit = true;
         }
         else {
             let temp = [];

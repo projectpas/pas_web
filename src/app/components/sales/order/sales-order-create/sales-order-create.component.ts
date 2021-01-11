@@ -1211,7 +1211,7 @@ export class SalesOrderCreateComponent implements OnInit {
         break;
       case SalesOrderActionType.CloseSalesOrder:
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId).subscribe(result => {
+          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1220,7 +1220,7 @@ export class SalesOrderCreateComponent implements OnInit {
         break;
       case SalesOrderActionType.CancelSalesOrder:
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId).subscribe(result => {
+          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;

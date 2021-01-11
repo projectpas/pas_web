@@ -97,23 +97,34 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
     }
 
+    arrayEmplsit:any=[];
+    arrayUnitOfMeasureList:any=[];
+    arrayCurrencyList:any=[];
+    arrayPercentList:any=[];
+
     refresh(isView) {
         // this.isView = isView;
         this.isSpinnerVisible = true;
+        this.arrayEmplsit.push(0);
+        this.arrayUnitOfMeasureList.push(0);
+        this.arrayCurrencyList.push(0);
+        this.arrayPercentList.push(0);
         forkJoin(this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, 0),
-            this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.customerId),
-            this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName'),
-            this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code'),
-            this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")).subscribe(response => {
+            //this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.customerId),
+            this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join()),
+            //this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName'),
+            this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join()),
+            //this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code'),
+            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
+            //this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue"))
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
                 this.unitOfMeasureList = response[2];
                 this.currencyList = response[3];
                 this.markupList = response[4];
-
-            }, error => this.onDataLoadError(error))
-
+            }, error => this.onDataLoadError(error));
     }
 
     refreshFreightsOnSaveOrDelete(fromDelete = false) {
