@@ -8,7 +8,8 @@ import {
   DialogType,
   MessageSeverity
 } from "../../../../services/alert.service";
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
+declare var $ : any;
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 import { ISalesQuote } from "../../../../models/sales/ISalesQuote.model";
@@ -101,7 +102,6 @@ export class SalesOrderListComponent {
   ) { }
 
   ngOnInit() {
-    debugger;
     this.isSpinnerVisible = true;
     this.salesQuote = new SalesQuote();
     //this.headerValue = new HeaderValue();
@@ -461,7 +461,7 @@ export class SalesOrderListComponent {
       PagingData.filters[x] = dt.filters[x].value;
     });
 
-    this.salesQuoteService
+    this.salesOrderService
       .search(PagingData).subscribe(res => {
         const vList = res[0]['results'].map(x => {
           return {
@@ -499,7 +499,7 @@ export class SalesOrderListComponent {
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
   }
 
-  getAuditHistoryById(rowData) {
+  getAuditHistoryById(content,rowData) {
     this.isSpinnerVisible = true;
     this.salesOrderService.getSOHistory(rowData.salesOrderId).subscribe(res => {
         //this.auditHistory = res;
@@ -511,6 +511,7 @@ export class SalesOrderListComponent {
                           }
                       });  
         this.isSpinnerVisible = false;
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }, err => {
       this.isSpinnerVisible = false;
     });

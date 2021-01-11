@@ -1133,7 +1133,12 @@ export class SalesOrderCreateComponent implements OnInit {
               `Sales Order updated successfully.`,
               MessageSeverity.success
             );
-            this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
+            this.getSalesOrderInstance(this.id, true);
+            //this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
+            if (createNewVersion) {
+              this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
+            }
+            this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
           });

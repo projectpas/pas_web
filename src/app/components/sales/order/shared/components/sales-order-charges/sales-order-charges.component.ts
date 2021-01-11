@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
+declare var $ : any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
@@ -65,7 +66,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     isEnableUpdateButton: boolean = true;
     isSaveChargesDesabled: boolean = true;
     frieghtsCreateForm: any;
-
+    isUpdate: boolean = false;
     constructor(private salesOrderService: SalesOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -169,8 +170,10 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             if (Number(this.costPlusType) == 3) {
                 this.chargesFlatBillingAmount = res[0].markupFixedPrice;
             }
+            this.isUpdate = true;
         } else {
             this.salesOrderChargesList = [];
+            this.isUpdate = false;
         }
         this.chargeForm = [];
         this.salesOrderChargesLists = [];

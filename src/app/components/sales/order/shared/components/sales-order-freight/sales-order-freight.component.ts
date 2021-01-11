@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnChanges, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
+declare var $ : any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { AuthService } from '../../../../../../services/auth.service';
@@ -56,7 +57,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     deletedStatusInfo: boolean = false;
     restorerecord: any = {}
     deletedrowIndex: any;
-
+    isUpdate: boolean = false;
     constructor(private salesOrdeService: SalesOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -160,9 +161,11 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             if (Number(this.costPlusType) == 3) {
                 this.freightFlatBillingAmount = res[0].markupFixedPrice;
             }
+            this.isUpdate = true;
             // this.overAllMarkup = res[0].headerMarkupId;
         } else {
             this.salesOrderFreightList = [];
+            this.isUpdate = false;
         }
         this.freightForm = [];
         this.salesOrderFreightLists = [];
