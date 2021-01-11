@@ -103,7 +103,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
 
     getAircraftModelListByAircraftManufacturerId<T>(aircraftManufacturerId: string, idlist? : string ): Observable<T> {
-        let endpointUrl = `${this.getModelsListById}/${aircraftManufacturerId}/${idlist !== undefined ? idlist : '0'}`;        
+        let endpointUrl = this.configurations.baseUrl +`${this.getModelsListById}/${aircraftManufacturerId}/${idlist !== undefined ? idlist : '0'}`;        
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAircraftModelListByAircraftManufacturerId(aircraftManufacturerId,idlist));
