@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { ConfigurationService } from '../../../../../../services/configuration.service';
 import { AuditHistory } from '../../../../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Documents } from '../../../../../../models/documents.model';
 import { CommonService } from '../../../../../../services/common.service';
 import { CustomerService } from '../../../../../../services/customer.service';

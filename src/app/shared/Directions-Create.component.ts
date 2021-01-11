@@ -3,7 +3,7 @@ import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
 import { IDirections } from "../Workflow/Directions";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-import * as $ from 'jquery';
+declare var $ : any;
 @Component({
     selector: 'grd-directions',
     templateUrl: './Directions-Create.component.html',

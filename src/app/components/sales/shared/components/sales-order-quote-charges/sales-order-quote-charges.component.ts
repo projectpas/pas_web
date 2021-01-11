@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../../services/alert.service';
 import { WorkOrderService } from '../../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../../services/auth.service';

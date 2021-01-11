@@ -29,7 +29,7 @@ import { editValueAssignByCondition, formatNumberAsGlobalSettingsModule, getObje
 import { CommonService } from '../../../../services/common.service';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
-import * as $ from 'jquery';
+declare var $ : any;
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { emailPattern, urlPattern, phonePattern } from '../../../../validations/validation-pattern';
 

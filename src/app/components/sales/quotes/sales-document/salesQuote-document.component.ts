@@ -13,7 +13,7 @@ import { getObjectByValue, getObjectById, getValueFromObjectByKey, editValueAssi
 import { SalesQuoteService } from '../../../../services/salesquote.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Documents } from '../../../../models/documents.model';
 import { CommonService } from '../../../../services/common.service';
 import { CustomerService } from '../../../../services/customer.service';
