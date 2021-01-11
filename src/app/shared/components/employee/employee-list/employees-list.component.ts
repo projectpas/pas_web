@@ -21,7 +21,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { EmployeeService } from '../../../../services/employee.service';
 import { Router } from '@angular/router';
 import { AppTranslationService } from '../../../../services/app-translation.service';
-import $ from "jquery";
+//import $ from "jquery";
 import * as moment from 'moment';
 import { CommonService } from '../../../../services/common.service';
 import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
@@ -32,7 +32,7 @@ import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { ThrowStmt } from '@angular/compiler';
 import { DatePipe } from '@angular/common';
-
+declare let $ : any;
 
 
 
@@ -45,6 +45,7 @@ import { DatePipe } from '@angular/common';
 })
 /** employees-list component*/
 export class EmployeesListComponent implements OnInit {
+    
     activeIndex: number;
     private isSaving: boolean;
     isDeleteMode: boolean = false;
@@ -725,24 +726,17 @@ export class EmployeesListComponent implements OnInit {
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
     openView(row) {
-        this.isSpinnerVisible = true;
+        this.isSpinnerVisible = true;       
         $('#step1').collapse('show');
         this.toGetEmployeeDetailsByEmpId(row.employeeId);
-
-
         this.toGetDocumentsListNew(row.employeeId);
         this.viewEmpID = row.employeeId;
         this.loadEmployeeRoles(row.employeeId);
-
-
         this.isSpinnerVisible = false;
-
-
-
         this.empService.getEmployeeListforView(row.employeeId).subscribe(
             results => this.onemployeeDataLoadSuccessful(results[0]),
             error => this.onDataLoadFailed(error)
-        );
+        );        
     }
 
     dismissModel() {
@@ -816,9 +810,7 @@ export class EmployeesListComponent implements OnInit {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;            
         });
     }
     getColorCodeForHistory(i, field, value) {
