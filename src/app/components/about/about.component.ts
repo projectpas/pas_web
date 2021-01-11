@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 @Component({

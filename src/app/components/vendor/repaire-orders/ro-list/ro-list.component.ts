@@ -11,7 +11,7 @@ import { RepairOrderService } from '../../../../services/repair-order.service';
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
-import * as $ from 'jquery';
+declare var $ : any;
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MenuItem } from 'primeng/api';
 import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';

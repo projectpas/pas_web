@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 @Component({

@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { MenuItem } from 'primeng/api';//bread crumb
 import { AuthService } from '../../services/auth.service';

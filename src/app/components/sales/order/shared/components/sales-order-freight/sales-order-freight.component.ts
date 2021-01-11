@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnChanges, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { AuthService } from '../../../../../../services/auth.service';

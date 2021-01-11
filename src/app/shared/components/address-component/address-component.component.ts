@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { CustomerShippingModel } from '../../../models/customer-shipping.model';

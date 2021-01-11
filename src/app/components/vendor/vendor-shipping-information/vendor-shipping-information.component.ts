@@ -12,7 +12,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { MasterComapnyService } from '../../../services/mastercompany.service';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import * as $ from 'jquery';
+declare var $ : any;
 import { editValueAssignByCondition, getObjectById, getObjectByValue, getValueFromObjectByKey } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CustomerInternationalShippingModel } from '../../../models/customer-internationalshipping.model';

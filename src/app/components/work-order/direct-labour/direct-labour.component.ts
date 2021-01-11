@@ -5,7 +5,7 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { LaborAndOverheadCostService } from '../../../services/laborandoverheadcost.service';
 import { AuthService } from '../../../services/auth.service';
 import { CommonService } from '../../../services/common.service';
-import * as $ from 'jquery';
+declare var $ : any;
 
 @Component({
     selector: 'app-direct-labour',

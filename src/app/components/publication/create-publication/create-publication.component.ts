@@ -30,7 +30,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 @Component({

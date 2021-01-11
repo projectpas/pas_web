@@ -9,7 +9,7 @@ import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { getObjectById, formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
-import * as $ from 'jquery';
+declare var $ : any;
 
 @Component({
     selector: 'grd-charges',

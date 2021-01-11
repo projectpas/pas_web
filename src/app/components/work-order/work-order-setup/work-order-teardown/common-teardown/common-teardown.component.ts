@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
 import { WorkOrderService } from '../../../../../services/work-order/work-order.service';
