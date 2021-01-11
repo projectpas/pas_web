@@ -12,7 +12,7 @@ import { CommonService } from '../../../services/common.service';
 import { Currency } from '../../../models/currency.model';
 import { ItemMasterLoanExchange } from '../../../models/item-master-loan-exchange.model';
 import { CurrencyService } from '../../../services/currency.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { getValueFromArrayOfObjectById, listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { TableModule, Table } from 'primeng/table';

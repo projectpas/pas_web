@@ -26,7 +26,8 @@ import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomp
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ManufacturerService } from '../../../../services/manufacturer.service';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 import { MenuItem } from 'primeng/api';

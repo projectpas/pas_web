@@ -23,7 +23,7 @@ import { AircraftModelService } from '../../../../services/aircraft-model/aircra
 import { DashNumberService } from '../../../../services/dash-number/dash-number.service';
 import { AuthService } from '../../../../services/auth.service';
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { MenuItem } from 'primeng/api';

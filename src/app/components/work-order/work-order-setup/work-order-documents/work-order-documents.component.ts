@@ -1,7 +1,7 @@
 ﻿import { Component, Input, OnInit, ViewChild } from '@angular/core';
 
 import { Documents } from '../../../../models/work-order-documents.modal';
-import * as $ from 'jquery';
+declare var $ : any;
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';

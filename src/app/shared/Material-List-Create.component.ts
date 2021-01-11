@@ -13,7 +13,7 @@ import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { WorkOrderQuoteService } from "../services/work-order/work-order-quote.service";
 import { NgForm } from "@angular/forms";
-import * as $ from 'jquery';
+declare var $ : any;
 import * as cloneDeep from 'lodash/cloneDeep';
 import { CommonService } from "../services/common.service";
 import { AtaSubChapter1Service } from "../services/atasubchapter1.service";

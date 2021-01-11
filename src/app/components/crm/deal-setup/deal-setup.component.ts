@@ -4,7 +4,7 @@ import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CustomerService } from '../../../services/customer.service';
 import { NgForm } from '@angular/forms';
-import * as $ from 'jquery';
+declare var $ : any;
 import { GlAccountService } from '../../../services/glAccount/glAccount.service';
 import { GlAccount } from '../../../models/GlAccount.model';
 import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition,getValueByFieldFromArrayofObject, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';

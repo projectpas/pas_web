@@ -14,7 +14,7 @@ import { AccountListingService } from '../../../services/account-listing/account
 import { GlAccountService } from '../../../services/glAccount/glAccount.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
-import * as $ from 'jquery';
+declare var $ : any;
 import * as moment from 'moment';
 import { CommonService } from '../../../services/common.service';
 import { DatePipe } from '@angular/common';

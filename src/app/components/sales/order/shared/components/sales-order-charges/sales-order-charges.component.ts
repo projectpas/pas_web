@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
-//import * as $ from 'jquery';
 declare var $ : any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';

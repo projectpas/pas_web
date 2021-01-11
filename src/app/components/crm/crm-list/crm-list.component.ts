@@ -1,7 +1,7 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import { MatTableDataSource, MatDialog } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';

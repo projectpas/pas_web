@@ -27,7 +27,7 @@ import { takeUntil } from "rxjs/operators";
 import { Subject } from 'rxjs';
 import { DBkeys } from '../../../../services/db-Keys';
 import { DatePipe } from '@angular/common';
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 @Component({

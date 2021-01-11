@@ -55,7 +55,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { getObjectByValue, getPageCount, getObjectById, validateRecordExistsOrNot, getValueFromObjectByKey, editValueAssignByCondition, getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule, formatStringToNumber } from '../../../generic/autocomplete';
 import { AssetAcquisitionType } from '../../../models/asset-acquisition-type.model';
 import { AssetAcquisitionTypeService } from "../../../services/asset-acquisition-type/asset-acquisition-type.service";
-import * as $ from 'jquery';
+declare var $ : any;
 import * as moment from 'moment';
 import { ConditionService } from '../../../services/condition.service';
 // import { e } from '@angular/core/src/render3';

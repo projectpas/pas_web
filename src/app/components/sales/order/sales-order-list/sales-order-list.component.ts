@@ -8,7 +8,6 @@ import {
   DialogType,
   MessageSeverity
 } from "../../../../services/alert.service";
-//import * as $ from 'jquery';
 declare var $ : any;
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
