@@ -16,7 +16,8 @@ import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
 import { editValueAssignByCondition } from '../../../../generic/autocomplete';
 import { titlePattern } from '../../../../validations/validation-pattern';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 @Component({
 	selector: 'app-legal-entity-banking',
 	templateUrl: './legal-entity-banking.component.html',

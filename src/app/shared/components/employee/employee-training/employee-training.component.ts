@@ -21,7 +21,7 @@ import { editValueAssignByCondition, formatNumberAsGlobalSettingsModule, getValu
 import { CommonService } from '../../../../services/common.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AircraftModelService } from '../../../../services/aircraft-model/aircraft-model.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import * as moment from 'moment';
 
 @Component({

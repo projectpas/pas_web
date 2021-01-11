@@ -33,7 +33,7 @@ import { NotificationService } from './services/notification.service';
 import { NotificationEndpoint } from './services/notification-endpoint.service';
 import { AccountService } from './services/account.service';
 import { AccountEndpoint } from './services/account-endpoint.service';
-import * as $ from 'jquery';
+declare var $ : any;
 
 describe('AppComponent', () => {
     beforeEach(async(() => {

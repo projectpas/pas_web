@@ -7,9 +7,10 @@ import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { StocklineListSalesFilter } from '../models/sales/StocklineListSalesFilter';
 import { CustomPaginate } from '../models/custom-paginate';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class StocklineEndpoint extends EndpointFactory {
+	baseUrl = environment.baseUrl;
 	private readonly _actionsUrlNew1: string = "/api/StockLine/stockLine";
 	private readonly _deleteStockUrl: string = "/api/StockLine/deleteIntegration";
 	private readonly _actionsUrlNew: string = "/api/StockLine/stockLinepost";//which will be specified in the Controller
@@ -22,7 +23,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _stockLineListUrl: string = "/api/StockLine/Get";//which will be specified in the Controller
 	private readonly _actionsUrl1: string = "/api/StocklineAdjustment/Get";//which will be specified in the Controller
 	private readonly _integrationPortalById: string = "/api/StockLine/IntegrationPortalGet";
-	private readonly _timeLifeGetById: string = "/api/StockLine/timeLifeGetById";
+	private readonly _timeLifeGetById: string =this.baseUrl + "/api/StockLine/timeLifeGetById";
 	private readonly _stocklineGetById: string = "/api/StockLine/StocklineGetById";//which will be specified in the Controller
 	private readonly _adjustmentUrl: string = "/api/StockLine/AdjustmentGet";//which will be specified in the Controller
 	private readonly _adjustmentUrlNew: string = "/api/StockLine/stockLineAdjustmentpost";//which will be specified in the Controller 

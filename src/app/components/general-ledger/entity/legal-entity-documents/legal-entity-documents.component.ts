@@ -9,7 +9,7 @@ import { MasterComapnyService } from '../../../../services/mastercompany.service
 import { LegalEntityService } from '../../../../services/legalentity.service';
 import { MatDialog } from '@angular/material';
 import { ConfigurationService } from '../../../../services/configuration.service';
-import * as $ from 'jquery';
+declare var $ : any;
 @Component({
     selector: 'app-legal-entity-documents',
     templateUrl: './legal-entity-documents.component.html',

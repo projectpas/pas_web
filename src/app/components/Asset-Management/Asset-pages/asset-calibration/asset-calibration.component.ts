@@ -14,7 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { formatNumberAsGlobalSettingsModule, getObjectById } from '../../../../generic/autocomplete';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CommonService } from '../../../../services/common.service';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { MenuItem } from 'primeng/api';
 @Component({
     selector: 'app-asset-calibration',
