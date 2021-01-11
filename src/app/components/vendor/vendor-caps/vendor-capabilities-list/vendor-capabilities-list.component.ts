@@ -9,7 +9,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { MasterCompany } from '../../../../models/mastercompany.model';
 import { VendorService } from '../../../../services/vendor.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { CommonService } from '../../../../services/common.service';

@@ -7,7 +7,8 @@ import { AlertService, MessageSeverity } from '../../../../services/alert.servic
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonService } from '../../../../services/common.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { MenuItem } from 'primeng/api';
 @Component({
     selector: 'app-asset-maintenance-warranty',

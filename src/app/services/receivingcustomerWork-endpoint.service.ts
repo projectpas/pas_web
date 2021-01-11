@@ -4,33 +4,35 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-@Injectable()
+import { environment } from 'src/environments/environment';
+@Injectable() 
 export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
-	private readonly _actionsUrl: string = "/api/ReceivingCustomerWork/Get";
-	private readonly _actionsUrlNew: string = "/api/ReceivingCustomerWork/receivingCustomerWork";
-	private readonly _actionsUpdateUrlNew: string = "/api/ReceivingCustomerWork/UpdatereceivingCustomerWork";
-	private readonly _actionDeleteUrlNew: string = "/api/ReceivingCustomerWork/deletereceivingCustomerWork";
-    private readonly _actionsUrlAuditHistory: string = "/api/ReceivingCustomerWork/auditHistoryById";
-    private readonly _actionsTimeUrlNew: string = "/api/ReceivingCustomerWork/PostTimeLine";
-    private readonly _TimeLifeUpdate: string = "/api/ReceivingCustomerWork/timeLifeUpdate";
-    private readonly _updateActiveInactive: string = "/api/ReceivingCustomerWork/updateForActive";
-    private readonly _actionsUrlAudit: string = "/api/ReceivingCustomerWork/GetAudit";
-    private readonly _customerList: string = '/api/ReceivingCustomerWork/List';
-    private readonly _customerWorkRowBySearchId: string = '/api/ReceivingCustomerWork/receivingCustomerWorkById';
-    private readonly _customerGlobalSearch: string = '/api/ReceivingCustomerWork/ListGlobalSearch'
-    get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
-    get customerWorkRowById() { return this.configurations.baseUrl + this._customerWorkRowBySearchId; }
+    baseUrl = environment.baseUrl;
+	private readonly _actionsUrl: string =this.baseUrl + "/api/ReceivingCustomerWork/Get";
+	private readonly _actionsUrlNew: string =this.baseUrl + "/api/ReceivingCustomerWork/receivingCustomerWork";
+	private readonly _actionsUpdateUrlNew: string = this.baseUrl +"/api/ReceivingCustomerWork/UpdatereceivingCustomerWork";
+	private readonly _actionDeleteUrlNew: string =this.baseUrl + "/api/ReceivingCustomerWork/deletereceivingCustomerWork";
+    private readonly _actionsUrlAuditHistory: string =this.baseUrl + "/api/ReceivingCustomerWork/auditHistoryById";
+    private readonly _actionsTimeUrlNew: string =this.baseUrl + "/api/ReceivingCustomerWork/PostTimeLine";
+    private readonly _TimeLifeUpdate: string =this.baseUrl + "/api/ReceivingCustomerWork/timeLifeUpdate";
+    private readonly _updateActiveInactive: string =this.baseUrl + "/api/ReceivingCustomerWork/updateForActive";
+    private readonly _actionsUrlAudit: string = this.baseUrl +"/api/ReceivingCustomerWork/GetAudit";
+    private readonly _customerList: string = this.baseUrl +'/api/ReceivingCustomerWork/List';
+    private readonly _customerWorkRowBySearchId: string =this.baseUrl + '/api/ReceivingCustomerWork/receivingCustomerWorkById';
+    private readonly _customerGlobalSearch: string =this.baseUrl + '/api/ReceivingCustomerWork/ListGlobalSearch'
+    // get actionsUrl() { return this._actionsUrl; }
+    // get customerWorkRowById() { return  this._customerWorkRowBySearchId; }
 	constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 		super(http, configurations, injector);
 	}
 	getReasonEndpoint<T>(): Observable<T> {
-		return this.http.get<T>(this.actionsUrl, this.getRequestHeaders())
+		return this.http.get<T>(this._actionsUrl, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getReasonEndpoint());
 			});
     }
     getCustomerWorkListByid<T>(receivingCustomerWorkId: any): Observable<T> {
-        let endpointurl = `${this.customerWorkRowById}/${receivingCustomerWorkId}`;
+        let endpointurl = `${this._customerWorkRowBySearchId}/${receivingCustomerWorkId}`;
         return this.http.get<T>(endpointurl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getCustomerWorkListByid(receivingCustomerWorkId));
@@ -195,17 +197,17 @@ export class ReceivingCustomerWorkEndpoint extends EndpointFactory {
             });
     }
     getAuditHistory(receivingCustomerWorkId) {
-        return this.http.get(`${this.configurations.baseUrl}/${this._actionsUrlAudit}?receivingCustomerWorkId=${receivingCustomerWorkId}`).catch(error => {
+        return this.http.get(`${this._actionsUrlAudit}?receivingCustomerWorkId=${receivingCustomerWorkId}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getAuditHistory(receivingCustomerWorkId));
         });
     }
     getUpdateActionforActive(receivingCustomerWorkId:number,status:string,updatedBy:string) {
-        return this.http.get(`${this.configurations.baseUrl}/${this._updateActiveInactive}?id=${receivingCustomerWorkId}&status=${status}&updatedBy=${updatedBy}`).catch(error => {
+        return this.http.get(`${this._updateActiveInactive}?id=${receivingCustomerWorkId}&status=${status}&updatedBy=${updatedBy}`).catch(error => {
             return this.handleErrorCommon(error, () => this.getUpdateActionforActive(receivingCustomerWorkId,status,updatedBy));
         });
     }
     getGlobalCustomerRecords<T>(value, pageIndex, pageSize): Observable<T> {
-        return this.http.get<T>(`${this.configurations.baseUrl}${this._customerGlobalSearch}?value=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
+        return this.http.get<T>(`${this._customerGlobalSearch}?value=${value}&pageNumber=${pageIndex}&pageSize=${pageSize}`, this.getRequestHeaders())
             .catch(error => {
                 return this.handleErrorCommon(error, () => this.getGlobalCustomerRecords(value, pageIndex, pageSize));
             });

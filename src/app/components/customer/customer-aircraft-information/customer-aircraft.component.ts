@@ -13,7 +13,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Table } from 'primeng/table';
 @Component({
     selector: 'app-customer-aircraft',

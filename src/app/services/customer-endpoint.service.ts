@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
+import { environment } from 'src/environments/environment';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
@@ -16,7 +16,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerTypeUrl: string = "/api/Customer/CustomerTypeGet";
     private readonly _aircraftTypeUrl: string = "/api/Customer/aircraftTypeGet";
     private readonly _updateShipAddressDetails: string = "/api/Customer/updateShipAddress";
-    private readonly _customersUrlNew: string = "/api/Customer/customers";
+    private readonly _customersUrlNew: string = environment.baseUrl + "/api/Customer/customers";
     private readonly _updateActiveInactive: string = "/api/Customer/customersUpdateforActive";
     private readonly _insertToaddAudit: string = "/api/Customer/insertToAuditaddress";
     private readonly _updateToaddressaudit: string = "/api/Customer/updateToAuditaddress";
@@ -27,7 +27,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerBillAddressUrl = "/api/Customer/customerAddressGet";
     private readonly _cusShippingGeturl = "/api/Customer/cusshippingGet";
     private readonly _cusShippingGeturlwithId = "/api/Vendor/cusshippingGetwithid";
-    private readonly _customerList: string = '/api/Customer/List';
+    private readonly _customerList: string = environment.baseUrl + '/api/Customer/List';
     private readonly __venshipwithid = "/api/Vendor/venshippingGetwithid";
     private readonly _customerBillViaDetails = "/api/Customer/getCustomerBillViaDetails";
     private readonly _getBilladdresshistory = "/api/Customer/getCustomerBillAddressHistory";
@@ -98,18 +98,18 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly getGlobalCustomer: string = "/api/customer/globalSearch";
 
 
-    private readonly _getAircraftMapped: string = "/api/Customer/getCustomerAircraftMapped";
+    private readonly _getAircraftMapped: string = environment.baseUrl +  "/api/Customer/getCustomerAircraftMapped";
     private readonly _getAircraftMappedAudit: string = "/api/Customer/getCustomerAircraftMappedAudit";
     private readonly _CustomerAircraftPostUrl: string = "/api/Customer/CustomerAircraftPost";
-    private readonly _getTaxTypeRateMapped: string = "/api/Customer/getCustomerTaxTypeRateMapped";
+    private readonly _getTaxTypeRateMapped: string = environment.baseUrl + "/api/Customer/getCustomerTaxTypeRateMapped";
     private readonly _CustomerTaxTypeRatePostUrl: string = "/api/Customer/CustomerTaxTypeRatePost";
 
     private readonly _CustomerAircraftSearchUrl: string = '/api/Customer/searchCustomerAircraftMappingDataByMultiTypeIdModelIDDashID';
     private readonly _CustomerATAPostUrl: string = "/api/Customer/CustomerContactATAPost";
     private readonly _getATAMappedByContactId: string = "/api/Customer/getCustomerContactATAMapped";
-    private readonly _getATAMappedByCustomerId: string = "/api/Customer/getCustomerATAMapped";
-    private readonly _getContactsByCustomerId: string = "/api/Customer/GetCustomerContacts";
-    private readonly _getCustomerContactGet: string = "/api/Customer/customer-contact-get";
+    private readonly _getATAMappedByCustomerId: string = environment.baseUrl + "/api/Customer/getCustomerATAMapped";
+    private readonly _getContactsByCustomerId: string = environment.baseUrl + "/api/Customer/GetCustomerContacts";
+    private readonly _getCustomerContactGet: string = environment.baseUrl + "/api/Customer/customer-contact-get";
 
 
     private readonly _deleteATAMappedByContactId: string = "/api/Customer/DeleteCustomerContactATAMapping"
@@ -149,7 +149,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _deleteShipVia: string = '/api/Customer/deleteshipviadetails';
     private readonly _restoreShipVia: string = '/api/Customer/restoreshipviadetails';
 
-    private readonly _deleteRestrictedParts: string = '/api/Customer/deletesRestrictedParts';
+    private readonly _deleteRestrictedParts: string = environment.baseUrl + '/api/Customer/deletesRestrictedParts';
     private readonly _restoreRestrictedParts: string = '/api/Customer/restoreRestrictedParts';
 
     private readonly _shippingDetailsStatus: string = '/api/Customer/shippingdetailsstatus';

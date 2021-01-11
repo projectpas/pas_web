@@ -1,7 +1,8 @@
 ﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Router, } from '@angular/router';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../services/auth.service';
 import { FormBuilder } from '@angular/forms';

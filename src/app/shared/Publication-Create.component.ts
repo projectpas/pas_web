@@ -11,7 +11,7 @@ import { PublicationService } from "../services/publication.service";
 import { Publication } from "../models/publication.model";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
-import * as $ from 'jquery';
+declare var $ : any;
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { WorkFlowtService } from "../services/workflow.service";
 import { ConfigurationService } from "../services/configuration.service";

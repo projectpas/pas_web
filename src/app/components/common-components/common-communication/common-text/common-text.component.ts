@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { getObjectById } from '../../../../generic/autocomplete';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';

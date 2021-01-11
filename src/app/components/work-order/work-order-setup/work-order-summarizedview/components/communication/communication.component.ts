@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, OnChanges } from '@angular/core
 import { WorkOrderService } from '../../../../../../services/work-order/work-order.service';
 import { WorkOrderLabor, AllTasks} from '../../../../../../models/work-order-labor.modal';
 import { formatNumberAsGlobalSettingsModule } from '../../../../../../generic/autocomplete';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 
 @Component({

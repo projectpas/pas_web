@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { PageHeaderComponent } from '../../../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { MasterCompany } from '../../../../models/mastercompany.model';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { AuthService } from '../../../../services/auth.service';

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, EventEmitter, Output } from '@angu
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { WorkOrderLabor, AllTasks} from '../../../../models/work-order-labor.modal';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { EndpointFactory } from '../../../../services/endpoint-factory.service';
 

@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Input, OnChanges } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { CommunicationService } from '../../../../../shared/services/communication.service';
 import { EmployeeService } from '../../../../../services/employee.service';
 import { DBkeys } from '../../../../../services/db-Keys';

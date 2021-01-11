@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Params, ActivatedRoute } from '@angular/router';
 import { Router, NavigationExtras } from '@angular/router';
 import { RadioButtonModule } from 'primeng/radiobutton';

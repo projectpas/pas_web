@@ -12711,6 +12711,9 @@ ul.ui-dropdown-items li.ui-state-highlight {
 .btn-danger:disabled i.fa-trash {
   color: #847d7e !important;
 }
+.btn:disabled i{
+  color: #847d7e !important;
+}
 #hideDisabled{
   background-color: #ffffff !important;
   // color: cadetblue !important;
