@@ -4,88 +4,64 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigurationService } from '../configuration.service';
 import { Observable } from 'rxjs';
 import { EndpointFactory } from '../endpoint-factory.service';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class AssetEndpoint extends EndpointFactory {
-    
-    private readonly _assetlistUrl: string = "/api/AssetModule/Get";
-    private readonly _assetlistNewUrl: string = "/api/AssetModule/assetlist";
+    baseUrl = environment.baseUrl;
+    private readonly _assetlistUrl: string =this.baseUrl + "/api/AssetModule/Get";
+    private readonly _assetlistNewUrl: string =this.baseUrl + "/api/AssetModule/assetlist";
     // private readonly _assetInventorylistUrl: string = "/api/AssetModule/GetAssetInventory";
-    private readonly _assetInventorylistUrl: string = "/api/AssetModule/assetinventorylist";
-    private readonly _allAssetlistUrl: string = "/api/AssetModule/GetAll";
-    private readonly _addAssetUrlNew: string = "/api/AssetModule/AddAsset";
-    private readonly _addAssetIntangibleUrl: string = "/api/AssetModule/AddIntangibleAsset";
-    private readonly _addAssetCalibrationUrl: string = "/api/AssetModule/AddAssetCalibration";
-    private readonly _addAssetMaintenanceUrl: string = "/api/AssetModule/AddAssetMaintenance";
-    private readonly _addAssetUrlNewInventory: string =  "/api/AssetModule/addAssetInventory";
-    private readonly _addAssetUrlNewInventoryIntangible: string ="/api/AssetModule/AddIntangibleAssetInventory"
+    private readonly _assetInventorylistUrl: string = this.baseUrl +"/api/AssetModule/assetinventorylist";
+    private readonly _allAssetlistUrl: string = this.baseUrl +"/api/AssetModule/GetAll";
+    private readonly _addAssetUrlNew: string =this.baseUrl + "/api/AssetModule/AddAsset";
+    private readonly _addAssetIntangibleUrl: string = this.baseUrl +"/api/AssetModule/AddIntangibleAsset";
+    private readonly _addAssetCalibrationUrl: string =this.baseUrl + "/api/AssetModule/AddAssetCalibration";
+    private readonly _addAssetMaintenanceUrl: string =this.baseUrl + "/api/AssetModule/AddAssetMaintenance";
+    private readonly _addAssetUrlNewInventory: string = this.baseUrl + "/api/AssetModule/addAssetInventory";
+    private readonly _addAssetUrlNewInventoryIntangible: string =this.baseUrl +"/api/AssetModule/AddIntangibleAssetInventory"
     
-    private readonly removeByIdURL: string = "/api/AssetModule/removeById";
-    private readonly removeAssetInventoryByIdURL: string = "/api/AssetModule/removeAssetInventoryById";
-    private readonly removeCapByIdURL: string = "/api/AssetModule/removeCapesById";
-    private readonly _updateAssetUrl: string = "/api/AssetModule/UpdateAsset";
-    private readonly _updateAssetIntangibleUrl: string = "/api/AssetModule/UpdateIntangibleAsset"; 
-    private readonly _updateAssetCalibrationUrl: string = "/api/AssetModule/UpdateAssetCalibration";
-    private readonly _updateAssetMaintenanceUrl: string = "/api/AssetModule/UpdateAssetMaintenance";
-    private readonly _updateAssetInventoryUrl: string = "/api/AssetModule/updateAssetInventory";
-    private readonly _updateAssetInventoryUrlIntangible: string = "/api/AssetModule/UpdateIntangibleAssetInventory";
+    private readonly removeByIdURL: string = this.baseUrl +"/api/AssetModule/removeById";
+    private readonly removeAssetInventoryByIdURL: string =this.baseUrl + "/api/AssetModule/removeAssetInventoryById";
+    private readonly removeCapByIdURL: string =this.baseUrl + "/api/AssetModule/removeCapesById";
+    private readonly _updateAssetUrl: string =this.baseUrl + "/api/AssetModule/UpdateAsset";
+    private readonly _updateAssetIntangibleUrl: string =this.baseUrl + "/api/AssetModule/UpdateIntangibleAsset"; 
+    private readonly _updateAssetCalibrationUrl: string =this.baseUrl + "/api/AssetModule/UpdateAssetCalibration";
+    private readonly _updateAssetMaintenanceUrl: string =this.baseUrl + "/api/AssetModule/UpdateAssetMaintenance";
+    private readonly _updateAssetInventoryUrl: string = this.baseUrl +"/api/AssetModule/updateAssetInventory";
+    private readonly _updateAssetInventoryUrlIntangible: string =this.baseUrl + "/api/AssetModule/UpdateIntangibleAssetInventory";
    
-    private readonly _updateAssetListingUrl: string = "/api/AssetModule/updateAssetListing";
-    private readonly _updateAssetInventoryListingUrl: string = "/api/AssetModule/updateAssetInventoryListing";
-    private readonly _capabilityListUrl: string = "/api/AssetModule/GetCapes";
-    private readonly _getCapabilityUrl: string = "/api/AssetModule/capabilityGet";
-    private readonly _getAssetCapabilityUrl: string = "/api/AssetModule/AssetcapabilityGet";
-    private readonly getAuditById: string = "/api/AssetModule/audits";
-    private readonly capesPost: string = "/api/AssetModule/Mancapespost";
-    private readonly _updatecapesByNewUrl: string = "/api/AssetModule/Updatecapes";
+    private readonly _updateAssetListingUrl: string =this.baseUrl + "/api/AssetModule/updateAssetListing";
+    private readonly _updateAssetInventoryListingUrl: string =this.baseUrl + "/api/AssetModule/updateAssetInventoryListing";
+    private readonly _capabilityListUrl: string = this.baseUrl +"/api/AssetModule/GetCapes";
+    private readonly _getCapabilityUrl: string =this.baseUrl + "/api/AssetModule/capabilityGet";
+    private readonly _getAssetCapabilityUrl: string =this.baseUrl + "/api/AssetModule/AssetcapabilityGet";
+    private readonly getAuditById: string = this.baseUrl +"/api/AssetModule/audits";
+    private readonly capesPost: string =this.baseUrl + "/api/AssetModule/Mancapespost";
+    private readonly _updatecapesByNewUrl: string =this.baseUrl + "/api/AssetModule/Updatecapes";
     
-    private readonly addassetcapes: string = "/api/AssetModule/addAssetCapes";
-    // private readonly _updatecapesUrl: string = "/api/AssetModule/updatecapes";
-    private readonly _updatecapesUrl: string = "/api/AssetModule/ActiveCapes";
+    private readonly addassetcapes: string = this.baseUrl +"/api/AssetModule/addAssetCapes";
+    // private readonly _updatecapesUrl: string =this.baseUrl + "/api/AssetModule/updatecapes";
+    private readonly _updatecapesUrl: string =this.baseUrl + "/api/AssetModule/ActiveCapes";
     
-    private readonly assetListGlobalSrhurl: string = "/api/AssetModule/assetglobalsearch";
-    private readonly _getAssetUrl: string = "/api/AssetModule/GetAsset";
-    private readonly _getAssetByIDUrl: string = "/api/AssetModule/GetAssetByID";
-    private readonly _getAssetByInventoryIDUrl: string = "/api/AssetModule/GetAssetByInventoryID";
-    private readonly _getByInventoryIDUrl: string = "/api/AssetModule/GetByInventoryID";
-    private readonly _getAssetcapesUrl: string = "/api/AssetModule/GetAssetCapesAudit";
-    private readonly _assetwarrantystatusListurl: string = "/api/AssetModule/GetWarrantyStatus";
-    private readonly _CapesSearchUrl: string = '/api/AssetModule/GetAssetCapesRecordCheck';
-    private readonly _customerList: string = '/api/AssetModule/List';
-    private readonly excelUploadCapes: string = "/api/AssetModule/UploadCapsAircraftCustomData";
-    private readonly _addDocumentDetails: string = '/api/AssetModule/customerDocumentUpload';
-    private readonly _getInventoryDocumentAttachmentslist: string = "/api/AssetModule/getinventorydocumentattachmentdetails";
-    private readonly allAssetIntangibleListURL: string = "api/AssetIntangibleAttributeType/GetAssetIntangibletype";
-
-    
-    get CapesSearchUrl() { return this.configurations.baseUrl + this._CapesSearchUrl }
-    get allAssetListURL() { return this.configurations.baseUrl + this._allAssetlistUrl; }
-    get assetListurl() { return this.configurations.baseUrl + this._assetlistUrl; }
-    get assetNewListurl() { return this.configurations.baseUrl + this._assetlistNewUrl; }
-    get assetInventoryListurl() { return this.configurations.baseUrl + this._assetInventorylistUrl; }
-    get removeById() { return this.configurations.baseUrl + this.removeByIdURL; }
-    get customerList() { return this.configurations.baseUrl + this._customerList; }
-    get removeAssetInventoryById() { return this.configurations.baseUrl + this.removeAssetInventoryByIdURL; }
-    get updateById() { return this.configurations.baseUrl + this._updateAssetListingUrl; }
-    get updateByInventoryId() { return this.configurations.baseUrl + this._updateAssetInventoryListingUrl; }
-    get removeCapesById() { return this.configurations.baseUrl + this.removeCapByIdURL; }
-    get capabilityTypeListUrl() { return this.configurations.baseUrl + this._capabilityListUrl; }
-    get getCapabilityUrl() { return this.configurations.baseUrl + this._getCapabilityUrl; }
-    get getAsetCapabilityUrl() { return this.configurations.baseUrl + this._getAssetCapabilityUrl; }
-    get getAssetUrl() { return this.configurations.baseUrl + this._getAssetUrl; }
-    get getAssetByIDUrl() { return this.configurations.baseUrl + this._getAssetByIDUrl; }
-    get getAssetByInventoryIDUrl() { return this.configurations.baseUrl + this._getAssetByInventoryIDUrl; }
-    get getByInventoryIDUrl() { return this.configurations.baseUrl + this._getByInventoryIDUrl; }
-    get getAssetcapesUrl() { return this.configurations.baseUrl + this._getAssetcapesUrl; }
-
+    private readonly assetListGlobalSrhurl: string =this.baseUrl + "/api/AssetModule/assetglobalsearch";
+    private readonly _getAssetUrl: string =this.baseUrl + "/api/AssetModule/GetAsset";
+    private readonly _getAssetByIDUrl: string =this.baseUrl + "/api/AssetModule/GetAssetByID";
+    private readonly _getAssetByInventoryIDUrl: string =this.baseUrl + "/api/AssetModule/GetAssetByInventoryID";
+    private readonly _getByInventoryIDUrl: string =this.baseUrl + "/api/AssetModule/GetByInventoryID";
+    private readonly _getAssetcapesUrl: string =this.baseUrl + "/api/AssetModule/GetAssetCapesAudit";
+    private readonly _assetwarrantystatusListurl: string =this.baseUrl + "/api/AssetModule/GetWarrantyStatus";
+    private readonly _CapesSearchUrl: string =this.baseUrl + '/api/AssetModule/GetAssetCapesRecordCheck';
+    private readonly _customerList: string =this.baseUrl + '/api/AssetModule/List';
+    private readonly excelUploadCapes: string =this.baseUrl + "/api/AssetModule/UploadCapsAircraftCustomData";
+    private readonly _addDocumentDetails: string =this.baseUrl + '/api/AssetModule/customerDocumentUpload';
+    private readonly _getInventoryDocumentAttachmentslist: string =this.baseUrl + "/api/AssetModule/getinventorydocumentattachmentdetails";
+    private readonly allAssetIntangibleListURL: string =this.baseUrl + "api/AssetIntangibleAttributeType/GetAssetIntangibletype";
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
     }
-
-
     getAllAssetList<T>(): Observable<T> {
-           return this.http.get<T>(this.allAssetListURL, this.getRequestHeaders())
+           return this.http.get<T>(this._allAssetlistUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAllAssetList());
             });
@@ -155,13 +131,13 @@ export class AssetEndpoint extends EndpointFactory {
         return this.http.post<T>(`${this._addDocumentDetails}`, file);
     }
     getDocumentList(assetReordId, IsMaintenance) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/AssetModule/getAssetDocumentDetail/${assetReordId}/${IsMaintenance}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getAssetDocumentDetail/${assetReordId}/${IsMaintenance}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.getDocumentList(assetReordId, IsMaintenance));
         });
     }
 
     getDocumentList_1(assetReordId, IsWarranty) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/AssetModule/getAssetDocumentDetail_1/${assetReordId}/${IsWarranty}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getAssetDocumentDetail_1/${assetReordId}/${IsWarranty}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.getDocumentList_1(assetReordId, IsWarranty));
         });
     }
@@ -172,13 +148,13 @@ export class AssetEndpoint extends EndpointFactory {
         });
     }
     deleteDocumentByCustomerAttachementId(assetAttachementId, updatedBy) {
-        return this.http.delete(`${this.configurations.baseUrl}/api/common/attachmentDelete/${assetAttachementId}?updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
+        return this.http.delete(`${this.baseUrl}/api/common/attachmentDelete/${assetAttachementId}?updatedBy=${updatedBy}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.deleteDocumentByCustomerAttachementId(assetAttachementId, updatedBy));
         });
     }
 
     getByAssetIdDataEndpoint<T>(assetId: any): Observable<T> {
-        let url = `${this.getAssetUrl}/${assetId}`;
+        let url = `${this._getAssetUrl}/${assetId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getByAssetIdDataEndpoint(assetId));
@@ -186,7 +162,7 @@ export class AssetEndpoint extends EndpointFactory {
     }
 
     getByAssetIdByIDDataEndpoint<T>(assetId: any): Observable<T> {
-        let url = `${this.getAssetByIDUrl}/${assetId}`;
+        let url = `${this._getAssetByIDUrl}/${assetId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getByAssetIdByIDDataEndpoint(assetId));
@@ -194,7 +170,7 @@ export class AssetEndpoint extends EndpointFactory {
     }
 
     getByAssetIdByInventoryIDDataEndpoint<T>(assetId: any): Observable<T> {
-        let url = `${this.getAssetByInventoryIDUrl}/${assetId}`;
+        let url = `${this._getAssetByInventoryIDUrl}/${assetId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getByAssetIdByInventoryIDDataEndpoint(assetId));
@@ -202,7 +178,7 @@ export class AssetEndpoint extends EndpointFactory {
     }
 
     getByInventoryIDDataEndpoint<T>(assetinventoryId: any): Observable<T> {
-        let url = `${this.getByInventoryIDUrl}/${assetinventoryId}`;
+        let url = `${this._getByInventoryIDUrl}/${assetinventoryId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getByInventoryIDDataEndpoint(assetinventoryId));
@@ -210,7 +186,7 @@ export class AssetEndpoint extends EndpointFactory {
     }
 
     getAssetCapesAuditById<T>(assetcapesId: any): Observable<T> {
-        let url = `${this.getAssetcapesUrl}/${assetcapesId}`;
+        let url = `${this._getAssetcapesUrl}/${assetcapesId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAssetCapesAuditById(assetcapesId));
@@ -218,19 +194,19 @@ export class AssetEndpoint extends EndpointFactory {
     }
 
     CapesFileUpload(file, assetRecordId,data) {
-        return this.http.post(`${this.configurations.baseUrl}${this.excelUploadCapes}?assetRecordId=${assetRecordId}`, file,data)
+        return this.http.post(`${this.baseUrl}${this.excelUploadCapes}?assetRecordId=${assetRecordId}`, file,data)
 
     }
     
     getAssetList<T>(): Observable<T> {
-        return this.http.get<T>(this.assetListurl, this.getRequestHeaders())
+        return this.http.get<T>(this._assetlistUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAssetList());
             });
     }
     getAssetNewList<T>(data): Observable<T> {
 
-        return this.http.post<T>(this.assetNewListurl,JSON.stringify(data), this.getRequestHeaders())
+        return this.http.post<T>(this._assetlistNewUrl,JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAssetNewList(data));
             });
@@ -252,7 +228,7 @@ export class AssetEndpoint extends EndpointFactory {
     //   }
     getAssetInventoryList<T>(data: any): Observable<T> {
 
-        return this.http.post<T>(this.assetInventoryListurl, JSON.stringify(data),this.getRequestHeaders())
+        return this.http.post<T>(this._assetInventorylistUrl, JSON.stringify(data),this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAssetInventoryList(data));
             });
@@ -292,8 +268,7 @@ if(roleObject.isTangible==true){
     }
 
     updateAssetListing<T>(assetRecordId: number, status: string,username:string): Observable<T> {
-        //let endpointUrl = `${this._updateAssetUrl}/${roleObject.assetRecordId}`;
-        let endpointUrl = `${this.updateById}/${assetRecordId}/${status}/${username}`;
+        let endpointUrl = `${this._updateAssetListingUrl}/${assetRecordId}/${status}/${username}`;
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.updateAssetListing(assetRecordId, status,username));
@@ -311,7 +286,7 @@ if(roleObject.isTangible==true){
     }
 
     removeAssetById<T>(assetRecordId: number): Observable<T> {
-        let endpointUrl = `${this.removeById}/${assetRecordId}`;
+        let endpointUrl = `${this.removeByIdURL}/${assetRecordId}`;
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -320,7 +295,7 @@ if(roleObject.isTangible==true){
     }
 
     removeAssetInventory<T>(assetRecordId: number): Observable<T> {
-        let endpointUrl = `${this.removeAssetInventoryById}/${assetRecordId}`;
+        let endpointUrl = `${this.removeAssetInventoryByIdURL}/${assetRecordId}`;
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -330,7 +305,7 @@ if(roleObject.isTangible==true){
 
 
     removeAssetCapesById<T>(assetCapesById: number): Observable<T> {
-        let endpointUrl = `${this.removeCapesById}/${assetCapesById}`;
+        let endpointUrl = `${this.removeCapByIdURL}/${assetCapesById}`;
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -339,7 +314,7 @@ if(roleObject.isTangible==true){
     }
 
     GetAssetCapesRecordCheck<T>(assetrecordid: number, searchUrl: string) {
-        let endpointUrl = `${this.CapesSearchUrl}?AssetRecordId=${assetrecordid}&${searchUrl}`;
+        let endpointUrl = `${this._CapesSearchUrl}?AssetRecordId=${assetrecordid}&${searchUrl}`;
 
         return this.http
             .get<T>(endpointUrl, this.getRequestHeaders())
@@ -371,13 +346,7 @@ if(type=='add'){
     }
 
     getAssetCapesAll<T>(data, id){
-        //return this.http.post(this.customerList, JSON.stringify(data), this.getRequestHeaders())
-        //    .catch(error => {
-        //        return this.handleError(error, () => this.getAssetCapesAll(data, id));
-        //    });
-
-        let endpointUrl = `${this.customerList}/${id}`;
-
+        let endpointUrl = `${this._customerList}/${id}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAssetCapesAll(data, id));
@@ -386,7 +355,7 @@ if(type=='add'){
 
 
     getCapabilityTypeListEndpoint<T>(assetRecordId): Observable<T> {
-        let endpointUrl = `${this.capabilityTypeListUrl}/${assetRecordId}`;
+        let endpointUrl = `${this._capabilityListUrl}/${assetRecordId}`;
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
@@ -396,7 +365,7 @@ if(type=='add'){
 
 
     getCapabilityDataEndpoint<T>(assetRecordId: any): Observable<T> {
-        let url = `${this.getCapabilityUrl}/${assetRecordId}`;
+        let url = `${this._getCapabilityUrl}/${assetRecordId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getCapabilityDataEndpoint(assetRecordId));
@@ -404,7 +373,7 @@ if(type=='add'){
     }
 
     getAssetCapabilityDataEndpoint<T>(assetCapesId: any): Observable<T> {
-        let url = `${this.getAsetCapabilityUrl}/${assetCapesId}`;
+        let url = `${this._getAssetCapabilityUrl}/${assetCapesId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.getAssetCapabilityDataEndpoint(assetCapesId));
@@ -412,7 +381,7 @@ if(type=='add'){
     }
 
     getAssetsById(assetRecordId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workOrder/workorderassetview?assetRecordId=${assetRecordId}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.baseUrl}/api/workOrder/workorderassetview?assetRecordId=${assetRecordId}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.getAssetsById(assetRecordId));
         });
     }
@@ -434,12 +403,12 @@ if(type=='add'){
     }
 
     getAssetDataForInventoryById(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/AssetModule/GetAssetDataforInventory/${id}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/GetAssetDataforInventory/${id}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.getAssetDataForInventoryById(id));
         });
     }
     getAuditDataByInventoryId(id) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/AssetModule/getauditdatabyinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
+        return this.http.get<any>(`${this.baseUrl}/api/AssetModule/getauditdatabyinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.getAuditDataByInventoryId(id));
         });
     }
@@ -457,12 +426,12 @@ if(type=='add'){
 
     //asset inventory adjustment
     getAdjustmentByAssetInventoryId(id) {
-        return this.http.post<any>(`${this.configurations.baseUrl}/api/AssetModule/getadjustmentbyassetinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
+        return this.http.post<any>(`${this.baseUrl}/api/AssetModule/getadjustmentbyassetinventoryid/${id}`, this.getRequestHeaders()).catch(error => {
             return this.handleError(error, () => this.getAdjustmentByAssetInventoryId(id));
         });
     }    
     assetAdjustmentPost<T>(data: any): Observable<T> {
-        let url = `${this.configurations.baseUrl}/api/AssetModule/adjustmentpost`;
+        let url = `${this.baseUrl}/api/AssetModule/adjustmentpost`;
         return this.http.post<T>(url, JSON.stringify(data), this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.assetAdjustmentPost(data));
@@ -470,21 +439,21 @@ if(type=='add'){
     }
 
     downloadAllAssetList<T>(data): Observable<T> {
-        let url = `${this.configurations.baseUrl}/api/AssetModule/ExportassetList`;
+        let url = `${this.baseUrl}/api/AssetModule/ExportassetList`;
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.downloadAllAssetList(data));
             });
     }
     downloadAllAssetInventoryList<T>(data): Observable<T> {
-        let url = `${this.configurations.baseUrl}/api/AssetModule/ExportAssetinventorylist`;
+        let url = `${this.baseUrl}/api/AssetModule/ExportAssetinventorylist`;
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.downloadAllAssetInventoryList(data));
             });
     }
     downloadAllAssetCapsList<T>(data,assetRecordId): Observable<T> {
-        let url = `${this.configurations.baseUrl}/api/AssetModule/ExportCapesList//${assetRecordId}`;
+        let url = `${this.baseUrl}/api/AssetModule/ExportCapesList//${assetRecordId}`;
         return this.http.post<T>(url, data, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.downloadAllAssetCapsList(data,assetRecordId));

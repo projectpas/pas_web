@@ -651,9 +651,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 			}else 	if(this.viewDataGeneralInformation.invoiceFaxPhonePosition==2){
 				this.viewDataGeneralInformation.invoiceFaxPhonePositionBottom=true;
 			}
-	
 
-			console.log("Res",this.viewDataGeneralInformation);
 			this.legalEntityMainId=res.legalEntityId
 		
 			this.bankingAps(legalEntityId);
@@ -862,7 +860,6 @@ this.isLockBox=false;
 	}
 	restorerecord: any = {}
 	downloadFileUpload(rowData) {
-		console.log("roe",rowData)
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }
