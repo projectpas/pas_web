@@ -6,7 +6,8 @@ import { listSearchFilterObjectCreation, editValueAssignByCondition } from '../.
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AuditHistory } from '../../../../models/audithistory.model';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { CommonService } from '../../../../services/common.service';
 import { LegalEntityService } from '../../../../services/legalentity.service';

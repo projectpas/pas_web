@@ -41,7 +41,7 @@
                                     </p-radioButton>
                                     <div>
                                         <select class="form-group select-markup" (ngModelChange)="validated()" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -70,7 +70,7 @@
                                     </p-radioButton>
                                     <div>
                                         <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -252,8 +252,8 @@
     <div *ngIf="!isView" style="padding: 10px;">
         <!--<button class="btn btn-primary pull-right side" (click)="createFreightsQuote()">Save</button>-->
         <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createFreightsQuote()">
-            <span *ngIf="salesOrderFreightList && salesOrderFreightList.length !=0">Update</span>
-            <span *ngIf="salesOrderFreightList && salesOrderFreightList.length ==0">Save</span>
+            <span *ngIf="isUpdate">Update</span>
+            <span *ngIf="!isUpdate">Save</span>
         </button>
     </div>
 
@@ -306,7 +306,7 @@
                                 <tbody>
                                     <tr *ngFor="let f of freightForm; let i = index">
                                         <td>
-                                            <p-dropdown placeholder="Select Site Name" name="shipVia{{ i }}" #shipVia="ngModel"
+                                            <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel"
                                                         [options]="shipViaList" (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                                             </p-dropdown>
                                         </td>
@@ -315,7 +315,7 @@
                                                    class="form-control w50" />
                                         </td>
                                         <td>
-                                            <p-dropdown placeholder="Select UOM" (ngModelChange)="enableUpdate()" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
+                                            <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
                                                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                                             </p-dropdown>
                                         </td>
@@ -332,7 +332,7 @@
                                                    class="form-control w50" />
                                         </td>
                                         <td>
-                                            <p-dropdown placeholder="Select UOM" (ngModelChange)="enableUpdate()" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
+                                            <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
                                                         class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
                                             </p-dropdown>
                                         </td>

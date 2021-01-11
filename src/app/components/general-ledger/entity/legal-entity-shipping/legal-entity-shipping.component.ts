@@ -7,7 +7,8 @@ import { legalEntityInternationalShippingModel, legalEntityInternationalShipVia 
 import { getValueFromObjectByKey, getObjectById, editValueAssignByCondition, listSearchFilterObjectCreation, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { CommonService } from '../../../../services/common.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import * as moment from 'moment';

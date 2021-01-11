@@ -8,7 +8,7 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { CommonService } from '../../../../services/common.service';
 import { getObjectByValue, getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService,MessageSeverity } from '../../../../services/alert.service';
 @Component({
   selector: 'app-work-order-labor',

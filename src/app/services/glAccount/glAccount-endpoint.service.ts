@@ -37,6 +37,12 @@ export class GlAccountEndpointService extends EndpointFactory {
   get getMiscdata() {
     return this.configurations.baseUrl + this.getMiscdataURL;
   }
+  get getAllGlAccountList() {
+    return this.configurations.baseUrl + this.getAllGlAccount;
+  }
+  get glaccountstatusList() {
+    return this.configurations.baseUrl + this.glaccountstatus;
+  }
 
   constructor(
     http: HttpClient,
@@ -57,8 +63,8 @@ export class GlAccountEndpointService extends EndpointFactory {
 
 
 
-  getglAccountList(data) {   
-		return this.http.post(this.getAllGlAccount, JSON.stringify(data), this.getRequestHeaders())
+  getglAccountList(data) {       
+		return this.http.post(this.getAllGlAccountList, JSON.stringify(data), this.getRequestHeaders())
 			.catch(error => {
 				return this.handleErrorCommon(error, () => this.getglAccountList(data));
 			});
@@ -101,14 +107,14 @@ export class GlAccountEndpointService extends EndpointFactory {
   }
 
   deleteRestoreGL(id,status, userName){
-    return this.http.post(`${this.deleteRestoreGLURL}?id=${id}&status=${status}&userName=${userName}`, this.getRequestHeaders())
+    return this.http.post(this.configurations.baseUrl + `${this.deleteRestoreGLURL}?id=${id}&status=${status}&userName=${userName}`, this.getRequestHeaders())
     .catch(error => {
         return this.handleErrorCommon(error, () => this.deleteRestoreGL(id,status,userName));
     });
   }
 
   updatestatusactive(id,status, userName) {
-    let endpointUrl = `${this.glaccountstatus}?glAccountId=${id}&status=${status}&updatedBy=${userName}`;
+    let endpointUrl = `${this.glaccountstatusList}?glAccountId=${id}&status=${status}&updatedBy=${userName}`;
     return this.http.post(endpointUrl,  this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.updatestatusactive(id,status, userName));
@@ -116,8 +122,8 @@ export class GlAccountEndpointService extends EndpointFactory {
   }
 
   getHistory(accountId): Observable<any> {
-    let endpointUrl = `${this._glCashFlowClassificationsUrlAuditHistory}/${accountId}`;
-
+    let endpointUrl = this.configurations.baseUrl + `${this._glCashFlowClassificationsUrlAuditHistory}/${accountId}`;
+    
     return this.http.get(endpointUrl, this.getRequestHeaders())
         .catch(error => {
             return this.handleErrorCommon(error, () => this.getHistory(accountId));

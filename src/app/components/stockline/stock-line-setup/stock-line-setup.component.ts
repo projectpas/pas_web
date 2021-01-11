@@ -19,7 +19,7 @@ import { getValueFromArrayOfObjectById, getValueFromObjectByKey, editValueAssign
 import { DatePipe } from '@angular/common';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { AuthService } from '../../../services/auth.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import * as moment from 'moment';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';

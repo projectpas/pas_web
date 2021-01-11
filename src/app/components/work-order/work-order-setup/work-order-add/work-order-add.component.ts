@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import { WorkOrderPartNumber } from '../../../../models/work-order-partnumber.model';
 import { Customer } from '../../../../models/customer.model';
 import { AlertService, MessageSeverity} from '../../../../services/alert.service';

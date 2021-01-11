@@ -155,18 +155,16 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }        
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Ledger", "LedgerId", "LedgerName", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.ledgerNameObjectData = res;
             }            
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         });
     }
 
-    load1099Miscdata(value) {
- 
+    load1099Miscdata(value) { 
         this.setEditArray = [];
         if (this.isEditMode == true) {
             this.setEditArray.push(this.glAccountObj.category1099Id ? this.glAccountObj.category1099Id : 0);
@@ -175,13 +173,12 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Master1099", "Master1099Id", "Name", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Master1099", "Master1099Id", "Name", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.miscData = res;
             }
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         })
     }
 
@@ -193,15 +190,13 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("LegalEntity", "LegalEntityId", "Name", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.entitiesObj = res;                
             }            
         }, err => {
-                    const errorLog = err;
-                 this.errorMessageHandler(errorLog);
-                });
-        
+            this.isSpinnerVisible = false;
+        });        
     }
 
     private loadGLCashFlowClassification(value) {
@@ -213,13 +208,12 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('GLCashFlowClassification','glClassFlowClassificationId','GLClassFlowClassificationName',strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('GLCashFlowClassification','glClassFlowClassificationId','GLClassFlowClassificationName',strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {               
                 this.allGLCashFlowClassInfo = res;
             }
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -231,7 +225,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("GLAccountClass", "GLAccountClassId", "GLAccountClassName", strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("GLAccountClass", "GLAccountClassId", "GLAccountClassName", strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.accountTypeObject = res;
             }
@@ -247,13 +241,12 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList("Nodetype", "NodetypeId", "NodetypeName", strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList("Nodetype", "NodetypeId", "NodetypeName", strText, true, 20, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.leafNodeNameObj = res;
             }
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;	
         });
     }
 
@@ -266,14 +259,11 @@ export class AccountListingCreateComponent implements OnInit {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonService.autoSuggestionSmartDropDownList('POROCategory','poroCategoryId','CategoryName',strText, true, 10000, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoSuggestionSmartDropDownList('POROCategory','poroCategoryId','CategoryName',strText, true, 10000, this.setEditArray.join(),this.currentUserMasterCompanyId).subscribe(res => {
             if (res && res.length != 0) {
                 this.poroCategoryList = res;
             }
-        }, err => {
-                const errorLog = err;
-                   this.errorMessageHandler(errorLog);
-                });
+        }, err => { this.isSpinnerVisible = false;});
     }
 
     ////// Master Drop Down End
@@ -497,7 +487,6 @@ export class AccountListingCreateComponent implements OnInit {
     selectedAccountType() {
         this.isAccountTypeExists = true;
     }
-
     
     createAccountData() {
             this.glAccountObj = {
@@ -516,46 +505,17 @@ export class AccountListingCreateComponent implements OnInit {
                 createdBy: this.userName,
                 updatedBy: this.userName,
                 createdDate: this.formatDateTime(null)
-            }}
-
-
+            }
+    }
    
     closeClick(){
         this.router.navigateByUrl('/generalledgermodule/generalledgerpage/app-account-listing');
-    }
-    
-
-    
-
-
-
-
-
-
-    
-    
-
-   
-
-
-
-  
-    
-
-
-
-           
-    
-
-   
-    
-
+    }   
 
     resetAssetStatus(): void {
         this.updateMode = false;
         this.currentGLAccount = new GlAccount();
     }
-
 
     open(content) {
         this.sourceglcashflowclassification = new GlCashFlowClassification();
@@ -579,11 +539,7 @@ export class AccountListingCreateComponent implements OnInit {
                 this.loadGLCashFlowClassification('');
                 this.currentGLAccount.glClassFlowClassificationId = cashFlow.glClassFlowClassificationId;
                 this.alertService.showMessage('C-Flow added successfully.');
-            }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            }
-            );
+            }, err => {});
         }
         else {
 
@@ -591,11 +547,7 @@ export class AccountListingCreateComponent implements OnInit {
             this.sourceglcashflowclassification.masterCompanyId = 1;
             this.glcashFlowClassifcationService.updateCashFlowClassification(this.sourceglcashflowclassification).subscribe(cashFlow => {
                 this.alertService.showMessage('C-Flow Updated successfully.');
-            }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            }
-            );
+            }, err => { });
         }
         this.modal.close();
     }

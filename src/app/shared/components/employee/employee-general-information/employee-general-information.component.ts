@@ -29,7 +29,7 @@ import { editValueAssignByCondition, formatNumberAsGlobalSettingsModule, getObje
 import { CommonService } from '../../../../services/common.service';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
-import * as $ from 'jquery';
+declare var $ : any;
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { emailPattern, urlPattern, phonePattern } from '../../../../validations/validation-pattern';
 
@@ -478,7 +478,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
@@ -505,7 +505,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join()).subscribe(response => {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('middlename', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
@@ -530,7 +530,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
         if (this.arrayContactlist.length == 0) {
             this.arrayContactlist.push(0);
         }
-        this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join()).subscribe(response => {
+        this.commonService.autoCompleteSmartDropDownEmployeeList('lastname', strText, true, this.arrayContactlist.join(),this.currentUserMasterCompanyId).subscribe(response => {
 
             var endResult = [];
             for (let resInd = 0; resInd < response.length; resInd++) {
@@ -722,8 +722,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
             this.isEnableNext = true;
             this.isSpinnerVisible = false;
         }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -1194,9 +1193,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     }
                 },
                 err => {
-                    this.isSpinnerVisible = false;
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
+                    this.isSpinnerVisible = false;                   
                 }
             );
         }
@@ -1215,9 +1212,7 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
                     }
                 },
                 err => {
-                    this.isSpinnerVisible = false;
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
+                    this.isSpinnerVisible = false;                   
                 });
         }
     }

@@ -17,7 +17,7 @@ import { SalesOrderQuotePart } from "../../../../../models/sales/SalesOrderQuote
 import { AuthService } from "../../../../../services/auth.service";
 import { CommonService } from "../../../../../services/common.service";
 import { ISalesOrderQuotePart } from "../../../../../models/sales/ISalesOrderQuotePart";
-import * as $ from 'jquery';
+declare var $ : any;
 import { SummaryPart } from "../../../../../models/sales/SummaryPart";
 
 @Component({
@@ -880,4 +880,7 @@ export class SalesPartNumberComponent {
     }
   }
 
+  checkToHide(i) {
+    return !this.summaryParts[i].hidePart;
+  }
 }

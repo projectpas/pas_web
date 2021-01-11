@@ -52,15 +52,15 @@
                 <tr ngClass="'row-bg1'" pReorderableRowHandle>
                     <td *ngFor="let summaryColumn of summaryColumns" style="width:auto" pReorderableRowHandle>
                         <span *ngIf="summaryColumn.field == 'hidePart'">
-                            <a class="expand-row" *ngIf="!summaryPart[summaryColumn.field]"
-                                (click)="summaryPart[summaryColumn.field] = !summaryPart[summaryColumn.field]">
+                            <a class="expand-row" *ngIf="!summaryPart[field]"
+                                (click)="summaryPart[field] = !summaryPart[field]">
                                 <i class="fa fa-plus btn
                                             btn-success btn-cstm btn-xs" matTooltip="Show details"
                                     style="padding: 3px 8px !important;">
                                 </i>
                             </a>
-                            <a class="expand-row" *ngIf="summaryPart[summaryColumn.field]"
-                                (click)="summaryPart[summaryColumn.field] =!summaryPart[summaryColumn.field]">
+                            <a class="expand-row" *ngIf="summaryPart[field]"
+                                (click)="summaryPart[field] =!summaryPart[field]">
                                 <i class="fa fa-minus btn-danger btn-cstm btn-xs" matTooltip="Hide details"
                                     style="padding: 3px 8px !important;">
                                 </i>
@@ -121,7 +121,7 @@
                         </span>
                     </td>
                 </tr>
-                <tr [hidden]="!summaryPart[rowIndex]" class="sub-table no-bg">
+                <tr [hidden]="!summaryPart[field]" class="sub-table no-bg">
                     <!-- <td style="text-align: center;"></td> -->
                     
                         <td colspan="23" class="p-0" style="overflow-y: auto !important;">
@@ -412,7 +412,7 @@
                         <div class="form-group notes-popup-cstm mat_emo"
                             style="width: 120px;    display: inline-flex;    margin-bottom: 0;">
                             <div [innerHTML]="part.notes" class="text_editor_box"></div>
-                            <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal"
+                            <i class="fa fa-pencil" data-toggle="modal"
                                 style="position: relative;top: 6px;" data-target="#textarea-popupNotes"
                                 matTooltip="Notes" matTooltipPosition="above"
                                 (click)="onAddTextAreaInfo(part,stockIndex, rowIndex)"></i>
@@ -422,15 +422,30 @@
                         <div [innerHTML]="part.notes" class="text_editor_box"></div>
                     </td>
                     <td class="zui-sticky-col" *ngIf="isViewMode == false">
-                        <button type="button" [disabled]="isEditDisabled(salesQuote, part)" class="btn-edit"
+                        <!-- <button type="button" [disabled]="isEditDisabled(salesQuote, part)" class="btn-edit"
                             mat-icon-button (click)="openPartToEdit(part)" matTooltip="edit" matTooltipPosition="above">
                             <mat-icon>edit</mat-icon>
-                        </button>
-                        <button type="button" [disabled]="isDeleteDisabled(salesQuote, part)" class="btn-delete"
+                        </button> -->
+                        <span *ngIf="!isEditDisabled(salesQuote, part)">	
+                            <a [class.disabled]="isEditDisabled(salesQuote, part)"	
+                                [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}" class="btn nobg"	
+                                (click)="openPartToEdit(part)" matTooltip="Edit" matTooltipPosition="above">	
+                                <i class="fa fa-pencil"></i>	
+                            </a>	
+                        </span>
+                        <!-- <button type="button" [disabled]="isDeleteDisabled(salesQuote, part)" class="btn-delete"
                             mat-icon-button matTooltip="Delete" matTooltipPosition="above"
                             (click)="openPartDelete(deleteContent,part)">
                             <mat-icon color="warn">delete</mat-icon>
-                        </button>
+                        </button> -->
+                        <span>	
+                            <a [class.disabled]="isDeleteDisabled(salesQuote, part)"	
+                                [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}" class="btn nobg"	
+                                (click)="openPartDelete(deleteContent,part)" matTooltip="Delete"	
+                                matTooltipPosition="above">	
+                                <i class="fa fa-trash"></i>	
+                            </a>	
+                        </span>
                         <span>
                             <a class="btn nobg btn-pluspo-cstm" (click)="initiateCreateWOROPO(part, 'PO')"
                                 matTooltip="Create PO" matTooltipPosition="above">

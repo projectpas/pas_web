@@ -3,7 +3,7 @@ import { fadeInOut } from '../../../../services/animations';
 import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
 import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { EmployeeService } from '../../../../services/employee.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
