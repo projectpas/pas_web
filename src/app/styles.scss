@@ -57,6 +57,7 @@ body .ui-widget {
 
 .mat-form-field-infix {
   padding: 0px;
+  margin-bottom: -1.25em;
   border-top: 0.84375em solid transparent;
 }
 .p-autoComplete-ctsm.ng-touched.ng-invalid input {
@@ -12499,7 +12500,7 @@ body.modal-open {
   margin: 0;
   padding: 4px 0 5px 5px;
   border-radius: 0;
-  font-weight: bold;
+  font-weight: 700;
   font-size: 10.5px !important; //10px
   padding-bottom: 4px !important;
 }
@@ -13527,6 +13528,7 @@ body .ui-datepicker table td {
 .ui-datepicker.ui-widget .ui-datepicker-calendar td a {
   border-radius: 0px;
   border: 1px solid #dcdcdc;
+  color:#333 !important;
 }
 
 .ui-datepicker.ui-widget .ui-datepicker-calendar td span {
@@ -14247,6 +14249,11 @@ p-multiselect .ui-multiselect-item {
   padding-top: 0 !important;
 }
 
+.ui-multiselect-panel .ui-multiselect-items-wrapper {
+  overflow: auto;
+  position: relative;
+  padding: .2em 0;
+}
 p-multiselect .ui-multiselect-panel .ui-multiselect-header .ui-chkbox {
   padding-left: 3px !important;
 }
@@ -14842,6 +14849,16 @@ body .ui-datepicker table td>a.ui-state-active {
   padding: 2px 3px 0px 2px;
 }
 
+body .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item {
+  margin: 0;
+  padding: 0.429em 0.857em;
+  border: 0 none;
+  font-weight: 700;
+  font-size: 10.5px !important;
+  color: #333;
+  background-color: transparent;
+  border-radius: 0;
+}
 p-multiselect {
   display: block;
   height: 34px;
@@ -14877,6 +14894,51 @@ p-multiselect .ui-multiselect-list .ui-chkbox .ui-chkbox-box .ui-chkbox-icon {
 p-multiselect .ui-multiselect-item.ui-state-highlight {
   background-color: transparent !important;
   border-color: transparent !important;
+}
+
+// .ui-multiselect-panel .ui-multiselect-item label {
+//   text-align: left;
+//   vertical-align: inherit;
+// }
+// p-multiselect .ui-multiselect-item label {
+//   margin-top: 13px;
+// }
+// p-multiselect label {
+//   margin-left: 10px!important;
+// }
+// label {
+//   margin-bottom: 2px!important;
+// }
+body .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item span {
+  display: inline-block;
+  vertical-align: middle;
+
+  text-align: left;
+    margin-left: 10px;
+    margin-bottom: 2px !important;
+    margin-right: 10px !important;
+    margin-top: 11px;
+}
+label {
+  width: 75px;
+  font-weight: 700;
+  color: #222;
+  margin-right: 10px;
+}
+label {
+  font-size: 10.5px!important;
+}
+
+.ui-multiselect-panel .ui-multiselect-item {
+  border: 0 none;
+  cursor: pointer;
+  font-weight: 400;
+  margin: 1px 0;
+  padding: .125em .25em;
+  text-align: left;
+  white-space: nowrap;
+  display: block;
+  position: relative;
 }
 
 p-multiselect .ui-multiselect-filter-container input {
@@ -14928,9 +14990,14 @@ p-multiselect .ui-multiselect .ui-multiselect-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-align: left;
+ 
+  padding: 4px 0 5px 5px;
+  border-radius: 0;
+  font-weight: 700;
+  font-size: 10.5px !important; 
   width: calc(100% - 27px) !important;
 }
-
 .ui-multiselect-close span.pi-times {
   float: right;
 }
@@ -14989,6 +15056,25 @@ body .ui-panelmenu .ui-panelmenu-header>a {
 
 p-panelmenu .ui-panelmenu {
   width: 220px !important;
+}
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li a, 
+body .ui-tabview.ui-tabview-bottom .ui-tabview-nav li a, 
+body .ui-tabview.ui-tabview-left .ui-tabview-nav li a, body .ui-tabview.ui-tabview-right 
+.ui-tabview-nav li a {
+  float: none;
+  display: inline-block;
+  color: #333333;
+  padding: 0.571em 1em;
+  font-weight: 400;
+}
+body .ui-megamenu .ui-megamenu-submenu-header {
+    margin: 0;
+    padding: 0.571em 1em;
+    color: #333333;
+    background-color: #f4f4f4;
+    font-weight: 400;
+    border: 0 none;
 }
 
 /* ./css for sidenav */
@@ -15907,6 +15993,27 @@ body .ui-autocomplete .ui-autocomplete-dropdown .ui-button-icon-left:before {
 
 .imstock-pddowm .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item.ui-state-highlight {
   color: #fff !important;
+}
+body .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item {
+  margin: 0;
+  padding: .429em .857em;
+  border: 0 none;
+  color: #333;
+  background-color: transparent;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+}
+.ui-multiselect-panel .ui-multiselect-item {
+  border: 0 none;
+  cursor: pointer;
+  font-weight: 400;
+  margin: 1px 0;
+  padding: .125em .25em;
+  text-align: left;
+  white-space: nowrap;
+  display: block;
+  position: relative;
 }
 
 .imstock-pmselect .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item .ui-chkbox {
