@@ -15,11 +15,8 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
     private readonly _actionsUrlNew: string = "/api/ATASubChapter1/actions";
     private readonly _actionsUrlAuditHistory: string = "/api/ATASubChapter1/ataauditHistoryById";
     private readonly getAtaSubChapterAuditById: string = "/api/ATASubChapter1/audits";
-    private readonly getSubChaptersListById: string = "/api/ATASubChapter1/ATASubChapterByATAChapterId";
-
-
+    private readonly getSubChaptersListById: string = environment.baseUrl + "/api/ATASubChapter1/ATASubChapterByATAChapterId";
     private readonly getSubChaptersList: string = environment.baseUrl + "/api/ATASubChapter1/ATASubChapter";
-
 
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 
