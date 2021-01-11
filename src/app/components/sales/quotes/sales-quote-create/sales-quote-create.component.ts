@@ -183,8 +183,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     private route: ActivatedRoute,
     private salesQuoteService: SalesQuoteService,
     private formBuilder: FormBuilder,
-    private commonservice: CommonService,
-    private commonService: CommonService,
+    public commonservice: CommonService,
     public currencyService: CurrencyService,
     public employeeService: EmployeeService,
     private authService: AuthService,
@@ -338,9 +337,9 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
       this.commonservice.smartDropDownList('CustomerWarningType', 'CustomerWarningTypeId', 'Name'),
-      this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join()),
-      this.commonService.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
-      this.commonService.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join()),
+      this.commonservice.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, [probabilityId].join()),
+      this.commonservice.autoSuggestionSmartDropDownList("CreditTerms", "CreditTermsId", "Name", '', true, 200, [creditLimitTermsId].join()),
+      this.commonservice.autoSuggestionSmartDropDownList("LeadSource", "LeadSourceId", "LeadSources", '', true, 100, [leadSourceId].join()),
 
       this.salesQuoteService.getAllSalesOrderQuoteSettings()).subscribe(result => {
         this.isSpinnerVisible = false;
@@ -611,7 +610,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (result !== undefined) {
       let accountTypeId = result.customerTypeId ? result.customerTypeId : 0;
 
-      this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', 
+      this.commonservice.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', 
       true, 100, [accountTypeId].join()).subscribe(accountTypes => {
         this.accountTypes = accountTypes;
       })
@@ -622,7 +621,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     empployid = empployid == 0 ? this.employeeId : empployid;
     editMSID = this.isEdit ? editMSID = id : 0;
     this.isSpinnerVisible = true;
-    this.commonService.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
+    this.commonservice.getManagmentStrctureData(id, empployid, editMSID).subscribe(response => {
       this.isSpinnerVisible = false;
       if (response) {
         const result = response;
@@ -716,7 +715,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       currentEmployeeId = this.employeeId;
     }
     this.isSpinnerVisible = true;
-    this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
+    this.commonservice.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
@@ -786,7 +785,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (legalEntityId != 0 && legalEntityId != null && legalEntityId != undefined) {
       this.salesQuote.managementStructureId = legalEntityId;
       this.salesQuote.companyId = legalEntityId;
-      this.commonService.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
+      this.commonservice.getManagementStructurelevelWithEmployee(legalEntityId, this.employeeId).subscribe(res => {
         this.bulist = res;
         this.employeedata('', this.salesQuote.managementStructureId);
       });
@@ -806,7 +805,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (buId != 0 && buId != null && buId != undefined) {
       this.salesQuote.managementStructureId = buId;
       this.salesQuote.buId = buId;
-      this.commonService.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
+      this.commonservice.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
       });
     } 
@@ -822,7 +821,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (divisionId != 0 && divisionId != null && divisionId != undefined) {
       this.salesQuote.divisionId = divisionId;
       this.salesQuote.managementStructureId = divisionId;
-      this.commonService.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
+      this.commonservice.getManagementStructurelevelWithEmployee(divisionId, this.employeeId).subscribe(res => {
         this.departmentList = res;
       });
     }

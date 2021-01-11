@@ -12,7 +12,7 @@
         <div>
           <button
             type="button"
-            class="btn-sm new-btn-primary" data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
+            class="btn-sm new-btn-primary" data-toggle="modal" (click)="openFreight(addNewFreight); createNew()">
             Add Freight
           </button>
         </div>
@@ -273,8 +273,8 @@
 </div>
 
 
-
-<div id="addNewFreight" class="modal fade" role="dialog" *ngIf="!view" data-backdrop="static" data-keyboard="false">
+<ng-template #addNewFreight let-c="close" let-d="dismiss" data-backdrop="static">
+<div *ngIf="!view" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xlg">
     <!-- Modal content-->
     <div class="modal-content">
@@ -434,6 +434,7 @@
     </div>
   </div>
 </div>
+</ng-template>
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
     <h4 class="modal-title">Are You Sure Want to Delete?</h4>
