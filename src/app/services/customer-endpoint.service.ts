@@ -12,16 +12,14 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _getContactHistroty: string = "/api/Customer/getContactHistroty";
     private readonly _customersUrl: string = "/api/Customer/Get";
     private readonly _customersUrlAll: string = "/api/Customer/GetAll";
-
     private readonly _customerTypeUrl: string = "/api/Customer/CustomerTypeGet";
-    private readonly _aircraftTypeUrl: string = "/api/Customer/aircraftTypeGet";
-    private readonly _updateShipAddressDetails: string = "/api/Customer/updateShipAddress";
+    private readonly _aircraftTypeUrl: string = "/api/Customer/aircraftTypeGet";    
     private readonly _customersUrlNew: string = environment.baseUrl + "/api/Customer/customers";
     private readonly _updateActiveInactive: string = "/api/Customer/customersUpdateforActive";
     private readonly _insertToaddAudit: string = "/api/Customer/insertToAuditaddress";
     private readonly _updateToaddressaudit: string = "/api/Customer/updateToAuditaddress";
     private readonly _deleteShipingData: string = "/api/Customer/deleteCustomerShipping";
-    private readonly _updatelists: string = "/api/Customer/updatelistStatus";
+    private readonly _updatelists: string = environment.baseUrl + "/api/Customer/updatelistStatus";
     private readonly _generalurl: string = "/api/Customer/customergeneralinfo";
     private readonly _addressUrl: string = "/api/Customer/AddressGet";
     private readonly _customerBillAddressUrl = "/api/Customer/customerAddressGet";
@@ -31,16 +29,13 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly __venshipwithid = "/api/Vendor/venshippingGetwithid";
     private readonly _customerBillViaDetails = "/api/Customer/getCustomerBillViaDetails";
     private readonly _getBilladdresshistory = "/api/Customer/getCustomerBillAddressHistory";
-    private readonly _billingInfoUrl: string = "/api/Customer/CustomerBillingPost";
-    private readonly _updateBillAddressDetails: string = "/api/Customer/customerBillAddressdetails";
-    private readonly _updatshippingAddressDetails: string = "/api/Customer/cusShippingUpdate";
-    private readonly _updateStatusCustomerShipping: string = "/api/Customer/updateStatusCustomerShipping";
-    // private readonly _saveBillViaDetails: string = "/api/Customer/addShipViaDetails";
+    private readonly _billingInfoUrl: string = environment.baseUrl + "/api/Customer/CustomerBillingPost";    
+    private readonly _updatshippingAddressDetails: string = environment.baseUrl + "/api/Customer/cusShippingUpdate";
+    private readonly _updateStatusCustomerShipping: string = environment.baseUrl + "/api/Customer/updateStatusCustomerShipping";    
     private readonly _customerShipViaDetails: string = "/api/Customer/getCustomerShipViaDetails";
-    private readonly _updateBillingViaDetails: string = "/api/Customer/customerBillAddressdetails";
-    private readonly _deleteBillingCusDettilas: string = "/api/Customer/DeleteCustomerBillingInfo";
-    private readonly _customerBillAddressdetails: string = "/api/Customer/customerBillAddressdetails";
-    //private readonly _customerBillingUrlNew: string = "/api/Customer/updateStatusCustomerBilling";
+    private readonly _updateBillingViaDetails: string = environment.baseUrl + "/api/Customer/customerBillAddressdetails";
+    private readonly _deleteBillingCusDettilas: string = environment.baseUrl + "/api/Customer/DeleteCustomerBillingInfo";
+    private readonly _customerBillAddressdetails: string = environment.baseUrl + "/api/Customer/customerBillAddressdetails";    
     private readonly _contacturl: string = "/api/Customer/ContactGet";
     private readonly _getATAchapterUrl: string = "/api/Customer/AtachapterGet";
     private readonly _fianlurl: string = "/api/Customer/fianlEmptyObj";
@@ -49,29 +44,33 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerCommonDataBySearchId: string = "/api/Customer/customer-common-data";
     private readonly _customerCommonDataWithContactsBySearchId: string = "/api/Customer/customer-common-data-with-contact";
     private readonly _salesListWithId: string = "/api/Customer/Saleslist";
-    private readonly _contactGeturl: string = "/api/Vendor/ContactCompleteGet"; LegalContact
-    private readonly _deleteContactUrl: string = "/api/Customer/CustomerContact";
+    private readonly _contactGeturl: string = "/api/Vendor/ContactCompleteGet"; 
+    private readonly _deleteContactUrl: string = environment.baseUrl + "/api/Customer/CustomerContact";
     private readonly _deleteContactUrl1: string = "/api/Customer/LegalContact";
     private readonly _CustomerContactUrlNew: string = "/api/Customer/updateStatusCusShippingAddress";
-    private readonly _CustomerContctUrl: string = "/api/Customer/CustomerContactPost";
-
+    private readonly _CustomerContctUrl: string = environment.baseUrl + "/api/Customer/CustomerContactPost";
     private readonly _CustomerContctUrl1: string = "/api/Customer/LegalContactPost";
     private readonly _CustomerUpdateContctUrl: string = "/api/Customer/ContactPost";
     private readonly _contactsEmptyObjurl: string = "/api/Customer/contactEmptyObj";
     private readonly _getShipViaByShippingId: string = "/api/Customer/GetShipVia";
     private readonly _getShipViaHistory: string = "/api/Customer/getShipViaHistory";
-    private readonly _shippingInfoUrl: string = "/api/Customer/CustomerShippingPost";
-    private readonly _saveShipViaDetails: string = "/api/Customer/addShipViaDetails";
-    private readonly _updateShippingViaDetails: string = "/api/Customer/updateShipViaDetails";
+    private readonly _shippingInfoUrl: string = environment.baseUrl + "/api/Customer/CustomerShippingPost";
+    //private readonly _customerBillingUrlNew: string = "/api/Customer/updateStatusCustomerBilling";
+    //private readonly _saveBillViaDetails: string = "/api/Customer/addShipViaDetails";
+    //private readonly _saveShipViaDetails: string = "/api/Customer/addShipViaDetails";
+    //private readonly _updateBillAddressDetails: string = "/api/Customer/customerBillAddressdetails";
+    //private readonly _customerFinanceUrl: string = "/api/Customer/customerFinancePost";
+    //private readonly _customerSalesUrl: string = "/api/Customer/customerSalesPost";
+    //private readonly _customersUrlAuditHistory: string = "/api/customer/auditHistoryById";
+    //private readonly _updateShipAddressDetails: string = "/api/Customer/updateShipAddress";
+    private readonly _updateShippingViaDetails: string = environment.baseUrl + "/api/Customer/updateShipViaDetails";
     private readonly _CustomerShipAddressdetails: string = "/api/Customer/CustomerShippingAddressDetails";
-    private readonly _CustomerShippingUrlNew: string = "/api/Customer/updateStatusCustomerShipping";
-    private readonly _customerFinanceUrl: string = "/api/Customer/customerFinancePost";
-    private readonly _customerFinanceInfoSaveUrl: string = "/api/Customer/customer-financial-info-save";
-    private readonly _customerFinanceInfoGetUrl: string = "/api/Customer/customer-financial-info-get";
-    private readonly _customerSalesUrl: string = "/api/Customer/customerSalesPost";
-    private readonly _customerSalesSaveUrl: string = "/api/Customer/customer-sales-info-save";
-    private readonly _customerSalesGetUrl: string = "/api/Customer/customer-sales-info-get";
-    private readonly _CustomerwarningUrl: string = "/api/Customer/saveCustomerWarnings";
+    private readonly _CustomerShippingUrlNew: string = "/api/Customer/updateStatusCustomerShipping";    
+    private readonly _customerFinanceInfoSaveUrl: string = environment.baseUrl + "/api/Customer/customer-financial-info-save";
+    private readonly _customerFinanceInfoGetUrl: string = environment.baseUrl + "/api/Customer/customer-financial-info-get";    
+    private readonly _customerSalesSaveUrl: string = environment.baseUrl + "/api/Customer/customer-sales-info-save";
+    private readonly _customerSalesGetUrl: string = environment.baseUrl + "/api/Customer/customer-sales-info-get";
+    private readonly _CustomerwarningUrl: string = environment.baseUrl + "/api/Customer/saveCustomerWarnings";
     private readonly _CustomerdataUrl: string = "/api/Customer/saveCustomeraircraftdata";
     private readonly _countryUrl: string = "/api/Customer/GetcountryList";
     private readonly _countryUrlNew: string = "api/Customer/postCountryList";
@@ -80,8 +79,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _newDiscount: string = "api/Customer/insertDiscount";
     private readonly _Customerwarningget: string = "/api/Customer/CustomerWarningsget";
     private readonly _aircraftmodelsPost: string = "/api/Customer/Aircraftpost";
-    private readonly _getAircraftUrl: string = "/api/Customer/Aircraftget";
-    //private readonly _customersUrlAuditHistory: string = "/api/customer/auditHistoryById";
+    private readonly _getAircraftUrl: string = "/api/Customer/Aircraftget";    
     private readonly _listUrl: string = "/api/Customer/GetCustomerBynameList";
     private readonly _aircraftmodelsurl: string = "/api/Customer/GetAircarftmodelsdata";
     private readonly _updateActiveInactiveforBilling: string = "/api/Customer/billingUpdateforActive";
@@ -96,26 +94,20 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly getAllCustomersInfoURL: string = "/api/customer/getAllCustomersInfo";
     private readonly getCustomer: string = "/api/customer/pagination";
     private readonly getGlobalCustomer: string = "/api/customer/globalSearch";
-
-
     private readonly _getAircraftMapped: string = environment.baseUrl +  "/api/Customer/getCustomerAircraftMapped";
-    private readonly _getAircraftMappedAudit: string = "/api/Customer/getCustomerAircraftMappedAudit";
+    private readonly _getAircraftMappedAudit: string = environment.baseUrl + "/api/Customer/getCustomerAircraftMappedAudit";
     private readonly _CustomerAircraftPostUrl: string = "/api/Customer/CustomerAircraftPost";
     private readonly _getTaxTypeRateMapped: string = environment.baseUrl + "/api/Customer/getCustomerTaxTypeRateMapped";
     private readonly _CustomerTaxTypeRatePostUrl: string = "/api/Customer/CustomerTaxTypeRatePost";
-
     private readonly _CustomerAircraftSearchUrl: string = '/api/Customer/searchCustomerAircraftMappingDataByMultiTypeIdModelIDDashID';
     private readonly _CustomerATAPostUrl: string = "/api/Customer/CustomerContactATAPost";
-    private readonly _getATAMappedByContactId: string = "/api/Customer/getCustomerContactATAMapped";
+    private readonly _getATAMappedByContactId: string = environment.baseUrl +  "/api/Customer/getCustomerContactATAMapped";
     private readonly _getATAMappedByCustomerId: string = environment.baseUrl + "/api/Customer/getCustomerATAMapped";
     private readonly _getContactsByCustomerId: string = environment.baseUrl + "/api/Customer/GetCustomerContacts";
     private readonly _getCustomerContactGet: string = environment.baseUrl + "/api/Customer/customer-contact-get";
-
-
     private readonly _deleteATAMappedByContactId: string = "/api/Customer/DeleteCustomerContactATAMapping"
     private readonly _restoreATAMappedByContactId: string = "/api/Customer/RestoreCustomerContactATAMapping"
     private readonly _CustomerAtaSearchUrl: string = '/api/Customer/searchGetCustomerATAMappedByMultiATAIDATASubID';
-
     private readonly _internationalshippingpost: string = '/api/Customer/createinternationalshipping'
     private readonly _internationalshippingget: string = '/api/Customer/internationalshippingdetaillist'
     private readonly _internationalstatus: string = '/api/Customer/internationalshippingdetailsstatus'
@@ -131,11 +123,9 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _updateActiveAircraftInvetory: string = '/api/Customer/UpdateActiveStatusCustomerAircraftMapping';
     private readonly _deleteTaxTypeRateMapped: string = '/api/Customer/DeleteCustomerTaxTypeRateMapping';
     private readonly _addShipViaDetails: string = '/api/Customer/addShipViaDetails';
-    private readonly _addDocumentDetails: string = '/api/Customer/customerDocumentUpload';
+    private readonly _addDocumentDetails: string = environment.baseUrl + '/api/Customer/customerDocumentUpload';
     private readonly _addRemoveDetails: string = '/api/Customer/customerDocumentDelete';
-
     private readonly _deleteCustomerDocuments: string = '/api/Customer/deleteCustomerDocuments';
-
     private readonly _customerContactHistory: string = '/api/Customer/customercontactauditdetails'
     private readonly _customerContactHistory1: string = '/api/Customer/Legalcontactauditdetails'
     private readonly _customerGlobalSearch: string = '/api/Customer/ListGlobalSearch'
@@ -146,38 +136,32 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerclassificationMapUrl: string = "/api/Customer/customerclassificationmappings";
     private readonly _deleteInternationalShippingViaMapUrl: string = '/api/Customer/deleteshippingviadetails';
     private readonly _restoreInternationalShippingViaMapUrl: string = '/api/Customer/restoreshippingviadetails';
-    private readonly _deleteShipVia: string = '/api/Customer/deleteshipviadetails';
+    private readonly _deleteShipVia: string = environment.baseUrl + '/api/Customer/deleteshipviadetails';
     private readonly _restoreShipVia: string = '/api/Customer/restoreshipviadetails';
-
     private readonly _deleteRestrictedParts: string = environment.baseUrl + '/api/Customer/deletesRestrictedParts';
     private readonly _restoreRestrictedParts: string = '/api/Customer/restoreRestrictedParts';
-
     private readonly _shippingDetailsStatus: string = '/api/Customer/shippingdetailsstatus';
     private readonly _shippingdetailsviastatus: string = '/api/Customer/shippingdetailsviastatus'
-
-
-
     private readonly _customersBillingUpdateforActive: string = '/api/Customer/customersBillingUpdateStatus'
-    private readonly _getCustomerDocumentAttachmentslist: string = "/api/FileUpload/getcustomerdocumentattachmentdetails";
+    private readonly _getCustomerDocumentAttachmentslist: string = environment.baseUrl + "/api/FileUpload/getcustomerdocumentattachmentdetails";
     private readonly _updateCustomerDocument: string = '/api/Customer/customerDocumentUpdate';
     private readonly _addCustomerFileUpload: string = "/api/Customer/customerFinanceDocumentUpload";
-
     private readonly _addCustomerFinanceFileDetails: string = "/api/Customer/getCustmerFinanceDocumentDetail";
-
     private readonly _customerDeleteAttachment: string = "/api/Customer/customerAttachmentDelete";
-    private readonly _customerAircraftUpdate: string = "/api/Customer/CustomerAircraftUpdate";
+    private readonly _customerAircraftUpdate: string = environment.baseUrl +"/api/Customer/CustomerAircraftUpdate";
     private readonly _customerHistory: string = "/api/Customer/GetCustomerAuditHistoryByid"
     private readonly _customerShippingHistory: string = "/api/Customer/getCustomerShippingHistory"
     private readonly _customerInterShippingHistory: string = "/api/Customer/GetCustomerInternationalShippingAuditHistoryByid";
     private readonly _customerShipViaHistory: string = "/api/Customer/GetShipViaAudit"
     private readonly _customerInterShipViaHistory: string = "/api/Customer/getauditshippingviadetailsbyid"
-    private readonly _getCustomerDocumentHistory: string = "/api/Customer/getCustomerDocumentAudit"
+    private readonly _getCustomerDocumentHistory: string = environment.baseUrl + "/api/Customer/getCustomerDocumentAudit"
     private readonly excelUpload: string = "/api/Customer/uploadcustomerbillingaddress"
     private readonly excelUploadShipping: string = "/api/Customer/uploadcustomershippingaddress"
     private readonly excelUploadInterShipping: string = "/api/Customer/uploadcustomerinternationalshipping"
     private readonly excelUploadContact: string = "/api/Customer/uploadcustomercontacts"
     private readonly _internationalShipViaByShippingIdList: string = '/api/Customer/getinternationalshippingviadetails';
     private readonly _customerContacATAHistory: string = '/api/Customer/getCustomerATAMappedAudit'
+
     get globalSearch() { return this.configurations.baseUrl + this.getGlobalCustomer; }
     get paginate() { return this.configurations.baseUrl + this.getCustomer; }
     get customerBillAddressUrl() { return this.configurations.baseUrl + this._customerBillAddressUrl; }
