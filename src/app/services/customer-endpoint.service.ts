@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
+import { environment } from 'src/environments/environment';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
@@ -27,7 +27,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerBillAddressUrl = "/api/Customer/customerAddressGet";
     private readonly _cusShippingGeturl = "/api/Customer/cusshippingGet";
     private readonly _cusShippingGeturlwithId = "/api/Vendor/cusshippingGetwithid";
-    private readonly _customerList: string = '/api/Customer/List';
+    private readonly _customerList: string = environment.baseUrl + '/api/Customer/List';
     private readonly __venshipwithid = "/api/Vendor/venshippingGetwithid";
     private readonly _customerBillViaDetails = "/api/Customer/getCustomerBillViaDetails";
     private readonly _getBilladdresshistory = "/api/Customer/getCustomerBillAddressHistory";
