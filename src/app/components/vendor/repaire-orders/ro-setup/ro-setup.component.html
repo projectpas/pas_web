@@ -259,8 +259,8 @@
                                             ></a>
                                             </span>
                                         </label>
-                                        <span> <div [innerHTML]="headerInfo.poMemo" 
-                                            [matTooltip]="parsedText(headerInfo.poMemo)"
+                                        <span> <div [innerHTML]="headerInfo.roMemo" 
+                                            [matTooltip]="parsedText(headerInfo.roMemo)"
                                             matTooltipPosition="above"
                                              class="form-control " 
                                             class="text_editor_box text-editor-field"></div> 
@@ -321,7 +321,7 @@
                         </div>
                     </div>
                     <div *ngIf="toggle_ro_header">                      
-                        <button class="btn btn-primary pull-right toggle-btn-align" (click)="savePurchaseOrderHeader()" 
+                        <button class="btn btn-primary pull-right toggle-btn-align" (click)="saveRepairOrderHeader()" 
                           [disabled]="!createROForm.valid" [disabled]="!enableHeaderSaveBtn"  >{{isEditModeHeader ? 'Update' : 'Save'}}</button>
                     </div>            
                 </div>
@@ -371,7 +371,7 @@
                                 <th>Report CUR <span class="clr-red">*</span></th>
                                 <th>WO Num</th>
                                 <th>Sub-WO Num</th>
-                                <th>RO Num</th>
+                                <!-- <th>RO Num</th> -->
                                 <th>SO Num</th>
                                 <th>Item Type</th>
                                 <th>GL Account</th>
@@ -509,8 +509,6 @@
                                     <td>
                                         <p-autoComplete field="label" class="autocomplete" appendTo="body" [(ngModel)]="partList.salesOrderId" name="salesOrderId{{row_index}}" [suggestions]="allSalesOrderDetails" (onSelect)="onSOSelect($event.value)" (completeMethod)="filterSalesOrderList($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                         </p-autoComplete>
-                                        <!-- <input type="number" class="form-control" [(ngModel)]="partList.salesOrderId" name="salesOrderId{{row_index}}"> -->
-
                                     </td>
                                     <td *ngIf="partList.itemTypeId==1">Stock</td>
                                     <td *ngIf="partList.itemTypeId==2">Non Stock</td>
@@ -542,7 +540,7 @@
                                     </td>
                                     <td class="mgmt-td-align">
                                         <!-- <label style="width:90px;">BU:</label> -->
-                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList,row_index)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                             <option value="0">Select</option>
                                             <option *ngFor="let businessUnit of partList.parentBulist" value="{{businessUnit.value}}">{{businessUnit.label}}</option>
                                         </select>
@@ -677,7 +675,7 @@
                                         <td colspan="3">
                                             <div class="form-row">
                                                 <div class="col-sm-10">
-                                                    <select class="inner-addon right-addon autosuggesions-add inline-block mw400 form-control" [(ngModel)]="partChildList.poPartSplitSiteId" name="partListAddressId{{row_index}}{{row_no}}" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required>
+                                                    <select class="inner-addon right-addon autosuggesions-add inline-block mw400 form-control" [(ngModel)]="partChildList.roPartSplitSiteId" name="partListAddressId{{row_index}}{{row_no}}" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required>
                                                         <option value="0" >Select</option>
                                                         <option *ngFor="let object of getAddressDetails('splitAddressData', row_index, row_no)" value="{{object.siteID}}">{{object.siteName}}, {{object.address1}}, {{object.city}}, {{object.stateOrProvince}}, {{object.country}} - {{object.postalCode}}</option>
                                                     </select>
@@ -685,7 +683,7 @@
                                                 <div class="col-sm-1 parts-plus" *ngIf="(partChildList.partListUserId | json) != '{}' && partChildList.partListUserId != null">
                                                     <div><a class="fa fa-plus-circle fa-lg" matTooltip="Add Split Address" matTooltipPosition="above" data-toggle="modal" data-target="#createPOAddress" (click)="onClickPartsListAddress('Add', partChildList, row_index, row_no)" *ngIf="!partChildList.isApproved"></a></div>
                                                 </div>
-                                                <div class="col-sm-1 parts-list-memo-div" *ngIf="partChildList.poPartSplitSiteId && partChildList.poPartSplitSiteId != null && partChildList.poPartSplitSiteId != 0">
+                                                <div class="col-sm-1 parts-list-memo-div" *ngIf="partChildList.roPartSplitSiteId && partChildList.roPartSplitSiteId != null && partChildList.roPartSplitSiteId != 0">
                                                     <!-- <div style="cursor:pointer; font-size:12px;"><a class="fa fa-edit fa-lg"
                                                          matTooltip="Edit Split Address" matTooltipPosition="above"
                                                          data-toggle="modal" data-target="#createPOAddress" 
@@ -821,7 +819,7 @@
                 </div>
                 </div>
                 <div>
-                    <button class="btn btn-primary pull-right" (click)="savePurchaseOrderPartsList()" [disabled]="!enablePartSaveBtn">{{isEditModePart ? 'Update' : 'Save'}}</button>
+                    <button class="btn btn-primary pull-right" (click)="saveRepairOrderPartsList()" [disabled]="!enablePartSaveBtn">{{isEditModePart ? 'Update' : 'Save'}}</button>
                 </div>
             </form>
         </p-tabPanel>

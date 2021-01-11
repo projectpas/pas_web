@@ -1,3 +1,4 @@
+import { RepairOrder } from './../../../components/receiving/repair-order/receiving-ro/RepairOrder.model';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import * as $ from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -130,11 +131,17 @@ export class AddressComponentComponent implements OnInit {
 				this.getShipToBillToDropDown(res)
 			});
 		}
-		else if(this.addressType == AddressTypeEnum.SalesOrder){
+		else if(this.addressType == AddressTypeEnum.SalesOrder) {
 			this.ModuleID = AppModuleEnum.SalesOrder;
 			this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
 				this.getShipToBillToDropDown(res)
 			});
+		}
+		else if(this.addressType == AddressTypeEnum.RepairOrder) {		
+			this.ModuleID = AppModuleEnum.RepairOrder;
+			this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
+				this.getShipToBillToDropDown(res)
+			});	
 		}
 	}
 

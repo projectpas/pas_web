@@ -10,5 +10,6 @@
     Company=9,
     SalesOrder = 10,
     SOPickTicket = 11,
-    PurchaseOrder = 13
+    PurchaseOrder = 13,
+    RepairOrder = 14
 }
