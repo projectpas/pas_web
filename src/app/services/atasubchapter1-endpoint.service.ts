@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-
+import { environment } from 'src/environments/environment';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 
@@ -18,7 +18,7 @@ export class ATASubChapter1Endpoint extends EndpointFactory {
     private readonly getSubChaptersListById: string = "/api/ATASubChapter1/ATASubChapterByATAChapterId";
 
 
-    private readonly getSubChaptersList: string = "/api/ATASubChapter1/ATASubChapter";
+    private readonly getSubChaptersList: string = environment.baseUrl + "/api/ATASubChapter1/ATASubChapter";
 
 
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
