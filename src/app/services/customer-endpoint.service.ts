@@ -137,7 +137,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _deleteInternationalShippingViaMapUrl: string = '/api/Customer/deleteshippingviadetails';
     private readonly _restoreInternationalShippingViaMapUrl: string = '/api/Customer/restoreshippingviadetails';
     private readonly _deleteShipVia: string = environment.baseUrl + '/api/Customer/deleteshipviadetails';
-    private readonly _restoreShipVia: string = '/api/Customer/restoreshipviadetails';
+    private readonly _restoreShipVia: string = environment.baseUrl + '/api/Customer/restoreshipviadetails';
     private readonly _deleteRestrictedParts: string = environment.baseUrl + '/api/Customer/deletesRestrictedParts';
     private readonly _restoreRestrictedParts: string = '/api/Customer/restoreRestrictedParts';
     private readonly _shippingDetailsStatus: string = '/api/Customer/shippingdetailsstatus';
