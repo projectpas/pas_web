@@ -16,7 +16,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerTypeUrl: string = "/api/Customer/CustomerTypeGet";
     private readonly _aircraftTypeUrl: string = "/api/Customer/aircraftTypeGet";
     private readonly _updateShipAddressDetails: string = "/api/Customer/updateShipAddress";
-    private readonly _customersUrlNew: string = "/api/Customer/customers";
+    private readonly _customersUrlNew: string = environment.baseUrl + "/api/Customer/customers";
     private readonly _updateActiveInactive: string = "/api/Customer/customersUpdateforActive";
     private readonly _insertToaddAudit: string = "/api/Customer/insertToAuditaddress";
     private readonly _updateToaddressaudit: string = "/api/Customer/updateToAuditaddress";
