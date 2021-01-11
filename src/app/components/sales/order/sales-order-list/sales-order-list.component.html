@@ -198,19 +198,23 @@
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </span>
-                            <span data-toggle="modal" data-target="#soHistory">
+                            <!-- <span data-toggle="modal" data-target="#soHistory">
                                 <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
+                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            </span> -->
+                            <span>
+                                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)"
                                     matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
                         </div>
 
                         <div *ngIf="currentDeletedstatus==true">
                             <span>
-                                <a class="btn nobg" (click)="viewSelectedRow(viewOrder,rowData)" matTooltip="View"
+                                <a class="btn nobg" (click)="viewSelectedRow(content,rowData)" matTooltip="View"
                                     matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                             </span>
-                            <span data-toggle="modal" data-target="#soHistory">
-                                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"
+                            <span>
+                                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(soHistory,rowData)" matTooltip="History"
                                   matTooltipPosition="above"><i class="fa fa-history"></i></a>
                               </span>
                             <span><a class="btn nobg" (click)="restore(restoreIdSo,rowData);"
@@ -337,12 +341,15 @@
         </div>
     </div>
 </div>
-<div id="soHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+<!-- <div id="soHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false"> -->
+<ng-template #soHistory let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
+                <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <h4 class="modal-title">History of Sales Order</h4>
             </div>
             <div class="modal-body" *ngIf="auditHistory">
@@ -435,8 +442,8 @@
             </div>
             <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+                <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
             </div>
         </div>
     </div>
-</div>
+</ng-template>
