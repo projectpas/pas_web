@@ -1100,7 +1100,6 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.salesQuote.memo = this.tempMemo;
     }
     this.enableUpdateButton = false;
-    this.modal.close();
   }
 
   closeErrorMessage() {
@@ -1768,10 +1767,6 @@ export class SalesQuoteCreateComponent implements OnInit {
   openConfirmationModal(submitType: boolean) {
     this.submitType = submitType;
     this.modal = this.modalService.open(this.updateConfirmationModal, { size: "sm" });
-  }
-
-  openDescription(content) {
-    this.modal = this.modalService.open(content, { size: "sm" });
   }
 
   closeConfirmationModal() {
