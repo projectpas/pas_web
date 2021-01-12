@@ -11,7 +11,7 @@ import { CustomerViewComponent } from '../../../../shared/components/customer/cu
 import { CommonService } from "../../../../services/common.service";
 import { DBkeys } from "../../../../services/db-Keys";
 import { MenuItem } from "primeng/api";
-import * as $ from "jquery";
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 
 @Component({

@@ -449,8 +449,8 @@
                             <div class="col-md-4 main_ar">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
-                                        Notes<i class="fa fa-pencil" data-toggle="modal" matTooltipPosition="above" matTooltip="Notes"
-                                            (click)="openDescription(addDescription); onAddDescription('notes')"></i>
+                                        Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description" matTooltipPosition="above" matTooltip="Notes"
+                                            (click)="onAddDescription('notes')"></i>
                                     </label>
                                     <span>
                                         <div class="form-group memo-popup-cstm mat_emo">
@@ -640,9 +640,8 @@
         </div>
     </div>
 </div>
-<ng-template #addDescription let-c="close" let-d="dismiss" data-backdrop="static">
-<!-- <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false"> -->
-    <!-- <div class="modal-dialog modal-lg" style="max-width: 400px !important;"> -->
+<div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" aria-label="Close" (click)="closeModal()">&times;</button>
@@ -678,9 +677,8 @@
                 </div>
             </div>
         </div>
-    <!--</div>
- </div> -->
-</ng-template>
+    </div>
+ </div>
 <ng-template #errorMessagePop let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>
