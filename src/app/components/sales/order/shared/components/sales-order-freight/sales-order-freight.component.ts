@@ -283,8 +283,14 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
         else {
             let temp = [];
+            // this.salesOrderFreightList.forEach((x) => {
+            //     temp = [...temp, ...x];
+            // })
             this.salesOrderFreightList.forEach((x) => {
-                temp = [...temp, ...x];
+                if(typeof x[Symbol.iterator] === 'function')
+                    temp = [...temp, ...x];
+                else
+                    temp = [...temp, x];
             })
             temp = [...temp, ...this.freightForm];
             this.salesOrderFreightLists = temp;
@@ -299,14 +305,20 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
         this.isEnableUpdateButton = true;
         this.isSaveChargesDesabled = false;
+        this.storedData=[...this.salesOrderFreightList];
     }
 
     createFreightsQuote() {
         let temp = this.salesOrderFreightList;
         let sendData = []
+        // for (let index = 0; index < temp.length; index++) {
+        //     sendData = [...sendData, ...temp[index]];
+        // }
         for (let index = 0; index < temp.length; index++) {
-            sendData = [...sendData, ...temp[index]];
-
+            if (typeof temp[index][Symbol.iterator] === 'function')
+                sendData = [...sendData, ...temp[index]];
+            else
+                sendData = [...sendData, temp[index]];                
         }
         sendData = sendData.map((f) => {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
@@ -324,8 +336,6 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
         }, error => {
             this.isSpinnerVisible = false;
-            const errorLog = error;
-            this.onDataLoadError(error)
         })
         this.isSaveChargesDesabled = true;
         this.storedData = [];

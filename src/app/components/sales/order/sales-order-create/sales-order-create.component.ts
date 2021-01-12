@@ -176,7 +176,7 @@ export class SalesOrderCreateComponent implements OnInit {
   soStatusList: any = [];
   soTypeList: any = [];
   addressType: any = 'SO';
-
+  showAddresstab:boolean  = false;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -1139,6 +1139,10 @@ export class SalesOrderCreateComponent implements OnInit {
             if (createNewVersion) {
               this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
             }
+            this.toggle_po_header = false;
+            if (this.isEdit) {
+              this.isCreateModeHeader = false;
+            }
             this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
@@ -1289,7 +1293,8 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
     }
     if (event.index == 3) {
-      this.salesAddressComponent.refresh(this.salesOrderQuote)
+      //this.salesAddressComponent.refresh(this.salesOrderQuote)
+      this.showAddresstab = true;
     }
     if (event.index == 4) {
       //this.salesOrderFreightComponent.refresh(false);

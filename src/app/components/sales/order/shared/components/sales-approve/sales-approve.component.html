@@ -1,69 +1,78 @@
-<div class="approver-tab-cstm">
+<!-- <div class="approver-tab-cstm">
     <h5 class="po-head">Approvers List</h5>
     <div class="form-row">
-        <div class="col-md-12">
-            <div class="table-responsive">
-                <div class="table-responsive" style="margin-top: 10px;">
-                    <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
-                        id="mpn-list-table">
-                        <thead>
-                            <tr class="pad_workflo">
-                                <th style="width:150px">Approver Name</th>
-                                <th style="width:150px">Approver Code</th>
-                                <th style="width:150px">Approver Email</th>
-                                <th style="width:100px">SO Amount</th>
-                                <th style="width:100px">Min Amount</th>
-                                <th style="width:100px">Max Amount</th>
-                                <th>Message</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="mpn-row" style="display: table-row;"
-                                *ngFor="let approver of approvers; let i=index;"
-                                [ngClass]="{red : approver.isExceeded == true}">
-                                <td>
-                                    {{approver.approverName}}
-                                </td>
-                                <td>
-                                    {{approver.approverCode}}
-                                </td>
-                                <td>
-                                    {{approver.approverEmail}}
-                                </td>
-                                <td style="text-align: right;">
-                                    {{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}
-                                </td>
-                                <td style="text-align: right;">
-                                    {{approver.lowerValue | twoDecimalGlobalNumberFormatPipe}}
-                                </td>
-                                <td style="text-align: right;">
-                                    {{approver.upperValue | twoDecimalGlobalNumberFormatPipe}}
-                                </td>
-                                <td>
-                                    {{approver.message}}
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="col-md-12"> -->
+            <div class="approver-tab-cstm">
+                <div class="table-responsive">
+                    <div class="table-responsive"
+                        style="margin-top: 10px; max-height: 600px !important; overflow-y: scroll !important;">
+                        <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table"
+                            id="mpn-list-table">
+                            <thead>
+                                <tr class="pad_workflo">
+                                    <th>Approver Name</th>
+                                    <th>Approver Code</th>
+                                    <th>Approver Email</th>
+                                    <th>Total Sales Quote Amout</th>
+                                    <th>Approver Rule</th>
+                                    <th>Memo</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="mpn-row" *ngFor="let approver of approvers; let i=index;">
+                                    <td>{{approver.approverName}}</td>
+                                    <td>{{approver.approverCode}}</td>
+                                    <td>{{approver.approverEmail}}</td>
+                                    <td style="text-align: right;">
+                                        <label
+                                            style="text-align: right !important;">{{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}</label>
+                                    </td>
+                                    <td>
+                                        {{approver.rule}}
+                                    </td>
+                                    <td>
+                                        <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['memo']"></p>
+                                    </td>
+                                    <td [ngClass]="{red : approver.isExceeded == true}">{{approver.message}}</td>
+                                    <!-- <td style="text-align: right;">
+                                                {{approver.lowerValue | twoDecimalGlobalNumberFormatPipe}}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{approver.upperValue | twoDecimalGlobalNumberFormatPipe}}
+                                            </td>
+                                            <td>
+                                                {{approver.message}}
+                                            </td> -->
+                                </tr>
+                                <tr *ngIf="approvers && approvers.length == 0">
+                                    <td [attr.colspan]="29" class="no-records-cstm"
+                                        style="color: red; font-weight: bold; text-align: center">
+                                        No records found
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- <br />
-    <div style="text-align:right; width:100%; padding:0;">
-        <button type="button" class="btn btn-primary" style="width:55px;height:20px;"
-            (click)="openConfirmationModal()">Save</button>
-    </div> -->
-</div>
-
-
-<!-- <ng-template #updatePNDetailsModal let-c="close" let-d="dismiss">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
-        <h4 class="modal-title">Do you want to save the Internal Aprroval Details?</h4>
-    </div>
-    <div class="modal-footer">
-
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="approve()">Save</button>
-    </div>
-</ng-template> -->
+            <!-- </div>
+                </div> -->
+            <!-- <br />
+                <div style="text-align:right; width:100%; padding:0;">
+                    <button type="button" class="btn btn-primary" style="width:55px;height:20px;"
+                        (click)="openConfirmationModal()">Save</button>
+                </div> -->
+            <!-- </div> -->
+            
+            
+            <!-- <ng-template #updatePNDetailsModal let-c="close" let-d="dismiss">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" (click)="closeConfirmationModal()">&times;</button>
+                    <h4 class="modal-title">Do you want to save the Internal Aprroval Details?</h4>
+                </div>
+                <div class="modal-footer">
+            
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="approve()">Save</button>
+                </div>
+            </ng-template> -->

@@ -1,6 +1,5 @@
 <div class="approver-tab-cstm">
   <h5 class="po-head mt-2">Customer Approvals List</h5>
-
   <div class="table-responsive">
     <div class="table-responsive" style="margin-top: 10px;">
       <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table" id="mpn-list-table">
@@ -14,14 +13,22 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="mpn-row" style="display: table-row;"
-            *ngFor="let approver of salesOrderCustomerApprovalListView; let i=index;">
-            <td>
-              <input type="checkbox" [disabled]="isView || !getPartToDisableOrNot(approver)"
-                [(ngModel)]="approver.selected" (click)="onApprovalSelected(approver, i)" />
-            </td>
-            <ng-container *ngFor="let field of columns">
-              <td style="width: 130px !important;" *ngIf="field.field != 'internalSentDate'
+          <ng-container *ngIf="!salesOrderCustomerApprovalListView || salesOrderCustomerApprovalListView.length==0">
+            <tr>
+              <td colspan="21" class="no-records-cstm" style="text-align: center;">
+                No records found
+              </td>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="salesOrderCustomerApprovalListView">
+            <tr class="mpn-row" style="display: table-row;"
+              *ngFor="let approver of salesOrderCustomerApprovalListView; let i=index;">
+              <td>
+                <input type="checkbox" [disabled]="isView || !getPartToDisableOrNot(approver)"
+                  [(ngModel)]="approver.selected" (click)="onApprovalSelected(approver, i)" />
+              </td>
+              <ng-container *ngFor="let field of columns">
+                <td style="width: 130px !important;" *ngIf="field.field != 'internalSentDate'
                                       && field.field != 'internalApprovedDate'
                                       && field.field != 'customerSentDate'
                                       && field.field != 'customerApprovedDate'
@@ -42,9 +49,9 @@
                                       && field.field != 'markupExtended'
                                       && field.field != 'qty'">
 
-                <span>{{approver[field.field]}}</span>
-              </td>
-              <td style="text-align: right; width: 150px !important;" *ngIf="field.field == 'discount'
+                  <span>{{approver[field.field]}}</span>
+                </td>
+                <td style="text-align: right; width: 150px !important;" *ngIf="field.field == 'discount'
                                       || field.field == 'markUpPercentage'
                                       || field.field == 'unitCostExtended'
                                       || field.field == 'discountAmount'
@@ -54,114 +61,118 @@
                                       || field.field == 'unitCostExtended'
                                       || field.field == 'marginAmountExtended'
                                       || field.field == 'marginPercentage'">
-                <span>{{approver[field.field] | twoDecimalGlobalNumberFormatPipe}}</span>
-              </td>
-              <td *ngIf="field.field == 'qty'" style="text-align: right; width: 130px !important;">
-                <span>{{approver[field.field] | globalNmberFormat}}</span>
-              </td>
+                  <span>{{approver[field.field] | twoDecimalGlobalNumberFormatPipe}}</span>
+                </td>
+                <td *ngIf="field.field == 'qty'" style="text-align: right; width: 130px !important;">
+                  <span>{{approver[field.field] | globalNmberFormat}}</span>
+                </td>
 
-              <td *ngIf="field.field == 'internalSentDate'">
-                <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                  [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 1" appendTo="body">
-                </p-calendar>
-              </td>
-              <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
-                <label *ngIf="field.field != 'internalStatusId'"
-                  [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
-                  [ngModelOptions]="{standalone: true}"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 2"
-                  *ngIf="field.field == 'internalStatusId'">
-                  <option value='-1'>--Select</option>
-                  <option *ngFor="let status of statusList" [ngValue]="status.statusId">
-                    {{status.name}}
-                  </option>
-                </select>
-              </td>
-              <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
-                <label *ngIf="field.field != 'internalStatusId'"
-                  [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
-                <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
-                  [ngModelOptions]="{standalone: true}"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 2"
-                  *ngIf="field.field == 'internalStatusId'">
-                  <option value='' selected>--Select</option>
-                  <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
-                    {{status.name}}
-                  </option>
-                </select>
-              </td>
-              <td *ngIf="field.field == 'internalMemo'" style="min-width: 100px;">
-                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['internalMemo']"></p>
-                <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionInternalStatus(approver)">
-                  <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
-                    matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddTextAreaInfo('internalMemo',i)"></i>
-                </div>
-              </td>
-              <td *ngIf="field.field == 'internalApprovedDate'">
-                <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                  [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'"
-                  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 2" appendTo="body">
-                </p-calendar>
-              </td>
+                <td *ngIf="field.field == 'internalSentDate'">
+                  <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [monthNavigator]="true" yearRange="1900:2100"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 1" appendTo="body">
+                  </p-calendar>
+                </td>
+                <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
+                  <label *ngIf="field.field != 'internalStatusId'"
+                    [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                  <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
+                    [ngModelOptions]="{standalone: true}"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 2"
+                    *ngIf="field.field == 'internalStatusId'">
+                    <option value='-1'>--Select</option>
+                    <option *ngFor="let status of statusList" [ngValue]="status.statusId">
+                      {{status.name}}
+                    </option>
+                  </select>
+                </td>
+                <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
+                  <label *ngIf="field.field != 'internalStatusId'"
+                    [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                  <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
+                    [ngModelOptions]="{standalone: true}"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 2"
+                    *ngIf="field.field == 'internalStatusId'">
+                    <option value='' selected>--Select</option>
+                    <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
+                      {{status.name}}
+                    </option>
+                  </select>
+                </td>
+                <td *ngIf="field.field == 'internalMemo'" style="min-width: 100px;">
+                  <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['internalMemo']"></p>
+                  <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionInternalStatus(approver)">
+                    <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
+                      matTooltipPosition="above" matTooltip="Add Memo"
+                      (click)="onAddTextAreaInfo('internalMemo',i)"></i>
+                  </div>
+                </td>
+                <td *ngIf="field.field == 'internalApprovedDate'">
+                  <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [monthNavigator]="true" yearRange="1900:2100"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 2" appendTo="body">
+                  </p-calendar>
+                </td>
 
-              <td *ngIf="field.field == 'customerSentDate'">
-                <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                  [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'"
-                  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 3" appendTo="body">
-                </p-calendar>
-              </td>
-              <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
-                <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
-                <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
-                  [ngModelOptions]="{standalone: true}"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 4"
-                  *ngIf="field.field == 'customerStatusId'">
-                  <option value='-1'>--Select</option>
-                  <option *ngFor="let status of statusList" [ngValue]="status.statusId">
-                    {{status.name}}
-                  </option>
-                </select>
-              </td>
-              <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver) ">
-                <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
-                <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
-                  [ngModelOptions]="{standalone: true}"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 4"
-                  *ngIf="field.field == 'customerStatusId'">
-                  <option value='' selected>--Select</option>
-                  <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
-                    {{status.name}}
-                  </option>
-                </select>
-              </td>
-              <td *ngIf="field.field == 'customerMemo'" style="min-width: 100px;">
-                <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['customerMemo']"></p>
-                <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionCustomerStatus(approver)">
-                  <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
-                    matTooltipPosition="above" matTooltip="Add Memo" (click)="onAddTextAreaInfo('customerMemo',i)"></i>
-                </div>
-              </td>
-              <td *ngIf="field.field == 'customerApprovedDate'">
-                <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
-                  [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'"
-                  [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                  [disabled]="!approver.selected || approver['approvalActionId'] != 4" appendTo="body">
-                </p-calendar>
-              </td>
-              <td *ngIf="field.field == 'customerApprovedBy'">
-                <label *ngIf="field.field != 'customerApprovedBy'">{{approver[field.field]}}</label>
-                <select *ngIf="field.field == 'customerApprovedBy'" [(ngModel)]="approver['customerApprovedById']"
-                  style="width:150px;" [disabled]="!approver.selected || approver['approvalActionId'] != 4">
-                  <option value="">Select</option>
-                  <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.contactName}}</option>
-                </select>
-              </td>
-            </ng-container>
-          </tr>
+                <td *ngIf="field.field == 'customerSentDate'">
+                  <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [monthNavigator]="true" yearRange="1900:2100"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 3" appendTo="body">
+                  </p-calendar>
+                </td>
+                <td *ngIf="field.field == 'customerStatusId' && !getApprovalActionCustomerStatus(approver)">
+                  <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
+                  <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                    [ngModelOptions]="{standalone: true}"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 4"
+                    *ngIf="field.field == 'customerStatusId'">
+                    <option value='-1'>--Select</option>
+                    <option *ngFor="let status of statusList" [ngValue]="status.statusId">
+                      {{status.name}}
+                    </option>
+                  </select>
+                </td>
+                <td *ngIf="field.field == 'customerStatusId' && getApprovalActionCustomerStatus(approver) ">
+                  <label *ngIf="field.field != 'customerStatusId'">{{approver[field.field]}}</label>
+                  <select style="width:150px;" [(ngModel)]="approver['customerStatusId']"
+                    [ngModelOptions]="{standalone: true}"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 4"
+                    *ngIf="field.field == 'customerStatusId'">
+                    <option value='' selected>--Select</option>
+                    <option *ngFor="let status of statusListForApproval" [ngValue]="status.statusId">
+                      {{status.name}}
+                    </option>
+                  </select>
+                </td>
+                <td *ngIf="field.field == 'customerMemo'" style="min-width: 100px;">
+                  <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="approver['customerMemo']"></p>
+                  <div style="margin-top: 4px;float: right;" *ngIf="getApprovalActionCustomerStatus(approver)">
+                    <i class="fa fa-info-circle fa-lg" data-toggle="modal" data-target="#memo-popup"
+                      matTooltipPosition="above" matTooltip="Add Memo"
+                      (click)="onAddTextAreaInfo('customerMemo',i)"></i>
+                  </div>
+                </td>
+                <td *ngIf="field.field == 'customerApprovedDate'">
+                  <p-calendar [showIcon]="true" class="calender-cstm" name="openDate" #openDate="ngModel" required
+                    [(ngModel)]="approver[field.field]" [dateFormat]="'dd/mm/yy'" [yearNavigator]="true"
+                    [monthNavigator]="true" yearRange="1900:2100"
+                    [disabled]="!approver.selected || approver['approvalActionId'] != 4" appendTo="body">
+                  </p-calendar>
+                </td>
+                <td *ngIf="field.field == 'customerApprovedBy'">
+                  <label *ngIf="field.field != 'customerApprovedBy'">{{approver[field.field]}}</label>
+                  <select *ngIf="field.field == 'customerApprovedBy'" [(ngModel)]="approver['customerApprovedById']"
+                    style="width:150px;" [disabled]="!approver.selected || approver['approvalActionId'] != 4">
+                    <option value="">Select</option>
+                    <option *ngFor="let cus of customerContactList" [value]="cus.contactId">{{cus.contactName}}</option>
+                  </select>
+                </td>
+              </ng-container>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
 
