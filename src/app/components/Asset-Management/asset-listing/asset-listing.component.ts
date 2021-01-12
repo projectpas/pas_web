@@ -18,7 +18,7 @@ import { CommonService } from '../../../services/common.service';
 import { ItemMasterCapabilitiesModel } from '../../../models/itemMasterCapabilities.model';
 import { VendorService } from '../../../services/vendor.service';
 import { AssetLocationService } from '../../../services/asset-location/asset-location.service';
-// import * as $ from 'jquery'
+// declare var $ : any;
 declare var $ : any;
 import { AuditHistory } from '../../../models/audithistory.model';
 import { UnitOfMeasureService } from '../../../services/unitofmeasure.service';

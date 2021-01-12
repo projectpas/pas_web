@@ -3,7 +3,7 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { AuthService } from '../../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { getValueFromObjectByKey, editValueAssignByCondition, getObjectById } from '../../../../generic/autocomplete';
-import * as $ from 'jquery'
+declare var $ : any;
 import { NgForm } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 @Component({

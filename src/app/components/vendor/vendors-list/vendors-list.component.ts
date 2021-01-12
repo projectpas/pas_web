@@ -11,7 +11,7 @@ import { MessageSeverity, AlertService } from '../../../services/alert.service';
 import { VendorService } from '../../../services/vendor.service';
 import { MasterComapnyService } from '../../../services/mastercompany.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import $ from "jquery";
+//import $ from "jquery";
 import { ConfigurationService } from '../../../services/configuration.service';
 import { VendorCapabilitiesService } from '../../../services/vendorcapabilities.service';
 import { MenuItem } from 'primeng/api';
@@ -19,6 +19,8 @@ import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+declare var $ : any;
+
 
 @Component({
     selector: 'app-vendors-list',

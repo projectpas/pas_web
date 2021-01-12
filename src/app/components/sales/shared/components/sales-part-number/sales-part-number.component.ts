@@ -880,4 +880,7 @@ export class SalesPartNumberComponent {
     }
   }
 
+  checkToHide(i) {
+    return !this.summaryParts[i].hidePart;
+  }
 }

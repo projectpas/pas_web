@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import * as $ from "jquery";
+declare var $ : any;
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
@@ -86,7 +86,6 @@ export class SalesQuoteListComponent implements OnInit {
         private alertService: AlertService,
         private modalService: NgbModal,
         private router: Router,
-        private customerService: CustomerService,
         public employeeService: EmployeeService,
         private commonservice: CommonService,
         public currencyService: CurrencyService,
@@ -224,7 +223,8 @@ export class SalesQuoteListComponent implements OnInit {
     }
 
     closeModal() {
-        $("#downloadConfirmation").modal("hide");
+        //$("#downloadConfirmation").modal("hide");
+        this.modal.close();
     }
 
     dismissModel() {
@@ -394,6 +394,7 @@ export class SalesQuoteListComponent implements OnInit {
                 dt._value = vList;
                 dt.exportCSV();
                 dt.value = this.sales;
+                this.modal.close();
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
@@ -401,8 +402,13 @@ export class SalesQuoteListComponent implements OnInit {
 
     }
     closeHistoryModal() {
-        $("#soqHistory").modal("hide");
+        this.modal.close();
     }
+
+    openHistoryPopup(content) {
+        this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
+    }
+
     getAuditHistoryById(rowData) {
         this.isSpinnerVisible = true;
         this.salesQuoteService.getSOQHistory(rowData.salesOrderQuoteId).subscribe(res => {
@@ -439,4 +445,7 @@ export class SalesQuoteListComponent implements OnInit {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
+    openDownload(content) {
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
 }

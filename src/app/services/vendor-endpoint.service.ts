@@ -23,7 +23,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _partDetails: string = "/api/Vendor/Getpartdetails";
 	private readonly _partDetailswithid: string = "/api/Vendor/GetpartdetailsWithid";
 	private readonly _partDetailswithidForsinglePart = "/api/Vendor/GetpartdetailsWithidForSinglePart"
-	private readonly _saveVendorCapesByVendor: string = "/api/Vendor/PostVendorCapes";
+	private readonly _saveVendorCapesByVendor: string = environment.baseUrl + "/api/Vendor/PostVendorCapes";
 
 	private readonly _capabilityUrl: string = "/api/Vendor/GetCapabilityList";
 	private readonly _vendrUrl: string = "/api/Vendor/GetListDetails";
@@ -51,11 +51,11 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _saveVendorpurchasespart: string = "/api/Vendor/saveVendorpurchasespart";
 	private readonly _saveVendorrepairepart: string = "/api/Vendor/saveVendorRepairPart";
 
-	private readonly _vendorUpdateUrl: string = "/api/Vendor/vendorUpdate";
+	private readonly _vendorUpdateUrl: string = environment.baseUrl + "/api/Vendor/vendorUpdate";
 	private readonly _vendorContactUrlNew: string = "/api/Vendor/updateStatusVenShippingAddress";
 	private readonly _deleteCheckPayment: string = "/api/Vendor/deleteCheckPayment";
 	private readonly _restoreCheckPayment: string = "/api/Vendor/restoreCheckPayment";
-	private readonly _deleteContactUrl: string = "/api/Vendor/vendorContact";
+	private readonly _deleteContactUrl: string = environment.baseUrl + "/api/Vendor/vendorContact";
 	private readonly _vendorShippingUrlNew: string = "/api/Vendor/updateStatusVendorShipping";
 	private readonly _vendorShippingAddressUrlDelete: string = "/api/Vendor/deletevendorshippingaddress";
 	private readonly _vendorShippingAddressUrlRestore: string = "/api/Vendor/restorevendorshippingaddress";
@@ -63,7 +63,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _vendorShippingAddressViaUrlRestore: string = "/api/Vendor/restorevendorshippingviaaddress";
 	private readonly _vendorShippingAddressViaInterUrlDelete: string = "/api/Vendor/deleteinternationalshipvia";
 	private readonly _vendorShippingAddressViaInterUrlRestore: string = "/api/Vendor/restoreinternationalshipvia";
-	private readonly _vendorsContctUrl: string = "/api/Vendor/vendorContactPost";
+	private readonly _vendorsContctUrl: string = environment.baseUrl + "/api/Vendor/vendorContactPost";
 	private readonly _checkPaymntUpdateUrl: string = "/api/Vendor/checkPaymentUpdate";
 	private readonly _domesticUpdate: string = "/api/Vendor/domesticPaymentUpdate";
 	private readonly _internationalUpdate: string = "/api/Vendor/InternationalUpdate";
@@ -72,17 +72,17 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _adddomesticpaymentUrl: string = "/api/Vendor/paymentDomesticPost";
 	private readonly _addinternationalpaymentUrl: string = "/api/Vendor/paymentInternationalPost";
 	private readonly _adddefaultpaymentUrl: string = "/api/Vendor/paymentDefaultPost";
-	private readonly _vendorsUpdateContctUrl: string = "/api/Vendor/ContactPost";
+	private readonly _vendorsUpdateContctUrl: string = environment.baseUrl + "/api/Vendor/ContactPost";
 	private readonly _vendorCheckpaymentUpdate: string = "/api/Vendor/vendorCheckPayment";
 	private readonly _vendorShipAddressdetails: string = "/api/Vendor/vendorShippingAddressDetails";
 	private readonly _vendorDomesticpaymentUpdate: string = "/api/Vendor/vendorDomesticPayment";
 	private readonly _vendorInternationalpaymentUpdate: string = "/api/Vendor/vendorInternationalPayment";
 	private readonly _vendorDefaultUpdate: string = "/api/Vendor/updatevendorDefault";
 
-	private readonly _vendorFinanceUrl: string = "/api/Vendor/vendorFinancePost";
+	private readonly _vendorFinanceUrl: string = environment.baseUrl +"/api/Vendor/vendorFinancePost";
 	private readonly _shippingInfoUrl: string = "/api/Vendor/vendorShippingPost";
 	private readonly _billingInfoUrl: string = "/api/Vendor/vendorBillingPost";
-	private readonly _billingInfoNew: string = "/api/Vendor/createvendorbillingaddress";
+	private readonly _billingInfoNew: string = environment.baseUrl + "/api/Vendor/createvendorbillingaddress";
 	private readonly _saveShipViaDetails: string = "/api/Vendor/addShipViaDetails";
 	private readonly _saveShipViaInterDetails: string = "/api/Vendor/createinternationalshipvia";
 	private readonly _saveBillViaDetails: string = "/api/Vendor/addBillViaDetails";
@@ -168,11 +168,11 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _saveCreateROApproval: string = "/api/Vendor/createRoApprover";
 	private readonly _updateROApproval: string = "/api/Vendor/updateRoApprover";
 
-	private readonly _getVendorPOmemolist: string = "/api/Vendor/vendorpomemolist";
-	private readonly _getVendorROmemolist: string = "/api/Vendor/vendorromemolist";
+	private readonly _getVendorPOmemolist: string = environment.baseUrl + "/api/Vendor/vendorpomemolist";
+	private readonly _getVendorROmemolist: string = environment.baseUrl + "/api/Vendor/vendorromemolist";
 	private readonly _updateVendorPOROmemolist: string = "/api/Vendor/updatevendormemotext";
 
-	private readonly _getVendorDocslist: string = "/api/Vendor/getVendorDocumentDetailList";
+	private readonly _getVendorDocslist: string = environment.baseUrl + "/api/Vendor/getVendorDocumentDetailList";
 	private readonly _addDocumentDetails: string = "/api/Vendor/vendorDocumentUpload";
 	private readonly _addCapesDocumentDetails: string = "/api/Vendor/uploadVendorCapsData";
 	private readonly _UploadVendorCapesDetails: string = "/api/Vendor/UploadVendorCapsListData";
@@ -183,20 +183,20 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _getVendorDeleteDocsDetailsById: string = "/api/Vendor/vendorDocumentDelete";
 
 	private readonly _getVendorShippingHistory: string = "/api/Vendor/getVendorShippingHistory";
-	private readonly _getVendorBillingHistory: string = "/api/Vendor/getVendorBillingHistory";
-	private readonly _getVendorContactHistory: string = "/api/Vendor/getVendorContactHistory";
+	private readonly _getVendorBillingHistory: string = environment.baseUrl + "/api/Vendor/getVendorBillingHistory";
+	private readonly _getVendorContactHistory: string = environment.baseUrl + "/api/Vendor/getVendorContactHistory";
 	private readonly _getVendorDocumentHistory: string = "/api/Vendor/getVendorDocumentAudit";
-	private readonly _getVendorCapabilityHistory: string = "/api/Vendor/getVendorCapabilityHistory";
+	private readonly _getVendorCapabilityHistory: string = environment.baseUrl + "/api/Vendor/getVendorCapabilityHistory";
 	private readonly _updateVendorBillAddressDetails: string = "/api/Vendor/updatevendorbillingaddress";
 	private readonly _addVendorDocumentDetails: string = "/api/FileUpload/uploadfiles";
 	private readonly _addVendorFileUpload: string = "/api/Vendor/vendorGeneralDocumentUpload";
-	private readonly _addVendorgeneralFileDetails: string = "/api/Vendor/getVendorGeneralDocumentDetail";
+	private readonly _addVendorgeneralFileDetails: string = environment.baseUrl + "/api/Vendor/getVendorGeneralDocumentDetail";
 	private readonly _vendorDeleteAttachment: string = "/api/Vendor/vendorAttachmentDelete";
 	private readonly _vendorProcess1099Id: string = "/api/Vendor/getVendorProcess1099ListForFinance";
 	private readonly _vendorProcess1099IdFromTransaction: string = "/api/Vendor/getVendorProcess1099ListFromTransaction";
-	private readonly _deleteVendorBillingAddressDelete: string = "/api/Vendor/deletevendorbillingaddress";
-	private readonly _restoreVendorBillingAddressDelete: string = "/api/Vendor/restorevendorbillingaddress";
-	private readonly _updateVendorBillingAddressStatus: string = "/api/Vendor/vendorbillingaddressstatus";
+	private readonly _deleteVendorBillingAddressDelete: string = environment.baseUrl + "/api/Vendor/deletevendorbillingaddress";
+	private readonly _restoreVendorBillingAddressDelete: string = environment.baseUrl + "/api/Vendor/restorevendorbillingaddress";
+	private readonly _updateVendorBillingAddressStatus: string = environment.baseUrl + "/api/Vendor/vendorbillingaddressstatus";
 	private readonly _vendorListsUrl: string = "/api/Vendor/vendorlist";
 
 	private readonly excelUploadBilling: string = "/api/Vendor/uploadvendorbillingaddress"

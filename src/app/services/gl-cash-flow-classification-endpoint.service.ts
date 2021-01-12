@@ -57,7 +57,7 @@ private readonly GlDelete : string = '/api/GlCashFlowClassification/glcashflowDe
 
         return this.http.post<T>(this._glCashFlowClassificationUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewGlCashFlowClassificationEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewGlCashFlowClassificationEndpoint(userObject));
             });
     }
 

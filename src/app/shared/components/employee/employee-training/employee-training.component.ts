@@ -21,8 +21,9 @@ import { editValueAssignByCondition, formatNumberAsGlobalSettingsModule, getValu
 import { CommonService } from '../../../../services/common.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AircraftModelService } from '../../../../services/aircraft-model/aircraft-model.service';
-declare var $ : any;
+//import * as $ from 'jquery';
 import * as moment from 'moment';
+declare let $ : any;
 
 @Component({
     selector: 'app-employee-training',
