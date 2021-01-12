@@ -134,8 +134,8 @@ if(res && localStorage.getItem('currentLETab')=='Documents'){
 			this.currentTab = 'Documents';
 			this.activeMenuItem = 6;
 			this.referenceId=this.entityId; 
-			console.log("tabsData",this.editGeneralInformationData)
-		if(this.editGeneralInformationData){
+			this.referenceId=this.referenceId? this.referenceId :this.editGeneralInformationData.legalEntityId;
+			if(this.editGeneralInformationData){
 			this.legalEntityCode = this.editGeneralInformationData.companyCode;
 			if(typeof  this.editGeneralInformationData.name != 'string'){
 				this.legalEntityName = this.editGeneralInformationData.name.label;

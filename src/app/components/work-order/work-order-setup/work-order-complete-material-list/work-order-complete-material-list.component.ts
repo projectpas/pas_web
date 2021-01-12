@@ -8,7 +8,7 @@ import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { ActionService } from '../../../../Workflow/ActionService';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
-import * as $ from 'jquery'
+declare var $ : any;
 import { AuthService } from '../../../../services/auth.service';
 import { Subscription } from 'rxjs';
 import { Pipe, PipeTransform } from "@angular/core";

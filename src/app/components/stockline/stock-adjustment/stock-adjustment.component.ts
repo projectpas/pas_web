@@ -6,7 +6,7 @@ import { StocklineService } from '../../../services/stockline.service';
 import { Site } from '../../../models/site.model';
 import { CommonService } from '../../../services/common.service';
 import { Subject } from 'rxjs'
-import * as $ from 'jquery'
+declare var $ : any;
 import { takeUntil } from 'rxjs/operators';
 import { formatNumberAsGlobalSettingsModule, getValueFromObjectByKey, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';

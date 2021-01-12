@@ -20,7 +20,7 @@ import { AircraftManufacturerService } from '../../services/aircraft-manufacture
 import { AircraftModelService } from '../../services/aircraft-model/aircraft-model.service';
 import { DashNumberService } from '../../services/dash-number/dash-number.service';
 import { AtaMainService } from '../../services/atamain.service';
-import * as $ from 'jquery'
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';

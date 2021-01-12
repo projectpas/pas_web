@@ -16,7 +16,7 @@ import { SalesOrderCustomerApprovalView } from "../../../models/sales-order-cust
 import { SalesOrderCustomerApproval } from '../../../models/sales-order-customer-approval';
 import { WorkOrderQuoteService } from "../../../../../../services/work-order/work-order-quote.service";
 
-import * as $ from 'jquery'
+declare var $ : any;
 import { CommonService } from "../../../../../../services/common.service";
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
 // import { m } from "@angular/core/src/render3";

@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://dev.poweraerosuites.com/app1'
+  baseUrl: 'http://localhost:5050'
+  //baseUrl: 'https://dev.poweraerosuites.com/app1'
+  
 };
 
 /*

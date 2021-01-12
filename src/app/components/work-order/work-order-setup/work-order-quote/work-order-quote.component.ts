@@ -14,7 +14,7 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { ConditionService } from '../../../../services/condition.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
 import { AuthService } from '../../../../services/auth.service';
-import * as $ from 'jquery'
+declare var $ : any;
 import {
     AlertService,
     MessageSeverity
