@@ -252,6 +252,7 @@ if(this.type==1){
     deletedStatusInfo: boolean = false;
     partNo: any;
     getAllPhoneList() {
+        this.data = [];
         this.isSpinnerVisible = true;
         this.communicationService.getCommonPhoneData(this.referenceId, this.moduleId, this.deletedStatusInfo,this.type)
             .subscribe(
