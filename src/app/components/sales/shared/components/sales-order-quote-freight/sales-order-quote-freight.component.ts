@@ -222,10 +222,10 @@ dismissModelAlettRestore() {
             this.textAreaInfo = memo;
             this.freightForm[this.memoIndex].memo = this.textAreaInfo;
         }
-        this.modal.close();
+        $("#textarea-popupFreight").modal("hide");
     }
     onCloseTextAreaInfo() {
-        this.modal.close();
+        $("#textarea-popupFreight").modal("hide");
     }
 
 
@@ -547,7 +547,7 @@ dismissModelAlettRestore() {
                 this.markupChanged(this.freightForm[0], 'row');
             }
             this.salesOrderFreightList[this.mainEditingIndex] = this.freightForm[0];
-            this.modal.close();
+            $('#addNewFreight').modal('hide');
             this.isEdit = false;
         }
         else {
@@ -567,7 +567,7 @@ dismissModelAlettRestore() {
             if (this.costPlusType == 1) {
                 this.markupChanged({}, 'all');
             }
-            this.modal.close();
+            $('#addNewFreight').modal('hide');
         }
         this.isEnableUpdateButton=true;
         this.isSaveChargesDesabled=false;

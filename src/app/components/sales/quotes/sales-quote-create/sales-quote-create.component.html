@@ -1,24 +1,23 @@
 <div class="right_col" role="main">
     <div class="x_content">
         <div class="card new-card">
-            <div class="card-header bg-primary new-card-header">
+            <div class="card-header header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="new-card-heading">{{id ? 'Edit' : 'Create'}} Sales Order Quote</h4>
+                        <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order Quote</h4>
                     </div>
                     <div class="col-md-8">
-                        <button class="btn-sm new-btn-primary pull-left" (click)="expandHeader()">
+                        <button class="btn-sm header-button pull-left" (click)="expandHeader()">
                             {{toggle_po_header ? 'Collapse' : 'Expand'}}
                         </button>
                     </div>
                     <div>
-                        <button type="button" class="btn-sm new-btn-primary pull-right" matTooltipPosition="above"
+                        <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
                             matTooltip=" SO Quote List" [routerLink]="['/salesmodule/salespages/sales-quote-list']">
                             SO Quote List
                         </button>
                     </div>
                 </div>
-
             </div>
             <div class="card" style="padding: 5px; margin: 5px;" *ngIf="!toggle_po_header">
                 <div class="form-row">
