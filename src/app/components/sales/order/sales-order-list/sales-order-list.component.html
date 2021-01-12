@@ -1,12 +1,12 @@
 <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary new-card-header">
+    <div class="card-header header">
         <div class="row">
             <div class="col">
-                <h4 class="new-card-heading">Sales Order List</h4>
+                <h4 class="header-name">Sales Order List</h4>
             </div>
             <div>
-                <button type="button" class="btn-sm new-btn-primary" matTooltipPosition="above"
+                <button type="button" class="btn-sm header-button" matTooltipPosition="above"
                     matTooltip="Create Sales Order" [routerLink]="['/salesmodule/salespages/sales-order']">
                     Create Sales Order
                 </button>
@@ -172,8 +172,12 @@
                         [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
                         <!-- {{convertDate(col.field , rowData)}} -->
                         <span
-                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
+                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate' && col.field != 'openDate'">
                                 {{convertDate(col.field , rowData)}}
+                        </span>
+                        <span
+                            *ngIf="col.field == 'openDate'">
+                                {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy'}}
                         </span>
                         <span *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
                                 {{convertDate(col.field , rowData) | date: 'MM/dd/yyyy h:mm a '}}
@@ -232,7 +236,7 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="sales.length == 0">
                 <tr>
-                    <td [attr.colspan]="10" style="color: red; font-weight: bold; text-align: center">
+                    <td [attr.colspan]="19" style="color: red; font-weight: bold; text-align: center">
                         No records found
                     </td>
                 </tr>
@@ -357,32 +361,32 @@
                     <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
+                                <th>SO Num</th>
                                 <th>Quote Num</th>
                                 <th>Status</th>
-                                <th>SO Num</th>
                                 <th>Customer Name</th>
                                 <th>Customer Type</th>
                                 <th>Cust Ref</th>
                                 <th>Priority</th>
-                                <th>Salesperson</th>
+                                <th>Sales person</th>
                                 <th>Created Date</th>
                                 <th>Created By</th>
-                                <th>Modified Date</th>
-                                <th>Modified By</th>
+                                <th>Updated Date</th>
+                                <th>Updated By</th>
                                 <th>Is Deleted</th>
                             </tr>
                         </thead>
                         <tbody class="audithistory-cstm">
                             <tr *ngFor="let audit of auditHistory; let i = index;">
                                 <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'salesOrderNumber', audit.salesOrderNumber)  ? 'black' : 'red'  }">
+                                    {{audit.salesOrderNumber}}</td>
+                                <td
                                     [ngStyle]="{'color':  getColorCodeForHistory(i, 'salesOrderQuoteNumber', audit.salesOrderQuoteNumber)  ? 'black' : 'red'  }">
                                     {{audit.salesOrderQuoteNumber}}</td>
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">
                                     {{audit.status}}</td>
-                                <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'salesOrderNumber', audit.salesOrderNumber)  ? 'black' : 'red'  }">
-                                    {{audit.salesOrderNumber}}</td>
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
                                     {{audit.customerName}}</td>
@@ -399,11 +403,11 @@
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'salesPerson', audit.salesPerson)  ? 'black' : 'red'  }">
                                     {{audit.salesPerson}}</td>
                                 <td
-                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
-                                    {{audit.createdBy}}</td>
-                                <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
                                     {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                                <td
+                                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                                    {{audit.createdBy}}</td>
                                 <td
                                     [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
                                     {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
