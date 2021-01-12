@@ -15,7 +15,7 @@ import { DBkeys } from "../../../../../services/db-Keys";
 import { AlertService, MessageSeverity } from "../../../../../services/alert.service";
 import { AuthService } from "../../../../../services/auth.service";
 import { Column } from "primeng/components/common/shared";
-import * as $ from 'jquery'
+declare var $ : any;
 
 @Component({
     selector: "add-reserve-unreserve-part-number",

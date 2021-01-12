@@ -1,5 +1,4 @@
 export const environment = {
-    production: true,
-    baseUrl: 'https://dev.poweraerosuites.com/app1'
-  };
-  
+  production: true,
+  baseUrl: 'http://uatapp1.poweraerosuites.com'
+};

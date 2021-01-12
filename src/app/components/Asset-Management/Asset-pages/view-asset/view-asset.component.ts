@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
 import { AlertService } from '../../../../services/alert.service';
 import { Router } from '@angular/router';
-import * as $ from 'jquery'
+declare var $ : any;
 import { fadeInOut } from '../../../../services/animations';
 
 @Component({

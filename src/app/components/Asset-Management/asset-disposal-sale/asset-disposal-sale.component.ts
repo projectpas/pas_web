@@ -7,7 +7,7 @@ import { fadeInOut } from '../../../services/animations';
 import { AlertService, DialogType, MessageSeverity } from '../../../services/alert.service';
 import { CommonService } from '../../../services/common.service';
 import { LegalEntityService } from '../../../services/legalentity.service';
-import * as $ from 'jquery'
+declare var $ : any;
 
 @Component({
     selector: 'app-asset-disposal-sale',

@@ -40,7 +40,7 @@
     "moment": "^2.29.1",
     "ng-multiselect-dropdown": "^0.2.14",
     "ng2-charts": "^2.4.2",
-    "ng2-toasty": "^4.0.3",
+    "ng2-toasty": "4.0.3",
     "ngx-carousel": "^1.2.0",
     "primeicons": "^1.0.0",
     "primeng": "^8.0.0",

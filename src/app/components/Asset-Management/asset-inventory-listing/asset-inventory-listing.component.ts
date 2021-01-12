@@ -9,7 +9,8 @@ import { Vendor } from '../../../models/vendor.model';
 import { DepriciationMethod } from '../../../models/depriciation-method.model';
 import { CommonService } from '../../../services/common.service';
 import { ItemMasterCapabilitiesModel } from '../../../models/itemMasterCapabilities.model';
-import * as $ from 'jquery'
+// declare var $ : any; 
+declare var $ : any;
 import { listSearchFilterObjectCreation, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import * as moment from 'moment';

@@ -3,7 +3,7 @@ import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
 import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-import * as $ from 'jquery'
+declare var $ : any;
 import { WorkOrderQuoteService } from "../services/work-order/work-order-quote.service";
 import { ItemClassificationService } from "../services/item-classfication.service";
 import { VendorService } from "../services/vendor.service";

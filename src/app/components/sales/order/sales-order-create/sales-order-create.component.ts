@@ -764,6 +764,7 @@ export class SalesOrderCreateComponent implements OnInit {
     this.salesQuote.memo = this.salesOrderObj.memo;
     this.salesQuote.notes = this.salesOrderObj.notes;
     this.salesQuote.salesOrderQuoteNumber = this.salesOrderObj.salesOrderQuoteNumber;
+    this.salesQuote.statusName = this.salesOrderObj.statusName;
     this.salesQuote.isApproved = this.salesOrderObj.isApproved;
     this.salesQuote.companyId = this.salesOrderObj.masterCompanyId;
     this.salesQuote.buId = this.salesOrderObj.buId;
@@ -1291,10 +1292,20 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesAddressComponent.refresh(this.salesOrderQuote)
     }
     if (event.index == 4) {
-      this.salesOrderFreightComponent.refresh(false);
+      //this.salesOrderFreightComponent.refresh(false);
+      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
+        this.salesOrderFreightComponent.refresh(false);
+      } else {
+        this.salesOrderFreightComponent.refresh(true);
+      }
     }
     if (event.index == 5) {
-      this.salesOrderChargesComponent.refresh(false);
+      //this.salesOrderChargesComponent.refresh(false);
+      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+        this.salesOrderChargesComponent.refresh(false);
+      } else {
+        this.salesOrderChargesComponent.refresh(true);
+      }
     }
     if (event.index == 6) {
       this.salesOrderShippingComponent.refresh(this.selectedParts);

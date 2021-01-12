@@ -29,11 +29,6 @@ import { RepairOrderService } from '../../../services/repair-order.service';
 })
 export class AllViewComponent implements OnInit {
 
-  @Input() OrderId;
-  @Input() OrderType;
-  @Input() PovendorId;
-  @Input() vendorId: number;
-
   poHeaderAdd: any = {};
   roHeaderAdd: any = {};
   headerManagementStructureWithName: any = {};
@@ -52,8 +47,13 @@ export class AllViewComponent implements OnInit {
   capvendorId: number;
   selectedPurchaseOrderId: any;
   moduleName:any="PurchaseOrder";
-  vendorIdByParams: boolean = false;
   isViewMode: boolean = true;
+  vendorIdByParams: boolean = false;
+  @Input() OrderId;
+  @Input() OrderType;
+  @Input() PovendorId;
+  @Input() vendorId: number;
+
   approvalProcessHeader = [
     {
       header: 'Action',
@@ -123,8 +123,7 @@ export class AllViewComponent implements OnInit {
     this.selectedPurchaseOrderId = this.OrderId;
     let OrderId = this.OrderId;
     this.OrderTypes = this.OrderType;
-    let PovendorId = this.PovendorId;  
-
+    let PovendorId = this.PovendorId;      
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;      
       this.getPOViewById(OrderId);
@@ -147,6 +146,8 @@ export class AllViewComponent implements OnInit {
       this.getApprovalProcessListById(OrderId);
     }
   }
+
+  
 
   getPOViewById(poId) {
     this.purchaseOrderService.getPOViewById(poId).subscribe(res => {
