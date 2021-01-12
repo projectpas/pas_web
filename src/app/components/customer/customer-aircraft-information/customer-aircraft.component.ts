@@ -615,15 +615,19 @@ export class CustomerAircraftComponent implements OnInit {
 
     getAircraftMappedDataByCustomerId() {
         this.isSpinnerVisible = true;
-        this.customerService.getMappedAirCraftDetails(this.id).subscribe(res => {
-            this.aircraftListDataValues = res;
-            if (this.aircraftListDataValues.length > 0) {
-                this.totalRecords = this.aircraftListDataValues.length;
-                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-            }
-            this.isSpinnerVisible = false;
-        }, error => this.saveFailedHelper(error))
+        if(this.id > 0)
+        {
+            this.customerService.getMappedAirCraftDetails(this.id).subscribe(res => {
+                this.aircraftListDataValues = res;
+                if (this.aircraftListDataValues.length > 0) {
+                    this.totalRecords = this.aircraftListDataValues.length;
+                    this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                }
+                this.isSpinnerVisible = false;
+            }, error => this.saveFailedHelper(error))
+        }
     }
+    
     getCustomerAircraftHistory(row) {
         this.isSpinnerVisible = true;
         const { customerAircraftMappingId } = row;

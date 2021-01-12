@@ -44,14 +44,14 @@
                     <td *ngFor="let summaryColumn of summaryColumns" style="width:auto" pReorderableRowHandle>
                         <span *ngIf="summaryColumn.field == 'hidePart'">
                             <a class="expand-row" *ngIf="!summaryPart[summaryColumn.field]"
-                                (click)="summaryPart[summaryColumn.field] = !summaryPart[summaryColumn.field]">
+                                (click)="summaryPart[summaryColumn.field] = !summaryPart[summaryColumn.field];">
                                 <i class="fa fa-plus btn
                                             btn-success btn-cstm btn-xs" matTooltip="Show details"
                                     style="padding: 3px 8px !important;">
                                 </i>
                             </a>
                             <a class="expand-row" *ngIf="summaryPart[summaryColumn.field]"
-                                (click)="summaryPart[summaryColumn.field] =!summaryPart[summaryColumn.field]">
+                                (click)="summaryPart[summaryColumn.field] = !summaryPart[summaryColumn.field];">
                                 <i class="fa fa-minus btn-danger btn-cstm btn-xs" matTooltip="Hide details"
                                     style="padding: 3px 8px !important;">
                                 </i>

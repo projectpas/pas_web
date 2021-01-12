@@ -268,15 +268,15 @@ export class SalesOrderService {
   sentForInternalApproval(data) {
     return this.salesOrderEndPointSevice.sentForInternalApproval(data);
   }
-  close(salesOrderId: number): Observable<boolean[]> {
+  close(salesOrderId: number,updatedBy:string): Observable<boolean[]> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.close(salesOrderId)
+      this.salesOrderEndPointSevice.close(salesOrderId,updatedBy)
     );
   }
 
-  cancel(salesOrderId: number): Observable<boolean[]> {
+  cancel(salesOrderId: number,updatedBy:string): Observable<boolean[]> {
     return Observable.forkJoin(
-      this.salesOrderEndPointSevice.cancel(salesOrderId)
+      this.salesOrderEndPointSevice.cancel(salesOrderId,updatedBy)
     );
   }
 

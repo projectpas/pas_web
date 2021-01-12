@@ -41,7 +41,7 @@
                                     </p-radioButton>
                                     <div>
                                         <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -62,7 +62,7 @@
                         color:#fff !important;"></th>
                     </ng-container>
                     <ng-container *ngIf="!isView">
-                        <th colspan="4" style="background: #fff; border: 1px solid #e7ecf1;padding: 0;">
+                        <th colspan="4" style="background: #4298ff !important; color:#fff; border: 1px solid #e7ecf1;padding: 0;">
                             <div class="display-flex" style="background: #4298ff; padding-left: 10px;">
                                 <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
                                     <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
@@ -70,7 +70,7 @@
                                     </p-radioButton>
                                     <div>
                                         <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" (ngModelChange)="validated()" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                                                [(ngModel)]="overAllMarkup" (ngModelChange)="validated()" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -250,9 +250,9 @@
     <div *ngIf="!isView" style="padding: 10px;">
         <!--<button class="btn btn-primary pull-right side" (click)="createChargesQuote()">Save</button>-->
         <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createChargesQuote()">
-            <span *ngIf="salesOrderChargesList && salesOrderChargesList.length !=0">Update</span>
-            <span *ngIf="salesOrderChargesList && salesOrderChargesList.length ==0">Save</span>
-        </button>
+            <span *ngIf="isUpdate">Update</span>
+           <span *ngIf="!isUpdate">Save</span>
+         </button>
     </div>
 
 </div>

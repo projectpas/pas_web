@@ -13,7 +13,7 @@ import { environment } from 'src/environments/environment';
 export class ItemMasterEndpoint extends EndpointFactory {
 
 
-    private readonly _actionsUrl: string = "/api/ItemMaster/Get";
+    private readonly _actionsUrl: string = environment.baseUrl + "/api/ItemMaster/Get";
     private readonly _actionsCapsUrl: string = "/api/itemmaster/getitemmastercapes";
     private readonly _aircraftmodelsurl: string = "/api/ItemMaster/GetAircarftmodelsdata";
     private readonly _aircraftmanafacturerurl: string = "/api/ItemMaster/aircraftManufacturerGet";

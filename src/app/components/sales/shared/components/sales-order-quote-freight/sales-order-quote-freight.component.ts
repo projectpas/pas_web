@@ -222,10 +222,10 @@ dismissModelAlettRestore() {
             this.textAreaInfo = memo;
             this.freightForm[this.memoIndex].memo = this.textAreaInfo;
         }
-        $("#textarea-popupFreight").modal("hide");
+        this.modal.close();
     }
     onCloseTextAreaInfo() {
-        $("#textarea-popupFreight").modal("hide");
+        this.modal.close();
     }
 
 
@@ -233,8 +233,10 @@ dismissModelAlettRestore() {
         let temp = this.salesOrderFreightList;
         let sendData = []
         for (let index = 0; index < temp.length; index++) {
-            sendData = [...sendData, ...temp[index]];
-
+            if (typeof temp[index][Symbol.iterator] === 'function')
+                sendData = [...sendData, ...temp[index]];
+            else
+                sendData = [...sendData, temp[index]];                
         }
         sendData = sendData.map((f) => {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
@@ -545,13 +547,16 @@ dismissModelAlettRestore() {
                 this.markupChanged(this.freightForm[0], 'row');
             }
             this.salesOrderFreightList[this.mainEditingIndex] = this.freightForm[0];
-            $('#addNewFreight').modal('hide');
+            this.modal.close();
             this.isEdit = false;
         }
         else {
             let temp = [];
             this.salesOrderFreightList.forEach((x) => {
-                temp = [...temp, ...x];
+                if(typeof x[Symbol.iterator] === 'function')
+                    temp = [...temp, ...x];
+                else
+                    temp = [...temp, x];
             })
             temp = [...temp, ...this.freightForm];
             this.salesOrderFreightLists = temp;
@@ -562,10 +567,14 @@ dismissModelAlettRestore() {
             if (this.costPlusType == 1) {
                 this.markupChanged({}, 'all');
             }
-            $('#addNewFreight').modal('hide');
+            this.modal.close();
         }
         this.isEnableUpdateButton=true;
         this.isSaveChargesDesabled=false;
         this.storedData=[...this.salesOrderFreightList];
+    }
+
+    openFreight(content) {
+        this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
     }
 }
