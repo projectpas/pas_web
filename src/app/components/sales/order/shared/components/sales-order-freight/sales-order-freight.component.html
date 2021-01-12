@@ -66,11 +66,11 @@
                             <div class="display-inline-flex">
                                 <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
                                     <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusTypeSOQ"
-                                                   label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                                    (ngModelChange)="validated()" label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                                     </p-radioButton>
                                     <div>
                                         <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                                        (ngModelChange)="validated()" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -78,11 +78,11 @@
                                 </div>
                                 <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
                                     <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="2" label="Actual"
-                                                   [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                                    (ngModelChange)="validated()" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
                                 </div>
                                 <div>
                                     <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="3"
-                                                   label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                                    (ngModelChange)="validated()" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                                     </p-radioButton>
                                 </div>
                             </div>

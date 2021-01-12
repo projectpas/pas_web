@@ -1,6 +1,6 @@
 export interface ISalesSearchParameters {
     first: number;
-    page: number;
+    PageNo: number;
     pageCount: number;
     rows: number;
     limit: number;

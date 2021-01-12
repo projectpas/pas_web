@@ -580,7 +580,7 @@
                                 </app-sales-order-customer-approval>
                             </p-tabPanel>
                             <p-tabPanel header="Address">
-                                <app-address-component [addressType]="addressType" [id]="SalesOrderId">
+                                <app-address-component  *ngIf="showAddresstab" [addressType]="addressType" [id]="SalesOrderId">
 
                                 </app-address-component>
                                 <!-- <app-sales-address [customerId]="customerId" [salesQuote]="salesQuote"

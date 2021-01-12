@@ -567,5 +567,12 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getSOHistory(salesOrderId));
       });
   }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+      });
+  }
   //end nitin
 }
