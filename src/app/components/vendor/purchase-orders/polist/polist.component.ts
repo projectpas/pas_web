@@ -13,12 +13,13 @@ import { Table } from 'primeng/table';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../../services/common.service';
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { ReceivingService }  from '../../../../services/receiving/receiving.service';
 import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
+declare var $ : any;
 
 @Component({
 	selector: 'app-polist',
@@ -692,9 +693,9 @@ export class PolistComponent implements OnInit {
     // }
 
     viewSelectedRow(rowData) {
-        this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
+        //this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
         this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-        this.modal.componentInstance.OrderId = this.selectedPurchaseOrderId;        
+        this.modal.componentInstance.OrderId = rowData.purchaseOrderId;        
         this.modal.componentInstance.OrderType = 'Purchase Order';
         this.modal.componentInstance.PovendorId = rowData.vendorId;
     }
