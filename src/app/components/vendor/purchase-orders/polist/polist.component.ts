@@ -13,13 +13,12 @@ import { Table } from 'primeng/table';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../../services/common.service';
-//import * as $ from 'jquery';
+declare var $ : any;
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { ReceivingService }  from '../../../../services/receiving/receiving.service';
 import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
-declare var $ : any;
 
 @Component({
 	selector: 'app-polist',

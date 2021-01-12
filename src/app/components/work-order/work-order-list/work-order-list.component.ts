@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
 import { PageHeaderComponent } from '../../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { WorkOrderService } from '../../../services/work-order/work-order.service';
 import { Table } from 'primeng/table';
 import { AuthService } from '../../../services/auth.service';

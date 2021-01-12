@@ -21,7 +21,7 @@ import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/route
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { GMapModule } from 'primeng/gmap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';

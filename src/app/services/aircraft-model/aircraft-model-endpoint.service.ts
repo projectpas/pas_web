@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map';
 import { EndpointFactory } from '../endpoint-factory.service';
 import { ConfigurationService } from '../configuration.service';
 import { AircraftModel } from '../../models/aircraft-model.model';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class AircraftModelEndpointService extends EndpointFactory {
@@ -22,7 +23,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
     private readonly updateForActive: string = "/api/aircraftmodel/updateActive";
     private readonly getAuditById: string = "/api/aircraftmodel/audits";
     private readonly getAircraftModel: string = "/api/aircraftmodel/pagination";
-    private readonly getModelsListById: string = "/api/aircraftmodel/getModelsByManufacturerId";
+    private readonly getModelsListById: string = environment.baseUrl + "/api/aircraftmodel/getModelsByManufacturerId";
     private readonly getLandingPageURL: string = "/api/aircraftmodel/getLandingPage";
 
     get getAll() { return this.configurations.baseUrl + this.getAllURL; }

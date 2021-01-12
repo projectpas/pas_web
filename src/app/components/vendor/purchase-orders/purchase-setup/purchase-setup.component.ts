@@ -12,7 +12,7 @@ import { EmployeeService } from '../../../../services/employee.service';
 import { CustomerService } from '../../../../services/customer.service';
 import { CreatePOPartsList, PartDetails } from '../../../../models/create-po-partslist.model';
 import { NgForm } from '@angular/forms';
-//import * as $ from 'jquery';
+declare var $ : any;
 import { MenuItem } from 'primeng/api';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition, getValueByFieldFromArrayofObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
@@ -31,7 +31,6 @@ import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-r
 //import { connectableObservableDescriptor } from 'rxjs/observable/ConnectableObservable';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
-declare var $ : any;
 
 @Component({
 	selector: 'app-purchase-setup',

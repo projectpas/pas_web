@@ -40,8 +40,8 @@
           <div class="col">
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
-              data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
-              data-target="#downloadConfirmation"></button>
+              data-toggle="modal"
+              (click)="openDownload(downloadConfirmation); selectedOnly = false; targetData = dt;"></button>
             <!-- (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true })
                 :exportCSV(targetData); closeDeleteModal();" -->
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
@@ -69,14 +69,16 @@
                   <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of statusList">
                     <label class="radio-cstm wauto">
                       <input type="radio" name="currentStatus" class="form-control" value="{{status.value}}"
-                        [(ngModel)]="currentStatus" (change)="clearText(currentStatus); changeOfStatus(status.value, '');">
+                        [(ngModel)]="currentStatus"
+                        (change)="clearText(currentStatus); changeOfStatus(status.value, '');">
                       <span class="checkmark"></span>{{status.label}}
                     </label>
                   </div>
                   <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                     <label class="radio-cstm wauto">
                       <input type="radio" name="currentStatusSoq" class="form-control" value="0"
-                        [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}" (change)="clearText(currentStatus); changeOfStatus(0, '');">
+                        [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}"
+                        (change)="clearText(currentStatus); changeOfStatus(0, '');">
                       <span class="checkmark"></span>All
                     </label>
                   </div>
@@ -115,16 +117,16 @@
             <ng-container *ngIf="col.field == 'status'">
               <input *ngIf="col.field !== 'quoteDate' 
               && col.field !== 'createdDate'
-              && col.field !== 'updatedDate'" #filterStatusInput [disabled]="col.field == 'status' &&  currentStatus !='0'"
-              style="width:100%;" pInputText type="text"
-              (input)="dt.filter($event.target.value, col.field, 'contains')">
+              && col.field !== 'updatedDate'" #filterStatusInput
+                [disabled]="col.field == 'status' &&  currentStatus !='0'" style="width:100%;" pInputText type="text"
+                (input)="dt.filter($event.target.value, col.field, 'contains')">
             </ng-container>
             <ng-container *ngIf="col.field != 'status'">
               <input *ngIf="col.field !== 'quoteDate' 
               && col.field !== 'createdDate'
               && col.field !== 'updatedDate'" [disabled]="col.field == 'status' &&  currentStatus !='0'"
-              style="width:100%;" pInputText type="text"
-              (input)="dt.filter($event.target.value, col.field, 'contains')">
+                style="width:100%;" pInputText type="text"
+                (input)="dt.filter($event.target.value, col.field, 'contains')">
             </ng-container>
             <input type="date" *ngIf="col.field == 'quoteDate'" name="quoteDate" style="width:100%;"
               (change)="dt.filter($event.target.value, col.field, 'contains')">
@@ -178,9 +180,9 @@
                   <i class="fa fa-trash"></i>
                 </a>
               </span>
-              <span data-toggle="modal" data-target="#soqHistory">
-                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"
-                  matTooltipPosition="above"><i class="fa fa-history"></i></a>
+              <span data-toggle="modal">
+                <a class="btn nobg btn-hist-cstm" (click)="openHistoryPopup(soqHistory); getAuditHistoryById(rowData)"
+                  matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
               </span>
             </div>
             <div *ngIf="currentDeletedstatus==true">
@@ -188,9 +190,9 @@
                 <a class="btn nobg" (click)="viewSelectedRow(viewQuote,rowData)" matTooltip="View"
                   matTooltipPosition="above"><i class="fa fa-eye"></i></a>
               </span>
-              <span data-toggle="modal" data-target="#soqHistory">
-                <a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)" matTooltip="History"
-                  matTooltipPosition="above"><i class="fa fa-history"></i></a>
+              <span data-toggle="modal">
+                <a class="btn nobg btn-hist-cstm" (click)="openHistoryPopup(soqHistory); getAuditHistoryById(rowData)"
+                  matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
               </span>
               <span><a class="btn nobg" (click)="restore(restoreIdSoq,rowData);" matTooltip="Restore Record"
                   matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
@@ -239,29 +241,32 @@
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>
-<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" (click)="closeModal()">&times;</button>
-        <h4 class="modal-title">Are You Sure Want to Download?</h4>
-      </div>
-      <div class="modal-body" *ngIf="targetData && !selectedOnly">
-        <strong>
-          <span>
-            You are attempting to export {{targetData.totalRecords}} of records.
-          </span>
-        </strong>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary"
-          (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
-        <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
-      </div>
+<ng-template #downloadConfirmation let-c="close" let-d="dismiss" data-backdrop="static">
+  <!-- <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm"> -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Are You Sure Want to Download?</h4>
+      <button type="button" class="close" aria-label="Close" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" *ngIf="targetData && !selectedOnly">
+      <strong>
+        <span>
+          You are attempting to export {{targetData.totalRecords}} of records.
+        </span>
+      </strong>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary"
+        (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+      <button type="button" class="btn btn-danger" (click)="closeModal()">Cancel</button>
     </div>
   </div>
-</div>
-
+  <!-- </div>
+  </div> -->
+</ng-template>
 
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header">
@@ -313,107 +318,108 @@
     </div>
   </div>
 </div>
-<div id="soqHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-  <div class="modal-dialog modal-xl">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
-        <h4 class="modal-title">History of Sales Order Quote</h4>
-      </div>
-      <div class="modal-body" *ngIf="auditHistory">
-        <div class="table-responsive">
-          <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
-            <thead>
-              <tr>
-                <th>Quote Num</th>
-                <th>Status</th>
-                <th>SO Num</th>
-                <th>Customer Name</th>
-                <th>Customer Type</th>
-                <th>Cust Ref</th>
-                <th>Probability</th>
-                <th>Salesperson</th>
-                <th>Created Date</th>
-                <th>Created By</th>
-                <th>Updated Date</th>
-                <th>Updated By</th>
-                <th>Is Deleted</th>
-              </tr>
-            </thead>
-            <tbody class="audithistory-cstm">
-              <!--*ngIf="auditHistory.length> 0"-->
-              <tr *ngFor="let audit of auditHistory; let i = index;">
-                <!-- auditHistory[i>0 ? i-1 : i] -->
-                <td
-                  [ngStyle]="{'color':  getColorCodeForHistory(i, 'salesOrderQuoteNumber', audit.salesOrderQuoteNumber)  ? 'black' : 'red'  }">
-                  {{audit.salesOrderQuoteNumber}}</td>
-                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">
-                  {{audit.status}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'salesOrderNumber', audit.salesOrderNumber)  ? 'black' : 'red'  }">
-                  {{audit.salesOrderNumber}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
-                  {{audit.customerName}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerType', audit.customerType)  ? 'black' : 'red'  }">
-                  {{audit.customerType}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
-                  {{audit.customerReference}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'probability', audit.probability)  ? 'black' : 'red'  }">
-                  {{audit.probability}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'salesPerson', audit.salesPerson)  ? 'black' : 'red'  }">
-                  {{audit.salesPerson}}</td>
-                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
-                  {{audit.createdBy}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
-                  {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                <td
-                  [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
-                  {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
-                  {{audit.updatedBy}}</td>
-                <td>
-                  <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
-                      [(ngModel)]="audit.isDeleted" disabled></p>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <ng-template #noDatavailable>
-            <div class="text-center">
-              <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-              <h4 style="color: #ff5663;">No History Found </h4>
-            </div>
-          </ng-template>
-        </div>
-      </div>
-      <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
-        <div class="loading">
-          <div class="lds-roller">
-            <div>
-            </div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+<!-- <div id="soqHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xl"> -->
+<ng-template #soqHistory let-c="close" let-d="dismiss" data-backdrop="static">
+  <!-- Modal content-->
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" aria-label="Close" (click)="closeHistoryModal()">&times;</button>
+      <h4 class="modal-title">History of Sales Order Quote</h4>
+    </div>
+    <div class="modal-body" *ngIf="auditHistory">
+      <div class="table-responsive">
+        <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+          <thead>
+            <tr>
+              <th>Quote Num</th>
+              <th>Status</th>
+              <th>SO Num</th>
+              <th>Customer Name</th>
+              <th>Customer Type</th>
+              <th>Cust Ref</th>
+              <th>Probability</th>
+              <th>Salesperson</th>
+              <th>Created Date</th>
+              <th>Created By</th>
+              <th>Updated Date</th>
+              <th>Updated By</th>
+              <th>Is Deleted</th>
+            </tr>
+          </thead>
+          <tbody class="audithistory-cstm">
+            <!--*ngIf="auditHistory.length> 0"-->
+            <tr *ngFor="let audit of auditHistory; let i = index;">
+              <!-- auditHistory[i>0 ? i-1 : i] -->
+              <td
+                [ngStyle]="{'color':  getColorCodeForHistory(i, 'salesOrderQuoteNumber', audit.salesOrderQuoteNumber)  ? 'black' : 'red'  }">
+                {{audit.salesOrderQuoteNumber}}</td>
+              <td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">
+                {{audit.status}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'salesOrderNumber', audit.salesOrderNumber)  ? 'black' : 'red'  }">
+                {{audit.salesOrderNumber}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'customerName', audit.customerName)  ? 'black' : 'red'  }">
+                {{audit.customerName}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'customerType', audit.customerType)  ? 'black' : 'red'  }">
+                {{audit.customerType}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'customerReference', audit.customerReference)  ? 'black' : 'red'  }">
+                {{audit.customerReference}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'probability', audit.probability)  ? 'black' : 'red'  }">
+                {{audit.probability}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'salesPerson', audit.salesPerson)  ? 'black' : 'red'  }">
+                {{audit.salesPerson}}</td>
+              <td [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                {{audit.createdBy}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+              <td
+                [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+              <td [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                {{audit.updatedBy}}</td>
+              <td>
+                <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
+                    [(ngModel)]="audit.isDeleted" disabled></p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noDatavailable>
+          <div class="text-center">
+            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+            <h4 style="color: #ff5663;">No History Found </h4>
           </div>
-        </div>
-      </div>
-      <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+        </ng-template>
       </div>
     </div>
-
+    <div class="preloader" style="z-index: 10000;" *ngIf="isSpinnerVisible">
+      <div class="loading">
+        <div class="lds-roller">
+          <div>
+          </div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <app-spinner *ngIf="isSpinnerVisible"></app-spinner>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
+    </div>
   </div>
-</div>
+</ng-template>
+<!-- 
+  </div>
+</div> -->

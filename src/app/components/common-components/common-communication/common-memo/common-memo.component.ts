@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { NgbActiveModal, } from '@ng-bootstrap/ng-bootstrap';
-//import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../../services/auth.service';
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
-declare var $ : any;
 @Component({
     selector: 'app-common-memo',
     templateUrl: './common-memo.component.html',

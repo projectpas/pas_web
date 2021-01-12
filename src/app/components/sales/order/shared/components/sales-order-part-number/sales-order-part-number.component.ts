@@ -18,7 +18,7 @@ import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView"
 import { AuthService } from "../../../../../../services/auth.service";
 import { CommonService } from "../../../../../../services/common.service";
 import { ISalesOrderPart } from "../../../../../../models/sales/ISalesOrderPart";
-import * as $ from 'jquery';
+declare var $ : any;
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 @Component({
   selector: "app-sales-order-part-number",

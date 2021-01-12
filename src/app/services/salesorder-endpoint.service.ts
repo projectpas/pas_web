@@ -427,21 +427,21 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http.post<any>(`${this.configurations.baseUrl}/api/salesorder/soapproval`, JSON.stringify(data), this.getRequestHeaders());
   }
 
-  close(salesOrderId: number): Observable<boolean> {
-    const URL = `${this.getCloseEndPointUrl}/${salesOrderId}`;
+  close(salesOrderId: number,updatedBy:string): Observable<boolean> {
+    const URL = `${this.getCloseEndPointUrl}/${salesOrderId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.close(salesOrderId));
+        return this.handleErrorCommon(error, () => this.close(salesOrderId,updatedBy));
       });
   }
 
-  cancel(salesOrderId: number): Observable<boolean> {
-    const URL = `${this.getCancelEndPointUrl}/${salesOrderId}`;
+  cancel(salesOrderId: number,updatedBy:string): Observable<boolean> {
+    const URL = `${this.getCancelEndPointUrl}/${salesOrderId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.cancel(salesOrderId));
+        return this.handleErrorCommon(error, () => this.cancel(salesOrderId,updatedBy));
       });
   }
 

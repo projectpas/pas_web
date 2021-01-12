@@ -4,7 +4,7 @@ import { CustomerService } from '../../../../services/customer.service';
 import { CommonService } from '../../../../services/common.service';
 import { StocklineService } from '../../../../services/stockline.service';
 import { NgbModal, NgbActiveModal, NgbModalRef, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 

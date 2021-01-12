@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-//import * as $ from 'jquery';
+declare var $ : any;
 import { getObjectById } from '../../../../generic/autocomplete';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';
@@ -9,7 +9,6 @@ import { CommunicationService } from '../../../../shared/services/communication.
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { phonePattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
-declare var $ : any;
 @Component({
     selector: 'app-common-text',
     templateUrl: './common-text.component.html',

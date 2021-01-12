@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-//import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import * as moment from 'moment';
 import { AuthService } from '../../../services/auth.service';
 import { CustomerService } from '../../../services/customer.service';
@@ -11,7 +12,6 @@ import { CommonService } from '../../../services/common.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { Subject } from 'rxjs/Subject';
-declare var $ : any;
 
 @Component({
     selector: 'app-common-documents',

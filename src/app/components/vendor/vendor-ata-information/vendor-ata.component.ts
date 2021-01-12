@@ -8,7 +8,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { VendorService } from '../../../services/vendor.service';
 import { CommonService } from '../../../services/common.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 // import { DTCheckbox } from 'primeng/datatable';

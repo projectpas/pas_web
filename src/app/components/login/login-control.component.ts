@@ -11,7 +11,7 @@ import { AuthService } from "../../services/auth.service";
 import { ConfigurationService } from '../../services/configuration.service';
 import { Utilities } from '../../services/utilities';
 import { UserLogin } from '../../models/user-login.model';
-import * as $ from 'jquery';
+declare var $ : any;
 @Component({
     selector: "app-login-control",
     templateUrl: './login-control.component.html',

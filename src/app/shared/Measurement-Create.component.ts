@@ -9,7 +9,7 @@ import { ConditionService } from "../services/condition.service";
 import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { CommonService } from "../services/common.service";
-import * as $ from 'jquery';
+declare var $ : any;
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({ 

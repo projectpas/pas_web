@@ -18,7 +18,7 @@ import { getValueFromArrayOfObjectById, getValueFromObjectByKey, editValueAssign
 import { StocklineViewComponent } from '../../../shared/components/stockline/stockline-view/stockline-view.component';
 import { StocklineReferenceStorage } from '../shared/stockline-reference-storage';
 import { StocklineReference } from '../../../models/stocklineReference';
-import * as $ from 'jquery';
+declare var $ : any;
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 

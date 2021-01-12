@@ -4,7 +4,7 @@ import { AuthService } from '../../../services/auth.service';
 import {  AlertService, MessageSeverity } from '../../../services/alert.service';
 import { VendorService } from '../../../services/vendor.service';
 import { Router, ActivatedRoute} from '@angular/router';
-import * as $ from 'jquery';
+declare var $ : any;
 import { editValueAssignByCondition, getObjectById } from '../../../generic/autocomplete';
 import { CommonService } from '../../../services/common.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';

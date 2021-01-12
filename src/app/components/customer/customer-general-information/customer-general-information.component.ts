@@ -16,7 +16,7 @@ import { ItemMasterService } from '../../../services/itemMaster.service';
 import { CommonService } from '../../../services/common.service';
 import { emailPattern, urlPattern, phonePattern } from '../../../validations/validation-pattern';
 import { Router, ActivatedRoute } from '@angular/router';
-import * as $ from 'jquery';
+declare var $ : any;
 
 @Component({
     selector: 'app-customer-general-information',
