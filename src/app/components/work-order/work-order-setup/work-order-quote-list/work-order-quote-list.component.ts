@@ -14,7 +14,7 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { listSearchFilterObjectCreation } from '../../../../generic/autocomplete';
 import { Subject } from 'rxjs'
 import { takeUntil } from 'rxjs/operators';
-import * as $ from 'jquery'
+declare var $ : any;
 import {
   AlertService,
   MessageSeverity
