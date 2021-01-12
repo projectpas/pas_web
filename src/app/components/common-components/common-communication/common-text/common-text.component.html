@@ -334,13 +334,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="savePhone()"
-                        style="padding: 6px 12px !important;margin-top: 10px;"
+                    <button class="btn btn-primary editor-buttons-margin" data-dismiss="modal" (click)="savePhone()"
                         [disabled]="!textForm.valid || updateDisabledText">
                         {{(isEdit)?'Update':'Save'}}
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>

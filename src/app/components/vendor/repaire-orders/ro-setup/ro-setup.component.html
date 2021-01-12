@@ -136,7 +136,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Vendor Contact <span class="clr-red">*</span>
-                                            <span *ngIf="headerInfo.vendorId" lass="vendor-contact-icon"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Vendor Contact" matTooltipPosition="above" data-target="#addContactInfo" data-toggle="modal" (click)="resetVenContactInfo()"></a></span>
+                                            <span *ngIf="headerInfo.vendorId" class="vendor-contact-icon">
+                                                <a class="fa fa-plus-circle fa-lg" matTooltip="Add Vendor Contact" matTooltipPosition="above" data-target="#addContactInfo" data-toggle="modal" (click)="resetVenContactInfo()"></a></span>
                                         </label>
                                         <div>
                                             <p-autoComplete field="vendorContact" [ngClass]="inputValidCheckHeader ? 'autocomplete-validate' : ''" class="autocomplete" [(ngModel)]="headerInfo.vendorContactId" name="vendorContact" [suggestions]="vendorContactsHeader" (completeMethod)="filterVendorContacts($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" [disabled]="vendorName.invalid" #vendorContact="ngModel" (ngModelChange)="enableHeaderSave()" (onSelect)="onChangeVendorContact(headerInfo.vendorContactId)" required></p-autoComplete>
@@ -624,25 +625,26 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="inner-addon right-addon autosuggesions-add inline-block " *ngIf="partChildList.partListUserTypeId==customerModuleId">
-                                                <div>
-                                                    <p-autoComplete field="label" class="autocomplete autocomplete-po-cstm" 
+                                            <!-- <div class="inner-addon right-addon autosuggesions-add inline-block " *ngIf="partChildList.partListUserTypeId==customerModuleId">
+                                                <div> -->
+                                                    <p-autoComplete *ngIf="partChildList.partListUserTypeId==customerModuleId" field="label" class="autocomplete" 
                                                     [(ngModel)]="partChildList.partListUserId" 
                                                     name="cCustomerName{{row_index}}{{row_no}}" 
-                                                    [suggestions]="splitcustomersList" 
+                                                    [suggestions]="splitcustomersList" appendTo='body' [baseZIndex]="9999"
                                                     (completeMethod)="filterCustomersSplit($event)" [size]="30" [minLength]="1" [dropdown]="true"
                                                      (onSelect)="onUserNameChange(customerModuleId,$event.value, null, row_index, row_no)" #cCustomerName="ngModel" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required></p-autoComplete>
-                                                </div>
+                                                <!-- </div> -->
                                                 <!-- <div class="col-sm-1">
                                                     <div class="child-add-icon"><a target="_blank" matTooltip="Add Customer" matTooltipPosition="above" [routerLink]="['/customersmodule/customerpages/app-customer-create']"><i class="fa fa-plus-circle fa-lg"></i></a></div>
                                                 </div> -->
-                                            </div>
-                                            <div class="inner-addon right-addon autosuggesions-add inline-block w175" *ngIf="partChildList.partListUserTypeId==vendorModuleId">
-                                                <div>
-                                                    <p-autoComplete field="vendorName" class="autocomplete autocomplete-po-cstm"
+                                            <!-- </div> -->
+                                           
+                                            <!-- <div class="inner-addon right-addon autosuggesions-add inline-block w175" *ngIf="partChildList.partListUserTypeId==vendorModuleId">
+                                                <div> -->
+                                                    <p-autoComplete *ngIf="partChildList.partListUserTypeId==vendorModuleId" field="vendorName" class="autocomplete"
                                                                     [(ngModel)]="partChildList.partListUserId" 
                                                                     name="splitVendorNames{{row_index}}{{row_no}}" 
-                                                                    [suggestions]="splitVendorNames" 
+                                                                    [suggestions]="splitVendorNames" appendTo='body' [baseZIndex]="9999"
                                                                     (completeMethod)="filterSplitVendorNames($event)" 
                                                                     [size]="30" [minLength]="1" [dropdown]="true" 
                                                                     errorMessage="Records not found" [forceSelection]="true" 
@@ -650,16 +652,17 @@
                                                                     (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required>
                                                         <!--required #cVendorName="ngModel"-->
                                                     </p-autoComplete>
-                                                </div>
+                                                <!-- </div> -->
                                                 <!-- <div class="col-sm-1">
                                                     <div class="child-add-icon"><a target="_blank" matTooltip="Add Vendor" matTooltipPosition="above" [routerLink]="['/vendorsmodule/vendorpages/app-vendor-general-information']"><i class="fa fa-plus-circle fa-lg"></i></a></div>
                                                 </div> -->
-                                            </div>
-                                            <div class="inner-addon right-addon autosuggesions-add inline-block w100" *ngIf="partChildList.partListUserTypeId==companyModuleId">
-                                                <p-autoComplete field="label" class="autocomplete pautocomp-po-cstm"
+                                            <!-- </div> -->
+                                           
+                                            <!-- <div class="inner-addon right-addon autosuggesions-add inline-block w100" *ngIf="partChildList.partListUserTypeId==companyModuleId"> -->
+                                                <p-autoComplete *ngIf="partChildList.partListUserTypeId==companyModuleId" field="label" class="autocomplete"
                                                                 (onSelect)="onUserNameChange(companyModuleId,$event.value, null, row_index, row_no)"
                                                                 [(ngModel)]="partChildList.partListUserId" name="splitCompanyName{{row_index}}{{row_no}}"
-                                                                [suggestions]="legalEntityList_Forgrid"
+                                                                [suggestions]="legalEntityList_Forgrid" appendTo='body' [baseZIndex]="9999"
                                                                 (completeMethod)="filterCompanyNameforgrid($event)"
                                                                 [size]="30"
                                                                 [minLength]="1"
@@ -669,7 +672,7 @@
                                                                 title="Ship Company Name"
                                                                 #shipCompanyName="ngModel" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required>
                                                 </p-autoComplete>
-                                            </div>
+                                            <!-- </div> -->
                                         </td>
 
                                         <td colspan="3">
@@ -683,7 +686,7 @@
                                                 <div class="col-sm-1 parts-plus" *ngIf="(partChildList.partListUserId | json) != '{}' && partChildList.partListUserId != null">
                                                     <div><a class="fa fa-plus-circle fa-lg" matTooltip="Add Split Address" matTooltipPosition="above" data-toggle="modal" data-target="#createPOAddress" (click)="onClickPartsListAddress('Add', partChildList, row_index, row_no)" *ngIf="!partChildList.isApproved"></a></div>
                                                 </div>
-                                                <div class="col-sm-1 parts-list-memo-div" *ngIf="partChildList.roPartSplitSiteId && partChildList.roPartSplitSiteId != null && partChildList.roPartSplitSiteId != 0">
+                                                <div class="col-sm-1 parts-list-memo-div ship-address-memo" *ngIf="partChildList.roPartSplitSiteId && partChildList.roPartSplitSiteId != null && partChildList.roPartSplitSiteId != 0">
                                                     <!-- <div style="cursor:pointer; font-size:12px;"><a class="fa fa-edit fa-lg"
                                                          matTooltip="Edit Split Address" matTooltipPosition="above"
                                                          data-toggle="modal" data-target="#createPOAddress" 
@@ -1060,7 +1063,7 @@
                 <h4 class="modal-title"> {{addressMemoLabel}}</h4> <!--Memo-->
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
                     </thead>
@@ -1069,25 +1072,27 @@
                             <td>
                                 <p-editor [(ngModel)]="partsMemo" [style]="{'height':'320px'}"
                                           name="partsmemo" required></p-editor>
-                                <!-- <textarea [(ngModel)] = "material.description"></textarea> -->
+                               
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+                <p-editor [(ngModel)]="partsMemo" [style]="{'height':'320px'}"
+                name="partsmemo" required></p-editor>
+             
+               
                 <div class="editor-buttons">
-                    <button type="button" class="btn btn-primary modal-sc-button"
+                    <button type="button" class="btn btn-primary editor-buttons-margin"
                             data-dismiss="modal" (click)="onSavePartsMemo()">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger modal-sc-button"
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
                             data-dismiss="modal">
                         Close
                     </button>
-                </div>
-
+                </div>   
             </div>
-
-
+                
             <!-- <div class="modal-body">
                 <div class="form-group">
                     <label>{{textAreaLabel}}</label>
@@ -1110,7 +1115,7 @@
                 <h4 class="modal-title">Edit Memo</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
                     </thead>
@@ -1122,18 +1127,20 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div class="editor-buttons">
-                    <button type="button" class="btn btn-primary modal-sc-button"
+                </table> -->
+                <p-editor [(ngModel)]="tempApproverMemo"
+                [style]="{'height':'320px'}" name="tempApproverMemo" required></p-editor>
+            </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary editor-buttons-margin"
                             data-dismiss="modal" (click)="onSaveApproversMemo()">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger modal-sc-button"
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
                             data-dismiss="modal">
                         Close
                     </button>
-                </div>
-            </div>
+                </div>           
         </div>
     </div>
 </div>
@@ -1147,7 +1154,7 @@
             </div>
 
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Notes</th>
                     </thead>
@@ -1156,11 +1163,14 @@
                             <td>
                                 <p-editor [(ngModel)]="headerNotes" [style]="{'height':'320px'}"
                                            name="headerNotes" required></p-editor>
-                                <!-- <textarea [(ngModel)] = "material.description"></textarea> -->
+                               
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+                <p-editor [(ngModel)]="headerNotes" [style]="{'height':'320px'}"
+                name="headerNotes" required></p-editor>
+            
                 <div class="editor-buttons">  
                     <button type="button"  class="btn btn-primary editor-buttons-margin"
                             data-dismiss="modal" (click)="onSaveNotes()">
@@ -1172,8 +1182,6 @@
                     </button>
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -1187,19 +1195,23 @@
             </div>
 
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <p-editor [(ngModel)]="headerMemo" [style]="{'height':'320px'}" name="headerMemo" required></p-editor>
-                                <!-- <textarea [(ngModel)] = "material.description"></textarea> -->
+                                <p-editor [(ngModel)]="headerMemo" [style]="{'height':'320px'}" 
+                                name="headerMemo" required></p-editor>
+                               
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+                <p-editor [(ngModel)]="headerMemo" [style]="{'height':'320px'}" 
+                                name="headerMemo" required></p-editor>
+                           
                 <div class="editor-buttons">
                     <button type="button" class="btn btn-primary editor-buttons-margin" 
                             data-dismiss="modal" (click)="onSaveMemo()">
@@ -1211,9 +1223,6 @@
                     </button>
                 </div>
             </div>
-
-
-
             <!-- <div class="modal-body">
                 <div class="form-group">
                     <label>Memo</label>
@@ -1643,7 +1652,7 @@
                 </h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered
+                <!-- <table class="table table-bordered
                         table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
@@ -1651,12 +1660,16 @@
                     <tbody>
                         <tr>
                             <td>
-                                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required></p-editor>
-                                <!-- <textarea [(ngModel)] = "material.description"></textarea> -->
+                                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo"
+                                 required></p-editor>
+                             
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table> -->
+                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo"
+                required></p-editor>
+          
                 <div class="editor-buttons">
                     <button type="button" class="btn btn-primary btn-primary address-memo-editor-buttons"
                             data-dismiss="modal" (click)="onSaveAddressMemo()">
@@ -1665,6 +1678,7 @@
                     <button type="button" class="btn btn-danger address-memo-editor-buttons" data-dismiss="modal">Close</button>
                 </div>
             </div>
+            
             <!-- <div class="modal-body">
                 <div class="form-group">
                     <label>Memo</label>
@@ -1943,8 +1957,12 @@
                     </div> -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="addContactForVendor()"
+                    <button type="button" class="btn btn-primary editor-buttons-margin" (click)="addContactForVendor()"
                      data-dismiss="modal" [disabled]="!addContactForm.valid">Save</button>
+                     <button type="button" class="btn btn-danger editor-buttons-margin"
+                     data-dismiss="modal">
+                 Close
+             </button>
                 </div>
             </form>
         </div>
