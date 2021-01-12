@@ -258,7 +258,7 @@
                           matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
                     </div>
                   </td>
-                  <td class="text-center" *ngIf="isViewMode == true">
+                  <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
                     <span>
                       <a
                         class="btn btn-info boxed-float-btn nobg"
@@ -601,7 +601,7 @@
             </div> -->
           </div> 
         <!-- </div> -->
-        <div class="modal-body">
+       
         <form #addDocumentForm="ngForm" class="form-horizontal">
           <div class="modal-body">
             <div class="form-row">
@@ -766,8 +766,8 @@
             <button
               type="button"
               *ngIf="!isEditButton"
-              class="btn btn-primary pull-right submit-btn"
-              style="text-align:center"
+              class="btn btn-primary editor-buttons-margin"
+          
               (click)="saveDocumentInformation()"
               [disabled]="!addDocumentForm.valid || disableSave"
             >
@@ -776,8 +776,7 @@
             <button
               type="button"
               *ngIf="isEditButton"
-              class="btn btn-primary pull-right submit-btn"
-              style="text-align:center"
+              class="btn btn-primary editor-buttons-margin"
               (click)="saveDocumentInformation()"
               [disabled]="!addDocumentForm.valid || disableSave"
             >
@@ -785,14 +784,14 @@
             </button>
             <button
               type="button"
-              class="btn btn-danger"
+              class="btn btn-danger editor-buttons-margin"
               (click)="dismissDocumentPopupModel(); closeMyModel('#addDocumentDetails')"
             >
               Close
             </button>
           </div>
         </form>
-        </div>
+       
       </div>
     </div>
     <div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
