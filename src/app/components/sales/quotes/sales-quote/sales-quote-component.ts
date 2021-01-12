@@ -15,7 +15,7 @@ declare var $ : any;
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: "app-sales-quote-create",
+  selector: "app-sales-quote",
   templateUrl: "./sales-quote.component.html",
   styleUrls: ["./sales-quote.component.css"],
   providers: [DatePipe]
