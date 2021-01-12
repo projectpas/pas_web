@@ -135,7 +135,7 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.search(salesQuoteSearchParameters)
     );
   }
-
+  
   getTotalCharges() {
     return this.totalCharges;
   }
@@ -352,10 +352,10 @@ export class SalesOrderService {
     partNumberObj.fxRate = selectedPart.fixRate;
     partNumberObj.qty = selectedPart.quantityFromThis;
     partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
-    partNumberObj.salesBeforeDiscount = selectedPart.salesPriceExtended;
+    partNumberObj.salesBeforeDiscount = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0; //selectedPart.salesPriceExtended;
     partNumberObj.discount = selectedPart.salesDiscount ? Number(selectedPart.salesDiscount) : 0;
     partNumberObj.discountAmount = selectedPart.salesDiscountPerUnit;
-    partNumberObj.netSales = selectedPart.netSalesPriceExtended;
+    partNumberObj.netSales = selectedPart.netSalesPriceExtended ? formatStringToNumber(selectedPart.netSalesPriceExtended) : 0; //selectedPart.netSalesPriceExtended;
     partNumberObj.masterCompanyId = selectedPart.masterCompanyId;
     partNumberObj.notes = selectedPart.notes;
     if (!selectedPart.createdBy) {
@@ -366,20 +366,20 @@ export class SalesOrderService {
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
-    partNumberObj.unitCost = selectedPart.unitCostPerUnit;
+    partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
     partNumberObj.methodType =
       selectedPart.method === "Stock Line" ? "S" : "I";
 
-    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended;
-    partNumberObj.markupExtended = selectedPart.markupExtended;
+    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0; //selectedPart.salesPriceExtended;
+    partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0; //selectedPart.markupExtended;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
     partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
     partNumberObj.netSalePriceExtended = selectedPart.netSalePriceExtended;
-    partNumberObj.unitCostExtended = selectedPart.unitCostExtended;
-    partNumberObj.marginAmount = selectedPart.marginAmount;
-    partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended;
-    partNumberObj.marginPercentage = selectedPart.marginPercentagePerUnit;
+    partNumberObj.unitCostExtended = selectedPart.unitCostExtended ? formatStringToNumber(selectedPart.unitCostExtended) : 0; //selectedPart.unitCostExtended;
+    partNumberObj.marginAmount = selectedPart.marginAmount ? formatStringToNumber(selectedPart.marginAmount) : 0; //selectedPart.marginAmount;
+    partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended ? formatStringToNumber(selectedPart.marginAmountExtended) : 0; //selectedPart.marginAmountExtended;
+    partNumberObj.marginPercentage = selectedPart.marginPercentagePerUnit ? selectedPart.marginPercentagePerUnit : 0;
     partNumberObj.conditionId = selectedPart.conditionId;
     partNumberObj.currencyDescription = selectedPart.currencyDescription;
     partNumberObj.currencyId = selectedPart.currencyId;
@@ -390,7 +390,7 @@ export class SalesOrderService {
     partNumberObj.salesOrderQuotePartId = selectedPart.salesOrderQuotePartId;
     partNumberObj.itar = selectedPart.itar;
     partNumberObj.eccn = selectedPart.eccn;
-    partNumberObj.qtyRequested = selectedPart.quantityRequested;
+    partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0; //selectedPart.quantityRequested;
     partNumberObj.customerRequestDate = selectedPart.customerRequestDate.toDateString();
     partNumberObj.promisedDate = selectedPart.promisedDate.toDateString();
     partNumberObj.statusId = selectedPart.statusId;
@@ -516,6 +516,10 @@ export class SalesOrderService {
 
   getSOHistory(salesOrderId) {
     return this.salesOrderEndPointSevice.getSOHistory(salesOrderId)
+  }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.salesOrderEndPointSevice.approverslistbyTaskId(taskId, id);
   }
 
   //ed --nitin

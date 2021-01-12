@@ -540,7 +540,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	}
 
 	downloadAllEmployeeList<T>(employeeId): Observable<T> {
-		let url = this._employeeTotallistUrl;
+		let url =  this.configurations.baseUrl + this._employeeTotallistUrl;		
 		return this.http.post<T>(url, employeeId, this.getRequestHeaders())
 			.catch(error => {
 				return this.handleError(error, () => this.downloadAllEmployeeList(employeeId));

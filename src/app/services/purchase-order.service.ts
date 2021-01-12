@@ -119,8 +119,8 @@ export class PurchaseOrderService {
         return this.purchaseOrderEndpoint.getPOApproverList(purchaseOrderId);
     }
 
-    getPurchaseOrderSettingMasterData() {
-        return this.purchaseOrderEndpoint.getPurchaseOrderSettingMasterData();
+    getPurchaseOrderSettingMasterData(currentUserMasterCompanyId) {
+        return this.purchaseOrderEndpoint.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId);
     }
 
     savePurchaseOrderSettingMasterDate(data) {

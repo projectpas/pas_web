@@ -176,7 +176,7 @@ export class SalesOrderCreateComponent implements OnInit {
   soStatusList: any = [];
   soTypeList: any = [];
   addressType: any = 'SO';
-
+  showAddresstab:boolean  = false;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -764,6 +764,7 @@ export class SalesOrderCreateComponent implements OnInit {
     this.salesQuote.memo = this.salesOrderObj.memo;
     this.salesQuote.notes = this.salesOrderObj.notes;
     this.salesQuote.salesOrderQuoteNumber = this.salesOrderObj.salesOrderQuoteNumber;
+    this.salesQuote.statusName = this.salesOrderObj.statusName;
     this.salesQuote.isApproved = this.salesOrderObj.isApproved;
     this.salesQuote.companyId = this.salesOrderObj.masterCompanyId;
     this.salesQuote.buId = this.salesOrderObj.buId;
@@ -1138,6 +1139,10 @@ export class SalesOrderCreateComponent implements OnInit {
             if (createNewVersion) {
               this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
             }
+            this.toggle_po_header = false;
+            if (this.isEdit) {
+              this.isCreateModeHeader = false;
+            }
             this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
@@ -1288,13 +1293,24 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
     }
     if (event.index == 3) {
-      this.salesAddressComponent.refresh(this.salesOrderQuote)
+      //this.salesAddressComponent.refresh(this.salesOrderQuote)
+      this.showAddresstab = true;
     }
     if (event.index == 4) {
-      this.salesOrderFreightComponent.refresh(false);
+      //this.salesOrderFreightComponent.refresh(false);
+      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
+        this.salesOrderFreightComponent.refresh(false);
+      } else {
+        this.salesOrderFreightComponent.refresh(true);
+      }
     }
     if (event.index == 5) {
-      this.salesOrderChargesComponent.refresh(false);
+      //this.salesOrderChargesComponent.refresh(false);
+      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+        this.salesOrderChargesComponent.refresh(false);
+      } else {
+        this.salesOrderChargesComponent.refresh(true);
+      }
     }
     if (event.index == 6) {
       this.salesOrderShippingComponent.refresh(this.selectedParts);

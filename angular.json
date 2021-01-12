@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
             "assets": [
-              "src/favicon.ico",
+              "src/PAS-favicon.png",
+              "src/web.config",
               "src/assets"
             ],
             "styles": [
@@ -34,6 +35,7 @@
               "src/app/assets/themes/purple-green.scss",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/primeicons/primeicons.css",
+              "node_modules/ng2-toasty/bundles/style-material.css",
               "src/styles.scss"
             ],
             "scripts": ["node_modules/jquery/dist/jquery.min.js",

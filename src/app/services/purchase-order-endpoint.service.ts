@@ -262,10 +262,10 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
             });
     }
 
-    getPurchaseOrderSettingMasterData() {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting`)
+    getPurchaseOrderSettingMasterData(currentUserMasterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting?masterCompanyId=${currentUserMasterCompanyId}`)
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getPurchaseOrderSettingMasterData());
+                return this.handleErrorCommon(error, () => this.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId));
             });
     }
 

@@ -8,8 +8,8 @@
     SalesQuate = 7,
     Employee = 8,
     Company=9,
-    SalesOrder = 10,
-    SOPickTicket = 11,
+    SalesOrder = 11,
+    SOPickTicket = 12,
     PurchaseOrder = 13,
     RepairOrder = 14
 }

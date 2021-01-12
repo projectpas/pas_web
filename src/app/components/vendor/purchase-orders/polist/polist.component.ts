@@ -692,9 +692,9 @@ export class PolistComponent implements OnInit {
     // }
 
     viewSelectedRow(rowData) {
-        this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
+        //this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
         this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-        this.modal.componentInstance.OrderId = this.selectedPurchaseOrderId;        
+        this.modal.componentInstance.OrderId = rowData.purchaseOrderId;        
         this.modal.componentInstance.OrderType = 'Purchase Order';
         this.modal.componentInstance.PovendorId = rowData.vendorId;
     }
