@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
             "assets": [
-              "src/favicon.ico",
+              "src/PAS-favicon.png",
+              "src/web.config",
               "src/assets"
             ],
             "styles": [

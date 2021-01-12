@@ -43,6 +43,7 @@ import { LegalEntityService } from './services/legalentity.service';
 import { EmployeeService } from './services/employee.service';
 import { StocklineReferenceStorage } from './components/stockline/shared/stockline-reference-storage';
 import { SalesOrderReferenceStorage } from './components/sales/shared/sales-order-reference-storage';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'quickapp-pro-app',
   templateUrl: './app.component.html',
@@ -75,6 +76,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
   isSticky: any;
   @ViewChild('fixedButtons',{static:false}) el: ElementRef;
+  subscription: Subscription;
   //   @HostListener('window:scroll', [])
   //     onWindowScroll() {
   //       let number = this.el.nativeElement.offsetTop;
@@ -1544,7 +1546,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       }, 200);
     });
 
-    this.router.events.subscribe((event) => {
+    this.subscription = this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
         let url = (<NavigationStart>event).url;
 
@@ -1562,6 +1564,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
     this.unsubscribeNotifications();
+    if (this.subscription !== undefined) this.subscription.unsubscribe();
   }
 
   private unsubscribeNotifications() {

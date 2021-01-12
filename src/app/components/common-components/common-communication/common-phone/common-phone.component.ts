@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { NgbActiveModal, } from '@ng-bootstrap/ng-bootstrap';
-declare var $ : any;
+declare var $: any;
 import { getObjectById } from '../../../../generic/autocomplete';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';
@@ -22,9 +22,9 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     @Input() isView: boolean = false;
     @Input() savedWorkOrderData: any = [];
     @Input() selectedPartNumber: any = {};
-    @Input() commonContactId:any;
+    @Input() commonContactId: any;
     // @Input() ContactList: any;
-    @Input() type:any;
+    @Input() type: any;
     phoneViewData: any = {};
     isEdit: boolean = false;
     lazyLoadEventData: any;
@@ -47,7 +47,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         //{ field: 'customerContact', header: 'Customer Contact'  },
         { field: 'phoneNo', header: 'Phone' },
         { field: 'contactBy', header: 'Contacted By' },
-        { field: 'notes', header: 'Notes'},
+        { field: 'notes', header: 'Notes' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
@@ -70,58 +70,58 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     moduleName: any = "Communication";
     isSpinnerVisible: boolean = false;
     deletingRecord: any;
-    ContactList:any=[];
+    ContactList: any = [];
     constructor(private activeModal: NgbActiveModal,
         private communicationService: CommunicationService,
         private commonService: CommonService,
-        private alertService: AlertService,private datePipe: DatePipe,
+        private alertService: AlertService, private datePipe: DatePipe,
         private authService: AuthService,
         private modalService: NgbModal,) { }
 
     ngOnInit(): void {
-        if(this.type==1){
-            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact'})
-            this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact'})
-        }else{
-            this.selectedColumns.unshift({ field: 'vendorContact', header: 'Customer Contact'})
-            this.headers.unshift({ field: 'vendorContact', header: 'Customer Contact'})
+        if (this.type == 1) {
+            this.headers.unshift({ field: 'customerContact', header: 'Customer Contact' })
+            this.selectedColumns.unshift({ field: 'customerContact', header: 'Customer Contact' })
+        } else {
+            this.selectedColumns.unshift({ field: 'vendorContact', header: 'Customer Contact' })
+            this.headers.unshift({ field: 'vendorContact', header: 'Customer Contact' })
         }
-      
+
     }
 
     ngOnChanges(): void {
         this.getAllPhoneList();
-        if(this.isView==false){
+        if (this.isView == false) {
             this.getAllEmployees('');
-        if(this.type==1){
-            this.customerContacts('');
-        }else{
-            this.vendorContacts('');
+            if (this.type == 1) {
+                this.customerContacts('');
+            } else {
+                this.vendorContacts('');
+            }
         }
-    }
         this.moduleId = this.moduleId;
         this.referenceId = this.referenceId;
         this.ContactList = this.ContactList;
     }
-    setEditArray:any=[];
+    setEditArray: any = [];
     customerContacts(value) {
         this.setEditArray = [];
         if (this.isEdit == true) {
-            this.setEditArray.push(this.customerContact.customerContactId ? this.customerContact.customerContactId :0);
+            this.setEditArray.push(this.customerContact.customerContactId ? this.customerContact.customerContactId : 0);
         } else {
             this.setEditArray.push(0);
         }
-        const strText = value ? value : ''; 
+        const strText = value ? value : '';
         // 190
-        this.commonService.autoDropListCustomerContacts(this.commonContactId,  strText, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonService.autoDropListCustomerContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
             this.ContactList = res.map(x => {
-                        return {
-                            ...x,
-                            contactId:x.contactId,
-                            firstName: x.customerContactName
-                        }
-                    });
-                    this.cusContactList = this.ContactList;
+                return {
+                    ...x,
+                    contactId: x.contactId,
+                    firstName: x.customerContactName
+                }
+            });
+            this.cusContactList = this.ContactList;
         }, err => {
         });
     }
@@ -136,63 +136,67 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
         // 376
         this.commonService.autoDropListVendorContacts(this.commonContactId, strText, 20, this.setEditArray.join()).subscribe(res => {
             this.ContactList = res.map(x => {
-                        return {
-                            ...x,
-                            contactId:x.contactId,
-                            firstName: x.vendoreContactName
-                        }
-                    });
-                    this.cusContactList = this.ContactList;
+                return {
+                    ...x,
+                    contactId: x.contactId,
+                    firstName: x.vendoreContactName
+                }
+            });
+            this.cusContactList = this.ContactList;
 
         }, err => {
         });
     }
     filterCustomerContact(event): void {
-if(this.type==1){
-    if (event.query !== undefined && event.query !== null) {
-        this.customerContacts(event.query);
-    } else {
-        this.customerContacts('');
-    }
-    }else{
-        if (event.query !== undefined && event.query !== null) {
-            this.vendorContacts(event.query);
+        if (this.type == 1) {
+            if (event.query !== undefined && event.query !== null) {
+                this.customerContacts(event.query);
+            } else {
+                this.customerContacts('');
+            }
         } else {
-            this.vendorContacts('');
+            if (event.query !== undefined && event.query !== null) {
+                this.vendorContacts(event.query);
+            } else {
+                this.vendorContacts('');
+            }
         }
-}
-   
+
     }
     contactSelected(event) {
-        console.log("ev",event);
+        console.log("ev", event);
         this.addList[0].phoneNo = event.workPhone;
     }
-    editTextData:any={};
-    getmemo(){
-        this.disableUpdateButton=false;
+    editTextData: any = {};
+    getmemo() {
+        this.disableUpdateButton = false;
     }
     edit(rowData, index) {
         this.isEdit = true;
-        this.disableUpdateButton=true;
-        console.log("edit Dt",rowData)
-        this.editTextData=rowData;
-    if(this.type==1){
-        this.customerContact={'contactId':rowData.customerContactId,
-        'firstName': rowData.customerContact};
-        // this.customerContacts('');
-    }else{
-        this.customerContact={'contactId':rowData.customerContactId,
-        'firstName': rowData.vendorContact}
-    }
+        this.disableUpdateButton = true;
+        console.log("edit Dt", rowData)
+        this.editTextData = rowData;
+        if (this.type == 1) {
+            this.customerContact = {
+                'contactId': rowData.customerContactId,
+                'firstName': rowData.customerContact
+            };
+            // this.customerContacts('');
+        } else {
+            this.customerContact = {
+                'contactId': rowData.customerContactId,
+                'firstName': rowData.vendorContact
+            }
+        }
         this.getAllEmployees('');
-      
+
         // this.vendorContacts('');
-        console.log("edit11 Dt",rowData)
+        console.log("edit11 Dt", rowData)
         if (rowData.contactId == this.authService.currentEmployee.employeeId) {
             rowData.contactId = this.authService.currentEmployee;
         } else {
             setTimeout(() => {
-                this.addList[0].contactId= getObjectById('employeeId', rowData.contactId, this.employees);
+                this.addList[0].contactId = getObjectById('employeeId', rowData.contactId, this.employees);
             }, 1000);
         }
         this.addList = [{
@@ -201,14 +205,14 @@ if(this.type==1){
     }
     arrayContactlist: any = []
     getAllEmployees(strText = '') {
-        this.arrayContactlist=[];
-        if (this.isEdit==true) {
-            if(this.editTextData && typeof this.editTextData.contactId == 'string'){
-                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId :0);
-            }else{
-                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId.value :0);
-            }  
-        }else{
+        this.arrayContactlist = [];
+        if (this.isEdit == true) {
+            if (this.editTextData && typeof this.editTextData.contactId == 'string') {
+                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId : 0);
+            } else {
+                this.arrayContactlist.push(this.editTextData ? this.editTextData.contactId.value : 0);
+            }
+        } else {
             this.arrayContactlist.push(0);
         }
         this.commonService.autoCompleteSmartDropDownEmployeeList('firstName', strText, true, this.arrayContactlist.join()).subscribe(res => {
@@ -254,20 +258,22 @@ if(this.type==1){
     getAllPhoneList() {
         this.data = [];
         this.isSpinnerVisible = true;
-        this.communicationService.getCommonPhoneData(this.referenceId, this.moduleId, this.deletedStatusInfo,this.type)
+        this.communicationService.getCommonPhoneData(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type)
             .subscribe(
                 (res) => {
                     res = res.map(x => { return { ...x, 'notesData': this.getString(x.notes) } })
                     this.isSpinnerVisible = false;
-                  if(res && res.length !=0){
-                    this.data = res.map(x => {
-                        return {
-                            ...x,     
-                            createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                            updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
-                              }
-                    });
-                  }
+                    if (res && res.length != 0) {
+                        this.data = res.map(x => {
+                            return {
+                                ...x,
+                                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a') : '',
+                                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
+                            }
+                        });
+                    }
+                    else
+                        this.data = [];
                     this.totalRecords = res.length;
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
                 }, err => {
@@ -287,19 +293,19 @@ if(this.type==1){
     dismissModel() {
         this.activeModal.close();
     }
-    exportCSV(dt){
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
     }
     closeDeleteModal() {
-		$("#phonedownloadConfirmation").modal("hide");
-	}
+        $("#phonedownloadConfirmation").modal("hide");
+    }
 
     loadData(event) {
 
@@ -309,23 +315,23 @@ if(this.type==1){
         event.first = pageIndex;
 
     }
-    addPhone() { 
-        this.isEdit=false;
+    addPhone() {
+        this.isEdit = false;
         this.addList = [];
         this.addList.push({ phoneNo: '', contactId: this.authService.currentEmployee, notes: '' })
         if (this.ContactList.length > 0) {
-        this.ContactList.forEach(
-            (cc) => {
-                // if (cc.isDefaultContact) {
+            this.ContactList.forEach(
+                (cc) => {
+                    // if (cc.isDefaultContact) {
                     this.customerContact = cc;
                     this.addList[0].phoneNo = cc.workPhone.trim();
-                // }
-                return;
-            }
-        )
+                    // }
+                    return;
+                }
+            )
         }
     }
-    disableUpdateButton:any=false;
+    disableUpdateButton: any = false;
     savePhone() {
         if (this.isEdit) {
             let payload = this.formData(this.addList);
@@ -333,7 +339,7 @@ if(this.type==1){
             this.communicationService.updateCommonPhone(payload[0])
                 .subscribe(
                     (res) => {
-                        this.disableUpdateButton=true;
+                        this.disableUpdateButton = true;
                         this.isSpinnerVisible = false;
                         this.getAllPhoneList();
                         this.isEdit = false;
@@ -356,7 +362,7 @@ if(this.type==1){
                 )
         }
         this.addList = [];
-        this.customerContact=null;
+        this.customerContact = null;
     }
 
     formData(data) {
@@ -365,7 +371,7 @@ if(this.type==1){
             "Notes": data[0].notes,
             "ContactById": this.getEmpId(data[0].contactId),
             "WorkOrderPartNo": this.partNo,
-            "customerContactId":this.type==1? this.customerContact.contactId : this.customerContact.contactId,
+            "customerContactId": this.type == 1 ? this.customerContact.contactId : this.customerContact.contactId,
             "ModuleId": this.moduleId,
             "ReferenceId": this.referenceId,
             "MasterCompanyId": this.authService.currentUser.masterCompanyId,
@@ -375,9 +381,9 @@ if(this.type==1){
             "UpdatedDate": "2019-12-31T04:30:28.21",
             "IsActive": true,
             "IsDeleted": false,
-            "Phonetype":this.type
+            "Phonetype": this.type
             //vendor 2
-        } 
+        }
 
         if (this.isEdit) {
             toData['communicationPhoneId'] = data[0].communicationPhoneId;
@@ -417,12 +423,12 @@ if(this.type==1){
         this.deletingRecord = rowData;
         $('#deleteRowConfirmation').modal('show');
     }
-    closeRestore(){
+    closeRestore() {
         $('#deleteRowConfirmation').modal('hide');
     }
     deletePhone(rowData) {
         this.isSpinnerVisible = true;
-        this.communicationService.deleteCommonPhoneList(rowData.communicationPhoneId,this.userName)
+        this.communicationService.deleteCommonPhoneList(rowData.communicationPhoneId, this.userName)
             .subscribe(
                 res => {
                     this.isSpinnerVisible = false;
@@ -459,7 +465,7 @@ if(this.type==1){
     documentauditHisory: any = [];
     openHistory(rowData) {
 
-        this.communicationService.getCOmmonPhoneHistory(rowData.communicationPhoneId,this.type).subscribe(
+        this.communicationService.getCOmmonPhoneHistory(rowData.communicationPhoneId, this.type).subscribe(
             results => {
                 this.documentauditHisory = results;
             }, err => {

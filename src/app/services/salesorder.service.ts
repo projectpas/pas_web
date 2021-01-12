@@ -135,7 +135,7 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.search(salesQuoteSearchParameters)
     );
   }
-
+  
   getTotalCharges() {
     return this.totalCharges;
   }
@@ -516,6 +516,10 @@ export class SalesOrderService {
 
   getSOHistory(salesOrderId) {
     return this.salesOrderEndPointSevice.getSOHistory(salesOrderId)
+  }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.salesOrderEndPointSevice.approverslistbyTaskId(taskId, id);
   }
 
   //ed --nitin

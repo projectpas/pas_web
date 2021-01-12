@@ -24,7 +24,7 @@ export class AddressComponentComponent implements OnInit {
 
   @Input() addressType:any ;   
   @Input() id:any;     
-  @ViewChild('createPOAddressForm',{static:false}) createPOAddressForm: NgForm;
+  @ViewChild('createPOAddressForm',{static:true}) createPOAddressForm: NgForm;
   shipToUserTypeValidCheck: boolean;
   firstNamesShipTo: any[] = [];
   firstNamesBillTo: any[] = [];
@@ -1676,7 +1676,7 @@ if(this.billToAddressList && this.billToAddressList.length!=0){
 		}
 
 		SaveAllAddress(poAddressEdit){
-			this.commonService.saveAllAddress({ ...poAddressEdit }).subscribe(res => {				
+			this.commonService.saveAllAddress({ ...poAddressEdit }).subscribe(res => {
 				if(res.shipToPOAddressId &&  res.shipToPOAddressId > 0) {
 					this.sourcePoApproval = {
 						shipToPOAddressId: res.shipToPOAddressId,

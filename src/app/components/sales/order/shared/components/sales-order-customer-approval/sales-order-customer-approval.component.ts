@@ -19,9 +19,10 @@ import { WorkOrderQuoteService } from "../../../../../../services/work-order/wor
 declare var $ : any;
 import { CommonService } from "../../../../../../services/common.service";
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
-// import { m } from "@angular/core/src/render3";
+//import { m } from "@angular/core/src/render3";
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { ApprovalProcessEnum } from "../../../models/sales-approval-process-enum";
+import { ApprovalTaskEnum } from "../../../../quotes/models/approval-task-enum";
 @Component({
   selector: "app-sales-order-customer-approval",
   templateUrl: "./sales-order-customer-approval.component.html",
@@ -56,7 +57,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   salesQuoteId: number;
   statusList: any[] = [];
   defaultContactId: any;
-  fields: any;
+
 
   columns: any = [
     { field: 'actionStatus', header: 'Action', width: "100px" },
@@ -104,8 +105,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log("customer-id", this.customerId);
-    console.log("sales-order-id", this.salesOrderId);
+    // console.log("customer-id", this.customerId);
+    // console.log("sales-order-id", this.salesOrderId);
     // this.getApproverStatusList();
     // this.getCustomerApprovalList();
     this.selectedColumns = this.columns;
@@ -141,16 +142,18 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       this.setDefaultContact();
     }
     forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
-      this.workOrderService.getInternalApproversList(5, marginSummary.netSales),
+      //this.workOrderService.getInternalApproversList(5, marginSummary.netSales),
+      this.salesOrderService.approverslistbyTaskId(ApprovalTaskEnum.SOApproval, this.salesQuoteId),
       this.salesOrderService.getCustomerApprovalList(this.salesOrderId)
     ).subscribe(response => {
       this.isSpinnerVisible = false;
       this.setAproverStatusList(response[0]);
-      if (response[1] && response[1].length > 0) {
-        this.approvers = response[1];
-      } else {
-        this.approvers = [];
-      }
+      // if (response[1] && response[1].length > 0) {
+      //   this.approvers = response[1];
+      // } else {
+      //   this.approvers = [];
+      // }
+      this.approvers = response[1];
       if (response[2] && response[2].length > 0) {
         this.loadApprovalListView(response[2][0]);
       }
