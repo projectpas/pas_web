@@ -255,7 +255,7 @@ export class SalesQuoteListComponent implements OnInit {
 
     openQuoteToEdit(row) {
         this.isSpinnerVisible = true;
-        this.salesOrderQuoteId = row;
+        this.salesOrderQuoteId = row.salesOrderQuoteId;
         let customerId = row.customerId;
         this.router.navigateByUrl(
             `salesmodule/salespages/sales-quote-edit/${customerId}/${this.salesOrderQuoteId}`

@@ -491,7 +491,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     dismissModelRestore() {
         this.modal.close();
     }
-    getDeleteListByStatus(value) {
+    getDeleteListByStatus(value) {        
         this.deletedStatusInfo = value ? value : false;
         this.getAllEmail();
     }
