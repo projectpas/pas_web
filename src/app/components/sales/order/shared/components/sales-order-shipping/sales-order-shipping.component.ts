@@ -220,8 +220,6 @@ export class SalesOrderShippingComponent {
     }
 
     convertDate(key, data) {
-        // debugger;
-        // console.log("data checked data",key,data);
         if ((key === 'shipDate' || key === 'promisedDate' || key === 'estimatedShipDate') && data[key]) {
             return moment(data[key]).format('MM-DD-YYYY');
         } else {

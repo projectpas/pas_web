@@ -263,8 +263,10 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     let temp = this.salesOrderChargesList;
     let sendData = []
     for (let index = 0; index < temp.length; index++) {
-      sendData = [...sendData, ...temp[index]];
-
+      if (typeof temp[index][Symbol.iterator] === 'function')
+        sendData = [...sendData, ...temp[index]];
+      else
+        sendData = [...sendData, temp[index]];
     }
     sendData = sendData.map((f) => {
       return {

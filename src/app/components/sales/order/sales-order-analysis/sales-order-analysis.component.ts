@@ -241,8 +241,6 @@ export class SalesOrderAnalysisComponent implements OnInit {
   }
 
   convertDate(key, data) {
-    // debugger;
-    // console.log("data checked data",key,data);
     if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
       return moment(data[key]).format('MM/DD/YYYY');
     } else {
