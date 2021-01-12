@@ -4869,17 +4869,17 @@ export class PurchaseSetupComponent implements OnInit {
 
 
 	
-	saveApprovalProcess() {
+	saveApprovalProcess() {        
 		const data = [];
 		this.isSpinnerVisible = true;
-		this.approvalProcessList = this.approvalProcessList.map(x => {
+		this.approvalProcessList = this.approvalProcessList.map(x => {			
 			return {
 				...x,
 				legalEntityId: this.currentUserLegalEntityId,
 				internalEmails: this.apporoverEmailList,
 				approvers: this.apporoverNamesList.join(),
-				approvedById: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : null,
-				rejectedBy: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : null,
+				approvedById: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : 0,
+				rejectedBy: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : 0,
                 createdBy: this.userName,
                 updatedBy: this.userName
 			}

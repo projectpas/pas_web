@@ -1734,9 +1734,7 @@ if(this.billToAddressList && this.billToAddressList.length!=0){
 					MessageSeverity.success
 				);							
 			}, err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;				
 			});
 		}
 

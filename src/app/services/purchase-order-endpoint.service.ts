@@ -253,8 +253,8 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
 
     savePurchaseOrderSettingMasterDate<T>(param: any): Observable<any> {
         let body = JSON.stringify(param);
-        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
-        return this.http.post('/api/purchaseorder/savepurchaseordersettingmaster', body, this.getRequestHeaders())
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })        
+        return this.http.post(this.configurations.baseUrl + '/api/purchaseorder/savepurchaseordersettingmaster', body, this.getRequestHeaders())
             .map((response: Response) => {
                 return <any>response;
             }).catch(error => {
