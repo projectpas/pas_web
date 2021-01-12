@@ -124,8 +124,8 @@ export class RoSetupComponent implements OnInit {
 	@ViewChild('createROForm',{static:false}) createROForm: NgForm;
 	@ViewChild('createROPartsForm',{static:false}) createROPartsForm: NgForm;
 	@ViewChild('createROAddressForm',{static:false}) createROAddressForm: NgForm;
-	repairOrderId: any;
-	purchaseOrderPartRecordId: any;
+	repairOrderId: any;	
+	repairOrderPartRecordId : any
 	addAllMultiPN: boolean = false;	
 	childObject: any = {};
 	parentObject: any = {};
@@ -369,7 +369,6 @@ export class RoSetupComponent implements OnInit {
 	referenceId:any=0;
 	moduleName:any="RepairOrder";
 	home: any;
-
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,
@@ -1566,12 +1565,12 @@ export class RoSetupComponent implements OnInit {
 	BindAllParts(data) {		
 		this.partListData = [];
 		this.newPartsList = [this.newObjectForParent];
-		if(data) {	
+		if(data) {				
 			data[0].map((x, pindex) => {
 				this.newPartsList = {
 					...x,							
 					partNumberId: {value: x.itemMasterId, label: x.partNumber},						
-					ifSplitShip: x.purchaseOrderSplitParts.length > 0 ? true : false,
+					ifSplitShip: x.roPartSplits.length > 0 ? true : false,
 					partNumber: x.partNumber,
 					partDescription: x.partDescription,
 					needByDate: x.needByDate ? new Date(x.needByDate) : '',
@@ -1643,17 +1642,17 @@ export class RoSetupComponent implements OnInit {
         }
     }
 	getPurchaseOrderSplitPartsEdit(partList, pindex,ms?) {
-		if (partList.purchaseOrderSplitParts) {
-			return partList.purchaseOrderSplitParts.map((y, cindex) => {
+		if (partList.roPartSplits) {
+			return partList.roPartSplits.map((y, cindex) => {
 				const splitpart = {
 					...y,
 					needByDate: y.needByDate ? new Date(y.needByDate) : '',
 					isApproved: y.isApproved ? y.isApproved : false,
-					partListUserTypeId: y.poPartSplitUserTypeId,
-					poPartSplitSiteId : y.poPartSplitSiteId,
+					partListUserTypeId: y.roPartSplitUserTypeId,
+					roPartSplitSiteId : y.roPartSplitSiteId,
 					priorityId: partList.priorityId ? getValueFromArrayOfObjectById('label', 'value', partList.priorityId, this.allPriorityInfo) : null,
 					partListUserId: this.getPartSplitUserIdEdit(y, pindex, cindex),
-					partListAddressId: y.poPartSplitAddressId ? y.poPartSplitAddressId : 0,
+					partListAddressId: y.roPartSplitAddressId ? y.roPartSplitAddressId : 0,
 					quantityOrdered: y.quantityOrdered ? formatNumberAsGlobalSettingsModule(y.quantityOrdered, 0) : '0'				
 				}				
 				return splitpart;
@@ -1663,7 +1662,7 @@ export class RoSetupComponent implements OnInit {
 
 	getManagementStructureForChildPart(partChildList,response) {
 			if(response) {				
-				const result = response[partChildList.purchaseOrderPartRecordId];
+				const result = response[partChildList.repairOrderPartRecordId];
 				if(result[0] && result[0].level == 'Level1') {
 					partChildList.maincompanylist =  result[0].lstManagmentStrcture;
 					partChildList.childCompanyId = result[0].managementStructureId;
@@ -1736,7 +1735,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	getSubWOlsitId(parentdata,response) {		
-        const data1 = response[parentdata.purchaseOrderPartRecordId];
+        const data1 = response[parentdata.repairOrderPartRecordId];
 		if(data1) {
 				if (data1[0]) {
 					//parentdata.subWorkOrderlist = data1[0];
@@ -1765,7 +1764,7 @@ export class RoSetupComponent implements OnInit {
 		this.altPartNumList = [];
 		//parentdata.altEquiPartNumberId = null;
 		this.itemTypeId = 1;
-        const data1 = response[parentdata.purchaseOrderPartRecordId];
+        const data1 = response[parentdata.repairOrderPartRecordId];
 		if(data1) {
 				if (data1[0]) {
 					this.partWithId = data1[0];
@@ -1814,7 +1813,7 @@ export class RoSetupComponent implements OnInit {
 
 	getManagementStructureForParentPart(partList,response,responseFC) {
 	     	if(response) {
-				const result = response[partList.purchaseOrderPartRecordId];
+				const result = response[partList.repairOrderPartRecordId];
 				if(result[0] && result[0].level == 'Level1') {
 					partList.maincompanylist = result[0].lstManagmentStrcture;
 					partList.parentCompanyId = result[0].managementStructureId;
@@ -1885,17 +1884,17 @@ export class RoSetupComponent implements OnInit {
 	}
 	
 	getPartSplitUserIdEdit(data, pindex, cindex) {
-		if (data.poPartSplitUserTypeId === this.customerModuleId) {		
-			this.onUserNameChange( this.customerModuleId,data.poPartSplitUserId, data, pindex, cindex);
-			return getObjectById('value', data.poPartSplitUserId, this.allCustomers);
+		if (data.roPartSplitUserTypeId === this.customerModuleId) {		
+			this.onUserNameChange( this.customerModuleId,data.roPartSplitUserId, data, pindex, cindex);
+			return getObjectById('value', data.roPartSplitUserId, this.allCustomers);
 		}
-		if (data.poPartSplitUserTypeId === this.vendorModuleId) {
-			this.onUserNameChange( this.vendorModuleId,data.poPartSplitUserId, data, pindex, cindex);
+		if (data.roPartSplitUserTypeId === this.vendorModuleId) {
+			this.onUserNameChange( this.vendorModuleId,data.roPartSplitUserId, data, pindex, cindex);
 			return getObjectById('vendorId', data.poPartSplitUserId, this.allActions);
 		}
-		if (data.poPartSplitUserTypeId === this.companyModuleId) {
-			this.onUserNameChange(this.companyModuleId,data.poPartSplitUserId, data, pindex, cindex);
-			return getObjectById('value', data.poPartSplitUserId, this.legalEntity);
+		if (data.roPartSplitUserTypeId === this.companyModuleId) {
+			this.onUserNameChange(this.companyModuleId,data.roPartSplitUserId, data, pindex, cindex);
+			return getObjectById('value', data.roPartSplitUserId, this.legalEntity);
 		}
 	}
 
@@ -1919,14 +1918,14 @@ export class RoSetupComponent implements OnInit {
 					if(returnddataforbill.address && returnddataforbill.address.length > 0) {
 							for(var i =0; i < returnddataforbill.address.length; i++) {
 								if(returnddataforbill.address[i].isPrimary) {			
-									this.partListData[pindex].childList[cindex].poPartSplitSiteId = returnddataforbill.address[i].siteID;
+									this.partListData[pindex].childList[cindex].roPartSplitSiteId = returnddataforbill.address[i].siteID;
 								}
 							}
 					}
 				}
 				
 				if(siteID && siteID > 0)  {     
-					this.partListData[pindex].childList[cindex].poPartSplitSiteId = siteID;
+					this.partListData[pindex].childList[cindex].roPartSplitSiteId = siteID;
 				}
 			}
 			},err => {
@@ -1984,7 +1983,7 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}										
+					}					
 				}
 			}, err => {								
 			});			
@@ -3033,7 +3032,7 @@ export class RoSetupComponent implements OnInit {
 		this.loadModuleListForVendorComp();
 	}
 
-	savePurchaseOrderHeader() {			
+	saveRepairOrderHeader() {			
 		if(this.createROForm.invalid || 
 			this.headerInfo.companyId == 0 
 		    || this.headerInfo.companyId == null) {
@@ -3136,9 +3135,9 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	dismissModel() {
-		this.savePurchaseOrderPartsList(true); 
+		this.saveRepairOrderPartsList(true); 
     }
-	savePurchaseOrderPartsList(contwithoutVendorPrice = false) {
+	saveRepairOrderPartsList(contwithoutVendorPrice = false) {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
@@ -3202,9 +3201,9 @@ export class RoSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Name is required."
 					}
-					if(!this.partListData[i].childList[j].poPartSplitSiteId 
-						|| this.partListData[i].childList[j].poPartSplitSiteId == 0 
-						|| this.partListData[i].childList[j].poPartSplitSiteId == null) {	
+					if(!this.partListData[i].childList[j].roPartSplitSiteId 
+						|| this.partListData[i].childList[j].roPartSplitSiteId == 0 
+						|| this.partListData[i].childList[j].roPartSplitSiteId == null) {	
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Select Address is required."
 					}					
@@ -3252,20 +3251,20 @@ export class RoSetupComponent implements OnInit {
 				for (let j = 0; j < childDataList.length; j++) {					
 					this.childObject = {
 						repairOrderId: this.roId,
-						itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+						itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,						
 						assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 						partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 						roPartSplitUserTypeId: childDataList[j].partListUserTypeId ? childDataList[j].partListUserTypeId : 0,
 						roPartSplitUserId: childDataList[j].partListUserId ? this.getIdByObject(childDataList[j].partListUserId) : 0,						
-						roPartSplitSiteId: childDataList[j].poPartSplitSiteId ? childDataList[j].poPartSplitSiteId : 0, 
-						roPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
-						roPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitCity: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitStateOrProvince: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
-						roPartSplitCountry: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitSiteId: childDataList[j].roPartSplitSiteId ? childDataList[j].roPartSplitSiteId : 0, 
+						roPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+						roPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitCity: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitStateOrProvince: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+						roPartSplitCountry: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
 						UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
 						quantityOrdered: childDataList[j].quantityOrdered ? parseFloat(childDataList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0,
 						needByDate: this.datePipe.transform(childDataList[j].needByDate, "MM/dd/yyyy"),
@@ -3277,7 +3276,7 @@ export class RoSetupComponent implements OnInit {
 					this.childObjectArray.push(this.childObject)
 					this.childObjectArrayEdit.push({
 						...this.childObject,
-						purchaseOrderPartRecordId: childDataList[j].purchaseOrderPartRecordId ? childDataList[j].purchaseOrderPartRecordId : 0
+						repairOrderPartRecordId: childDataList[j].repairOrderPartRecordId ? childDataList[j].repairOrderPartRecordId : 0
 					});					
 				}
 			}
@@ -3287,7 +3286,7 @@ export class RoSetupComponent implements OnInit {
 				isParent: true,				
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
-				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumByObject(this.partListData[i].altEquiPartNumberId) : null,
+				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
 				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,
 				assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 				partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,			
@@ -3330,17 +3329,17 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,	
 				employeeID: this.employeeId ? this.employeeId : 0,						
-			}
+			}			
 			if (!this.isEditMode) {			
 				this.parentObjectArray.push({
 					...this.parentObject,
-					purchaseOrderSplitParts: this.childObjectArray					
+					roPartSplits: this.childObjectArray					
 				});				
 			} else {
 				this.parentObjectArray.push({
 					...this.parentObject,
-					purchaseOrderSplitParts: this.childObjectArrayEdit,
-					purchaseOrderPartRecordId: this.partListData[i].purchaseOrderPartRecordId ? this.partListData[i].purchaseOrderPartRecordId : 0
+					roPartSplits: this.childObjectArrayEdit,
+					repairOrderPartRecordId: this.partListData[i].repairOrderPartRecordId ? this.partListData[i].repairOrderPartRecordId : 0
 				})
 			}
 		}	
@@ -3399,14 +3398,15 @@ export class RoSetupComponent implements OnInit {
 	
 
 	filterAltPartItems(event,partNo,partList) {
-		const itemMasterId = getValueFromObjectByKey('value', partNo)
+		const itemMasterId = getValueFromObjectByKey('value', partNo)		
 		this.itemser.getItemMasterAltEquiMappingParts(itemMasterId).subscribe(res => {
-				this.altPartNumList = res;
-				this.altPartCollection = this.altPartNumList;
-				partList.altPartCollection = this.altPartNumList;
+				this.altPartNumList = res;			
+				this.altPartCollection = this.altPartNumList.map(x => {
+					return {value: x.altEquiPartNumberId, label: x.altEquiPartNumber }});
+				partList.altPartCollection = this.altPartCollection;				
 				if (event.query !== undefined && event.query !== null) {
-					const partNumberFilter = [...this.altPartNumList.filter(x => {
-						return x.altEquiPartNumber.toLowerCase().includes(event.query.toLowerCase())
+					const partNumberFilter = [...this.altPartCollection.filter(x => {
+						return x.label.toLowerCase().includes(event.query.toLowerCase())
 					})]
 					partList.altPartCollection = partNumberFilter;
 				}				
@@ -3446,9 +3446,9 @@ export class RoSetupComponent implements OnInit {
         this.enablePartSave();
 	
 
-		if(childata.purchaseOrderPartRecordId !== undefined && childata.purchaseOrderPartRecordId !== null) {
+		if(childata.repairOrderPartRecordId !== undefined && childata.repairOrderPartRecordId !== null) {
 			this.partListData[mainindex].childList = this.partListData[mainindex].childList.map(x => {
-				if (x.purchaseOrderPartRecordId == childata.purchaseOrderPartRecordId) {
+				if (x.repairOrderPartRecordId == childata.repairOrderPartRecordId) {
 					var remQty = this.partListData[mainindex].remQty ? parseInt(this.partListData[mainindex].remQty.toString().replace(/\,/g,'')) : 0;
 					var childQty = x.quantityOrdered ? parseInt(x.quantityOrdered.toString().replace(/\,/g,'')) : 0;						
 					this.partListData[mainindex].remQty = remQty + childQty;
@@ -4109,9 +4109,9 @@ export class RoSetupComponent implements OnInit {
 
     onDelPNRow(partList, index) {
         this.enablePartSave();		
-		if(partList.purchaseOrderPartRecordId !== undefined && partList.purchaseOrderPartRecordId !== null) {
+		if(partList.repairOrderPartRecordId !== undefined && partList.repairOrderPartRecordId !== null) {
 			this.partListData = this.partListData.map(x => {
-				if(x.purchaseOrderPartRecordId == partList.purchaseOrderPartRecordId){
+				if(x.repairOrderPartRecordId == partList.repairOrderPartRecordId){
 					return{...x, isDeleted : true}		
 				} else {
 					return x;
@@ -4231,7 +4231,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	getAltEquiPartNumByObject(obj) {
+	getAltEquiPartNumByObject(obj) {		
 		if (obj.altEquiPartNumberId) {
 			return obj.altEquiPartNumberId;
 		}
@@ -4376,7 +4376,7 @@ export class RoSetupComponent implements OnInit {
 			this.splitAddbutton = false;
 			this.splitmoduleId = splitPart.partListUserTypeId;
 			this.splituserId = this.getIdByObject(splitPart.partListUserId);
-			this.tempSplitAddress = getObjectById('siteID', splitPart.poPartSplitSiteId, this["splitAddressData" + pindex + cindex]);
+			this.tempSplitAddress = getObjectById('siteID', splitPart.roPartSplitSiteId, this["splitAddressData" + pindex + cindex]);
 			this.editSiteName = this.tempSplitAddress.siteName;
 			if(this.tempSplitAddress.isPoOnly) 
 				this.isEditModeSplitPoOnly = true;
