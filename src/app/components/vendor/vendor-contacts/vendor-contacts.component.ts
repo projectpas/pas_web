@@ -16,7 +16,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { getValueFromArrayOfObjectById, editValueAssignByCondition, getValueFromObjectByKey, getObjectByValue, getObjectById } from '../../../generic/autocomplete';
 import { emailPattern, titlePattern, phonePattern, mobilePattern } from '../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
-import * as $ from 'jquery'
+declare var $ : any;
 
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { AtaMainService } from '../../../services/atamain.service';
