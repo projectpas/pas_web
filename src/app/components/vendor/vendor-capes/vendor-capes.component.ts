@@ -458,24 +458,27 @@ export class VendorCapesComponent implements OnInit {
         this.vendorService.saveVendorCapes(this.vendorId, data).subscribe(res => {
             if(res) {
                 if (res.statusCode != 500) {
+                    this.isSpinnerVisible = false;
                     this.alertService.showMessage(
 						'Success',
 						`Saved Capability Info Successfully`,
 						MessageSeverity.success
                     );
-                    this.disableCapes = true;
-                    this.isSpinnerVisible = false;
+                    this.disableCapes = true;                    
                     this.getVendorCapabilitylistId('all'); 
                 }
 			 else {
+                    this.isSpinnerVisible = false;
                     this.alertService.showMessage(
                         'Error',
                         res.message,
                         MessageSeverity.error
                     );
-                    this.isSpinnerVisible = false;
                 }
-			 }
+             }
+             else{
+                this.isSpinnerVisible = false;
+             }
         }, error => {
             this.saveFailedHelper(error);        
             this.getVendorCapabilitylistId('all');    
@@ -695,9 +698,9 @@ export class VendorCapesComponent implements OnInit {
     }
 
     private saveFailedHelper(error: any) {
+        this.isSpinnerVisible = false;
 		this.alertService.showStickyMessage("Save Error", "The below errors occured while saving your changes:", MessageSeverity.error, error.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,''));
 		this.alertService.showStickyMessage(null, error.replace(/(<|&lt;)br\s*\/*(>|&gt;)/g,''), MessageSeverity.error);
-		this.isSpinnerVisible = false;
     }
 
     exportCSV() {
