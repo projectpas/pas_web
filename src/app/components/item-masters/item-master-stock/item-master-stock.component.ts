@@ -2466,6 +2466,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             this.router.navigate(['itemmastersmodule/itemmasterpages/app-item-master-stock']);
         }
         else{
+            this.itemMasterId = this._actRoute.snapshot.params['id'];
             const ItemMasterID = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
             const data = { ...this.exportInfo, 
                 createdBy : this.userName,
@@ -4179,7 +4180,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     
 
     saveExportInformation() {        
-
+        this.itemMasterId = this._actRoute.snapshot.params['id'];
         const ItemMasterID = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
         const data = { ...this.exportInfo, 
             createdBy : this.userName,
@@ -4216,7 +4217,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         })
     }
     saveandcreate(exportInfoormatiom) {
-        
+            this.itemMasterId = this._actRoute.snapshot.params['id'];
             const ItemMasterID = this.isEdit === true ? this.itemMasterId : this.collectionofItemMaster.itemMasterId;
             let expirationDate = null;
             if(this.exportInfo['exportCountryId'] == undefined){
