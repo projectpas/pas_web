@@ -10,6 +10,8 @@ import { VendorService } from "../services/vendor.service";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from "../services/auth.service";
+
 @Component({
     selector: 'grd-exclusions',
     templateUrl: './Exclusions-Create.component.html',
@@ -54,6 +56,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     constructor(private actionService: ActionService,
         private workOrderQuoteService: WorkOrderQuoteService,
         private itemClassService: ItemClassificationService,
+        private authService: AuthService,
         private vendorService: VendorService,
         private modalService: NgbModal,
         private itemser: ItemMasterService, private alertService: AlertService,
@@ -119,6 +122,14 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.workFlow.exclusions = [];
             this.addRow();
         }
+    }
+
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
     
     enableSaveMemo() {
@@ -204,7 +215,10 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         newRow.unitCost = "";
         newRow.memo = "";
         newRow.itemMasterId = "";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
+        newRow.updatedBy = this.userName;
+        newRow.updatedBy = this.userName;
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
         this.workFlow.exclusions.push(newRow);
     }
 

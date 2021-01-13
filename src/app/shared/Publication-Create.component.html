@@ -44,10 +44,9 @@
                     {{publ.publicationDescription}}
                 </td>
                 <td>
-                    <select class="form-control wf-pub-id full-width" id="ddlPublicationTypes"
-                        [(ngModel)]="publ.publicationType" >
+                    <select class="form-control wf-pub-id full-width" [(ngModel)]="publ.publicationType" >
                         <option value="0">--select--</option>
-                        <option *ngFor="let type of publicationTypes" value={{type.publicationTypeId}}>
+                        <option *ngFor="let type of publicationTypes" [value]="type.publicationTypeId">
                             {{type.name}}
                         </option>
                     </select>
