@@ -1640,6 +1640,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                                 if (this.UpdateMode) {
                                     publication[0].taskId = this.currenttaskId;
                                     publication[0].workflowId = this.updateWorkFlowId;
+                                    publication[0].createdBy = this.userName;
+                                    publication[0].updatedBy = this.userName;
                                 }
                                 this.workFlowList[i].publication = publication;
 

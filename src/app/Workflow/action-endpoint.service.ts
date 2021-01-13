@@ -18,8 +18,8 @@ export class ActionEndpoint extends EndpointFactory {
     private readonly _actionsUrl: string = "/api/Action/Get";
     private readonly _actionsUrlNew: string = "/api/Action/actions";
     private readonly _actionsUrlAuditHistory: string = "/api/Action/auditHistoryById";
-    private getActionURL: string = "/api/Task/Get";
-    private getActionAttributesURL: string = "/api/taskattribute/taskattributelist";
+    private getActionURL: string = environment.baseUrl + "/api/Task/Get";
+    private getActionAttributesURL: string = environment.baseUrl + "/api/taskattribute/taskattributelist";
     private getChargesTypeURL: string = environment.baseUrl + '/api/mastertest/ChargesType';
     private getChargesCurrencyURL: string = environment.baseUrl + '/api/mastertest/ChargesCurrency';
     private getEquipmentAssetTypesURL: string = environment.baseUrl + '/api/mastertest/EquipmentAssetType';
