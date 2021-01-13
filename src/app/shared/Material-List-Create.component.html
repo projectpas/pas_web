@@ -70,14 +70,21 @@
             </p-dropdown>
           </td>
           <td>
-            <select class="form-control wf-pub-id full-width" id="ddlMandatoryOrSupplemental"
-              [(ngModel)]="material.mandatoryOrSupplemental" style="margin:auto;" name="mandi_{{ i }}"
+            <!-- <select class="form-control wf-pub-id full-width" id="ddlMandatoryOrSupplemental"
+              [(ngModel)]="material.mandatoryOrSupplementalId" style="margin:auto;" name="mandi_{{ i }}"
               (change)="onSelectMaterialManditory(material)">
-              <option value="">--Select--</option>
+              <option value="" selected>--Select--</option>
               <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.id }}">
                 {{ mandatory.name }}
               </option>
-            </select>
+            </select> -->
+            <select class="form-control wf-pub-id full-width" 
+            [(ngModel)]="material.mandatorySupplementalId" (change)="onSelectMaterialManditory(material)" style="margin:auto;" name="mandi_{{ i }}">
+              <option value="0">--select--</option>
+              <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.materialMandatoriesId }}">
+                  {{mandatory.materialMandatoriesName}}
+              </option>
+          </select>
           </td>
           <td *ngIf="isQuote==true || isWorkOrder==true">
             <select class="form-control wf-pub-id" [(ngModel)]="material.provisionId" name="provision_{{ i }}"
@@ -126,7 +133,7 @@
             <div class="form-group memo-popup-cstm mat_emo">
               <div [innerHTML]="material.memo" matTooltipPosition="above" [matTooltip]="parsedText(material.memo)"
                 class="text_editor_box"></div>
-              <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" matTooltip="memo"
+              <i class="fa fa-pencil fa-lg ci_cls" data-toggle="modal" data-target="#textarea-popup" matTooltip="Memo"
                 matTooltipPosition="above" (click)="onAddTextAreaInfo(material,i)"></i>
             </div>
           </td>
@@ -156,8 +163,6 @@
           <td *ngIf="!isQuote" class="text-right"><b>
               {{ workFlow.materialExtendedPriceSummation }}</b>
           </td>
-          <td>&nbsp;</td>
-          <td>&nbsp;</td>
           <td>&nbsp;</td>
         </tr>
       </tfoot>
