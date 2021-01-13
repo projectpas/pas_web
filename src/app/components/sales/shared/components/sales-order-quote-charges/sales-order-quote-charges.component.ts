@@ -241,7 +241,10 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     else {
       let temp = [];
       this.salesOrderChargesList.forEach((x) => {
-        temp = [...temp, ...x];
+        if (typeof x[Symbol.iterator] === 'function')
+          temp = [...temp, ...x];
+        else
+          temp = [...temp, x];
       })
       temp = [...temp, ...this.chargeForm];
       this.salesOrderChargesLists = temp;
