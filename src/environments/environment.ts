@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'http://localhost:5050'
-  //baseUrl: 'https://dev.poweraerosuites.com/app1'
+  // baseUrl: 'http://localhost:5050'
+  baseUrl: 'http://devapp1.poweraerosuites.com/'
   
 };
 

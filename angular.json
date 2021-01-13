@@ -38,7 +38,10 @@
               "src/styles.scss"
             ],
             "scripts": ["node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"]
+              "src/assets/js/jquery-ui-1.12.1/jquery-ui.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "src/assets/js/cdnjs/bootstrap-multiselect.min.js"
+        ]
           },
           "configurations": {
             "production": {
