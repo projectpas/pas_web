@@ -226,8 +226,8 @@
         </div>
       </div>
 
-      <p-tabView class="pas-tabview">       
-        <p-tabPanel header="Parts List" [selected]="tabindex==0">
+      <p-tabView class="pas-tabview" (onChange)="onChangeTabView($event)">       
+        <p-tabPanel header="Parts List">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align"
           >
             <div class="tableFixHead">  
@@ -462,11 +462,16 @@
         </p-tabPanel>
        
         <p-tabPanel header="Vendor Capes">
-          <app-vendor-capabilities-list *ngIf="vendorId > 0 && isPoViewMode" [vendorId]="capvendorId" [isViewMode]="isViewMode">
-          </app-vendor-capabilities-list>          
+          <!-- <app-vendor-capabilities-list *ngIf="vendorId > 0 && isPoViewMode" [vendorId]="capvendorId" [isViewMode]="isViewMode">
+          </app-vendor-capabilities-list>  -->
+          {{capvendorId}}-{{showVendorCaptab}}-{{isViewMode}}
+          <app-vendor-capes *ngIf="capvendorId > 0 && showVendorCaptab"     
+            [vendorId]= "capvendorId"            
+            [isViewMode]="isViewMode">
+          </app-vendor-capes>
         </p-tabPanel>
 
-        <p-tabPanel header="Address">
+        <!-- <p-tabPanel header="Address">
           <div class="table-responsive default-bg clear">
             <div class="col-sm-5">
               <h5 class="po-head">Ship To</h5>
@@ -475,11 +480,9 @@
 
 
               <p><span class="label"><b> {{poHeaderAdd.shipToUserType}} Name <span _ngcontent-c22="" class="clr-red">*</span>:</b></span> <span class="value">{{poHeaderAdd.shipToUser ? poHeaderAdd.shipToUser : '-'}}</span></p>	
-              <!-- <p *ngIf="poHeaderAdd.shipToUserType"><span class="label"><b> User <span _ngcontent-c22="" class="clr-red">*</span>:</b></span> <span class="value">{{poHeaderAdd.shipToUser ? poHeaderAdd.shipToUser : '-'}}</span></p> -->
+              
               <p><span class="label"><b>Site Name <span _ngcontent-c22="" class="clr-red">*</span>:</b></span><span class="value">{{poHeaderAdd.shipToSiteName ? poHeaderAdd.shipToSiteName : '-'}}</span></p>
               <p><span class="label"><b>Address: </b></span><span class="value">{{poHeaderAdd.shipToAddress1 ? poHeaderAdd.shipToAddress1 : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</span></p>
-              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.shipToAddress3 ? poHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
               <p><span class="label"><b>City: </b></span><span class="value">{{poHeaderAdd.shipToCity ? poHeaderAdd.shipToCity : '-'}}</span></p>
               <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.shipToState ? poHeaderAdd.shipToState : '-'}}</span></p>
               <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.shipToPostalCode ? poHeaderAdd.shipToPostalCode : '-'}}</span></p>
@@ -494,17 +497,13 @@
               <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{poHeaderAdd.shippingCost ? poHeaderAdd.shippingCost : '-'}}</span></p>
               <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{poHeaderAdd.handlingCost ? poHeaderAdd.handlingCost : '-'}}</span></p>
               <p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{poHeaderAdd.shippingAccountNo ? poHeaderAdd.shippingAccountNo : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Shipping Id (AWB): </b></span><span class="value">{{poHeaderAdd.shippingId ? poHeaderAdd.shippingId : '-'}}</span></p>
-              <p><span class="label"><b>URL: </b></span><span class="value">{{poHeaderAdd.shippingURL ? poHeaderAdd.shippingURL : '-'}}</span></p> -->
-            </div>
+              </div>
             <div class="col-sm-5">
               <h5 class="po-head">Bill To</h5>
               <p><span class="label"><b>User Type <span _ngcontent-c22="" class="clr-red">*</span>:</b></span><span class="value">{{poHeaderAdd.billToUserType ? poHeaderAdd.billToUserType : '-'}}</span></p>
               <p><span class="label"><b> {{poHeaderAdd.billToUserType}} Name <span _ngcontent-c22="" class="clr-red">*</span>:</b></span><span class="value">{{poHeaderAdd.billToContactName ? poHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Site Name<span _ngcontent-c22="" class="clr-red">*</span>:</b></span><span class="value">{{poHeaderAdd.billToSiteName ? poHeaderAdd.billToSiteName : '-'}}</span></p>
               <p><span class="label"><b>Address: </b></span><span class="value">{{poHeaderAdd.billToAddress1 ? poHeaderAdd.billToAddress1 : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</span></p>
-              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.billToAddress3 ? poHeaderAdd.billToAddress3 : '-'}}</span></p> -->
               <p><span class="label"><b>City: </b></span><span class="value">{{poHeaderAdd.billToCity ? poHeaderAdd.billToCity : '-'}}</span></p>
               <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.billToState ? poHeaderAdd.billToState : '-'}}</span></p>
               <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.billToPostalCode ? poHeaderAdd.billToPostalCode : '-'}}</span></p>
@@ -516,6 +515,11 @@
                   </p></span></p>
             </div>
           </div>
+        </p-tabPanel>  -->
+
+        <p-tabPanel header="Address">
+        <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="id">
+        </app-address-component>
         </p-tabPanel>
 
         <p-tabPanel header="Documents">
