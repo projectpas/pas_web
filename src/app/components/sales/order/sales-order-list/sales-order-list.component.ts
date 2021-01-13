@@ -276,7 +276,7 @@ export class SalesOrderListComponent {
     this.isSpinnerVisible = true;
     let params: ISalesSearchParameters = new SalesSearchParameters();
     params.first = this.searchParameters.first;
-    params.page = this.searchParameters.page;
+    params.PageNo = this.searchParameters.PageNo;
     params.rows = this.searchParameters.rows;
     params.limit = this.searchParameters.limit;
     params.sortOrder = this.searchParameters.sortOrder;
