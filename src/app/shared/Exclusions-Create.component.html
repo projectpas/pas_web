@@ -9,8 +9,8 @@
       <tr>
         <th *ngIf="!isWorkFlow"><label>Task*</label></th>
         <th><label>EPN<span class="clr-red">*</span></label></th>
-        <th><label style="min-width: 90px;"> Description<span class="clr-red">*</span></label></th>
-        <th> <label>Condition</label></th>
+        <th><label style="min-width: 90px;"> Description</label></th>
+        <th> <label>Condition<span class="clr-red">*</span></label></th>
         <th> <label> Item Classification</label></th>
         <th><label style="min-width: 90px;"> Stock Type</label></th>
         <th><label>Qty </label></th>
@@ -84,7 +84,7 @@
             style="width: 120px;margin-bottom: 0;display: inline-flex;padding-top: 3px;">
           <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>
             <i class="fa fa-pencil ci_cls " data-toggle="modal" data-target="#textarea-popupexclusion"
-              matTooltip="memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(exclusion,i)"></i>
+              matTooltip="Memo" matTooltipPosition="above" (click)="onAddTextAreaInfo(exclusion,i)"></i>
           </div>
         </td>
         <td style="text-align: center;">
