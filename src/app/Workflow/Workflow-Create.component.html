@@ -1,17 +1,25 @@
 <p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="x_content">
     <div class="card" *ngIf="!isQuote">
-        <div class="card-header">
-            <div class="pull-left">
-                <h4 class="po-head m-0">{{typeOfForm}} Workflow</h4>
+        <div class="card-header header">
+            <div class="row">
+                <div class="col">
+                    <h4 class="header-name">{{typeOfForm}} Workflow
+                        <button class="btn-sm header-button header-button-alignment"
+                        (click)="toggle_wf_header=!toggle_wf_header">
+                            {{toggle_wf_header ? 'Collapse' : 'Expand'}}    
+                       </button>
+                    </h4>
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        class="btn-sm header-button pull-right"
+                        [routerLink]="['/workflowmodule/workflowpages/app-workflow-list']">
+                        Workflow List
+                    </button>
+                </div>
             </div>
-            <button class="btn btn-primary" (click)="toggle_wf_header=!toggle_wf_header" style="margin-left: 20px;">
-                {{toggle_wf_header ? 'Collapse' : 'Expand'}}
-            </button>
-            <button type="button" style="width: 200px;" class="btn btn-primary addpn-btn pull-right"
-                [routerLink]="['/workflowmodule/workflowpages/app-workflow-list']">
-                Workflow List
-            </button>
         </div>
         <div class="card-body">
             <div *ngIf="toggle_wf_header">
@@ -144,7 +152,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="Customer Name">Customer Name
+                                    <label for="Customer Name">Customer Name<span class="clr-red">*</span>
                                     </label>
                                     <p class="c-workflow-select">
                                         <p-autoComplete appendTo="body" [(ngModel)]="sourceWorkFlow.customerName"
@@ -291,7 +299,7 @@
                                             <div class="col-sm-4">
                                                 <div style="float:left;">
                                                     <label class="w80">Amount:</label>
-                                                    <input type="text" class="form-control w70 text-right"
+                                                    <input type="text" class="form-control w70 text-right" pInputText pKeyFilter="money" 
                                                         value="{{sourceWorkFlow.percentOfReplacement}}" disabled />
                                                 </div>
                                             </div>
@@ -740,7 +748,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Do you want to increase the Workflow Version?</h4>
+                    <h4 class="modal-title"  style="text-align: left;">Do you want to increase the Workflow Version?</h4>
                     <button type="button" class="close" data-dismiss="modal">
                         &times;
                     </button>

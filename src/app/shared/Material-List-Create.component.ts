@@ -21,6 +21,7 @@ import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } fro
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { MasterCompany } from "../models/mastercompany.model";
 import { ATASubChapter } from "../models/atasubchapter.model";
+import { AuthService } from "../services/auth.service";
 
 @Component({
     selector: 'grd-material',
@@ -42,9 +43,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     isViewItemMasterTLA: boolean = true;
     isViewItemMasterAlternate: boolean = true;
     isViewItemMasterEquivalency: boolean = true;
-    itemMasterView = false;
-    @Input() isWorkOrder = false;
+    itemMasterView = false;    
     @Input() isEdit = false;
+    @Input() isWorkOrder = false;
     @Input() editData;
     @Input() isQuote = false;
     @Input() taskList: any = [];
@@ -223,6 +224,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     constructor(private actionService: ActionService,
         private commonService: CommonService,
         private itemMasterService: ItemMasterService,
+        private authService: AuthService,
         private atasubchapter1service: AtaSubChapter1Service,
         private workOrderQuoteService: WorkOrderQuoteService,
         private itemser: ItemMasterService,
@@ -256,10 +258,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
             this.workFlow.materialList.map((x, index) => {
-                if (x['mandatoryOrSupplemental'] == this.workFlow.materialList[index].mandatoryOrSupplemental) {
-                    this.workFlow.materialList[index]['mandatorySupplementalId'] = x['mandatorySupplementalId'];
-
-                }
+                // if (x['mandatoryOrSupplemental'] == this.workFlow.materialList[index].mandatoryOrSupplemental) {
+                //     this.workFlow.materialList[index]['mandatorySupplementalId'] = x['mandatorySupplementalId'];
+                // }
                 this.getPNDetails(x);
             })
         }
@@ -282,31 +283,62 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }
     }
 
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
+
+    // getMaterailMandatoriesOld() {
+    //     let mandatorySupplementalIds = [];
+    //     if (!this.isWorkOrder || !this.isQuote) {
+    //         mandatorySupplementalIds = this.workFlow.materialList.reduce((acc, x) => {
+    //             return mandatorySupplementalIds.push(acc.mandatorySupplementalId);
+    //         }, 0)
+    //     }
+    //     this.isSpinnerVisible = true;
+    //     this.commonService.smartDropDownList('MaterialMandatories', 'Id', 'Name')
+    //         .subscribe(
+    //             mandatory => {
+    //                 this.isSpinnerVisible = false;
+    //                 this.materialMandatory = mandatory.map(x => {
+    //                     return {
+    //                         id: x.value,
+    //                         name: x.label
+    //                     }
+    //                 });
+    //                 this.defaultMaterialMandatory = 'Mandatory';
+    //                 if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
+    //                     this.workFlow.materialList[0].mandatorySupplementalId = 1;
+    //                 }
+    //             }, error => {
+    //                 this.isSpinnerVisible = false;
+    //             });
+    // }
+
     getMaterailMandatories() {
-        let mandatorySupplementalIds = [];
+        let materialMandatoriesIds = [];
         if (!this.isWorkOrder || !this.isQuote) {
-            mandatorySupplementalIds = this.workFlow.materialList.reduce((acc, x) => {
-                return mandatorySupplementalIds.push(acc.mandatorySupplementalId);
+            materialMandatoriesIds = this.workFlow.materialList.reduce((acc, x) => {
+                return materialMandatoriesIds.push(acc.MaterialMandatoriesId);
             }, 0)
         }
         this.isSpinnerVisible = true;
-        this.commonService.smartDropDownList('MaterialMandatories', 'Id', 'Name')
-            .subscribe(
-                mandatory => {
-                    this.isSpinnerVisible = false;
-                    this.materialMandatory = mandatory.map(x => {
-                        return {
-                            id: x.value,
-                            name: x.label
-                        }
-                    });
-                    this.defaultMaterialMandatory = 'Mandatory';
-                    if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
-                        this.workFlow.materialList[0].mandatorySupplementalId = 1;
+        this.commonService.autoSuggestionSmartDropDownList('MaterialMandatories', 'Id', 'Name', '', true, 20, materialMandatoriesIds)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.materialMandatory = res.map(x => {
+                    return {
+                        ...x,
+                        materialMandatoriesId: x.value,
+                        materialMandatoriesName: x.label
                     }
-                }, error => {
-                    this.isSpinnerVisible = false;
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
+            });
     }
 
     ngOnChanges() {
@@ -340,8 +372,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     onSelectMaterialManditory(rowData) {
         this.materialMandatory.forEach(
             x => {
-                if (x['id'] == rowData.mandatoryOrSupplemental) {
-                    rowData['mandatoryOrSupplemental'] = x['name'];
+                if (x['materialMandatoriesId'] == rowData.materialMandatoriesId) {
+                    rowData['materialMandatoriesName'] = x['materialMandatoriesName'];
                 }
             }
         )
@@ -425,9 +457,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     onPartSelect(event, material, index) {
         if (this.itemclaColl) {
             var materialObj = this.workFlow.materialList.find(x => x.partNumber == event && x.taskId == this.workFlow.taskId);
-
             var itemMasterId = this.itemclaColl.find(x => x[0].partName == event)[0].partId;
-
             if (materialObj != undefined) {
                 if (this.workFlow.exclusions) {
                     var isPartExcluded = this.workFlow.exclusions.find(x => x.itemMasterId != '' && x.itemMasterId == itemMasterId && x.taskId == this.workFlow.taskId)
@@ -475,7 +505,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }, 0)
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('Provision', 'ProvisionId', 'Description', '', true, 100, provisionIds)
-
             .subscribe(res => {
                 this.isSpinnerVisible = false;
                 this.provisionListData = [];
@@ -601,7 +630,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         newRow.extraCost = "0.00";
         newRow.itemClassificationId = "";
         newRow.itemMasterId = "";
-        newRow.mandatorySupplementalId = 1;
+        newRow.materialMandatoriesId  = 1;
         newRow.partDescription = "";
         newRow.partNumber = "";
         newRow.isDeferred = this.isDeferredBoolean;
@@ -613,18 +642,21 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         newRow.unitOfMeasureId = this.defaultUOMId;
         newRow.isDelete = false;
         newRow.extendedPrice = '';
+        newRow.updatedBy = this.userName;
+        newRow.updatedBy = this.userName;
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
 
         if (this.materialMandatory) {
             this.materialMandatory.forEach(
                 x => {
-                    if (x['id'] == 1) {
-                        newRow['mandatoryOrSupplemental'] = x['name'];
+                    if (x['materialMandatoriesId'] == 1) {
+                        newRow['materialMandatoriesName'] = x['materialMandatoriesName'];
                     }
                 }
             )
         }
         else {
-            newRow['mandatoryOrSupplemental'] = 'Mandatory';
+            newRow['materialMandatoriesName'] = 'Mandatory';
         }
 
         this.workFlow.materialList.push(newRow);

@@ -179,7 +179,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     arrayItemMasterIdlist:any[] = [];
     breadcrumbs: MenuItem[] = [
         { label: 'Work Flow' },
-		{ label: 'Work Flow List' },
 		{ label: 'Create Work Flow' }
 	];
 
@@ -262,7 +261,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.typeOfForm = 'Edit';
             this.breadcrumbs = [
                 { label: 'Work Flow' },
-                { label: 'Work Flow List' },
                 { label: 'Edit Work Flow' }
             ];
         }
@@ -978,7 +976,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         let workScopeId = this.sourceWorkFlow.workScopeId ? this.sourceWorkFlow.workScopeId : '0';
         this.arrayworkScopeIdlist.push(workScopeId); 
 
-        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'Description', '', true, 100, this.arrayworkScopeIdlist.join(), this.currentUserMasterCompanyId)
+        this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', '', true, 100, this.arrayworkScopeIdlist.join(), this.currentUserMasterCompanyId)
             .subscribe(res => {
                 this.worksScopeCollection = res.map(x => {
                     return {
@@ -1217,7 +1215,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         }
     }
 
-    onPercentOfNew(myValue, percentValue) {
+    onPercentOfNew(myValue, percentValue = 0) {
         this.sourceWorkFlow.costOfNew = this.sourceWorkFlow.costOfNew ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfNew, 2) : null;
         this.sourceWorkFlow.percentOfNew = '';
         if (myValue) {
@@ -1230,7 +1228,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.berDetermination();
     }
 
-    onPercentOfReplcaement(myValue, percentValue) {
+    onPercentOfReplcaement(myValue, percentValue = 0) {
         this.sourceWorkFlow.costOfReplacement = this.sourceWorkFlow.costOfReplacement ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfReplacement, 2) : null;
         this.sourceWorkFlow.percentOfReplacement = '';
         if (myValue) {
@@ -1626,6 +1624,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                                 if (this.UpdateMode) {
                                     material[0].taskId = this.currenttaskId;
                                     material[0].workflowId = this.updateWorkFlowId;
+                                    material[0].createdBy = this.userName;
+                                    material[0].updatedBy = this.userName;
                                 }
 
                                 this.workFlowList[i].materialQtySummation = 0;
@@ -1836,7 +1836,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                         this.workFlowList[0].materialQtySummation = 0;
                         this.workFlowList[0].materialExtendedCostSummation = 0;
                         this.workFlowList[0].totalMaterialCost = 0;
-                        this.workFlowList[0].materialList = material;
                         this.workFlowList[0].materialList = material;
 
                     }
@@ -2078,8 +2077,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         return expertise;
     }
 
-
-
     GetMaterialList(): any[] {
         var material = [{
             workflowMaterialListId: "0",
@@ -2100,6 +2097,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             taskId: "",
             workflowId: "",
             masterCompanyId: '',
+            createdBy: this.userName,
+            updatedBy: this.userName,
             AllowEdit: true,
             isDelete: false,
         }];
@@ -2310,15 +2309,15 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.isSpinnerVisible = true;
         const souceData={...this.sourceWorkFlow};
         if(souceData.exclusions && souceData.exclusions.length !=0){
-        souceData.exclusions.forEach(element => {
-           delete element.partName
-        });
-    }
-    if(souceData.measurements && souceData.measurements.length !=0){
-        souceData.measurements.forEach(element => {
-           delete element.partName
-        });   
-    }
+            souceData.exclusions.forEach(element => {
+            delete element.partName
+            });
+        }
+        if(souceData.measurements && souceData.measurements.length !=0){
+            souceData.measurements.forEach(element => {
+            delete element.partName
+            });   
+        }
         this.actionService.getNewWorkFlow(souceData).subscribe(
             result => {
                 this.isSpinnerVisible = false;
@@ -2463,11 +2462,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                             material.taskId = workflow.taskId;
                             material.order = workflow.order;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
+                            material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.createdBy = this.userName;
                             material.createdDate = new Date();
                         } else {
                             material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
+                            material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
                         }
