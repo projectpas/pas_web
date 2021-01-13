@@ -138,7 +138,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Vendor Contact <span class="clr-red">*</span>
-                                            <span *ngIf="headerInfo.vendorId" lass="vendor-contact-icon"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Vendor Contact" matTooltipPosition="above" data-target="#addContactInfo" data-toggle="modal" (click)="resetVenContactInfo()"></a></span>
+                                            <span *ngIf="headerInfo.vendorId" class="vendor-contact-icon"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Vendor Contact" matTooltipPosition="above" data-target="#addContactInfo" data-toggle="modal" (click)="resetVenContactInfo()"></a></span>
                                         </label>
                                         <div>
                                             <p-autoComplete field="vendorContact" [ngClass]="inputValidCheckHeader ? 'autocomplete-validate' : ''" class="autocomplete" [(ngModel)]="headerInfo.vendorContactId" name="vendorContact" [suggestions]="vendorContactsHeader" (completeMethod)="filterVendorContacts($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" [disabled]="vendorName.invalid" #vendorContact="ngModel" (ngModelChange)="enableHeaderSave()" (onSelect)="onChangeVendorContact(headerInfo.vendorContactId)" required></p-autoComplete>
@@ -546,7 +546,7 @@
                                     </td>
                                     <td class="mgmt-td-align">
                                         <!-- <label style="width:90px;">BU:</label> -->
-                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
+                                        <select class="form-control" [(ngModel)]="partList.parentbuId" name="parentBU{{row_index}}" (change)="getParentDivisionlist(partList,row_index)" (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved">
                                             <option value="0">Select</option>
                                             <option *ngFor="let businessUnit of partList.parentBulist" value="{{businessUnit.value}}">{{businessUnit.label}}</option>
                                         </select>
@@ -691,7 +691,7 @@
                                                 <div class="col-sm-1 parts-plus" *ngIf="(partChildList.partListUserId | json) != '{}' && partChildList.partListUserId != null">
                                                     <div><a class="fa fa-plus-circle fa-lg" matTooltip="Add Split Address" matTooltipPosition="above" data-toggle="modal" data-target="#createPOAddress" (click)="onClickPartsListAddress('Add', partChildList, row_index, row_no)" *ngIf="!partChildList.isApproved"></a></div>
                                                 </div>
-                                                <div class="col-sm-1 parts-list-memo-div" *ngIf="partChildList.poPartSplitSiteId && partChildList.poPartSplitSiteId != null && partChildList.poPartSplitSiteId != 0">
+                                                <div class="col-sm-1 parts-list-memo-div ship-address-memo" *ngIf="partChildList.poPartSplitSiteId && partChildList.poPartSplitSiteId != null && partChildList.poPartSplitSiteId != 0">
                                                     <!-- <div style="cursor:pointer; font-size:12px;"><a class="fa fa-edit fa-lg"
                                                          matTooltip="Edit Split Address" matTooltipPosition="above"
                                                          data-toggle="modal" data-target="#createPOAddress" 
@@ -1724,8 +1724,12 @@
                     </div> -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary pull-right submit-btn" (click)="addContactForVendor()"
+                    <button type="button" class="btn btn-primary editor-buttons-margin" (click)="addContactForVendor()"
                      data-dismiss="modal" [disabled]="!addContactForm.valid">Save</button>
+                     <button type="button" class="btn btn-danger editor-buttons-margin"
+                     data-dismiss="modal">
+                 Close
+             </button>
                 </div>
             </form>
         </div>

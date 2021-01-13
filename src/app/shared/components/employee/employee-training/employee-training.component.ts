@@ -266,7 +266,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
 		if(this.arrayTrainingtypelist.length == 0) {			
 			this.arrayTrainingtypelist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType',strText,true,20000,this.arrayTrainingtypelist.join()).subscribe(response => {           
+		this.commonService.autoSuggestionSmartDropDownList('EmployeeTrainingType', 'EmployeeTrainingTypeId', 'TrainingType',strText,true,20000,this.arrayTrainingtypelist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
             this.dataSource.data = response;
             this.alltrainingTypes = response;
             this.alertService.stopLoadingMessage();
@@ -274,9 +274,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
 		},err => {
             this.alertService.stopLoadingMessage();
             this.loadingIndicator = false;
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}
 
@@ -314,12 +312,10 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     private getAllAircraftManfacturer(strText = '') {        
 		if(this.arrayAircraftManfacturerlist.length == 0) {			
 			this.arrayAircraftManfacturerlist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'aircraftTypeId', 'description',strText,true,20000,this.arrayAircraftManfacturerlist.join()).subscribe(response => { 
+		this.commonService.autoSuggestionSmartDropDownList('AircraftType', 'aircraftTypeId', 'description',strText,true,20000,this.arrayAircraftManfacturerlist.join(),this.currentUserMasterCompanyId).subscribe(response => { 
             this.manufacturerData = response;
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});
 	}
     
@@ -343,10 +339,7 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
                         value: models.aircraftModelId
                     };
                 });}
-            },err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            });
+            },err => {});
     }
    
     private loadMasterCompanies() {
@@ -691,12 +684,10 @@ export class EmployeeTrainingComponent implements OnInit, AfterViewInit {
     private getAllFrequencyTrainingData(strText = '') {       
 		if(this.arrayFrequencyTrainingInfolist.length == 0) {			
 			this.arrayFrequencyTrainingInfolist.push(0); }
-		this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName',strText,true,20000,this.arrayFrequencyTrainingInfolist.join()).subscribe(response => {  
+		this.commonService.autoSuggestionSmartDropDownList('FrequencyOfTraining', 'FrequencyOfTrainingId', 'FrequencyName',strText,true,20000,this.arrayFrequencyTrainingInfolist.join(),this.currentUserMasterCompanyId).subscribe(response => {  
             this.getAllFrequencyTrainingInfodrpData = response;
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
 	}
 

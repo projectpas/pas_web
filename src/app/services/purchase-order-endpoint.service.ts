@@ -253,8 +253,8 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
 
     savePurchaseOrderSettingMasterDate<T>(param: any): Observable<any> {
         let body = JSON.stringify(param);
-        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })
-        return this.http.post('/api/purchaseorder/savepurchaseordersettingmaster', body, this.getRequestHeaders())
+        let headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8' })        
+        return this.http.post(this.configurations.baseUrl + '/api/purchaseorder/savepurchaseordersettingmaster', body, this.getRequestHeaders())
             .map((response: Response) => {
                 return <any>response;
             }).catch(error => {
@@ -262,10 +262,10 @@ export class PurchaseOrderEndpoint extends EndpointFactory {
             });
     }
 
-    getPurchaseOrderSettingMasterData() {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting`)
+    getPurchaseOrderSettingMasterData(currentUserMasterCompanyId) {
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/purchaseorder/getPOSetting?masterCompanyId=${currentUserMasterCompanyId}`)
             .catch(error => {
-                return this.handleErrorCommon(error, () => this.getPurchaseOrderSettingMasterData());
+                return this.handleErrorCommon(error, () => this.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId));
             });
     }
 

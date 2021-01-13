@@ -1,18 +1,18 @@
 <div class="right_col" role="main">
     <div class="x_content">
         <div class="card new-card">
-            <div class="card-header bg-primary new-card-header">
+            <div class="card-header header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="new-card-heading">{{id ? 'Edit' : 'Create'}} Sales Order</h4>
+                        <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order</h4>
                     </div>
                     <div class="col-md-9">
-                        <button class="btn-sm new-btn-primary pull-left" (click)="toggle_po_header=!toggle_po_header">
+                        <button class="btn-sm header-button header-button-alignment" (click)="toggle_po_header=!toggle_po_header">
                             {{toggle_po_header ? 'Collapse' : 'Expand'}}
                         </button>
                     </div>
                     <div>
-                        <button type="button" class="btn-sm new-btn-primary pull-right" matTooltipPosition="above"
+                        <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
                             matTooltip="SO List" [routerLink]="['/salesmodule/salespages/sales-order-list']">
                             SO List
                         </button>
@@ -580,7 +580,7 @@
                                 </app-sales-order-customer-approval>
                             </p-tabPanel>
                             <p-tabPanel header="Address">
-                                <app-address-component [addressType]="addressType" [id]="SalesOrderId">
+                                <app-address-component  *ngIf="showAddresstab" [addressType]="addressType" [id]="SalesOrderId">
 
                                 </app-address-component>
                                 <!-- <app-sales-address [customerId]="customerId" [salesQuote]="salesQuote"

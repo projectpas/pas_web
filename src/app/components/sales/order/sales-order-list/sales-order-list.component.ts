@@ -115,7 +115,7 @@ export class SalesOrderListComponent {
     }
     this.breadcrumbs = [
       { label: 'Sales Order' },
-      { label: 'Order List' },
+      { label: 'Sales Order List' },
     ];
 
   }
@@ -168,9 +168,9 @@ export class SalesOrderListComponent {
       { field: "estimatedShipDateType", header: "Est. Ship Date", width: "130px" },
       { field: "salesPerson", header: "Sales Person", width: "180px" },
       { field: "createdDate", header: "Created Date", width: "130px" },
-      { field: "createdBy", header: "CreatedBy", width: "130px" },
+      { field: "createdBy", header: "Created By", width: "130px" },
       { field: "updatedDate", header: "Updated Date", width: "130px" },
-      { field: "updatedBy", header: "UpdatedBy", width: "130px" }
+      { field: "updatedBy", header: "Updated By", width: "130px" }
 
     ];
     this.selectedColumns = this.headers;
@@ -276,7 +276,7 @@ export class SalesOrderListComponent {
     this.isSpinnerVisible = true;
     let params: ISalesSearchParameters = new SalesSearchParameters();
     params.first = this.searchParameters.first;
-    params.page = this.searchParameters.page;
+    params.PageNo = this.searchParameters.PageNo;
     params.rows = this.searchParameters.rows;
     params.limit = this.searchParameters.limit;
     params.sortOrder = this.searchParameters.sortOrder;
@@ -453,7 +453,8 @@ export class SalesOrderListComponent {
     this.isSpinnerVisible = true;
     const isdelete = this.currentDeletedstatus ? true : false;
     let PagingData;
-    PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+    //PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+    PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"StatusId":this.currentStatus,"isDeleted":isdelete,"ViewType": this.viewType},"globalFilter":""}
     // let PagingData: ISalesSearchParameters = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentStatus, "isDeleted": isdelete }, "globalFilter": "" }
     let filters = Object.keys(dt.filters);
     filters.forEach(x => {

@@ -28,7 +28,7 @@ import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { DatePipe } from '@angular/common';
 import { SalesOrderReferenceStorage } from '../../../sales/shared/sales-order-reference-storage';
 import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-reference-storage';
-// import { connectableObservableDescriptor } from 'rxjs/observable/ConnectableObservable';
+//import { connectableObservableDescriptor } from 'rxjs/observable/ConnectableObservable';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 
@@ -367,8 +367,6 @@ export class PurchaseSetupComponent implements OnInit {
 	moduleId:any=0;
 	referenceId:any=0;
 	moduleName:any="PurchaseOrder";
-	home: any;
-
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,
@@ -413,7 +411,7 @@ export class PurchaseSetupComponent implements OnInit {
 		this.posettingModel.IsResale = false;
         this.posettingModel.IsDeferredReceiver = false;
         this.posettingModel.IsEnforceApproval = false;		 
-		this.getPurchaseOrderMasterData();
+		this.getPurchaseOrderMasterData(this.currentUserMasterCompanyId);
 		
 
 		this.vendorIdByParams = this._actRoute.snapshot.params['vendorId'];       
@@ -506,8 +504,8 @@ export class PurchaseSetupComponent implements OnInit {
 		
         
 	}
-	getPurchaseOrderMasterData() {        
-        this.purchaseOrderService.getPurchaseOrderSettingMasterData().subscribe(res => {
+	getPurchaseOrderMasterData(currentUserMasterCompanyId) {        
+        this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
             if (res) {
                 this.posettingModel.PurchaseOrderSettingId = res.purchaseOrderSettingId;
                 this.posettingModel.IsResale = res.isResale;
@@ -3287,7 +3285,7 @@ export class PurchaseSetupComponent implements OnInit {
 				isParent: true,				
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
-				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumByObject(this.partListData[i].altEquiPartNumberId) : null,
+				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
 				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,
 				assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 				partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,			
@@ -3400,11 +3398,12 @@ export class PurchaseSetupComponent implements OnInit {
 		const itemMasterId = getValueFromObjectByKey('value', partNo)
 		this.itemser.getItemMasterAltEquiMappingParts(itemMasterId).subscribe(res => {
 				this.altPartNumList = res;
-				this.altPartCollection = this.altPartNumList;
-				partList.altPartCollection = this.altPartNumList;
+				this.altPartCollection = this.altPartNumList.map(x => {
+					return {value: x.altEquiPartNumberId, label: x.altEquiPartNumber }});
+				partList.altPartCollection = this.altPartCollection;
 				if (event.query !== undefined && event.query !== null) {
-					const partNumberFilter = [...this.altPartNumList.filter(x => {
-						return x.altEquiPartNumber.toLowerCase().includes(event.query.toLowerCase())
+					const partNumberFilter = [...this.altPartCollection.filter(x => {
+						return x.label.toLowerCase().includes(event.query.toLowerCase())
 					})]
 					partList.altPartCollection = partNumberFilter;
 				}				
@@ -4870,17 +4869,17 @@ export class PurchaseSetupComponent implements OnInit {
 
 
 	
-	saveApprovalProcess() {
+	saveApprovalProcess() {        
 		const data = [];
 		this.isSpinnerVisible = true;
-		this.approvalProcessList = this.approvalProcessList.map(x => {
+		this.approvalProcessList = this.approvalProcessList.map(x => {			
 			return {
 				...x,
 				legalEntityId: this.currentUserLegalEntityId,
 				internalEmails: this.apporoverEmailList,
 				approvers: this.apporoverNamesList.join(),
-				approvedById: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : null,
-				rejectedBy: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : null,
+				approvedById: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : 0,
+				rejectedBy: x.actionId == this.SubmitInternalApprovalID ? parseInt(this.employeeId.toString()) : 0,
                 createdBy: this.userName,
                 updatedBy: this.userName
 			}

@@ -19,6 +19,10 @@ import { SOApprovalRuleComponent } from "../components/sales/order/shared/compon
 
 const salesPagesRoutes: Routes = [
   {
+    path: '',
+    component: SalesPagesComponent
+  },
+  {
     path: "salespages",
     component: SalesPagesComponent,
     children: [

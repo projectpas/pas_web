@@ -491,13 +491,14 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     dismissModelRestore() {
         this.modal.close();
     }
-    getDeleteListByStatus(value) {
+    getDeleteListByStatus(value) {        
         this.deletedStatusInfo = value ? value : false;
         this.getAllEmail();
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
     getAllEmail() {
+        this.data = [];
         this.isSpinnerVisible = true;
         this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type)
             .subscribe(
@@ -513,7 +514,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                             }
                         });
-                    }
+                    }                    
                 }, err => {
                     this.errorMessageHandler();
                 }

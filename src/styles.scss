@@ -9379,7 +9379,7 @@ button.multiselect {
 }
 
 .splitship-child td input {
-  width: 90px !important;
+  width: 100% !important;
 }
 
 .splitship-child input[type='number'] {
@@ -16273,7 +16273,9 @@ li{
 .pcalendar-wo-labor .ui-calendar.ui-calendar-w-btn .ui-inputtext {
   width: 115px !important;
 }
-
+.ui-calendar.ui-calendar-w-btn input{
+  width:100% !important;
+}
 .emp-labour-cstm p-autocomplete .ui-autocomplete {
   width: calc(100% - 14px) !important;
   padding-right: 3px;

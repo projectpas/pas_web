@@ -277,8 +277,14 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
         else {
             let temp = [];
+            // this.salesOrderChargesList.forEach((x) => {
+            //     temp = [...temp, ...x];
+            // })
             this.salesOrderChargesList.forEach((x) => {
-                temp = [...temp, ...x];
+                if(typeof x[Symbol.iterator] === 'function')
+                    temp = [...temp, ...x];
+                else
+                    temp = [...temp, x];
             })
             temp = [...temp, ...this.chargeForm];
             this.salesOrderChargesLists = temp;
@@ -299,9 +305,14 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     createChargesQuote() {
         let temp = this.salesOrderChargesList;
         let sendData = []
+        // for (let index = 0; index < temp.length; index++) {
+        //     sendData = [...sendData, ...temp[index]];
+        // }
         for (let index = 0; index < temp.length; index++) {
-            sendData = [...sendData, ...temp[index]];
-
+            if (typeof temp[index][Symbol.iterator] === 'function')
+                sendData = [...sendData, ...temp[index]];
+            else
+                sendData = [...sendData, temp[index]];                
         }
         sendData = sendData.map((f) => {
             return {
