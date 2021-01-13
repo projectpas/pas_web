@@ -49,7 +49,7 @@ export class POApprovalService extends EndpointFactory {
   updateActionforActive<T>(ruleId,status,user): Observable<T> {
     return this.http
       .get<T>(
-        this.configurations.baseUrl + `${this._approvalrulestatusUrl}?approvalRuleId=${ruleId}&status=${status}&updatedBy=${user}`,
+        `${this._approvalrulestatusUrl}?approvalRuleId=${ruleId}&status=${status}&updatedBy=${user}`,
         this.getRequestHeaders()
       )
       .catch((error) => {
@@ -70,7 +70,7 @@ export class POApprovalService extends EndpointFactory {
   createapprovalrulecommon(data) {
     return this.http
       .post(
-        this.configurations.baseUrl + this._createapprovalrulecommon,
+        this._createapprovalrulecommon,
         JSON.stringify(data),
         this.getRequestHeaders()
       )
@@ -84,7 +84,7 @@ export class POApprovalService extends EndpointFactory {
   getapprovalrulebyidwithEmployee<T>(id): Observable<T> {
     return this.http
       .get<T>(
-        this.configurations.baseUrl + `${this._approvalrulebyidwithEmployee}${id}`,
+        `${this._approvalrulebyidwithEmployee}${id}`,
         this.getRequestHeaders()
       )
       .catch((error) => {
@@ -97,7 +97,7 @@ export class POApprovalService extends EndpointFactory {
   getApprovalRuleHistorycommon<T>(id): Observable<T> {
     return this.http
       .get<T>(
-        this.configurations.baseUrl + `${this._getApprovalRuleHistorycommon}${id}`,
+        `${this._getApprovalRuleHistorycommon}${id}`,
         this.getRequestHeaders()
       )
       .catch((error) => {
@@ -118,7 +118,7 @@ export class POApprovalService extends EndpointFactory {
 
   restoreApprovalById(id,name) {
     return this.http.get(
-      this.configurations.baseUrl + `${this._restoreApprovalById}?approvalRuleId=${id}&updatedBy=${name}`,
+      `${this._restoreApprovalById}?approvalRuleId=${id}&updatedBy=${name}`,
       this.getRequestHeaders()
     ).catch((error) => {
       return this.handleErrorCommon(error, () =>
@@ -129,7 +129,7 @@ export class POApprovalService extends EndpointFactory {
 
   deleteApprovalById(id,name) {
     return this.http.get(
-      this.configurations.baseUrl + `${this._deleteApprovalById}?approvalRuleId=${id}&updatedBy=${name}`,
+      `${this._deleteApprovalById}?approvalRuleId=${id}&updatedBy=${name}`,
       this.getRequestHeaders()
     ).catch((error) => {
       return this.handleErrorCommon(error, () =>
