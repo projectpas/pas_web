@@ -100,9 +100,9 @@
                   <i class="fa fa-eye"></i>
                 </a>
               </span>
-              <button class="btn-add" mat-icon-button matTooltip="Create Sales Order Quote" matTooltipPosition="above"
+              <button class="btn-add" mat-icon-button 
                 (click)="createQuote(rowData)" [disabled]="!rowData.isActive || rowData.isDeleted">
-                <i class="fa fa-plus"> </i>
+                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Sales Order Quote' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
               </button>
             </div>
           </td>
