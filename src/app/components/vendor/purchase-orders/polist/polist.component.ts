@@ -217,6 +217,17 @@ export class PolistComponent implements OnInit {
         }
 
     }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
+	get employeeId() {
+	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+	}
+    
+    
     closeModal() {
         $("#downloadConfirmation").modal("hide");
     }
@@ -275,7 +286,9 @@ export class PolistComponent implements OnInit {
 
     getList(data) {
         const isdelete = this.currentDeletedstatus ? true : false;
-        data.filters.isDeleted = isdelete
+        data.filters.isDeleted = isdelete;
+        data.filters.employeeId = this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         this.purchaseOrderService.getPOList(data).subscribe(res => { 
             const vList  = res['results'].map(x => {
                 return {
