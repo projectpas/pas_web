@@ -236,7 +236,7 @@ export class RoSetupComponent implements OnInit {
 	disableHeaderInfo: boolean = false; 
 	allWorkOrderInfo: any = [];
 	allsubWorkOrderInfo: any = [];
-	allRepairOrderInfo: any = [];
+	//allRepairOrderInfo: any = [];
 	allSalesOrderInfo: any = [];
 	allShipViaInfo: any = [];
 	allWorkOrderDetails: any = [];
@@ -287,7 +287,7 @@ export class RoSetupComponent implements OnInit {
 	arrayCustlist:any[] = [];
 	arrayWOlist:any[] = [];
 	arraysubWOlist:any[] = [];
-	arrayROlist:any[] = [];
+	//arrayROlist:any[] = [];
 	arraySOlist:any[] = [];
 	breadcrumbs: MenuItem[];
 	splitAddbutton: boolean = false;
@@ -451,9 +451,9 @@ export class RoSetupComponent implements OnInit {
 								else if (x.label == "SOWONO") {
                                     this.arraysubWOlist.push(x.value);
 								}								
-								else if (x.label == "RONO") {
-                                    this.arrayROlist.push(x.value);
-								}
+								// else if (x.label == "RONO") {
+                                //     this.arrayROlist.push(x.value);
+								// }
 								else if (x.label == "SONO") {
                                     this.arraySOlist.push(x.value);
 								}
@@ -1381,10 +1381,10 @@ export class RoSetupComponent implements OnInit {
 		this.arraysubWOlist.push(id);
 	}	
 
-	onROSelect(id)
-	{
-		this.arrayROlist.push(id);
-	}
+	// onROSelect(id)
+	// {
+	// 	this.arrayROlist.push(id);
+	// }
 
 	onSOSelect(id)
 	{
@@ -1519,7 +1519,7 @@ export class RoSetupComponent implements OnInit {
 				resale: res.resale,
 				managementStructureId:res.managementStructureId,
 				companyId: this.getManagementStructureDetails(res.managementStructureId,this.employeeId,res.managementStructureId),
-                poMemo: res.poMemo,
+                roMemo: res.roMemo,
 				notes: res.notes,
                 createdDate: res.createdDate,
 				updatedDate:res.updatedDate,
@@ -2954,25 +2954,25 @@ export class RoSetupComponent implements OnInit {
 
 	
 
-	loadRepairOrderList(filterVal = '') {
-		if (this.arrayROlist.length == 0) {
-            this.arrayROlist.push(0); }
-		this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-			const data = res.map(x => {
-				return {
-					value: x.repairOrderId,
-					label: x.repairOrderNumber
-				}
-			});
-			this.allRepairOrderInfo = [
-				{value: 0, label: 'Select'}
-			];
-			this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
-			this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
-		},err => {
-			this.isSpinnerVisible = false;				
-		});
-	}
+	// loadRepairOrderList(filterVal = '') {
+	// 	if (this.arrayROlist.length == 0) {
+    //         this.arrayROlist.push(0); }
+	// 	this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+	// 		const data = res.map(x => {
+	// 			return {
+	// 				value: x.repairOrderId,
+	// 				label: x.repairOrderNumber
+	// 			}
+	// 		});
+	// 		this.allRepairOrderInfo = [
+	// 			{value: 0, label: 'Select'}
+	// 		];
+	// 		this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
+	// 		this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;				
+	// 	});
+	// }
 
 	loadSalesOrderList(filterVal = '') {
 		if (this.arraySOlist.length == 0) {
@@ -3026,7 +3026,7 @@ export class RoSetupComponent implements OnInit {
 		this.getCountriesList();
 		this.loadPercentData();
 		this.loadWorkOrderList();
-		this.loadRepairOrderList();
+		//this.loadRepairOrderList();
 		this.loadSalesOrderList();
 		this.loapartItems();
 		this.loadModuleListForVendorComp();
@@ -3075,7 +3075,7 @@ export class RoSetupComponent implements OnInit {
 				approvedDate: this.headerInfo.approvedDate,				
 				deferredReceiver: this.headerInfo.deferredReceiver ? this.headerInfo.deferredReceiver : false,
 				resale: this.headerInfo.resale ? this.headerInfo.resale : false,
-				poMemo: this.headerInfo.poMemo ? this.headerInfo.poMemo : '',
+				roMemo: this.headerInfo.roMemo ? this.headerInfo.roMemo : '',
                 notes: this.headerInfo.notes ? this.headerInfo.notes : '',				
 				managementStructureId: this.headerInfo.managementStructureId ? this.headerInfo.managementStructureId : 0,
 				masterCompanyId: this.currentUserMasterCompanyId,
@@ -4141,10 +4141,10 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	onAddMemo() {
-		this.headerMemo = this.headerInfo.poMemo;
+		this.headerMemo = this.headerInfo.roMemo;
 	}
 	onSaveMemo() {
-		this.headerInfo.poMemo = this.headerMemo;
+		this.headerInfo.roMemo = this.headerMemo;
 		this.enableHeaderSaveBtn = true;
 	}
 
