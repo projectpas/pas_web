@@ -23,6 +23,7 @@ import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSa
 import { forkJoin } from "rxjs/observable/forkJoin";
 import { ApprovalProcessEnum } from "../../../models/sales-approval-process-enum";
 import { ApprovalTaskEnum } from "../../../../quotes/models/approval-task-enum";
+
 @Component({
   selector: "app-sales-order-customer-approval",
   templateUrl: "./sales-order-customer-approval.component.html",
@@ -291,7 +292,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   onApprovalSelected(approver, i) {
-    if (approver.approvalActionId == 4) {
+    //if (approver.approvalActionId == 4) {
+      if (approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
       if (this.defaultContactId) {
         this.salesOrderCustomerApprovalListView[i].customerApprovedById = this.defaultContactId;
       } else {
@@ -322,6 +324,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
 
       instance.originalStatusId = approval.statusId;
       instance.selected = instance.originalStatusId == DBkeys.DEFAULT_SALES_ORDER_APPROVAL_STATUS_ID;
+      //instance.selected = instance.originalStatusId == (4 || "4") ? true : false;
       instance.openDate = new Date(approval.openDate);
       instance.approvalDate = new Date(approval.approvalDate);
       instance.approvedDate = new Date(approval.approvedDate);
@@ -449,7 +452,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     if (this.approvers && this.approvers.length > 0) {
       this.approvers.forEach(
         x => {
-          if (x.selected && x.approvalActionId == 3) {
+          //if (x.selected && x.approvalActionId == 3) {
+            if (x.selected && x.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
             openEmail = true;
           }
         }
@@ -475,6 +479,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.salesOrderCustomerApprovalListView.forEach(
       x => {
         if (x.selected) {
+          debugger;
           let obj = {
             "SalesOrderId": x.salesOrderId,
 
@@ -611,7 +616,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   getApprovalActionInternalStatus(approver) {
-    if (approver.selected && approver.approvalActionId == 2) {
+    //if (approver.selected && approver.approvalActionId == 2) {
+      if (approver.selected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
       return true;
     } else {
       return false;
@@ -619,7 +625,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   getApprovalActionCustomerStatus(approver) {
-    if (approver.selected && approver.approvalActionId == 4) {
+    //if (approver.selected && approver.approvalActionId == 4) {
+      if (approver.selected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
       return true;
     } else {
       return false;
