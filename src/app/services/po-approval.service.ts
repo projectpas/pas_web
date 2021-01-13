@@ -35,7 +35,7 @@ export class POApprovalService extends EndpointFactory {
   getAllApprovalDataByTaskId<T>(taskID,isDeleted,currentStatus): Observable<T> {   
     return this.http
       .get<T>(
-        this.configurations.baseUrl + `${this._approvalrulelistbyTaskURL}?taskID=${taskID}&currentStatus=${currentStatus}&isDeleted=${isDeleted}`,
+        `${this._approvalrulelistbyTaskURL}?taskID=${taskID}&currentStatus=${currentStatus}&isDeleted=${isDeleted}`,
         this.getRequestHeaders()
       )
       .catch((error) => {
