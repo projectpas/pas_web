@@ -54,6 +54,9 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.getROApprovalListById(repairOrderId);
   }
    
+  approverslistbyTaskId(taskId, id) {
+    return this.repairOrderEndpoint.approverslistbyTaskId(taskId, id);
+  }
 
   getVendorROHeaderById(repairOrderId) {
     return this.repairOrderEndpoint.getVendorROHeaderById(repairOrderId);

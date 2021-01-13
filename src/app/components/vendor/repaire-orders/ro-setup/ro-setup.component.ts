@@ -274,7 +274,7 @@ export class RoSetupComponent implements OnInit {
 	displayWarningModal: boolean = false;
 	roFulfillingstatusID: number = -1;
 	roOpenstatusID: number = -1;
-	poApprovaltaskId = 0;
+	roApprovaltaskId = 0;
 	ApprovedstatusId = 0; 
 	WaitingForApprovalstatusId = 0; 
 	ShowWarning = 0; 
@@ -2092,12 +2092,12 @@ export class RoSetupComponent implements OnInit {
 
 	getApproversListById(roId) {	
 		this.isSpinnerVisible = true;
-		if(this.poApprovaltaskId == 0) {
+		if(this.roApprovaltaskId == 0) {
 		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
 		if(response) {					
             response.forEach(x => {
-                if (x.label.toUpperCase() == "PO APPROVAL") {
-                    this.poApprovaltaskId = x.value;
+                if (x.label.toUpperCase() == "RO APPROVAL") {
+                    this.roApprovaltaskId = x.value;
                 }              
 			});
 			this.getApproversByTask(roId)
@@ -2113,7 +2113,7 @@ export class RoSetupComponent implements OnInit {
 	}
 	getApproversByTask(roId) {		
 		this.isSpinnerVisible = true;
-		this.purchaseOrderService.approverslistbyTaskId(this.poApprovaltaskId, roId).subscribe(res => {
+		this.repairOrderService.approverslistbyTaskId(this.roApprovaltaskId, roId).subscribe(res => {
 						 this.internalApproversList = res;
 						 this.internalApproversList.map(x => {
 							this.apporoverEmailList = x.approverEmails;
@@ -2130,7 +2130,7 @@ export class RoSetupComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		this.selectallApprovers = false;
 		this.enableApproverSaveBtn = false;
-		this.purchaseOrderService.getPOApprovalListById(roId).subscribe(res => {
+		this.repairOrderService.getROApprovalListById(roId).subscribe(res => {			
 			const arrayLen = res.length;
 			let count = 0;
 			this.approvalProcessList = res.map(x => {
@@ -2148,13 +2148,13 @@ export class RoSetupComponent implements OnInit {
 					unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
 					extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
 				}
-			});
+			});			
 			if(this.approvalProcessList && this.approvalProcessList.length > 0) {
 			var approvalProcessListWithChild:any[] = [];
 			this.approvalProcessList = this.approvalProcessList.forEach(element => {
 				if(element.isParent) {
 					approvalProcessListWithChild.push(element);
-                    this.approvalProcessList.filter(x => x.parentId == element.purchaseOrderPartId).forEach(					
+                    this.approvalProcessList.filter(x => x.parentId == element.repairOrderPartId).forEach(					
 						child => {	if(child) {
 							approvalProcessListWithChild.push(child);
 						}}
@@ -4049,12 +4049,12 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	filterRepairOrderList(event) {
+// 	filterRepairOrderList(event) {
 
-		if (event.query !== undefined && event.query !== null) {
-			this.loadRepairOrderList(event.query);
-	}
-}
+// 		if (event.query !== undefined && event.query !== null) {
+// 			this.loadRepairOrderList(event.query);
+// 	}
+// }  
 
 	filterSalesOrderList(event) {
 		if (event.query !== undefined && event.query !== null) {
