@@ -836,48 +836,50 @@
                 </button>
             </div>
         </form> 
-        <div class="modal fade" id="textareapopup"  role="dialog" data-backdrop="static"
-       >
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" (click)="closeMemoModel()">
-                        &times;
-                    </button>
-                    <h4 class="modal-title">Edit Memo</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="table table-bordered table-fixed workflow-table-material">
-                        <thead>
-                            <th style="color: #fff;">Memo</th>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="white-space: inherit">
-                                    <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
-                                        (ngModelChange)="enableSaveMemo()" [style]="{ height: '320px' }"
-                                        name="memoPopupContent" required></p-editor>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div style="float: right;">
-                        <button type="button" class="btn btn-primary" [disabled]="disabledMemo"
-                            style="padding: 6px 12px !important; margin-top: 10px;" (click)="onClickPopupSave()">
-                            Save
-                        </button>
-                        <button type="button" class="btn btn-danger" style="padding: 6px 12px !important; margin-top: 10px;"
-                            (click)="closeMemoModel()">
-                            Close
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+       
     </div>
 </div>
 
+<div class="modal fade" id="textareapopup"  role="dialog" data-backdrop="static"
+>
+ <div class="modal-dialog modal-sm">
+     <div class="modal-content">
+         <div class="modal-header">
+             <button type="button" class="close" (click)="closeMemoModel()">
+                 &times;
+             </button>
+             <h4 class="modal-title">Edit Memo</h4>
+         </div>
+         <div class="modal-body">
+             <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                 <thead>
+                     <th style="color: #fff;">Memo</th>
+                 </thead>
+                 <tbody>
+                     <tr>
+                         <td style="white-space: inherit">
+                             <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
+                                 (ngModelChange)="enableSaveMemo()" [style]="{ height: '320px' }"
+                                 name="memoPopupContent" required></p-editor>
+                         </td>
+                     </tr>
+                 </tbody>
+             </table> -->
+             <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
+             (ngModelChange)="enableSaveMemo()" [style]="{ height: '320px' }"
+             name="memoPopupContent" required></p-editor>
+             <div class="editor-buttons">
+                 <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo" (click)="onClickPopupSave()">
+                     Save
+                 </button>
+                 <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
+                     Close
+                 </button>
+             </div>
+         </div>
+     </div>
+ </div>
+</div>
 <div class="modal fade" id="workorderpopup" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm" style="max-width: 530px !important;">
         <div class="modal-content">

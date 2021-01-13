@@ -150,8 +150,8 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _saveVendorRepairOrderPart: string = "/api/repairorder/createrepairorderparts";
 	private readonly _roByIdUrl: string = "/api/Vendor/roById";
 	private readonly _roPartByIdUrl: string = "/api/Vendor/roPartsById";
-	private readonly _poPartByItemIdUrl: string = "/api/Vendor/POListByMasterItemId";
-	private readonly _roPartByItemIdUrl: string = "/api/Vendor/ROListByMasterItemId";
+	private readonly _poPartByItemIdUrl: string = environment.baseUrl + "/api/Vendor/POListByMasterItemId";
+	private readonly _roPartByItemIdUrl: string = environment.baseUrl + "/api/Vendor/ROListByMasterItemId";
 	private readonly _roListWithFiltersUrl: string = "/api/repairorder/roListWithFilters";
 	private readonly _saveCreateROApproval: string = "/api/Vendor/createRoApprover";
 	private readonly _updateROApproval: string = "/api/Vendor/updateRoApprover";
