@@ -576,7 +576,7 @@
                                 <app-sales-order-customer-approval *ngIf="isEdit" [customer-id]="customerId"
                                     [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
                                     [customerContactList]="customerContactList"
-                                    (on-part-approved-event)="onPartsApprovedEvent()">
+                                    (on-part-approved-event)="onPartsApprovedEvent($event)">
                                 </app-sales-order-customer-approval>
                             </p-tabPanel>
                             <p-tabPanel header="Address">
