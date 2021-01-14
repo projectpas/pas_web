@@ -480,7 +480,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Details of Legal Entity Billing Information</h4>
                 <button type="button" class="close" (click)="dismissModelView()">&times;</button>
-            </div>
+           
 
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
@@ -496,6 +496,7 @@
                     </p>
                 </div>
             </div>
+        </div>
             <div class="preloader" *ngIf="isSpinnerVisibleView">
                 <div class="loading">
                     <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
@@ -543,7 +544,7 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <br>
+        <!-- <br>
         <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
@@ -557,7 +558,7 @@
                     <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
                 </p>
             </div>
-        </div><br>
+        </div><br> -->
     </div>
     <div class="modal-body">
         <strong>
@@ -578,7 +579,7 @@
             <span aria-hidden="true">&times;</span>
         </button>
 
-        <div class="col-md-12 shadow-box-cstm">
+        <!-- <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
                     <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -591,12 +592,13 @@
                     <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
                 </p>
             </div>
-        </div>
+        </div> -->
 
     </div>
-    <div class="modal-body" style="padding:7px;">
-        <div class="table-responsive history_hg">
-            <table class="table table-bordered">
+    <div class="modal-body">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th>Site Name <span class="clr-red">*</span></th>
@@ -651,6 +653,7 @@
                       </td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
