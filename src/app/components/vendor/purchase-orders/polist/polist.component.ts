@@ -217,6 +217,17 @@ export class PolistComponent implements OnInit {
         }
 
     }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
+	get employeeId() {
+	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+	}
+    
+    
     closeModal() {
         $("#downloadConfirmation").modal("hide");
     }
@@ -275,7 +286,9 @@ export class PolistComponent implements OnInit {
 
     getList(data) {
         const isdelete = this.currentDeletedstatus ? true : false;
-        data.filters.isDeleted = isdelete
+        data.filters.isDeleted = isdelete;
+        data.filters.employeeId = this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         this.purchaseOrderService.getPOList(data).subscribe(res => { 
             const vList  = res['results'].map(x => {
                 return {
@@ -1034,7 +1047,7 @@ export class PolistComponent implements OnInit {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
 		//let PagingData = { ...dt, filters: listSearchFilterObjectCreation(dt.filters), status: status, "rows":dt.totalRecords }
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentStatusPO,"isDeleted":isdelete},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"employeeId":this.employeeId,"masterCompanyId" :this.currentUserMasterCompanyId,"status":this.currentStatusPO,"isDeleted":isdelete},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
