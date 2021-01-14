@@ -37,7 +37,7 @@
           <input type="text" class="form-control text-right" maxlength="10" pInputText pKeyFilter="pnum"
             value="{{ eqp.quantity }}" [(ngModel)]="eqp.quantity" [ngModelOptions]="{standalone: true}" required />
         </td>
-        <td>
+        <td  style="text-align: center;">
           <button class="btn btn-danger nobg" (click)="deleteRow(i)">
             <i class="fa fa-trash"></i>
           </button>

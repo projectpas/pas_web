@@ -280,7 +280,9 @@ export class ActionEndpoint extends EndpointFactory {
             'quantity': exclusion.quantity,
             'unitCost': exclusion.unitCost,
             'isDelete': exclusion.isDelete,
-            'memo': exclusion.memo
+            'memo': exclusion.memo,
+            'createdBy': exclusion.createdBy,
+            'updatedBy': exclusion.updatedBy,
         }
         return this.http.post<T>(this.AddExclusionURL, JSON.parse(JSON.stringify(exclusion)), this.getRequestHeaders())
             .catch(error => {
@@ -318,7 +320,8 @@ export class ActionEndpoint extends EndpointFactory {
             'isDeferred': material.isDeferred,
             'itemClassificationId': material.itemClassificationId,
             'itemMasterId': material.itemMasterId,
-            'mandatoryOrSupplemental': material.mandatoryOrSupplemental,
+            'materialMandatoriesName': material.materialMandatoriesName,
+            'materialMandatoriesId': material.materialMandatoriesId,
             'partDescription': material.partDescription,
             'memo': material.memo,
             'price': material.price,
@@ -328,7 +331,10 @@ export class ActionEndpoint extends EndpointFactory {
             'unitOfMeasureId': material.unitOfMeasureId,
             'workflowId': material.workflowId,
             'isDelete': material.isDelete,
-            'partNumber': material.partNumber
+            'partNumber': material.partNumber,
+            'masterCompanyId': material.masterCompanyId,
+            'createdBy': material.createdBy,
+            'updatedBy': material.updatedBy,
         }
         return this.http.post<T>(this.AddMaterialListURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
             .catch(error => {
