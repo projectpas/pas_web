@@ -871,6 +871,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.itemMasterRowData = row;
         this.showItemmasterView = true;
         this.itemMasterId = row.itemMasterId;
+        $('#itemMasterView').modal('show');
     }
     getntlafieds(ntaeData) {
         for (let i = 0; i < ntaeData.length; i++) {
