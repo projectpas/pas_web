@@ -1037,11 +1037,15 @@
             <button class="btn btn-primary pull-right" (click)="saveApprovalProcess()" [disabled]="!enableApproverSaveBtn">Submit</button>
         </p-tabPanel>
         <p-tabPanel header="Vendor Capes">
-            <app-vendor-capabilities-list 
+            <!-- <app-vendor-capabilities-list 
             *ngIf="capvendorId > 0 && showVendorCaptab"          
             [vendorId]="capvendorId"
             [isViewMode]="isViewMode"
-          ></app-vendor-capabilities-list>
+          ></app-vendor-capabilities-list> -->
+          <app-vendor-capes *ngIf="capvendorId > 0 && showVendorCaptab"     
+                [vendorId]= "capvendorId"            
+                [isViewMode]="isViewMode">
+          </app-vendor-capes>
         </p-tabPanel>
         <p-tabPanel header="Documents" > 
             <app-common-documents  *ngIf="showDocumenttab" [moduleName]="moduleName" [offLineUpload]="true" [referenceId]="id">
