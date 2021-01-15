@@ -840,8 +840,8 @@
                                                                         </button>
                                                                     </span>
                                                                     <span>
-                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia1,rowData)"
-                                                                           data-target="#contentAuditHistShipVia1" data-toggle="modal"
+                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia,rowData)"
+                                                                           data-target="#contentAuditHistShipVia" data-toggle="modal"
                                                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                                     </span>
                                                                 </div>
@@ -870,8 +870,8 @@
                                                                     </span>
                                                                     <span *ngIf="!isViewMode"><a class="btn nobg" (click)="restoreDomesticShippingVia(restoreDomesticShippingViaId,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                                     <span>
-                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia1,rowData)"
-                                                                           data-target="#contentAuditHistShipVia1" data-toggle="modal"
+                                                                        <a class="btn nobg" (click)="openHist(contentAuditHistShipVia,rowData)"
+                                                                           data-target="#contentAuditHistShipVia" data-toggle="modal"
                                                                            matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                                                     </span>
                                                                 </div>
@@ -1073,6 +1073,84 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <ng-template #contentAuditHistShipVia1 let-c="close" let-d="dismiss" style="width:auto">
+                                <div class="modal-header">
+                            
+                                    <h4 class="modal-title">History of Domestic Ship Via Info</h4>
+                                    <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    <div class="col-md-12 shadow-box-cstm">
+                                        <div class="col-md-6">
+                                            <p class="fs12">
+                                                <label class="control-label labels-font-header" style="width: auto;">
+                                                    Vendor Name:
+                                                </label>
+                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                    {{getVendorName() }}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <p class="fs12">
+                                                <label class="control-label labels-font-header" style="width: auto;">
+                                                    Vendor Code:
+                                                </label>
+                                                <span class="span-header-red" style="text-transform: capitalize">
+                                                    {{local?.vendorCode }}
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                            
+                                </div>
+                                <div class="modal-body">
+                            
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Ship Via</th>
+                                                    <th>Shipping Account Info</th>
+                                                    <th>Memo</th>
+                                                    <th>Is Primary</th>
+                                                    <th>Is Active</th>
+                                                    <th>Created By</th>
+                                                    <th>Created Date</th>
+                                                    <th>Updated By</th>
+                                                    <th>Updated Date</th>
+                            
+                                                </tr>
+                                            </thead>
+                                            <tr *ngFor="let audit of auditHisory; let i = index;">
+                                                <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shipVia', audit.shipViaName)  ? 'black' : 'red'  }">
+                                                    {{audit.shipViaName}}
+                                                </td>
+                                                <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shippingAccountinfo', audit.shippingAccountinfo)  ? 'black' : 'red'  }">
+                                                    {{audit.shippingAccountinfo}}
+                                                </td>
+                                                <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
+                                                    {{audit.memo}}
+                                                </td>
+                                                <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">
+                                                    {{audit.isPrimary}}
+                                                </td>
+                                                <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">
+                                                    {{audit.isActive}}
+                                                </td>
+                                                <td>{{audit.updatedBy}}</td>
+                                                <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                                                <td>{{audit.createdBy}}</td>
+                                                <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+                                </div>
+                            </ng-template>
 
                             <!-- The Modal -->
                             <div class="modal popup-blur" id="contentAuditHistShipVia" data-backdrop="static">
@@ -1690,83 +1768,7 @@
 
 </ng-template>
 
-<ng-template #contentAuditHistShipVia1 let-c="close" let-d="dismiss" style="width:auto">
-    <div class="modal-header">
 
-        <h4 class="modal-title">History of Domestic Ship Via Info</h4>
-        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="col-md-12 shadow-box-cstm">
-            <div class="col-md-6">
-                <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
-                        Vendor Name:
-                    </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
-                        {{getVendorName() }}
-                    </span>
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p class="fs12">
-                    <label class="control-label labels-font-header" style="width: auto;">
-                        Vendor Code:
-                    </label>
-                    <span class="span-header-red" style="text-transform: capitalize">
-                        {{local?.vendorCode }}
-                    </span>
-                </p>
-            </div>
-        </div>
-
-    </div>
-    <div class="modal-body">
-
-        <div class="table-responsive">
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Ship Via</th>
-                        <th>Shipping Account Info</th>
-                        <th>Memo</th>
-                        <th>Is Primary</th>
-                        <th>Is Active</th>
-                        <th>Created By</th>
-                        <th>Created Date</th>
-                        <th>Updated By</th>
-                        <th>Updated Date</th>
-
-                    </tr>
-                </thead>
-                <tr *ngFor="let audit of auditHisory; let i = index;">
-                    <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shipVia', audit.shipViaName)  ? 'black' : 'red'  }">
-                        {{audit.shipViaName}}
-                    </td>
-                    <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'shippingAccountinfo', audit.shippingAccountinfo)  ? 'black' : 'red'  }">
-                        {{audit.shippingAccountinfo}}
-                    </td>
-                    <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'memo', audit.memo)  ? 'black' : 'red'  }">
-                        {{audit.memo}}
-                    </td>
-                    <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'isPrimary', audit.isPrimary)  ? 'black' : 'red'  }">
-                        {{audit.isPrimary}}
-                    </td>
-                    <td [ngStyle]="{'color':  getColorCodeForInterShipViaHistory(i, 'isActive', audit.isActive)  ? 'black' : 'red'  }">
-                        {{audit.isActive}}
-                    </td>
-                    <td>{{audit.updatedBy}}</td>
-                    <td>{{audit.updatedDate | date: 'dd-MM-yyyy h:mm a '}}</td>
-                    <td>{{audit.createdBy}}</td>
-                    <td>{{audit.createdDate | date: 'dd-MM-yyyy h:mm a '}}</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
-    </div>
-</ng-template>
 
 <div class="modal fade" id="addInternationalShippingInfo" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
