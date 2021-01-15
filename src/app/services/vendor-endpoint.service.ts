@@ -56,7 +56,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _vendorShippingAddressViaUrlDelete: string = environment.baseUrl + "/api/Vendor/deletevendorshippingviaaddress";
 	private readonly _vendorShippingAddressViaUrlRestore: string = environment.baseUrl + "/api/Vendor/restorevendorshippingviaaddress";
 	private readonly _vendorShippingAddressViaInterUrlDelete: string = environment.baseUrl + "/api/Vendor/deleteinternationalshipvia";
-	private readonly _vendorShippingAddressViaInterUrlRestore: string = "/api/Vendor/restoreinternationalshipvia";
+	private readonly _vendorShippingAddressViaInterUrlRestore: string = environment.baseUrl + "/api/Vendor/restoreinternationalshipvia";
 	private readonly _vendorsContctUrl: string = environment.baseUrl + "/api/Vendor/vendorContactPost";
 	private readonly _checkPaymntUpdateUrl: string = environment.baseUrl + "/api/Vendor/checkPaymentUpdate";
 	private readonly _domesticUpdate: string = environment.baseUrl + "/api/Vendor/domesticPaymentUpdate";
