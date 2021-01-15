@@ -73,7 +73,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _vendorInternationalpaymentUpdate: string = "/api/Vendor/vendorInternationalPayment";
 	private readonly _vendorDefaultUpdate: string = "/api/Vendor/updatevendorDefault";
 	private readonly _vendorFinanceUrl: string = environment.baseUrl +"/api/Vendor/vendorFinancePost";
-	private readonly _shippingInfoUrl: string = "/api/Vendor/vendorShippingPost";
+	private readonly _shippingInfoUrl: string = environment.baseUrl + "/api/Vendor/vendorShippingPost";
 	private readonly _billingInfoUrl: string = "/api/Vendor/vendorBillingPost";
 	private readonly _billingInfoNew: string = environment.baseUrl + "/api/Vendor/createvendorbillingaddress";
 	private readonly _saveShipViaDetails: string = environment.baseUrl + "/api/Vendor/addShipViaDetails";
@@ -108,7 +108,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _updateActiveInactive: string = environment.baseUrl + "/api/Vendor/vendorUpdateforActive";
 	private readonly _updateActiveInactiveforContact: string = environment.baseUrl + "/api/Vendor/vendorUpdateforActiveforcontact";
 	private readonly _updateActiveInactiveforpayment: string = environment.baseUrl + "/api/Vendor/vendorUpdateforActiveforpayment";
-	private readonly _updateActiveInactivefordshipping: string = "/api/Vendor/vendorUpdateforActiveforshipping";
+	private readonly _updateActiveInactivefordshipping: string = environment.baseUrl + "/api/Vendor/vendorUpdateforActiveforshipping";
 	private readonly _updateActiveInactivefordbilling: string = "/api/Vendor/vendorUpdateforActiveforbilling";
 	private readonly _updateActiveInactivefordshipviaDetails: string = "/api/Vendor/vendorUpdateforActiveforshipviaDetails";
 	private readonly _polisturl: string = "/api/Vendor/polist";
