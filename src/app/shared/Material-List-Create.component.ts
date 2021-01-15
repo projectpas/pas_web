@@ -596,6 +596,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     onAddTextAreaInfo(material, index) {
+        this.disableEditor=true;
         this.memoIndex = index;
         this.textAreaInfo = material.memo;
     }
@@ -605,10 +606,12 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.textAreaInfo = memo;
             this.workFlow.materialList[this.memoIndex].memo = this.textAreaInfo;
         }
+        this.disableEditor=true;
         $("#textarea-popup").modal("hide");
     }
 
     onCloseTextAreaInfo() {
+        this.disableEditor=true;
         $("#textarea-popup").modal("hide");
     }
 
@@ -976,4 +979,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     onViewAircraft(rowData) { }
     getAircraftAuditHistory(rowData) { }
     onViewAircraftonDbl(rowData) { }
+
+    disableEditor: any = true;
+    editorgetmemo(ev) {
+        this.disableEditor = false;
+    }
 } 
