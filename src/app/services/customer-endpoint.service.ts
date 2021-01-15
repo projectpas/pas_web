@@ -15,7 +15,7 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerTypeUrl: string = "/api/Customer/CustomerTypeGet";
     private readonly _aircraftTypeUrl: string = "/api/Customer/aircraftTypeGet";    
     private readonly _customersUrlNew: string = environment.baseUrl + "/api/Customer/customers";
-    private readonly _updateActiveInactive: string = "/api/Customer/customersUpdateforActive";
+    private readonly _updateActiveInactive: string = environment.baseUrl + "/api/Customer/customersUpdateforActive";
     private readonly _insertToaddAudit: string = "/api/Customer/insertToAuditaddress";
     private readonly _updateToaddressaudit: string = "/api/Customer/updateToAuditaddress";
     private readonly _deleteShipingData: string = "/api/Customer/deleteCustomerShipping";
@@ -134,8 +134,8 @@ export class CustomerEndpoint extends EndpointFactory {
     private readonly _customerRestrictionsByCustomerAndCustomerWarningListIdUrl: string = '/api/common/customerrestrictions'
     private readonly _customerBillingHistory: string = "/api/Customer/getCustomerBillingHistory"
     private readonly _customerclassificationMapUrl: string = "/api/Customer/customerclassificationmappings";
-    private readonly _deleteInternationalShippingViaMapUrl: string = '/api/Customer/deleteshippingviadetails';
-    private readonly _restoreInternationalShippingViaMapUrl: string = '/api/Customer/restoreshippingviadetails';
+    private readonly _deleteInternationalShippingViaMapUrl: string = environment.baseUrl + '/api/Customer/deleteshippingviadetails';
+    private readonly _restoreInternationalShippingViaMapUrl: string = environment.baseUrl + '/api/Customer/restoreshippingviadetails';
     private readonly _deleteShipVia: string = environment.baseUrl + '/api/Customer/deleteshipviadetails';
     private readonly _restoreShipVia: string = environment.baseUrl + '/api/Customer/restoreshipviadetails';
     private readonly _deleteRestrictedParts: string = environment.baseUrl + '/api/Customer/deletesRestrictedParts';
