@@ -274,17 +274,18 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12" style="text-align-last: end; padding-right: 2%;">
-                <button type="button" name="isActive" [ngClass]="currentAsset.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
-                    <span class="value">{{currentAsset.isActive ? 'Active' : 'In-Active'}}</span>
-                 </button> 
-            </div>
+           
         </div>
         <div class="modal-body"> 
             <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
                 <div class="loading">
                     <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                 </div>
+            </div>
+            <div class="col-md-12" style="text-align-last: end; padding-right: 2%;">
+                <button type="button" name="isActive" [ngClass]="currentAsset.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                    <span class="value">{{currentAsset.isActive ? 'Active' : 'In-Active'}}</span>
+                 </button> 
             </div>
             <form #generalForm="ngForm" >
                 <div class="form-row">
@@ -1506,13 +1507,14 @@
         <h4 class="modal-title">History of Asset Inventory</h4>
       </div>
       <div class="modal-body">
-        <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+        <!-- <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
             <div class="loading">
                 <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
             </div>
-        </div>
-        <div class="table-responsive assetInv-audit">
-          <table class="table table-bordered"  *ngIf="showhistorylist">
+        </div> -->
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead"> 
+          <table class="table table-bordered header-table-width"  *ngIf="showhistorylist">
               <ng-container *ngIf="!isIntangible">
                 <thead>
                     <tr>
@@ -1844,6 +1846,7 @@
               </ng-container>
             
           </table>
+          </div>
           <ng-template *ngIf="!showhistorylist">
             <div class="text-center">
                 <div class="text-center">

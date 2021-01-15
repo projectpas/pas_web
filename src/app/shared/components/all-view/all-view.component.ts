@@ -13,19 +13,19 @@ import { Table } from 'primeng/table';
 import { PurchaseOrderService } from '../../../services/purchase-order.service';
 import { VendorCapabilitiesService } from '../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../services/common.service';
-declare var $ : any;
-import { formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
+declare var $: any;
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from '../../../generic/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { ReceivingService } from '../../../services/receiving/receiving.service';
 import { RepairOrderService } from '../../../services/repair-order.service';
 
-
 @Component({
-  selector: 'app-all-view',
+  selector: 'app-all-view', 
   templateUrl: './all-view.component.html',
   styleUrls: ['./all-view.component.scss'],
   animations: [fadeInOut],
-  providers: [DatePipe]
+  providers: [DatePipe],
+  
 })
 export class AllViewComponent implements OnInit {
 
@@ -43,16 +43,23 @@ export class AllViewComponent implements OnInit {
   approvalProcessList: any = [];
   tabindex: number = 0;
   OrderTypes: string;
-  isPoViewMode: boolean = false;  
+  isPoViewMode: boolean = false;
   capvendorId: number;
   selectedPurchaseOrderId: any;
-  moduleName:any="PurchaseOrder";
+  moduleName: any = "PurchaseOrder";
   isViewMode: boolean = true;
-  vendorIdByParams: boolean = false;
+  vendorIdByParams: number;
   @Input() OrderId;
   @Input() OrderType;
   @Input() PovendorId;
   @Input() vendorId: number;
+
+  addressType: any = 'PO';
+  showAddresstab: boolean = false;
+  id: number;
+
+  //showPartListtab: boolean = false;
+  showVendorCaptab: boolean = false;
 
   approvalProcessHeader = [
     {
@@ -123,9 +130,11 @@ export class AllViewComponent implements OnInit {
     this.selectedPurchaseOrderId = this.OrderId;
     let OrderId = this.OrderId;
     this.OrderTypes = this.OrderType;
-    let PovendorId = this.PovendorId;      
+    this.id = this.OrderId;
+    let PovendorId = this.PovendorId;
+    this.vendorIdByParams = this.PovendorId;
     if (this.OrderTypes == 'Purchase Order') {
-      this.loadingIndicator = true;      
+      this.loadingIndicator = true;
       this.getPOViewById(OrderId);
       this.getPOPartsViewById(OrderId);
       this.getApproversListById(OrderId);
@@ -147,7 +156,40 @@ export class AllViewComponent implements OnInit {
     }
   }
 
-  
+  onChangeTabView(event) {
+    console.log(event)
+
+    if (event.index == 0) {
+      //this.showPartListtab = true;
+      //this.getPOPartsViewById(this.OrderId);      
+    }
+    if (event.index == 1) {
+    }
+    if (event.index == 2) {
+      //this.getApproversListById(this.OrderId);
+    }
+    if (event.index == 3) {
+      //	this.getApproversListById(this.OrderId);
+      //  this.getApprovalProcessListById(this.OrderId);
+      //	this.enableApproverSaveBtn = false;     
+      this.showVendorCaptab = true;
+      const id = editValueAssignByCondition('vendorId', this.vendorId);
+    }
+    if (event.index == 4) {
+      //this.showVendorCaptab = true;
+      //const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+      this.showAddresstab = true;
+      this.id = this.OrderId;
+    }
+    if (event.index == 5) {
+      //this.showDocumenttab = true;
+    }
+    if (event.index == 6) {
+      //this.showComunicationtab = true;
+    }
+
+  }
+
 
   getPOViewById(poId) {
     this.purchaseOrderService.getPOViewById(poId).subscribe(res => {
@@ -156,7 +198,7 @@ export class AllViewComponent implements OnInit {
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
       };
-      this.getVendorCapesByID(this.poHeaderAdd.vendorId);          
+      this.getVendorCapesByID(this.poHeaderAdd.vendorId);
     }, err => {
       this.isSpinnerVisible = false;
     });
@@ -277,7 +319,7 @@ export class AllViewComponent implements OnInit {
         this.errorMessageHandler(errorLog);
       });
     }
-  }  
+  }
 
   getPurchaseOrderSplit(partList) {
     if (partList.purchaseOrderSplitParts) {
@@ -318,11 +360,11 @@ export class AllViewComponent implements OnInit {
   getApproversByTask(poId) {
     this.isSpinnerVisible = true;
     this.purchaseOrderService.approverslistbyTaskId(this.poApprovaltaskId, poId).subscribe(res => {
-      this.internalApproversList = res;      
+      this.internalApproversList = res;
       this.isSpinnerVisible = false;
-    },err => {
-        this.isSpinnerVisible = false;
-      });
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
   }
 
   getApprovalProcessListById(poId) {
@@ -357,9 +399,9 @@ export class AllViewComponent implements OnInit {
         });
         this.approvalProcessList = approvalProcessListWithChild;
         console.log(this.approvalProcessList)
-      }      
+      }
     }, err => {
-      this.isSpinnerVisible = false;    
+      this.isSpinnerVisible = false;
     });
   }
 
