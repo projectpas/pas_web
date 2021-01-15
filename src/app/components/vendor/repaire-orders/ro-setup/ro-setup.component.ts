@@ -236,7 +236,7 @@ export class RoSetupComponent implements OnInit {
 	disableHeaderInfo: boolean = false; 
 	allWorkOrderInfo: any = [];
 	allsubWorkOrderInfo: any = [];
-	allRepairOrderInfo: any = [];
+	//allRepairOrderInfo: any = [];
 	allSalesOrderInfo: any = [];
 	allShipViaInfo: any = [];
 	allWorkOrderDetails: any = [];
@@ -274,7 +274,7 @@ export class RoSetupComponent implements OnInit {
 	displayWarningModal: boolean = false;
 	roFulfillingstatusID: number = -1;
 	roOpenstatusID: number = -1;
-	poApprovaltaskId = 0;
+	roApprovaltaskId = 0;
 	ApprovedstatusId = 0; 
 	WaitingForApprovalstatusId = 0; 
 	ShowWarning = 0; 
@@ -287,7 +287,7 @@ export class RoSetupComponent implements OnInit {
 	arrayCustlist:any[] = [];
 	arrayWOlist:any[] = [];
 	arraysubWOlist:any[] = [];
-	arrayROlist:any[] = [];
+	//arrayROlist:any[] = [];
 	arraySOlist:any[] = [];
 	breadcrumbs: MenuItem[];
 	splitAddbutton: boolean = false;
@@ -451,9 +451,9 @@ export class RoSetupComponent implements OnInit {
 								else if (x.label == "SOWONO") {
                                     this.arraysubWOlist.push(x.value);
 								}								
-								else if (x.label == "RONO") {
-                                    this.arrayROlist.push(x.value);
-								}
+								// else if (x.label == "RONO") {
+                                //     this.arrayROlist.push(x.value);
+								// }
 								else if (x.label == "SONO") {
                                     this.arraySOlist.push(x.value);
 								}
@@ -1381,10 +1381,10 @@ export class RoSetupComponent implements OnInit {
 		this.arraysubWOlist.push(id);
 	}	
 
-	onROSelect(id)
-	{
-		this.arrayROlist.push(id);
-	}
+	// onROSelect(id)
+	// {
+	// 	this.arrayROlist.push(id);
+	// }
 
 	onSOSelect(id)
 	{
@@ -1519,7 +1519,7 @@ export class RoSetupComponent implements OnInit {
 				resale: res.resale,
 				managementStructureId:res.managementStructureId,
 				companyId: this.getManagementStructureDetails(res.managementStructureId,this.employeeId,res.managementStructureId),
-                poMemo: res.poMemo,
+                roMemo: res.roMemo,
 				notes: res.notes,
                 createdDate: res.createdDate,
 				updatedDate:res.updatedDate,
@@ -2092,12 +2092,12 @@ export class RoSetupComponent implements OnInit {
 
 	getApproversListById(roId) {	
 		this.isSpinnerVisible = true;
-		if(this.poApprovaltaskId == 0) {
+		if(this.roApprovaltaskId == 0) {
 		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
 		if(response) {					
             response.forEach(x => {
-                if (x.label.toUpperCase() == "PO APPROVAL") {
-                    this.poApprovaltaskId = x.value;
+                if (x.label.toUpperCase() == "RO APPROVAL") {
+                    this.roApprovaltaskId = x.value;
                 }              
 			});
 			this.getApproversByTask(roId)
@@ -2113,7 +2113,7 @@ export class RoSetupComponent implements OnInit {
 	}
 	getApproversByTask(roId) {		
 		this.isSpinnerVisible = true;
-		this.purchaseOrderService.approverslistbyTaskId(this.poApprovaltaskId, roId).subscribe(res => {
+		this.repairOrderService.approverslistbyTaskId(this.roApprovaltaskId, roId).subscribe(res => {
 						 this.internalApproversList = res;
 						 this.internalApproversList.map(x => {
 							this.apporoverEmailList = x.approverEmails;
@@ -2130,7 +2130,7 @@ export class RoSetupComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		this.selectallApprovers = false;
 		this.enableApproverSaveBtn = false;
-		this.purchaseOrderService.getPOApprovalListById(roId).subscribe(res => {
+		this.repairOrderService.getROApprovalListById(roId).subscribe(res => {			
 			const arrayLen = res.length;
 			let count = 0;
 			this.approvalProcessList = res.map(x => {
@@ -2148,13 +2148,13 @@ export class RoSetupComponent implements OnInit {
 					unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
 					extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
 				}
-			});
+			});			
 			if(this.approvalProcessList && this.approvalProcessList.length > 0) {
 			var approvalProcessListWithChild:any[] = [];
 			this.approvalProcessList = this.approvalProcessList.forEach(element => {
 				if(element.isParent) {
 					approvalProcessListWithChild.push(element);
-                    this.approvalProcessList.filter(x => x.parentId == element.purchaseOrderPartId).forEach(					
+                    this.approvalProcessList.filter(x => x.parentId == element.repairOrderPartId).forEach(					
 						child => {	if(child) {
 							approvalProcessListWithChild.push(child);
 						}}
@@ -2954,25 +2954,25 @@ export class RoSetupComponent implements OnInit {
 
 	
 
-	loadRepairOrderList(filterVal = '') {
-		if (this.arrayROlist.length == 0) {
-            this.arrayROlist.push(0); }
-		this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-			const data = res.map(x => {
-				return {
-					value: x.repairOrderId,
-					label: x.repairOrderNumber
-				}
-			});
-			this.allRepairOrderInfo = [
-				{value: 0, label: 'Select'}
-			];
-			this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
-			this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
-		},err => {
-			this.isSpinnerVisible = false;				
-		});
-	}
+	// loadRepairOrderList(filterVal = '') {
+	// 	if (this.arrayROlist.length == 0) {
+    //         this.arrayROlist.push(0); }
+	// 	this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+	// 		const data = res.map(x => {
+	// 			return {
+	// 				value: x.repairOrderId,
+	// 				label: x.repairOrderNumber
+	// 			}
+	// 		});
+	// 		this.allRepairOrderInfo = [
+	// 			{value: 0, label: 'Select'}
+	// 		];
+	// 		this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
+	// 		this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;				
+	// 	});
+	// }
 
 	loadSalesOrderList(filterVal = '') {
 		if (this.arraySOlist.length == 0) {
@@ -3026,7 +3026,7 @@ export class RoSetupComponent implements OnInit {
 		this.getCountriesList();
 		this.loadPercentData();
 		this.loadWorkOrderList();
-		this.loadRepairOrderList();
+		//this.loadRepairOrderList();
 		this.loadSalesOrderList();
 		this.loapartItems();
 		this.loadModuleListForVendorComp();
@@ -3075,7 +3075,7 @@ export class RoSetupComponent implements OnInit {
 				approvedDate: this.headerInfo.approvedDate,				
 				deferredReceiver: this.headerInfo.deferredReceiver ? this.headerInfo.deferredReceiver : false,
 				resale: this.headerInfo.resale ? this.headerInfo.resale : false,
-				poMemo: this.headerInfo.poMemo ? this.headerInfo.poMemo : '',
+				roMemo: this.headerInfo.roMemo ? this.headerInfo.roMemo : '',
                 notes: this.headerInfo.notes ? this.headerInfo.notes : '',				
 				managementStructureId: this.headerInfo.managementStructureId ? this.headerInfo.managementStructureId : 0,
 				masterCompanyId: this.currentUserMasterCompanyId,
@@ -4049,12 +4049,12 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	filterRepairOrderList(event) {
+// 	filterRepairOrderList(event) {
 
-		if (event.query !== undefined && event.query !== null) {
-			this.loadRepairOrderList(event.query);
-	}
-}
+// 		if (event.query !== undefined && event.query !== null) {
+// 			this.loadRepairOrderList(event.query);
+// 	}
+// }  
 
 	filterSalesOrderList(event) {
 		if (event.query !== undefined && event.query !== null) {
@@ -4141,10 +4141,10 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	onAddMemo() {
-		this.headerMemo = this.headerInfo.poMemo;
+		this.headerMemo = this.headerInfo.roMemo;
 	}
 	onSaveMemo() {
-		this.headerInfo.poMemo = this.headerMemo;
+		this.headerInfo.roMemo = this.headerMemo;
 		this.enableHeaderSaveBtn = true;
 	}
 

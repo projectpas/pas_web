@@ -205,9 +205,20 @@ export class RoListComponent implements OnInit {
         this.getList(this.lazyLoadEventDataInput);
     }  
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
+	get employeeId() {
+	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+	}
+
     getList(data) {
         const isdelete = this.currentDeletedstatus ? true : false;
-        data.filters.isDeleted = isdelete;      
+        data.filters.isDeleted = isdelete;    
+        data.filters.employeeId = this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;  
         this.repairOrderService.getROList(data).subscribe(res => {
             const vList = res[0]['results'];
             this.data = vList;
@@ -220,8 +231,7 @@ export class RoListComponent implements OnInit {
                 this.totalPages=0;
             } 
             this.isSpinnerVisible = false;
-        },err => {const errorLog = err;           
-			this.errorMessageHandler(errorLog);});
+        },err => {this.isSpinnerVisible = false;});
     }
 
 
@@ -477,7 +487,7 @@ export class RoListComponent implements OnInit {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         let PagingData;
-        PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": tt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+        PagingData = { "filters": { "employeeId":this.employeeId,"masterCompanyId" :this.currentUserMasterCompanyId, "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": tt.totalRecords, "sortOrder": 1, "globalFilter": "" };
         // let PagingData: ISalesSearchParameters = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentStatus, "isDeleted": isdelete }, "globalFilter": "" }
         let filters = Object.keys(tt.filters);
         filters.forEach(x => {
@@ -497,11 +507,7 @@ export class RoListComponent implements OnInit {
                 tt.exportCSV();
                 tt.value = vList;
                 this.isSpinnerVisible = false;                
-            }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            }
-        );
+            }, err => {  this.isSpinnerVisible = false;});
     } 
 
 
