@@ -237,6 +237,14 @@
                                       <i class="fa fa-eye"></i>
                                   </a>
                                 </span>
+                                   
+                            <span data-toggle="modal" data-target="#history">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="History">
+                                    <i class="fa fa-history"></i>
+                                </a>
+                            </span>
                                 <span><a
                                     class="btn nobg"
                                     (click)="restore(restoreConfirm, rowData)"
@@ -313,7 +321,7 @@
         <div class="modal-body">
           <strong>
             Worklflow ACC:
-            <span class="new-label">{{ currentWorkflow.workflowId }}</span>
+            <span class="new-label">{{ restorerecord.workOrderNumber }}</span>
           </strong>
         </div>
         <div class="modal-footer">
@@ -327,7 +335,7 @@
     </ng-template>
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="view" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xlg">
             <div class="modal-content" *ngIf="sourceWorkFlow != undefined">
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
@@ -991,7 +999,7 @@
 
     <div class="modal fade" tabindex="-1" id="history" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xlg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal">&times;</button>

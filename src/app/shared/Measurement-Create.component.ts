@@ -46,7 +46,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         this.row.taskId = this.workFlow.taskId;
         if(this.workFlow.measurements && this.workFlow.measurements.length !=0){
             this.workFlow.measurements.map((x, index) => {
-                    this.workFlow.measurements[index].partName=x;
+                    this.workFlow.measurements[index].partName=x; 
             })
         }
     }
@@ -75,9 +75,9 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     onPartSelect(event, measurement) {
         var anyMeasurement = this.workFlow.measurements.filter(measurement =>
             measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
-            console.log("mahesh",anyMeasurement)
+
         if (anyMeasurement.length > 1) {
-            console.log("description",measurement.partDescription);
+  
             measurement.partNumber = "";
             measurement.partDescription = "";
             event = "";
@@ -85,14 +85,16 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             return;
         }
         else {
-            if (this.itemclaColl) {
-                for (let i = 0; i < this.itemclaColl.length; i++) {
-                    if (event == this.itemclaColl[i].partName) {
-                        measurement.partNumber = this.itemclaColl[i].partId;
-                        measurement.partDescription = this.itemclaColl[i].partDescription;
-                    }
-                };
-            }
+            // if (this.itemclaColl) {
+            //     for (let i = 0; i < this.itemclaColl.length; i++) {
+            //         if (event == this.itemclaColl[i].partName) {
+            //             measurement.partNumber = this.itemclaColl[i].partId;
+            //             measurement.partDescription = this.itemclaColl[i].partDescription;
+            //         }
+            //     };
+            // }
+            measurement.partNumber = event.partId;
+                        measurement.partDescription = event.partDescription;
         }
     }
 

@@ -44,6 +44,8 @@ import { EmployeeService } from './services/employee.service';
 import { StocklineReferenceStorage } from './components/stockline/shared/stockline-reference-storage';
 import { SalesOrderReferenceStorage } from './components/sales/shared/sales-order-reference-storage';
 import { Subscription } from 'rxjs';
+import { environment } from 'src/environments/environment';
+environment
 @Component({
   selector: 'quickapp-pro-app',
   templateUrl: './app.component.html',
@@ -187,7 +189,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Invoice Batches', routerLink: '' },
                 {
                   label: 'Customer Statement Report', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
                   }
                 }
               ],
@@ -224,7 +226,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 },
                 {
                   label: 'Capes Report', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/Reports/report/Report%20Project1/Capabilities');
+                    this.navigateToURL(environment.reportUrl+'/Reports/report/Report%20Project1/Capabilities');
                   }
                 }
               ],
@@ -292,7 +294,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [{ label: 'CMM by PIN', routerLink: '/#' },
               {
                 label: 'Publication Tracking', command: (event?: any) => {
-                  this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPublication+Tracking&rs:Command=Render');
+                  this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPublication+Tracking&rs:Command=Render');
                 }
               }],
             },
@@ -556,18 +558,18 @@ export class AppComponent implements OnInit, AfterViewInit {
                   // routerLink:
                   //   '/workordersmodule/workorderspages/app-purchase-order-report',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order&rs:Command=Render');
                   },
                   
                 },
                 {
                   label: 'Purchase order Dashboard', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order+Dashboard&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPurchase+Order+Dashboard&rs:Command=Render');
                   }
                 },
                 {
                   label: 'PO TO WO-SO', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
                   }
                 }
               ],
@@ -636,45 +638,45 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'SO Backlog', routerLink: '/#' },
                 {
                   label: 'SO On Time Perfomance', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+On+Time+Performance&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+On+Time+Performance&rs:Command=Render');
                   },
                 },
                 {
                   label: 'SO Quotes',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quotes&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quotes&rs:Command=Render');
                   },
                 },
                 {
                   label: 'SO Quote Conversion',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Conversion&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+Conversion&rs:Command=Render');
                   },
                 }, {
                   label: 'SO Quote History',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+History&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Quote+History&rs:Command=Render');
                   },
                 }, {
                   label: 'SO Billing',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Billing&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Billing&rs:Command=Render');
                   },
                 }, {
                   label: 'SO Gross Margin',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Gross+Margin&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+Gross+Margin&rs:Command=Render');
                   },
                 }, {
                   label: 'Salesperson Report',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
                   },
                 },
               ],
@@ -727,67 +729,67 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'WO Backlog',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Backlog&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Backlog&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO On Time Performance',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+On+Time+Performance&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+On+Time+Performance&rs:Command=Render');
                   },
                 },
                 {
                   label: 'Work Order Tracking',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Tracking&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Tracking&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Quotes',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quotes&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quotes&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Quote Conversion',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+Conversion&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+Conversion&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Quote History',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+History&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Quote+History&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Billing',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Billing&rs:Command=Render');
                   },
                 },
                 {
                   label: 'WO Gross Margin',
                   // routerLink: '/#',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+Gross+Margin&rs:Command=Render');
                   },
                  
                 },
                 {
                   label: 'Labor Tracking', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fLabor+Tracking&rs:Command=Render');
                   }
                 },
                 {
                   label: 'Tech Productivity', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
                   }
                 }
               ],
@@ -869,7 +871,7 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 {
                   label: 'Repair order by WO & SO', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fRepair+Order+by+WO+and+SO&rs:Command=Render');
                   }
                 },
               ]
@@ -930,7 +932,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           //       { label: 'Disposal', routerLink: '/#' },
           //       {
           //         label: 'Tools', command: (event?: any) => {
-          //           this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+          //           this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
           //         }
           //       }
           //     ],
@@ -967,7 +969,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // },
                 {
                   label: 'Stock Line', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fStockLine&rs:Command=Render');
                   }
                 }
               ],
@@ -1034,7 +1036,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // { label: 'Capabilities List', routerLink: '/#' },
               {
                 label: 'Capabilities List Report', command: (event?: any) => {
-                  this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
+                  this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCapabilities&rs:Command=Render');
                 }
               }
             
@@ -1101,7 +1103,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 { label: 'Disposal', routerLink: '/#' },
                 {
                   label: 'Tools List', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
                   }
                 },
                 { label: 'Calibration List ', routerLink: '/#' },
@@ -1114,7 +1116,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             //   items: [
             //     {
             //       label: 'Tools List', command: (event?: any) => {
-            //         this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+            //         this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
             //       }
             //     },
             //     { label: 'Calibration List ', routerLink: '/#' },
@@ -1227,7 +1229,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'Receiving Log',
                   command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fReceiving+Log&rs:Command=Render');
                   }
                 },
                 // {
@@ -1237,7 +1239,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 // },
                 {
                   label: 'Receive customer work', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Work&rs:Command=Render');
                   }
                 }
               ],

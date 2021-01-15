@@ -166,6 +166,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     onChargeTypeChange(event, charge): void {
+        console.log("eveene",event, charge)
         this.isSpinnerVisible = true;
         var isTypeExist = this.workFlow.charges.filter(x => x.workflowChargeTypeId == charge.workflowChargeTypeId && x.taskId == this.workFlow.taskId);
         this.chargesTypes.forEach((ct) => {
