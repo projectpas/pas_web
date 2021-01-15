@@ -352,7 +352,7 @@
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <button type="button" class="close" (click)="CloserCOnatcHistory()">&times;</button>
-                                                        <div class="col-md-12 shadow-box-cstm">
+                                                        <!-- <div class="col-md-12 shadow-box-cstm">
                                                             <div class="col-md-6">
                                                                 <p class="fs12">
                                                                     <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -365,7 +365,7 @@
                                                                     <span class="span-header-red" style="text-transform: capitalize"> {{companyCode }} </span>
                                                                 </p>
                                                             </div>
-                                                        </div>
+                                                        </div> -->
                                                         <h4 class="modal-title">History of Banking Information</h4>
                                                     </div>
                                                     <div class="modal-body">
@@ -374,8 +374,9 @@
                                                                 <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                                                             </div>
                                                         </div>
-                                                        <div class="table-responsive rrhistory history_hg">
-                                                            <table class="table table-bordered " *ngIf="auditHistory.length> 0 else noDatavailable">
+                                                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                                            <div class="tableFixHead"> 
+                                                            <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                                                                 <thead>
                                                                     <tr>
                                                                         <th  *ngFor="let audit of auditHistoryHeaders; let i = index;">{{audit.header}} <span class="clr-red" *ngIf="audit.field!='createdDate' && audit.field!='createdBy' && audit.field!='updatedBy' && audit.field!='updatedDate'">*</span></th>
@@ -396,6 +397,7 @@
                                         
                                         
                                                             </table>
+                                                            </div>
                                                             <ng-template #noDatavailable>
                                                                 <div class="text-center">
                                                                     <h4 style="color: #ff5663;">No History Found </h4>

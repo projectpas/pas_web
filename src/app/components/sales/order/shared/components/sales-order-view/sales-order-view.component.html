@@ -250,7 +250,7 @@
           <p><span class="label"><b>Memo: </b></span><span
               class="value">
               <!-- {{salesOrder.shipViaMemo ? salesOrder.shipViaMemo : '-'}} -->
-              <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.shipViaMemo"></p>
+              <p class="p-0 m-0 p_textEditor" [innerHTML]="salesOrder.shipToMemo"></p>
             </span></p>
           <p><span class="label"><b>Ship Via: </b></span><span
               class="value">{{salesOrder.shipViaName ? salesOrder.shipViaName : '-'}}</span></p>
@@ -259,7 +259,7 @@
           <p><span class="label"><b>Handling Cost: </b></span><span
               class="value">{{salesOrder.handlingCost ? salesOrder.handlingCost : '-'}}</span></p>
           <p><span class="label"><b>Shipping Acct Num: </b></span><span
-              class="value">{{salesOrder.shippingAccountNo ? salesOrder.shippingAccountNo : '-'}}</span></p>
+              class="value">{{salesOrder.shipViaShippingAccountInfo ? salesOrder.shipViaShippingAccountInfo : '-'}}</span></p>
         </div>
         <div class="col-sm-4">
           <h5 class="po-head">Bill To</h5>

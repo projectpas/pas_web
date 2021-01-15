@@ -2052,22 +2052,25 @@
                 <h4 class="modal-title">Edit {{ memoLabel }}</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th style="color: #fff;">{{ memoLabel }}</th>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <p-editor [(ngModel)]="headerMemo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}" name="headerMemo" required></p-editor>
+                                <p-editor [(ngModel)]="headerMemo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+                                 name="headerMemo" required></p-editor>
                             </td>
                         </tr>
                     </tbody> 
-                </table>
-                <div style="float:right">
-                    <button type="button" class="btn btn-primary" style="margin-top: 10px;"
+                </table> -->
+                <p-editor [(ngModel)]="headerMemo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+                name="headerMemo" required></p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin"
                     data-dismiss="modal" (click)="onSaveMemo()" (ngModelChange)="getmemo($event)" [disabled]="disableEditor">Save</button>
-                    <button type="button" class="btn btn-danger" style="margin-top: 10px;"
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
                      data-dismiss="modal">Close</button>
                </div> 
             </div>
