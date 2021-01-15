@@ -720,6 +720,7 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 
 		this.itemMasterService.getMappedAirCraftDetails(itemMasterId).subscribe(data => {
 			const responseData = data;
+		
 			this.aircraftListDataValues = responseData.map(x => { //aircraftListData
 				return {
 					...x,
@@ -742,7 +743,8 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 			this.viewItemMaster = res[0];
 			this.viewItemMaster.integrationPortal = this.viewItemMaster.integrationPortal.replace(/,/g, ', ');
 			//this.viewItemMaster.oemPN = res[0].oemPNData[0].partNumber + ' - ' + res[0].oemPNData[0].partDescription;
-			this.openView(this.itemMasterRowData);
+			// this.openView(this.itemMasterRowData);
+			this.openView(this.viewItemMaster);
 			this.isSpinnerVisible = false;
 		}, error => this.isSpinnerVisible = false);
 	}

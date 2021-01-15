@@ -185,8 +185,13 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 { label: 'Invoice Register', routerLink: '' },
                 { label: 'Invoice Batches', routerLink: '' },
+                {
+                  label: 'Customer Statement Report', command: (event?: any) => {
+                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
+                  }
+                }
               ],
-            },
+            }, 
           ],
           [
             {
@@ -541,6 +546,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                       routerLink: '/vendorsmodule/vendorpages/app-po-settings',
                   },
                 { label: 'Create Vendor RMA', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Reports & Forms',
+              items: [
                 {
                   label: 'PO Report',
                   // routerLink:
@@ -560,7 +570,6 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fPO+to+WO-SO&rs:Command=Render');
                   }
                 }
-
               ],
             },
           ],
@@ -873,61 +882,61 @@ export class AppComponent implements OnInit, AfterViewInit {
         label: 'Stock',
         icon: 'fa fa-fw fa-folder-open',
         items: [
-          [
-            {
-              label: 'Asset Management',
-              items: [
-                {
-                  label: 'Asset Inventory List',
-                  routerLink:
-                    '/assetmodule/assetpages/app-asset-inventory-listing',
-                },
-                {
-                  label: 'Create Asset Inventory',
-                  routerLink:
-                    '/assetmodule/assetpages/app-create-asset-inventory',
-                },
-                {
-                  label: 'Disposal Sale',
-                  routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
-                },
-                { label: 'Periodic Depreciation', routerLink: '/#' },
-                { label: 'Asset Adjustment', routerLink: '/#' },
-                { label: 'Calibration Management', routerLink: '/#' },
-                { label: 'Leases & Insurance', routerLink: '/#' },
-                { label: 'Asset Maintenance', routerLink: '/#' },
-                { label: 'Depreciation Forecast', routerLink: '/#' },
-              ],
-            },
-            {
-              label: 'Assets',
-              items: [
-                {
-                  label: 'Asset List',
-                  routerLink: '/assetmodule/assetpages/app-asset-listing',
-                },
-                {
-                  label: 'Create Asset',
-                  routerLink: '/assetmodule/assetpages/app-create-asset',
-                },
-              ],
-            },
-            {
-              label: 'Report & Forms',
-              items: [
-                { label: 'List Report', routerLink: '/#' },
-                { label: 'Depreciation', routerLink: '/#' },
-                { label: 'Additons', routerLink: '/#' },
-                { label: 'Disposal', routerLink: '/#' },
-                {
-                  label: 'Tools', command: (event?: any) => {
-                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
-                  }
-                }
-              ],
-            },
+          // [
+          //   {
+          //     label: 'Asset Management',
+          //     items: [
+          //       {
+          //         label: 'Asset Inventory List',
+          //         routerLink:
+          //           '/assetmodule/assetpages/app-asset-inventory-listing',
+          //       },
+          //       {
+          //         label: 'Create Asset Inventory',
+          //         routerLink:
+          //           '/assetmodule/assetpages/app-create-asset-inventory',
+          //       },
+          //       {
+          //         label: 'Disposal Sale',
+          //         routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
+          //       },
+          //       { label: 'Periodic Depreciation', routerLink: '/#' },
+          //       { label: 'Asset Adjustment', routerLink: '/#' },
+          //       { label: 'Calibration Management', routerLink: '/#' },
+          //       { label: 'Leases & Insurance', routerLink: '/#' },
+          //       { label: 'Asset Maintenance', routerLink: '/#' },
+          //       { label: 'Depreciation Forecast', routerLink: '/#' },
+          //     ],
+          //   },
+          //   {
+          //     label: 'Assets',
+          //     items: [
+          //       {
+          //         label: 'Asset List',
+          //         routerLink: '/assetmodule/assetpages/app-asset-listing',
+          //       },
+          //       {
+          //         label: 'Create Asset',
+          //         routerLink: '/assetmodule/assetpages/app-create-asset',
+          //       },
+          //     ],
+          //   },
+          //   {
+          //     label: 'Report & Forms',
+          //     items: [
+          //       { label: 'List Report', routerLink: '/#' },
+          //       { label: 'Depreciation', routerLink: '/#' },
+          //       { label: 'Additons', routerLink: '/#' },
+          //       { label: 'Disposal', routerLink: '/#' },
+          //       {
+          //         label: 'Tools', command: (event?: any) => {
+          //           this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+          //         }
+          //       }
+          //     ],
+          //   },
            
-          ],
+          // ],
           [
             {
               label: 'Stock Line',
@@ -1034,6 +1043,86 @@ export class AppComponent implements OnInit, AfterViewInit {
             ],
             },
           ],
+        ],
+      },
+      {
+        label: 'Asset Management',
+        icon: 'fa fa-fw fa-folder-open',
+        items: [
+          [
+            {
+              label: 'Asset Management',
+              items: [
+                {
+                  label: 'Asset Inventory List',
+                  routerLink:
+                    '/assetmodule/assetpages/app-asset-inventory-listing',
+                },
+                {
+                  label: 'Add Asset Inventory',
+                  routerLink:
+                    '/assetmodule/assetpages/app-create-asset-inventory',
+                },
+                {
+                  label: 'Asset List',
+                  routerLink: '/assetmodule/assetpages/app-asset-listing',
+                },
+                {
+                  label: 'Create Asset',
+                  routerLink: '/assetmodule/assetpages/app-create-asset',
+                },
+                { label: 'Calibration Mgmt', routerLink: '/#' },
+                { label: 'Asset Maintenance', routerLink: '/#' },
+                { label: 'Leases and Insurance', routerLink: '/#' },
+                // {
+                //   label: 'Disposal Sale',
+                //   routerLink: '/assetmodule/assetpages/app-asset-disposal-sale',
+                // },
+              
+              ],
+            },
+            {
+              label: 'Accounting',
+              items: [
+                { label: 'Process Depreciation', routerLink: '/#' },
+                { label: 'Asset Adjustment', routerLink: '/#' },
+               
+                { label: 'Asset Sale, Write Off, Write Down', routerLink: '/#' },
+             
+                { label: 'Depreciation Forecast', routerLink: '/#' },
+              ],
+            },
+            {
+              label: 'Report & Forms',
+              items: [
+                { label: 'Reports List ', routerLink: '/#' },
+                { label: 'Depreciation', routerLink: '/#' },
+                { label: 'Additons', routerLink: '/#' },
+                { label: 'Disposal', routerLink: '/#' },
+                {
+                  label: 'Tools List', command: (event?: any) => {
+                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+                  }
+                },
+                { label: 'Calibration List ', routerLink: '/#' },
+                { label: 'Calibration Due Report', routerLink: '/#' }
+                
+              ],
+            },
+            // {
+            //   label: 'Tools',
+            //   items: [
+            //     {
+            //       label: 'Tools List', command: (event?: any) => {
+            //         this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTools&rs:Command=Render');
+            //       }
+            //     },
+            //     { label: 'Calibration List ', routerLink: '/#' },
+            //     { label: 'Calibration Due Report', routerLink: '/#' }
+            //   ],
+            // },
+          ],
+     
         ],
       },
       {

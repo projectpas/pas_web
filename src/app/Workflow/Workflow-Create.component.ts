@@ -2252,7 +2252,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceWorkFlow.createdBy = this.userName;
         this.sourceWorkFlow.updatedBy = this.userName;
-
         this.actionService.getNewWorkFlow(this.sourceWorkFlow).subscribe(
             data => {
                 this.isSpinnerVisible = false;
@@ -2464,13 +2463,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                             material.taskId = workflow.taskId;
                             material.order = workflow.order;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
-                            material.materialMandatoriesId = workflow.materialMandatoriesId;
+                            // material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.createdBy = this.userName;
                             material.createdDate = new Date();
                         } else {
                             material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
-                            material.materialMandatoriesId = workflow.materialMandatoriesId;
+                            // material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
                         }

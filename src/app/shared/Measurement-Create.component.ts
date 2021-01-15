@@ -59,6 +59,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         newRow.workflowMeasurementId = "0";
         newRow.taskId = this.workFlow.taskId;
         newRow.partNumber = "";
+        newRow.partName="";
         newRow.partDescription = "";
         newRow.sequence = "";
         newRow.stage = "";
@@ -74,7 +75,9 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     onPartSelect(event, measurement) {
         var anyMeasurement = this.workFlow.measurements.filter(measurement =>
             measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
+            console.log("mahesh",anyMeasurement)
         if (anyMeasurement.length > 1) {
+            console.log("description",measurement.partDescription);
             measurement.partNumber = "";
             measurement.partDescription = "";
             event = "";
@@ -86,7 +89,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
                 for (let i = 0; i < this.itemclaColl.length; i++) {
                     if (event == this.itemclaColl[i].partName) {
                         measurement.partNumber = this.itemclaColl[i].partId;
-                        measurement.partDescription = this.itemclaColl[i].partName;
+                        measurement.partDescription = this.itemclaColl[i].partDescription;
                     }
                 };
             }

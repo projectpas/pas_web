@@ -13,7 +13,7 @@ import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { WorkOrderQuoteService } from "../services/work-order/work-order-quote.service";
 import { NgForm } from "@angular/forms";
-declare var $ : any;
+declare var $: any;
 import * as cloneDeep from 'lodash/cloneDeep';
 import { CommonService } from "../services/common.service";
 import { AtaSubChapter1Service } from "../services/atasubchapter1.service";
@@ -43,7 +43,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     isViewItemMasterTLA: boolean = true;
     isViewItemMasterAlternate: boolean = true;
     isViewItemMasterEquivalency: boolean = true;
-    itemMasterView = false;    
+    itemMasterView = false;
     @Input() isEdit = false;
     @Input() isWorkOrder = false;
     @Input() editData;
@@ -153,7 +153,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     ntaeData2: any;
     ntaeData3: any;
     ntaeData4: any;
-    purchaseSalesInfo: any = [];
     exchangeLoanInfo: any = {};
     viewItemMasterNS: any = {};
     aircraftauditHistory: any = [];
@@ -288,7 +287,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+        return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
 
     // getMaterailMandatoriesOld() {
@@ -546,7 +545,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
         });
     }
-    
+
     async getPartConditions(part, index) {
         this.isSpinnerVisible = true;
         if (part) {
@@ -630,7 +629,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         newRow.extraCost = "0.00";
         newRow.itemClassificationId = "";
         newRow.itemMasterId = "";
-        newRow.materialMandatoriesId  = 1;
+        newRow.materialMandatoriesId = 1;
         newRow.partDescription = "";
         newRow.partNumber = "";
         newRow.isDeferred = this.isDeferredBoolean;
@@ -866,346 +865,14 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return this[variable + index];
     }
 
-    expandAllItemMasterDetails() {
-        $('#step1').collapse('show');
-        $('#step2').collapse('show');
-        $('#step3').collapse('show');
-        $('#step4').collapse('show');
-        $('#step5').collapse('show');
-        $('#step6').collapse('show');
-        $('#step7').collapse('show');
-        $('#step8').collapse('show');
-    }
-
-    closeAllItemMasterDetails() {
-        $('#step1').collapse('hide');
-        $('#step2').collapse('hide');
-        $('#step3').collapse('hide');
-        $('#step4').collapse('hide');
-        $('#step5').collapse('hide');
-        $('#step6').collapse('hide');
-        $('#step7').collapse('hide');
-        $('#step8').collapse('hide');
-    }
-
-    closeItemMasterDetails() {
-        $('#step1').collapse('show');
-        $('#step2').collapse('hide');
-        $('#step3').collapse('hide');
-        $('#step4').collapse('hide');
-        $('#step5').collapse('hide');
-        $('#step6').collapse('hide');
-        $('#step7').collapse('hide');
-        $('#step8').collapse('hide');
-    }
-
-    toGetAllDocumentsList(itemMasterId) {
-        var moduleId = 22;
-        this.isSpinnerVisible = true;
-        this.commonService.GetDocumentsList(itemMasterId, moduleId).subscribe(res => {
-            this.allUploadedDocumentsList = res;
-            this.isSpinnerVisible = false;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    getItemMasterById(itemMasterId) {
-        this.itemMasterService.getItemMasterDetailById(itemMasterId).subscribe(res => {
-            this.viewItemMaster = res[0];
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    getPurchaseSalesInfo(id) {
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getPurcSaleDetailById(id).subscribe(res => {
-
-            this.isSpinnerVisible = false;
-            this.purchaseSalesInfo = res;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
+    itemMasterRowData: any = {};
+    showItemmasterView: any = false;
     openView(row) {
-        this.closeItemMasterDetails();
+        this.itemMasterRowData = row;
+        this.showItemmasterView = true;
         this.itemMasterId = row.itemMasterId;
-        this.toGetAllDocumentsList(row.itemMasterId);
-        this.getItemMasterById(row.itemMasterId);
-        this.getPurchaseSalesInfo(this.itemMasterId);
-        this.partNumber = row.partNumber;
-        this.description = row.partDescription;
-        if (row.isAlternatePartChecked) {
-            this.isAlternatePartChecked = true;
-        }
-        else {
-            this.isAlternatePartChecked = false;
-        }
-        this.isSerialized = row.isSerialized;
-        this.isTimeLife = row.isTimeLife;
-        this.nha = row.nha;
-        this.stockLevel = row.stockLevel;
-        this.nationalStockNumber = row.nationalStockNumber;
-        if (row.itemClassification) {
-            this.itemClassificationId = row.itemClassification.description;
-        }
-        else { this.itemClassificationId = "" }
-        if (row.manufacturer) {
-            this.manufacturerId = row.manufacturer.name;
-        }
-        else { this.manufacturerId = "" }
-
-        if (row.priority) {
-            this.priorityId = row.priority.description;
-        }
-        else { this.priorityId = "" }
-
-        if (row.currency) {
-            this.currencyId = row.currency.symbol;
-        }
-        else { this.currencyId = "" }
-        this.stockUnitOfMeasureId = row.stockUnitOfMeasureId;
-        this.purchaseUnitOfMeasureId = row.purchaseUnitOfMeasureId;
-        this.itemGroupId = row.itemGroup;
-        this.isAcquiredMethodBuy = row.isAcquiredMethodBuy;
-        this.expirationDate = row.expirationDate;
-        this.isReceivedDateAvailable = row.isReceivedDateAvailable;
-        this.isManufacturingDateAvailable = row.isManufacturingDateAvailable;
-        this.isTagDateAvailable = row.isTagDateAvailable;
-        this.isOpenDateAvailable = row.isOpenDateAvailable;
-        this.isShippedDateAvailable = row.isShippedDateAvailable;
-        this.isOtherDateAvailable = row.isOtherDateAvailable;
-        this.provisionId = row.provisionId;
-        this.isHazardousMaterial = row.isHazardousMaterial;
-        this.selectedAircraftTypes = row.selectedAircraftTypes;
-        this.isEnabeCapes = row.isEnabeCapes;
-        this.pma = row.pma;
-        this.der = row.der;
-        this.ataMainId = row.ataMainId;
-        this.isSchematic = row.isSchematic;
-        this.overhaulHours = row.overhaulHours;
-        this.rpHours = row.rpHours;
-        this.testHours = row.testHours;
-        this.turnTimeOverhaulHours = row.turnTimeOverhaulHours;
-        this.turnTimeRepairHours = row.turnTimeRepairHours;
-        this.rfqTracking = row.rfqTracking;
-        this.manufacturingDays = row.manufacturingDays;
-        this.listPrice = row.listPrice;
-        this.glAccountId = row.glAccountId;
-        this.exportCurrencyId = row.exportCurrencyId;
-        this.consumeUnitOfMeasureId = row.consumeUnitOfMeasureId;
-        this.soldUnitOfMeasureId = row.soldUnitOfMeasureId;
-        this.leadTimeDays = row.leadTimeDays;
-        this.leadTimeHours = row.leadTimeHours;
-        this.stockLevel = row.stockLevel;
-        this.reorderPoint = row.reorderPoint;
-        this.reorderQuantiy = row.reorderQuantiy;
-        this.minimumOrderQuantity = row.minimumOrderQuantity;
-        this.isExchangeInfoAvailable = row.isExchangeInfoAvailable;
-        this.exportWeight = row.exportWeight;
-        this.exportValue = row.exportValue;
-        this.salesMarkUpOnListPrice = row.salesMarkUpOnListPrice;
-        this.createdBy = row.createdBy;
-
-        if (row.exportClassification) {
-            this.exportClassificationId = row.exportClassification.description;
-        }
-        else {
-            this.exportClassificationId = "";
-        }
-        this.exportSizeLength = row.exportSizeLength;
-        this.exportSizeWidth = row.exportSizeWidth;
-        this.exportSizeHeight = row.exportSizeHeight;
-        this.updatedBy = row.updatedBy;
-        this.memo = row.memo;
-        this.createddate = row.createdDate;
-        this.updatedDate = row.updatedDate;
-
-        this.getAllSubChapters();
-        this.getAircraftMappedDataByItemMasterId(row.itemMasterId);
-        this.getATAMappedDataByItemMasterId(row.itemMasterId);
-        this.getNtaeData(row.itemMasterId);
-        this.getExchange(row.itemMasterId);
-
-        this.loadMasterCompanies();
+        $('#itemMasterView').modal('show');
     }
-
-    getAllSubChapters() {
-        this.isSpinnerVisible = true;
-        this.atasubchapter1service
-            .getAtaSubChapter1List()
-            .subscribe(atasubchapter => {
-
-                this.isSpinnerVisible = false;
-                const responseData = atasubchapter[0];
-                this.orginalAtaSubChapterValues = responseData;
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
-
-    getAircraftMappedDataByItemMasterId(itemMasterId) {
-        this.itemMasterService.getMappedAirCraftDetails(itemMasterId).subscribe(data => {
-            const responseData = data;
-            this.aircraftListDataValues = responseData.map(x => { 
-                return {
-                    ...x,
-                    aircraft: x.aircraftType,
-                    model: x.aircraftModel,
-                    dashNumber: x.dashNumber,
-                    memo: x.memo,
-                }
-            });
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    getATAMappedDataByItemMasterId(itemMasterId) {
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getMappedATADetails(itemMasterId).subscribe(res => {
-            this.ataMappedList = res.map(x => {
-
-                this.isSpinnerVisible = false;
-                return {
-                    ...x,
-                    ataChapterName: x.ataChapterCode + ' - ' + x.ataChapterName,
-                    ataSubChapterDescription: getValueFromArrayOfObjectById('ataSubChapterCode', 'ataSubChapterId', x.ataSubChapterId, this.orginalAtaSubChapterValues) + ' - ' + x.ataSubChapterDescription
-                }
-            });
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    getNtaeData(itemMasterId) {
-        this.filterManufacturerData = [];
-        this.filterDiscriptionData = [];
-        this.filterPartItemClassificationData = [];
-        let reqData = {
-            first: 0,
-            rows: 10,
-            sortOrder: 1,
-            filters: {
-                ItemMasterId: itemMasterId,
-                MappingType: 3,
-            },
-        }
-        let reqDatas = {
-            first: 0,
-            rows: 10,
-            sortOrder: 1,
-            filters: {
-                ItemMasterId: itemMasterId,
-                MappingType: 4,
-            },
-            globalFilter: null
-        }
-        let reqDatas1 = {
-            first: 0,
-            rows: 10,
-            sortOrder: 1,
-            filters: {
-                ItemMasterId: itemMasterId,
-                MappingType: 1,
-            },
-            globalFilter: null
-        }
-        let reqDatas2 = {
-            first: 0,
-            rows: 10,
-            sortOrder: 1,
-            filters: {
-                ItemMasterId: itemMasterId,
-                MappingType: 2,
-            },
-            globalFilter: null
-        }
-
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getnhatlaaltequpartlis(reqData).subscribe(res => {
-
-            this.isSpinnerVisible = false;
-            this.ntaeData = res;
-            this.getntlafieds(this.ntaeData);
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getnhatlaaltequpartlis(reqDatas).subscribe(res => {
-
-            this.isSpinnerVisible = false;
-            this.ntaeData2 = res;
-            this.getntlafieds(this.ntaeData2);
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getnhatlaaltequpartlis(reqDatas1).subscribe(res => {
-            this.ntaeData3 = res;
-
-            this.isSpinnerVisible = false;
-            this.getntlafieds(this.ntaeData3);
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getequivalencypartlist(reqDatas2).subscribe(res => {
-            this.ntaeData4 = res;
-
-            this.isSpinnerVisible = false;
-            for (let i = 0; i < this.ntaeData4.length; i++) {
-                this.filterManufacturerData.push({
-                    label: this.ntaeData4[i].manufacturer,
-                    value: this.ntaeData4[i].manufacturerId
-                });
-                this.filterDiscriptionData.push({
-                    label: this.ntaeData4[i].altPartDescription,
-                    value: this.ntaeData4[i].altPartDescription
-                });
-                this.filterPartItemClassificationData.push({
-                    label: this.ntaeData4[i].itemClassification,
-                    value: this.ntaeData4[i].itemClassificationId
-                });
-            }
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    getExchange(itemMasterId) {
-        this.isSpinnerVisible = true;
-        this.itemMasterService.getExchangeLoan(itemMasterId).subscribe(res => {
-
-            this.isSpinnerVisible = false;
-            if (res[0] != null && res[0] != undefined) {
-                this.exchangeLoanInfo = res[0];
-            }
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
-
-    private loadMasterCompanies() {
-        this.alertService.startLoadingMessage();
-        this.isSpinnerVisible = true;
-        this.masterComapnyService.getMasterCompanies().subscribe(
-            results => {
-                this.isSpinnerVisible = false;
-                this.onDataMasterCompaniesLoadSuccessful(results[0])
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
-
-    private onDataMasterCompaniesLoadSuccessful(allStockInfo: MasterCompany[]) {
-        this.alertService.stopLoadingMessage();
-    }
-
     getntlafieds(ntaeData) {
         for (let i = 0; i < ntaeData.length; i++) {
             this.filterManufacturerData.push({
@@ -1284,7 +951,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             );
         }
     }
-    
+
     handleError(err) {
         if (err['error']['errors']) {
             err['error']['errors'].forEach(x => {
@@ -1304,9 +971,9 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }
     }
 
-    onTaskChange(material) {}
-    downloadFileUpload(f) {}
-    onViewAircraft(rowData) {}
-    getAircraftAuditHistory(rowData) {}
-    onViewAircraftonDbl(rowData) {}
+    onTaskChange(material) { }
+    downloadFileUpload(f) { }
+    onViewAircraft(rowData) { }
+    getAircraftAuditHistory(rowData) { }
+    onViewAircraftonDbl(rowData) { }
 } 

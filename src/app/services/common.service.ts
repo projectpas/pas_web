@@ -6,7 +6,7 @@ import { ConfigurationService } from './configuration.service';
 import { EndpointFactory } from './endpoint-factory.service';
 import { environment } from 'src/environments/environment';
 
-@Injectable()
+@Injectable() 
 
 
 // module Types : 
