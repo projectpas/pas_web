@@ -185,8 +185,13 @@ export class AppComponent implements OnInit, AfterViewInit {
               items: [
                 { label: 'Invoice Register', routerLink: '' },
                 { label: 'Invoice Batches', routerLink: '' },
+                {
+                  label: 'Customer Statement Report', command: (event?: any) => {
+                    this.navigateToURL('http://65.175.100.63:8080/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fCustomer+Statement&rs:Command=Render');
+                  }
+                }
               ],
-            },
+            }, 
           ],
           [
             {

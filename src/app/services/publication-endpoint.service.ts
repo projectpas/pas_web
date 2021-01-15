@@ -9,90 +9,90 @@ import { DBkeys } from './db-Keys';
 
 @Injectable()
 export class PublicationEndpointService extends EndpointFactory {
-  private readonly _publicationGetUrl: string = '/api/Publication/getpublicationslist';
-  private readonly _publicationGetUrlNew: string = '/api/Publication/getpublicationslistnew';
-  private readonly _publicationGetByIdUrl: string = '/api/Publication/GetPublicationByID';
+  private readonly _publicationGetUrl: string =this.configurations.baseUrl+ '/api/Publication/getpublicationslist';
+  private readonly _publicationGetUrlNew: string = this.configurations.baseUrl+'/api/Publication/getpublicationslistnew';
+  private readonly _publicationGetByIdUrl: string = this.configurations.baseUrl+'/api/Publication/GetPublicationByID';
 
-  private readonly _publicationUrlNew: string =
+  private readonly _publicationUrlNew: string =this.configurations.baseUrl+
     '/api/Publication/publicationpost';
-  private readonly _actionsUrlAuditHistory: string =
+  private readonly _actionsUrlAuditHistory: string =this.configurations.baseUrl+
     '/api/Publication/auditHistoryById';
   private readonly getPublicationAuditById: string = '/api/Publication/audits';
 
-  private readonly _publicationPNACNEW: string =
+  private readonly _publicationPNACNEW: string =this.configurations.baseUrl+
     '/api/Publication/PubPNACMappingPost';
-  private readonly _publicationPNATANEW: string =
+  private readonly _publicationPNATANEW: string =this.configurations.baseUrl+
     '/api/Publication/PubPNATAMappingPost';
-  private readonly _PostPNMapping: string = '/api/Publication/PNIMMappingPost';
-  private readonly _getAirMappingByPublicationID: string =
+  private readonly _PostPNMapping: string =this.configurations.baseUrl+ '/api/Publication/PNIMMappingPost';
+  private readonly _getAirMappingByPublicationID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAircraftMappedByPublcationID';
-  private readonly _getAtaMappingByPublicationID: string =
+  private readonly _getAtaMappingByPublicationID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAtaMappedByPublcationID';
-  private readonly _getAirMappingByMultiTypeID: string =
+  private readonly _getAirMappingByMultiTypeID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAirMappedByPublicationIdMultiTypeID';
-  private readonly _getAirMappingByMultiModelID: string =
+  private readonly _getAirMappingByMultiModelID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAirMappedByPublicationIdMultiModelID';
-  private readonly _getAirMappingByMultiDashID: string =
+  private readonly _getAirMappingByMultiDashID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAirMappedByPublicationIdMultiDashID';
-  private readonly _getAirMappingByMultiTypeIDModelID: string =
+  private readonly _getAirMappingByMultiTypeIDModelID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAirMappedByPublicationIdMultiTypeIDModelID';
-  private readonly _getAirMappingByMultiTypeIDModelIDDashID: string =
+  private readonly _getAirMappingByMultiTypeIDModelIDDashID: string =this.configurations.baseUrl+
     '/api/Publication/getItemAirMappedByPublicationIdMultiTypeIDModelIDDashID';
 
-  private readonly _getATAMappingByMultiChapterIDSubID: string =
+  private readonly _getATAMappingByMultiChapterIDSubID: string =this.configurations.baseUrl+
     '/api/Publication/getItemATAMappedByPublicationIdMultiATAIDSubChapterID';
-  private readonly _deleteItemMasterMappingByID: string =
+  private readonly _deleteItemMasterMappingByID: string =this.configurations.baseUrl+
     '/api/Publication/deletePublicationItemMasterMapping';
-  private readonly _deletepublicationtagtypeEndPoint: string =
+  private readonly _deletepublicationtagtypeEndPoint: string =this.configurations.baseUrl+
     '/api/Publication/deletepublicationtagtype';
-  private readonly _getATAMappingByMultiChapterID: string =
+  private readonly _getATAMappingByMultiChapterID: string =this.configurations.baseUrl+
     '/api/Publication/getItemATAMappedByPublicationIdMultiChapterID';
-  private readonly _getATAMappingByMultiSubChapterID: string =
+  private readonly _getATAMappingByMultiSubChapterID: string =this.configurations.baseUrl+
     '/api/Publication/getItemATAMappedByPublicationIdMultiSubChapterID';
-  private readonly _getFilesBypublication: string =
+  private readonly _getFilesBypublication: string =this.configurations.baseUrl+
         '/api/Publication/getFilesBypublication';
-    private readonly _getFilesBypublicationNew: string =
+    private readonly _getFilesBypublicationNew: string =this.configurations.baseUrl+
         '/api/Publication/getfiledetailsbypublicationNew';
 
-  private readonly _getPublishedByModuleListEndPointUrl: string = '/api/Publication/publishedbymodulelist';
-  private readonly _publicationPNMappingData: string =
+  private readonly _getPublishedByModuleListEndPointUrl: string =this.configurations.baseUrl+ '/api/Publication/publishedbymodulelist';
+  private readonly _publicationPNMappingData: string =this.configurations.baseUrl+
     '/api/Publication/GetPubPNMappedDataByPublicationRecordIds';
-  private readonly _AircraftInformationSearch: string =
+  private readonly _AircraftInformationSearch: string =this.configurations.baseUrl+
     '/api/Publication/searchGetItemAirMappedByPublicationIdMultiTypeIDModelIDDashID';
 
-  private readonly _searchgetAirMappingByMultiTypeIDModelIDDashID: string =
+  private readonly _searchgetAirMappingByMultiTypeIDModelIDDashID: string =this.configurations.baseUrl+
     '/api/Publication/searchGetItemAirMappedByPublicationIdMultiTypeIDModelIDDashID';
 
-  private readonly _searchgetATAMappingByMultiChapterIDSubID: string =
+  private readonly _searchgetATAMappingByMultiChapterIDSubID: string =this.configurations.baseUrl+
     '/api/Publication/searchGetItemATAMappedByPublicationIdMultiATAIDSubChapterID';
 
-  private readonly _publicationStatus: string =
+  private readonly _publicationStatus: string =this.configurations.baseUrl+
     '/api/Publication/publicationstatus';
-  private readonly _publicationGetByIdViewUrl: string = '/api/Publication/publicationview';
-  private readonly _publicationGlobalSearchUrl: string = '/api/Publication/publicationsglobalsearch';
-  private readonly _getpublicationslistadvancesearchUrl: string = '/api/Publication/getpublicationslistadvancesearch';
-  private readonly _publicationTypes: string = '/api/Publication/getpublicationtypes';
-  private readonly _publicationForWorkflowURL: string = '/api/Publication/GetPublicationDropdownData';
-  private readonly _publicationURL: string = '/api/Publication/getPublicationForWorkFlowById';
-  private readonly _excelUpload: string = "/api/Publication/uploadpublicationcustomdata";
-  private readonly _auditsUrl: string = "/api/Publication/publicationhistory";
+  private readonly _publicationGetByIdViewUrl: string =this.configurations.baseUrl+ '/api/Publication/publicationview';
+  private readonly _publicationGlobalSearchUrl: string =this.configurations.baseUrl+ '/api/Publication/publicationsglobalsearch';
+  private readonly _getpublicationslistadvancesearchUrl: string =this.configurations.baseUrl+ '/api/Publication/getpublicationslistadvancesearch';
+  private readonly _publicationTypes: string =this.configurations.baseUrl+ '/api/Publication/getpublicationtypes';
+  private readonly _publicationForWorkflowURL: string =this.configurations.baseUrl+ '/api/Publication/GetPublicationDropdownData';
+  private readonly _publicationURL: string = this.configurations.baseUrl+'/api/Publication/getPublicationForWorkFlowById';
+  private readonly _excelUpload: string =this.configurations.baseUrl+ "/api/Publication/uploadpublicationcustomdata";
+  private readonly _auditsUrl: string = this.configurations.baseUrl+"/api/Publication/publicationhistory";
 
 
-  get getCodeUrl() {
-    return this.configurations.baseUrl + this._publicationGetUrl;
-  }
+  // get getCodeUrl() {
+  //   return this.configurations.baseUrl + this._publicationGetUrl;
+  // }
 
-  get getPublicationsListUrl() {
-    return this.configurations.baseUrl + this._publicationGetUrlNew;
-  }
+  // get getPublicationsListUrl() {
+  //   return this.configurations.baseUrl + this._publicationGetUrlNew;
+  // }
 
-  get getPublicationForWorkFlowURL() {
-    return this.configurations.baseUrl + this._publicationForWorkflowURL;
-  }
+  // get getPublicationForWorkFlowURL() {
+  //   return this.configurations.baseUrl + this._publicationForWorkflowURL;
+  // }
 
-  get getPublicationURL() {
-    return this.configurations.baseUrl + this._publicationURL;
-  }
+  // get getPublicationURL() {
+  //   return this.configurations.baseUrl + this._publicationURL;
+  // }
 
 
   constructor(
@@ -105,7 +105,7 @@ export class PublicationEndpointService extends EndpointFactory {
 
   getpublicationEndpoint<T>(): Observable<T> {
     return this.http
-      .get<T>(this.getCodeUrl, this.getRequestHeaders())
+      .get<T>(this._publicationGetUrl, this.getRequestHeaders())
       .catch(error => {
         return this.handleError(error, () => this.getpublicationEndpoint());
       });
@@ -556,13 +556,13 @@ export class PublicationEndpointService extends EndpointFactory {
   }
 
   getpublicationListEndpoint<T>(data): Observable<T> {
-    return this.http.post(this.getCodeUrl, JSON.stringify(data), this.getRequestHeaders())
+    return this.http.post(this._publicationGetUrl, JSON.stringify(data), this.getRequestHeaders())
       .catch(error => {
         return this.handleError(error, () => this.getpublicationListEndpoint(data));
       });
   }
   getpublicationListEndpointNew<T>(data): Observable<T> {
-    return this.http.post(this.getPublicationsListUrl, JSON.stringify(data), this.getRequestHeaders())
+    return this.http.post(this._publicationGetUrlNew, JSON.stringify(data), this.getRequestHeaders())
       .catch(error => {
         return this.handleError(error, () => this.getpublicationListEndpointNew(data));
       });
@@ -594,14 +594,14 @@ export class PublicationEndpointService extends EndpointFactory {
 
   getAllPublicationsDropdownEndPoint<T>(): Observable<T> {
     return this.http
-      .get<T>(this.getPublicationForWorkFlowURL, this.getRequestHeaders())
+      .get<T>(this._publicationForWorkflowURL, this.getRequestHeaders())
       .catch(error => {
         return this.handleError(error, () => this.getAllPublicationsDropdownEndPoint());
       });
   }
 
   getPublicationForWorkFlowEndpoint<T>(publicationId: number): Observable<T> {
-    return this.http.get<T>(`${this.getPublicationURL}/${publicationId}`, this.getRequestHeaders())
+    return this.http.get<T>(`${this._publicationURL}/${publicationId}`, this.getRequestHeaders())
       .catch(error => {
         return this.handleError(error, () => this.getPublicationForWorkFlowEndpoint(publicationId));
       });
@@ -622,7 +622,7 @@ export class PublicationEndpointService extends EndpointFactory {
 
   getpublicationListBySearchEndpoint<T>(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location): Observable<T> {
     return this.http
-      .get<T>(`${this.getCodeUrl}?pageNumber=${pageIndex}&pageSize=${pageSize}&publicationId=${publicationId}&description=${description}&publicationType=${publicationType}&publishedBy=${publishby}&employee=${employeeName}&location=${location}`, this.getRequestHeaders())
+      .get<T>(`${this._publicationGetUrl}?pageNumber=${pageIndex}&pageSize=${pageSize}&publicationId=${publicationId}&description=${description}&publicationType=${publicationType}&publishedBy=${publishby}&employee=${employeeName}&location=${location}`, this.getRequestHeaders())
       .catch(error => {
         return this.handleError(error, () => this.getpublicationListBySearchEndpoint(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location));
       });
