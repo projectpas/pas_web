@@ -1154,8 +1154,12 @@
                       <label class="popup-plusicon-cstm" style="width: 170px !important;">
                         ATA SubChapters
                       </label>
-                      <p-multiSelect class="imstock-pmselect p-multi-aircraft-dash" [options]="add_ataSubChapterList"
-                        [(ngModel)]="add_SelectedModels" [disabled]="!add_SelectedId" name="popUpATASubchapter" [panelStyle]="{ minWidth: '12em' }">
+                      <p-multiSelect
+                       [options]="add_ataSubChapterList"
+                        [(ngModel)]="add_SelectedModels"
+                         [disabled]="!add_SelectedId"
+                          name="popUpATASubchapter" 
+                          [style]="{ minWidth: '220px' }">
                       </p-multiSelect>
                     </div>
                   </div>
