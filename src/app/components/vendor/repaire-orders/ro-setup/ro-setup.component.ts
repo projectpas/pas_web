@@ -3854,7 +3854,7 @@ export class RoSetupComponent implements OnInit {
 			 }
 	}
 
-	saveShippingAddressToPO() {
+	saveShippingAddressToRO() {
 		const data = {
 			...this.addNewAddress,
 			createdBy: this.userName,
@@ -3863,7 +3863,7 @@ export class RoSetupComponent implements OnInit {
 			isActive: true,
 		}		
 		const addressData = { ...data,
-								  purchaseOrderID : this.id,
+			                      repairOrderId : this.id,
 								  isPoOnly: true,
 								  siteName: editValueAssignByCondition('siteName', data.siteName),
 								  userTypeId: this.splitmoduleId, 

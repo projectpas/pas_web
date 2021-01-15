@@ -1393,7 +1393,7 @@
                       
                         <div class="form-group col-md-12" style="margin-top: 8px;">
                             <button type="button" class="btn btn-primary" *ngIf="(!isEditModeSplitPoOnly && !isEditModeSplitAddress) || isEditModeSplitAddress" (click)="saveShippingAddress();"  [disabled]="!(addSplitSiteNameForm.valid && splitAddbutton && !issplitSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeSplitAddress ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
-                            <button type="button" class="btn btn-primary" *ngIf="(!isEditModeSplitPoOnly && !isEditModeSplitAddress) || isEditModeSplitPoOnly" [disabled]="!(addSplitSiteNameForm.valid && splitAddbutton && !issplitSiteNameAlreadyExists) || addNewAddress.isPrimary" (click)="saveShippingAddressToPO();"   data-dismiss="modal">{{isEditModeSplitPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+                            <button type="button" class="btn btn-primary" *ngIf="(!isEditModeSplitPoOnly && !isEditModeSplitAddress) || isEditModeSplitPoOnly" [disabled]="!(addSplitSiteNameForm.valid && splitAddbutton && !issplitSiteNameAlreadyExists) || addNewAddress.isPrimary" (click)="saveShippingAddressToRO();"   data-dismiss="modal">{{isEditModeSplitPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
                         </div>
 
                     </form>
