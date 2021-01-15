@@ -37,7 +37,7 @@ export class VendorEndpointService extends EndpointFactory {
 	private readonly _paymentEmptyObjurl: string = "/api/Vendor/paymentEmptyObj";
 	private readonly _generalEmptyObjurl: string = "/api/Vendor/generalEmptyObj";
 	private readonly _addressUrl: string = "/api/Vendor/AddressGet";
-	private readonly _vendorsUrlNew: string = "/api/Vendor/vendorPost";
+	private readonly _vendorsUrlNew: string = environment.baseUrl + "/api/Vendor/vendorPost";
 	private readonly _getVendorForPo: string = "/api/Vendor/getVendorForPo";
 	private readonly _vendorwarningUrl: string = environment.baseUrl + "/api/Vendor/saveVendorWarnings";
 	private readonly _saveVendorpurchases: string = "/api/Vendor/saveVendorpurchases";
