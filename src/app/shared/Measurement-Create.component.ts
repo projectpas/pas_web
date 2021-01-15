@@ -73,12 +73,11 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     }
 
     onPartSelect(event, measurement) {
-        console.log("meassss",event, measurement)
         var anyMeasurement = this.workFlow.measurements.filter(measurement =>
             measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
-            console.log("mahesh",anyMeasurement)
+
         if (anyMeasurement.length > 1) {
-            console.log("description",measurement.partDescription);
+  
             measurement.partNumber = "";
             measurement.partDescription = "";
             event = "";
