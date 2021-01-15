@@ -537,7 +537,10 @@
                                         [(ngModel)]="selectedItems" [settings]="dropdownSettings"
                                         (onDeSelect)="onDeSelect($event)" (onSelect)="onItemSelect($event)"
                                         (onDeSelectAll)="onDeSelectAll($event)" (onSelectAll)="onSelectAll($event)">
-                                    </ng-multiselect-dropdown>
+                                    </ng-multiselect-dropdown> 
+                                    <!-- <p-multiSelect [options]="allTagTypes" (input)="onFilterTangible($event)"
+                                    (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
+                                </p-multiSelect> -->
                                 </div>
                             </div>
                         </div>

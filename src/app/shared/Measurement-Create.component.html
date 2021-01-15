@@ -20,7 +20,7 @@
                 <p-autoComplete appendTo="body" [(ngModel)]="measurement.partName" [suggestions]="partCollection"
                     (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
                     class="workflow-measurement-select" #partNum="ngModel" errorMessage="Records not found"
-                    field="partDescription" (onSelect)="onPartSelect($event,measurement)" [forceSelection]="true"
+                    field="partNumber" (onSelect)="onPartSelect($event,measurement)" [forceSelection]="true"
                     title="PN" required>
                 </p-autoComplete>
             </td> 

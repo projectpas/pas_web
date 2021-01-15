@@ -1,25 +1,17 @@
-import { Component, Input, OnChanges, OnInit, EventEmitter, Output, OnDestroy } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { IMaterialCondition } from "../Workflow/MaterialCondition";
 import { IMaterialMandatory } from "../Workflow/MaterialMandatory";
-import { IMaterialUOM } from "../Workflow/MaterialUOM";
 import { ActionService } from "../Workflow/ActionService";
-import { IMaterialList } from "../Workflow/MaterialList";
-import { VendorService } from "../services/vendor.service";
-import { ConditionService } from "../services/condition.service";
 import { ItemClassificationService } from "../services/item-classfication.service";
 import { UnitOfMeasureService } from "../services/unitofmeasure.service";
-import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { WorkOrderQuoteService } from "../services/work-order/work-order-quote.service";
 import { NgForm } from "@angular/forms";
 declare var $: any;
 import * as cloneDeep from 'lodash/cloneDeep';
 import { CommonService } from "../services/common.service";
-import { AtaSubChapter1Service } from "../services/atasubchapter1.service";
 import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { MasterComapnyService } from "../services/mastercompany.service";
-import { MasterCompany } from "../models/mastercompany.model";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
 
@@ -222,12 +214,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     constructor(private actionService: ActionService,
         private commonService: CommonService,
-        private itemMasterService: ItemMasterService,
         private authService: AuthService,
-        private atasubchapter1service: AtaSubChapter1Service,
         private workOrderQuoteService: WorkOrderQuoteService,
-        private itemser: ItemMasterService,
-        private vendorService: VendorService,
         private alertService: AlertService,
         public unitofmeasureService: UnitOfMeasureService,
         public itemClassService: ItemClassificationService,
@@ -645,7 +633,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         newRow.isDelete = false;
         newRow.extendedPrice = '';
         newRow.updatedBy = this.userName;
-        newRow.updatedBy = this.userName;
+        newRow.createdBy = this.userName;
         newRow.masterCompanyId = this.currentUserMasterCompanyId;
 
         if (this.materialMandatory) {
