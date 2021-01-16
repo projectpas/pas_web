@@ -100,9 +100,11 @@
                   <i class="fa fa-eye"></i>
                 </a>
               </span>
-              <button class="btn-add" mat-icon-button 
-                (click)="createQuote(rowData)" [disabled]="!rowData.isActive || rowData.isDeleted">
-                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Sales Order Quote' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
+              <button class="btn-add" mat-icon-button (click)="createQuote(rowData)"
+                [disabled]="!rowData.isActive || rowData.isDeleted">
+                <i class="fa fa-plus"
+                  [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Sales Order Quote' : (!rowData.isActive ? 'Inactive' : 'Deletd')"
+                  matTooltipPosition="above"> </i>
               </button>
             </div>
           </td>
@@ -134,9 +136,11 @@
     <p class="warning_color">{{customerWarning.warningMessage}}</p>
   </div>
   <div class="modal-footer">
-
+    <h5>Continue ?</h5>
     <button type="button" class="btn btn-primary" data-dismiss="modal"
-      (click)="moveToCreate(customerWarning.customerId)">Ok</button>
+      (click)="moveToCreate(customerWarning.customerId)">Yes</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"
+      (click)="closeModal()">No</button>
   </div>
 </ng-template>
 <ng-template #restrictionPopup let-c="close" let-d="dismiss">
