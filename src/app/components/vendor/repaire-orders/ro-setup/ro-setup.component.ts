@@ -1447,7 +1447,8 @@ export class RoSetupComponent implements OnInit {
             this.warningsandRestriction(vendorId);
             if (this.arrayVendlsit.length == 0) {
                 this.arrayVendlsit.push(0);
-            }
+			}
+			this.arrayVendlsit.push(vendorId);
             this.isSpinnerVisible = true;
             this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.allActions = res;
