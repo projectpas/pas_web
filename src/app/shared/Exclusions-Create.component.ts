@@ -52,7 +52,6 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     deleteRowRecord:any={};
     deletedRowIndex:any;
     disabledMemo: boolean = false;
-
     constructor(private actionService: ActionService,
         private workOrderQuoteService: WorkOrderQuoteService,
         private itemClassService: ItemClassificationService,
@@ -277,8 +276,8 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     }
 
     calculateExtendedCost(exclusion): void {
-        exclusion.unitCost = exclusion.unitCost ? formatNumberAsGlobalSettingsModule(exclusion.unitCost, 2) : '';
-        exclusion.quantity = exclusion.quantity ? exclusion.quantity.toString().replace(/\,/g, '') : 0;
+        exclusion.unitCost = exclusion.unitCost ?   formatNumberAsGlobalSettingsModule(exclusion.unitCost, 2) : '0.00';
+        exclusion.quantity = exclusion.quantity ? formatNumberAsGlobalSettingsModule(exclusion.quantity, 0) : '0';
         var value: any = parseFloat(exclusion.quantity) * parseFloat(exclusion.unitCost.toString().replace(/\,/g, ''));
         if (value > 0) {
             exclusion.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);
@@ -456,6 +455,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
+        this.modal.close();
     }
 
     onDataLoadFailed(log) {

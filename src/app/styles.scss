@@ -16155,7 +16155,7 @@ margin: 0;
 
 .p-radiobutton-cstm .ui-radiobutton {
   margin-right: -5px !important;
-  padding-top: 8px !important;
+  padding-top: 2px !important;
 }
 
 .p-radiobutton-cstm .ui-radiobutton .ui-radiobutton-box {
@@ -17078,4 +17078,24 @@ a.ui-menuitem-link ui-corner-all ui-state-hover {
 }
 input[type="date"]::-webkit-clear-button {
   display: block !important;
+}
+.multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret {
+  width: 29px !important;
+  height: 35px !important;
+  right: 0px !important;
+  top: 0;
+  padding: 2px 0px !important;
+}
+.multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret:before {
+
+  right: 0 !important;
+  top: 35% !important;
+}
+.multiselect-dropdown .dropdown-btn {
+ border: none !important;
+  border-radius: 4px !important;
+  padding-right: 23px !important;
+}
+ng-multiselect-dropdown{
+  border-radius: 4px !important;
 }

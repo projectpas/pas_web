@@ -7,16 +7,16 @@ import 'rxjs/add/operator/map';
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { TaskAttribute } from '../models/taskattribute.model';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class TaskAttributeEndpointService extends EndpointFactory {
+    baseUrl = environment.baseUrl;
 
-
-    private readonly _actionsattributeUrl: string = "/api/taskattribute/taskattributelist";
-    private readonly _actionsattributeUrlNew: string = "/api/taskattribute/createtaskattribute";
-    private readonly _actionsattributeUrlUpdate: string = "/api/taskattribute/updatetaskattribute";
-    private readonly _actionsattributeUrlDelete: string = "/api/taskattribute/deletetaskattribute";
-    private readonly _actionsUrlAuditHistory: string = "/api/taskattribute/taskattributehistory";
+    private readonly _actionsattributeUrl: string =this.baseUrl+ "/api/taskattribute/taskattributelist";
+    private readonly _actionsattributeUrlNew: string =this.baseUrl+ "/api/taskattribute/createtaskattribute";
+    private readonly _actionsattributeUrlUpdate: string =this.baseUrl+ "/api/taskattribute/updatetaskattribute";
+    private readonly _actionsattributeUrlDelete: string =this.baseUrl+ "/api/taskattribute/deletetaskattribute";
+    private readonly _actionsUrlAuditHistory: string =this.baseUrl+ "/api/taskattribute/taskattributehistory";
 
 
     get actionattributesUrl() { return this.configurations.baseUrl + this._actionsattributeUrl; }

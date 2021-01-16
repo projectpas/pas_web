@@ -3,3 +3,4 @@ dist
 /.vs/PAS_WEB/v16
 /.vs
 /package-lock.json
+/.dist

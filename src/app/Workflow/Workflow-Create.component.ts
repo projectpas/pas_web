@@ -1,18 +1,8 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Input, OnDestroy, Output, EventEmitter } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, Output, EventEmitter } from "@angular/core";
 import { ActionService } from "./ActionService";
 import { ITask } from "./Action";
 import { IActionAttrbutes } from "./ActionAttributes";
-import { IWorkFlow } from "./WorkFlow";
-import { ICharges } from "./Charges";
-import { IDirections } from "./Directions";
-import { IEquipmentList } from "./EquipmentList";
-import { IExpertise } from "./Expertise";
-import { IMaterialList } from "./MaterialList";
-import { IPublication } from "./Publication";
-import { IExclusion } from "./Exclusion";
-import { IMeasurement } from "./Measurement";
 import { ActivatedRoute, Router } from "@angular/router";
-import { VirtualTimeScheduler } from "rxjs";
 import { SelectItem } from "primeng/api";
 import { VendorService } from "../services/vendor.service";
 import { EmployeeExpertiseService } from "../services/employeeexpertise.service";
@@ -26,14 +16,13 @@ import { WorkFlowtService } from "../services/workflow.service";
 import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 declare var $ : any;
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ChargesCreateComponent } from "../shared/Charges-Create.component";
 import { Percent } from "../models/Percent.model";
 import { PercentService } from "../services/percent.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { AuthService } from "../services/auth.service";
-import { formatNumberAsGlobalSettingsModule, getObjectById } from "../generic/autocomplete";
+import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { MenuItem } from 'primeng/api';
 
@@ -72,8 +61,8 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     newAction: ITask;
     workFlowActions: ITask[];
     sourceWorkFlow: any = {};
-    employeeExplist: any[] = [];
-    materailTypeList: any[] = [];
+    // employeeExplist: any[] = [];
+    // materailTypeList: any[] = [];
     allCustomers: any[] = [];
     customerNamecoll: any[] = [];
     customerNames: any[] = [];
@@ -267,10 +256,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
 
         this.sourceWorkFlow.workFlowId = +this.router.snapshot.paramMap.get("id");
         this.isFixedcheck('');
-        this.loadItemClassData();
-        this.getMaterialMandatory();
-        this.loadUOMData();
-        this.loadConditionData();
+        // this.loadItemClassData();
+        // this.getMaterialMandatory();
+        // this.loadUOMData();
+        // this.loadConditionData();
         this.sourceWorkFlow.workflowCreateDate = new Date();
         this.sourceWorkFlow.version = "V-1";
 
@@ -281,40 +270,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this._workflowService.currentWorkFlowId = this.sourceWorkFlow.workFlowId;
         }
 
-        this.getMaterialType();
-        this.loadExpertiseData();
+        // this.getMaterialType();
+        // this.loadExpertiseData();
 
         this.newAction = { Id: "0", Name: "", Description: "", Memo: "", Sequence: 0 };
         this.getAllActions();
 
-        this.isSpinnerVisible = true;
-        this.actionService.getActionAttributes().subscribe(
-            actionAttributes => {
-                this.isSpinnerVisible = false;
-                actionAttributes = actionAttributes.filter(x => x.isActive && x)
-                this.actionAttributes = [];
-                for (let attr of actionAttributes) {
-                    if (this.isQuote && (attr.description == 'Material List' || attr.description == 'Charges' || attr.description == 'Exclusions' || attr.description == 'Expertise')) {
-                        this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
-                    }
-                    else if (!this.isQuote) {
-                        this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
-                    }
-                }
-                this.actionAttributes = this.actionAttributes.sort(function (a, b) {
-                    var nameA = a.Sequence; // ignore upper and lowercase
-                    var nameB = b.Sequence; // ignore upper and lowercase
-                    if (nameA < nameB) {
-                        return -1;
-                    }
-                    if (nameA > nameB) {
-                        return 1;
-                    }
-                    return 0;
-                });
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
+this.getTaksAttributes();
 
         this.dropdownSettings = {
             singleSelection: false,
@@ -329,7 +291,36 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.loadWorkFlow();
         this.getAllPercentages();
     }
-
+    getTaksAttributes(){
+    this.isSpinnerVisible = true;
+    this.actionService.getActionAttributes().subscribe(
+        actionAttributes => {
+            this.isSpinnerVisible = false;
+            actionAttributes = actionAttributes.filter(x => x.isActive && x)
+            this.actionAttributes = [];
+            for (let attr of actionAttributes) {
+                if (this.isQuote && (attr.description == 'Material List' || attr.description == 'Charges' || attr.description == 'Exclusions' || attr.description == 'Expertise')) {
+                    this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
+                }
+                else if (!this.isQuote) {
+                    this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
+                }
+            }
+            this.actionAttributes = this.actionAttributes.sort(function (a, b) {
+                var nameA = a.Sequence; // ignore upper and lowercase
+                var nameB = b.Sequence; // ignore upper and lowercase
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+                return 0;
+            });
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
+}
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
@@ -703,26 +694,26 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         });
     }
 
-    getMaterialType() {
-        this.isSpinnerVisible = true;
-        this._workflowService.getMaterialType().subscribe(data => {
-            this.materailTypeList = data;
-            this.isSpinnerVisible = false;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
+    // getMaterialType() {
+    //     this.isSpinnerVisible = true;
+    //     this._workflowService.getMaterialType().subscribe(data => {
+    //         this.materailTypeList = data;
+    //         this.isSpinnerVisible = false;
+    //     }, error => {
+    //         this.isSpinnerVisible = false;
+    //     });
+    // }
 
-    private loadExpertiseData() {
-        this.isSpinnerVisible = true;
-        this.expertiseService.getWorkFlows().subscribe(data => {
-            this.isSpinnerVisible = false;
-            this.employeeExplist = data;
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
+    // private loadExpertiseData() {
+    //     this.isSpinnerVisible = true;
+    //     this.expertiseService.getWorkFlows().subscribe(data => {
+    //         this.isSpinnerVisible = false;
+    //         this.employeeExplist = data;
+    //     }, error => {
+    //         this.isSpinnerVisible = false;
+    //     });
 
-    }
+    // } 
 
     getActionAttributesDD() {
         this.isSpinnerVisible = true;
@@ -1361,86 +1352,86 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             });
     }
 
-    private getDefaultConditionId(name: string): string {
+    // private getDefaultConditionId(name: string): string {
 
-        if (this.allconditioninfo != undefined && this.allconditioninfo.length > 0) {
-            let defaultCondition: any = this.allconditioninfo.find(x => x.description.trim().toLowerCase() == name.toLowerCase())
+    //     if (this.allconditioninfo != undefined && this.allconditioninfo.length > 0) {
+    //         let defaultCondition: any = this.allconditioninfo.find(x => x.description.trim().toLowerCase() == name.toLowerCase())
 
-            return defaultCondition != undefined ? defaultCondition.conditionId : 0;
-        }
-        else {
+    //         return defaultCondition != undefined ? defaultCondition.conditionId : 0;
+    //     }
+    //     else {
 
-            this.isSpinnerVisible = true;
-            this.conditionService.getConditionList().subscribe(data => {
-                this.isSpinnerVisible = false;
-                this.allconditioninfo = data[0];
-                let defaultCondition: any = this.allconditioninfo.find(x => x.description.trim().toLowerCase() == name.toLowerCase())
+    //         this.isSpinnerVisible = true;
+    //         this.conditionService.getConditionList().subscribe(data => {
+    //             this.isSpinnerVisible = false;
+    //             this.allconditioninfo = data[0];
+    //             let defaultCondition: any = this.allconditioninfo.find(x => x.description.trim().toLowerCase() == name.toLowerCase())
 
-                return defaultCondition != undefined ? defaultCondition.conditionId : 0;
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-        }
-    }
+    //             return defaultCondition != undefined ? defaultCondition.conditionId : 0;
+    //         }, error => {
+    //             this.isSpinnerVisible = false;
+    //         });
+    //     }
+    // }
 
-    private loadConditionData() {
-        this.isSpinnerVisible = true;
-        this.conditionService.getConditionList().subscribe(data => {
-            this.isSpinnerVisible = false;
-            this.allconditioninfo = data[0];
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
+    // private loadConditionData() {
+    //     this.isSpinnerVisible = true;
+    //     this.conditionService.getConditionList().subscribe(data => {
+    //         this.isSpinnerVisible = false;
+    //         this.allconditioninfo = data[0];
+    //     }, error => {
+    //         this.isSpinnerVisible = false;
+    //     });
+    // }
 
-    private getDefaultUOMId(name: string): string {
-        let defaultUOM: any = this.allUomdata.filter(x => x.shortName == name);
+    // private getDefaultUOMId(name: string): string {
+    //     let defaultUOM: any = this.allUomdata.filter(x => x.shortName == name);
 
-        if (defaultUOM.length > 0) {
-            return defaultUOM[0].unitOfMeasureId;
-        }
-        return "";
-    }
+    //     if (defaultUOM.length > 0) {
+    //         return defaultUOM[0].unitOfMeasureId;
+    //     }
+    //     return "";
+    // }
 
-    private loadUOMData() {
-        this.isSpinnerVisible = true;
-        this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
-            this.isSpinnerVisible = false;
-            this.allUomdata = uomdata[0];
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-    }
+    // private loadUOMData() {
+    //     this.isSpinnerVisible = true;
+    //     this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
+    //         this.isSpinnerVisible = false;
+    //         this.allUomdata = uomdata[0];
+    //     }, error => {
+    //         this.isSpinnerVisible = false;
+    //     });
+    // }
 
-    private getDefaultMaterialMandatoryId(name: string): string {
-        let defaultMaterialMandatory: any = this.materialMandatory.filter(x => x.name == name);
+    // private getDefaultMaterialMandatoryId(name: string): string {
+    //     let defaultMaterialMandatory: any = this.materialMandatory.filter(x => x.name == name);
 
-        if (defaultMaterialMandatory.length > 0) {
-            return defaultMaterialMandatory.id;
-        }
-        return "";
-    }
+    //     if (defaultMaterialMandatory.length > 0) {
+    //         return defaultMaterialMandatory.id;
+    //     }
+    //     return "";
+    // }
 
-    private getMaterialMandatory(): void {
-        this.isSpinnerVisible = true;
-        this.actionService.GetMaterialMandatory().subscribe(
-            mandatory => {
-                this.isSpinnerVisible = false;
-                this.materialMandatory = mandatory;
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
+    // private getMaterialMandatory(): void { 
+    //     this.isSpinnerVisible = true;
+    //     this.actionService.GetMaterialMandatory().subscribe(
+    //         mandatory => {
+    //             this.isSpinnerVisible = false;
+    //             this.materialMandatory = mandatory;
+    //         }, error => {
+    //             this.isSpinnerVisible = false;
+    //         });
+    // }
 
-    private loadItemClassData() {
-        this.isSpinnerVisible = true;
-        this.itemClassService.getWorkFlows().subscribe(data => {
-            this.isSpinnerVisible = false;
-            this.itemClassInfo = data
-        }, error => {
-            this.isSpinnerVisible = false;
-        });;
-    }
+    // private loadItemClassData() {
+    //     this.isSpinnerVisible = true;
+    //     this.itemClassService.getWorkFlows().subscribe(data => {
+    //         this.isSpinnerVisible = false;
+    //         this.itemClassInfo = data
+    //     }, error => {
+    //         this.isSpinnerVisible = false;
+    //     });;
+    // }
 
     onDataLoadFailed(log) {
         const errorLog = log;
@@ -2078,16 +2069,17 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
 
         return expertise;
     }
-
+    // this.getDefaultConditionId('new')
+    // this.getDefaultUOMId('Ea')
     GetMaterialList(): any[] {
         var material = [{
             workflowMaterialListId: "0",
             itemMasterId: '',
-            conditionCodeId: this.getDefaultConditionId('new'),
+            conditionCodeId: 0,
             mandatoryOrSupplemental: 'Mandatory',
             itemClassificationId: '',
             quantity: '',
-            unitOfMeasureId: this.getDefaultUOMId('Ea'),
+            unitOfMeasureId: 0,
             unitCost: "",
             extendedCost: "",
             price: "",
@@ -2252,7 +2244,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceWorkFlow.createdBy = this.userName;
         this.sourceWorkFlow.updatedBy = this.userName;
-
         this.actionService.getNewWorkFlow(this.sourceWorkFlow).subscribe(
             data => {
                 this.isSpinnerVisible = false;
@@ -2464,13 +2455,13 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
                             material.taskId = workflow.taskId;
                             material.order = workflow.order;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
-                            material.materialMandatoriesId = workflow.materialMandatoriesId;
+                            // material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.createdBy = this.userName;
                             material.createdDate = new Date();
                         } else {
                             material.workflowMaterialListId = material.workflowMaterialListId > 0 ? material.workflowMaterialListId : 0;
                             material.masterCompanyId = this.currentUserMasterCompanyId;
-                            material.materialMandatoriesId = workflow.materialMandatoriesId;
+                            // material.materialMandatoriesId = workflow.materialMandatoriesId;
                             material.updatedBy = this.userName;
                             material.updatedDate = new Date();
                         }

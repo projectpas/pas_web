@@ -15,11 +15,13 @@ import { environment } from 'src/environments/environment';
 export class ActionEndpoint extends EndpointFactory {
 
 
-    private readonly _actionsUrl: string = "/api/Action/Get";
-    private readonly _actionsUrlNew: string = "/api/Action/actions";
-    private readonly _actionsUrlAuditHistory: string = "/api/Action/auditHistoryById";
-    private getActionURL: string = environment.baseUrl + "/api/Task/Get";
-    private getActionAttributesURL: string = environment.baseUrl + "/api/taskattribute/taskattributelist";
+
+    private readonly _actionsUrl: string = environment.baseUrl+"/api/Action/Get";
+    private readonly _actionsUrlNew: string =environment.baseUrl+ "/api/Action/actions";
+    private readonly _actionsUrlAuditHistory: string =environment.baseUrl+ "/api/Action/auditHistoryById";
+    private getActionURL: string =environment.baseUrl+ "/api/Task/Get";
+    private getActionAttributesURL: string =environment.baseUrl+ "/api/taskattribute/taskattributelist";
+
     private getChargesTypeURL: string = environment.baseUrl + '/api/mastertest/ChargesType';
     private getChargesCurrencyURL: string = environment.baseUrl + '/api/mastertest/ChargesCurrency';
     private getEquipmentAssetTypesURL: string = environment.baseUrl + '/api/mastertest/EquipmentAssetType';
@@ -63,7 +65,7 @@ export class ActionEndpoint extends EndpointFactory {
     private UpdatePublicationURL: string = environment.baseUrl + "/api/workflow/updatePublication";
     private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/remove";
 
-    get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
+    get actionsUrl() { return  this._actionsUrl; }
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
