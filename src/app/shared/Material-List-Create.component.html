@@ -176,7 +176,7 @@
           <h4 class="modal-title">Edit Memo</h4> 
         </div>
         <div class="modal-body">
-          <table class="table table-bordered table-fixed">
+          <!-- <table class="table table-bordered table-fixed">
             <thead>
                 <th style="color: #fff;">Memo</th>
             </thead>
@@ -187,12 +187,14 @@
                     </td>
                 </tr>
             </tbody> 
-        </table>
+        </table> -->
+        <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+ 
           <!-- <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor> -->
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" [disabled]="disableEditor" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-          <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+          <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disableEditor" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+          <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
         </div>
       </div>
     </div>
