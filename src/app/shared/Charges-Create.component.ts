@@ -1,16 +1,11 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { ActionService } from "../Workflow/ActionService"
-import { ICharges } from "../Workflow/Charges";
-import { IChargesCurrency } from "../Workflow/ChargesCurrency";
-import { IChargesType } from "../Workflow/ChargesType";
-import { CurrencyService } from "../services/currency.service";
 import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-import { getObjectById, formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
+import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 declare var $ : any;
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
     selector: 'grd-charges',
     templateUrl: './Charges-Create.component.html',
@@ -33,7 +28,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     @Output() saveChargesListForWO = new EventEmitter();
     @Output() updateChargesListForWO = new EventEmitter();
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
-
+    modal: NgbModalRef;
     chargesTypes: any[] = [];
     chargesCurrency: any[] = [];
     row: any;
@@ -43,8 +38,8 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     roNumList: any[] = [];
 
-    constructor(private vendorservice: VendorService, private actionService: ActionService, 
-        private currencyService: CurrencyService, private alertService: AlertService, 
+    constructor(private modalService: NgbModal,private vendorservice: VendorService, 
+         private alertService: AlertService, 
         private commonService: CommonService) {
     }
 
@@ -331,15 +326,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         this.workFlow.totalChargesCost = formatNumberAsGlobalSettingsModule(this.workFlow.totalChargesCost, 2);
     }
 
-    deleteRow(index): void {
-        if (this.workFlow.charges[index].workflowChargesListId == undefined || this.workFlow.charges[index].workflowChargesListId == "0" || this.workFlow.charges[index].workflowChargesListId == "") {
-            this.workFlow.charges.splice(index, 1);
-        }
-        else {
-            this.workFlow.charges[index].isDelete = true;
-        }
-        this.reCalculate();
-    }
+
 
     saveChargesWorkOrder() {
         this.saveChargesListForWO.emit(this.workFlow)
@@ -416,4 +403,31 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
             );
         }
     }
+    dismissModel() {
+        this.modal.close();
+    }
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+        this.chargesTypes.forEach(element => {
+            if(element.chargeId==row.workflowChargeTypeId){
+                row.chargeType=element.chargeType;
+            }
+        });
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.charges[this.deletedRowIndex].workflowChargesListId == undefined || this.workFlow.charges[this.deletedRowIndex].workflowChargesListId == "0" || this.workFlow.charges[this.deletedRowIndex].workflowChargesListId == "") {
+            this.workFlow.charges.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.charges[this.deletedRowIndex].isDelete = true;
+        }
+        this.reCalculate();
+        this.dismissModel();
+    }
+
 }
