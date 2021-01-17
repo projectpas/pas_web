@@ -46,43 +46,7 @@
                         style="position: relative;top: 6px; color: royalblue !important;"
                          matTooltip="Memo" matTooltipPosition="above"
                         (click)="onAddTextAreaInfo(measurement,i)"></i>
-                        <div class="modal fade" id="textareapopupMemo" role="dialog" data-backdrop="static" data-keyboard="false">
-                            <div class="modal-dialog modal-xs">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" style="font-size: 22px !important;">&times;</button>
-                                        <h4 class="modal-title">Edit {{"Memo"}}</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <table class="table table-bordered table-fixed workflow-table-material">
-                                            <thead>
-                                                <th style="color: #fff;background: #4298ff !important;">{{"Memo"}}</th>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                                                            required>
-                                                        </p-editor>                        
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <div style="float:right">
-                                            <button type="button" class="btn btn-primary adj_cor" data-dismiss="modal"
-                                               
-                                                (click)="onSaveTextAreaInfo(textAreaInfo)">
-                                                Save
-                                            </button>
-                                            <button type="button" class="btn btn-danger adj_cor"
-                                                data-dismiss="modal">
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        
                 </div>
             </td>
             <td style="text-align: center;">
@@ -112,6 +76,49 @@
     </div>
 </ng-template>
 
+
+<div class="modal fade" id="textareapopupMemo" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="font-size: 22px !important;">&times;</button>
+                <h4 class="modal-title">Edit {{"Memo"}}</h4>
+            </div>
+            <div class="modal-body">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                        <th style="color: #fff;background: #4298ff !important;">{{"Memo"}}</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                                    required>
+                                </p-editor>                        
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> -->
+                <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                required>
+              </p-editor>  
+            
+           </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+                       
+                        (click)="onSaveTextAreaInfo(textAreaInfo)">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
+                        data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        
+    </div>
+</div>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">

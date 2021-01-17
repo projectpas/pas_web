@@ -245,7 +245,10 @@
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
           <th
-          class="table-actions-column"
+         
+          style="  width:160px !important;
+          position:sticky !important;
+          text-align:center !important;"
             *ngIf="selectedColumns.length > 0"
           >
             Actions
@@ -260,7 +263,9 @@
               <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
               <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
           </th>
-        <th class="table-actions-column"></th>
+        <th style="  width:160px !important;
+        position:sticky !important;
+        text-align:center !important;"></th>
       </tr>
       </ng-template>
 
@@ -285,7 +290,9 @@
                 <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
             </td>
           </ng-container>          
-          <td class="action-icons-cstm table-column-width">
+          <td class="table-column-width" style="  width:160px !important;
+          position:sticky !important;
+          text-align:center !important;">
             <div *ngIf="currentDeletedstatus == false">
               <ng-container *ngIf="!isViewMode">
                 <p-inputSwitch

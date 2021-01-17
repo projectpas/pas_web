@@ -15921,8 +15921,11 @@ body .ui-autocomplete .ui-autocomplete-dropdown .ui-button-icon-left:before {
   font-size: 18px !important;
 }
 
-.imstock-pmselect span {
+.imstock-pmselect .ui-multiselect-panel .ui-multiselect-header .ui-multiselect-filter-container .ui-multiselect-filter-icon {
   font-size: 16px !important;
+}
+.imstock-pmselect span{
+  font-size:10.5px !important;
 }
 
 .imstock-pmselect .ui-multiselect-filter-container .ui-multiselect-filter-icon {
@@ -16392,7 +16395,9 @@ p-editor .ui-editor-container {
 .btn-po-cstm {
   color: #ff5663 !important;
 }
-
+.btn-users-cstm{
+  color:#333 !important;
+}
 .btn-ro-cstm {
   color: #259e08 !important;
 }

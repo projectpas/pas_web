@@ -318,8 +318,9 @@
             Unknown
           </label>
 
-          <p-multiSelect *ngIf="!modelUnknown" (ngModelChange)="enableSaveAdd()" [maxSelectedLabels]="2" [disabled]="!add_SelectedAircraftId"
-            class="imstock-pmselect" [options]="add_AircraftModelList" [(ngModel)]="add_SelectedModel"
+          <p-multiSelect *ngIf="!modelUnknown" (ngModelChange)="enableSaveAdd()" [maxSelectedLabels]="2"
+           [disabled]="!add_SelectedAircraftId"
+            [options]="add_AircraftModelList" [(ngModel)]="add_SelectedModel"
             name="ModelsPopup" (onChange)="getDashNumberByTypeandModel($event)"></p-multiSelect>
         </div>
       </div>
@@ -333,7 +334,7 @@
           </label>
 
           <p-multiSelect *ngIf="!modelUnknown && !dashNumberUnknown" [maxSelectedLabels]="2"
-            [disabled]="!add_SelectedAircraftId" class="imstock-pmselect p-multi-aircraft-dash"
+            [disabled]="!add_SelectedAircraftId"
             [options]="add_AircraftDashNumberList" [(ngModel)]="add_SelectedDashNumber" name="dashNumbersPopup"
             (onChange)="selectedDashnumbervalue($event)" (ngModelChange)="enableSaveAdd()"></p-multiSelect>
         </div>
