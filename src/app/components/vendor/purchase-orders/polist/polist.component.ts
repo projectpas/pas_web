@@ -19,7 +19,6 @@ import { MenuItem } from 'primeng/api';
 import { ReceivingService }  from '../../../../services/receiving/receiving.service';
 import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';
 import * as moment from 'moment';
-import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 
 @Component({
 	selector: 'app-polist',
@@ -91,6 +90,7 @@ export class PolistComponent implements OnInit {
     isViewMode: boolean = true;
     capvendorId: number; 
     tabindex: number = 0; 
+
    
     @Input() isEnablePOList: boolean;
     @Input() vendorId: number;
@@ -109,6 +109,13 @@ export class PolistComponent implements OnInit {
     aircraftListDataValues: any;
     selectedOnly: boolean = false;
     targetData: any;
+    colsaircraftLD: any[] = [
+        { field: "aircraft", header: "Aircraft" },
+        { field: "model", header: "Model" },
+        { field: "dashNumber", header: "Dash Numbers" },
+        { field: "memo", header: "Memo" }
+    ];
+
     approvalProcessHeader = [        
         {
             header: 'Action',
@@ -182,9 +189,21 @@ export class PolistComponent implements OnInit {
         this.vendorService.ShowPtab = false;       
     }
     ngOnInit() {
-        this.loadPOStatus();        
+        this.loadPOStatus();
+        //this.loadApprovalProcessStatus();
+        //this.getWarningsList();
         this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-polist';
         this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+        
+        this.vendorCapesCols = [			
+			{ field: 'ranking', header: 'Ranking' },
+			{ field: 'partNumber', header: 'PN' },
+			{ field: 'partDescription', header: 'PN Description' },
+			{ field: 'capabilityType', header: 'Capability Type' },
+			{ field: 'cost', header: 'Cost' },
+			{ field: 'tat', header: 'TAT' },
+			{ field: 'name', header: 'PN Mfg' },
+        ];
         if( this.isReceivingPolist == false ){
             this.breadcrumbs = [
                 { label: 'Purchase Order' },
@@ -198,6 +217,7 @@ export class PolistComponent implements OnInit {
         }
 
     }
+
     get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
 		  ? this.authService.currentUser.masterCompanyId
@@ -205,7 +225,8 @@ export class PolistComponent implements OnInit {
 	}
 	get employeeId() {
 	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-	}    
+	}
+    
     
     closeModal() {
         $("#downloadConfirmation").modal("hide");
@@ -215,7 +236,7 @@ export class PolistComponent implements OnInit {
 			this.poStatusList = response;
 			this.poStatusList = this.poStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		},err => {
-			this.isSpinnerVisible = false;					
+			this.isSpinnerVisible = false;				
 		});
     }
     errorMessageHandler(log) {
@@ -232,12 +253,14 @@ export class PolistComponent implements OnInit {
         this.pageIndex = 0;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = this.pageIndex;
-        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, pageIndex: 1 };             
+        this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status, pageIndex: 1 }; 
+            
         this.isSpinnerVisible = true;     
         this.getList(this.lazyLoadEventDataInput);
 
     }
     restorerecord: any = {}
+
     restoreRecord() {
         this.commonService.updatedeletedrecords('PurchaseOrder', 'PurchaseOrderId', this.restorerecord.purchaseOrderId).subscribe(res => {
             this.getDeleteListByStatus(true)
@@ -249,11 +272,12 @@ export class PolistComponent implements OnInit {
     }
     restore(content, rowData) {
         this.restorerecord = rowData;
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });       
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
     dismissModel() {
         this.modal.close();
     }
+
     getList(data) {
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete;
@@ -263,10 +287,14 @@ export class PolistComponent implements OnInit {
             const vList  = res['results'].map(x => {
                 return {
                     ...x,
-                    openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
-                    closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
-                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
+                //     closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
+                //     createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                       openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',
+                       closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MMM-dd-yyyy'): '',
+                       createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                       updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 }
             });  
             this.data = vList;
@@ -291,21 +319,187 @@ export class PolistComponent implements OnInit {
                     this.ApprovedstatusId = x.value;
 				}
             },err => {
-                this.isSpinnerVisible = false;              	
+                this.isSpinnerVisible = false;               
             });
 		});
     }
+    
+    // getApprovalProcessListById(poId) {
+	// 	this.isSpinnerVisible = true;	
+	// 	this.purchaseOrderService.getPOApprovalListById(poId).subscribe(res => {
+	// 		const arrayLen = res.length;
+	// 		let count = 0;
+	// 		this.approvalProcessList = res.map(x => {
+	// 			if(x.actionId == this.ApprovedstatusId) {
+	// 				count++;
+	// 			}				
+	// 			return {
+	// 				...x,
+	// 				sentDate: x.sentDate ? new Date(x.sentDate) : null, 				 
+	// 				approvedDate: x.approvedDate ? new Date(x.approvedDate) : null,
+	// 				unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+	// 				extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
+	// 			}
+	// 		});
+	// 		if(this.approvalProcessList && this.approvalProcessList.length > 0) {
+	// 		var approvalProcessListWithChild:any[] = [];
+	// 		this.approvalProcessList = this.approvalProcessList.forEach(element => {
+	// 			if(element.isParent) {
+	// 				approvalProcessListWithChild.push(element);
+    //                 this.approvalProcessList.filter(x => x.parentId == element.purchaseOrderPartId).forEach(
+	// 					child => {
+	// 						approvalProcessListWithChild.push(child);
+	// 					}
+	// 				);
+	// 			}
+	// 		});
+	// 		this.approvalProcessList = approvalProcessListWithChild;	
+	// 			}	
+	// 		this.isSpinnerVisible = false; 
+	// 	}, err => {
+	// 		this.isSpinnerVisible = false;						
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);						
+	// 	});
+	// }
+
+    // getApprovalProcessListById(poId) {
+	// 	this.isSpinnerVisible = true;		
+	// 	this.purchaseOrderService.getPOApprovalListById(poId).subscribe(res => {
+	// 		const arrayLen = res.length;
+	// 		let count = 0;
+	// 		this.approvalProcessList = res.map(x => {
+	// 			if(x.actionId == this.ApprovedstatusId) {
+	// 				count++;
+	// 			}				
+	// 			return {
+	// 				...x,
+	// 				sentDate: x.sentDate ? new Date(x.sentDate) : null, 
+	// 				approvedDate: x.approvedDate ? new Date(x.approvedDate) : null,
+	// 				unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+	// 				extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
+	// 			}
+	// 		});
+	// 		this.isSpinnerVisible = false;
+	// 	}, err => {
+    //         this.isSpinnerVisible = false;
+    //         const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);
+	// 	})
+    // }
+    
+    // getManagementStructureCodes(id) {
+    //     this.commonService.getManagementStructureCodes(id).subscribe(res => {
+	// 		if (res.Level1) {
+	// 			this.headerManagementStructure.level1 = res.Level1;
+    //         } else {
+    //             this.headerManagementStructure.level1 = '-';
+    //         }
+    //         if (res.Level2) {
+	// 			this.headerManagementStructure.level2 = res.Level2;
+    //         } else {
+    //             this.headerManagementStructure.level2 = '-';
+    //         }
+    //         if (res.Level3) {
+	// 			this.headerManagementStructure.level3 = res.Level3;
+    //         } else {
+    //             this.headerManagementStructure.level3 = '-';
+    //         }
+    //         if (res.Level4) {
+	// 			this.headerManagementStructure.level4 = res.Level4;
+	// 		} else {
+    //             this.headerManagementStructure.level4 = '-';
+    //         }
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
+
+    // getManagementStructureNameandCodes(id) {
+    //     this.commonService.getManagementStructureNameandCodes(id).subscribe(res => {
+	// 		if (res.Level1) {
+	// 			this.headerManagementStructureWithName.level1 = res.Level1;
+    //         } else {
+    //             this.headerManagementStructureWithName.level1 = '-';
+    //         }
+    //         if (res.Level2) {
+	// 			this.headerManagementStructureWithName.level2 = res.Level2;
+    //         } else {
+    //             this.headerManagementStructureWithName.level2 = '-';
+    //         }
+    //         if (res.Level3) {
+	// 			this.headerManagementStructureWithName.level3 = res.Level3;
+    //         } else {
+    //             this.headerManagementStructureWithName.level3 = '-';
+    //         }
+    //         if (res.Level4) {
+	// 			this.headerManagementStructureWithName.level4 = res.Level4;
+	// 		} else {
+    //             this.headerManagementStructureWithName.level4 = '-';
+    //         }
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
+    
+    // getManagementStructureCodesParent(partList) {
+    //     this.commonService.getManagementStructureNameandCodes(partList.managementStructureId).subscribe(res => {
+	// 		if (res.Level1) {
+	// 			partList.level1 = res.Level1;
+    //         }
+    //         if (res.Level2) {
+	// 			partList.level2 = res.Level2;
+    //         }
+    //         if (res.Level3) {
+	// 			partList.level3 = res.Level3;
+    //         }
+    //         if (res.Level4) {
+	// 			partList.level4 = res.Level4;
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
+
+    // getManagementStructureCodesChild(partChild) {
+    //     this.commonService.getManagementStructureNameandCodes(partChild.managementStructureId).subscribe(res => {
+	// 		if (res.Level1) {
+	// 			partChild.level1 = res.Level1;
+    //         }
+    //         if (res.Level2) {
+	// 			partChild.level2 = res.Level2;
+    //         }
+    //         if (res.Level3) {
+	// 			partChild.level3 = res.Level3;
+    //         }
+    //         if (res.Level4) {
+	// 			partChild.level4 = res.Level4;
+	// 		}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
+
     columnsChanges() {
         this.refreshList();
     }
     refreshList() {
         this.table.reset();
     }
-    loadData(event) {     
+    loadData(event) {
+        //this.lazyLoadEventData = null;
         this.isSpinnerVisible = true;
         this.lazyLoadEventData = event;
         this.pageIndex =  parseInt(event.first) / event.rows;
@@ -328,7 +522,25 @@ export class PolistComponent implements OnInit {
             }
         }
     }
+
     
+	// openVendorCapesHistory(row) {
+    //     this.isSpinnerVisible = true;
+    //     this.vendorService.getVendorCapabilityAuditHistory(row.vcId, this.poHeaderAdd.vendorId).subscribe(res => {
+           
+    //         this.capabilityauditHistory = res.map(x => {
+	// 			return {
+	// 				...x,
+	// 				cost: x.cost ? formatNumberAsGlobalSettingsModule(x.cost, 2) : '0.00'
+	// 			}
+    //         });
+    //         this.isSpinnerVisible = false;
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
 
     onChangeInputField(value, field, el) {       
         if (value === '') { el.classList.add("hidePlaceHolder"); }
@@ -462,47 +674,148 @@ export class PolistComponent implements OnInit {
             this.getList(this.lazyLoadEventData);
             this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;				
+			this.isSpinnerVisible = false;					
 		});
     }
 
-    viewSelectedRow(rowData) {       
+    // viewSelectedRow(rowData) {		
+    //   	this.loadingIndicator = true;
+    //     this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
+    //     this.getPOViewById(rowData.purchaseOrderId);
+    //     this.getPOPartsViewById(rowData.purchaseOrderId);
+    //     this.getApproversListById(rowData.purchaseOrderId);
+    //     this.getApprovalProcessListById(rowData.purchaseOrderId);  
+    //     this.tabindex = 0;
+    //     if(rowData.vendorId) {
+	// 		setTimeout(() => {
+    //             this.isPoViewMode = true;
+    //             this.vendorId = rowData.vendorId;    
+    //             this.capvendorId = rowData.vendorId;            
+	// 			this.warnings(rowData.vendorId);
+	// 		}, 1200);
+    //     }        
+    // }
+
+    viewSelectedRow(rowData) {
+        //this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
         this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
         this.modal.componentInstance.OrderId = rowData.purchaseOrderId;        
         this.modal.componentInstance.OrderType = 'Purchase Order';
         this.modal.componentInstance.PovendorId = rowData.vendorId;
-        this.warningsandRestriction(rowData.vendorId);
     }
 
-    //#region All Binding 
+    WarningsList: any;
+	WarningListId:any;
+	getWarningsList(): void {
+		this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name').subscribe(res => {
+			res.forEach(element => {
+				if (element.label == 'Create Purchase Order') {
+					this.WarningListId = element.value;
+					return;
+				}
+			});
+		},err => {
+			this.isSpinnerVisible = false;				
+		}); 
+	}   
     warningMessage:any;
 	warningID:any = 0;
-    isEditWork:any = false;
-	restrictID:any = 0;
-	restrictMessage:any;
-	WarningsList: any;
-	WarningListId:any;
-	warningsandRestriction(Id) {       
-            this.WarningListId = VendorWarningEnum.Create_Purchase_Requisition;
-            if (Id && this.WarningListId) {
-                this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
-                    if (res) {
-                        if(res.warning) {
-                        this.warningMessage = res.warningMessage;
-                        this.warningID = res.vendorWarningId;
-                        this.restrictID == 0;
-                       }                       
-                    }
-                },err => {
-                    this.isSpinnerVisible = false;                   
-                });
-            }
-    } 
-    
-    viewSelectedRowdbl(rowData) {       
+    warnings(Id) {		
+		if (Id) {
+			this.commonService.vendorWarnings(Id, this.WarningListId).subscribe((res: any) => {
+				if (res) {
+					this.warningMessage = res.warningMessage;
+					this.warningID = res.vendorWarningId;
+				}				
+			},err => {
+				this.isSpinnerVisible = false;					
+			});
+		}
+	}
+
+    viewSelectedRowdbl(rowData) {
+       
         this.viewSelectedRow(rowData);
+        //$('#poView').modal('show');
     }
 
+    // getPOViewById(poId) {
+    //     this.purchaseOrderService.getPOViewById(poId).subscribe(res => {            
+    //         this.poHeaderAdd = {
+    //             ...res,
+    //             shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
+    //             handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
+    //         };
+    //         this.getVendorCapesByID(this.poHeaderAdd.vendorId);
+    //         this.getManagementStructureCodes(res.managementStructureId);
+    //         this.getManagementStructureNameandCodes(res.managementStructureId);
+            
+    //     },err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
+    // getPOPartsViewById(poId) {
+    //     this.poPartsList = [];
+    //     this.purchaseOrderService.getPOPartsViewById(poId).subscribe(res => {           
+    //         res.map(x => {
+    //             const partList = {
+    //                 ...x,
+    //                 unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+    //                 vendorListPrice: x.vendorListPrice ? formatNumberAsGlobalSettingsModule(x.vendorListPrice, 2) : '0.00',
+    //                 discountPercent: x.discountPercent ? formatNumberAsGlobalSettingsModule(x.discountPercent, 2) : '0.00',
+    //                 discountPerUnit: x.discountPerUnit ? formatNumberAsGlobalSettingsModule(x.discountPerUnit, 2) : '0.00',
+    //                 discountAmount: x.discountAmount ? formatNumberAsGlobalSettingsModule(x.discountAmount, 2) : '0.00',
+    //                 extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
+    //                 foreignExchangeRate: x.foreignExchangeRate ? formatNumberAsGlobalSettingsModule(x.foreignExchangeRate, 5) : '0.00',
+    //                 purchaseOrderSplitParts: this.getPurchaseOrderSplit(x)              
+    //             }
+    //             this.getManagementStructureCodesParent(partList);
+    //             this.poPartsList.push(partList);
+    //         });
+    //     },err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+    // }
+
+    // getPurchaseOrderSplit(partList) {
+    //     if(partList.purchaseOrderSplitParts) {
+	// 		return partList.purchaseOrderSplitParts.map(y => {
+	// 			const splitpart = {
+	// 				...y,					
+	// 			}
+	// 			this.getManagementStructureCodesChild(splitpart);
+	// 			return splitpart;
+	// 		})
+	// 	}
+    // }
+
+    // getApproversListById(poId) {	
+	// 	this.isSpinnerVisible = true;
+	// 	if(this.poApprovaltaskId == 0) {
+	// 	this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
+	// 	if(response) {					
+    //         response.forEach(x => {
+    //             if (x.label.toUpperCase() == "PO APPROVAL") {
+    //                 this.poApprovaltaskId = x.value;
+    //             }              
+	// 		});
+	// 		this.getApproversByTask(poId)
+	// 	}
+	// 	},err => {
+	// 		this.isSpinnerVisible = false;
+	// 		const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);		
+	// 	});
+	// 	}
+	// 	else {
+	// 		this.getApproversByTask(poId)
+	// 	}
+		
+	// }
 	getApproversByTask(poId) {
 		this.isSpinnerVisible = true;
 		this.purchaseOrderService.approverslistbyTaskId(this.poApprovaltaskId, poId).subscribe(res => {
@@ -513,7 +826,49 @@ export class PolistComponent implements OnInit {
 							 this.isSpinnerVisible = false;
 						 });
 
-	}    
+	}
+	
+
+    // getApproversListById(poId) {
+    //     this.isSpinnerVisible = true;
+    //     if(this.poApprovaltaskId == 0) {
+    //         this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
+    //         if(response) {					
+    //             response.forEach(x => {
+    //                 if (x.label.toUpperCase() == "PO APPROVAL") {
+    //                     this.poApprovaltaskId = x.value;
+    //                 }              
+    //             });
+    //         }
+    //         },err => {
+    //             this.isSpinnerVisible = false;
+    //             const errorLog = err;
+    //             this.errorMessageHandler(errorLog);		
+    //         });
+    //         }
+	// 	this.purchaseOrderService.getPOTotalCostById(poId).subscribe(res => {
+	// 		if(res) {
+	// 			this.poTotalCost = res.totalCost;				
+	// 			this.purchaseOrderService.getApproversListByTaskIdModuleAmt(this.poApprovaltaskId, this.poTotalCost).subscribe(res => {
+	// 				this.internalApproversList = res;
+	// 			})
+	// 		}
+	// 		this.isSpinnerVisible = false;
+	// 	}, err => {
+    //         this.isSpinnerVisible = false;
+    //         const errorLog = err;
+	// 		this.errorMessageHandler(errorLog);
+    //     });
+    // }
+
+    getVendorCapesByID(vendorId) {
+        this.vendorCapesInfo = [];
+		this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
+			this.vendorCapesInfo = res;
+		}, err => {
+            this.isSpinnerVisible = false;           
+        });
+	}
     
     globalSearch(value) {        
         this.pageIndex =this.lazyLoadEventDataInput.rows > 10 ? parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows : 0;
@@ -554,9 +909,7 @@ export class PolistComponent implements OnInit {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
     }
     getColorCodeForHistory(i, field, value) {
@@ -593,9 +946,42 @@ export class PolistComponent implements OnInit {
 
     closeDeleteModal() {
         $("#poDelete").modal("hide");
-    }  
+    }    
 
-  
+    // viewSelectedCapsRow(rowData) {       
+    //     const {vcId} = rowData;
+    //     this.getVendorCapabilitiesView(vcId);     
+    //     this.getVendorCapesAircraftView(vcId);     
+    // }
+    
+    getVendorCapabilitiesView(vendorCapesId) {
+		this.vendorCapesService.getVendorCapabilitybyId(vendorCapesId).subscribe(res => {			
+			this.vendorCapesGeneralInfo = {
+				...res,
+				cost: res.cost ? formatNumberAsGlobalSettingsModule(res.cost, 2) : '0.00'
+			};
+		},err => {
+			this.isSpinnerVisible = false;			
+		});
+	}
+
+
+	getVendorCapesAircraftView(vendorCapesId) {
+		this.vendorCapesService.getVendorAircraftGetDataByCapsId(vendorCapesId).subscribe(res => {          
+            this.aircraftListDataValues = res.map(x => {
+                return {
+                    ...x,
+                    aircraft: x.aircraftType,
+                    model: x.aircraftModel,
+                    dashNumber: x.dashNumber,
+                    memo: x.memo,
+                }
+            })
+		}, err => {
+            this.isSpinnerVisible = false;           
+        });
+    }
+    
     formatePrice(value) {
         if(value){
             return formatNumberAsGlobalSettingsModule(value, 2);
@@ -663,7 +1049,7 @@ export class PolistComponent implements OnInit {
             dt.value = vList;
             this.isSpinnerVisible = false;           
         }, err => {
-            this.isSpinnerVisible = false;    
+            this.isSpinnerVisible = false;  
         });
 	
     }

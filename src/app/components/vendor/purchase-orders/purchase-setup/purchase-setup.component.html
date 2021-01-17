@@ -379,7 +379,7 @@
                                 <th>Item Type</th>
                                 <th>GL Account</th>
                                 <th>UOM</th>                                
-                                <th colspan="4">Management Structure <span class="clr-red">*</span></th>
+                                <th class="msHeader" colspan="4">Management Structure <span class="clr-red">*</span></th>
                                 <th>Notes</th>
                             </tr>
                         </thead>
@@ -895,8 +895,8 @@
             <table class="table table-bordered header-table-width">
                     <thead>
                         <tr class="pad_workflo">
-                            <th class="approver-th-align">
-                                <input type="checkbox" (click)="selectAllApproval(selectallApprovers)" [(ngModel)]="selectallApprovers" [disabled]="disableApproverSelectAll" /> Select All
+                            <th class="approver-th-align th-width" >
+                                <input type="checkbox" (click)="selectAllApproval(selectallApprovers)" [(ngModel)]="selectallApprovers" [disabled]="disableApproverSelectAll" /> 
                             </th>
                              <th class="approver-th-align approver-display" style="display: none;">
                                 Split Shipment
@@ -904,11 +904,10 @@
                             <th *ngFor="let header of approvalProcessHeader">
                                 {{header.header}}
                             </th>
-                        </tr>
-                    </thead>
+                        </tr>                    </thead>
                     <tbody>
                         <tr *ngFor="let approver of approvalProcessList; let i=index;"  [ngStyle]="{'background-color':approver.isParent === false ? '#fafafa' : 'white' }"  >
-                            <td class="approver-process-td">                             
+                            <td style="text-align: center;"  >                             
                                 <input *ngIf="approver.isParent" type="checkbox" [(ngModel)]="approver.isSelected" (change)="selectApproval(approver)" [disabled]= "!getPartToDisableOrNot(approver)" />
                             </td>
                             <td class="approver-process-td approver-display" >
