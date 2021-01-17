@@ -662,6 +662,7 @@ export class SalesOrderPartNumberComponent {
           `PN  updated successfully.`,
           MessageSeverity.success
         );
+        this.saveButton = true;
         this.onPartsSavedEvent.emit(this.selectedParts);
       }, error => {
         this.isSpinnerVisible = false;
