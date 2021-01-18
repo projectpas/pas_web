@@ -21,8 +21,8 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div *ngIf="toggle_wf_header">
+        <div class="card-body" *ngIf="toggle_wf_header">
+            <div >
                 <div class="form-row">
                     <div class="col-md-6 wf-h-col">
                         <div class="form-row">
@@ -55,7 +55,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="description">Workflow Description</label>
-                                    <input type="text" class="form-control" id="description"
+                                    <input type="text" class="form-control" id="description" 
                                         [(ngModel)]="sourceWorkFlow.workflowDescription" (change)="checkEnableUpdate()">
                                 </div>
                             </div>
@@ -77,8 +77,10 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="changepn">Changed PN</label>
-                                    <p class="c-workflow-select">
+                                    <label for="changepn">Revised PN</label>
+                                    <input type="text" class="form-control" id="revisedPartNumber" 
+                                    [(ngModel)]="sourceWorkFlow.revisedPartNumber" [disabled]="true">
+                                    <!-- <p class="c-workflow-select">
                                         <p-autoComplete appendTo="body" [(ngModel)]="sourceWorkFlow.changedPart"
                                             [suggestions]="changedPartCollection"
                                             (completeMethod)="filterChangedPartItems($event)" [size]="32"
@@ -87,7 +89,7 @@
                                             (onSelect)="onChangedPartSelect($event)" [forceSelection]="true" title="PN"
                                             required>
                                         </p-autoComplete>
-                                    </p>
+                                    </p> -->
                                 </div>
                             </div>
                         </div>
@@ -165,6 +167,139 @@
                                     </p>
                                 </div>
                             </div>
+                        </div>
+                        <div>
+                            <h4 class="total-wf-cost">Total Workflow Cost</h4>
+                            <div class="form-row mar-top-10 total-wf-cost-form">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Material Cost</label>
+                                        <input type="text" class="form-control text-right" [(ngModel)]="MaterialCost" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Expertise Cost</label>
+                                        <input type="text" class="form-control text-right" [(ngModel)]="TotalExpertiseCost" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Charges</label>
+                                        <input type="text" class="form-control text-right" [(ngModel)]="TotalCharges" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Other</label>
+                                        <input type="text" class="form-control text-right" (change)="onChangeOtherCost()" pInputText pKeyFilter="money" (ngModelChange)="checkEnableUpdate()" [(ngModel)]="sourceWorkFlow.otherCost" />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Total</label>
+                                        <input type="text" class="form-control text-right" [(ngModel)]="Total" value="" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>% of BER Threshold</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mar-top-10 total-wf-cost-form">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <select (ngModelChange)="checkEnableUpdate()" [(ngModel)]="sourceWorkFlow.percentageOfMaterial" class="form-control" 
+                                            (change)="onMaterialCostChange(sourceWorkFlow.percentageOfMaterial,'html');">
+                                            <option value="-1">--Select--</option>
+                                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
+                                                {{percent.label}}%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <select (ngModelChange)="checkEnableUpdate()" [(ngModel)]="sourceWorkFlow.percentageOfExpertise" class="form-control"
+                                        (change)="onExpertiseCostChange(sourceWorkFlow.percentageOfExpertise,'html');">
+                                            <option value="-1">--Select--</option>
+                                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
+                                                {{percent.label}}%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <select (ngModelChange)="checkEnableUpdate()" [(ngModel)]="sourceWorkFlow.percentageOfCharges" class="form-control"
+                                        (change)="onChargesChange(sourceWorkFlow.percentageOfCharges,'html');">
+                                            <option value="-1">--Select--</option>
+                                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
+                                                {{percent.label}}%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <select (ngModelChange)="checkEnableUpdate()" [(ngModel)]="sourceWorkFlow.percentageOfOthers" class="form-control"
+                                        (change)="onOtherChange(sourceWorkFlow.percentageOfOthers,'html');">
+                                            <option value="-1">--Select--</option>
+                                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
+                                                {{percent.label}}%</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <!-- <select [(ngModel)]="sourceWorkFlow.percentageOfTotal" class="form-control"
+                                        (change)="onTotalChange(sourceWorkFlow.percentageOfTotal);">
+                                            <option value="-1">--Select--</option>
+                                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
+                                                {{percent.label}}%</option>
+                                        </select> -->
+                                        <input type="text" class="form-control text-right" [(ngModel)]="sourceWorkFlow.totPer" disabled />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mar-top-10 total-wf-cost-form">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control text-right" [(ngModel)]="EstMaterialCost" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control text-right" [(ngModel)]="EstTotalExpertiseCost"
+                                            disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control text-right" [(ngModel)]="EstTotalCharges" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control text-right" [(ngModel)]="EstTotalOthers" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control text-right" [(ngModel)]="TotalEst" value="" disabled />
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <input type="number" class="form-control" [(ngModel)]="PercentBERThreshold" value="" disabled />
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-2">
+                                    <div class="form-group">
+                                        <button class="btn btn-primary" (click)="calculateTotalWorkFlowCost(true)">Calculate Total
+                                            Workflow Cost</button>
+                                    </div>
+                                </div> -->
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -330,148 +465,20 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div *ngIf="toggle_wf_header " style="margin-top: 15px;"></div>
-            <h4 class="total-wf-cost">Total Workflow Cost</h4>
-            <div class="form-row mar-top-10 total-wf-cost-form">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Material Cost</label>
-                        <input type="text" class="form-control text-right" [(ngModel)]="MaterialCost" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Expertise Cost</label>
-                        <input type="text" class="form-control text-right" [(ngModel)]="TotalExpertiseCost" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Charges</label>
-                        <input type="text" class="form-control text-right" [(ngModel)]="TotalCharges" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Other</label>
-                        <input type="text" class="form-control text-right" (change)="onChangeOtherCost()" pInputText pKeyFilter="money" [(ngModel)]="sourceWorkFlow.otherCost" />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>Total</label>
-                        <input type="text" class="form-control text-right" [(ngModel)]="Total" value="" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <label>% of BER Threshold</label>
+                <div class="pull-right">
+                    <div class="form-row pull-right" *ngIf="!isWorkOrder">
+                        <div class="form-group col-md-4" style="margin-top: 15px;">
+                            <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="!UpdateMode"
+                                (click)="addWorkFlow(true)">Save</button>
+                            <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="UpdateMode"
+                                [disabled]="disableUpdateButton"
+                                (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="form-row mar-top-10 total-wf-cost-form">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select [(ngModel)]="sourceWorkFlow.percentageOfMaterial" class="form-control" 
-                            (change)="onMaterialCostChange(sourceWorkFlow.percentageOfMaterial);">
-                            <option value="-1">--Select--</option>
-                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
-                                {{percent.label}}%</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select [(ngModel)]="sourceWorkFlow.percentageOfExpertise" class="form-control"
-                        (change)="onExpertiseCostChange(sourceWorkFlow.percentageOfExpertise);">
-                            <option value="-1">--Select--</option>
-                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
-                                {{percent.label}}%</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select [(ngModel)]="sourceWorkFlow.percentageOfCharges" class="form-control"
-                        (change)="onChargesChange(sourceWorkFlow.percentageOfCharges);">
-                            <option value="-1">--Select--</option>
-                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
-                                {{percent.label}}%</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select [(ngModel)]="sourceWorkFlow.percentageOfOthers" class="form-control"
-                        (change)="onOtherChange(sourceWorkFlow.percentageOfOthers);">
-                            <option value="-1">--Select--</option>
-                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
-                                {{percent.label}}%</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <select [(ngModel)]="sourceWorkFlow.percentageOfTotal" class="form-control"
-                        (change)="onTotalChange(sourceWorkFlow.percentageOfTotal);">
-                            <option value="-1">--Select--</option>
-                            <option *ngFor="let percent of totalPercent" [ngValue]="percent.value">
-                                {{percent.label}}%</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-row mar-top-10 total-wf-cost-form">
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <input type="text" class="form-control text-right" [(ngModel)]="EstMaterialCost" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <input type="text" class="form-control text-right" [(ngModel)]="EstTotalExpertiseCost"
-                            disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <input type="text" class="form-control text-right" [(ngModel)]="EstTotalCharges" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <input type="text" class="form-control text-right" [(ngModel)]="EstTotalOthers" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <input type="text" class="form-control text-right" [(ngModel)]="TotalEst" value="" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <input type="number" class="form-control" [(ngModel)]="PercentBERThreshold" value="" disabled />
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="form-group">
-                        <button class="btn btn-primary" (click)="calculateTotalWorkFlowCost(true)">Calculate Total
-                            Workflow Cost</button>
-                    </div>
-                </div>
-            </div>
-            <div class="pull-right">
-                <div class="form-row pull-right" *ngIf="!isWorkOrder">
-                    <div class="form-group col-md-4" style="margin-top: 15px;">
-                        <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="!UpdateMode"
-                            (click)="addWorkFlow(true)">Save</button>
-                        <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="UpdateMode"
-                            [disabled]="disableUpdateButton"
-                            (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
-                    </div>
-                </div>
-            </div>
+            <!-- <div *ngIf="toggle_wf_header " style="margin-top: 15px;"></div> -->
+
         </div>
     </div>
 
@@ -750,18 +757,19 @@
         <div class="modal-dialog modal-sm" style="text-align: center;">
             <!-- Modal content-->
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header" style="text-align:start;">
                     <h4 class="modal-title"  style="text-align: left;">Do you want to increase the Workflow Version?</h4>
                     <button type="button" class="close" data-dismiss="modal">
                         &times;
                     </button>
                 </div>
-                <div class="modal-body table-responsive">
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal"
+                <div class="modal-body table-responsive" style="text-align:end;margin-top
+                :15px;">
+                    <button class="btn btn-primary " data-dismiss="modal"
                         (click)="increaseVerConfirmation(true)" style="padding: 6px 12px !important;">
                         YES
                     </button>
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal"
+                    <button class="btn btn-danger " data-dismiss="modal"
                         style="padding: 6px 12px !important;" (click)="increaseVerConfirmation(false)">
                         NO
                     </button>

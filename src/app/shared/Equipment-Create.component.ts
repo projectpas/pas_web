@@ -1,15 +1,13 @@
-import { Component, Input, OnChanges, OnInit, EventEmitter, Output, AfterContentChecked, AfterViewInit, DoCheck } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
 import { IEquipmentAssetType } from "../Workflow/EquipmentAssetType";
-import { IEquipmentList } from "../Workflow/EquipmentList";
 import { VendorService } from "../services/vendor.service";
-import { ItemMasterService } from "../services/itemMaster.service";
 import { AssetService } from "../services/asset/Assetservice";
 import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
     selector: 'grd-equipment',
     templateUrl: './Equipment-Create.component.html',
@@ -42,9 +40,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     currentPage: number = 1;
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
-
+    modal: NgbModalRef;
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
-        private actionService: ActionService, private vendorService: VendorService, 
+        private actionService: ActionService, private vendorService: VendorService, private modalService: NgbModal,
         private assetService: AssetService, private alertService: AlertService) {
     }
 
@@ -114,14 +112,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         this.workFlow.equipments.push(newRow);
     }
 
-    deleteRow(index): void {
-        if (this.workFlow.equipments[index].workflowEquipmentListid == undefined || this.workFlow.equipments[index].workflowEquipmentListid == "0" || this.workFlow.equipments[index].workflowEquipmentListid == "") {
-            this.workFlow.equipments.splice(index, 1);
-        }
-        else {
-            this.workFlow.equipments[index].isDelete = true;
-        }
-    }
+
 
     onPartSelect(event, equipment) {
         if (this.itemclaColl) {
@@ -250,4 +241,25 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             );
         }
     }
+    dismissModel() {
+        this.modal.close();
+    }
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.equipments[this.deletedRowIndex].workflowEquipmentListid == undefined || this.workFlow.equipments[this.deletedRowIndex].workflowEquipmentListid == "0" || this.workFlow.equipments[this.deletedRowIndex].workflowEquipmentListid == "") {
+            this.workFlow.equipments.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.equipments[this.deletedRowIndex].isDelete = true;
+        }
+        this.dismissModel();
+    }
+  
 }

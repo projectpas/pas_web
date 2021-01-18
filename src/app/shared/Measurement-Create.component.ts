@@ -10,7 +10,7 @@ import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { CommonService } from "../services/common.service";
 declare var $ : any;
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 
 @Component({ 
     selector: 'grd-measurement',
@@ -93,10 +93,11 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             //         }
             //     };
             // }
-            measurement.partNumber = event.partId;
+            measurement.itemMasterId = event.partId;
+            measurement.partNumber = event.partNumber;
                         measurement.partDescription = event.partDescription;
         }
-    }
+    } 
 
     loapartItems(strvalue = '', initialCall = false) {
         this.isSpinnerVisible = true;
