@@ -480,13 +480,11 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         { field: 'fileName', header: 'File Name' },
     ]
     customerDocumentsColumns = [
-
         { field: 'docName', header: 'Name' },
         { field: 'docDescription', header: 'Description' },
         { field: 'docMemo', header: 'Memo' },
         { field: 'fileName', header: 'File Name' },
         { field: 'fileSize', header: 'File Size' },
-
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedBy', header: 'Updated By' },
         { field: 'createdDate', header: 'Created Date' },
@@ -4154,7 +4152,6 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                     );
                     this.disablepurchaseSales = true;
                     this.getPurchaseSalesDetailById(ItemMasterID);
-                    //this.exchLoan.loadData(this.ItemMasterId);
                 },
                 error => this.saveFailedHelper(error))
             }
@@ -4204,16 +4201,7 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
                 `Saved Export Information Successfully `,
                 MessageSeverity.success
             );
-            // if(field == 'save')
-            // {
-                this.router.navigate(['itemmastersmodule/itemmasterpages/app-item-master-list'])
-            // }
-            // else
-            // {
-            //     this.currentTab = 'General';
-            //     this.activeMenuItem = 1;
-            //     this.router.navigate(['itemmastersmodule/itemmasterpages/app-item-master-stock'])
-            // }
+            this.router.navigate(['itemmastersmodule/itemmasterpages/app-item-master-list'])
         })
     }
     saveandcreate(exportInfoormatiom) {

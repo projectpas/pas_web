@@ -27,11 +27,11 @@ export class ItemMasterEndpoint extends EndpointFactory {
     private readonly _partUrl: string = "/api/ItemMaster/GetParntnumberlist";
     private readonly _getCountryTypeUrl: string = "/api/ItemMaster/GetCountries";
     private readonly _actionsUrlNew: string = environment.baseUrl + "/api/ItemMaster/itemMasterpost";
-    private readonly _itemMasterNonStockpost: string = "/api/ItemMaster/itemMasterNonStockpost";
+    private readonly _itemMasterNonStockpost: string = environment.baseUrl + "/api/ItemMaster/itemMasterNonStockpost";
     private readonly _mancapPost: string = "/api/ItemMaster/Mancapespost";
     private readonly _aircraftmodelsPost: string = "/api/ItemMaster/Aircraftpost";
     private readonly _updateDeleteStatus: string = environment.baseUrl + "/api/ItemMaster/updateDeleteStatus";
-    private readonly _updateDeleteStatusNonStock: string = "/api/ItemMaster/updateDeleteStatusNonStock";
+    private readonly _updateDeleteStatusNonStock: string = environment.baseUrl + "/api/ItemMaster/updateDeleteStatusNonStock";
     private readonly _manufactureNew: string = "/api/ItemMaster/manufacturerpost";
     private readonly _warnUrlNew: string = "/api/ItemMaster/warning";
     private readonly _getwarningUrl: string = "/api/ItemMaster/getwarning";
@@ -377,6 +377,14 @@ export class ItemMasterEndpoint extends EndpointFactory {
         return this.http.put<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.updateDeleteStatusNonStock(selectedvalues));
+            });
+    }
+
+    updateRestoreStatusNonStock<T>(selectedvalues: any): Observable<T> {
+        let url = `${this._updateRestoreStatusNonStock}/${selectedvalues}`;
+        return this.http.put<T>(url, this.getRequestHeaders())
+            .catch(error => {
+                return this.handleError(error, () => this.updateRestoreStatusNonStock(selectedvalues));
             });
     }
 

@@ -18,16 +18,6 @@
             </div>
         </div>
     </div>
-    <!-- <div class="form-group row form-bg">
-        <div class="col-sm-8 mleft25">
-            <label class="radio-inline">
-                <input type="radio" name="stock" (click)="stock()"> Stock
-            </label>
-            <label class="radio-inline" style="color: #fd6428; font-weight: bold;">
-                <input type="radio" name="stock" [checked]="true" (click)="nonStock()"> Non-Stock
-            </label>
-        </div>
-    </div> -->
     <div class="card new-card">
         <div class="card-header bg-primary">
           <div class="row">
@@ -38,14 +28,12 @@
               <button
                 type="button"
                 class="btn-sm new-btn-primary"
-                [routerLink]="['/itemmastersmodule/itemmasterpages/app-item-master-list']"
-              >
+                [routerLink]="['/itemmastersmodule/itemmasterpages/app-item-master-list']">
                 Item Master List
               </button>
             </div>
           </div>
         </div>
-    
     <div class="clear"></div>
     <br>
     <div class="pheading">
@@ -65,42 +53,27 @@
                             </ng-template>
                         </p-autoComplete>
                         <div *ngIf="disableSavePartName" style="color:red">Already Exist</div>
-                        <!-- <div *ngIf="disableSavepartNumber" style="color:red">Already Exists</div> -->
                         <label class="control-label">PN Description <strong class="clr-red">*</strong></label>
                         <p-autoComplete (onKeyUp)=descriptionHandler($event) (onSelect)="partdescriptionId($event)" [suggestions]="descriptionCollection" name="partdescription" (completeMethod)="filterdescription($event)" [(ngModel)]="sourceItemMaster.partdescription" [size]="30" [minLength]="1" [dropdown]="true" class="p-autoComplete-ctsm" (onClear)="onClearPNDesc()" required>
                             <ng-template let-partDescription pTemplate="item">
                                 <div class="ui-helper-clearfix">{{partDescription}}</div>
                             </ng-template>
                         </p-autoComplete>
-                        <!-- <div *ngIf="disableSavepartDescription" style="color:red">Already Exist</div> -->
                         <div class="inline-block display-flex">
                             <label class="control-label">
                                 Item Classification <strong class="clr-red">*</strong>
-                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addCustomerClass" matTooltip="Add Item Classification"  matTooltipPosition="above" (click)="itemclassification(contentEdit)"></i></span> -->
                             </label>
                         </div>
                         <div>
                             <p-dropdown class="p-dropdown-100" [options]="allitemNonStockclassificationInfo" filter="true" [(ngModel)]="sourceItemMaster.itemNonStockClassificationId" name="itemNonStockClassificationId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
-
-                            <!-- <select name="itemNonStockClassificationId" [(ngModel)]="sourceItemMaster.itemNonStockClassificationId" required>
-                                <option value="">-- Select --</option>
-                                <option *ngFor="let itemName of allitemNonStockclassificationInfo" [ngValue]="itemName.value">{{itemName.label}}</option>
-                            </select> -->
                         </div>
                         <div class="inline-block display-flex">
                             <label class="control-label">
                                 Item Group
-                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addCustomerClass" matTooltip="Add Item Group" matTooltipPosition="above" (click)="item(contentEdits)"></i></span> -->
                             </label>
                         </div>
                         <div>
                             <p-dropdown class="p-dropdown-100" [options]="allitemgroupobjInfo" filter="true" [(ngModel)]="sourceItemMaster.itemGroupId" name="itemGroupId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
-                            <!-- <select name="itemGroupId" [(ngModel)]="sourceItemMaster.itemGroupId">
-                                <option value="">-- Select --</option>
-                                <ng-container *ngFor="let itemGroupName of allitemgroupobjInfo">
-                                    <option  [ngValue]="itemGroupName.itemGroupId">{{itemGroupName.description}}</option>
-                                  </ng-container> 
-                             </select> -->
                         </div>
                         <div class="inline-block display-flex spacing-label" style="margin-top: 5px;">
                             <label class="control-label">Acquired?</label>
@@ -124,50 +97,25 @@
                         <div class="inline-block display-flex">
                             <label class="control-label control-item">
                                 Manufacturer <strong class="clr-red">*</strong>
-                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addCustomerClass" matTooltip="Add Manufacturer" matTooltipPosition="above" (click)="Mfacturer(modeledt)"></i></span> -->
                             </label>
                         </div>
                         <div>
                             <p-dropdown class="p-dropdown-100" [options]="allManufacturerInfo" filter="true" [(ngModel)]="sourceItemMaster.manufacturerId" name="manufacturerId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
-                            <!-- <select name="manufacturerId" [(ngModel)]="sourceItemMaster.manufacturerId" required>
-                                <option value="">-- Select --</option>
-                                <ng-container *ngFor="let name of allManufacturerInfo">
-                                    <option  [ngValue]="name.value">{{name.label}}</option>
-                                </ng-container>
-                            </select> -->
                         </div>
                         <label class="control-label control-item">Discount (%) on Purchases </label>
                         <p-dropdown class="p-dropdown-100" [options]="discDataList" filter="true" [(ngModel)]="sourceItemMaster.discountPurchasePercent" name="discountPurchasePercent" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
-                        <!-- <select name="discountPurchasePercent" class="select-drop" [(ngModel)]="sourceItemMaster.discountPurchasePercent" (change)="getSelectedValue($event.target.value)">
-                            <option value="">-- Select --</option>
-                            <option *ngFor="let number of discDataList" value="{{number.value}}">{{number.label}}</option>
-                        </select> -->
                         <div class="inline-block display-flex">
                             <label class="control-label control-item">
                                 GL Account <strong class="clr-red">*</strong>
-                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" [routerLink]="['/generalledgermodule/generalledgerpage/app-glaccount-create']"></i></span> -->
                             </label>
                         </div>
                         <p-dropdown class="p-dropdown-100" [options]="allGlInfo" filter="true" [(ngModel)]="sourceItemMaster.glAccountId" name="glAccountId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
-                        <!-- <select name="glAccountId" [(ngModel)]="sourceItemMaster.glAccountId" required>
-                            <option value="">-- Select --</option>
-                            <option class="form-control" *ngFor="let glAccounts of allGlInfo" [ngValue]="glAccounts.value">
-                                {{glAccounts.label}}
-                            </option>
-                        </select> -->
                         <div class="inline-block display-flex">
                             <label class="control-label control-item">
                                 Purchase UOM <strong class="clr-red">*</strong>
-                                <!-- <span style="margin-left:3px;margin-top:5px;cursor:pointer;"><i class="fa fa-plus-circle fa-lg" data-toggle="modal" data-target="#addPurchaseUom" matTooltip="Add UOM" matTooltipPosition="above" (click)="unitmeasure(conEdit)"></i></span> -->
                             </label>
                         </div>
                         <p-dropdown class="p-dropdown-100" [options]="allUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true" required></p-dropdown>
-                        <!-- <select name="purchaseUnitOfMeasureId" [(ngModel)]="sourceItemMaster.purchaseUnitOfMeasureId" required>
-                            <option value="">-- Select --</option>
-                            <ng-container *ngFor="let unitName of allUnitOfMeasureinfo">
-                                <option  [ngValue]="unitName.value">{{unitName.label}}</option>
-                            </ng-container>
-                        </select> -->
                         <div class="checkbox-cstm" style="margin-top: 14px;">
                             <label>
                                 <input type="checkbox" name="isHazardousMaterial"
@@ -182,10 +130,6 @@
                     <div class="form-group">
                         <label class="control-label">Currency </label>
                         <p-dropdown class="p-dropdown-100" [options]="allCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.currencyId" name="currencyId" [resetFilterOnHide]="true" placeholder="Select" [showClear]="true"></p-dropdown>
-                        <!-- <select name="currencyId" class="select-drop" [(ngModel)]="sourceItemMaster.currencyId">
-                            <option value="">-- Select --</option>
-                            <option *ngFor="let currencyName of allCurrencyInfo" [ngValue]="currencyName.value">{{currencyName.label}}</option>
-                        </select> -->
                         <label class="control-label">Unit Cost</label>
                         <input class="form-control text-right" type="text" name="unitCost" pKeyFilter="money" [(ngModel)]="sourceItemMaster.unitCost" (change)="onChangeUnitCost()">
                         <label class="control-label">List Price </label>
@@ -201,8 +145,6 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div>
                 <div>
-                    <!-- <div class="clear"></div>
-                    <hr> -->
                     <button type="submit" class="btn btn-primary pull-right submit-btn" (click)="editItemAndCloseModel()" [disabled]="!nonStockForm.valid || disableSavePartName">{{isEdit ? 'Update' : 'Save'}}</button>
                     <div class="clear"></div>
                 </div>
@@ -211,9 +153,6 @@
         </div>
 
     </form>
-
-    <!-- <div class="pull-right"> © 2018 <a href="#">PAS</a> </div> -->
-
 </div>
 
 <p-dialog header="Alert" [(visible)]="display" [modal]="true" [dismissableMask]="true" maximizedLeft="140px" maximizedTop="140px"
@@ -286,7 +225,6 @@
             </div>
         </form>
     </div>
-
 </ng-template>
 
 <ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
@@ -457,7 +395,6 @@
             </div>
         </form>
     </div>
-
 
 </ng-template>
 <ng-template #modeledt let-c="close" let-d="dismiss" style="width:auto">
