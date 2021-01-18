@@ -1,34 +1,16 @@
-﻿
-
-<!-- <div class="x_content"> -->
-    <!-- <div class="card">
-        <div class="card-header">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                    <li class="breadcrumb-item active" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} Asset Inventory</li>
-                </ol>
-            </nav>
-        </div> -->
-        <div class="x_content">
-               
-            <!-- <nav aria-label="breadcrumb">
-                <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                    <li class="breadcrumb-item active" aria-current="page">Asset Inventory</li>
-                    <li class="breadcrumb-item" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} Asset Inventory</li>
-                </ol>
-            </nav> -->
+﻿        <div class="x_content">
             <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
     <div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="header">
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading">
+          <h4 class="header-name">
               {{isEditMode ? 'Edit' : 'Create' }} Asset Inventory</h4>
         </div>
         <div>
           <button
             type="button"
-            class="btn-sm new-btn-primary"
+            class="btn-sm header-button"
             [routerLink]="[
             '/assetmodule/assetpages/app-asset-inventory-listing'
             ]"
@@ -454,7 +436,7 @@
 <!-- // calibration  , certification , inspection , verification -->
 
 <div class="form-row m-t-10" *ngIf="currentAsset.isTangible">
-        <div class="col-md-3" [ngClass]="(currentAsset.calibrationRequired) ? 'border-box-cstm' : ''" *ngIf="currentAsset.calibrationRequired" style="margin-top: 4px;">
+        <div class="col-md-3 align_jdust" [ngClass]="(currentAsset.calibrationRequired) ? 'border-box-cstm' : ''" *ngIf="currentAsset.calibrationRequired" style="margin-top: 4px;">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -581,7 +563,7 @@
             </ng-container>
         </div>                        
 
-        <div class="col-md-3" [ngClass]="(currentAsset.certificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.certificationRequired">
+        <div class="col-md-3 align_jdust" [ngClass]="(currentAsset.certificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.certificationRequired">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -647,7 +629,7 @@
             </ng-container>
         </div>
 
-        <div  class="col-md-3" [ngClass]="(currentAsset.inspectionRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.inspectionRequired">
+        <div  class="col-md-3 align_jdust" [ngClass]="(currentAsset.inspectionRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.inspectionRequired">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -717,7 +699,7 @@
             </ng-container>
         </div>                        
 
-        <div class="col-md-3" [ngClass]="(currentAsset.verificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.verificationRequired">
+        <div class="col-md-3 align_jdust" [ngClass]="(currentAsset.verificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.verificationRequired">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
