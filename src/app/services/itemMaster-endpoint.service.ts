@@ -45,7 +45,7 @@ export class ItemMasterEndpoint extends EndpointFactory {
     private readonly _listeqpmntUrl: string = "api/ItemMaster/GetEquipmentlist";
     private readonly _lisUrl: string = "/api/ItemMaster/GetDescriptionbypart";
     private readonly _updateActiveInactiveforstock: string = environment.baseUrl + "/api/ItemMaster/itemstockUpdateforActive";
-    private readonly _updateActiveInactiveforNonstock: string = "/api/ItemMaster/itemNonstockUpdateforActive";
+    private readonly _updateActiveInactiveforNonstock: string = environment.baseUrl + "/api/ItemMaster/itemNonstockUpdateforActive";
     private readonly _stocksUrlNew: string = environment.baseUrl + "/api/ItemMaster/itemMasterpost";
     private readonly _getIntegrationUrl: string = "/api/ItemMaster/IntegrationGet";
     private readonly _getItemGroupListEndPointUrl: string = "/api/Itemgroup/Get/"
@@ -377,14 +377,6 @@ export class ItemMasterEndpoint extends EndpointFactory {
         return this.http.put<T>(url, this.getRequestHeaders())
             .catch(error => {
                 return this.handleError(error, () => this.updateDeleteStatusNonStock(selectedvalues));
-            });
-    }
-
-    updateRestoreStatusNonStock<T>(selectedvalues: any): Observable<T> {
-        let url = `${this._updateRestoreStatusNonStock}/${selectedvalues}`;
-        return this.http.put<T>(url, this.getRequestHeaders())
-            .catch(error => {
-                return this.handleError(error, () => this.updateRestoreStatusNonStock(selectedvalues));
             });
     }
 
