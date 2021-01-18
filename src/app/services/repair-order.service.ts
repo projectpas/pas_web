@@ -104,8 +104,8 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.saveRepaireOrderSettings<any>(data);
   }
   
-  getRepairOrderSettingMasterData() {
-    return this.repairOrderEndpoint.getRepairOrderSettingMasterData();
+  getRepairOrderSettingMasterData(masterCompanyId) {
+    return this.repairOrderEndpoint.getRepairOrderSettingMasterData(masterCompanyId);
   }
 
   getAllEditID(reairOrderId) {

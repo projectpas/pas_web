@@ -236,9 +236,7 @@ export class PolistComponent implements OnInit {
 			this.poStatusList = response;
 			this.poStatusList = this.poStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
     }
     errorMessageHandler(log) {
@@ -269,16 +267,12 @@ export class PolistComponent implements OnInit {
             this.modal.close();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
     }
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        // this.modal.result.then(() => {           
-        // }, () => { })
     }
     dismissModel() {
         this.modal.close();
@@ -293,10 +287,14 @@ export class PolistComponent implements OnInit {
             const vList  = res['results'].map(x => {
                 return {
                     ...x,
-                    openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
-                    closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
-                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
+                //     closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
+                //     createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                       openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',
+                       closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MMM-dd-yyyy'): '',
+                       createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                       updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 }
             });  
             this.data = vList;
@@ -321,9 +319,7 @@ export class PolistComponent implements OnInit {
                     this.ApprovedstatusId = x.value;
 				}
             },err => {
-                this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
+                this.isSpinnerVisible = false;               
             });
 		});
     }
@@ -661,9 +657,7 @@ export class PolistComponent implements OnInit {
         this.purchaseOrderService.getPOStatus(rowData.purchaseOrderId, rowData.isActive, this.userName).subscribe(res => {
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;			
 		});
 
     }
@@ -680,9 +674,7 @@ export class PolistComponent implements OnInit {
             this.getList(this.lazyLoadEventData);
             this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});
     }
 
@@ -723,9 +715,7 @@ export class PolistComponent implements OnInit {
 				}
 			});
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		}); 
 	}   
     warningMessage:any;
@@ -738,9 +728,7 @@ export class PolistComponent implements OnInit {
 					this.warningID = res.vendorWarningId;
 				}				
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;					
 			});
 		}
 	}
@@ -878,9 +866,7 @@ export class PolistComponent implements OnInit {
 		this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
 			this.vendorCapesInfo = res;
 		}, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
 	}
     
@@ -923,9 +909,7 @@ export class PolistComponent implements OnInit {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
     }
     getColorCodeForHistory(i, field, value) {
@@ -977,9 +961,7 @@ export class PolistComponent implements OnInit {
 				cost: res.cost ? formatNumberAsGlobalSettingsModule(res.cost, 2) : '0.00'
 			};
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -996,9 +978,7 @@ export class PolistComponent implements OnInit {
                 }
             })
 		}, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
     }
     
@@ -1069,9 +1049,7 @@ export class PolistComponent implements OnInit {
             dt.value = vList;
             this.isSpinnerVisible = false;           
         }, err => {
-            this.isSpinnerVisible = false;           
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;  
         });
 	
     }

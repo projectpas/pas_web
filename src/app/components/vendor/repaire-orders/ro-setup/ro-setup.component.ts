@@ -506,7 +506,7 @@ export class RoSetupComponent implements OnInit {
         
 	}
 	getRepairOrderMasterData() {    
-        this.repairOrderService.getRepairOrderSettingMasterData().subscribe(res => {
+        this.repairOrderService.getRepairOrderSettingMasterData(this.currentUserMasterCompanyId).subscribe(res => {
             if (res) {
                 this.rosettingModel.repairOrderSettingId = res.repairOrderSettingId;
                 this.rosettingModel.IsResale = res.isResale;
