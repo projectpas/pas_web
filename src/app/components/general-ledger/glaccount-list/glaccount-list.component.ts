@@ -76,7 +76,6 @@ export class GlaccountListComponent implements OnInit {
   }
 
   confirmDelete(content, id) {
-    debugger;
     this.glaccountToRemove = Object.assign(
       {},
       this.glAccountList.filter(function (glAccount) {
@@ -86,7 +85,6 @@ export class GlaccountListComponent implements OnInit {
     this.modal = this.modalService.open(content, { size: "sm" });
   }
   removeAssetType(): void {
-    debugger;
     this.glAccountService
       .remove(this.glaccountToRemove.glAccountId)
       .subscribe((response) => {

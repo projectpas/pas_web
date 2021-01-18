@@ -124,24 +124,24 @@ export class SalesQuoteCreateComponent implements OnInit {
   bulist: any[] = [];
   divisionlist: any[] = [];
   private onDestroy$: Subject<void> = new Subject<void>();
-  @ViewChild("errorMessagePop",{static:false}) public errorMessagePop: ElementRef;
-  @ViewChild("closeQuotePopup",{static:false}) public closeQuotePopup: ElementRef;
-  @ViewChild("newQuoteCreatePopup",{static:false}) public newQuoteCreatePopup: ElementRef;
-  @ViewChild("copyQuotePopup",{static:false}) public copyQuotePopup: ElementRef;
-  @ViewChild("newSalesQuoteForm",{static:false}) public newSalesQuoteForm: NgForm;
-  @ViewChild("salesQuoteConvertPopup",{static:false}) public salesQuoteConvertPopup: ElementRef;
-  @ViewChild("emailQuotePopup",{static:false}) public emailQuotePopup: ElementRef;
-  @ViewChild("salesQuotePrintPopup",{static:false}) public salesQuotePrintPopup: ElementRef;
-  @ViewChild(SalesApproveComponent,{static:false}) public salesApproveComponent: SalesApproveComponent;
-  @ViewChild(SalesCustomerApprovalsComponent,{static:false}) public salesCustomerApprovalsComponent: SalesCustomerApprovalsComponent;
-  @ViewChild(SalesOrderQuoteFreightComponent,{static:false}) public salesOrderQuoteFreightComponent: SalesOrderQuoteFreightComponent;
-  @ViewChild(SalesOrderQuoteChargesComponent,{static:false}) public salesOrderQuoteChargesComponent: SalesOrderQuoteChargesComponent;
-  @ViewChild(SalesPartNumberComponent,{static:false}) public salesPartNumberComponent: SalesPartNumberComponent;
-  @ViewChild(SalesQuoteDocumentsComponent,{static:false}) public salesQuoteDocumentsComponent: SalesQuoteDocumentsComponent;
-  @ViewChild(SalesQuoteAnalysisComponent,{static:false}) public salesQuoteAnalysisComponent: SalesQuoteAnalysisComponent;
-  @ViewChild(ManagementStructureComponent,{static:false})
+  @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
+  @ViewChild("closeQuotePopup", { static: false }) public closeQuotePopup: ElementRef;
+  @ViewChild("newQuoteCreatePopup", { static: false }) public newQuoteCreatePopup: ElementRef;
+  @ViewChild("copyQuotePopup", { static: false }) public copyQuotePopup: ElementRef;
+  @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
+  @ViewChild("salesQuoteConvertPopup", { static: false }) public salesQuoteConvertPopup: ElementRef;
+  @ViewChild("emailQuotePopup", { static: false }) public emailQuotePopup: ElementRef;
+  @ViewChild("salesQuotePrintPopup", { static: false }) public salesQuotePrintPopup: ElementRef;
+  @ViewChild(SalesApproveComponent, { static: false }) public salesApproveComponent: SalesApproveComponent;
+  @ViewChild(SalesCustomerApprovalsComponent, { static: false }) public salesCustomerApprovalsComponent: SalesCustomerApprovalsComponent;
+  @ViewChild(SalesOrderQuoteFreightComponent, { static: false }) public salesOrderQuoteFreightComponent: SalesOrderQuoteFreightComponent;
+  @ViewChild(SalesOrderQuoteChargesComponent, { static: false }) public salesOrderQuoteChargesComponent: SalesOrderQuoteChargesComponent;
+  @ViewChild(SalesPartNumberComponent, { static: false }) public salesPartNumberComponent: SalesPartNumberComponent;
+  @ViewChild(SalesQuoteDocumentsComponent, { static: false }) public salesQuoteDocumentsComponent: SalesQuoteDocumentsComponent;
+  @ViewChild(SalesQuoteAnalysisComponent, { static: false }) public salesQuoteAnalysisComponent: SalesQuoteAnalysisComponent;
+  @ViewChild(ManagementStructureComponent, { static: false })
   public managementStructureComponent: ManagementStructureComponent;
-  @ViewChild(SalesAddressComponent,{static:false}) public salesAddressComponent: SalesAddressComponent;
+  @ViewChild(SalesAddressComponent, { static: false }) public salesAddressComponent: SalesAddressComponent;
   isCopyMode: boolean = false;
   quoteCopyRefId: any;
   copyConsiderations: CopyConsiderationsForSalesQuote;
@@ -150,7 +150,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   verifySalesOrderQuoteObj: VerifySalesQuoteModel;
   salesOrderConversionCriteriaObj: SalesOrderConversionCritera;
   salesOrderView: SalesOrderView;
-  @ViewChild("updateConfirmationModal",{static:false})
+  @ViewChild("updateConfirmationModal", { static: false })
   public updateConfirmationModal: ElementRef;
   submitType: boolean = true;
   customerWarning: any = {};
@@ -177,6 +177,8 @@ export class SalesQuoteCreateComponent implements OnInit {
   validDaysSettingsList = [];
   managementValidCheck: boolean;
   moduleName: any = "SalesQuote";
+  enforceApproval: boolean;
+
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -217,14 +219,14 @@ export class SalesQuoteCreateComponent implements OnInit {
     });
     this.managementStructureId = this.currentUserManagementStructureId;
 
-    if(!this.isEdit) {
+    if (!this.isEdit) {
       this.load(this.managementStructureId);
     }
 
-    setTimeout(() => {	
+    setTimeout(() => {
       this.getSOQInstance(true);
-    },							 
-    2200);
+    },
+      2200);
 
     if (this.id) {
       this.getMarginSummary()
@@ -333,7 +335,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     let probabilityId = this.salesQuote.probabilityId ? this.salesQuote.probabilityId : 0;
     let creditLimitTermsId = this.salesQuote.creditLimitTermsId ? this.salesQuote.creditLimitTermsId : 0;
     let leadSourceId = this.salesQuote.leadSourceId ? this.salesQuote.leadSourceId : 0;
-    
+
     forkJoin(
       this.customerService.getCustomerCommonDataWithContactsById(this.customerId, this.salesQuote.customerContactId),
       this.commonservice.getCSRAndSalesPersonOrAgentList(this.currentUserManagementStructureId, this.customerId, this.salesQuote.customerServiceRepId, this.salesQuote.salesPersonId),
@@ -511,7 +513,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     this.csrFirstCollection = CSRData;
     this.enableUpdateButton = false;
   }
-  
+
   filterAgentFirstName(event) {
     this.agentFirstCollection = this.agentsOriginalList;
 
@@ -522,7 +524,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     ];
     this.agentFirstCollection = agentData;
   }
-  
+
   filterSalesFirstName(event) {
     this.salesFirstCollection = this.salesPersonAndAgentOriginalList;
     const employeeListData = [
@@ -611,10 +613,10 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (result !== undefined) {
       let accountTypeId = result.customerTypeId ? result.customerTypeId : 0;
 
-      this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '', 
-      true, 100, [accountTypeId].join()).subscribe(accountTypes => {
-        this.accountTypes = accountTypes;
-      })
+      this.commonService.autoSuggestionSmartDropDownList('CustomerType', 'CustomerTypeId', 'Description', '',
+        true, 100, [accountTypeId].join()).subscribe(accountTypes => {
+          this.accountTypes = accountTypes;
+        })
     }
   }
 
@@ -809,7 +811,7 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.commonService.getManagementStructurelevelWithEmployee(buId, this.employeeId).subscribe(res => {
         this.divisionlist = res;
       });
-    } 
+    }
     else {
       this.salesQuote.managementStructureId = this.salesQuote.companyId;
     }
@@ -882,6 +884,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         this.salesQuoteView = data && data.length ? data[0] : null;
         this.salesOrderQuoteObj = this.salesQuoteView.salesOrderQuote;
         this.verifySalesQuoteConversion(this.salesQuoteView.verificationResult);
+        this.toggle_po_header = false;
       }
       if (this.deletePartsWhileCopieng == true) {
         this.salesQuoteView.parts = [];
@@ -1006,6 +1009,7 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.salesQuote.statusName = validDaysObject.defaultStatusName;
         }
         this.defaultSettingPriority = validDaysObject.defaultPriorityId;
+        this.enforceApproval = validDaysObject.isApprovalRule;
       } else {
         this.salesQuote.validForDays = 10;
         if (this.salesQuote.salesQuoteTypes && this.salesQuote.salesQuoteTypes.length > 0) {
@@ -1074,7 +1078,7 @@ export class SalesQuoteCreateComponent implements OnInit {
   onChangeInput() {
     this.enableUpdateButton = false;
   }
-  
+
   viewSelectedRow() {
     this.modal = this.modalService.open(CustomerViewComponent, { size: "lg", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.customerId = this.customerId;
@@ -1278,7 +1282,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         if (!selectedPart.customerRequestDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
-          if(!partNameAdded){
+          if (!partNameAdded) {
             errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
             partNameAdded = true;
           }
@@ -1287,7 +1291,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         if (!selectedPart.estimatedShipDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
-          if(!partNameAdded){
+          if (!partNameAdded) {
             errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
             partNameAdded = true;
           }
@@ -1296,7 +1300,7 @@ export class SalesQuoteCreateComponent implements OnInit {
         if (!selectedPart.promisedDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
-          if(!partNameAdded){
+          if (!partNameAdded) {
             errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
             partNameAdded = true;
           }
@@ -1305,13 +1309,13 @@ export class SalesQuoteCreateComponent implements OnInit {
         if (!selectedPart.priorityId) {
           this.isSpinnerVisible = false;
           invalidParts = true;
-          if(!partNameAdded){
+          if (!partNameAdded) {
             errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
             partNameAdded = true;
           }
           errmessage = errmessage + '<br />' + "Please enter priority ID."
         }
-        
+
         if (selectedPart.customerRequestDate && selectedPart.promisedDate && selectedPart.estimatedShipDate) {
           if (selectedPart.customerRequestDate < this.salesQuote.openDate ||
             selectedPart.estimatedShipDate < this.salesQuote.openDate ||
@@ -1321,7 +1325,7 @@ export class SalesQuoteCreateComponent implements OnInit {
           if (selectedPart.promisedDate < selectedPart.customerRequestDate) {
             this.isSpinnerVisible = false;
             invalidParts = true;
-            if(!partNameAdded){
+            if (!partNameAdded) {
               errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
               partNameAdded = true;
             }
@@ -1330,7 +1334,7 @@ export class SalesQuoteCreateComponent implements OnInit {
           if (selectedPart.estimatedShipDate < selectedPart.customerRequestDate) {
             this.isSpinnerVisible = false;
             invalidParts = true;
-            if(!partNameAdded){
+            if (!partNameAdded) {
               errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
               partNameAdded = true;
             }
@@ -1381,6 +1385,7 @@ export class SalesQuoteCreateComponent implements OnInit {
             this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
+            this.toggle_po_header = true;
           });
         }
       } else {
@@ -1414,10 +1419,12 @@ export class SalesQuoteCreateComponent implements OnInit {
             this.router.navigateByUrl(`salesmodule/salespages/sales-quote-list`);
           }
         }
-          , error => {
-            this.isSpinnerVisible = false;
-          })
+        , error => {
+          this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
+        })
       }
+      this.toggle_po_header = false;
     }
   }
 

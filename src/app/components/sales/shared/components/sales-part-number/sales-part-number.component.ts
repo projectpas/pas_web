@@ -17,8 +17,9 @@ import { SalesOrderQuotePart } from "../../../../../models/sales/SalesOrderQuote
 import { AuthService } from "../../../../../services/auth.service";
 import { CommonService } from "../../../../../services/common.service";
 import { ISalesOrderQuotePart } from "../../../../../models/sales/ISalesOrderQuotePart";
-declare var $ : any;
+declare var $: any;
 import { SummaryPart } from "../../../../../models/sales/SummaryPart";
+import { StocklineViewComponent } from "../../../../../shared/components/stockline/stockline-view/stockline-view.component";
 
 @Component({
   selector: "app-sales-part-number",
@@ -44,8 +45,8 @@ export class SalesPartNumberComponent {
   auditHistory = [];
   inputValidCheckHeader = false;;
   summaryColumns: any[] = [];
-  @ViewChild("addPart",{static:false}) addPart: ElementRef;
-  @ViewChild("salesMargin",{static:false}) salesMargin: ElementRef;
+  @ViewChild("addPart", { static: false }) addPart: ElementRef;
+  @ViewChild("salesMargin", { static: false }) salesMargin: ElementRef;
   @Input() customer: any;
   @Input() totalFreights = 0;
   @Input() totalCharges = 0;
@@ -54,7 +55,7 @@ export class SalesPartNumberComponent {
   query: ItemMasterSearchQuery;
   @Input() salesQuoteView: ISalesQuoteView;
   @Input() defaultSettingPriority;
-  @ViewChild("updatePNDetailsModal",{static:false})
+  @ViewChild("updatePNDetailsModal", { static: false })
   public updatePNDetailsModal: ElementRef;
   @Output() myEvent = new EventEmitter();
   isEdit: boolean = false;
@@ -626,7 +627,7 @@ export class SalesPartNumberComponent {
       if (!selectedPart.customerRequestDate) {
         this.isSpinnerVisible = false;
         invalidParts = true;
-        if(!partNameAdded){
+        if (!partNameAdded) {
           errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
           partNameAdded = true;
         }
@@ -635,7 +636,7 @@ export class SalesPartNumberComponent {
       if (!selectedPart.estimatedShipDate) {
         this.isSpinnerVisible = false;
         invalidParts = true;
-        if(!partNameAdded){
+        if (!partNameAdded) {
           errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
           partNameAdded = true;
         }
@@ -644,7 +645,7 @@ export class SalesPartNumberComponent {
       if (!selectedPart.promisedDate) {
         this.isSpinnerVisible = false;
         invalidParts = true;
-        if(!partNameAdded){
+        if (!partNameAdded) {
           errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
           partNameAdded = true;
         }
@@ -653,7 +654,7 @@ export class SalesPartNumberComponent {
       if (!selectedPart.priorityId) {
         this.isSpinnerVisible = false;
         invalidParts = true;
-        if(!partNameAdded){
+        if (!partNameAdded) {
           errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
           partNameAdded = true;
         }
@@ -668,7 +669,7 @@ export class SalesPartNumberComponent {
         if (selectedPart.promisedDate < selectedPart.customerRequestDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
-          if(!partNameAdded){
+          if (!partNameAdded) {
             errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
             partNameAdded = true;
           }
@@ -677,7 +678,7 @@ export class SalesPartNumberComponent {
         if (selectedPart.estimatedShipDate < selectedPart.customerRequestDate) {
           this.isSpinnerVisible = false;
           invalidParts = true;
-          if(!partNameAdded){
+          if (!partNameAdded) {
             errmessage = errmessage + '<br />PN - ' + selectedPart.partNumber;
             partNameAdded = true;
           }
@@ -882,5 +883,10 @@ export class SalesPartNumberComponent {
 
   checkToHide(i) {
     return !this.summaryParts[i].hidePart;
+  }
+
+  viewStockSelectedRow(rowData) {
+    this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
+    this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
 }

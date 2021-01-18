@@ -195,7 +195,6 @@ export class RolesManagementStructureComponent implements OnInit, AfterViewInit{
 
 	public saveManagement(roleLevelId, data1) //retriving SiteManagement Array
 	{
-		debugger;
 		for (let i = 0; i < data1.length; i++) {
 			if (data1[i].data.managementStructureId != null) {
 				data1[i].data.UserRoleLevelId = roleLevelId;
