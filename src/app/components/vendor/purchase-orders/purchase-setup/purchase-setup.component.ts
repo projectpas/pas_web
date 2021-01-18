@@ -530,7 +530,7 @@ export class PurchaseSetupComponent implements OnInit {
 	WarningsList: any;
 	WarningListId:any;
 	warningsandRestriction(Id) {       
-            this.WarningListId = VendorWarningEnum.Create_Purchase_Requisition;
+            this.WarningListId = VendorWarningEnum.Create_Purchase_Order;
             if (Id && this.WarningListId) {
                 this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
                     if (res) {
@@ -561,20 +561,7 @@ export class PurchaseSetupComponent implements OnInit {
         if (status == 'Submit Approval' && action == '1') {
             return true;
         } else { return false; }
-	}
-
-	// bindshippingSieListOriginal(moduleId=0,userId=0) {
-	// 	moduleId = moduleId = 0 ? this.splitmoduleId : 0;
-	// 	userId= userId = 0 ? this.splituserId : 0;
-
-	// this.commonService.getaddressdetailsOnlyUserbyuser(moduleId, userId, 'Ship',this.poId).subscribe(
-	// 	returnddataforbill => {
-	// 		this.splitSieListOriginal = returnddataforbill.address.map(x => {
-	// 																		return {
-	// 																			siteName: x.siteName, siteId: x.siteId
-	// 																		}});
-	// 	});
-	// }
+	}	
 
 	filterSplitSite(event) {		
         this.commonService.getaddressdetailsOnlyUserbyuser(this.splitmoduleId, this.splituserId, 'Ship',this.poId).subscribe(
@@ -592,8 +579,7 @@ export class PurchaseSetupComponent implements OnInit {
 			this.lstfilterSplitSite = shippingSite;	
 		}
 	});		
-	}
-	 
+	}	 
 	 
 	checkSplitSiteNameSelect() {
 		if(this.isEditModeSplitPoOnly == false && this.isEditModeSplitAddress == false) {
@@ -1440,13 +1426,14 @@ export class PurchaseSetupComponent implements OnInit {
 	// Load Vendor data
 	loadvendorDataById(vendorId) {		
 		if (vendorId) {
-            this.vendorContactList = [];
+		    this.vendorContactList = [];
             this.getVendorContactsListByID(vendorId);
             this.getVendorCreditTermsByID(vendorId);
             this.warningsandRestriction(vendorId);
             if (this.arrayVendlsit.length == 0) {
                 this.arrayVendlsit.push(0);
-            }
+			}
+			this.arrayVendlsit.push(vendorId);
             this.isSpinnerVisible = true;
             this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.allActions = res;
@@ -2041,10 +2028,10 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	getTotalDiscAmount() {
-		this.totalDiscAmount = 0;
-		this.partListData.map(x => {			
+		this.totalDiscAmount = 0;		
+		this.partListData.map(x => {
 			x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g,'')) : 0;
-			this.totalDiscAmount += x.tempDiscAmt;
+			this.totalDiscAmount = parseFloat(this.totalDiscAmount) +  parseFloat(x.tempDiscAmt);
 			this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
 		})
 	}
@@ -2176,634 +2163,8 @@ export class PurchaseSetupComponent implements OnInit {
 			}
 		});   
 		this.isSpinnerVisible = false;    
-	}	
-
-	// getShipToUserIdEdit(data) {
-	// 	if (data.shipToUserType === this.customerModuleId) {
-	// 		this.tempShipTOAddressId = data.shipToAddressId;
-	// 		this.onShipToCustomerSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
-	// 		this.getShipViaEdit(data);
-	// 		return getObjectById('value', data.shipToUserId, this.allCustomers);
-	// 	}
-	// 	if (data.shipToUserType === this.vendorModuleId) {
-	// 		this.tempShipTOAddressId = data.shipToAddressId;
-	// 		this.onShipToVendorSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
-	// 		this.getShipViaEdit(data);
-	// 		return getObjectById('vendorId', data.shipToUserId, this.allActions);
-	// 	}
-	// 	if (data.shipToUserType === this.companyModuleId) {			
-	// 		this.tempShipTOAddressId = data.shipToAddressId;		
-	// 		this.shipToSelectedvalue = data.shipToUserId;
-	// 		this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
-	// 			this.companySiteList_Shipping = response;
-	// 			if (this.isEditMode) {
-    //                 if (data.shipToSiteId == 0) {
-    //                     this.companySiteList_Shipping.push({ legalEntityShippingAddressId: 0, siteName: data.shipToSiteName, addressId: data.shipToAddressId });
-	// 					this.shipToAddress.address1 = data.shipToAddress1;
-	// 					this.shipToAddress.address2 = data.shipToAddress2;						
-	// 					this.shipToAddress.city = data.shipToCity;
-	// 					this.shipToAddress.stateOrProvince = data.shipToState;
-	// 					this.shipToAddress.postalCode = data.shipToPostalCode;
-	// 					this.shipToAddress.country = data.shipToCountry;
-	// 				} else {
-    //                     this.onShipToGetCompanyAddress(data.shipToSiteId);
-	// 				}
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
-	// 			this.contactListForCompanyShipping = response;
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', data.shipToContactId, this.contactListForCompanyShipping);
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		this.getShipViaEdit(data);			
-	// 		return getObjectById('value', data.shipToUserId, this.legalEntity);
-	// 	}
-	// }
-
-	// onShipToCustomerSelected(customerId, res?, id?, value?) {	
-	// 	this.clearInputOnClickUserIdShipTo();
-	// 	this.shipToSelectedvalue = customerId;
-	// 	this.customerService.getCustomerShipAddressGet(customerId).subscribe(
-	// 		returnddataforbill => {
-	// 			this.shipToCusData = returnddataforbill[0];
-	// 			for(var i =0; i < this.shipToCusData.length; i++) {
-	// 				if(this.shipToCusData[i].isPrimary && value != 'shipEdit') {
-	// 					this.sourcePoApproval.shipToSiteId = this.shipToCusData[i].customerShippingAddressId;
-	// 					this.sourcePoApproval.shipToAddressId = this.shipToCusData[i].AddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.shipToSiteId = id;
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if(res){
-	// 					if (res.shipToSiteId == 0) {
-	// 					this.shipToCusData.push({ customerShippingAddressId: 0, addressId:res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-	// 				}}
-	// 			}
-	// 			this.onShipToGetAddress(res, res.shipToSiteId);
-	// 		}, err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-
-	// 	this.customerService.getContacts(customerId).subscribe(data => {
-	// 		this.shipToContactData = data[0];
-	// 		for(var i =0; i < this.shipToContactData.length; i++) {
-	// 			if(this.shipToContactData[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.shipToContactData[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'shipEdit') {
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.shipToContactData);
-	// 		}
-	// 	},
-	// 	err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// 	this.getShipViaDetailsForShipTo(res.shipViaId);
-	// }
-
-	// clearInputOnClickUserIdShipTo() {
-	// 	this.sourcePoApproval.shipToSiteId = 0;
-	// 	this.sourcePoApproval.shipToAddressId = 0;
-	// 	this.sourcePoApproval.shipToContactId = 0;
-	// 	this.sourcePoApproval.shipToMemo = '';
-	// 	this.sourcePoApproval.shipViaId = 0;
-	// 	this.sourcePoApproval.shippingCost = 0;
-	// 	this.sourcePoApproval.handlingCost = 0;
-	// 	this.sourcePoApproval.shippingAcctNum = 0;		
-	// 	this.shipToAddress = {};
-	// 	this.shipViaList = [];
-	// 	this.shipToCusData = [];
-	// 	this.vendorSelected = [];
-	// 	this.companySiteList_Shipping = [];
-	// }
-	
-	getShipViaDetailsForShipTo(id?) {		
-		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue).subscribe(response => {
-			this.shipViaList = response;
-			for(var i =0; i < this.shipViaList.length; i++) {
-				if(this.shipViaList[i].isPrimary) {
-					this.sourcePoApproval.shipViaId = this.shipViaList[i].shipViaId;
-					this.getShipViaDetails(this.sourcePoApproval.shipViaId);
-				}
-			}
-			if (id) {
-				this.sourcePoApproval.shipViaId = id;
-				this.getShipViaDetails(id);
-			}
-		},
-		err => {
-			this.isSpinnerVisible = false;				
-		})
-	}
-
-	getShipViaDetails(id) {	
-		
-		this.sourcePoApproval.shippingAcctNum = null;
-		var userType = this.sourcePoApproval.shipToUserTypeId ? parseInt(this.sourcePoApproval.shipToUserTypeId) : 0;
-		const shippingViaId = id ? getValueFromArrayOfObjectById('shippingViaId', 'shipViaId', id, this.shipViaList) : 0;
-		if(shippingViaId != 0 && shippingViaId != null) {
-			
-			this.commonService.getShipViaDetailsById(shippingViaId, userType).subscribe(res => {
-				const responseData = res;
-				this.sourcePoApproval.shippingAcctNum = responseData.shippingAccountInfo;
-                this.sourcePoApproval.shipVia = responseData.shipVia;					
-				
-			},err => {
-				this.isSpinnerVisible = false;				
-			})
-		} 		
 	}
 	
-	onShipToGetAddress(data, id) {		
-		this.shipToAddress = {};
-		if (data.shipToUserTypeId == this.customerModuleId || data.shipToUserType == this.customerModuleId) {
-			this.shipToAddress = getObjectById('customerShippingAddressId', id, this.shipToCusData);
-		}
-		else if (data.shipToUserTypeId == this.vendorModuleId || data.shipToUserType == this.vendorModuleId) {
-			this.shipToAddress = getObjectById('vendorShippingAddressId', id, this.vendorSelected);
-		}
-		this.shipToAddress = { ...this.shipToAddress, country: this.shipToAddress.countryName ? this.shipToAddress.countryName : this.shipToAddress.country }
-	}
-	
-	getShipViaEdit(data) {
-		this.commonService.getShipViaDetailsByModule(data.shipToUserType, this.shipToSelectedvalue).subscribe(response => {
-			this.shipViaList = response;
-			this.sourcePoApproval.shippingAcctNum = data.shippingAccountNo;
-			this.sourcePoApproval.shipViaId = data.shipViaId;
-			if(this.sourcePoApproval.shipViaId) {
-				this.getShipViaDetails(this.sourcePoApproval.shipViaId);
-			}
-			if (data.shipViaId == 0) {
-				this.shipViaList.push({ shipViaId: 0, name: data.shipVia, shippingAccountInfo: data.shippingAcctNum });
-				this.sourcePoApproval.shippingAcctNum = data.shippingAcctNum;
-			} 
-		},err => {
-			this.isSpinnerVisible = false;			
-		});
-	}
-	
-	// onShipToVendorSelected(vendorId, res?, id?, value?) {
-	// 	this.clearInputOnClickUserIdShipTo();
-	// 	this.shipToSelectedvalue = vendorId;
-	// 	this.showInput = true;
-	// 	this.vendorService.getVendorShipAddressGet(vendorId).subscribe(
-	// 		returdaa => {
-	// 			this.vendorSelected = returdaa[0];
-	// 			for(var i =0; i < this.vendorSelected.length; i++) {
-	// 				if(this.vendorSelected[i].isPrimary && value != 'shipEdit') {
-    //                     this.sourcePoApproval.shipToSiteId = this.vendorSelected[i].vendorShippingAddressId;
-    //                     this.sourcePoApproval.shipToAddressId = this.vendorSelected[i].AddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-    //                 res.shipToSiteId = id;
-	// 			}
-	// 			if (this.isEditMode && res) {
-    //                 if (res.shipToSiteId == 0) {
-    //                     this.vendorSelected.push({ vendorShippingAddressId: 0, addressId: res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-	// 				}
-	// 			}
-	// 			if(res) {
-    //                 this.onShipToGetAddress(res, res.shipToSiteId);
-	// 			} else {
-    //                 this.onShipToGetAddress(this.sourcePoApproval, this.sourcePoApproval.shipToSiteId);
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;						
-	// 		});
-	// 	this.vendorService.getContacts(vendorId).subscribe(data => {
-	// 		this.vendorContactsForshipTo = data[0];
-	// 		for(var i =0; i < this.vendorContactsForshipTo.length; i++) {
-	// 			if(this.vendorContactsForshipTo[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.vendorContactsForshipTo[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'shipEdit') {
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.vendorContactsForshipTo);
-	// 		}	
-
-	// 		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, vendorId).subscribe(res => {
-	// 			this.shipViaList = res;
-	// 					},err => {
-	// 						this.isSpinnerVisible = false;								
-	// 					});
-    //         this.getShipViaDetailsForShipTo(res.shipViaId);
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// }
-
-	// onShipToGetCompanyAddress(id) {
-	// 	this.shipToAddress = {};		
-	// 	this.companyService.getShippingAddress(id).subscribe(res => {			
-	// 		const resp = res;
-    //         if (resp) {
-    //             this.shipToAddress.addressId = resp.addressId;
-	// 			this.shipToAddress.address1 = resp.line1;
-	// 			this.shipToAddress.address2 = resp.line2;				
-	// 			this.shipToAddress.city = resp.city;
-	// 			this.shipToAddress.stateOrProvince = resp.stateOrProvince;
-	// 			this.shipToAddress.postalCode = resp.postalCode;
-	// 			this.shipToAddress.countryId = resp.countryId;
-	// 			this.shipToAddress.country = getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList);
-    //         } else {
-    //             this.shipToAddress.addressId = 0;
-	// 			this.shipToAddress.address1 = '';
-	// 			this.shipToAddress.address2 = '';				
-	// 			this.shipToAddress.city = '';
-	// 			this.shipToAddress.stateOrProvince = '';
-	// 			this.shipToAddress.postalCode = '';
-	// 			this.shipToAddress.country = '';
-	// 			this.shipToAddress.countryId = null;
-	// 		}
-	// 			},
-	// 	err => {});		
-	// }	
-
-	// errorMessageHandler(log) {
-	// 	const errorLog = log;
-	// 	var msg = '';
-	// 	if(errorLog.message) {
-	// 	  if (errorLog.error && errorLog.error.errors.length > 0) {
-	// 				for (let i = 0; i < errorLog.error.errors.length; i++){
-	// 					msg = msg + errorLog.error.errors[i].message + '<br/>'
-	// 				}
-	// 			}
-	// 			this.alertService.showMessage(
-    //                 errorLog.error.message,
-	// 				msg,
-	// 				MessageSeverity.error
-	// 			);
-	// 	   }
-	// 	   else {
-	// 		this.alertService.showMessage(
-	// 			'Error',
-	// 			log.error,
-	// 			MessageSeverity.error
-	// 		); }
-	// }
-
-	// getLegalEntityDetailsById() {
-	// 	this.commonService.getLegalEntityIdByMangStrucId(this.currentUserManagementStructureId).subscribe(res => {
-	// 		this.currentUserLegalEntityId = res.legalEntityId;
-	// 		this.getInactiveObjectForLEOnEdit('value', this.currentUserLegalEntityId, this.legalEntity, 'LegalEntity', 'LegalEntityId', 'Name');
-	// 		this.isSpinnerVisible = false;			
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;					
-	// 	});
-	// }
-
-	
-	// getInactiveObjectForLEOnEdit(string, id, originalData, tableName, primaryColumn, description) {
-    //     if(id) {
-    //         for(let i=0; i < originalData.length; i++) {
-    //             if(originalData[i][string] == id) {
-    //                 this.sourcePoApproval.shipToUserId = originalData[i];
-	// 				this.sourcePoApproval.billToUserId = originalData[i];
-	// 				this.onShipToCompanySelected(originalData[i]);
-	// 				this.onBillToCompanySelected(originalData[i]);
-    //             } 
-    //         }
-    //         let obj: any = {};
-    //         this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
-	// 			obj = res[0];
-	// 			this.legalEntity = [...originalData, obj];
-	// 			this.sourcePoApproval.shipToUserId = obj;
-	// 			this.sourcePoApproval.billToUserId = obj;
-	// 			this.onShipToCompanySelected(obj);
-	// 			this.onBillToCompanySelected(obj);
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;				
-	// 		});
-	// 	} else {
-    //         return null;
-    //     }
-	// }	
-	
-	// onShipToCompanySelected(object?, res?, id?) {
-	// 	this.clearInputOnClickUserIdShipTo();
-	// 	this.shipToSelectedvalue = object ? object.value : this.shipToSelectedvalue;
-	// 	this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
-	// 		this.companySiteList_Shipping = response;
-	// 		for(var i =0; i < this.companySiteList_Shipping.length; i++) {
-	// 			if(this.companySiteList_Shipping[i].isPrimary) {
-	// 				this.sourcePoApproval.shipToSiteId = this.companySiteList_Shipping[i].legalEntityShippingAddressId;
-	// 				this.sourcePoApproval.shipToAddressId = this.companySiteList_Shipping[i].AddressId;
-	// 				this.onShipToGetCompanyAddress(this.sourcePoApproval.shipToSiteId);
-	// 			}
-	// 		}
-	// 		if (id) {
-	// 			res.shipToSiteId = id;
-	// 			this.onShipToGetCompanyAddress(id);
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;			
-	// 	});
-	// 	this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
-	// 		this.contactListForCompanyShipping = response;
-	// 		for(var i =0; i < this.contactListForCompanyShipping.length; i++) {
-	// 			if(this.contactListForCompanyShipping[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.contactListForCompanyShipping[i];
-	// 			}
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;					
-	// 	});
-	// 	this.getShipViaDetailsForShipTo();
-	// }
-
-	// onBillToCompanySelected(object?, response?, id?) {
-	// 	this.clearInputOnClickUserIdBillTo();
-	// 	this.billToSelectedvalue = object ? object.value : this.billToSelectedvalue;
-	// 	this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(res => {
-	// 		this.companySiteList_Billing = res;
-	// 		for(var i =0; i < this.companySiteList_Billing.length; i++) {
-	// 			if(this.companySiteList_Billing[i].isPrimary) {
-	// 				this.sourcePoApproval.billToSiteId = this.companySiteList_Billing[i].legalEntityBillingAddressId;
-	// 				this.sourcePoApproval.billToAddressId = this.companySiteList_Billing[i].AddressId;
-	// 				this.onBillToGetCompanyAddress(this.sourcePoApproval.billToSiteId);
-	// 			}
-	// 		}
-	// 		if (id) {
-	// 			response.billToSiteId = id;
-	// 			this.onBillToGetCompanyAddress(id);
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// 	this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(res => {
-	// 		this.contactListForCompanyBilling = res;
-	// 		for(var i =0; i < this.contactListForCompanyBilling.length; i++) {
-	// 			if(this.contactListForCompanyBilling[i].isDefaultContact) {
-	// 				this.sourcePoApproval.billToContactId = this.contactListForCompanyBilling[i];
-	// 			}
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// 	// this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.billToUserTypeId, this.billToSelectedvalue).subscribe(res => {
-	// 	// 	this.shipViaList = res;
-	// 	// },err => {
-	// 	// 	this.isSpinnerVisible = false;
-	// 	// 	const errorLog = err;
-	// 	// 	this.errorMessageHandler(errorLog);		
-	// 	// });
-	// }
-
-	// clearInputOnClickUserIdBillTo() {
-	// 	this.sourcePoApproval.billToSiteId = 0;
-	// 	this.sourcePoApproval.billToContactId = 0;
-	// 	this.billToAddress = {};
-	// 	this.sourcePoApproval.billToMemo = '';
-	// 	this.billToCusData = [];
-	// 	this.vendorSelectedForBillTo = [];
-	// 	this.companySiteList_Billing = [];
-	// }
-
-	// onBillToGetCompanyAddress(id) {
-	// 	this.billToAddress = {};
-	// 	this.companyService.getBillingAddress(id).subscribe(res => {
-    //         if (res) {
-    //             this.billToAddress.addressId = res[0].addressId;
-	// 			this.billToAddress.address1 = res[0].address1;
-	// 			this.billToAddress.address2 = res[0].address2;				
-	// 			this.billToAddress.city = res[0].city;
-	// 			this.billToAddress.stateOrProvince = res[0].stateOrProvince;
-	// 			this.billToAddress.postalCode = res[0].postalCode;
-	// 			this.billToAddress.countryId= res[0].countryId;
-	// 			this.billToAddress.country = res[0].countryId ? getValueFromArrayOfObjectById('label', 'value', res[0].countryId, this.allCountriesList) : '';
-				
-    //         } else {
-    //             this.billToAddress.addressId = 0;
-	// 			this.billToAddress.address1 = '';
-	// 			this.billToAddress.address2 = '';			
-	// 			this.billToAddress.city = '';
-	// 			this.billToAddress.stateOrProvince = '';
-	// 			this.billToAddress.postalCode = '';
-	// 			this.billToAddress.country = '';
-	// 			this.billToAddress.countryId= null;
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;					
-	// 	});
-	
-	// }
-	
-	// getBillToUserIdEdit(data) {
-	// 	if (data.billToUserType === this.customerModuleId) {
-	// 		this.tempBillTOAddressId = data.billToAddressId;
-	// 		this.onBillToCustomerSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
-	// 		return getObjectById('value', data.billToUserId, this.allCustomers);
-	// 	}
-	// 	if (data.billToUserType === this.vendorModuleId) {
-	// 		this.tempBillTOAddressId = data.billToAddressId;
-	// 		this.onBillToVendorSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
-	// 		return getObjectById('vendorId', data.billToUserId, this.allActions);
-	// 	}
-	// 	if (data.billToUserType === this.companyModuleId) {
-	// 		this.tempBillTOAddressId = data.billToAddressId;			
-	// 		this.billToSelectedvalue = data.billToUserId;
-	// 		this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(response => {
-	// 			this.companySiteList_Billing = response;
-	// 			if (this.isEditMode) {
-	// 				if (data.billToSiteId == 0) {
-	// 					this.companySiteList_Billing.push({ legalEntityBillingAddressId: 0, siteName: data.billToSiteName });
-	// 					this.billToAddress.address1 = data.billToAddress1;
-	// 					this.billToAddress.address2 = data.billToAddress2;						
-	// 					this.billToAddress.city = data.billToCity;
-	// 					this.billToAddress.stateOrProvince = data.billToState;
-	// 					this.billToAddress.postalCode = data.billToPostalCode;
-	// 					this.billToAddress.country = data.billToCountry;
-	// 				} else {
-	// 					this.onBillToGetCompanyAddress(data.billToSiteId);
-	// 				}
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(response => {
-	// 			this.contactListForCompanyBilling = response;
-	// 			this.sourcePoApproval.billToContactId = getObjectById('contactId', data.billToContactId, this.contactListForCompanyBilling);
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		return getObjectById('value', data.billToUserId, this.legalEntity);
-	// 	}
-	// }
-	
-    // bill to
-	// onBillToGetAddress(data, id) {	
-	// 	if (data.billToUserTypeId == this.customerModuleId || data.billToUserType == this.customerModuleId) {			
-	// 		const resp = getObjectById('customerBillingAddressId', id, this.billToCusData);		
-	// 		if (resp) {
-	// 			this.billToAddress.address1 = resp.address1;
-	// 			this.billToAddress.address2 = resp.address2;			
-	// 			this.billToAddress.city = resp.city;
-	// 			this.billToAddress.stateOrProvince = resp.stateOrProvince;
-	// 			this.billToAddress.postalCode = resp.postalCode;
-	// 			this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
-	// 		} else {
-	// 			this.billToAddress.address1 = '';
-	// 			this.billToAddress.address2 = '';				
-	// 			this.billToAddress.city = '';
-	// 			this.billToAddress.stateOrProvince = '';
-	// 			this.billToAddress.postalCode = '';
-	// 			this.billToAddress.country = '';
-	// 		}		
-	// 	} else if (data.billToUserTypeId == this.vendorModuleId || data.billToUserType == this.vendorModuleId) {
-	// 		if(id != 0) {
-	// 			this.vendorService.getVendorAddressById(id).subscribe(res => {
-	// 				const resp = res;
-	// 				if (resp) {
-	// 					this.billToAddress.addressId = resp.vba.addressId;
-	// 					this.billToAddress.address1 = resp.line1;
-	// 					this.billToAddress.address2 = resp.line2;						
-	// 					this.billToAddress.city = resp.city;
-	// 					this.billToAddress.stateOrProvince = resp.stateOrProvince;
-	// 					this.billToAddress.postalCode = resp.postalCode;
-	// 					this.billToAddress.countryId = resp.countryId;
-	// 					this.billToAddress.country = resp.countryId ? getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList) : '';
-	// 				} else {
-	// 					this.billToAddress.address1 = '';
-	// 					this.billToAddress.address2 = '';						
-	// 					this.billToAddress.city = '';
-	// 					this.billToAddress.stateOrProvince = '';
-	// 					this.billToAddress.postalCode = '';
-	// 					this.billToAddress.countryId = null;
-	// 					this.billToAddress.country = '';
-	// 				}
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;							
-	// 			});
-	// 		} else {
-	// 			const resp = getObjectById('vendorBillingAddressId', id, this.vendorSelectedForBillTo);
-	// 			if (resp) {
-	// 				this.billToAddress.address1 = resp.address1;
-	// 				this.billToAddress.address2 = resp.address2;
-	// 				this.billToAddress.city = resp.city;
-	// 				this.billToAddress.stateOrProvince = resp.stateOrProvince;
-	// 				this.billToAddress.postalCode = resp.postalCode;
-	// 				this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
-	// 			} else {
-	// 				this.billToAddress.address1 = '';
-	// 				this.billToAddress.address2 = '';
-	// 				this.billToAddress.city = '';
-	// 				this.billToAddress.stateOrProvince = '';
-	// 				this.billToAddress.postalCode = '';
-	// 				this.billToAddress.country = '';
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-
-	// onBillToCustomerSelected(customerId, res?, id?, value?) {		
-	// 	if(res) {
-	// 		res.billToStateOrProvince = res.billToState ? res.billToState : '';
-	// 	}		
-	// 	this.clearInputOnClickUserIdBillTo();
-	// 	this.billToSelectedvalue = customerId;
-	// 	this.customerService.getCustomerBillViaDetails(customerId).subscribe(
-	// 		returnddataforbill => {
-	// 			this.billToCusData = returnddataforbill[0];
-	// 			for(var i =0; i < this.billToCusData.length; i++) {
-	// 				if(this.billToCusData[i].isPrimary && value != 'billEdit') {
-	// 					this.sourcePoApproval.billToSiteId = this.billToCusData[i].customerBillingAddressId;
-	// 					this.sourcePoApproval.billToAddressId = this.billToCusData[i].AddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.billToSiteId = id;
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if (res && res.billToSiteId == 0) {
-	// 					this.billToCusData.push({ customerBillingAddressId: 0, address1: res.billToAddress1, address2: res.billToAddress2, city: res.billToCity, stateOrProvince: res.billToStateOrProvince, postalCode: res.billToPostalCode, country: res.billToCountry, siteName: res.billToSiteName })
-	// 				}
-	// 			}
-	// 			if(res) {
-	// 				this.onBillToGetAddress(res, res.billToSiteId);
-	// 			} else {
-	// 				this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 	this.customerService.getContacts(customerId).subscribe(data => {
-	// 		this.billToContactData = data[0];
-	// 		for(var i =0; i < this.billToContactData.length; i++) {
-	// 			if(this.billToContactData[i].isDefaultContact) {
-	// 				this.sourcePoApproval.billToContactId = this.billToContactData[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'billEdit') {
-	// 			this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.billToContactData);
-	// 		}
-	// 	},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// }
-
-	
-	// async onBillToVendorSelected(vendorId, res?, id?, value?) {
-	// 	this.clearInputOnClickUserIdBillTo();
-	// 	this.billToSelectedvalue = vendorId;
-	// 	this.showInput = true;
-	// 	await this.vendorService.getVendorSiteNames(vendorId).subscribe(
-	// 		returdaa => {
-	// 			this.vendorSelectedForBillTo = returdaa;
-	// 			for(var i =0; i < this.vendorSelectedForBillTo.length; i++) {
-	// 				if(this.vendorSelectedForBillTo[i].isPrimary && value != 'billEdit') {
-	// 					this.sourcePoApproval.billToSiteId = this.vendorSelectedForBillTo[i].vendorBillingAddressId;
-	// 					this.sourcePoApproval.billToAddressId = this.vendorSelectedForBillTo[i].AddressId;
-						
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.billToSiteId = id;
-	// 				this.onBillToGetAddress(res, res.billToSiteId);
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if (res && res.billToSiteId == 0) {
-	// 					this.vendorSelectedForBillTo.push({ vendorBillingAddressId: 0, siteName: res.billToSiteName });
-	// 					this.billToAddress.address1 = res.billToAddress1;
-	// 					this.billToAddress.address2 = res.billToAddress2;
-	// 					this.billToAddress.city = res.billToCity;
-	// 					this.billToAddress.stateOrProvince = res.billToState;
-	// 					this.billToAddress.postalCode = res.billToPostalCode;
-	// 					this.billToAddress.country = res.billToCountry;
-	// 				} else {
-	// 					if(res) {
-	// 						this.onBillToGetAddress(res, res.billToSiteId);
-	// 					} else {
-	// 						this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
-	// 					}
-	// 				}
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 	this.vendorService.getContacts(vendorId).subscribe(
-	// 		returdaa => {
-	// 			this.vendorContactsForBillTO = returdaa[0];
-	// 			for(var i =0; i < this.vendorContactsForBillTO.length; i++) {
-	// 				if(this.vendorContactsForBillTO[i].isDefaultContact) {
-	// 					this.sourcePoApproval.billToContactId = this.vendorContactsForBillTO[i];
-	// 				}
-	// 			}
-	// 			if (this.isEditMode && value == 'billEdit') {
-	// 				this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.vendorContactsForBillTO);
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-		
-	// 	}
-
 	onChangeTabView(event) {
 		if(event.index == 0) {
 			this.getPurchaseOrderAllPartsById(this.poId);
@@ -2879,16 +2240,7 @@ export class PurchaseSetupComponent implements OnInit {
     filterCompanyNameforgrid(event) {	
 			if (event.query !== undefined && event.query !== null) {
 				this.getLegalEntity(event.query); }
-	}
-	// filterCompanyNameforShipping(event) {
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		this.getLegalEntity(event.query); }
-	// }
-
-	// filterCompanyNameforBilling(event) {
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		this.getLegalEntity(event.query); }
-	// }
+	}	
 
 	private priorityData(strText = '') {
         if (this.arrayPrioritylist.length == 0) {
@@ -3014,8 +2366,7 @@ export class PurchaseSetupComponent implements OnInit {
 	editDropDownLoad() {
 		this.loadVendorList('');
 		this.priorityData();           
-		this.loadPOStatus();			
-		this.loadVendorList();	
+		this.loadPOStatus();
 		this.loadCurrencyData();
 		this.loadConditionData();	
 		this.loadApprovalProcessStatus();
@@ -3411,8 +2762,7 @@ export class PurchaseSetupComponent implements OnInit {
 			});
 	}
 
-	filterNames(event) {
-		
+	filterNames(event) {		
 		if (event.query !== undefined && event.query !== null) {
 			this.loadcustomerData(event.query); }
 	}
@@ -3441,8 +2791,6 @@ export class PurchaseSetupComponent implements OnInit {
 
     deleteSplitShipment(childata, index, mainindex) {
         this.enablePartSave();
-	
-
 		if(childata.purchaseOrderPartRecordId !== undefined && childata.purchaseOrderPartRecordId !== null) {
 			this.partListData[mainindex].childList = this.partListData[mainindex].childList.map(x => {
 				if (x.purchaseOrderPartRecordId == childata.purchaseOrderPartRecordId) {
@@ -3458,67 +2806,7 @@ export class PurchaseSetupComponent implements OnInit {
 		} else{
 			this.partListData[mainindex].childList.splice(index, 1);
 		}
-	}
-
-	// filterCustomerContactsForShipTo(event) {
-	// 	this.firstNamesShipTo = this.shipToContactData;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const customerContacts = [...this.shipToContactData.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesShipTo = customerContacts;
-	// 	}
-	// }
-
-	// filterVendorContactsForShipTo(event) {
-	// 	this.firstNamesShipTo1 = this.vendorContactsForshipTo;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorContacts = [...this.vendorContactsForshipTo.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesShipTo1 = vendorContacts;		
-
-	// 	}
-	// }
-
-	// filterShippingContacts(event) {
-	// 	this.contactListForShippingCompany = this.contactListForCompanyShipping;
-	// 	const customerContacts = [...this.contactListForCompanyShipping.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.contactListForShippingCompany = customerContacts;
-	// }
-
-	// filterBillingContact(event) {
-	// 	this.contactListForBillingCompany = this.contactListForCompanyBilling;
-	// 	const customerContacts = [...this.contactListForCompanyBilling.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.contactListForBillingCompany = customerContacts;
-	// }
-
-	// filterCustomerContactsForBillTo(event) {
-	// 	this.firstNamesbillTo = this.billToContactData;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const customerContacts = [...this.billToContactData.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesbillTo = customerContacts;
-	// 	}
-	// }
-
-	// filterVendorContactsForBillTo(event) {
-	// 	this.firstNamesbillTo1 = this.vendorContactsForBillTO;
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorContacts = [...this.vendorContactsForBillTO.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesbillTo1 = vendorContacts;
-	// 	}
-	// }	
+	}	
 
 	onClickShipMemo() {
 		this.addressMemoLabel = 'Edit Ship';
@@ -3906,41 +3194,7 @@ export class PurchaseSetupComponent implements OnInit {
             err => {
                 this.isSpinnerVisible = false;	});      
 	}
-
-	// clearInputShipTo() {
-	// 	this.sourcePoApproval.shipToUserId = 0;
-	// 	this.sourcePoApproval.shipToAddressId = 0;
-	// 	this.sourcePoApproval.shipToContactId = 0;
-	// 	this.sourcePoApproval.shipToMemo = '';
-	// 	this.sourcePoApproval.shipViaId = 0;
-	// 	this.sourcePoApproval.shippingCost = 0;
-	// 	this.sourcePoApproval.handlingCost = 0;
-	// 	this.sourcePoApproval.shippingAcctNum = null;		
-	// 	this.shipToAddress = {};
-	// 	this.shipViaList = [];
-	// 	this.shipToCusData = [];
-	// 	this.vendorSelected = [];
-	// 	this.companySiteList_Shipping = [];
-	// }
-
-	// clearInputBillTo() {
-	// 	this.sourcePoApproval.billToUserId = 0;
-	// 	this.sourcePoApproval.billToAddressId = 0;
-	// 	this.sourcePoApproval.billToContactId = 0;
-	// 	this.billToAddress = {};
-	// 	this.sourcePoApproval.billToMemo = '';
-	// 	this.billToCusData = [];
-	// 	this.vendorSelectedForBillTo = [];
-	// 	this.companySiteList_Billing = [];
-	// }
-
-	// clearShipToContact() {
-	// 	this.sourcePoApproval.shipToContactId = null;
-	// }
-	// clearBillToContact() {
-	// 	this.sourcePoApproval.billToContactId = null;
-	// }
-
+	
 	eventHandler(event) {
 		if (event.target.value != "") {
 			let value = event.target.value.toLowerCase();
@@ -3957,8 +3211,6 @@ export class PurchaseSetupComponent implements OnInit {
 
 		}
 	}
-
-
 
 	selectedVendorName(value) {
 		this.loadvendorDataById(value.vendorId);
