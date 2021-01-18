@@ -1,14 +1,14 @@
 
 <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb><div class="card">
   <div class="card new-card">
-      <div class="card-header bg-primary">
+      <div class="card-header header">
           <div class="row">
               <div class="col">
-                  <h4 class="new-card-heading">Repair Order Settings</h4>
+                  <h4 class="header-name">Repair Order Settings</h4>
               </div>
           </div>
       </div>
-      <div class="card-body">
+      <div class="card-body header-body">
           <form #roQuoteSettingsForm="ngForm">
               <div class="form-group">
                 <input type="hidden" [(ngModel)]="rosettingModel.RepairOrderSettingId" name="RepairOrderSettingId">
