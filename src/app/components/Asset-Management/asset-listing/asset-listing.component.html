@@ -205,7 +205,7 @@
                                         </div>
                                         <div *ngIf="currentDeletedstatus==true">
                                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                                            matTooltipPosition="above" ></p-inputSwitch> 
                                             <span data-toggle="modal" data-target="#view">
                                                 <a class="btn nobg btn-view-cstm" (onChange)="openView(view,rowData)"
                                                    (click)="openView(view,rowData)" matTooltip="View" matTooltipPosition="above">
@@ -501,7 +501,7 @@
                                                             <span class="label"><b>Depreciation Method: </b></span><span class="value">{{assetViewList.depreciationMethod}}</span>
                                                             </p>
                                                             <p>
-                                                            <span class="label col-sm-6"><b>Residual  %: </b></span><span class="value">{{assetViewList.residualPer}}</span>
+                                                            <span class="label col-sm-6"><b>Residual  %: </b></span><span class="value">{{assetViewList.residualPer}}  %</span>
                                                             </p>
                                                             <p>
                                                             <span class="label"><b>Asset Life: </b></span><span class="value">{{assetViewList.assetLife}}</span>

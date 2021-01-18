@@ -3,7 +3,7 @@
     <div class="card-header bg-primary" *ngIf="isView==false">
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading">  {{ assetServices.isEditMode == true ? 'Edit'  : 'Create'}} Asset Caps</h4>
+          <h4 class="new-card-heading">  {{ assetServices.isEditMode == true ? 'Edit'  : 'Create'}} Asset Capabilities</h4>
         </div>
         <div>
           <button
@@ -430,28 +430,17 @@
             <div class="clear"></div>
             <hr />
             <div class="clear"></div>
-
-            <!-- <div class="col-md-12" style="margin-bottom: -10px;">
-                <h4 class="float-left">
-                    Capabilities
-                    <a class="plusicon-cstm new-margin" matTooltip="Add Capability" matTooltipPosition="above"
-                       data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
-                  
-                        <i class="fa fa-plus-circle fa-lg"></i>
-                    </a>
-                </h4>
-            </div> -->
             <div class="card-header bg-primary" *ngIf="isView==false">
                 <div class="row">
                   <div class="col">
-                    <h4 class="new-card-heading"> Capabilities Info</h4>
+                    <h4 class="new-card-heading"> Capabilities </h4>
                   </div>
                   <div>
                     <button
                       type="button"
                       class="btn-sm new-btn-primary"  matTooltip="Add Capability" matTooltipPosition="above"
                       data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
-                      Add New Capability
+                      Add  Capability
                     </button>
                   </div>
                 </div>
@@ -502,7 +491,7 @@
                             matTooltipPosition="above" style="padding: 5px 12px !important;"
                             pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                             (click)="dt.exportCSV({selectionOnly:true})"></button>
-                    <div  *ngIf="isView==false" class="excel-upload  excel-upload-cstm">
+                    <!-- <div  *ngIf="isView==false" class="excel-upload  excel-upload-cstm">
                         <button name="download" id="download" type="button" class="btn btn-primary"
                                 matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForCapes()"
                                 style="padding: 5px 10px !important;">
@@ -517,7 +506,7 @@
                             </span>
                         </label>
                         &nbsp; &nbsp;
-                    </div>
+                    </div> -->
                     </div>
                     <div class="col"  >
                         <div class="">

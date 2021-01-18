@@ -1064,9 +1064,10 @@
                                             </div>
                                          <div class="col-md-6">
                                                 <div class="form-group">
+                                                    <!-- [minDate]="todaysDate" -->
                                                     <label>Warranty Start Date  <span *ngIf="currentAsset.isWarrantyRequired==true" class="clr-red">*</span></label>
                                                     <p-calendar [showIcon]="true" 
-                                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [required]="currentAsset.isWarrantyRequired==true" (ngModelChange)="getmemo($event)" [minDate]="todaysDate" [maxDate]="currentAsset.warrantyEndDate" name="warrantyStartDate" [(ngModel)]="currentAsset.warrantyStartDate"></p-calendar>
+                                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [required]="currentAsset.isWarrantyRequired==true" (ngModelChange)="getmemo($event)"  [maxDate]="currentAsset.warrantyEndDate" name="warrantyStartDate" [(ngModel)]="currentAsset.warrantyStartDate"></p-calendar>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Warranty End Date  <span *ngIf="currentAsset.isWarrantyRequired==true" class="clr-red">*</span></label>

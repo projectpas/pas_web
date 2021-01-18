@@ -107,7 +107,7 @@
                                         [(ngModel)]="currentAsset.entryDate"></p-calendar>
                                 </div>
                                 <div class="form-group"> 
-                                    <label>Asset Id <span class="clr-red">*</span></label>
+                                    <label>Id <span class="clr-red">*</span></label>
                                     <p-autoComplete field="label" class="pautocomp-cstm" (ngModelChange)="getmemo($event)" (onKeyUp)=assetIdHandler($event)
                                     (onSelect)="onAssetIdselection($event)"  [(ngModel)]="currentAsset.assetId" name="assetIdl"
                                      [suggestions]="localCollection" (completeMethod)="filterAssetId($event)" [size]="30" [minLength]="1"
@@ -234,11 +234,11 @@
                                         
                                         <div class="form-group">
                                             <label>
-                                                Asset Location <span style="margin-left:3px;cursor:pointer;">
+                                                Asset Location  <span class="clr-red">*</span><span style="margin-left:3px;cursor:pointer;">
                                                 </span>
                                             </label>
                                          
-                                            <p-dropdown  [showClear]="true" class="p-dropdown-100"  (input)="onFilterLocation($event.target.value)" (ngModelChange)="getmemo($event)"  [options]="allAssetLocations" filter="true" [(ngModel)]="currentAsset.assetLocationId" name="assetLocationId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
+                                            <p-dropdown  [showClear]="true" class="p-dropdown-100" required  (input)="onFilterLocation($event.target.value)" (ngModelChange)="getmemo($event)"  [options]="allAssetLocations" filter="true" [(ngModel)]="currentAsset.assetLocationId" name="assetLocationId" [resetFilterOnHide]="true" placeholder="Select" ></p-dropdown>
                                         </div>
                                         <div class="form-group memo-popup-cstm mat_emo">
                                             <label>
@@ -455,7 +455,7 @@
                             class="btn btn-primary pull-right submit-btn" (click)="nextClick('Next')">Next</button>
                        
                             <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && currentAsset.isTangible"
-                            [disabled]="!currentAsset.assetId || !currentAsset.name || !currentAsset.assetAcquisitionTypeId || !currentAsset.tangibleClassId || !currentAsset.unitOfMeasureId || !currentAsset.currencyId || !currentAsset.companyId || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
+                            [disabled]="!currentAsset.assetId || !currentAsset.name || !currentAsset.assetLocationId || !currentAsset.assetAcquisitionTypeId || !currentAsset.tangibleClassId || !currentAsset.unitOfMeasureId || !currentAsset.currencyId || !currentAsset.companyId || showExistMsg || showExistMsgForAsset ||  showExistMsgForAssetParent" (click)="saveAsset()">
                             Save
                         </button>
                         <button type="submit" class="btn btn-primary pull-right submit-btn" *ngIf="isEditMode==false && !currentAsset.isTangible"
