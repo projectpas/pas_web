@@ -45,7 +45,7 @@ export class PublicationService {
   getWorkFlows(data) {
     return Observable.forkJoin(
       this.publicationEndpoint.getpublicationListEndpoint<Publication[]>(data)
-    );
+    )
   }
   getPublications(data) {
     return Observable.forkJoin(
@@ -199,11 +199,11 @@ export class PublicationService {
     );
   }
 
-    getFilesBypublicationNew(PublicationID: number) {
-        return this.publicationEndpoint.getFilesBypublicationEndPointNew<any>(
-            PublicationID
-        );
-    }
+  getFilesBypublicationNew(PublicationID: number) {
+    return this.publicationEndpoint.getFilesBypublicationEndPointNew<any>(
+      PublicationID
+    );
+  }
 
   getPublishedByModuleList() {
     return this.publicationEndpoint.getPublishedByModuleListEndPoint<any>();

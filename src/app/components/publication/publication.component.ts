@@ -20,7 +20,7 @@ import { AircraftManufacturerService } from '../../services/aircraft-manufacture
 import { AircraftModelService } from '../../services/aircraft-model/aircraft-model.service';
 import { DashNumberService } from '../../services/dash-number/dash-number.service';
 import { AtaMainService } from '../../services/atamain.service';
-declare var $ : any;
+declare var $: any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';
@@ -83,8 +83,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     auditHistory: AuditHistory[];
     Active: string = "Active";
     isSpinnerVisible: Boolean = false;
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     displayedColumns = ['PublicationId', 'PartNumber', 'description'];
     //, 'Sequence', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'
     dataSource: MatTableDataSource<Publication>;
@@ -109,7 +109,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     public isActive: boolean = false;
-    viewCheck:boolean=true;
+    viewCheck: boolean = true;
     // totalRecords: any=0;
     generalInfo: any;
     // pageIndex: number = 0;
@@ -233,7 +233,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
     pageIndexChange(event) {
         this.pageSize = event.rows;
-    } 
+    }
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -243,9 +243,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private loadData(data) {
         this.isSpinnerVisible = true;
         this.lazyLoadEventDataInput = data;
-        const isdelete=this.currentDeletedstatus ? true:false;
+        const isdelete = this.currentDeletedstatus ? true : false;
         data.filters['viewType'] = this.viewType;
-        data.filters['status'] = this.status ? this.status :this.currentstatus;
+        data.filters['status'] = this.status ? this.status : this.currentstatus;
         data.filters['isDeleted'] = isdelete;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.publicationService.getPublications(PagingData).subscribe(
@@ -255,7 +255,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
                 this.isSpinnerVisible = false;
             }, err => {
-                this.isSpinnerVisible = false;           
+                this.isSpinnerVisible = false;
                 const errorLog = err;
                 this.errorMessageHandler(errorLog);
             });
@@ -263,16 +263,16 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     errorMessageHandler(log) {
-		this.alertService.showMessage(
-			'Error',
-			log.error,
-			MessageSeverity.error
-		);
-	}
+        this.alertService.showMessage(
+            'Error',
+            log.error,
+            MessageSeverity.error
+        );
+    }
     changeOfStatus(status, viewType) {
         const lazyEvent = this.lazyLoadEventDataInput;
         this.viewType = viewType === '' ? this.viewType : viewType;
-        this.isSpinnerVisible = true;  
+        this.isSpinnerVisible = true;
         this.loadData({
             ...lazyEvent,
             filters: {
@@ -286,7 +286,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.status = status;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        this.isSpinnerVisible = true;  
+        this.isSpinnerVisible = true;
         this.loadData(PagingData);
     }
     // geListByStatus(status) {
@@ -295,39 +295,41 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     //     const PagingData = { ...this.lazyLoadEventDataInput, filters:{status: status} }
     //     this.loadData(PagingData);
     // }
-    currentDeletedstatus:boolean=false;
+    currentDeletedstatus: boolean = false;
     currentstatus: string = 'Active';
-    getDeleteListByStatus(value){
-        this.currentDeletedstatus=true;
+    getDeleteListByStatus(value) {
+        this.currentDeletedstatus = true;
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
         this.status = status;
         this.isSpinnerVisible = true;
-        if(value==true){
-            this.currentstatus="ALL";
-         
+        if (value == true) {
+            this.currentstatus = "ALL";
+
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL" };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData)
         } else {
-            this.currentDeletedstatus=false;
-            this.currentstatus="ALL"
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL"};
+            this.currentDeletedstatus = false;
+            this.currentstatus = "ALL"
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL" };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData);
         }
     }
-    restorerecord:any={};
+    restorerecord: any = {};
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-        }, () => { console.log('Backdrop click') })
+        }, () => {
+            // console.log('Backdrop click')
+        })
     }
-    restoreRecord(){
-        this.commonService.updatedeletedrecords('Publication','PublicationRecordId',this.restorerecord.publicationRecordId).subscribe(res => {
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('Publication', 'PublicationRecordId', this.restorerecord.publicationRecordId).subscribe(res => {
             this.modal.close();
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
@@ -388,7 +390,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 //employee: getValueFromArrayOfObjectById('firstName', 'employeeId', x.employee, this.allEmployeeinfo),
             }
         });
-     
+
     }
 
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
@@ -425,7 +427,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     //         console.log('When user closes');
     //     }, () => { console.log('Backdrop click') })
     // }
-   
+
 
     openDelete(content, row) {
         this.selectedRowforDelete = row;
@@ -434,8 +436,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.sourceAction = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
+            // console.log('When user closes');
+        }, () => {
+            //  console.log('Backdrop click')
+        })
     }
 
     openStep1() {
@@ -461,7 +465,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.generalInfo = true;
         $('#step1').collapse('show');
 
-        console.log(row)
+        // console.log(row)
         //this.generalInfo = row;
         // this.sourceAction = row;
         // this.publication_Name = row.publicationId;
@@ -490,7 +494,6 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         //get general info
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {
             this.generalInfo = res[0];
-            console.log(this.generalInfo);
 
             // this.attachmentList = res[0].attachmentDetails.map(x => {
             //     return {
@@ -505,7 +508,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         //get PN Mapping info
         this.publicationService.getPublicationPNMapping(row.publicationRecordId)
             .subscribe(res => {
-                console.log(res);
+                // console.log(res);
                 this.pnMappingList = res.map(x => {
                     return {
                         ...x,
@@ -549,33 +552,35 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     };
                 });
             });
-            this.isSpinnerVisible = false;
+        this.isSpinnerVisible = false;
     }
 
     viewSelectedRowdbl(rowData) {
         this.openView(rowData);
         $('#view').modal('show');
     }
-   
-    
+
+
     closeDeleteModal() {
-        $("#downloadPublication").modal("hide");
+        // $("#downloadPublication").modal("hide");
+        $("#downloadConfirmation").modal("hide");
     }
- 
-    exportCSV(dt){
+
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                revisionDate: x.revisionDate ?  this.datePipe.transform(x.revisionDate, 'MMM-dd-yyyy hh:mm a'): '',
-                nextReviewDate: x.nextReviewDate ?  this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a'): '',
-                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a'): '',
-                verifiedDate:x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                revisionDate: x.revisionDate ? this.datePipe.transform(x.revisionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                nextReviewDate: x.nextReviewDate ? this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a') : '',
+                expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a') : '',
+                verifiedDate: x.verifiedDate ? this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
     }
 
-   
+
+
     openDocumentsList(content, rowData) {
         this.openDocumentsList = rowData;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
@@ -670,12 +675,12 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         filters: {
                             ...lazyEvent.filters,
                             viewType: this.viewType,
-                            status:this.status
+                            status: this.status
                         }
                     });
                     this.isSpinnerVisible = false;
                 },
-                    error => this.saveFailedHelper(error));
+                error => this.saveFailedHelper(error));
             //alert(e);
         }
         else {
@@ -693,7 +698,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         filters: {
                             ...lazyEvent.filters,
                             viewType: this.viewType,
-                            status:this.Active
+                            status: this.Active
                         }
                     });
                     this.isSpinnerVisible = false;
@@ -731,7 +736,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
 
         this.employeeService.getEmployeeList().subscribe(
-            results => { console.log(results), this.onempDataLoadSuccessful(results[0]) },
+            results => {
+                // console.log(results),
+                this.onempDataLoadSuccessful(results[0])
+            },
             error => this.onDataLoadFailed(error)
         );
     }
@@ -745,7 +753,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     publicationPagination(event: { first: any; rows: number }) {
-        console.log(event);
+        // console.log(event);
         const pageIndex = parseInt(event.first) / event.rows;
         this.pageIndex = pageIndex;
         this.pagesize = event.rows; //10
@@ -834,7 +842,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             response.map(x => {
                 this.ataChapterList.push({
                     value: x.ataChapterId,
-                    label:  x.ataChapterCode + '-'+ x.ataChapterName
+                    label: x.ataChapterCode + '-' + x.ataChapterName
                 });
             });
         });
@@ -848,7 +856,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     const responseData = atasubchapter;
                     responseData.map(x => {
                         this.ataSubChapterList.push({
-                            label:x.ataChapterCode + '-'+ x.description,
+                            label: x.ataChapterCode + '-' + x.description,
                             value: x.ataSubChapterId
                         });
                     });
@@ -860,13 +868,13 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     onSearchAircraftInfoAtaChapter() {
-        console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
+        // console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
         this.selectedATAchapter = this.selectedATAchapter ? this.selectedATAchapter : 0;
         this.selectedATASubChapter = this.selectedATASubChapter ? this.selectedATASubChapter : 0;
         this.selectAircraftManfacturer = this.selectAircraftManfacturer ? this.selectAircraftManfacturer : 0;
         this.selectedAircraftModel = this.selectedAircraftModel ? this.selectedAircraftModel : 0;
         this.selectedDashNumbers = this.selectedDashNumbers ? this.selectedDashNumbers : 0;
-        console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
+        // console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
         if (this.selectAircraftManfacturer !== undefined || this.selectedATAchapter !== undefined) {
             const requestParams = {
 
@@ -886,7 +894,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
             }
             this.publicationService.getpublicationslistadvancesearch(requestParams).subscribe(results => {
-                console.log(results);
+                // console.log(results);
                 this.onDataLoadSuccessful(results[0]['results']);
                 this.totalRecords = results[0]['totalRecordsCount']
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
@@ -974,7 +982,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         //const { customerShippingId } = rowData.customerShippingId;
 
         this.commonService.GetAttachmentPublicationAudit(rowData.attachmentDetailId).subscribe(
-              res => {
+            res => {
                 this.sourceViewforDocumentAudit = res;
             })
 
@@ -1017,12 +1025,12 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         }
     }
     dismissDocumentPopupModel(type) {
-      
+
         this.closeMyModel(type);
-        
+
     }
     closeMyModel(type) {
-        
+
         $(type).modal("hide");
 
     }
