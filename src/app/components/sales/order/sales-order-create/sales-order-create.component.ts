@@ -674,6 +674,7 @@ export class SalesOrderCreateComponent implements OnInit {
     if (this.salesOrderObj && this.salesOrderObj.salesOrderQuoteId && this.salesOrderObj.salesOrderQuoteId) {
       this.controlSettings.showViewQuote = true;
     }
+    
     let partList: any[] = this.salesOrderView.parts;
     for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
@@ -1075,6 +1076,7 @@ export class SalesOrderCreateComponent implements OnInit {
       let invalidDate = false;
 
       for (let i = 0; i < this.selectedParts.length; i++) {
+        debugger;
         let selectedPart = this.selectedParts[i];
         var errmessage = '';
         if (!selectedPart.customerRequestDate) {

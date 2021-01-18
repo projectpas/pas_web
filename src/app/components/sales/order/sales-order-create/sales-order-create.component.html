@@ -508,7 +508,7 @@
                                 Submit
                             </button>
                             <button type="submit" *ngIf="((isEdit && !isCreateModeHeader))||isHeaderSubmit"
-                                [disabled]="enableUpdateButton" (click)="openConfirmationModal(true)"
+                                [disabled]="enableUpdateButton" (click)="onSubmit(true)"
                                 class="btn pull-right submit-btn btn btn-primary">
                                 Update
                             </button>
