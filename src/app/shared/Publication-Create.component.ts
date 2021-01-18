@@ -32,7 +32,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     @Input() workFlow: IWorkFlow;
     @Input() UpdateMode: boolean;
     @Output() notify: EventEmitter<IWorkFlow> =new EventEmitter<IWorkFlow>();
-    publicationTypes: IPublicationType[];
+    publicationTypes: any=[];
     publicationAircraftManufacturers: IPublicationAircraftManufacturer[];
     publicationModels: IPublicationModel[];
     publicationStatuses: IPublicationStatus[];
@@ -208,14 +208,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    deleteRow(index): void {
-        if (this.workFlow.publication[index].id == "0" || this.workFlow.publication[index].id == "") {
-            this.workFlow.publication.splice(index, 1);
-        }
-        else {
-            this.workFlow.publication[index].isDeleted = true;
-        }
-    }
+
 
     getPublicationByItemMasterId(itemMasterId) {
         this.isSpinnerVisible = true;
@@ -619,6 +612,32 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
                 MessageSeverity.error
             );
         }
+    }
+    dismissModel() {
+        this.modal.close();
+    }
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+        this.publicationDropdown.forEach(element => {
+            if(element.publicationRecordId==row.publicationId){
+                row.publication=element.publicationId;
+            }
+        });
+        console.log("ff",row)
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.publication[this.deletedRowIndex].id == "0" || this.workFlow.publication[this.deletedRowIndex].id == "") {
+            this.workFlow.publication.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.publication[this.deletedRowIndex].isDeleted = true;
+        }
+        this.dismissModel();
     }
 
 }

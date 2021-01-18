@@ -14,7 +14,7 @@ import { getValueFromArrayOfObjectById, formatNumberAsGlobalSettingsModule } fro
 import { MasterComapnyService } from "../services/mastercompany.service";
 import { ATASubChapter } from "../models/atasubchapter.model";
 import { AuthService } from "../services/auth.service";
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
     selector: 'grd-material',
     templateUrl: './Material-List-Create.component.html',
@@ -211,10 +211,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     textAreaInfo: any;
     memoIndex;
     moduleName: any = '';
-
+    modal: NgbModalRef;
     constructor(private actionService: ActionService,
         private commonService: CommonService,
         private authService: AuthService,
+        private modalService: NgbModal,
         private workOrderQuoteService: WorkOrderQuoteService,
         private alertService: AlertService,
         public unitofmeasureService: UnitOfMeasureService,
@@ -401,7 +402,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         })
     }
 
-    reCalculate() {
+    reCalculate() { 
         this.calculateExtendedCostSummation();
         this.calculateQtySummation();
         this.calculatePriceSummation();
@@ -652,18 +653,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.workFlow.materialList.push(newRow);
     }
 
-    deleteRow(index, form: NgForm): void {
-        if (this.workFlow.materialList[index].workflowMaterialListId == undefined || this.workFlow.materialList[index].workflowMaterialListId == "0" || this.workFlow.materialList[index].workflowMaterialListId == "") {
-            this.workFlow.materialList.splice(index, 1);
-            let temp = cloneDeep(this.workFlow.materialList);
-            form.resetForm();
-            this.workFlow.materialList = cloneDeep(temp);
-        }
-        else {
-            this.workFlow.materialList[index].isDelete = true;
-        }
-        this.reCalculate();
-    }
+
 
 
     calculateExtendedCost(material): void {
@@ -845,7 +835,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                             part.price = part.price ? formatNumberAsGlobalSettingsModule(part.price, 2) : formatNumberAsGlobalSettingsModule(partDetail["salePrice"], 2);
                             this.calculateExtendedCost(part);
                             this.calculateExtendedPrice(part);
-                        }
+                        } 
                     }, error => {
                         this.isSpinnerVisible = false;
                     });
@@ -972,4 +962,31 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     editorgetmemo(ev) {
         this.disableEditor = false;
     }
+    dismissModel() {
+        this.modal.close();
+    }
+    deleteRowRecord:any={};
+    deletedRowIndex:any;
+    currentForm:any;
+    openDelete(content, row,index,form: NgForm) {
+        this.currentForm=form;
+        this.deletedRowIndex=index;
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.materialList[this.deletedRowIndex].workflowMaterialListId == undefined || this.workFlow.materialList[this.deletedRowIndex].workflowMaterialListId == "0" || this.workFlow.materialList[this.deletedRowIndex].workflowMaterialListId == "") {
+            this.workFlow.materialList.splice(this.deletedRowIndex, 1);
+            let temp = cloneDeep(this.workFlow.materialList);
+            this.currentForm.resetForm();
+            this.workFlow.materialList = cloneDeep(temp);
+        }
+        else {
+            this.workFlow.materialList[this.deletedRowIndex].isDelete = true;
+        }
+        this.reCalculate();
+        this.dismissModel();
+    }
+
 } 

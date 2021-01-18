@@ -1,12 +1,9 @@
 import { Component, Input, OnChanges, OnInit, EventEmitter, Output } from "@angular/core";
 import { IWorkFlow } from "../Workflow/WorkFlow";
-import { IExpertiseType } from "../Workflow/ExpertiseType";
-import { ActionService } from "../Workflow/ActionService";
-import { IExpertise } from "../Workflow/Expertise";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
     selector: 'grd-expertise',
     templateUrl: './Expertise-Create.component.html',
@@ -23,10 +20,10 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
     currentPage: number = 1;
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
-
+    modal: NgbModalRef;
 
     constructor(private alertService: AlertService,
-        private commonService: CommonService) {
+        private commonService: CommonService, private modalService: NgbModal,) {
     }
 
     ngOnInit(): void {
@@ -104,15 +101,6 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
         this.workFlow.expertise.push(newRow);
     }
 
-    deleteRow(index): void {
-        if (this.workFlow.expertise[index].workflowExpertiseListId != undefined || this.workFlow.expertise[index].workflowExpertiseListId == "0" || this.workFlow.expertise[index].workflowExpertiseListId == "") {
-            this.workFlow.expertise.splice(index, 1);
-        }
-        else {
-            this.workFlow.expertise[index].isDelete = true;
-        }
-        this.reCalculate();
-    }
 
     calculateLabourCost(expertise): void {
         expertise.estimatedHours = expertise.estimatedHours ? formatNumberAsGlobalSettingsModule(expertise.estimatedHours, 2) : '';
@@ -211,4 +199,36 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             );
         }
     }
-}
+    dismissModel() {
+        this.modal.close();
+    }
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+        this.expertiseTypes.forEach(element => {
+            if(element.employeeExpertiseId==row.expertiseTypeId){
+                row.expertiseType=element.label;
+            }
+        });
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.expertise[this.deletedRowIndex].workflowExpertiseListId != undefined || this.workFlow.expertise[this.deletedRowIndex].workflowExpertiseListId == "0" || this.workFlow.expertise[this.deletedRowIndex].workflowExpertiseListId == "") {
+            this.workFlow.expertise.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.expertise[this.deletedRowIndex].isDelete = true;
+        }
+        this.reCalculate();
+        this.dismissModel();
+    }
+    }
+
+
+    
+
+
+

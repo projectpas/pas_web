@@ -276,7 +276,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.salesOrderCustomerApprovalListView.forEach(
       (x, i) => {
         let disableEdit = this.getPartToDisableOrNot(x);
-        if (!disableEdit) {
+        if (disableEdit) {//if (!disableEdit) {
           x.selected = !isSelected;
           this.onApprovalSelected(x, i);
         }

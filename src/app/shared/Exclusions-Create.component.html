@@ -28,7 +28,7 @@
             <option *ngFor="let task of taskList" [value]="task.taskId">{{task.description}}</option>
           </select>
         </td>
-        <td style="width: 180px;">
+        <td style="width: 180px;padding-top:5px;">
           <p-autoComplete appendTo="body" [(ngModel)]="exclusion.partName" [suggestions]="partCollection"
             (completeMethod)="filterpartItems($event)" [size]="32" [minLength]="1" [dropdown]="true"
             class="wf-header-select" #partNum="ngModel" errorMessage="Records not found" field="partNumber"
@@ -69,7 +69,7 @@
         <td class="text-right">
           {{ exclusion.extendedCost }}
        </td>
-        <td style="padding: 4px 8px;">
+        <td>
           <select class="form-control wf-pub-id full-width" id="ddlEstimatedOccurance"
             [(ngModel)]="exclusion.estimtPercentOccurrance" name="estPercentOcc_{{i}}"> exstimtPercentOccurance
             <option value="">--Select--</option>
@@ -79,7 +79,7 @@
               ">{{ occurance.name  }}</option>
           </select>
         </td>
-        <td>
+        <td style="padding-top:9px">
        <div class="form-group memo-popup-cstm mat_emo"
             style="width: 120px;margin-bottom: 0;display: inline-flex;padding-top: 3px;">
           <div [innerHTML]="exclusion.memo" class="text_editor_box"></div>
@@ -145,7 +145,7 @@
       </div>
         <div class="modal-body">
 
-        <table class="table table-bordered table-fixed workflow-table-material">
+        <!-- <table class="table table-bordered table-fixed workflow-table-material">
           <thead>
               <th style="color: #fff;">Memo</th>
           </thead>
@@ -156,13 +156,14 @@
                   </td>
               </tr>
           </tbody>
-      </table>
-      
+      </table> -->
+      <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSaveMemo()" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
+               
       
       </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" [disabled]="disabledMemo" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
-          <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+          <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disabledMemo" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>
+          <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
         </div>
       </div>
     </div>
