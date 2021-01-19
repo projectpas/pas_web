@@ -2299,6 +2299,8 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                         element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
                        element.workflowPublicationDashNumbers[i].workflowId=souceData.workflowId
                         delete element.workflowPublicationDashNumbers[i].dashNumberId;
+                        delete element.workflowPublicationDashNumbers[i].allDashNumbers;
+                        delete element.workflowPublicationDashNumbers[i].aircraft;
                     }
                 }
             });

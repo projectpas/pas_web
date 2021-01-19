@@ -57,7 +57,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
 
     materialCondition: any = [];
-    materialMandatory: IMaterialMandatory[];
+    materialMandatory: any=[];
     materialUOM: any[] = [];
     row: any;
     sourceWorkFlow: any = {};
@@ -324,6 +324,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                         materialMandatoriesName: x.label
                     }
                 });
+             
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -475,8 +476,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.unitOfMeasureId = this.itemclaColl[i][0].unitOfMeasureId;
                     material.unitCost = this.itemclaColl[i][0].unitCost;
                 }
-            };
-
+            }; 
+            this.materialMandatory.forEach(element => {
+                if(element.materialMandatoriesName=='Mandatory'){
+                    material.materialMandatoriesId=element.materialMandatoriesId;
+                    material.MaterialMandatoriesName=element.materialMandatoriesName;
+                }
+            });
             material.conditionCodeId = this.conditionList[0].value;
             this.getPNDetails(material);
         }
