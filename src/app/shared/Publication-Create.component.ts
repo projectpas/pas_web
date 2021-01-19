@@ -365,7 +365,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
             }
         })
     }
-
+ 
     private loadPublicationById(wfPublication: any, isDropdownChange: boolean) {
         this.isSpinnerVisible = true;
         this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
