@@ -531,7 +531,7 @@ export class RoSetupComponent implements OnInit {
 	WarningsList: any;
 	WarningListId:any;
 	warningsandRestriction(Id) {       
-            this.WarningListId = VendorWarningEnum.Create_Purchase_Requisition;
+            this.WarningListId = VendorWarningEnum.Create_Repair_Order;
             if (Id && this.WarningListId) {
                 this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
                     if (res) {

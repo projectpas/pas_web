@@ -150,7 +150,6 @@ export class RoListComponent implements OnInit {
         private vendorCapesService: VendorCapabilitiesService,
         private commonService: CommonService,
         private modalService: NgbModal,
-
         private datePipe: DatePipe) {
         this.vendorService.ShowPtab = false;     
 
@@ -159,16 +158,16 @@ export class RoListComponent implements OnInit {
     ngOnInit() {
         this.loadROStatus();
         this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-ro-list';
-        this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);        
-        this.vendorCapesCols = [			
-			{ field: 'ranking', header: 'Ranking' },
-			{ field: 'partNumber', header: 'PN' },
-			{ field: 'partDescription', header: 'PN Description' },
-			{ field: 'capabilityType', header: 'Capability Type' },
-			{ field: 'cost', header: 'Cost' },
-			{ field: 'tat', header: 'TAT' },
-			{ field: 'name', header: 'PN Mfg' },
-        ];
+        // this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);        
+        // this.vendorCapesCols = [			
+		// 	{ field: 'ranking', header: 'Ranking' },
+		// 	{ field: 'partNumber', header: 'PN' },
+		// 	{ field: 'partDescription', header: 'PN Description' },
+		// 	{ field: 'capabilityType', header: 'Capability Type' },
+		// 	{ field: 'cost', header: 'Cost' },
+		// 	{ field: 'tat', header: 'TAT' },
+		// 	{ field: 'name', header: 'PN Mfg' },
+        // ];
         if(this.isReceivingRolist == false){
             this.breadcrumbs = [
                 { label: 'Repair Order' },
@@ -192,7 +191,7 @@ export class RoListComponent implements OnInit {
 			this.roStatusList = this.roStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         },err => {const errorLog = err;
             this.isSpinnerVisible = false;
-			this.errorMessageHandler(errorLog);});
+		});
 	}
     getROListByStatus(status) {
         this.currentStatus = status;
@@ -241,9 +240,6 @@ export class RoListComponent implements OnInit {
                 if (x.label.toUpperCase() == "APPROVED") {
                     this.ApprovedstatusId = x.value;
 				}
-            },err => {              
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
             });
 		});
 	}
@@ -267,8 +263,8 @@ export class RoListComponent implements OnInit {
 			});
 			this.isSpinnerVisible = false;
 		}, err => {           
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            const errorLog = err;	
+            this.isSpinnerVisible = false;		
 		})
 	}
     
@@ -626,8 +622,7 @@ export class RoListComponent implements OnInit {
                 });
             }
             },err => {               
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
+                const errorLog = err;             	
             });
             }
 		this.isSpinnerVisible = true;
@@ -640,8 +635,7 @@ export class RoListComponent implements OnInit {
 			}
 			this.isSpinnerVisible = false;
 		}, err => {           
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
+            const errorLog = err;          
         });
     }
 
@@ -649,8 +643,7 @@ export class RoListComponent implements OnInit {
 		this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
 			this.vendorCapesInfo = res;
         }, err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);}
+			const errorLog = err;	}		
         )
 	}
 
@@ -661,7 +654,6 @@ export class RoListComponent implements OnInit {
         this.lazyLoadEventDataInput.first = pageIndex;
         this.lazyLoadEventDataInput.globalFilter = value;
         this.filterText = value;
-
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentStatus };
         if (this.isEnableROList) {
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, vendorId: this.vendorId }
@@ -694,7 +686,7 @@ export class RoListComponent implements OnInit {
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         },err => {const errorLog = err;
             this.isSpinnerVisible = false;
-                        this.errorMessageHandler(errorLog);});
+         });
     }
     restore(content, rowData) {
         this.restorerecord = rowData;
@@ -709,7 +701,7 @@ export class RoListComponent implements OnInit {
             this.auditHistory = res;
         }, err => {			
 			const errorLog = err;
-			this.errorMessageHandler(errorLog);});
+			});
     }
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
