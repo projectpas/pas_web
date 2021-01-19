@@ -627,7 +627,7 @@
                                         <tbody>
                                             <tr *ngFor="let measurement of task.measurements;let i = index">
                                                 <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{measurement.PartName}}</td>
+                                                <td>{{measurement.partNumber}}</td>
                                                 <td class="text-right">{{measurement.sequence}}</td>
                                                 <td>{{measurement.stage}}</td>
                                                 <td class="text-right">{{measurement.min}}</td>
@@ -788,8 +788,8 @@
                                                 <th>Qty</th>
                                                 <th>Unit Cost</th>
                                                 <th>Extended Cost</th>
-                                                <th>Unit Price</th>
-                                                <th>Extended Price</th>
+                                                <!-- <th>Unit Price</th> -->
+                                                <!-- <th>Extended Price</th> -->
                                                 <th>Vendor Name</th>
                                             </tr>
                                         </thead>
@@ -801,8 +801,8 @@
                                                 <td class="text-right">{{charge.quantity}}</td>
                                                 <td class="text-right">{{charge.unitCost}}</td>
                                                 <td class="text-right">{{charge.extendedCost}}</td>
-                                                <td class="text-right">{{charge.unitPrice}}</td>
-                                                <td class="text-right">{{charge.extendedPrice}}</td>
+                                                <!-- <td class="text-right">{{charge.unitPrice}}</td> -->
+                                                <!-- <td class="text-right">{{charge.extendedPrice}}</td> -->
                                                 <td>{{charge.vendorName}}</td>
                                             </tr>
                                             <tr>
@@ -812,8 +812,8 @@
                                                 <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
-                                                <td></td>
-                                                <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td>
+                                                <!-- <td></td> -->
+                                                <!-- <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td> -->
                                                 <td></td>
                                             </tr>
                                         </tbody>
@@ -836,8 +836,8 @@
                                                 <th>UOM</th>
                                                 <th>Unit Cost</th>
                                                 <th>Extended Cost</th>
-                                                <th>Unit Price</th>
-                                                <th>Extended Price</th>
+                                                <!-- <th>Unit Price</th> -->
+                                                <!-- <th>Extended Price</th> -->
                                                 <th>Memo</th>
                                                 <th>Deferred</th>
                                             </tr>
@@ -854,8 +854,8 @@
                                                 <td>{{material.unitOfMeasure}}</td>
                                                 <td class="text-right">{{material.unitCost}}</td>
                                                 <td class="text-right">{{material.extendedCost}}</td>
-                                                <td class="text-right">{{material.price}}</td>
-                                                <td class="text-right">{{material.extendedPrice}}</td>
+                                                <!-- <td class="text-right">{{material.price}}</td> -->
+                                                <!-- <td class="text-right">{{material.extendedPrice}}</td> -->
                                                 <td>
                                                     <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
                                                 </td>
@@ -873,8 +873,8 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                                <td class="text-right"><b>{{task.materialTotalPrice}}</b></td>
-                                                <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td>
+                                                <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
+                                                <!-- <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td> -->
                                                 <td></td>
                                                 <td></td>
                                             </tr>

@@ -221,7 +221,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         newRow.itemMasterId = "";
         newRow.isDeleted = false;
         newRow.updatedBy = this.userName;
-        newRow.updatedBy = this.userName;
+        newRow.createdBy = this.userName;
         newRow.masterCompanyId = this.currentUserMasterCompanyId;
         this.workFlow.exclusions.push(newRow);
     }
@@ -245,6 +245,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             exclusion.partNumber = "";
             exclusion.partName = "";
             exclusion.itemClassificationId = '';
+            exclusion.createdBy = this.userName;
             event = "";
             this.alertService.showMessage("Workflow", "EPN is already in use in Exclusion List.", MessageSeverity.error);
             return;
@@ -260,6 +261,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                         exclusion.conditionId = event.conditionId;
                         exclusion.itemClassificationId = this.itemclaColl[i].itemClassificationId;
                         exclusion.itemClassification = this.itemclaColl[i].itemClassification;
+                        exclusion.createdBy = this.userName;
                     }
                 }
             }

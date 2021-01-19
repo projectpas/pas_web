@@ -2231,6 +2231,7 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         this.sourceWorkFlow.updatedBy = this.userName;
         const dataSet={...this.sourceWorkFlow}
         delete  dataSet.customerName;
+    
         this.actionService.getNewWorkFlow(dataSet).subscribe(
             data => {
                 this.isSpinnerVisible = false;
@@ -2282,7 +2283,9 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         const souceData = { ...this.sourceWorkFlow };
         if (souceData.exclusions && souceData.exclusions.length != 0) {
             souceData.exclusions.forEach(element => {
-                element.partNumber=element.partName.partNumber;
+                if(element.partName){
+                    element.partNumber=element.partName.partNumber;
+                }
                 delete element.partName
             });
         }
@@ -2293,12 +2296,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
         }
         if (souceData.publication && souceData.publication.length != 0) {
             souceData.publication.forEach(element => {
+                delete element.allDashNumbers;
+                delete element.aircraft;
                 if (element.workflowPublicationDashNumbers && element.workflowPublicationDashNumbers.length != 0) {
                     var i;
                     for (i = 0; i < element.workflowPublicationDashNumbers.length; i++) {
                         element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
                        element.workflowPublicationDashNumbers[i].workflowId=souceData.workflowId
                         delete element.workflowPublicationDashNumbers[i].dashNumberId;
+                      
                     }
                 }
             });

@@ -223,6 +223,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     public onPublicationChange(event, wfPublication) {
+        console.log("event",event)
         const pubData = this.publicationDropdown;
         for (var i = 0; i < pubData.length; i++) {
             if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {
@@ -249,7 +250,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.publications = [];
             this.loadPublicationById(wfPublication, true);
         }
-    }
+    } 
     setAircraftArray:any=[];
     setModelArray:any=[];
     setDashNumberArray:any=[];
@@ -257,16 +258,14 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 this.setAircraftArray=[];
         this.isSpinnerVisible = true;
         this.setAircraftArray.push(data.aircraftManufacturer? data.aircraftManufacturer:0);
-        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, data.publicationId,this.setAircraftArray.join()).subscribe(res => {
+        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, data.publicationId? data.publicationId :data,this.setAircraftArray.join()).subscribe(res => {
             this['aircraftListByPubId' + index] = res;
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
-        // this.getAircraftByPublicationId(x.publicationId, index);
-                // this.getModelByAircraftId(x.publicationId, x.aircraftManufacturer, index);
-                // this.getDashNumberByModelandAircraftIds(x.publicationId, x.aircraftManufacturer, x.model, index);
+
     getModelByAircraftId(x, index) {
         this.setModelArray=[];
         this.setModelArray.push(x.model? x.model:0);
@@ -354,7 +353,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
         return aircraftDashNumbers;
     }
 
-    bindEditModeData(data) {
+    bindEditModeData(data) { 
         this.workFlow.publication = data.map((x, index) => {
             if (x.publicationId) {
                 this.getAircraftByPublicationId(x, index);
@@ -366,7 +365,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
             }
         })
     }
-
+ 
     private loadPublicationById(wfPublication: any, isDropdownChange: boolean) {
         this.isSpinnerVisible = true;
         this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
