@@ -2146,18 +2146,45 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     addWorkFlow(isHeaderUpdate: boolean): void {
         this.isheadUpdate = isHeaderUpdate;
         this.sourceWorkFlow.workflowId = undefined;
-
+// debugger;
+this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
+// this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
         if (!this.validateWorkFlowHeader()) {
             return;
-        } else {
-            this.confirmation();
-        }
+        } 
 
         if (!this.calculateTotalWorkFlowCost(false)) {
             $('#confir').modal("show");
-        } else {
+        }
+        if(this.finalCost==0){
             this.confirmation();
         }
+    }
+    updateWorkFlow(): void {
+        if (!this.validateWorkFlowHeader()) {
+            this.validateheader = true;
+            return;
+        }
+        this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
+        this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
+        if (!this.calculateTotalWorkFlowCost(false)) {
+            $('#quoteVer').modal("hide");
+        if(this.finalCost >0){
+            if ((this.finalCost > this.finalThrsh)) {
+                    $('#UpdateConfirm').modal("show");
+                }
+        }
+            if(this.finalCost==0){
+                this.updateConfirmation();
+            }
+        }
+        if (this.finalCost < this.finalThrsh) {
+            if(this.finalCost>0){
+            this.updateConfirmation();
+        }
+    }
+
+
     }
     dataCancel() {
         $('#confir').modal("hide");
@@ -2182,9 +2209,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             if (this.sourceWorkFlow.customerName) {
                 this.sourceWorkFlow.customerId = this.sourceWorkFlow.customerName.customerId;
             }
-
+            const createDataset={...this.sourceWorkFlow}
+                 delete createDataset.customerName;
             this.isSpinnerVisible = true;
-            this.actionService.addWorkFlowHeader(this.sourceWorkFlow).subscribe(result => {
+            this.actionService.addWorkFlowHeader(createDataset).subscribe(result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow header added successfully.", MessageSeverity.success);
                 this.isUpdateAfterCreate = true;
@@ -2201,7 +2229,10 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceWorkFlow.createdBy = this.userName;
         this.sourceWorkFlow.updatedBy = this.userName;
-        this.actionService.getNewWorkFlow(this.sourceWorkFlow).subscribe(
+        const dataSet={...this.sourceWorkFlow}
+        delete  dataSet.customerName;
+    
+        this.actionService.getNewWorkFlow(dataSet).subscribe(
             data => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow added successfully.", MessageSeverity.success);
@@ -2211,28 +2242,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             });
     }
 
-    updateWorkFlow(): void {
-        if (!this.validateWorkFlowHeader()) {
-            this.validateheader = true;
-            return;
-        }
-        this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
-        this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
-        if (!this.calculateTotalWorkFlowCost(false)) {
-            $('#quoteVer').modal("hide");
-           if ((this.finalCost > this.finalThrsh)) {
-                $('#UpdateConfirm').modal("show");
-            }
-            if(this.finalCost==0){
-                this.updateConfirmation();
-            }
-        }
-        if (this.finalCost < this.finalThrsh) {
-            this.updateConfirmation();
-        }
 
-
-    }
     upDateDataCancel() {
         $('#UpdateConfirm').modal("hide");
     }
@@ -2252,8 +2262,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
             this.sourceWorkFlow.createdBy = this.userName;
             this.sourceWorkFlow.updatedBy = this.userName;
-
-            this.actionService.addWorkFlowHeader(this.sourceWorkFlow).subscribe(result => {
+            const workflowData={...this.sourceWorkFlow}
+        delete    workflowData.customerName
+            this.actionService.addWorkFlowHeader(workflowData).subscribe(result => {
                 this.isSpinnerVisible = false;
                 this.alertService.showMessage(this.title, "Work Flow header updated successfully.", MessageSeverity.success);
                 this.sourceWorkFlow.workflowId = result.workflowId;
@@ -2272,6 +2283,9 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         const souceData = { ...this.sourceWorkFlow };
         if (souceData.exclusions && souceData.exclusions.length != 0) {
             souceData.exclusions.forEach(element => {
+                if(element.partName){
+                    element.partNumber=element.partName.partNumber;
+                }
                 delete element.partName
             });
         }
@@ -2282,15 +2296,20 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         }
         if (souceData.publication && souceData.publication.length != 0) {
             souceData.publication.forEach(element => {
+                delete element.allDashNumbers;
+                delete element.aircraft;
                 if (element.workflowPublicationDashNumbers && element.workflowPublicationDashNumbers.length != 0) {
                     var i;
                     for (i = 0; i < element.workflowPublicationDashNumbers.length; i++) {
                         element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
+                       element.workflowPublicationDashNumbers[i].workflowId=souceData.workflowId
                         delete element.workflowPublicationDashNumbers[i].dashNumberId;
+                      
                     }
                 }
             });
         }
+        delete    souceData.customerName
         this.actionService.getNewWorkFlow(souceData).subscribe(
             result => {
                 this.isSpinnerVisible = false;
