@@ -21,6 +21,7 @@ import { SalesQuoteEndpointService } from "../services/salesquote-endpoint.servi
 import { AddressComponentComponent } from '../shared/components/address-component/address-component.component';
 import { AllApprovalRuleComponent }  from "../shared/components/all-approval-rule/all-approval-rule.component";
 import { AuditComponentComponent } from '../shared/components/audit-component/audit-component.component';
+import { ShipViaCreateComponent } from '../shared/components/ship-via-create/ship-via-create.component';
 
 @NgModule({
   imports: [
@@ -47,12 +48,14 @@ import { AuditComponentComponent } from '../shared/components/audit-component/au
     CommonModulesComponent,  
     AddressComponentComponent,
     AllApprovalRuleComponent,
-    AuditComponentComponent
+    AuditComponentComponent,
+    ShipViaCreateComponent
   ],
   exports:[
     AddressComponentComponent,
     AllApprovalRuleComponent,
-    AuditComponentComponent
+    AuditComponentComponent,
+    ShipViaCreateComponent
   ],
   providers: [ SalesQuoteService, SalesQuoteEndpointService],
 })
