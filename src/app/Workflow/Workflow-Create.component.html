@@ -289,7 +289,7 @@
                                             disabled />
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2"> 
                                     <div class="form-group">
                                         <input type="text" class="form-control text-right" [(ngModel)]="TotalEst"
                                             value="" disabled />
@@ -473,14 +473,17 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>  
                 <div class="pull-right"> 
                     <div class="form-row pull-right" *ngIf="!isWorkOrder">
                         <div class="form-group col-md-4" style="margin-top: 15px;">
                             <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="!UpdateMode"
-                                (click)="addWorkFlow(true)">Save</button>
+                                (click)="addWorkFlow(true)"
+                                [disabled]=" !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
+                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId ||!sourceWorkFlow.customerName">Save</button>
                             <button class="btn btn-primary" style="padding: 6px 12px;" *ngIf="UpdateMode"
-                                [disabled]="disableUpdateButton"
+                                [disabled]="disableUpdateButton || !sourceWorkFlow.workflowCreateDate || !sourceWorkFlow.currencyId ||
+                                !sourceWorkFlow.part || !sourceWorkFlow.workScopeId ||!sourceWorkFlow.customerName"
                                 (click)="isHeaderUpdate = true;showVersionUpdate()">Update</button>
                         </div>
                     </div>
