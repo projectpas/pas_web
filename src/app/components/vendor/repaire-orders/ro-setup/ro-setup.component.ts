@@ -109,6 +109,7 @@ export class RoSetupComponent implements OnInit {
 	partNumbers: any;
 	tempMemo: any;
 	headerMemo: any;
+	contactMemo:any;
 	headerNotes:any;
 	partsMemo:any;	
 	multiplePNDetails: boolean;
@@ -3550,7 +3551,13 @@ export class RoSetupComponent implements OnInit {
 		this.headerInfo.roMemo = this.headerMemo;
 		this.enableHeaderSaveBtn = true;
 	}
-
+	onAddContactMemo() {
+		this.contactMemo = this.vendorContactInfo.notes;
+	}
+	onSaveContactMemo() {
+		this.vendorContactInfo.notes = this.contactMemo;
+		// this.enableHeaderSaveBtn = true;
+	}
 
 	onAddNotes() {
 		this.headerNotes = this.headerInfo.notes;
