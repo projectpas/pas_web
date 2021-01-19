@@ -5,7 +5,7 @@
     <table class="table table-bordered table-fixed workflow-table-pub">
         <thead class="thead-light">
             <tr>
-                <th> Pub ID<span class="clr-red">*</span></th>
+                <th style="min-width: 120px;"> Pub ID<span class="clr-red" >*</span></th>
                 <th> Pub Desc </th>
                 <th> Pub Type </th>
                 <th> Revision Date </th>
@@ -13,7 +13,7 @@
                 <th> Source </th>
                 <th> Aircraft </th>
                 <th> Model </th>
-                <th> Dash Number </th>
+                <th style="min-width: 120px;"> Dash Number </th>
                 <th> Location </th>
                 <th> Verified By </th>
                 <th> Verified Date </th>
@@ -59,7 +59,7 @@
                 </td>
                 <td>
                     {{publ.source}}
-                </td>
+                </td> 
                 <td>
                     <select class="form-control wf-pub-id full-width" id="ddlAircraftManufacturer"
                         [(ngModel)]="publ.aircraftManufacturer"
@@ -85,9 +85,7 @@
                 <td>
                     <ng-multiselect-dropdown class="form-control" [placeholder]="'--Select--'"
                         [data]="getDynamicVariableData('dashNumberListByModelId',i)"
-                        [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings"
-                        (onDeSelect)="onDeSelect(publ,$event)" (onSelect)="onItemSelect(publ,$event)"
-                        (onSelectAll)="onSelectAll(publ,$event)">
+                        [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings">
                     </ng-multiselect-dropdown>
                 </td>
                 <td>

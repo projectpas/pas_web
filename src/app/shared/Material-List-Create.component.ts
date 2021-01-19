@@ -41,7 +41,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Input() editData;
     @Input() isQuote = false;
     @Input() taskList: any = [];
-    @Input() workFlow: IWorkFlow;
+    @Input() workFlow:any={};
     @Input() markupList;
     @Input() UpdateMode: boolean;
     @Input() isWorkFlow: boolean = false;
@@ -473,6 +473,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.itemClassification = this.itemclaColl[i][0].itemClassification;
                     material.unitOfMeasure = this.itemclaColl[i][0].unitOfMeasure;
                     material.unitOfMeasureId = this.itemclaColl[i][0].unitOfMeasureId;
+                    material.unitCost = this.itemclaColl[i][0].unitCost;
                 }
             };
 
@@ -530,6 +531,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.commonService.getPartnumList(value).subscribe(res => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
+            this.allPartnumbersInfo.forEach(element => {
+                if(element.partId==this.workFlow.itemMasterId){
+                   this.partCollection.splice(element, 1); 
+                }
+               });
         }, error => {
             this.isSpinnerVisible = false;
         });
