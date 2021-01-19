@@ -73,6 +73,7 @@ import { SalesOrderService } from "../services/salesorder.service";
 import { AppSharedModule } from "../app-shared.module";
 import { ReceivingService } from "../services/receiving/receiving.service";
 import { ReceivingEndpointService } from "../services/receiving/receiving-endpoint.service";
+import { AllViewComponent } from "../shared/components/all-view/all-view.component";
 //import { AddressComponentComponent } from "../components/address-component/address-component.component";
 //import { AllApprovalRuleComponent } from "../components/all-approval-rule/all-approval-rule.component";
 //import { CommonDocumentsComponent } from "../components/common-documents/common-documents.component";
@@ -152,7 +153,8 @@ import { CommonCommunicationModule } from "../components/common-components/commo
 		//AddressComponentComponent,
 		//CommonDocumentsComponent,
 		//AllApprovalRuleComponent,
-		PoSettingsComponent
+		PoSettingsComponent,
+		AllViewComponent
 	],
 	providers: [
 		VendorClassificationComponent,
@@ -167,7 +169,7 @@ import { CommonCommunicationModule } from "../components/common-components/commo
 		ReceivingEndpointService
 	],
 	entryComponents: [
-		AddActionsDialogComponent
+		AddActionsDialogComponent,
 	],
 	exports:[PolistComponent,RoListComponent]
 })

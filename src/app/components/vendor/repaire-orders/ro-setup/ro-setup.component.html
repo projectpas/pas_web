@@ -711,7 +711,7 @@
                                         <td>{{partList.UOMShortName}}</td>
                                         <td>{{partChildList.priorityId}}</td>
                                         <td><input class="form-control text-right" type="text" pKeyFilter="pint" [(ngModel)]="partChildList.quantityOrdered" name="childQtyOrdered{{row_index}}{{row_no}}" (change)="onChangeChildQtyOrdered(partList, partChildList)" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required /></td> <!--[disabled]="!partList.quantityOrdered"-->
-                                        <td><p-calendar class="calendar-grid" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [minDate]="sourcePoApproval.openDate" [(ngModel)]="partChildList.needByDate" name="childNeedByDate{{row_index}}{{row_no}}" id="childNeedByDate{{row_index}}{{row_no}}" title="Need By Date" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required></p-calendar></td>
+                                        <td><p-calendar class="calendar-grid"  appendTo="body"  [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [minDate]="sourcePoApproval.openDate" [(ngModel)]="partChildList.needByDate" name="childNeedByDate{{row_index}}{{row_no}}" id="childNeedByDate{{row_index}}{{row_no}}" title="Need By Date" (ngModelChange)="enablePartSave()" [disabled]="partChildList.isApproved" required></p-calendar></td>
                                         <td class="mgmt-td-align">
                                             <!-- <label style="width:90px;">Company:</label> -->
                                             <select class="inner-addon right-addon autosuggesions-add inline-block mw400"
