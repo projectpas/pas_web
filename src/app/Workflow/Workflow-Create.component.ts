@@ -4,23 +4,16 @@ import { ITask } from "./Action";
 import { IActionAttrbutes } from "./ActionAttributes";
 import { ActivatedRoute, Router } from "@angular/router";
 import { SelectItem } from "primeng/api";
-import { VendorService } from "../services/vendor.service";
-import { EmployeeExpertiseService } from "../services/employeeexpertise.service";
 import { WorkScopeService } from "../services/workscope.service";
-import { CustomerService } from "../services/customer.service";
 import { ItemClassificationService } from "../services/item-classfication.service";
 import { CurrencyService } from "../services/currency.service";
 import { UnitOfMeasureService } from "../services/unitofmeasure.service";
-import { ConditionService } from "../services/condition.service";
 import { WorkFlowtService } from "../services/workflow.service";
 import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-declare var $ : any;
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+declare var $: any;
 import { ChargesCreateComponent } from "../shared/Charges-Create.component";
 import { Percent } from "../models/Percent.model";
-import { PercentService } from "../services/percent.service";
-import { WorkOrderService } from "../services/work-order/work-order.service";
 import { AuthService } from "../services/auth.service";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
@@ -31,7 +24,7 @@ import { MenuItem } from 'primeng/api';
     templateUrl: './workflow-Create.component.html',
     styleUrls: ['./workflow-Create.component.css']
 })
-  
+
 export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     @Input() isWorkOrder;
     @Input() savedWorkOrderData;
@@ -61,8 +54,11 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     newAction: ITask;
     workFlowActions: ITask[];
     sourceWorkFlow: any = {};
-    // employeeExplist: any[] = [];
-    // materailTypeList: any[] = [];
+    title: string = "Work Flow";
+    validateheader: any = false;
+    calculatepart: any = false;
+    finalCost: any;
+    finalThrsh: any;
     allCustomers: any[] = [];
     customerNamecoll: any[] = [];
     customerNames: any[] = [];
@@ -125,11 +121,11 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     selectedSideTabIndex: number;
     berthreshold: any;
     modal: any;
-    EstMaterialCost :any= '0.00';
-    EstTotalExpertiseCost :any= '0.00';
-    EstTotalCharges :any= '0.00';
-    EstTotalOthers :any= '0.00';
-    TotalEst :any= '0.00';
+    EstMaterialCost: any = '0.00';
+    EstTotalExpertiseCost: any = '0.00';
+    EstTotalCharges: any = '0.00';
+    EstTotalOthers: any = '0.00';
+    TotalEst: any = '0.00';
     actionAttributeTabs: any[] = [
         { visible: false, selected: false, label: "Material List" },
         { visible: false, selected: false, label: "Charges" },
@@ -150,7 +146,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     TotalExpertiseCost: any;
     Total: any;
     PercentBERThreshold: any;
-    @ViewChild(ChargesCreateComponent,{static:false}) chargesCreateComponent: ChargesCreateComponent;
+    @ViewChild(ChargesCreateComponent, { static: false }) chargesCreateComponent: ChargesCreateComponent;
     responseDataForHeader: any;
     tasksData: any = [];
     typeOfForm: string = 'Create';
@@ -162,15 +158,15 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     tempMemo: any;
     disableUpdateButton: boolean = false;
     updateWorkFlowId: string;
-    arrayworkScopeIdlist:any[] = [];
-    arraycurrencyIdlist:any[] = [];
-    arrayCustomerIdlist:any[] = [];
-    arrayItemMasterIdlist:any[] = [];
+    arrayworkScopeIdlist: any[] = [];
+    arraycurrencyIdlist: any[] = [];
+    arrayCustomerIdlist: any[] = [];
+    arrayItemMasterIdlist: any[] = [];
     breadcrumbs: MenuItem[] = [
         { label: 'Work Flow' },
-		{ label: 'Create Work Flow' }
-	];
-    isOnload:any;
+        { label: 'Create Work Flow' }
+    ];
+    isOnload: any;
     constructor(private actionService: ActionService,
         private authService: AuthService,
         private router: ActivatedRoute,
@@ -236,7 +232,20 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.workFlow.selectedItems = this.selectedItems;
 
         if (this.selectedItems != undefined && this.selectedItems.length > 0)
-            this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
+
+            if (!this.currentPanelId) {
+                this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
+            }
+            else {
+                for (var i = 0; i < this.workFlow.selectedItems.length; i++) {
+                    if (this.workFlow.selectedItems[i].Id == this.currentPanelId) {
+                        this.setCurrentPanel(this.selectedItems[i].Name, this.selectedItems[i].Id);
+                    } else {
+                        this.setCurrentPanel(this.selectedItems[0].Name, this.selectedItems[0].Id);
+                        return;
+                    }
+                }
+            }
     }
 
     ngOnInit(): void {
@@ -270,7 +279,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.newAction = { Id: "0", Name: "", Description: "", Memo: "", Sequence: 0 };
         this.getAllActions();
 
-this.getTaksAttributes();
+        this.getTaksAttributes();
 
         this.dropdownSettings = {
             singleSelection: false,
@@ -278,56 +287,56 @@ this.getTaksAttributes();
             textField: 'Name',
             selectAllText: 'Select All',
             unSelectAllText: 'UnSelect All',
-            itemsShowLimit: 1,
+            itemsShowLimit: 3,
             allowSearchFilter: false
         };
 
         this.loadWorkFlow();
         this.getAllPercentages();
     }
-    getTaksAttributes(){
-    this.isSpinnerVisible = true;
-    this.actionService.getActionAttributes().subscribe(
-        actionAttributes => {
-            this.isSpinnerVisible = false;
-            actionAttributes = actionAttributes.filter(x => x.isActive && x)
-            this.actionAttributes = [];
-            for (let attr of actionAttributes) {
-                if (this.isQuote && (attr.description == 'Material List' || attr.description == 'Charges' || attr.description == 'Exclusions' || attr.description == 'Expertise')) {
-                    this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
+    getTaksAttributes() {
+        this.isSpinnerVisible = true;
+        this.actionService.getActionAttributes().subscribe(
+            actionAttributes => {
+                this.isSpinnerVisible = false;
+                actionAttributes = actionAttributes.filter(x => x.isActive && x)
+                this.actionAttributes = [];
+                for (let attr of actionAttributes) {
+                    if (this.isQuote && (attr.description == 'Material List' || attr.description == 'Charges' || attr.description == 'Exclusions' || attr.description == 'Expertise')) {
+                        this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
+                    }
+                    else if (!this.isQuote) {
+                        this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
+                    }
                 }
-                else if (!this.isQuote) {
-                    this.actionAttributes.push({ Id: attr.taskAttributeId, Name: attr.description, Sequence: attr.taskAttributeId });
-                }
-            }
-            this.actionAttributes = this.actionAttributes.sort(function (a, b) {
-                var nameA = a.Sequence; // ignore upper and lowercase
-                var nameB = b.Sequence; // ignore upper and lowercase
-                if (nameA < nameB) {
-                    return -1;
-                }
-                if (nameA > nameB) {
-                    return 1;
-                }
-                return 0;
+                this.actionAttributes = this.actionAttributes.sort(function (a, b) {
+                    var nameA = a.Sequence; // ignore upper and lowercase
+                    var nameB = b.Sequence; // ignore upper and lowercase
+                    if (nameA < nameB) {
+                        return -1;
+                    }
+                    if (nameA > nameB) {
+                        return 1;
+                    }
+                    return 0;
+                });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-        }, error => {
-            this.isSpinnerVisible = false;
-        });
-}
+    }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
-	get employeeId() {
-		return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
-	}
+    get employeeId() {
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+    }
 
     private getAllPercentages(): void {
         this.isSpinnerVisible = true;
@@ -395,15 +404,15 @@ this.getTaksAttributes();
             this.isSpinnerVisible = true;
             this.actionService.getWorkFlow(workFlowId).subscribe(workFlow => {
                 this.sourceWorkFlow = workFlow[0];
-if(workFlow&& workFlow[0]){
-    this.sourceWorkFlow.part = {
-        partId: workFlow[0].itemMasterId,
-        partName: workFlow[0].partNumber
-    }
-}
+                if (workFlow && workFlow[0]) {
+                    this.sourceWorkFlow.part = {
+                        partId: workFlow[0].itemMasterId,
+                        partName: workFlow[0].partNumber
+                    }
+                }
                 this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : -1;
                 this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : -1;
-                this.sourceWorkFlow.percentageOfCharges =  this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : -1;
+                this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : -1;
                 this.sourceWorkFlow.percentageOfOthers = this.sourceWorkFlow.percentageOfOthers > 0 ? this.sourceWorkFlow.percentageOfOthers : -1;
                 this.sourceWorkFlow.percentageOfTotal = this.sourceWorkFlow.percentageOfTotal > 0 ? this.sourceWorkFlow.percentageOfTotal : -1;
                 this.isSpinnerVisible = false;
@@ -448,9 +457,9 @@ if(workFlow&& workFlow[0]){
                 this.loadWorkScopedata();
                 this.loadcustomerData();
                 this.updateMode(workFlow);
-// calculation part 
-this.isOnload=true;
-this.calculateTotalWorkFlowCost(true)
+                // calculation part 
+                this.isOnload = true;
+                this.calculateTotalWorkFlowCost(true)
 
             }, error => {
                 this.isSpinnerVisible = false;
@@ -754,33 +763,33 @@ this.calculateTotalWorkFlowCost(true)
             itemMasterId = this.sourceWorkFlow.changedPartNumberId ? this.sourceWorkFlow.changedPartNumberId : 0;
         }
 
-        if(this.arrayItemMasterIdlist.length == 0 && itemMasterId == 0) {			
-            this.arrayItemMasterIdlist.push(0); 
+        if (this.arrayItemMasterIdlist.length == 0 && itemMasterId == 0) {
+            this.arrayItemMasterIdlist.push(0);
         }
-        else{
-            this.arrayItemMasterIdlist.push(itemMasterId); 
-        }    
- 
+        else {
+            this.arrayItemMasterIdlist.push(itemMasterId);
+        }
+
         // this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strvalue, true, 20, this.arrayItemMasterIdlist.join(), this.currentUserMasterCompanyId)
         //     .subscribe(res => {
-            this.commonService.getPartnumList(strvalue).subscribe(res => {
-                this.isSpinnerVisible = false;
-                this.partCollection = res.map(x => {
-                    if (initialCall && this.sourceWorkFlow.partNumber == x.partNumber) {
-                        this.sourceWorkFlow.part = {
-                            partId: x.itemMasterId,
-                            partName: x.partNumber
-                        }
-                    }
-                    return {
-                        ...x,
+        this.commonService.getPartnumList(strvalue).subscribe(res => {
+            this.isSpinnerVisible = false;
+            this.partCollection = res.map(x => {
+                if (initialCall && this.sourceWorkFlow.partNumber == x.partNumber) {
+                    this.sourceWorkFlow.part = {
                         partId: x.itemMasterId,
                         partName: x.partNumber
                     }
-                });
-            }, error => {
-                this.isSpinnerVisible = false;
+                }
+                return {
+                    ...x,
+                    partId: x.itemMasterId,
+                    partName: x.partNumber
+                }
             });
+        }, error => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     loadChangePartItems(strvalue = '', initialCall = false) {
@@ -789,12 +798,12 @@ this.calculateTotalWorkFlowCost(true)
         if (this.UpdateMode && this.sourceWorkFlow) {
             changedPartNumberId = this.sourceWorkFlow.changedPartNumberId ? this.sourceWorkFlow.changedPartNumberId : 0;
         }
-        
-        if(this.arrayItemMasterIdlist.length == 0 && changedPartNumberId == 0) {			
-            this.arrayItemMasterIdlist.push(0); 
+
+        if (this.arrayItemMasterIdlist.length == 0 && changedPartNumberId == 0) {
+            this.arrayItemMasterIdlist.push(0);
         }
-        else{
-            this.arrayItemMasterIdlist.push(changedPartNumberId); 
+        else {
+            this.arrayItemMasterIdlist.push(changedPartNumberId);
         }
 
         this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strvalue, true, 20, this.arrayItemMasterIdlist.join(), this.currentUserMasterCompanyId)
@@ -832,7 +841,7 @@ this.calculateTotalWorkFlowCost(true)
 
     public onPartSelect(event) {
         this.isSpinnerVisible = true;
-        this.sourceWorkFlow.revisedPartNumber=event.revisedPartNumber
+        this.sourceWorkFlow.revisedPartNumber = event.revisedPartNumber
         this.itemser.getItemMasterDetailById(this.sourceWorkFlow.part.partId).subscribe(res => {
 
             this.isSpinnerVisible = false;
@@ -971,7 +980,7 @@ this.calculateTotalWorkFlowCost(true)
 
     private loadWorkScopedata() {
         let workScopeId = this.sourceWorkFlow.workScopeId ? this.sourceWorkFlow.workScopeId : '0';
-        this.arrayworkScopeIdlist.push(workScopeId); 
+        this.arrayworkScopeIdlist.push(workScopeId);
 
         this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'WorkScopeId', 'WorkScopeCode', '', true, 100, this.arrayworkScopeIdlist.join(), this.currentUserMasterCompanyId)
             .subscribe(res => {
@@ -989,12 +998,12 @@ this.calculateTotalWorkFlowCost(true)
 
     private loadCurrencyData() {
         let currencyId = this.sourceWorkFlow.currencyId ? this.sourceWorkFlow.currencyId : '0';
-        if(this.arraycurrencyIdlist.length == 0 && currencyId == 0) {			
-            this.arraycurrencyIdlist.push(0); 
+        if (this.arraycurrencyIdlist.length == 0 && currencyId == 0) {
+            this.arraycurrencyIdlist.push(0);
         }
-        else{
-            this.arraycurrencyIdlist.push(currencyId); 
-        }       
+        else {
+            this.arraycurrencyIdlist.push(currencyId);
+        }
 
         this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 0, this.arraycurrencyIdlist.join(), this.currentUserMasterCompanyId)
             .subscribe(currencydata => {
@@ -1036,13 +1045,13 @@ this.calculateTotalWorkFlowCost(true)
             customerId = this.sourceWorkFlow.customerId ? this.sourceWorkFlow.customerId : 0;
         }
 
-        if(this.arrayCustomerIdlist.length == 0 && customerId == 0) {			
-            this.arrayCustomerIdlist.push(0); 
-        }  
-        else{
-            this.arrayCustomerIdlist.push(customerId); 
+        if (this.arrayCustomerIdlist.length == 0 && customerId == 0) {
+            this.arrayCustomerIdlist.push(0);
         }
-        
+        else {
+            this.arrayCustomerIdlist.push(customerId);
+        }
+
         this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', query, true, 20, this.arrayCustomerIdlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.customerNames = res.map(x => {
                 this.isSpinnerVisible = false;
@@ -1165,22 +1174,22 @@ this.calculateTotalWorkFlowCost(true)
         if (this.UpdateMode) {
             this.disableUpdateButton = false;
         }
-     
+
         const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
-        const val = ((otherCost / 100) * this.sourceWorkFlow.percentageOfCharges)+otherCost;
-        this.EstTotalOthers=formatNumberAsGlobalSettingsModule(val, 2);
+        const val = ((otherCost / 100) * this.sourceWorkFlow.percentageOfCharges) + otherCost;
+        this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : null;
     }
-    onMaterialCostChange(percentValue,from) {
-       
-        if(from=='html'){
-            this.isOnload==false
+    onMaterialCostChange(percentValue, from) {
+
+        if (from == 'html') {
+            this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.MaterialCost) {
             percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
             const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
-            const val = ((MaterialCost / 100) * percentValue)+MaterialCost;
+            const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
             this.EstMaterialCost = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
@@ -1188,15 +1197,15 @@ this.calculateTotalWorkFlowCost(true)
         }
     }
 
-    onExpertiseCostChange(percentValue,from) {
-        if(from=='html'){
-            this.isOnload==false
+    onExpertiseCostChange(percentValue, from) {
+        if (from == 'html') {
+            this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.TotalExpertiseCost) {
             percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
             const TotalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
-            const val = ((TotalExpertiseCost / 100) * percentValue)+TotalExpertiseCost;
+            const val = ((TotalExpertiseCost / 100) * percentValue) + TotalExpertiseCost;
             this.EstTotalExpertiseCost = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
@@ -1204,15 +1213,15 @@ this.calculateTotalWorkFlowCost(true)
         }
     }
 
-    onChargesChange(percentValue,from) {
-        if(from=='html'){
-            this.isOnload==false
+    onChargesChange(percentValue, from) {
+        if (from == 'html') {
+            this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.TotalCharges) {
             percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
             const TotalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
-            const val = ((TotalCharges / 100) * percentValue)+TotalCharges;
+            const val = ((TotalCharges / 100) * percentValue) + TotalCharges;
             this.EstTotalCharges = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
@@ -1220,28 +1229,28 @@ this.calculateTotalWorkFlowCost(true)
         }
     }
 
-    onOtherChange(percentValue,from) {
-        if(from=='html'){
-            this.isOnload==false
+    onOtherChange(percentValue, from) {
+        if (from == 'html') {
+            this.isOnload == false
             this.calculateTotalWorkFlowCost(true);
         }
         if (this.sourceWorkFlow.otherCost) {
             percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
             const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
-            const val = ((otherCost / 100) * percentValue)+otherCost;
+            const val = ((otherCost / 100) * percentValue) + otherCost;
             this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
             this.setTotalCharges()
         } else {
-            this.EstTotalOthers ='0.00';
+            this.EstTotalOthers = '0.00';
         }
     }
-   setTotalCharges(){
+    setTotalCharges() {
     }
-    calculateTotalWorkFlowCost(isDisplayErrorMesage:boolean):any{
+    percentBERTh:any;
+    calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
         if (this.sourceWorkFlow.berThresholdAmount == undefined || this.sourceWorkFlow.berThresholdAmount == 0) {
             this.sourceWorkFlow.berThresholdAmount = 0;
         }
-
         this.MaterialCost = 0;
         this.TotalCharges = 0;
         this.TotalExpertiseCost = 0;
@@ -1258,53 +1267,49 @@ this.calculateTotalWorkFlowCost(true)
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
-if(this.isOnload==true){
-    this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial,'onload');
-    this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise,'onload');
-    this.onChargesChange(this.sourceWorkFlow.percentageOfCharges,'onload');
-    this.onOtherChange(this.sourceWorkFlow.percentageOfOthers,'onload');
-    this.onTotalChange(this.sourceWorkFlow.percentageOfTotal,'onload');
-   
-    const totlapercent=(this.sourceWorkFlow.percentageOfMaterial+this.sourceWorkFlow.percentageOfExpertise+this.sourceWorkFlow.percentageOfCharges+this.sourceWorkFlow.percentageOfOthers)/4
-    this.sourceWorkFlow.percentageOfTotal=totlapercent;
-    this.sourceWorkFlow.totPer=totlapercent+'%';
-}
-    const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
-    const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
-    const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
-    const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, '')) : 0.00;
-    const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
-    this.Total = formatNumberAsGlobalSettingsModule(total, 2);
-    this.TotalEst=this.Total
-    const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
-    const maxValue = Math.max(0, total, berThAmt);
-    const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
+        if (this.isOnload == true) {
+            this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
+            this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise, 'onload');
+            this.onChargesChange(this.sourceWorkFlow.percentageOfCharges, 'onload');
+            this.onOtherChange(this.sourceWorkFlow.percentageOfOthers, 'onload');
+            this.onTotalChange(this.sourceWorkFlow.percentageOfTotal, 'onload');
 
-    let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
+            const totlapercent = (this.sourceWorkFlow.percentageOfMaterial + this.sourceWorkFlow.percentageOfExpertise + this.sourceWorkFlow.percentageOfCharges + this.sourceWorkFlow.percentageOfOthers) / 4
+            this.sourceWorkFlow.percentageOfTotal = totlapercent;
+            this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
+        }
+        const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
+        const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
+        const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
+        const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, '')) : 0.00;
+        const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
+        this.Total = formatNumberAsGlobalSettingsModule(total, 2);
+        this.TotalEst = this.Total
+        const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
+        const maxValue = Math.max(0, total, berThAmt);
+        const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
+        let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
+        this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
+        this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+        if (!this.isOnload) {
+            if (this.Total > berThAmt && isDisplayErrorMesage && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
+                this.alertService.showMessage(this.title, 'Work Flow total cost is exceeding the BER Threshold Amount', MessageSeverity.info);
+                return false;
+            }
 
-    this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
-    // 
-//    if (this.Total > berThAmt && isDisplayErrorMesage && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
-//         this.alertService.showMessage(this.title, 'Work Flow total cost is exceeding the BER Threshold Amount', MessageSeverity.info);
-//         return false;
-//     }
-    if (this.Total > berThAmt && isDisplayErrorMesage && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
-        this.alertService.showMessage(this.title, 'Work Flow total cost is exceeding the BER Threshold Amount', MessageSeverity.info);
-        return false;
+            if (this.Total > berThAmt && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
+                return false;
+            }
+
+            return true;
+        }
     }
-
-    if (this.Total > berThAmt && (this.sourceWorkFlow.isFixedAmount == true || this.sourceWorkFlow.isPercentageOfNew == true || this.sourceWorkFlow.percentageOfReplacement == true)) {
-        return false;
-    }
-
-    return true;
-    }
-    onTotalChange(percentValue,from) {
+    onTotalChange(percentValue, from) {
         this.TotalEst = '0.00';
         if (this.Total) {
             percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
             const Total = parseFloat(this.Total.toString().replace(/\,/g, ''));
-            const val = ((Total / 100) * percentValue)+this.Total;
+            const val = ((Total / 100) * percentValue) + this.Total;
             this.TotalEst = formatNumberAsGlobalSettingsModule(val, 2);
         } else {
             this.TotalEst = '0.00';
@@ -1336,49 +1341,6 @@ if(this.isOnload==true){
             this.sourceWorkFlow.percentOfReplacement = 0;
         }
         this.berDetermination();
-    }
-
-    private defualtChargesListobj() {
-        let partListObj = {
-            type: '', qty: '', unitcost: '', extcost: '', taskId: ''
-        }
-        return partListObj;
-    }
-
-    private defualtDrectObj() {
-        let partListObj = {
-            action: '', directionName: '', sequence: '', memo: '',
-        }
-        return partListObj;
-    }
-
-    private defualtEquipmentObj() {
-        let partListObj = {
-            partNumber: '', partDescription: '', itemClassification: '', qty: '',
-        }
-        return partListObj;
-    }
-
-    private defualtExclsuionObj() {
-        let partListObj = {
-            epn: '', epndescription: '', cost: '', notes: '',
-        }
-        return partListObj;
-    }
-
-    private defualtExpertiseObj() {
-        let partListObj = {
-            expertiseType: '', estimatedHours: '', standardRate: '', estimatedRate: '',
-        }
-        return partListObj;
-    }
-
-    private defualtMaterialListobj() {
-        let partListObj = {
-            partNumber: '', partDescription: '', itemClassification: '', qty: '', uom: '', condition: '',
-            unitcost: '', extcost: '', provision: '', deffered: '', figureId: '', taskId: ''
-        }
-        return partListObj;
     }
 
     getWorkFlowMaterial() {
@@ -1424,119 +1386,6 @@ if(this.isOnload==true){
         });
     }
 
-    private GetPartNumberList() {
-        this.isSpinnerVisible = true;
-        this.itemser.getPartDetailsDropdown().subscribe(
-            results => {
-                this.isSpinnerVisible = false;
-                this.allParts = results;
-                if (this.updateMode) {
-                    var currentSelectedPart = this.allParts.filter(x => x.itemMasterId == this.sourceWorkFlow.itemMasterId);
-
-                    if (currentSelectedPart.length > 0) {
-                        this.sourceWorkFlow.part = {
-                            "partId": currentSelectedPart[0].itemMasterId,
-                            "partName": currentSelectedPart[0].partNumber,
-                            "description": currentSelectedPart[0].partDescription
-                        };
-                    }
-
-                    if (this.sourceWorkFlow.changedPartNumberId != undefined && this.sourceWorkFlow.changedPartNumberId != null && this.sourceWorkFlow.changedPartNumberId != '') {
-                        var currentSelectedChangedPart = this.allParts.filter(x => x.itemMasterId == this.sourceWorkFlow.changedPartNumberId);
-                        if (currentSelectedChangedPart.length > 0) {
-                            this.sourceWorkFlow.changedPart = {
-                                "partId": currentSelectedChangedPart[0].itemMasterId,
-                                "partName": currentSelectedChangedPart[0].partNumber,
-                                "description": currentSelectedChangedPart[0].partDescription
-                            };
-                        }
-                    }
-                }
-            }, error => {
-                this.isSpinnerVisible = false;
-            });
-    }
-
-    // private getDefaultConditionId(name: string): string {
-
-    //     if (this.allconditioninfo != undefined && this.allconditioninfo.length > 0) {
-    //         let defaultCondition: any = this.allconditioninfo.find(x => x.description.trim().toLowerCase() == name.toLowerCase())
-
-    //         return defaultCondition != undefined ? defaultCondition.conditionId : 0;
-    //     }
-    //     else {
-
-    //         this.isSpinnerVisible = true;
-    //         this.conditionService.getConditionList().subscribe(data => {
-    //             this.isSpinnerVisible = false;
-    //             this.allconditioninfo = data[0];
-    //             let defaultCondition: any = this.allconditioninfo.find(x => x.description.trim().toLowerCase() == name.toLowerCase())
-
-    //             return defaultCondition != undefined ? defaultCondition.conditionId : 0;
-    //         }, error => {
-    //             this.isSpinnerVisible = false;
-    //         });
-    //     }
-    // }
-
-    // private loadConditionData() {
-    //     this.isSpinnerVisible = true;
-    //     this.conditionService.getConditionList().subscribe(data => {
-    //         this.isSpinnerVisible = false;
-    //         this.allconditioninfo = data[0];
-    //     }, error => {
-    //         this.isSpinnerVisible = false;
-    //     });
-    // }
-
-    // private getDefaultUOMId(name: string): string {
-    //     let defaultUOM: any = this.allUomdata.filter(x => x.shortName == name);
-
-    //     if (defaultUOM.length > 0) {
-    //         return defaultUOM[0].unitOfMeasureId;
-    //     }
-    //     return "";
-    // }
-
-    // private loadUOMData() {
-    //     this.isSpinnerVisible = true;
-    //     this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
-    //         this.isSpinnerVisible = false;
-    //         this.allUomdata = uomdata[0];
-    //     }, error => {
-    //         this.isSpinnerVisible = false;
-    //     });
-    // }
-
-    // private getDefaultMaterialMandatoryId(name: string): string {
-    //     let defaultMaterialMandatory: any = this.materialMandatory.filter(x => x.name == name);
-
-    //     if (defaultMaterialMandatory.length > 0) {
-    //         return defaultMaterialMandatory.id;
-    //     }
-    //     return "";
-    // }
-
-    // private getMaterialMandatory(): void { 
-    //     this.isSpinnerVisible = true;
-    //     this.actionService.GetMaterialMandatory().subscribe(
-    //         mandatory => {
-    //             this.isSpinnerVisible = false;
-    //             this.materialMandatory = mandatory;
-    //         }, error => {
-    //             this.isSpinnerVisible = false;
-    //         });
-    // }
-
-    // private loadItemClassData() {
-    //     this.isSpinnerVisible = true;
-    //     this.itemClassService.getWorkFlows().subscribe(data => {
-    //         this.isSpinnerVisible = false;
-    //         this.itemClassInfo = data
-    //     }, error => {
-    //         this.isSpinnerVisible = false;
-    //     });;
-    // }
 
     onDataLoadFailed(log) {
         const errorLog = log;
@@ -1592,9 +1441,9 @@ if(this.isOnload==true){
     setCurrentPanel(itemName, id): void {
 
         this.currentPanelId = id;
-        this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
         itemName = itemName.replace(" ", "_");
 
+        this.workFlow.partNumber = this.sourceWorkFlow.itemMasterId;
         var list = document.getElementsByClassName('pan');
         for (var i = 0; i < list.length; i++) {
             list[i].classList.remove('active');
@@ -1611,12 +1460,11 @@ if(this.isOnload==true){
 
     SetCurrectTab(taskId, index?): void {
         this.currenttaskId = taskId;
-
+        // this.currentPanelId=this.currentPanelId ? this.currentPanelId :0;
         if (index !== undefined || index !== null) {
 
             this.selectedSideTabIndex = index;
         }
-
         this.workFlow = this.workFlowList.filter(x => x.taskId == this.currenttaskId)[0];
 
         var list = document.getElementsByClassName('actrmv');
@@ -2294,23 +2142,29 @@ if(this.isOnload==true){
 
         return true;
     }
-
+    isheadUpdate: any;
     addWorkFlow(isHeaderUpdate: boolean): void {
+        this.isheadUpdate = isHeaderUpdate;
         this.sourceWorkFlow.workflowId = undefined;
 
         if (!this.validateWorkFlowHeader()) {
             return;
+        } else {
+            this.confirmation();
         }
 
         if (!this.calculateTotalWorkFlowCost(false)) {
-            var OkCancel = confirm("Work Flow total cost exceed the BER threshold amount. Do you still want to continue?");
-            if (OkCancel == false) {
-                return;
-            }
+            $('#confir').modal("show");
+        } else {
+            this.confirmation();
         }
-
+    }
+    dataCancel() {
+        $('#confir').modal("hide");
+    }
+    confirmation() {
         this.SaveWorkFlow();
-        if (isHeaderUpdate) {
+        if (this.isheadUpdate) {
             this.sourceWorkFlow.charges = [];
             this.sourceWorkFlow.directions = [];
             this.sourceWorkFlow.equipments = [];
@@ -2343,9 +2197,7 @@ if(this.isOnload==true){
 
             return;
         }
-
         this.isSpinnerVisible = true;
-
         this.sourceWorkFlow.masterCompanyId = this.currentUserMasterCompanyId;
         this.sourceWorkFlow.createdBy = this.userName;
         this.sourceWorkFlow.updatedBy = this.userName;
@@ -2359,20 +2211,32 @@ if(this.isOnload==true){
             });
     }
 
-    title: string = "Work Flow";
-
     updateWorkFlow(): void {
         if (!this.validateWorkFlowHeader()) {
+            this.validateheader = true;
             return;
         }
-
+        this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
+        this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
         if (!this.calculateTotalWorkFlowCost(false)) {
-            var OkCancel = confirm("Work Flow total cost exceed the BER threshold amount. Do you still want to continue?");
-            if (OkCancel == false) {
-                return;
+            $('#quoteVer').modal("hide");
+           if ((this.finalCost > this.finalThrsh)) {
+                $('#UpdateConfirm').modal("show");
+            }
+            if(this.finalCost==0){
+                this.updateConfirmation();
             }
         }
+        if (this.finalCost < this.finalThrsh) {
+            this.updateConfirmation();
+        }
 
+
+    }
+    upDateDataCancel() {
+        $('#UpdateConfirm').modal("hide");
+    }
+    updateConfirmation() {
         this.SaveWorkFlow();
         if (this.isHeaderUpdate) {
             this.sourceWorkFlow.charges = [];
@@ -2405,16 +2269,27 @@ if(this.isOnload==true){
             this.alertService.showMessage(this.title, "Atleast one task is required.", MessageSeverity.error);
         }
         this.isSpinnerVisible = true;
-        const souceData={...this.sourceWorkFlow};
-        if(souceData.exclusions && souceData.exclusions.length !=0){
+        const souceData = { ...this.sourceWorkFlow };
+        if (souceData.exclusions && souceData.exclusions.length != 0) {
             souceData.exclusions.forEach(element => {
-            delete element.partName
+                delete element.partName
             });
         }
-        if(souceData.measurements && souceData.measurements.length !=0){
+        if (souceData.measurements && souceData.measurements.length != 0) {
             souceData.measurements.forEach(element => {
-            delete element.partName
-            });   
+                delete element.partName
+            });
+        }
+        if (souceData.publication && souceData.publication.length != 0) {
+            souceData.publication.forEach(element => {
+                if (element.workflowPublicationDashNumbers && element.workflowPublicationDashNumbers.length != 0) {
+                    var i;
+                    for (i = 0; i < element.workflowPublicationDashNumbers.length; i++) {
+                        element.workflowPublicationDashNumbers[i].AircraftDashNumberId = element.workflowPublicationDashNumbers[i]['dashNumberId'];
+                        delete element.workflowPublicationDashNumbers[i].dashNumberId;
+                    }
+                }
+            });
         }
         this.actionService.getNewWorkFlow(souceData).subscribe(
             result => {
@@ -2425,7 +2300,6 @@ if(this.isOnload==true){
                 this.isSpinnerVisible = false;
             });
     }
-
     increaseVerConfirmation(isIncrease) {
         $('#quoteVer').modal("hide");
         this.sourceWorkFlow['isVersionIncrease'] = isIncrease;

@@ -463,7 +463,6 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	}
 
 	nodeSelect(event) {
-		debugger;
 		//event.node = selected node
 		console.log("selected node", event, event.node);
 	}
@@ -726,7 +725,6 @@ export class LocationComponent implements OnInit, AfterViewInit {
 
 	public saveManagement(locationId, data1) //retriving SiteManagement Array
 	{
-		debugger;
 		for (let i = 0; i < data1.length; i++) {
 			if (data1[i].data.managementStructureId != null) {
 				data1[i].data.locationId = locationId;

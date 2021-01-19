@@ -19,7 +19,7 @@ import { AuthService } from "../services/auth.service";
 })
 export class ExclusionsCreateComponent implements OnInit, OnChanges {
     @Input() isWorkOrder = false;
-    @Input() workFlow: IWorkFlow;
+    @Input() workFlow:any={};
     @Input() UpdateMode: boolean;
     @Input() isEdit = false;
     @Input() isQuote = false;
@@ -183,6 +183,11 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                         conditionId:x.conditionId
                     }
                 });
+                this.partCollection.forEach(element => {
+                    if(element.partId==this.workFlow.itemMasterId){
+                       this.partCollection.splice(element, 1); 
+                    }
+                   });
                 this.itemclaColl = this.partCollection;
             }, error => {
                 this.isSpinnerVisible = false;

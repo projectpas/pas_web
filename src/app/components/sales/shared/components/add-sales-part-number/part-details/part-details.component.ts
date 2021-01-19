@@ -114,12 +114,12 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'select', header: '', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN', width: '40px', textalign: 'left' },
       { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
+      { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
       { field: 'itemGroup', header: 'Item Group', width: '100px', textalign: 'left' },
       { field: 'manufacturer', header: 'Manufacturer', width: '90px', textalign: 'left' },
       { field: 'itemClassificationCode', header: 'Classification', width: '90px', textalign: 'left' },
-      { field: 'conditionDescription', header: 'Cond', width: '90px', textalign: 'left' },
       { field: 'oempmader', header: 'OEM/PMA/DER', width: '90px', textalign: 'left' },
-      { field: 'alternateFor', header: 'Alternate / Equivalency PN', width: '90px', textalign: 'left' },
+      { field: 'alternateFor', header: 'Alt/Equiv For', width: '90px', textalign: 'left' },
       { field: 'qtyToOrder', header: 'Qty Req', width: '110px', textalign: 'right' },
       { field: 'qtyAvailable', header: 'Qty Avail', width: '90px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '90px', textalign: 'right' },
@@ -135,7 +135,7 @@ export class PartDetailsComponent implements OnChanges {
       { field: 'partNumber', header: 'PN', width: '80px', textalign: 'left' },
       { field: 'description', header: 'PN Description', width: '100px', textalign: 'left' },
       { field: 'stockType', header: 'Stk Type', width: '100px', textalign: 'left' },
-      { field: 'Manufacturer', header: 'Manufacturer', width: '100px', textalign: 'left' },
+      { field: 'stkLineManufacturer', header: 'Manufacturer', width: '100px', textalign: 'left' },
       { field: 'uomDescription', header: 'UOM', width: '80px', textalign: 'left' },
       { field: 'qtyAvailable', header: 'Qty Avail', width: '100px', textalign: 'right' },
       { field: 'qtyOnHand', header: 'Qty On Hand', width: '100px', textalign: 'right' },
@@ -285,11 +285,8 @@ export class PartDetailsComponent implements OnChanges {
 
   viewStockSelectedRow(rowData) {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-
     // this.modal = this.modalService.open(StocklineViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
-    this.modal.result.then(() => {
-    }, () => { })
   }
 
   viewStockLineHistory(rowData) {
@@ -316,8 +313,8 @@ export class PartDetailsComponent implements OnChanges {
           coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '',
           lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '',
         }
-      })
-      this.isSpinnerVisible = false
+      });
+      this.isSpinnerVisible = false;
     }, error => {
       this.isSpinnerVisible = false;
       const errorLog = error;

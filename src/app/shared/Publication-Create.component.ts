@@ -112,11 +112,10 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             textField: 'dashNumber',
             selectAllText: 'Select All',
             unSelectAllText: 'UnSelect All',
-            itemsShowLimit: 2,
+            itemsShowLimit: 3,
             allowSearchFilter: false
         };
         this.getPublicationByItemMasterId(this.itemMasterId);
-
         this.row = this.workFlow.publication[0];
         if (this.row == undefined) {
             this.row = {};
@@ -135,6 +134,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.row.publicationRecordId = "0";
         }
         this.loadPublicationTypes();
+
+
     }
 
     loadPublicationTypes() {
@@ -213,7 +214,8 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     getPublicationByItemMasterId(itemMasterId) {
         this.isSpinnerVisible = true;
         this._workflowService.getPublicationsByItemMasterId(itemMasterId).subscribe(res => {
-            this.publicationDropdown = res;
+            this.publicationDropdown = res; 
+        
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
@@ -273,8 +275,11 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
             this['dashNumberListByModelId' + index] = res.map(x => {
                 return {
+                    // ...x,
+                    AircraftDashNumberId:x.dashNumberId,
                     dashNumberId: x.dashNumberId,
-                    dashNumber: x.dashNumber
+                    dashNumber: x.dashNumber,
+                   
                 }
             }, error => {
                 this.isSpinnerVisible = false;
@@ -461,14 +466,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
 
-    onDeSelect(publication, item: any) {
-    }
 
-    onItemSelect(publication, item: any) {
-    }
-
-    onSelectAll(publication, items: any) {
-    }
 
     openAllCollapse() {
         $('#step1').collapse('show');
@@ -625,7 +623,6 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
                 row.publication=element.publicationId;
             }
         });
-        console.log("ff",row)
       this.deleteRowRecord = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }

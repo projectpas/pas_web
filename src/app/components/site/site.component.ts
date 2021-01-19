@@ -366,7 +366,6 @@ export class SiteComponent implements OnInit, AfterViewInit {
 	}
 
 	nodeSelect(event) {
-		debugger;
 		//event.node = selected node
 		console.log("selected node", event, event.node);
 	}

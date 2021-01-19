@@ -109,6 +109,7 @@ export class PurchaseSetupComponent implements OnInit {
 	tempMemo: any;
 	headerMemo: any;
 	headerNotes:any;
+	contactMemo:any;
 	partsMemo:any;	
 	multiplePNDetails: boolean;
 	addressMemoLabel: string;
@@ -3397,6 +3398,13 @@ export class PurchaseSetupComponent implements OnInit {
 		this.enableHeaderSaveBtn = true;
 	}
 
+	onAddContactMemo() {
+		this.contactMemo = this.vendorContactInfo.notes;
+	}
+	onSaveContactMemo() {
+		this.vendorContactInfo.notes = this.contactMemo;
+		// this.enableHeaderSaveBtn = true;
+	}
 
 	onAddNotes() {
 		this.headerNotes = this.headerInfo.notes;

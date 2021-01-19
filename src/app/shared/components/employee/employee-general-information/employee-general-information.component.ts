@@ -2039,7 +2039,6 @@ export class EmployeeGeneralInformationComponent implements OnInit, AfterViewIni
     }
     //already exits first name
     firstnameeventHandler(firstName) {
-        debugger;
         if (firstName.firstName != "") {
             let value = firstName.firstName;
             if (this.firstCollection) {

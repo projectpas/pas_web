@@ -1,12 +1,11 @@
-<div>
-    <div class="card new-card">
-        <div class="card-header bg-primary new-card-header">
+<div class="card new-card">
+        <div class="card-header header">
             <div class="row">
                 <div class="col">
-                    <h4 class="new-card-heading">{{moduleName}} Approval Rule</h4>
+                    <h4 class="header-name">{{moduleName}} Approval Rule</h4>
                 </div>
                 <div>
-                    <button type="button" class="btn-sm new-btn-primary" data-toggle="modal"
+                    <button type="button" class="btn-sm header-button" data-toggle="modal"
                         data-target="#addNewPOApproval" (click)="addNewApproval()" *ngIf="!isView">
                         Create Approval Rule
                     </button>
@@ -14,9 +13,9 @@
 
             </div>
         </div>
-    </div>
+    
 
-    <div class="card-body new-card-body">
+    <div class="card-body header-body">
 
         <p-table #dt class="rpo-table-cstm rro-table-cstm" [value]="poApprovalData" [metaKeySelection]="true"
             [first]="0" [style]="{ width: '100%' }" (onPage)="pageIndexChange($event)" [rows]="pageSize"
@@ -31,52 +30,55 @@
 
                         <p-multiSelect [options]="headers" [(ngModel)]="selectedColumns"
                             [ngModelOptions]="{ standalone: true }" optionLabel="header"
-                            selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
-                            defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                            selectedItemsLabel="{0} columns selected"
+                             class="multiselect-field"
+                            defaultLabel="Choose Columns"></p-multiSelect>
                     </div>
                     <div class="col">
-                        <div style="width: auto !important; float: right;"
-                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                        <div					
+						class="global-search-field inner-addon right-addon inline-block"
+					  >
                             <i class="fa fa-search"></i>
-                            <input type="text" pInputText size="50" class="form-control"
+                            <input type="text" pInputText size="50"
+                             class="form-control"
                                 (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                                style="height: 28px !important;" />
+                               />
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+                        <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data"
                             matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
-                            (click)="dt.exportCSV()" style="padding:5px 10px !important;"></button>
+                            (click)="dt.exportCSV()"></button>
                     </div>
-                    <div class="col">
-                        <div class="">
-                            <div class="col" style="width: 395px; float: right; padding-top: 3px;">
-                                <div class="form-group">
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <div class="pull-right buttons-div-align">
+                        <div class="col">
+                          <div class="col buttons-top-padding">
+                            <div class="form-group" [hidden]="isApproverlist">
+                              <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="RuleEmpStatus" class="form-control" value="Active"
                                                 (click)="getruleByStatus('Active')" checked [(ngModel)]="currentStatus" />
                                             <span class="checkmark"></span>Active
                                         </label>
                                     </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="RuleEmpStatus" class="form-control" value="InActive"
                                                 (click)="getruleByStatus('InActive')" [(ngModel)]="currentStatus" />
                                             <span class="checkmark"></span>In-Active
                                         </label>
                                     </div>
-                                    <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                    <div class="pull-left radio-buttons-align">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="RuleEmpStatus" class="form-control" value="All"
                                                 (click)="getruleByStatus('All')" [(ngModel)]="currentStatus" />
                                             <span class="checkmark"></span>All
                                         </label>
                                     </div>
-                                    <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                                        <label style="width: auto !important; margin-top: 3px;">
+                                    <div class="checkbox-cstm pull-left checkbox-align">
+                                        <label class="checkbox-label-align">
                                             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
                                                 id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -91,44 +93,44 @@
             </ng-template>
             <ng-template pTemplate="colgroup" let-columns>
                 <colgroup>
-                    <col *ngFor="let col of columns" style="width:130px" />
+                    <col *ngFor="let col of columns" class="table-column-width" />
                 </colgroup>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
 
-                    <ng-container *ngFor="let col of columns" style="width:150px">
-                        <th class="text-center"
+                    <ng-container *ngFor="let col of columns">
+                        <th class="table-column-width"
                             *ngIf="col.field!='companyName' && col.field!='buName' && col.field!='deptName' && col.field!='divName'"
                             pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="text-center" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn
+                        <th class="table-column-width" *ngIf="col.field=='companyName'" colspan="4" pResizableColumn
                             pReorderableColumn [pSortableColumn]="col.field">
                             Management Structure
                         </th>
                     </ng-container>
-                    <th style="width:140px;position:sticky;" *ngIf="selectedColumns.length > 0 && !isView">
-                        Action
+                    <th class="table-actions-column" *ngIf="selectedColumns.length > 0 && !isView">
+                        Actions
                     </th>
                 </tr>
                 <tr>
-                    <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-                        <input style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input class="table-header-input-width" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
                             pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains')" />
-                        <input type="date" style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                             name="createdDate" (change)="dt.filter($event.target.value, col.field, 'contains')" />
-                        <input type="date" style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
                             name="updatedDate" (change)="dt.filter($event.target.value, col.field, 'contains')" />
                     </th>
-                    <th style="width: 140px;position:sticky;"></th>
+                    <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
-                        <td class="uiTable_td_ovrflw_control">
+                        <td class="uiTable_td_ovrflw_control table-column-width" class="ui-resizable-column">
                             {{
                                 col.field == 'createdDate'
                                   ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
@@ -138,7 +140,7 @@
                               }}
                         </td>
                     </ng-container>
-                    <td style="width:140px;position:sticky; border: 1px solid #c8c8c8;" class="action-icons-cstm"
+                    <td class="action-icons-cstm table-column-width"
                         *ngIf="!isView">
                         <!-- <button class="btn-edit ptable-wo-btns buton_back_bordernon" mat-icon-button data-target="#addNewMemo" data-toggle="modal"
                       (click)="edit(rowData, i)" matTooltip="Edit">
@@ -179,17 +181,17 @@
             </ng-template>
             <ng-template pTemplate="emptymessage" let-columns *ngIf="poApprovalData.length == 0">
                 <tr>
-                    <td [attr.colspan]="15" class="no-records-cstm">
+                    <td [attr.colspan]="15" class="no-records-cstm no-records-msg">
                         No records found
                     </td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="summary" id="footer">
                 <label id="footer">Total:</label>
-                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
                 &nbsp;&nbsp;
                 <label id="footer">Pages Count:</label>
-                <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
+                <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
                     pInputText type="text" />
             </ng-template>
         </p-table>
@@ -276,7 +278,7 @@
             </div>
             <div class="modal-body">
                 <form #poApprovalForm="ngForm">
-                    <div class="col-md-3" style="padding-left: 6px; padding-right: 6px;">
+                    <div class="col-md-3 all-approval-div">
                         <div class="form-group">
                             <label style="width:auto">Approval Rule<span class="clr-red">*</span></label>
                             <select disabled="true" [(ngModel)]="creatingData.approvalTaskId"
@@ -328,7 +330,7 @@
                 </div>  -->
 
                     </div>
-                    <div class="col-3" style="padding-left: 6px; padding-right: 6px;">
+                    <div class="col-3 all-approval-div" >
                         <div class="form-group">
                             <label style="margin-top: -8px;">Amount <span class="clr-red">*</span></label>
                             <select [(ngModel)]="creatingData.amountId" (ngModelChange)="onSaveChange()" name="amount"
@@ -365,7 +367,7 @@
                                     [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
                                     #approverId="ngModel">
                                 </p-autoComplete>
-                                <button type="button" class="btn btn-primary but_stl"
+                                <button type="button" class="btn btn-primary m-t-10 pull-right but_stl"
                                     (click)="onAddApprover();">Add</button>
                             </div>
                             <!-- <select [(ngModel)]="creatingData.approverId" name="approver" required>
@@ -374,15 +376,15 @@
                     </select>    -->
                         </div>
                     </div>
-                    <div class="col-3" style="padding-left: 6px; padding-right: 6px;">
-                        <div class="card">
-                            <div class="card-header" style="padding: 10px 12px;">
-                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span
+                    <div class="col-md-3">
+                        <div class="card management-structure-card">
+                            <div class="card-header management-structure-card-header">
+                                <h5 class="management-structure-header" style="color:#333">Management Structure <span
                                         class="clr-red">*</span></h5>
                             </div>
-                            <div class="card-body" style="padding: 12px 12px 4px;">
+                            <div class="card-body structure-card-body">
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" class="form-control"
+                                    <select  class="form-control field-radius-5"
                                         name="primaryCompany" [(ngModel)]="creatingData.companyId"
                                         (change)="getBUList(creatingData.companyId);" #mCompanyName required>
                                         <option value="0">Select</option>
@@ -397,16 +399,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" [(ngModel)]="creatingData.buId"
+                                    <select  [(ngModel)]="creatingData.buId"
                                         name="primaryBU" (change)="getDivisionlist(creatingData.buId)"
-                                        class="form-control">
+                                        class="form-control field-radius-5">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of bulist" [ngValue]="name.value">{{name.label}}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" class="form-control"
+                                    <select  class="form-control field-radius-5"
                                         [(ngModel)]="creatingData.divisionId" name="primaryDivision"
                                         (change)="getDepartmentlist(creatingData.divisionId)">
                                         <option value="0">Select</option>
@@ -415,7 +417,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" class="form-control"
+                                    <select  class="form-control field-radius-5"
                                         [(ngModel)]="creatingData.departmentId" name="primaryDept"
                                         (change)="getDepartmentId(creatingData.departmentId)">
                                         <option value="0">Select</option>
@@ -438,38 +440,38 @@
                             [totalRecords]="totalRecordsemp">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th style="width: 50px; text-align: center;">
+                                    <th class="table-column-width">
                                         Flag
                                     </th>
-                                    <th style="width: 120px;" *ngFor="let col of columns">
+                                    <th class="table-column-width" *ngFor="let col of columns">
                                         {{ col.header }}
                                     </th>
-                                    <th style="width: 120px; text-align: center;">
+                                    <th class="table-column-width">
                                         Primary
                                     </th>
-                                    <th style="width: 120px; position:sticky;text-align:center;">
+                                    <th class="table-column-width">
                                         Action
                                     </th>
                                 </tr>
                                 <tr>
-                                    <td style="width: 50px; text-align: center;">
+                                    <td class="table-column-width">
                                     </td>
-                                    <th style="width: 120px;" style="width:auto" *ngFor="let col of columns"
+                                    <th class="table-column-width" *ngFor="let col of columns"
                                         [ngSwitch]="col.field">
                                         <input [disabled]="col.field == 'isPrimary'" style="width:100%;" pInputText
                                             type="text" (input)="
                                     ptabletagName.filter($event.target.value, col.field, 'contains')
                                     " />
                                     </th>
-                                    <th style="width: 120px; text-align: center;">
+                                    <th class="table-column-width" >
                                     </th>
-                                    <th style="width: 120px; position:sticky;text-align:center;">
+                                    <th class="table-column-width" >
                                     </th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
                                 <tr>
-                                    <td style="width: 50px; text-align: center;">
+                                    <td class="table-column-width">
                                         <span class="flag">
                                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                             color: rowData.isPrimary == true ? 'green' : 'none'
@@ -477,16 +479,16 @@
                                                 aria-hidden="true"></i>
                                         </span>
                                     </td>
-                                    <td style="width: 120px; text-align:left;" *ngFor="let col of columns">
+                                    <td class="table-column-width" *ngFor="let col of columns">
                                         {{ col.field != 'isPrimary' ? rowData[col.field] : ''}}
                                     </td>
-                                    <td style="width: 120px; text-align: center;">
+                                    <td class="table-column-width">
                                         <input *ngIf="rowData.isPrimary" disabled type="checkbox" name="isPrimary"
                                             checked>
                                         <input *ngIf="!rowData.isPrimary" (click)="makePrimary(rowData.employeeId)"
                                             type="checkbox" name="isPrimary">
                                     </td>
-                                    <td style="width: 120px; position:sticky;text-align:center;">
+                                    <td class="table-column-width">
                                         <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{i}}"
                                             onLabel="on" offLabel="off"
                                             matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active'}}"
@@ -507,20 +509,20 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage" let-columns *ngIf="employeeNames.length == 0">
                                 <tr>
-                                    <td [attr.colspan]="4" style="color: red; font-weight: bold; text-align: center">
+                                    <td [attr.colspan]="4" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total: </label>
-                                <input style="width: 5%;" [value]="employeeNames.length" name="totalRecords" disabled
+                                <input class="footer-input-width" [value]="employeeNames.length" name="totalRecords" disabled
                                     pInputText type="text" />
 
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
 
-                                <input style="width: 5%;" [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)"
+                                <input class="footer-input-width" [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)"
                                     name="page count tax" disabled pInputText type="text" />
                             </ng-template>
                             <ng-template #contentDeleteTag let-c="close" let-d="dismiss">
@@ -537,7 +539,7 @@
                                     </strong>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-success"
+                                    <button type="button" class="btn btn-primary"
                                         (click)="onDeleteTagName()">Yes</button>
                                     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
                                 </div>
@@ -548,15 +550,13 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <div style="float:right">
-                    <button class="btn btn-primary btn-primary" (click)="savePoApproval()"
-                        style="padding: 6px 12px !important;margin-top: 10px;"
+              
+                    <button class="btn btn-primary" (click)="savePoApproval()"
                         [disabled]="!poApprovalForm.valid || employeeNames.length == 0 || creatingData.managementStructureId == 0 || creatingData.approvalTaskId == 0 || creatingData.ruleNumberId == 0 || !enableSaveBtn">
                         {{(isEdit)?'Update':'Save'}}
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;" (click)="isEdit = false;">Close</button>
-                </div>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="isEdit = false;">Close</button>
+               
             </div>
 
 
@@ -571,7 +571,7 @@
                             <h4 class="modal-title">Edit Memo</h4>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-bordered table-fixed workflow-table-material">
+                            <!-- <table class="table table-bordered table-fixed workflow-table-material">
                                 <thead>
                                     <th style="color: #fff;">Memo</th>
                                 </thead>
@@ -584,15 +584,16 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-primary"
-                                    style="padding: 6px 12px !important; margin-top: 10px;"
+                            </table> -->
+                            <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
+                            [style]="{ height: '320px' }" name="memoPopupContent"
+                            (ngModelChange)="onSaveChange()" required></p-editor>
+                            <div class="editor-buttons">
+                                <button type="button" class="btn btn-primary editor-buttons-margin"
                                     (click)="onClickPopupSave()">
                                     Save
                                 </button>
-                                <button type="button" class="btn btn-danger" (click)="closeMemoModel()"
-                                    style="padding: 6px 12px !important; margin-top: 10px;">
+                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
                                     Close
                                 </button>
                             </div>
@@ -632,8 +633,9 @@
                 <h4 class="modal-title">History of {{moduleName}} Approval Rule</h4>
             </div>
             <div class="modal-body" *ngIf="auditHistory">
-                <div class="table-responsive">
-                    <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
                                 <th rowspan="2">Task Name</th>
@@ -722,10 +724,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
                             <!-- <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;"> -->
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
                     </ng-template>
                 </div>
@@ -869,15 +872,15 @@
                             </span></p>
                     </div>
 
-                    <div class="col-3" style="padding-left: 6px; padding-right: 6px;">
-                        <div class="card">
-                            <div class="card-header" style="padding: 10px 12px;">
-                                <h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span
+                    <div class="col-md-3">
+                        <div class="card management-structure-card">
+                            <div class="card-header management-structure-card-header" >
+                                <h5 class="management-structure-header" style="color:#333">Management Structure <span
                                         class="clr-red">*</span></h5>
                             </div>
-                            <div class="card-body" style="padding: 12px 12px 4px;">
+                            <div class="card-body structure-card-body">
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" class="form-control"
+                                    <select class="form-control field-radius-5"
                                         name="primaryCompany" [disabled]="true" [(ngModel)]="creatingData.companyId"
                                         (change)="getBUList(creatingData.companyId);" #mCompanyName required>
                                         <option value="0">Select</option>
@@ -892,16 +895,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" [(ngModel)]="creatingData.buId"
+                                    <select  [(ngModel)]="creatingData.buId"
                                         name="primaryBU" [disabled]="true" (change)="getDivisionlist(creatingData.buId)"
-                                        class="form-control">
+                                        class="form-control field-radius-5">
                                         <option value="0">Select</option>
                                         <option *ngFor="let name of bulist" [ngValue]="name.value">{{name.label}}
                                         </option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" class="form-control"
+                                    <select class="form-control field-radius-5"
                                         [(ngModel)]="creatingData.divisionId" [disabled]="true" name="primaryDivision"
                                         (change)="getDepartmentlist(creatingData.divisionId)">
                                         <option value="0">Select</option>
@@ -910,7 +913,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <select style="border-radius: 5px !important;" class="form-control"
+                                    <select class="form-control field-radius-5"
                                         [(ngModel)]="creatingData.departmentId" [disabled]="true" name="primaryDept"
                                         (change)="getDepartmentId(creatingData.departmentId)">
                                         <option value="0">Select</option>
@@ -930,38 +933,38 @@
                             [totalRecords]="totalRecordsemp">
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th style="width: 50px; text-align: center;">
+                                    <th class="table-column-width">
                                         Flag
                                     </th>
-                                    <th style="width: 120px;" *ngFor="let col of columns">
+                                    <th class="table-column-width" *ngFor="let col of columns">
                                         {{ col.header }}
                                     </th>
-                                    <th style="width: 120px; text-align: center;">
+                                    <th class="table-column-width">
                                         Primary
                                     </th>
-                                    <th style="width: 120px; position:sticky;text-align:center;">
+                                    <th class="table-column-width">
                                         Action
                                     </th>
                                 </tr>
                                 <tr>
-                                    <td style="width: 50px; text-align: center;">
+                                    <td class="table-column-width">
                                     </td>
-                                    <th style="width: 120px;" style="width:auto" *ngFor="let col of columns"
+                                    <th class="table-column-width" *ngFor="let col of columns"
                                         [ngSwitch]="col.field">
                                         <input [disabled]="col.field == 'isPrimary'" style="width:100%;" pInputText
                                             type="text" (input)="
                                         ptabletagName.filter($event.target.value, col.field, 'contains')
                                         " />
                                     </th>
-                                    <th style="width: 120px; text-align: center;">
+                                    <th class="table-column-width">
                                     </th>
-                                    <th style="width: 120px; position:sticky;text-align:center;">
+                                    <th class="table-column-width">
                                     </th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
                                 <tr>
-                                    <td style="width: 50px; text-align: center;">
+                                    <td class="table-column-width">
                                         <span class="flag">
                                             <i *ngIf="rowData.isPrimary == true" [ngStyle]="{
                                                 color: rowData.isPrimary == true ? 'green' : 'none'
@@ -969,16 +972,16 @@
                                                 aria-hidden="true"></i>
                                         </span>
                                     </td>
-                                    <td style="width: 120px; text-align:left;" *ngFor="let col of columns">
+                                    <td class="table-column-width" *ngFor="let col of columns">
                                         {{ col.field != 'isPrimary' ? rowData[col.field] : '' &&
                                     col.field=='employee'?rowData[col.field]:''}}
                                     </td>
-                                    <td style="width: 120px; text-align: center;">
+                                    <td class="table-column-width">
                                         <input *ngIf="rowData.isPrimary" disabled type="checkbox" name="isPrimary"
                                             checked>
                                         <input *ngIf="!rowData.isPrimary" disabled type="checkbox" name="isPrimary">
                                     </td>
-                                    <td style="width: 120px; position:sticky;text-align:center;">
+                                    <td class="table-column-width">
                                         <p-inputSwitch [disabled]="true" [(ngModel)]="rowData['isActive']"
                                             name="isActive{{i}}"
                                             matTooltip="{{ rowData['isActive'] ? 'Active' : 'In Active'}}"
@@ -989,20 +992,20 @@
                             </ng-template>
                             <ng-template pTemplate="emptymessage" let-columns *ngIf="employeeNames.length == 0">
                                 <tr>
-                                    <td [attr.colspan]="4" style="color: red; font-weight: bold; text-align: center">
+                                    <td [attr.colspan]="4" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total: </label>
-                                <input style="width: 5%;" [value]="employeeNames.length" name="totalRecords" disabled
+                                <input class="footer-input-width" [value]="employeeNames.length" name="totalRecords" disabled
                                     pInputText type="text" />
 
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
 
-                                <input style="width: 5%;" [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)"
+                                <input class="footer-input-width" [ngModel]="getTaxPageCount(employeeNames.length,pageSizeemp)"
                                     name="page count tax" disabled pInputText type="text" />
                             </ng-template>
                         </p-table>
@@ -1010,11 +1013,9 @@
 
                 </form>
             </div>
-            <div class="modal-footer">
-                <div style="float:right">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;" (click)="isEdit = false;">Close</button>
-                </div>
+            <div class="modal-footer">              
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="isEdit = false;">Close</button>
+              
             </div>
 
 
@@ -1029,7 +1030,7 @@
                             <h4 class="modal-title">Edit Memo</h4>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-bordered table-fixed workflow-table-material">
+                            <!-- <table class="table table-bordered table-fixed workflow-table-material">
                                 <thead>
                                     <th style="color: #fff;">Memo</th>
                                 </thead>
@@ -1042,15 +1043,16 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table>
-                            <div style="float: right;">
-                                <button type="button" class="btn btn-primary"
-                                    style="padding: 6px 12px !important; margin-top: 10px;"
+                            </table> -->
+                            <p-editor spellcheck="true" [(ngModel)]="memoPopupContent"
+                            [style]="{ height: '320px' }" name="memoPopupContent"
+                            (ngModelChange)="onSaveChange()" required></p-editor>
+                            <div class="editor-buttons">
+                                <button type="button" class="btn btn-primary editor-buttons-margin"
                                     (click)="onClickPopupSave()">
                                     Save
                                 </button>
-                                <button type="button" class="btn btn-danger" (click)="closeMemoModel()"
-                                    style="padding: 6px 12px !important; margin-top: 10px;">
+                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()">
                                     Close
                                 </button>
                             </div>

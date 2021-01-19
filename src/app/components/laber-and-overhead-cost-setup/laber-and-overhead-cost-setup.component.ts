@@ -437,7 +437,6 @@ export class LaberAndOverheadCostSetupComponent implements OnInit, AfterViewInit
     }
 
     showAuditPopup(template, id): void {
-        debugger;
         this.getHistoryLaborandOverheadCostAuditDetails(id);
         this.modal = this.modalService.open(template, { size: 'sm' });
     }

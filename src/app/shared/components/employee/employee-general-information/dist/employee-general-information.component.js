@@ -216,7 +216,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
         var _this = this;
         this.isSpinnerVisible = true;
         this.employeeId = this.Actroute.snapshot.paramMap.get('id');
-        debugger;
         if (this.employeeId) {
             this.employeeService.employeeId = this.employeeId;
             this.isEditContent = true;
@@ -1771,7 +1770,6 @@ var EmployeeGeneralInformationComponent = /** @class */ (function () {
     };
     //already exits first name
     EmployeeGeneralInformationComponent.prototype.firstnameeventHandler = function (firstName) {
-        debugger;
         if (firstName.firstName != "") {
             var value = firstName.firstName;
             if (this.firstCollection) {
