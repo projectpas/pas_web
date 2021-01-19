@@ -250,28 +250,44 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.loadPublicationById(wfPublication, true);
         }
     }
-
-    getAircraftByPublicationId(publicationRecordId, index) {
+    setAircraftArray:any=[];
+    setModelArray:any=[];
+    setDashNumberArray:any=[];
+    getAircraftByPublicationId(data, index) {
+this.setAircraftArray=[];
         this.isSpinnerVisible = true;
-        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, publicationRecordId).subscribe(res => {
+        this.setAircraftArray.push(data.aircraftManufacturer? data.aircraftManufacturer:0);
+        this.publicationService.getAircraftManfacturerByPublicationId(this.itemMasterId, data.publicationId,this.setAircraftArray.join()).subscribe(res => {
             this['aircraftListByPubId' + index] = res;
             this.isSpinnerVisible = false;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
-
-    getModelByAircraftId(publicationRecordId, aircraftTypeId, index) {
-        this.publicationService.getAircraftModelByAircraftManfacturerId(this.itemMasterId, publicationRecordId, aircraftTypeId).subscribe(res => {
+        // this.getAircraftByPublicationId(x.publicationId, index);
+                // this.getModelByAircraftId(x.publicationId, x.aircraftManufacturer, index);
+                // this.getDashNumberByModelandAircraftIds(x.publicationId, x.aircraftManufacturer, x.model, index);
+    getModelByAircraftId(x, index) {
+        this.setModelArray=[];
+        this.setModelArray.push(x.model? x.model:0);
+        this.publicationService.getAircraftModelByAircraftManfacturerId(this.itemMasterId, x.publicationId, x.aircraftManufacturer,this.setModelArray.join()).subscribe(res => {
             this['aircraftModelListByPubId' + index] = res;
         }, error => {
             this.isSpinnerVisible = false;
         });
     }
 
-    getDashNumberByModelandAircraftIds(publicationRecordId, aircraftTypeId, aircraftModelId, index) {
+    getDashNumberByModelandAircraftIds(x, index) {
+        this.setDashNumberArray=[];
         this.isSpinnerVisible = true;
-        this.publicationService.getDashNumberByModelandAircraftIds(this.itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId).subscribe(res => {
+       if(x && x.workflowPublicationDashNumbers && x.workflowPublicationDashNumbers.length !=0){
+x.workflowPublicationDashNumbers.forEach(element => {
+    this.setDashNumberArray.push(element.aircraftDashNumberId)
+});
+       }else{
+        this.setDashNumberArray.push(0);
+       }
+        this.publicationService.getDashNumberByModelandAircraftIds(this.itemMasterId, x.publicationId, x.aircraftManufacturer, x.model,this.setDashNumberArray.join()).subscribe(res => {
             this.isSpinnerVisible = false;
             this['dashNumberListByModelId' + index] = res.map(x => {
                 return {
@@ -341,9 +357,9 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     bindEditModeData(data) {
         this.workFlow.publication = data.map((x, index) => {
             if (x.publicationId) {
-                this.getAircraftByPublicationId(x.publicationId, index);
-                this.getModelByAircraftId(x.publicationId, x.aircraftManufacturer, index);
-                this.getDashNumberByModelandAircraftIds(x.publicationId, x.aircraftManufacturer, x.model, index);
+                this.getAircraftByPublicationId(x, index);
+                this.getModelByAircraftId(x, index);
+                this.getDashNumberByModelandAircraftIds(x ,index);
             }
             return {
                 ...x
