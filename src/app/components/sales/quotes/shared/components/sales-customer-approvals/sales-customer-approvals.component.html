@@ -1,11 +1,12 @@
 <div class="approver-tab-cstm">
   <h5 class="po-head mt-2">Customer Approvals List</h5>
-  <div class="table-responsive">
-    <div class="table-responsive" style="margin-top: 10px;">
-      <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table" id="mpn-list-table">
+  <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+    <div class="tableFixHead"> 
+    <table class="table table-bordered header-table-width">
+      <!-- <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table" id="mpn-list-table"> -->
         <thead>
           <tr class="pad_workflo">
-            <th style="width: fit-content;">
+            <th class="approver-th-align th-width" >
               <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall"
                 [disabled]="isView" /> Select All
             </th>
@@ -14,7 +15,7 @@
         </thead>
         <tbody>
           <ng-container *ngIf="!quotesList || quotesList.length==0"><tr>
-            <td colspan="13" class="no-records-cstm">
+            <td colspan="21" class="no-records-cstm">
               No records found
             </td>
           </tr></ng-container>
