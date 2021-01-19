@@ -740,6 +740,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				data => {
 					this.geListByStatus(this.currentstatus);
 					this.isSpinnerVisible = false;
+					this.alertService.showMessage("Success", `Item Was Deleted Successfully `, MessageSeverity.success)
 					this.saveCompleted(this.sourceItemMaster);
 				});	
 		}
@@ -749,6 +750,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				data => {
 					this.geListByStatus(this.currentstatus);
 					this.isSpinnerVisible = false;
+					this.alertService.showMessage("Success", `Item Was Deleted Successfully `, MessageSeverity.success)
 					this.saveCompleted(this.sourceItemMaster);
 				});	
 		}
