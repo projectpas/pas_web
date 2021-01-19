@@ -189,7 +189,6 @@ export class LegalEntityStructureComponent implements OnInit, AfterViewInit {
 		return out
 	}
 	nodeSelect(event) {
-		debugger;
 		//event.node = selected node
 		console.log("selected node", event, event.node);
 	}

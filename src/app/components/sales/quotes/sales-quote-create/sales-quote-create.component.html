@@ -500,7 +500,7 @@
                                 class="btn btn-primary">
                                 Create SO
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()">
+                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()" [disabled]="(enforceApproval ? (verifySalesOrderQuoteObj.canCovertToSalesOrder === false ? true : false) : false)">
                                 Email Quote
                             </button>
                             <button type="button" class="btn btn-primary" (click)="initiateQuoteCopying()">

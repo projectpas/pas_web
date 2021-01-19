@@ -6,8 +6,8 @@
     </div>
     <div class="row" style="overflow-y: auto;  border: 1px solid rgba(0,0,0,.125);">
         <!-- <div style="overflow-y: auto;"> -->
-        <p-table #dt class="rpo-table-cstm rro-table-cstm salesquotePart1 sales-part-number" [value]="summaryParts" [lazy]="true"
-            [rows]="10" [paginator]="showPaginator" [first]="0" [rowsPerPageOptions]="[10, 20, 30]"
+        <p-table #dt class="rpo-table-cstm rro-table-cstm salesquotePart1 sales-part-number" [value]="summaryParts"
+            [lazy]="true" [rows]="10" [paginator]="showPaginator" [first]="0" [rowsPerPageOptions]="[10, 20, 30]"
             selectionMode="multiple" [totalRecords]="totalRecords" [columns]="summaryColumns" [scrollable]="true"
             [resizableColumns]="true" [reorderableColumns]="true" scrollHeight="450px" (onLazyLoad)="onPaging($event)">
             <ng-template pTemplate="colgroup" let-summaryColumns>
@@ -99,7 +99,7 @@
                         <span>
                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                 [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}" class="btn nobg"
-                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add/Edit Stock Line"
+                                (click)="addPartNumber(summaryPart,rowIndex)" matTooltip="Add/Edit PN"
                                 matTooltipPosition="above">
                                 <i class="fa fa-pencil"></i>
                             </a>
@@ -117,7 +117,7 @@
                     <div class="zui-wrapper" style="padding-bottom:12px;margin-top:8px;margin-left:8px;;">
                         <td colspan="23" class="p-0" style="overflow-y: auto !important;">
                             <div [ngClass]="isViewMode ? 'zui-scroller-view' : 'zui-scroller'"
-                             style="background: #fff;">
+                                style="background: #fff;">
                                 <!-- zui-table rpo-table-cstm sales-quote-part-search-data -->
                                 <p-table #dt class=" rpo-table-cstm rro-table-cstm salesquotePart "
                                     [value]="summaryPart.childParts" [lazy]="true" [rows]="10"
@@ -347,14 +347,17 @@
                         <div [innerHTML]="part.notes" class="text_editor_box"></div>
                     </td>
                     <td class="zui-sticky-col" style="width:107px !important" *ngIf="isViewMode == false">
+                        <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                            (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
+                            <i class="fa fa-eye"></i>
+                        </a>
                         <span *ngIf="!isEditDisabled(salesQuote, part)">
                             <a [class.disabled]="isEditDisabled(salesQuote, part)"
                                 [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}" class="btn nobg"
-                                (click)="openPartToEdit(part)" matTooltip="Edit" matTooltipPosition="above">
+                                (click)="openPartToEdit(part)" matTooltip="Edit Price" matTooltipPosition="above">
                                 <i class="fa fa-pencil"></i>
                             </a>
                         </span>
-
                         <span>
                             <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
                                 [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}" class="btn nobg"
