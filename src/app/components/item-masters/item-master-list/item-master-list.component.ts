@@ -113,7 +113,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	getSelectedCollection: any;
 	NonstockView: boolean = false;
 	NonstockAdd: boolean = false; priorityId: any;
-	// exportCountryId: any;
 	memo: any;
 	exportWeight: any;
 	exportValue: any;
@@ -248,21 +247,19 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		{ field: 'updatedDate', header: 'Updated Date' },
 		{ field: 'updatedBy', header: 'UpdatedBy' },
 		{ field: 'download', header: 'Actions' },
-		// { field: 'delete', header: 'Delete' },
 	];
 	itemMasterRowData: any = {};
 	isViewOpened: boolean = false;
 	lazyLoadEventDataInputForStock: any;
     status: string = 'active';
     currentstatus: string = 'active';
-    currentDeletedstatus:boolean=false;
+	currentDeletedstatus:boolean=false;
 	lazyLoadEventDataInputStock: any;
 	lazyLoadEventDataInputNonStock: any;
 	pageNumber = 0;
 	selectedOnly: boolean = false;
     targetData: any;
 
-	//selectedColumns: any;
 	/** item-master-list ctor */
 	constructor(private authService: AuthService, private cdRef : ChangeDetectorRef,private atasubchapter1service: AtaSubChapter1Service,private datePipe: DatePipe, private route: Router, private alertService: AlertService, private router: Router, public itemMasterService: ItemMasterService, private modalService: NgbModal, private masterComapnyService: MasterComapnyService, public commonService: CommonService, private currencyService: CurrencyService, private _actRoute: ActivatedRoute ) {
 		this.itemMasterService.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-list';
@@ -285,7 +282,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
     }
 	ngOnInit(): void {
 
-		// if (this.itemMasterService.listStock == true) { this.loaddata('Stock'); }
 		this.itemMasterService.currentUrl = '/itemmastersmodule/itemmasterpages/app-item-master-list';
 		this.itemMasterService.bredcrumbObj.next(this.itemMasterService.currentUrl);//Bread Crumb
 		var itemType = this._actRoute.snapshot.queryParams['type'];
@@ -328,12 +324,11 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			{ field: 'updatedBy', header: 'Updated By' },
 		];
 	}
-	openHist() {
-		
+
+	openHist() {		
 	}
 	
 	openEdit(row) {
-
 		const { itemMasterId } = row;
 		this.activeIndex = 0;
 		this.router.navigateByUrl(`/itemmastersmodule/itemmasterpages/app-item-master-stock/edit/${itemMasterId}`);
@@ -354,10 +349,9 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	closeDeleteModal() {
 		$("#downloadConfirmation").modal("hide");
 	}
+
 	openEdits(row) {
-
 		this.itemMasterService.isEditMode = true;
-
 		this.itemMasterService.getCapabilityData(row.itemMasterId).subscribe(data => {
 			this.getSelectedCollection = data;
 			this.itemMasterService.capsCollection = this.getSelectedCollection;
@@ -369,9 +363,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.activeIndex = 1;
 
 		this.router.navigateByUrl(`/itemmastersmodule/itemmasterpages/app-item-master-non-stock/edit/${row.itemMasterId}`);
-
 	}
-
 
 	dblExpandAllItemMasterListModel() {
 		$('#step1').collapse('show');
@@ -381,8 +373,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		$('#step6').collapse('show');
 		$('#step8').collapse('show');
 		$('#step58').collapse('show');
-
 	}
+
 	dblCloseAllItemMasterListModel() {
 		$('#step1').collapse('hide');
 		$('#step2').collapse('hide');
@@ -391,10 +383,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		$('#step6').collapse('hide');
 		$('#step8').collapse('hide');
 		$('#step58').collapse('hide');
-
-
 	}
-
 
 	openEdited(row) {
 		this.itemMasterService.isEditMode = true;
@@ -403,7 +392,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.activeIndex = 2;
 		this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-equipment');
 	}
-
 
 	ngAfterViewInit() { }
 
@@ -449,7 +437,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.equipmentTable = false;
 			this.exchangeTable = true;
 			this.loanTable = false;
-			// this.loaddata(this.radioButtonValue);
 		}
 		else if (val == 4) {
 			this.radioButtonValue = "Loan";
@@ -462,17 +449,15 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 
 	public loadStockData(event, dt?) {
-	this.isSpinnerVisible = true;
+		this.isSpinnerVisible = true;
 		this.lazyLoadEventData = event;
 		this.lazyLoadEventDataInputStock = event;
         this.lazyLoadEventDataInputStock.filters = {
             ...this.lazyLoadEventData.filters,
 			status: this.currentstatus ? this.currentstatus : 'active'
 		}
-		//const isdelete=this.currentDeletedstatus ? true:false;
 		event.filters.isDeleted = this.currentDeletedstatus ? true:false;	
 		event.filters.status = this.currentstatus ? this.currentstatus : 'active';
-		//const pageIndex = parseInt(event.first) / event.rows;
 		this.pageIndex = parseInt(event.first) / event.rows;
 		this.pageSize = event.rows;
 		event.first = this.pageIndex;		
@@ -499,8 +484,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				this.nonStockTable = false;
 				this.stockTableColumns = this.cols;
 				this.loadingIndicator = false;
-				//this.allStockInfo = results[0]['results'];
-
 				this.allStockInfo = results[0]['results'].map(x => {
 					return {
 						...x,
@@ -521,10 +504,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	this.isSpinnerVisible = true;
 		this.itemMasterService.getItemMasterNonStockListData(PagingData).subscribe(
 			results => {
-				// this.onitemmasterSuccessful(results[0], event), 
 				this.nonStockTable = true;
 				this.stockTable = false;
-
 				this.nonStockTableColumns = this.cols1;
 				this.loadingIndicator = false;
 				this.allNonstockInfo = results[0]['results'].map(x => {
@@ -551,10 +532,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
             ...this.lazyLoadEventDataForNonStock.filters,
 			status: this.currentstatus ? this.currentstatus : 'active'
 		}
-		//const isDelete=this.currentDeletedstatus ? true:false;
 		event.filters.isDeleted = this.currentDeletedstatus ? true:false;
 		event.filters.status = this.currentstatus ? this.currentstatus : 'active';
-		//const pageIndex = parseInt(event.first) / event.rows;
 		this.pageIndexNonStock = parseInt(event.first) / event.rows;
 		this.nonStockPageSize = event.rows;
 		event.first = this.pageIndexNonStock
@@ -566,6 +545,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		const PagingData = { ...this.lazyLoadEventDataForNonStock, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataForNonStock.filters) }
 		this.getItemsListNonStock(PagingData);
 	}
+
 	private loadRolesData() {
 		this.loadingIndicator = true;
 
@@ -574,14 +554,14 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			error => this.onDataLoadFailed(error)
 		);
 	}
-	private onDataLoadSuccessful(allWorkFlows: any[]) {
 
+	private onDataLoadSuccessful(allWorkFlows: any[]) {
 		this.loadingIndicator = false;
 		this.dataSource.data = allWorkFlows;
 		this.allitemstockinfo = allWorkFlows;
 	}
-	private onitemmasterSuccessful(allWorkFlows, value) {
 
+	private onitemmasterSuccessful(allWorkFlows, value) {
 		for (let i = 0; i < allWorkFlows.length; i++) {
 			if (allWorkFlows[i]["manufacturer"]) {
 				allWorkFlows[i]["manufacturerdesc"] = allWorkFlows[i]["manufacturer"]["name"]
@@ -590,7 +570,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			if (allWorkFlows[i]["itemClassification"]) {
 				allWorkFlows[i]["classificationdesc"] = allWorkFlows[i]["itemClassification"]["description"]
 			}
-
 		}
 		this.stockTable = true;
 
@@ -599,8 +578,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.allStockInfo = allWorkFlows['results'];
 		this.totalRecords = allWorkFlows.totalRecordsCount;
 		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-
-
 
 		if (value == "Stock") {
 			this.stockTable = true;
@@ -651,11 +628,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	private onRolesLoadSuccessfull(allWorkFlows: any[]) {
 		this.allRolesInfo = allWorkFlows;
 		if (this.allRolesInfo.length > 0) {
-
 			for (let i = 0; i < this.allRolesInfo.length; i++) {
-
 				if (this.allRolesInfo[i].entityName = 'ItemMasterMain') {
-
 					if (this.allRolesInfo[i].permittedEditActionDescription = 'Add') {
 						this.Add = true;
 						this.NonstockAdd = true;
@@ -707,12 +681,9 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 						this.EquipmentDelete = true;
 					}
 				}
-
 			}
 		}
-
 	}
-
 
 	colsaircraftLD: any[] = [
 		{ field: "aircraft", header: "Aircraft" },
@@ -740,7 +711,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		{ field: 'memo', header: 'Memo' }
 	];
 
-
 	alterTableColumns: any[] = [
 		{ field: "altPartNo", header: "PN" },
 		{ field: "altPartDescription", header: "Description" },
@@ -757,13 +727,12 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	get userName(): string {
 		return this.authService.currentUser ? this.authService.currentUser.userName : "";
 	}
+
 	deleteItemAndCloseModel() {
-		//this.loadingIndicator = true;
 		this.isSpinnerVisible = true;
 		this.isSaving = true;
 		this.isDeleteMode = true;
 		this.sourceItemMaster.isdelete = false;
-		//this.sourceVendor = content;
 		this.sourceItemMaster.updatedBy = this.userName;
 		if(this.stockTable)
 		{	
@@ -772,7 +741,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 					this.geListByStatus(this.currentstatus);
 					this.isSpinnerVisible = false;
 					this.saveCompleted(this.sourceItemMaster);
-					//this.getItemsListStock(this.lazyLoadEventDataInputStock);
 				});	
 		}
 		if(this.nonStockTable)
@@ -782,24 +750,21 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 					this.geListByStatus(this.currentstatus);
 					this.isSpinnerVisible = false;
 					this.saveCompleted(this.sourceItemMaster);
-					//this.getItemsListNonStock(this.lazyLoadEventDataInputStock);
 				});	
 		}
 		this.modal.close();
 	}
-	
 
 	openDelete(content, row) {
-
 		this.isEditMode = false;
 		this.isDeleteMode = true;
 		this.sourceItemMaster = row;
 		this.deletePartDesc = row.partNumber + ' - ' + row.partDescription;		
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
+
 	private nonstockList() {
 		this.loadingIndicator = true;
-
 		this.itemMasterService.getItemNonstockList().subscribe(
 			results => this.onitemnonstockSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
@@ -809,12 +774,10 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	private onitemnonstockSuccessful(allWorkFlows: any[]) {
 		this.loadingIndicator = false;
 		this.allNonstockInfo = allWorkFlows;
-
 	}
 
 	private StockList() {
 		this.loadingIndicator = true;
-
 		this.itemMasterService.getItemeStockList().subscribe(
 			results => this.onitemStockSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
@@ -827,7 +790,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 	private EuipmentList() {
 		this.loadingIndicator = true;
-
 		this.itemMasterService.getItemEquipmentList().subscribe(
 			results => this.onitemequipmntSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
@@ -844,6 +806,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.alertService.stopLoadingMessage();
 		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
 	}
+
 	private loadMasterCompanies() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
@@ -852,7 +815,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
 		);
-
 	}
 
 	private onDataMasterCompaniesLoadSuccessful(allStockInfo: MasterCompany[]) {
@@ -865,16 +827,15 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.isEditMode = false;
 		this.modal.close();
 	}
+
 	handleChangeforstock(rowData, e) {
 		if (e.checked == false) {
 			this.sourceAction.itemMasterId = rowData.itemMasterId;
 			rowData.updatedBy = this.userName;
 			this.sourceAction.updatedBy = this.userName;
-
             this.Active = "In Active";
 			this.sourceAction.isActive = false;
 			this.isSpinnerVisible = true;
-
 			if (this.radioButtonValue == "Stock") {
 				this.itemMasterService.updateActionforActiveforstock(rowData).subscribe(
 					response => {
@@ -924,8 +885,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 					},
 					error => { this.errorMessageHandler(error) } )
 			}
-			
-			//this.geListByStatus('active');
 		}
 		else {
 			var employpeeleaveTypeId = [];
@@ -989,23 +948,14 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 					},
 					error => { this.errorMessageHandler(error) } )
 			}
-			//this.geListByStatus('inactive');
 		}
 	}
 
 	private saveCompleted(user?: any) {
 		this.isSaving = false;
-
 		if (this.isDeleteMode == true) {
-			//this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
 			this.isDeleteMode = false;
 		}
-		else {
-		//	this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
-
-		}
-
-		//this.onitemmasterSuccessful(results[0], value);
 	}
 
 	errorMessageHandler(log) {
@@ -1023,30 +973,28 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.alertService.stopLoadingMessage();
 		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
 	}
+
 	columnsChanges() {
 		this.refreshList();
 	}
+
 	refreshList() {
 		if (this.filteredText != "" && this.filteredText != null && this.filteredText != undefined) {
-			// this.globalSearch(this.filteredText);
 		}
 		else {
 			this.table.reset();
 		}
 	}
+
 	openView(row) {
 		this.isViewOpened = true;
 		this.itemMasterRowData = row;
 		this.closeItemMasterDetails();
-		// $('#step1').collapse('show');
 		this.itemMasterId = row.itemMasterId;
 		this.toGetAllDocumentsList(row.itemMasterId);
 		this.toGetDocumentsListNew(row.itemMasterId)
-		//this.toGetAllDocumentsListNew(row.itemMasterId);
-
 		this.getItemMasterById(row.itemMasterId);
 		this.getPurchaseSalesInfo(this.itemMasterId);
-		// this.viewItemMaster = row;
 		this.partNumber = row.partNumber;
 		this.description = row.partDescription;
 		if (row.isAlternatePartChecked) {
@@ -1073,29 +1021,10 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.priorityId = row.priority.description;
 		}
 		else { this.priorityId = "" }
-
-		//this.currencyId = row.currencyId;
-
 		if (row.currency) {
 			this.currencyId = row.currency.symbol;
 		}
 		else { this.currencyId = "" }
-
-		//if (row.countries) {
-		//	this.exportCountryId = row.countries.nice_name;
-		//}
-		//else { this.exportCountryId = "" }
-
-		//if (row.UnitOfMeasure) {
-		//	this.purchaseUnitOfMeasureId = row.UnitOfMeasure.shortName;
-		//}
-		//else { this.purchaseUnitOfMeasureId = "" }
-
-		//if (row.UnitOfMeasure) {
-		//	this.stockUnitOfMeasureId = row.UnitOfMeasure.shortName;
-		//}
-		//else { this.stockUnitOfMeasureId = "" }
-		// this.exportCountryId = row.exportCountryId;
 		this.stockUnitOfMeasureId = row.stockUnitOfMeasureId;
 		this.purchaseUnitOfMeasureId = row.purchaseUnitOfMeasureId;
 		this.itemGroupId = row.itemGroup;
@@ -1138,7 +1067,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.exportValue = row.exportValue;
 		this.salesMarkUpOnListPrice = row.salesMarkUpOnListPrice;
 		this.createdBy = row.createdBy;
-		//this.exportClassificationId = row.exportClassificationId;
 		if (row.exportClassification) {
 			this.exportClassificationId = row.exportClassification.description;
 		}
@@ -1149,7 +1077,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.exportSizeWidth = row.exportSizeWidth;
 		this.exportSizeHeight = row.exportSizeHeight;
 		this.updatedBy = row.updatedBy;
-		// this.exportCountryId = row.exportCountryId;
 		this.memo = row.memo;
 		this.createddate = row.createdDate;
 		this.updatedDate = row.updatedDate;
@@ -1157,7 +1084,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.getAllSubChapters();
 		this.getAircraftMappedDataByItemMasterId(row.itemMasterId);
 		this.getATAMappedDataByItemMasterId(row.itemMasterId);
-		// this.getCapabilityList(row.itemMasterId);
 		this.getNtaeData(row.itemMasterId);
 		this.getExchange(row.itemMasterId);
 
@@ -1180,8 +1106,15 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         })
-    }
+	}
 
+	restoreNonStock(record) {
+        this.commonService.updatedeletedrecords11('ItemMasterNonStock', 'ItemMasterNonStockId', record.itemMasterId).subscribe(res => {
+            this.getDeleteListByStatus(true)
+            this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+        })
+	}
+	
 	getExchange(itemMasterId) {
 		this.itemMasterService.getExchangeLoan(itemMasterId).subscribe(res => {
 			if (res[0] != null && res[0] != undefined) {
@@ -1189,7 +1122,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			}
 		});
 	}
-
 
 	getNtaeData(itemMasterId) {
 		this.filterManufacturerData = [];
@@ -1251,9 +1183,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		this.itemMasterService.getequivalencypartlist(reqDatas2).subscribe(res => {
 			this.ntaeData4 = res;
 			for (let i = 0; i < this.ntaeData4.length; i++) {
-				// if (this.ntaeData4[i].attachmentDetails) {
-				// 	this.ntaeData4[i]["fileName"] = this.ntaeData4[i].attachmentDetails.ad.fileName
-				// }
 				this.filterManufacturerData.push({
 					label: this.ntaeData4[i].manufacturer,
 					value: this.ntaeData4[i].manufacturerId
@@ -1268,8 +1197,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				});
 			}
 		});
-
-		//}
 	}
 
 	getntlafieds(ntaeData) {
@@ -1283,52 +1210,26 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 				value: ntaeData[i].altPartDescription
 			});
 		}
-
 	}
-
 
 	resetViewData() {
         this.viewRowData = undefined;
 	}
+
 	viewSelectedRow(rowData) {
         this.viewRowData = rowData;
 	}
 	
-	
-
-	// getCapabilityList(itemMasterId) {
-	//     let reqData = {
-	//         first: 0,
-	//         rows: 10,
-	//         sortOrder: -1,
-	//         filters: {
-	//             partNo: "",
-	//             itemMasterId: itemMasterId
-	// },
-	//         globalFilter: null
-	//     }
-	//     this.itemMasterService.getItemMasterCapsList(reqData).subscribe(
-	//         results => this.onDataLoadSuccessfuls(results[0]),
-	//         error => this.onDataLoadFailed(error)
-	//     );
-	// }
-
-	// private onDataLoadSuccessfuls(allWorkFlows: any[]) {
-	//    // this.dataSource.data = allWorkFlows;
-	//     this.allItemMasterCapsList = allWorkFlows;
-	// }
 	// get all subchapter for dropdown
 	getAllSubChapters() {
 		this.atasubchapter1service
 			.getAtaSubChapter1List()
 			.subscribe(atasubchapter => {
-				//const responseData = atasubchapter[0];
 				this.orginalAtaSubChapterValues = atasubchapter[0];
 			});
 	}
 
 	getATAMappedDataByItemMasterId(itemMasterId) {
-		// check whether edit or create and send and passes ItemMasterId
 		this.itemMasterService.getMappedATADetails(itemMasterId).subscribe(res => {
 			this.ataMappedList = res.map(x => {
 				return {
@@ -1360,6 +1261,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.viewItemMaster = res[0];
 		});
 	}
+
 	openViewforNonstock(content, row) {
 		this.isSpinnerVisible = true;
 		this.itemMasterService.getItemMasterNonStockDataById(row.itemMasterId).subscribe(res => {
@@ -1372,46 +1274,39 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.isSpinnerVisible = false;
 		}, err => {
 			this.isSpinnerVisible = false;
-			//const errorLog = err;
 			this.errorMessageHandler(err);
 		})
 		
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
 	}
 
-
-
 	openHelpText(content) {
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
+
 	public navigateTogeneralInfostock() {
-		//this.workFlowtService.listCollection = [];
 		this.activeIndex = 0;
 		this.itemMasterService.indexObj.next(this.activeIndex);
 		this.itemMasterService.isEditMode = false;
 		this.itemMasterService.enableExternal = false;
 		this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
 		localStorage.removeItem('currentTab');
-
 	}
 
 	public navigateTogeneralInfononstock() {
-		//this.workFlowtService.listCollection = [];
 		this.activeIndex = 0;
 		this.itemMasterService.indexObj.next(this.activeIndex);
 		this.itemMasterService.isEditMode = false;
 		this.itemMasterService.enableExternal = false;
 		this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-non-stock')
-
 	}
+
 	public navigateTogeneralInfoequipment() {
-		//this.workFlowtService.listCollection = [];
 		this.activeIndex = 0;
 		this.itemMasterService.indexObj.next(this.activeIndex);
 		this.itemMasterService.isEditMode = false;
 		this.itemMasterService.enableExternal = false;
 		this.route.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-equipment')
-
 	}
 
 	toGetAllDocumentsList(itemMasterId) {
@@ -1420,6 +1315,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.allUploadedDocumentsList = res;
 		})
 	}
+
 	downloadFileUpload(rowData) {
 		this.commonService.toDownLoadFile(rowData.link);
 	}
@@ -1440,6 +1336,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		$('#step7').collapse('show');
 		$('#step8').collapse('show');
 	}
+
 	closeAllItemMasterDetails() {
 		$('#step1').collapse('hide');
 		$('#step2').collapse('hide');
@@ -1450,6 +1347,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		$('#step7').collapse('hide');
 		$('#step8').collapse('hide');
 	}
+
 	closeItemMasterDetails() {
 		$('#step1').collapse('show');
 		$('#step2').collapse('hide');
@@ -1468,6 +1366,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	onViewAircraft(rowData) {
 		this.viewAircraftData = rowData;
 	}
+
 	onViewAircraftonDbl(rowData) {
 		this.onViewAircraft(rowData);
 		$('#viewAircraft').modal('show');
@@ -1492,7 +1391,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 
 	advancedSearchData(searchData) {
-
 		this.loadingIndicator = true;
 		const itemMasterSearch = {
 			partNumber: searchData.partNo,
@@ -1522,6 +1420,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		}
 		this.loadingIndicator = false;		
 	}
+
 	clearAdvanceSerchData() {
 		this.searchData.partNo = '',
 		this.searchData.description = '',			
@@ -1530,7 +1429,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 
 	clearSerchData() {		
-
 		this.loadingIndicator = true;
 		const filterdData = {
 			first: 0,
@@ -1547,16 +1445,13 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		} else {
 			this.loadNonStockData(filterdData);
 		}
-
 			this.searchData.partNo = '',
 			this.searchData.description = '',			
 			this.searchData.hazardousMaterial = '',
 			this.searchData.listPrice = ''
 
 		this.loadingIndicator = false;
-
 	}
-
 
 	filterpartItems(event) {
 		this.partCollection = [];
@@ -1606,20 +1501,8 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 
 	eventHandler(event) {
-		//if (event.target.value != "") {
-		//	let value = event.target.value.toLowerCase();
-		//	if (this.selectedActionName) {
-		//		if (value == this.selectedActionName.toLowerCase()) {
-		//			this.disableSavePartName = true;
-		//		}
-		//		else {
-		//			this.disableSavePartName = false;
-
-		//		}
-		//	}
-
-		//}
 	}
+
 	private ptnumberlistdata() {
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
@@ -1641,7 +1524,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		});
 	}
 
-
 	private onDataLoadcountrySuccessful(allWorkFlows: any[]) {
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
@@ -1649,7 +1531,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 
 	toggleShowOpenAdvancedSearch(dt) {
-
 		this.isOpenAdvancedSearch = !this.isOpenAdvancedSearch;
 		if(dt.filters.partNumber && this.isOpenAdvancedSearch){
 			dt.filters.partNumber.value = '';
@@ -1658,6 +1539,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			dt.filters.partDescription.value = '';
 		}		
 	}
+
 	private loadStockDataList(event) {
 		this.lazyLoadEventData = event;
 		this.pageIndex =parseInt(event.first) / event.rows;
@@ -1698,6 +1580,7 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			error => this.onDataLoadFailed(error)
 		);
 	}
+
 	private getisHazardousMaterial(isHazardousMaterial) {
 		if (isHazardousMaterial) {
 			return isHazardousMaterial === 'Yes' ? 'True' : 'False';
@@ -1706,7 +1589,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 
 	private loadNonStockDataList(event) {
 		this.lazyLoadEventDataForNonStock = event;
-		//const pageIndex = parseInt(event.first) / event.rows;
 		this.pageIndexNonStock = parseInt(event.first) / event.rows;
 		this.pageSizeNonStock = event.rows;
 		event.first = this.pageIndexNonStock
@@ -1755,7 +1637,6 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 	
 	dateFilterForTable(date, field) {
-
 		if (date !== '' && moment(date).format('MMMM DD YYYY')) {
 			this.allDocumentsList = this.allDocumentsListOriginal;
 			const data = [...this.allDocumentsList.filter(x => {
@@ -1770,15 +1651,15 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 		} else {
 			this.allDocumentsList = this.allDocumentsListOriginal;
 		}
-
 	}
+
 	openHistoryDoc(rowData) {
 		this.commonService.GetAttachmentAudit(rowData.attachmentDetailId).subscribe(
 			res => {
 				this.sourceViewforDocumentAudit = res;
 			})
-
 	}
+
 	getColorCodeForHistoryDoc(i, field, value) {
 		const data = this.sourceViewforDocumentAudit;
 		const dataLength = data.length;
@@ -1792,17 +1673,14 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 	}
 	
 	lazyLoadEventDataInput: any;
+
 	geListByStatus(status) {
-
 		this.currentstatus = status;
-
 		const itemMasterSearch = {			
 			partNumber: this.searchData.partNo ,
-			partDescription: this.searchData.description,	
-			
+			partDescription: this.searchData.description,				
 			status : this.currentstatus,
 			isDeleted : this.currentDeletedstatus,
-			//stockType: searchData.stockType,
 			isHazardousMaterial: this.searchData.hazardousMaterial === 'Yes' ? true : (this.searchData.hazardousMaterial === "No" ? false : "" ),
 			listPrice: this.searchData.listPrice
 		}
@@ -1824,26 +1702,11 @@ export class ItemMasterListComponent implements OnInit, AfterViewInit, AfterCont
 			this.loadNonStockDataList(filterdData);
 		}
 		this.loadingIndicator = false;	
-
-        // this.status = status;
-	// 	this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: status };
-	// 	this.lazyLoadEventDataInputStock.first = 0;
-	// 	this.pageNumber = 10;
-    //     const PagingData = { ...this.lazyLoadEventDataInputStock, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInputStock.filters) }
-    //        if(this.radioButtonValue == "Stock"){
-	// 		setTimeout(() => {
-	// 			this.getItemsListStock(PagingData);
-	// 		}, 100);
-	//    } else {
-	// 	setTimeout(() => {
-	// 		this.getItemsListNonStock(PagingData);
-    //     }, 100);
 	}
+
 	currentDeletedstat = false;
 	getDeleteListByStatus(value){
-
 			this.currentDeletedstatus = value;
-			//this.status = this.currentstatus;
 			this.lazyLoadEventDataInputStock.filters.isDeleted=value
 			this.lazyLoadEventDataInputStock.filters = { ...this.lazyLoadEventDataInputStock.filters, status: this.currentstatus};
 			this.lazyLoadEventDataInputStock.first = 0;

@@ -225,7 +225,6 @@ export class SalesQuoteComponent implements OnInit {
           this.moveToCreate(customerId)
         } else {
           this.modal = this.modalService.open(this.warningPopup, { size: 'lg', backdrop: 'static', keyboard: false });
-
         }
       }, error => {
         this.isSpinnerVisible =false;

@@ -567,7 +567,9 @@
                                     </td>
                                     <td>
 
-                                        <div [innerHTML]="partList.memo" class="form-control"
+                                        <div [innerHTML]="partList.memo" 
+                                        [matTooltip]="parsedText(partList.memo)"
+                                                matTooltipPosition="above" class="form-control"
                                              class="text_editor_box parts-memo"></div>
                                         <!-- <i class="fa fa-info-circle fa-lg pull-right" style="margin-top:-16px"
                                            data-toggle="modal"
@@ -1197,6 +1199,8 @@
     </div>
 </div>
 
+
+
 <div class="modal fade" id="cpo-memo" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1629,12 +1633,36 @@
                             </div>
                         </div>
                         <div class="col-sm-12">
-                            <div class="col-sm-4">
-                                <label>Memo</label>
+                            <div class="col-sm-4 form-group memo-popup-cstm">
+                                <label>Memo 
+                                   
+                                </label>
                             </div>
                             <div class="col-sm-5">
-                                <textarea class="form-control" name="notes" [(ngModel)]="vendorContactInfo.notes"></textarea>
+                                <!-- <textarea class="form-control" name="notes"
+                                 [(ngModel)]="vendorContactInfo.notes">
+                                </textarea> -->
+                                <span>
+                                    <div class="form-group memo-popup-cstm mat_emo">
+                                        <div [innerHTML]="vendorContactInfo.notes"
+                                        [matTooltip]="parsedText(vendorContactInfo.notes)"
+                                        matTooltipPosition="above"
+                                         class="form-control text-editor-field"
+                                            class="text_editor_box text-editor-width">
+                                        </div>
+                                    </div>
+                                </span>
                             </div>
+                            <span class="editor-span"
+                            ><a
+                              class="btn nobg"
+                              data-toggle="modal"
+                              data-target="#contact-memo"
+                              (click)="onAddContactMemo()"
+                              matTooltipPosition="above" matTooltip="Memo"
+                              ><i class="fa fa-pencil" style="color:#337ab7" ></i
+                            ></a>
+                            </span>
                         </div>
 
                     </div>
@@ -1735,6 +1763,48 @@
              </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="contact-memo" role="dialog" data-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Contact Memo</h4>
+            </div>
+
+            <div class="modal-body">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                    <th style="color: #fff;">Notes</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p-editor [(ngModel)]="headerNotes" [style]="{'height':'320px'}"
+                                           name="headerNotes" required></p-editor>
+                               
+                            </td>
+                        </tr>
+                    </tbody>
+                </table> -->
+                <p-editor [(ngModel)]="contactMemo" [style]="{'height':'320px'}"
+                name="contactMemo" required></p-editor>
+                <div class="editor-buttons">  
+                    <button type="button"  class="btn btn-primary editor-buttons-margin"
+                            data-dismiss="modal" (click)="onSaveContactMemo()">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
+                            data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+
+
         </div>
     </div>
 </div>

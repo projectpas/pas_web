@@ -22,7 +22,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     allPartnumbersInfo: any[] = [];
     itemclaColl: any[];
     partCollection: any[];
-    @Input() workFlow: IWorkFlow;
+    @Input() workFlow:any={};
     @Input() UpdateMode: boolean;
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
     row: any;
@@ -119,6 +119,11 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
                         partName: x.label
                     }
                 });
+                this.partCollection.forEach(element => {
+             if(element.partId==this.workFlow.itemMasterId){
+                this.partCollection.splice(element, 1); 
+             }
+            });
                 this.itemclaColl = this.partCollection;
             }, error => {
                 this.isSpinnerVisible = false;

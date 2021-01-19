@@ -1,8 +1,8 @@
-<div class="card">
-  <div class="card-body" style="padding: 1px 5px;">
+<!-- <div class="card">
+ 
     <div class="right_col" role="main">
       <div>
-        <div class="x_content">
+        <div class="x_content"> -->
           <div class="col-md-12 shadow-box-cstm" *ngIf="!isViewMode">
             <div class="col-md-4">
               <p class="fs12">
@@ -23,15 +23,15 @@
               </p>
             </div>
           </div>
-          <div class="card" style="padding: 10px;">
-              <div class=" col-md-12 card-header bg-primary new-card-header">
+          <div class="card new-card">
+              <div class="card-header header">
                   <div class="row">
                       <div class="col">
-                          <h4 class="new-card-heading"> Capabilities</h4>
+                          <h4 class="header-name"> Capabilities</h4>
                       </div>
                       <div>
                           <a class="plusicon-cstm" *ngIf="!isViewMode"  data-toggle="modal" >
-                              <button type="button" id="btnAddcapes" class="btn-sm new-btn-primary" [disabled]="currentDeletedStatus" (click)="addFieldValue()">
+                              <button type="button" id="btnAddcapes" class="btn-sm header-button" [disabled]="currentDeletedStatus" (click)="addFieldValue()">
                                   Add Capabilities
                               </button>
                           </a>
@@ -214,11 +214,11 @@
                 </div>
             </form>
           </div>
-        </div>
+        <!-- </div>
       </div>
     </div>
-  </div>
-</div>
+  
+</div> -->
 
 <div class="modal fade" id="capes-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog">

@@ -4,7 +4,7 @@
   <div class="card-header header">
     <div class="row">
       <div class="col">
-        <h4 class="header-name">Quote List</h4>
+        <h4 class="header-name">Sales Order Quote List</h4>
       </div>
       <div>
         <button type="button" class="btn-sm header-button" matTooltipPosition="above"
@@ -49,16 +49,16 @@
               (click)="dt.exportCSV({selectionOnly:true})"></button>
             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
               <label class="radio-cstm wauto">
-                <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
-                  (click)="changeOfStatus('','pnview')">
-                <span class="checkmark"></span>PN View
+                <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
+                  (click)="changeOfStatus('','soqview')">
+                <span class="checkmark"></span>SOQ View
               </label>
             </div>
             <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
               <label class="radio-cstm wauto">
-                <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
-                  (click)="changeOfStatus('','soqview')">
-                <span class="checkmark"></span>SOQ View
+                <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
+                  (click)="changeOfStatus('','pnview')">
+                <span class="checkmark"></span>PN View
               </label>
             </div>
           </div>
