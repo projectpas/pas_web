@@ -532,7 +532,6 @@ export class LegalEntityGeneralInformationComponent implements OnInit {
     }
 
     openEdit(content, row) {
-        debugger
         //this.toGetentityGeneralDocumentsList(this.sourceentity.entityId);
         this.isEditMode = true;
         this.isSaving = true;

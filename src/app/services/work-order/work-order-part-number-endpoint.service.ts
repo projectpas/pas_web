@@ -53,7 +53,6 @@ export class WorkOrderPartNumberEndpointService extends EndpointFactory {
     }
 
     addWorkOrder<T>(workOrderPartNumber: WorkOrderPartNumber): Observable<T> {
-        debugger;
         let endpointUrl = this.add;
 
         return this.http.post<T>(endpointUrl, JSON.stringify(workOrderPartNumber), this.getRequestHeaders())

@@ -39,9 +39,9 @@
   <div class="col-2 column">
     <div class="form-group">
       <label>PN<span class="clr-red">*</span></label>
-      <p-autoComplete class="autocomp-customer-cstm" name="partNumber"
+      <p-autoComplete field="partNumber" class="autocomp-customer-cstm" name="partNumberObj"
         [(ngModel)]="query.partSearchParamters.partNumberObj"
-        [suggestions]="this.partDetails" [forceSelection]="true"
+        [suggestions]="partDetails" [forceSelection]="true"
         field="partNumber" 
         (completeMethod)="searchPartByPartNumber($event)"
         (onSelect)="onPartNumberSelect($event)" [size]="30" [minLength]="1" [dropdown]="true"

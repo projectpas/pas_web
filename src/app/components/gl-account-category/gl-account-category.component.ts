@@ -159,7 +159,6 @@ export class GLAccountCategoryComponent implements OnInit {
         rowData.isActive = rowData.isActive || false;
         rowData.isDelete = rowData.isDelete || false;
         let item = new GLAccountCategory(rowData.glAccountCategoryId, rowData.glAccountCategoryName, rowData.glcid, rowData.createdBy, rowData.createdDate, rowData.updatedDate, userName, rowData.isActive, rowData.isDelete);
-        debugger;
         return item;
     }
 

@@ -45,7 +45,7 @@ export class PublicationService {
   getWorkFlows(data) {
     return Observable.forkJoin(
       this.publicationEndpoint.getpublicationListEndpoint<Publication[]>(data)
-    );
+    )
   }
   getPublications(data) {
     return Observable.forkJoin(
@@ -199,11 +199,11 @@ export class PublicationService {
     );
   }
 
-    getFilesBypublicationNew(PublicationID: number) {
-        return this.publicationEndpoint.getFilesBypublicationEndPointNew<any>(
-            PublicationID
-        );
-    }
+  getFilesBypublicationNew(PublicationID: number) {
+    return this.publicationEndpoint.getFilesBypublicationEndPointNew<any>(
+      PublicationID
+    );
+  }
 
   getPublishedByModuleList() {
     return this.publicationEndpoint.getPublishedByModuleListEndPoint<any>();
@@ -282,13 +282,13 @@ export class PublicationService {
       this.publicationEndpoint.getpublicationListBySearchEndpoint<Publication[]>(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location)
     );
   }
-  getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId) {
-    return this.publicationEndpoint.getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId)
+  getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId,idList) {
+    return this.publicationEndpoint.getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId,idList)
   }
-  getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId) {
-    return this.publicationEndpoint.getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId);
+  getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId,idList) {
+    return this.publicationEndpoint.getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId,idList);
   }
-  getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId) {
-    return this.publicationEndpoint.getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId);
+  getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId, idList) {
+    return this.publicationEndpoint.getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId, idList);
   }
 }

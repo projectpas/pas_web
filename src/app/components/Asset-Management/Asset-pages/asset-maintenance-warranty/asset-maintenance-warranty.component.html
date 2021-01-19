@@ -1,13 +1,13 @@
 ﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="header">
         <div class="row">
             <div class="col">
-                <h4 class="new-card-heading">{{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset Maintenance
+                <h4 class="header-name">{{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset Maintenance
                     & Warranty</h4>
             </div>
             <div>
-                <button type="button" class="btn-sm new-btn-primary"
+                <button type="button" class="btn-sm header-button"
                     [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
                     Asset List
                 </button>
@@ -49,8 +49,8 @@
             <div class="col-md-12">
                 <div class="card new-card">
 
-                    <div class="card-header bg-primary">
-                        <h4 class="new-card-heading"> Maintenance & Warranty</h4>
+                    <div class="header">
+                        <h4 class="header-name"> Maintenance & Warranty</h4>
                     </div>
                 </div>
             </div>

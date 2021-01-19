@@ -41,7 +41,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Input() editData;
     @Input() isQuote = false;
     @Input() taskList: any = [];
-    @Input() workFlow: IWorkFlow;
+    @Input() workFlow:any={};
     @Input() markupList;
     @Input() UpdateMode: boolean;
     @Input() isWorkFlow: boolean = false;
@@ -57,7 +57,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
 
     materialCondition: any = [];
-    materialMandatory: IMaterialMandatory[];
+    materialMandatory: any=[];
     materialUOM: any[] = [];
     row: any;
     sourceWorkFlow: any = {};
@@ -324,6 +324,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                         materialMandatoriesName: x.label
                     }
                 });
+             
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -473,9 +474,15 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     material.itemClassification = this.itemclaColl[i][0].itemClassification;
                     material.unitOfMeasure = this.itemclaColl[i][0].unitOfMeasure;
                     material.unitOfMeasureId = this.itemclaColl[i][0].unitOfMeasureId;
+                    material.unitCost = this.itemclaColl[i][0].unitCost;
                 }
-            };
-
+            }; 
+            this.materialMandatory.forEach(element => {
+                if(element.materialMandatoriesName=='Mandatory'){
+                    material.materialMandatoriesId=element.materialMandatoriesId;
+                    material.MaterialMandatoriesName=element.materialMandatoriesName;
+                }
+            });
             material.conditionCodeId = this.conditionList[0].value;
             this.getPNDetails(material);
         }
@@ -530,6 +537,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.commonService.getPartnumList(value).subscribe(res => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
+            this.allPartnumbersInfo.forEach(element => {
+                if(element.partId==this.workFlow.itemMasterId){
+                   this.partCollection.splice(element, 1); 
+                }
+               });
         }, error => {
             this.isSpinnerVisible = false;
         });

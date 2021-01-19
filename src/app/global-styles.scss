@@ -294,7 +294,8 @@ table.table-bordered {
   padding: 10px 12px;
 }
 .management-structure-header{
-  margin-bottom: 0; font-size: 12px;
+  margin-bottom: 0 !important; 
+  font-size: 12px !important;
 
 }
 .structure-card-body{
@@ -384,7 +385,7 @@ margin-top: 10px;
 }
 
 .tableFixHead {
-  overflow-y: auto;
+  // overflow-y: auto;
   // height: 400px;
 }
 .tableFixHead thead th {
@@ -410,7 +411,7 @@ th {
 }
 
 .pas-table-cstm{
-  padding: 5px 5px !important;
+  // padding: 5px 5px !important;
 }
 
 .child-header-back th{
@@ -534,4 +535,7 @@ padding-bottom: 0 !important;
     font-size: 15px !important;
     color: #295d92 !important;
     font-weight: bold;
+  }
+  .field-radius-5{
+    border-radius: 5px !important;
   }

@@ -1,22 +1,15 @@
 ﻿<div class="x_content">
-               
-    <!-- <nav aria-label="breadcrumb">
-        <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-            <li class="breadcrumb-item active" aria-current="page">Asset Inventory</li>
-            <li class="breadcrumb-item" aria-current="page">Asset Inventory List</li>
-        </ol>
-    </nav> -->
     <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
               <div class="card new-card">
-                            <div class="card-header bg-primary new-card-header">
+                            <div class="header ">
                               <div class="row">
                                 <div class="col">
-                                  <h4 class="new-card-heading">Asset Inventory List</h4>
+                                  <h4 class="header-name">Asset Inventory List</h4>
                                 </div>
                                 <div>
                                   <button
                                     type="button"
-                                    class="btn-sm new-btn-primary"
+                                    class="btn-sm header-button"
                                     (click)="navigateTogeneralInfo()"                                
                                   >
                                   Add Asset Inventory 
@@ -184,7 +177,7 @@
                                                            matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                                            <span ><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                             <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToEdit(rowData)" disabled matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                            <span><a class="btn nobg btn-edit-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
+                                            <span><a class="btn nobg btn-adjst-cstm" (click)="openAssetToAdjustment(rowData)" matTooltip="Asset Adjustment" matTooltipPosition="above"><i class="fa fa-adjust"></i></a> </span>
                                             <span><a class="btn nobg btn-adjhist-cstm" matTooltip="Asset Adjustment History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                             <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                             <span><a class="btn nobg btn-delete-cstm" (click)="openDelete(content,rowData)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
@@ -194,7 +187,7 @@
                                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                             matTooltipPosition="above" (onChange)="toggleIsActive(rowData,$event)"></p-inputSwitch> 
                                             <span><a class="btn nobg btn-view-cstm" data-toggle="modal" data-target="#invView"  (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                                            <span ><a class="btn nobg" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                            <span ><a class="btn nobg btn-restore-cstm" (click)="restore(restoreId,rowData);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                             <span data-toggle="modal" data-target="#assetInvAudit"><a class="btn nobg btn-delete-cstm" (click)="openHistory(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a> </span>
                                         </div>
                                  </td> 
@@ -1507,11 +1500,11 @@
         <h4 class="modal-title">History of Asset Inventory</h4>
       </div>
       <div class="modal-body">
-        <!-- <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
+        <div class="preloader" *ngIf="isSpinnerVisibleHistory" style="    z-index: 1060;">
             <div class="loading">
                 <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
             </div>
-        </div> -->
+        </div>
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead"> 
           <table class="table table-bordered header-table-width"  *ngIf="showhistorylist">

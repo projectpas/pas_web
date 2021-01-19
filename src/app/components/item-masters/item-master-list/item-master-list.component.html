@@ -1,8 +1,5 @@
 ﻿<div class="x_panel">
     <div class="x_content">
-        <!-- <div class="pheading">
-
-        </div> -->
         <div class="card new-card">
             <div class="card-header bg-primary new-card-header">
                 <div class="row">
@@ -101,18 +98,11 @@
                                     iconPos="left"
                                     label="Export Selected Data"
                                     (click)="dt.exportCSV({selectionOnly:true})"
-                                   
                                   ></button>
-                                  <!-- data-toggle="modal"
-                                  data-target="#downloadConfirmation"
-                                  (click)="selectedOnly = true; targetData = dt;" -->
                                   <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
                                   </button>
-                                  
                                 <div style="width: 650px; float: right; padding: 3px 0 0;">
-
-                                    <!--class="col"-->
                                       <div class="form-group">
                                         <div class="pull-left" style="margin: 6px 15px 0 20px;">
                                             <label class="radio-cstm wauto">
@@ -128,10 +118,7 @@
                                                 <span class="checkmark"></span>Non-Stock
                                             </label>
                                         </div>
-
                                         <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
-
-
                                         <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
@@ -152,7 +139,6 @@
                                         </div>
                                         <div class="checkbox-cstm" style="margin-left: 0;">
                                             <label style="width: auto !important;margin-top: 3px;">
-                                            <!--  -->
                                             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" 
                                              (click)="getDeleteListByStatus($event.target.checked)"
                                                 />
@@ -164,16 +150,13 @@
                                     </div>
                                     </div>
                               </div>
-
                               <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
                                     <col *ngFor="let col of columns" style="width:130px">
                                 </colgroup>
                             </ng-template>
-                              
             <ng-template pTemplate="header" let-columns>
                 <tr>
-
                     <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                         [pSortableColumn]="col.field">
                         {{col.header}}
@@ -183,9 +166,7 @@
                         Actions
                     </th>
                 </tr>
-
                 <tr>
-                    <!--(keyup)="dt.filter($event.target.value, col.field, 'contains')"-->
                     <th *ngFor="let col of columns" [ngSwitch]="col.field">
                       <input
                         style="width: 100%;"
@@ -319,8 +300,6 @@
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" class="btn btn-danger height40 black-search-button btmargin" style="margin-top: 0.8%;">
                                                     Clear
                                                  </button> 
-                                                <!-- <button class="btn btn-default height40 black-search-button btmargin" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"><i class="fa fa-search"></i></button>
-                                                <button class="btn btn-default  height40 black-search-button btmargin" matTooltip="Clear" matTooltipPosition="above" (click)="clearSerchData()"><i class="fa fa-close"></i></button>             -->
                                             </div>
                                         </div>
     
@@ -515,15 +494,13 @@
                                                 <label style="width: auto !important;margin-top: 3px;">
                                                 <!--  -->
                                                 <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  
-                                                (click)="getDeleteListByStatus($event.target.checked)"
-                                                    />
+                                                (click)="getDeleteListByStatus($event.target.checked)"/>
                                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                 Show  Deleted List 
                                                 </label>
                                             </div>
                                       </div>
                                     </div>
-                                    
                                     </div>
                               </div>
 
@@ -587,8 +564,6 @@
                                                  <button type="button" matTooltip="Search" matTooltipPosition="above" (click)="clearSerchData()" class="btn btn-danger height40 black-search-button btmargin" style="margin-top: 0.8%;">
                                                     Clear
                                                  </button> 
-                                                 <!-- <button class="btn btn-default height40 black-search-button btmargin" matTooltip="Search" matTooltipPosition="above" (click)="advancedSearchData(searchData)"><i class="fa fa-search"></i></button> 
-                                                <button class="btn btn-default  height40 black-search-button btmargin" matTooltip="Clear" matTooltipPosition="above" (click)="clearSerchData()"><i class="fa fa-close"></i></button>-->
                                             </div>
                                         </div>
                                     </div>
@@ -642,7 +617,7 @@
                                 </ng-container>
                                 
                                 <td class="action-icons-cstm" style="width:130px">
-                                    <div>
+                                    <div *ngIf="currentDeletedstatus==false">
                                         <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
                                                        onLabel="on" offLabel="off"
                                                        (onChange)="handleChangeforstock(rowData,$event)"
@@ -672,6 +647,29 @@
                                         <span data-toggle="modal" data-target="#nonStockHistory">
                                             <a class="btn nobg btn-hist-cstm" (click)="openHist()"
                                                matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                        </span>
+                                    </div>
+                                    <div *ngIf="currentDeletedstatus==true">
+                                        <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
+                                                       onLabel="on" offLabel="off" [disabled]="currentDeletedstatus"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above"
+                                                       onLabel="on" offLabel="off" [disabled]="currentDeletedstatus"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above"
+                                                       onLabel="on" offLabel="off" [disabled]="currentDeletedstatus"
+                                                       [(ngModel)]="rowData['isActive']"></p-inputSwitch>
+                                        <span>
+                                            <a class="btn nobg btn-view-cstm" (click)="openViewforNonstock(view1,rowData)" matTooltip="View" matTooltipPosition="above">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a class="btn nobg btn-edit-cstm" (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                                        </span>
+                                        <span *ngIf="currentDeletedstatus"><a class="btn nobg" (click)="restoreNonStock(rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                        <span data-toggle="modal" data-target="#nonStockHistory">
+                                            <a class="btn nobg btn-hist-cstm" (click)="openHist()" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                                         </span>
                                     </div>
                                 </td>
@@ -980,7 +978,6 @@
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete ?</h4>
-         <!-- <b>  Part Number :</b> {{deletePartDesc}}  -->
         <button type="button" class="close" aria-label="Close"
          (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>

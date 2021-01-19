@@ -41,7 +41,6 @@ export class AssetListingComponent implements OnInit {
     @Input() assetsId;
     currentDeletedstatus: boolean = false;
     currentstatus: string = 'Active';
-    // isWorkOrder = false;
     isSpinnerVisible: boolean;
     selectedRows: any = [];
     isSaving: boolean;
@@ -95,19 +94,14 @@ export class AssetListingComponent implements OnInit {
     home: any;
     selectedOnly: boolean = false;
     targetData: any;
-    // comented for asset audit
-    //AuditDetails: SingleScreenAuditDetails[];
     pageNumber = 0;
     public auditHisory: AuditHistory[] = [];
     auditHistory: any[] = [];
     lazyLoadEventDataInput: any;
     status: string = 'active';
-    /** Asset-listing ctor */
     loadingIndicator: boolean;
     allAssetInfo: any[] = [];
     allAssetInfoNew: any[] = [];
-    // cols: { field: string; header: string; colspan: string }[];
-    // cols1: { field: string; header: string; }[];
     selectedColumns: { field: string; header: string; }[];
     selectedCol: { field: string; header: string; }[];
     cols = [
@@ -118,21 +112,15 @@ export class AssetListingComponent implements OnInit {
         { field: 'isSerializedNew', header: 'Serialized', colspan: '1' },
         { field: 'calibrationRequiredNew', header: 'Calibrated', colspan: '1' },
         { field: 'assetClass', header: 'Asset Category', colspan: '1' },
-        //{ field: 'managementStrName', header: 'Management Structure', colspan: '4' },
-        /*{ field: 'buName', header: 'BU' },
-        { field: 'deptName', header: 'Div' },
-        { field: 'divName', header: 'Dept' },*/
-        { field: 'companyName', header: 'Level 01', colspan: '1' },
-        { field: 'buName', header: 'Level 02', colspan: '1' },
-        { field: 'deptName', header: 'Level 03', colspan: '1' },
-        { field: 'divName', header: 'Level 04', colspan: '1' },
-
+        // { field: 'companyName', header: 'Level 01', colspan: '1' },
+        // { field: 'buName', header: 'Level 02', colspan: '1' },
+        // { field: 'deptName', header: 'Level 03', colspan: '1' },
+        // { field: 'divName', header: 'Level 04', colspan: '1' },
         { field: 'assetType', header: 'Asset Class', colspan: '1' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'Updated By' },
-        //{ field: 'assetStatus', header: 'Status', colspan: '1' },
     ];
     cols1 = [
         { field: 'partNumber', header: 'PN' },
@@ -171,24 +159,19 @@ export class AssetListingComponent implements OnInit {
                 this.errorMessageHandler(errorLog);
             })
         }
-
     }
     loadEventData(event) {
-
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;
         this.pageIndex = pageIndex;
         this.pageSize = event.rows;
         event.first = pageIndex;
         if (event.first < 1) { event.first = 0 }
-
     }
     closeDeleteModal() {
         $("#downloadConfirmation").modal("hide");
     }
     async getList(data) {
-
-
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.assetService.getAssetCapesAll(PagingData, this.assetRecordId).subscribe(res => {
             this.data = res;
@@ -206,9 +189,6 @@ export class AssetListingComponent implements OnInit {
         this.status = status;
         this.currentstatus = status;
         this.pageNumber = 0;
-        // const PagingData = { ...this.lazyLoadEventDataInput, filters:{status: status} }
-        // PagingData.first= 0;
-        // this.loadData(PagingData);
         this.lazyLoadEventDataInput.first = 0;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
@@ -222,7 +202,6 @@ export class AssetListingComponent implements OnInit {
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
-        // this.status = status;
         if (value == true) {
             this.currentstatus = this.currentstatus;
             this.status = this.status;
@@ -239,14 +218,12 @@ export class AssetListingComponent implements OnInit {
         }
     }
     publicationPagination(event: { first: any; rows: number }) {
-        // this.currentstatus="Active"
         this.loadData(event);
     }
     restorerecord: any = {};
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-
     }
     restoreRecord() {
         this.commonservice.updatedeletedrecords('Asset', 'AssetRecordId', this.restorerecord.assetRecordId,).subscribe(res => {
@@ -259,10 +236,6 @@ export class AssetListingComponent implements OnInit {
         })
     }
     private loadData(data) {
-
-        // if(data.first <1){
-        //     data.first=0;
-        // }
         this.pageIndex = parseInt(data.first) / data.rows;
         this.pageSize = data.rows;
         if (this.pageIndex < 1) {
@@ -270,7 +243,6 @@ export class AssetListingComponent implements OnInit {
         }
         data.first = this.pageIndex;
         this.lazyLoadEventDataInput = data;
-
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
         data.filters['status'] = this.status ? this.status : 'Active';
@@ -291,7 +263,6 @@ export class AssetListingComponent implements OnInit {
             { field: 'updatedBy', header: 'Last Updated By', width: '100px' },
             { field: 'updatedDate', header: 'Last Updated Time', width: '100px' },
         ];
-
     }
     globalFilterValue: any;
     filterGlobal(value, type) {
@@ -329,26 +300,6 @@ export class AssetListingComponent implements OnInit {
         this._route.navigateByUrl('assetmodule/assetpages/app-create-asset');
 
     }
-
-    private getInsecGLAccName() {
-        if (this.assetViewList && this.assetViewList.inspectionGlaAccountId) {
-            this.glAccountService.getById(this.assetViewList.inspectionGlaAccountId).subscribe(
-                results => { this.onGlAccountLoad(results[0]) }, err => {
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);
-                }
-            );
-        }
-    }
-
-    private onGlAccountLoad(getGl: GlAccount) {
-        if (getGl && getGl[0] != undefined) {
-            this.alertService.stopLoadingMessage();
-            this.loadingIndicator = false;
-            this.assetViewList.inspectionGlaAccountName = getGl[0].accountName;
-        }
-    }
-
     getAuditHistoryById(rowData) {
         this.assetService.getAssetCapesAudit(rowData.assetCapesId).subscribe(res => {
             this.auditHistory = res;
@@ -357,7 +308,6 @@ export class AssetListingComponent implements OnInit {
             this.errorMessageHandler(errorLog);
         })
     }
-
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
         const dataLength = data.length;
@@ -373,13 +323,11 @@ export class AssetListingComponent implements OnInit {
     openAssetToEdit(row) {
         this.assetService.isEditMode = true;
         this.isSaving = true;
-        // this.assetService.currentAssetId = row.assetRecordId;
         this.assetService.listCollection = row;
         const { assetId } = row;
         this._route.navigateByUrl(`assetmodule/assetpages/app-edit-asset/${row.assetRecordId}`);
     }
     openAssetToAdjustment(row) {
-        // this.assetService.currentAssetId = row.assetRecordId;
         this.assetService.listCollection = row;
         const { assetId } = row;
         this._route.navigateByUrl(`assetmodule/assetpages/app-asset-adjustment/${row.assetRecordId}`);
@@ -393,7 +341,6 @@ export class AssetListingComponent implements OnInit {
 
     removeAsset(): void {
         this.assetService.remove(this.assetService.listCollection.assetRecordId).subscribe(response => {
-            //this.alertService.showMessage("Asset removed successfully.");
             this.alertService.showMessage("Success", `Asset removed successfully.`, MessageSeverity.success);
             this.modal.close();
             const lazyEvent = this.lazyLoadEventDataInput;
@@ -492,7 +439,6 @@ export class AssetListingComponent implements OnInit {
             this.errorMessageHandler(errorLog);
         });
     }
-
     getDefaultVendorName(id) {
         for (let i = 0; i < this.allVendorInfo.length; i++) {
             if (id == this.allVendorInfo[i].vendorId)
@@ -506,12 +452,8 @@ export class AssetListingComponent implements OnInit {
         }
     }
     openViewData(content, row) {
-        // this.setViewManagementStrucureData(row);
-
-
         this.assetViewList = row;
         this.assetViewList.depreOrIntang = row.isDepreciable == true ? 'Tangible' : 'Intangible';
-        // this.assetViewList.assetAcquisitionTypeId = this.getAssetAcqName(row.assetAcquisitionTypeId);
         this.assetViewList.manufacturerName = row.manufacturer ? row.manufacturer.name : "";
         this.assetViewList.isSerialized = row.isSerialized == true ? 'Yes' : 'No';
         this.assetViewList.currencyId = row.currency ? row.currency.code : '';
@@ -524,23 +466,9 @@ export class AssetListingComponent implements OnInit {
         this.assetViewList.unitOfMeasureId = this.getUOMName(row.unitOfMeasureId);
         this.assetViewList.assetTypeId = row.assetType ? row.assetType.assetTypeName : "";
         this.assetRecordId = row.assetRecordId;
-        // if(this.assetViewList.isIntangible==false){
-        //     if(row && row.assetRecordId !=undefined){
-        //         this.isSpinnerVisibleView=true;
-        // this.assetService.getcapabilityListData(row.assetRecordId).subscribe(
-        //     results =>{
-        //         this.isSpinnerVisibleView=false;
-        //         this.onCapesLoaded(results[0])},err => {			
-        //         const errorLog = err;
-        //         this.isSpinnerVisibleView=false;
-        //         this.errorMessageHandler(errorLog);}
-        // );
-        //     }
-        // }
         this.selectedCol = this.cols1;
         this.assetViewList.unitCost = row.unitCost ? formatNumberAsGlobalSettingsModule(row.unitCost, 2) : "";
-        // this.assetLocationData(row.asset_Location);
-        if (!this.isWorkOrder) {
+       if (!this.isWorkOrder) {
             this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 
         }
@@ -568,12 +496,6 @@ export class AssetListingComponent implements OnInit {
         }
 
     }
-    private onCapesLoaded(allCapes: ItemMasterCapabilitiesModel[]) {
-        this.allCapesInfo = allCapes;
-        this.totalRecords1 = this.allCapesInfo.length;
-        this.totalPages1 = Math.ceil(this.totalRecords1 / this.pageSize1);
-    }
-
 
     getDeprFrequencyName(id) {
         for (let i = 0; i < this.depreciationFrequencyList.length; i++) {
@@ -581,62 +503,46 @@ export class AssetListingComponent implements OnInit {
                 return this.depreciationFrequencyList[i].label;
         }
     }
-
     getUOMName(id) {
         for (let i = 0; i < this.allUnitOfMeasureinfo.length; i++) {
             if (id == this.allUnitOfMeasureinfo[i].unitOfMeasureId)
                 return this.allUnitOfMeasureinfo[i].shortName;
         }
     }
-
     getGLAccountName(id) {
         for (let i = 0; i < this.GLAccountList.length; i++) {
             if (id == this.GLAccountList[i].glAccountId)
                 return this.GLAccountList[i].accountName;
         }
     }
-
     getGLAccountCode(id) {
         for (let i = 0; i < this.GLAccountList.length; i++) {
             if (id == this.GLAccountList[i].glAccountId)
                 return this.GLAccountList[i].accountCode;
         }
     }
-
-
     onSuccessfulAssetType(audits: any[]) {
         if (audits && audits[0]) {
             this.assetViewList.assetAttributeTypeId = audits[0].assetAttributeTypeId;
             this.assetViewList.assetAttributeTypeName = audits[0].assetAttributeTypeName;
-            //this.assetViewList.description = audits[0].description;
             this.assetViewList.conventionType = audits[0].conventionType;
             this.assetViewList.depreciationMethod = audits[0].depreciationMethod;
-            // this.assetViewList.depreciationMethodObj = this.getDeprMethodName(audits[0].depreciationMethod);
             this.assetViewList.residualPercentage = audits[0].residualPercentage ? formatNumberAsGlobalSettingsModule(audits[0].residualPercentage, 2) : "";
             this.assetViewList.residualValue = audits[0].residualValue;
             this.assetViewList.assetLife = audits[0].assetLife;
             this.assetViewList.depreciationFrequencyId = audits[0].depreciationFrequencyId;
-            // this.assetViewList.depreciationFrequencyObj = this.getDeprFrequencyName(audits[0].depreciationFrequencyId);
             this.assetViewList.acquiredGLAccountId = audits[0].acquiredGLAccountId;
-            // this.assetViewList.acquiredGLAccountObj = this.getGLAccountCode(audits[0].acquiredGLAccountId);
-            this.assetViewList.deprExpenseGLAccountId = audits[0].deprExpenseGLAccountId;
-            // this.assetViewList.deprExpenseGLAccountObj = this.getGLAccountCode(audits[0].deprExpenseGLAccountId);
-            this.assetViewList.adDepsGLAccountId = audits[0].adDepsGLAccountId;
-            // this.assetViewList.adDepsGLAccountObj = this.getGLAccountCode(audits[0].adDepsGLAccountId);
+           this.assetViewList.deprExpenseGLAccountId = audits[0].deprExpenseGLAccountId;
+           this.assetViewList.adDepsGLAccountId = audits[0].adDepsGLAccountId;
             this.assetViewList.assetSale = audits[0].assetSale;
-            // this.assetViewList.assetSaleObj = this.getGLAccountCode(audits[0].assetSale);
             this.assetViewList.assetWriteOff = audits[0].assetWriteOff;
-            // this.assetViewList.assetWriteOffObj = this.getGLAccountCode(audits[0].assetWriteOff);
-            this.assetViewList.assetWriteDown = audits[0].assetWriteDown;
-            // this.assetViewList.assetWriteDownObj = this.getGLAccountCode(audits[0].assetWriteDown);
+           this.assetViewList.assetWriteDown = audits[0].assetWriteDown;
             this.assetViewList.createdBy = audits[0].createdBy;
             this.assetViewList.updatedBy = audits[0].updatedBy;
             this.assetViewList.createdDate = audits[0].createdDate;
             this.assetViewList.updatedDate = audits[0].updatedDate;
             this.assetViewList.isDelete = audits[0].isDelete;
             this.assetViewList.isActive = audits[0].isActive;
-
-
         }
     }
     openAllCollapse() {
@@ -659,31 +565,20 @@ export class AssetListingComponent implements OnInit {
             this.errorMessageHandler(errorLog);
         })
     }
-
     getDepreciationFrequencyList() {
         this.commonservice.smartDropDownList('AssetDepreciationFrequency', 'AssetDepreciationFrequencyId', 'Name').subscribe(res => {
             this.depreciationFrequencyList = res;
-
         }, err => {
             const errorLog = err;
             this.errorMessageHandler(errorLog);
         })
     }
 
-    selectColumns(value, field) {
-
-    }
-    selectAssetclass(value, field) {
-
-    }
-
-    exportCSV(dt) {
-
+   exportCSV(dt) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentstatus, "isDeleted": isdelete }, "globalFilter": "" }
         PagingData.globalFilter = this.globalFilterValue ? this.globalFilterValue : '';
-        // PagingData.filters['global']=this.globalFilterValue ? this.globalFilterValue :'';
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
@@ -707,7 +602,6 @@ export class AssetListingComponent implements OnInit {
             }
         );
     }
-
     errorMessageHandler(log) {
         this.isSpinnerVisible = false;
         this.alertService.showMessage(
@@ -715,34 +609,8 @@ export class AssetListingComponent implements OnInit {
             log,
             MessageSeverity.error
         );
-        //     var msg = '';
-
-        //     if( typeof log.error == 'string' ) {
-        //         this.alertService.showMessage(
-        // 			'Error',
-        // 			log.error,
-        // 			MessageSeverity.error
-        // 		); 
-
-        //     }else{
-
-
-        // 	  if (log.error && log.error.errors.length > 0) {
-        // 				for (let i = 0; i < log.error.errors.length; i++){
-        // 					msg = msg + log.error.errors[i].message + '<br/>'
-        // 				}
-        // 			}
-        // 			this.alertService.showMessage(
-        //                 log.error.message,
-        // 				msg,
-        // 				MessageSeverity.error
-        // 			);
-
-        // }
     }
-
     parsedText(text) {
-
         if (text) {
             const dom = new DOMParser().parseFromString(
                 '<!doctype html><body>' + text,
@@ -762,7 +630,6 @@ export class AssetListingComponent implements OnInit {
             } else if (field == 'updatedDate') {
                 this.dateObject = { 'updatedDate': date }
             }
-
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData);
@@ -778,8 +645,5 @@ export class AssetListingComponent implements OnInit {
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData);
         }
-
     }
-
-    changeStatus(rowData) {}
 }
