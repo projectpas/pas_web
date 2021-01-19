@@ -1,18 +1,11 @@
-﻿import { Component, ViewChild, OnInit, AfterViewInit, Input, SimpleChanges } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatIcon } from '@angular/material';
-import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+﻿import { Component, OnInit,  Input, SimpleChanges } from '@angular/core';
+import {  MatTableDataSource } from '@angular/material';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { InputTextModule } from 'primeng/inputtext';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { AutoCompleteModule } from 'primeng/autocomplete';
 import { fadeInOut } from '../../../services/animations';
 import { AuthService } from '../../../services/auth.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
-import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { WorkFlowtService } from '../../../services/workflow.service';
 import { ActionService } from '../../../Workflow/ActionService';
 import { CustomerService } from '../../../services/customer.service';
@@ -34,7 +27,6 @@ import { MenuItem } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 declare var $ : any;
-
 @Component({
     selector: 'app-workflow-list',
     templateUrl: './workflow-list.component.html',
@@ -72,7 +64,6 @@ export class WorkflowListComponent implements OnInit {
     PercentBERThreshold: number;
     tasks: any[];
     addedTasks: any[];
-    allParts: any[];
     expertiseTypes: any[];
     assetTypes: any[];
     chargesTypes: any[];
@@ -146,8 +137,8 @@ export class WorkflowListComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.getWorkFlowActions();
-        this.LoadParts();
+        // this.getWorkFlowActions();
+        // this.LoadParts();
         this.selectedGridColumns = this.gridColumns;
         if (this.isWorkOrder) {
             this.workFlowtService.getWorkFlowDataById(this.workFlowId).subscribe(res => {
@@ -405,24 +396,24 @@ export class WorkflowListComponent implements OnInit {
         }
     }
 
-    private loadPublicationTypes(): void {
-        this.actionService.GetPublicationType().subscribe(
-            type => {
-                this.publicationTypes = type;
-                for (var task of this.addedTasks) {
-                    for (var publication of task.publication) {
-                        var selectectedPublicationType = this.publicationTypes.filter(x => x.publicationTypeId == publication.publicationType);
-                        if (selectectedPublicationType.length > 0) {
-                            publication.publicationTypeName = selectectedPublicationType[0].name;
-                        }
-                    }
-                }
-            },
-            error => {
+    // private loadPublicationTypes(): void {
+    //     this.actionService.GetPublicationType().subscribe(
+    //         type => {
+    //             this.publicationTypes = type;
+    //             for (var task of this.addedTasks) {
+    //                 for (var publication of task.publication) {
+    //                     var selectectedPublicationType = this.publicationTypes.filter(x => x.publicationTypeId == publication.publicationType);
+    //                     if (selectectedPublicationType.length > 0) {
+    //                         publication.publicationTypeName = selectectedPublicationType[0].name;
+    //                     }
+    //                 }
+    //             }
+    //         },
+    //         error => {
 
-            }
-        );
-    }
+    //         }
+    //     );
+    // }
 
     onAccordTabClick1(task: any) {
         task.selected = !task.selected;
@@ -447,15 +438,15 @@ export class WorkflowListComponent implements OnInit {
                     berThresholdAmount: sourceWF.berThresholdAmount ? formatNumberAsGlobalSettingsModule(sourceWF.berThresholdAmount, 2) : null,
 
                 };
-                var part = this.allParts.filter(x => x.itemMasterId == rowData.changedPartNumberId)[0];
-                this.sourceWorkFlow.changedPartNumber = part != undefined ? part.partNumber : '';
+                // var part = this.allParts.filter(x => x.itemMasterId == rowData.changedPartNumberId)[0];
+                // this.sourceWorkFlow.changedPartNumber = part != undefined ? part.partNumber : '';
                 this.sourceWorkFlow.workflowCreateDate = new Date(this.sourceWorkFlow.workflowCreateDate).toLocaleDateString();
                 this.sourceWorkFlow.workflowExpirationDate = this.sourceWorkFlow.workflowExpirationDate != null && this.sourceWorkFlow.workflowExpirationDate != '' ? new Date(this.sourceWorkFlow.workflowExpirationDate).toLocaleDateString() : '';
 
                 this.calculatePercentOfNew(workflow[0].costOfNew, workflow[0].percentageOfNew);
                 this.calculatePercentOfReplacement(workflow[0].costOfReplacement, workflow[0].percentageOfReplacement);
-                this.loadcustomerData();
-                this.loadCurrencyData();
+                // this.loadcustomerData();
+                // this.loadCurrencyData();
                 this.calculateTotalWorkFlowCost();
                 this.getAllTasks();
                 this.isSpinnerVisible = false;
@@ -465,22 +456,25 @@ export class WorkflowListComponent implements OnInit {
 
     onViewMaterialList(rowData): void {
         this.sourceWorkFlow = undefined;
+        this.isSpinnerVisible = true;
         this.actionService.getWorkFlowWithMaterialList(rowData.workflowId).subscribe(
             workflow => {
                 this.sourceWorkFlow = workflow[0];
                 this.calculateWorkFlowTotalMaterialCost();
                 this.getAllTasks();
+                this.isSpinnerVisible = false;
             },
             error => {
+                this.isSpinnerVisible = false;
             });
     }
 
-    getWorkFlowActions() {
-        this.workFlowtService.getWorkFlowMaterial().subscribe(
-            results => { },
-            error => { }
-        );
-    }
+    // getWorkFlowActions() {
+    //     this.workFlowtService.getWorkFlowMaterial().subscribe(
+    //         results => { },
+    //         error => { }
+    //     );
+    // }
 
     private setPublicationData(selectedPublication: any, row: any) {
         if (selectedPublication != null) {
@@ -511,16 +505,16 @@ export class WorkflowListComponent implements OnInit {
         }
     }
 
-    private loadcustomerData() {
-        this.customerService.getWorkFlows().subscribe(data => {
-            this.allCustomers = data[0];
-            var selectectedCustomer = this.allCustomers.filter(x => x.customerId == this.sourceWorkFlow.customerId);
-            if (selectectedCustomer.length > 0) {
-                this.sourceWorkFlow.customerName = selectectedCustomer[0].name;
-            }
+    // private loadcustomerData() {
+    //     this.customerService.getWorkFlows().subscribe(data => {
+    //         this.allCustomers = data[0];
+    //         var selectectedCustomer = this.allCustomers.filter(x => x.customerId == this.sourceWorkFlow.customerId);
+    //         if (selectectedCustomer.length > 0) {
+    //             this.sourceWorkFlow.customerName = selectectedCustomer[0].name;
+    //         }
 
-        });
-    }
+    //     });
+    // }
 
     private calculatePercentOfNew(myValue, percentValue) {
         this.sourceWorkFlow.percentOfNew = "";
@@ -538,18 +532,18 @@ export class WorkflowListComponent implements OnInit {
         }
     }
 
-    private loadCurrencyData() {
-        this.currencyService.getCurrencyList().subscribe(currencydata => {
-            this.allCurrencyData = currencydata[0];
-            if (this.sourceWorkFlow && this.sourceWorkFlow.currencyId) {
-                var selectectedCurrency = this.allCurrencyData.filter(x => x.currencyId == this.sourceWorkFlow.currencyId);
-            }
-            if (selectectedCurrency.length > 0) {
-                this.sourceWorkFlow.currencySymbol = selectectedCurrency[0].symbol;
-                this.sourceWorkFlow.currencyText = selectectedCurrency[0].displayName;
-            }
-        })
-    }
+    // private loadCurrencyData() {
+    //     this.currencyService.getCurrencyList().subscribe(currencydata => {
+    //         this.allCurrencyData = currencydata[0];
+    //         if (this.sourceWorkFlow && this.sourceWorkFlow.currencyId) {
+    //             var selectectedCurrency = this.allCurrencyData.filter(x => x.currencyId == this.sourceWorkFlow.currencyId);
+    //         }
+    //         if (selectectedCurrency.length > 0) {
+    //             this.sourceWorkFlow.currencySymbol = selectectedCurrency[0].symbol;
+    //             this.sourceWorkFlow.currencyText = selectectedCurrency[0].displayName;
+    //         }
+    //     })
+    // }
 
     private calculateTotalWorkFlowCost(): void {
         this.MaterialCost = 0.00;
@@ -702,7 +696,7 @@ export class WorkflowListComponent implements OnInit {
     }
 
     private getAllTasks(): void {
-        this.isSpinnerVisible = true;
+        // this.isSpinnerVisible = true;
         this.actionService.getActions().subscribe(
             actions => {
                 this.tasks = [];
@@ -710,7 +704,7 @@ export class WorkflowListComponent implements OnInit {
                     this.tasks.push({ Id: attr.taskId, Name: attr.description, Description: "", Memo: "" })
                 }
                 this.organiseTaskAndTaskAttributes();
-                this.loadPublicationTypes();
+                // this.loadPublicationTypes();
             },
             error => { }
         );
@@ -729,7 +723,7 @@ export class WorkflowListComponent implements OnInit {
 
             task.charges = this.sourceWorkFlow.charges.filter(x => {
                 if (x.taskId == task.Id) {
-                    this.LoadChargesDropDownValues(x);
+                    // this.LoadChargesDropDownValues(x);
                     chargesTotalQty += x.quantity == undefined || x.quantity == '' ? 0 : x.quantity;
                     chargesTotalExtendedCost += x.extendedCost == undefined || x.extendedCost == '' ? 0 : x.extendedCost;
                     chargesTotalChargesCost += x.extendedPrice == undefined || x.extendedPrice == '' ? 0 : x.extendedPrice;
@@ -757,7 +751,7 @@ export class WorkflowListComponent implements OnInit {
 
             task.equipments = this.sourceWorkFlow.equipments.filter(x => {
                 if (x.taskId == task.Id) {
-                    this.LoadAllAsset(x);
+                    // this.LoadAllAsset(x);
                 }
                 return x.taskId == task.Id
             });
@@ -791,7 +785,7 @@ export class WorkflowListComponent implements OnInit {
 
             task.expertise = this.sourceWorkFlow.expertise.filter(x => {
                 if (x.taskId == task.Id) {
-                    this.LoadExpertise(x);
+                    // this.LoadExpertise(x);
                     totalEstimatedHours += x.estimatedHours == undefined && x.estimatedHours == '' ? 0 : x.estimatedHours;
                     totalDirectLaborCost += x.directLaborRate == undefined && x.directLaborRate == '' ? 0 : x.directLaborRate;
                     totalOHCost += x.overheadCost == undefined && x.overheadCost == '' ? 0 : x.overheadCost;
@@ -823,10 +817,10 @@ export class WorkflowListComponent implements OnInit {
 
             task.materialList = this.sourceWorkFlow.materialList.filter(x => {
                 if (x.taskId == task.Id) {
-                    this.loadConditionData(x);
-                    this.loadUOMData(x);
-                    this.loadMaterialMandatoryData(x);
-                    this.loadItemClassification(x);
+                    // this.loadConditionData(x);
+                    // this.loadUOMData(x);
+                    // this.loadMaterialMandatoryData(x);
+                    // this.loadItemClassification(x);
                     materialTotalQty += x.quantity == undefined || x.quantity == '' ? 0 : x.quantity;
                     materialTotalExtendedCost += x.extendedCost == undefined || x.extendedCost == '' ? 0 : x.extendedCost;
                     materialTotalPrice += x.price == undefined || x.price == '' ? 0 : x.price;
@@ -851,7 +845,7 @@ export class WorkflowListComponent implements OnInit {
             })
 
             task.measurements = this.sourceWorkFlow.measurements.filter(x => {
-                this.setMeasurementDropdownText(x);
+                // this.setMeasurementDropdownText(x);
                 return x.taskId == task.Id
             });
 
@@ -859,294 +853,294 @@ export class WorkflowListComponent implements OnInit {
                 return x.taskId == task.Id
             });
 
-            for (var pub of task.publication) {
-                if (pub.aircraftManufacturer != null && pub.aircraftManufacturer != '') {
+            // for (var pub of task.publication) {
+            //     if (pub.aircraftManufacturer != null && pub.aircraftManufacturer != '') {
 
-                    this.aircraftManufacturerService.getById(pub.aircraftManufacturer).subscribe(
-                        result => {
-                            for (var task of this.addedTasks) {
-                                for (var publication of task.publication) {
-                                    if (publication.aircraftManufacturer == result[0][0].aircraftTypeId) {
-                                        publication.aircraftManufacturerName = result[0][0].description;
-                                    }
-                                }
-                            }
-                        },
-                        error => {
+            //         this.aircraftManufacturerService.getById(pub.aircraftManufacturer).subscribe(
+            //             result => {
+            //                 for (var task of this.addedTasks) {
+            //                     for (var publication of task.publication) {
+            //                         if (publication.aircraftManufacturer == result[0][0].aircraftTypeId) {
+            //                             publication.aircraftManufacturerName = result[0][0].description;
+            //                         }
+            //                     }
+            //                 }
+            //             },
+            //             error => {
 
-                        }
-                    );
+            //             }
+            //         );
 
-                    if (pub.model != null && pub.model != '') {
-                        this.aircraftmodelService.getById(pub.model).subscribe(
-                            result => {
-                                for (var publication of task.publication) {
-                                    if (publication.model == result[0][0].aircraftModelId) {
-                                        publication.modelName = result[0][0].modelName;
-                                    }
-                                }
-                            },
-                            error => {
+            //         if (pub.model != null && pub.model != '') {
+            //             this.aircraftmodelService.getById(pub.model).subscribe(
+            //                 result => {
+            //                     for (var publication of task.publication) {
+            //                         if (publication.model == result[0][0].aircraftModelId) {
+            //                             publication.modelName = result[0][0].modelName;
+            //                         }
+            //                     }
+            //                 },
+            //                 error => {
 
-                            }
-                        );
+            //                 }
+            //             );
 
-                        this.dashNumberService.getDashNumberByModelTypeId(pub.model.toString(), pub.aircraftManufacturer.toString()).subscribe((dashnumberValues) => {
-                            for (var publication of task.publication) {
-                                if (dashnumberValues.length > 0 && dashnumberValues[0].aircraftModelId == publication.model && dashnumberValues[0].aircraftTypeId == publication.aircraftManufacturer) {
-                                    publication.allDashNumbers = '';
+            //             this.dashNumberService.getDashNumberByModelTypeId(pub.model.toString(), pub.aircraftManufacturer.toString()).subscribe((dashnumberValues) => {
+            //                 for (var publication of task.publication) {
+            //                     if (dashnumberValues.length > 0 && dashnumberValues[0].aircraftModelId == publication.model && dashnumberValues[0].aircraftTypeId == publication.aircraftManufacturer) {
+            //                         publication.allDashNumbers = '';
 
-                                    for (var dashNum of dashnumberValues) {
-                                        var workFlowDashNumber = publication.workflowPublicationDashNumbers.filter(x => x.aircraftDashNumberId == dashNum.dashNumberId);
-                                        if (workFlowDashNumber.length > 0) {
-                                            publication.allDashNumbers += dashNum.dashNumber.toString() + ', ';
-                                        }
-                                    }
-                                }
+            //                         for (var dashNum of dashnumberValues) {
+            //                             var workFlowDashNumber = publication.workflowPublicationDashNumbers.filter(x => x.aircraftDashNumberId == dashNum.dashNumberId);
+            //                             if (workFlowDashNumber.length > 0) {
+            //                                 publication.allDashNumbers += dashNum.dashNumber.toString() + ', ';
+            //                             }
+            //                         }
+            //                     }
 
-                            }
-                        });
-                    }
-                }
+            //                 }
+            //             });
+            //         }
+            //     }
 
-                if (this.publications != undefined) {
-                    var selectedPublication = this.publications.filter(function (publication) {
-                        return publication.publicationRecordId == pub.publicationId;
-                    });
-                    if (selectedPublication.length == 0) {
-                        this.loadPublicationById(pub);
-                    }
-                    else {
-                        this.setPublicationData(selectedPublication[0], pub);
-                    }
-                }
-                else {
-                    this.publications = [];
-                    this.loadPublicationById(pub);
-                }
-            }
+            //     if (this.publications != undefined) {
+            //         var selectedPublication = this.publications.filter(function (publication) {
+            //             return publication.publicationRecordId == pub.publicationId;
+            //         });
+            //         if (selectedPublication.length == 0) {
+            //             this.loadPublicationById(pub);
+            //         }
+            //         else {
+            //             this.setPublicationData(selectedPublication[0], pub);
+            //         }
+            //     }
+            //     else {
+            //         this.publications = [];
+            //         this.loadPublicationById(pub);
+            //     }
+            // }
         }
     }
 
-    private loadPublicationById(wfPublication: any) {
-        this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
-            result => {
-                if (result[0] != undefined && result[0] != null) {
-                    this.publications.push(result[0]);
-                    this.setPublicationData(result[0], wfPublication);
-                }
-            }
-        );
-    }
+    // private loadPublicationById(wfPublication: any) {
+    //     this.publicationService.getPublicationForWorkFlow(wfPublication.publicationId).subscribe(
+    //         result => {
+    //             if (result[0] != undefined && result[0] != null) {
+    //                 this.publications.push(result[0]);
+    //                 this.setPublicationData(result[0], wfPublication);
+    //             }
+    //         }
+    //     );
+    // }
 
-    private setChargesTypeDropdownText(charge: any): void {
-        var chargesType = this.chargesTypes.filter(x => x.id == charge.workflowChargeTypeId);
-        if (chargesType.length > 0) {
-            charge.chargesTypeName = chargesType[0].name;
-        }
-    }
+    // private setChargesTypeDropdownText(charge: any): void {
+    //     var chargesType = this.chargesTypes.filter(x => x.id == charge.workflowChargeTypeId);
+    //     if (chargesType.length > 0) {
+    //         charge.chargesTypeName = chargesType[0].name;
+    //     }
+    // }
 
-    private setChargesVendorDropdownText(charge: any): void {
-        var vendor = this.vendors.filter(x => x.vendorId == charge.vendorId)[0];
-        if (vendor != undefined) {
-            charge.vendorName = vendor != undefined ? vendor.vendorName : '';
-        }
-    }
+    // private setChargesVendorDropdownText(charge: any): void {
+    //     var vendor = this.vendors.filter(x => x.vendorId == charge.vendorId)[0];
+    //     if (vendor != undefined) {
+    //         charge.vendorName = vendor != undefined ? vendor.vendorName : ''; 3
+    //     }
+    // }
 
-    private setEquipmentAssetDropdownText(equipment: any): void {
-        var asset = this.assets.filter(x => x.assetRecordId == equipment.assetId);
-        if (asset.length > 0) {
-            equipment.assetName = asset[0].assetId;
-        }
-    }
+    // private setEquipmentAssetDropdownText(equipment: any): void {
+    //     var asset = this.assets.filter(x => x.assetRecordId == equipment.assetId);
+    //     if (asset.length > 0) {
+    //         equipment.assetName = asset[0].assetId;
+    //     }
+    // }
 
-    private setEquipmentAssetTypeDropdownText(equipment: any): void {
-        var assetType = this.assetTypes.filter(x => x.id == equipment.assetTypeId);
-        if (assetType.length > 0) {
-            equipment.assetTypeName = assetType[0].name;
-        }
-    }
+    // private setEquipmentAssetTypeDropdownText(equipment: any): void {
+    //     var assetType = this.assetTypes.filter(x => x.id == equipment.assetTypeId);
+    //     if (assetType.length > 0) {
+    //         equipment.assetTypeName = assetType[0].name;
+    //     }
+    // }
 
-    private setMeasurementDropdownText(measurement: any): void {
-        var part = this.allParts.filter(x => x.itemMasterId == measurement.partNumber);
-        if (part.length > 0) {
-            measurement.PartName = part[0].partNumber;
-        }
-    }
+    // private setMeasurementDropdownText(measurement: any): void {
+    //     var part = this.allParts.filter(x => x.itemMasterId == measurement.partNumber);
+    //     if (part.length > 0) {
+    //         measurement.PartName = part[0].partNumber;
+    //     }
+    // }
 
-    private setExpertiseDropdownText(expertise: any): void {
-        var expertiseType = this.expertiseTypes.filter(x => x.expertiseTypeId == expertise.expertiseTypeId);
-        if (expertiseType.length > 0) {
-            expertise.expetiseTypeName = expertiseType[0].description;
-        }
-    }
+    // private setExpertiseDropdownText(expertise: any): void {
+    //     var expertiseType = this.expertiseTypes.filter(x => x.expertiseTypeId == expertise.expertiseTypeId);
+    //     if (expertiseType.length > 0) {
+    //         expertise.expetiseTypeName = expertiseType[0].description;
+    //     }
+    // }
 
-    private setMaterialConditionDropdown(material: any): void {
-        var condition = this.materialCondition.filter(x => x.conditionId == material.conditionCodeId);
+    // private setMaterialConditionDropdown(material: any): void {
+    //     var condition = this.materialCondition.filter(x => x.conditionId == material.conditionCodeId);
 
-        if (condition.length > 0) {
-            material.conditionName = condition[0].description;
-        }
-    }
+    //     if (condition.length > 0) {
+    //         material.conditionName = condition[0].description;
+    //     }
+    // }
 
-    private setMaterialUOMDropdownText(material): void {
-        var uom = this.materialUOM.filter(x => x.unitOfMeasureId == material.unitOfMeasureId);
+    // private setMaterialUOMDropdownText(material): void {
+    //     var uom = this.materialUOM.filter(x => x.unitOfMeasureId == material.unitOfMeasureId);
 
-        if (uom.length > 0) {
-            material.uomName = uom[0].description;
-        }
-    }
+    //     if (uom.length > 0) {
+    //         material.uomName = uom[0].description;
+    //     }
+    // }
 
-    private setMaterialMandatoryText(material): void {
-        var mandatory = this.materialMandatory.filter(x => x.name == material.mandatoryOrSupplemental);
-        if (mandatory.length > 0) {
-            material.mandatoryOrSupplementalName = mandatory[0].name;
-        }
-    }
+    // private setMaterialMandatoryText(material): void {
+    //     var mandatory = this.materialMandatory.filter(x => x.name == material.mandatoryOrSupplemental);
+    //     if (mandatory.length > 0) {
+    //         material.mandatoryOrSupplementalName = mandatory[0].name;
+    //     }
+    // }
 
-    private setMaterialItemClassificationName(material: any): void {
-        var itemClassification = this.itemClassification.filter(x => x.itemClassificationId == material.itemClassificationId);
-        if (itemClassification.length > 0) {
-            material.itemClassificationName = itemClassification[0].description;
-        }
-    }
+    // private setMaterialItemClassificationName(material: any): void {
+    //     var itemClassification = this.itemClassification.filter(x => x.itemClassificationId == material.itemClassificationId);
+    //     if (itemClassification.length > 0) {
+    //         material.itemClassificationName = itemClassification[0].description;
+    //     }
+    // }
 
-    private LoadParts(): void {
-        this.itemMasterService.getPartDetailsDropdown().subscribe(
-            results => {
-                this.allParts = results;
-            },
-            error => { }
-        );
-    }
+    // private LoadParts(): void {
+    //     this.itemMasterService.getPartDetailsDropdown().subscribe(
+    //         results => {
+    //             this.allParts = results;
+    //         },
+    //         error => { }
+    //     );
+    // }
 
-    private LoadAllAsset(equipment: any): void {
-        if (this.assets == undefined || this.assets.length == 0) {
-            this.assetService.getAllAssetList().subscribe(results => {
-                this.assets = results[0];
-                this.setEquipmentAssetDropdownText(equipment);
-            });
-        }
-        else {
-            this.setEquipmentAssetDropdownText(equipment);
-        }
+    // private LoadAllAsset(equipment: any): void {
+    //     if (this.assets == undefined || this.assets.length == 0) {
+    //         this.assetService.getAllAssetList().subscribe(results => {
+    //             this.assets = results[0];
+    //             this.setEquipmentAssetDropdownText(equipment);
+    //         });
+    //     }
+    //     else {
+    //         this.setEquipmentAssetDropdownText(equipment);
+    //     }
 
-        if (this.assetTypes == undefined || this.assetTypes.length == 0) {
-            this.actionService.getEquipmentAssetType().subscribe(
-                allAssetTypes => {
-                    this.assetTypes = allAssetTypes;
-                    this.setEquipmentAssetTypeDropdownText(equipment);
-                },
-                error => {
-                }
-            );
-        }
-        else {
-            this.setEquipmentAssetTypeDropdownText(equipment);
-        }
-    }
+    //     if (this.assetTypes == undefined || this.assetTypes.length == 0) {
+    //         this.actionService.getEquipmentAssetType().subscribe(
+    //             allAssetTypes => {
+    //                 this.assetTypes = allAssetTypes;
+    //                 this.setEquipmentAssetTypeDropdownText(equipment);
+    //             },
+    //             error => {
+    //             }
+    //         );
+    //     }
+    //     else {
+    //         this.setEquipmentAssetTypeDropdownText(equipment);
+    //     }
+    // }
 
-    private LoadExpertise(expertise: any): void {
-        if (this.expertiseTypes == undefined || this.expertiseTypes.length == 0) {
-            this.actionService.GetExpertiseType().subscribe(
-                expertiseTypes => {
-                    this.expertiseTypes = expertiseTypes;
-                    this.setExpertiseDropdownText(expertise);
-                },
-                error => { }
-            );
-        }
-        else {
-            this.setExpertiseDropdownText(expertise);
-        }
+    // private LoadExpertise(expertise: any): void {
+    //     if (this.expertiseTypes == undefined || this.expertiseTypes.length == 0) {
+    //         this.actionService.GetExpertiseType().subscribe(
+    //             expertiseTypes => {
+    //                 this.expertiseTypes = expertiseTypes;
+    //                 this.setExpertiseDropdownText(expertise);
+    //             },
+    //             error => { }
+    //         );
+    //     }
+    //     else {
+    //         this.setExpertiseDropdownText(expertise);
+    //     }
 
-    }
+    // }
 
-    private LoadChargesDropDownValues(charges: any): void {
-        if (this.chargesTypes == undefined || this.chargesTypes.length == 0) {
-            this.actionService.getChargesType().subscribe(
-                chargesTypes => {
-                    this.chargesTypes = chargesTypes;
-                    this.setChargesTypeDropdownText(charges);
-                }
-                ,
-                error => {
-                }
-            );
-        }
-        else {
-            this.setChargesTypeDropdownText(charges);
-        }
-        if (this.vendors == undefined || this.vendors.length == 0) {
-            this.vendorservice.getWorkFlows().subscribe(
-                results => {
-                    this.vendors = results[0];
-                    this.setChargesVendorDropdownText(charges);
-                },
-                error => {
+    // private LoadChargesDropDownValues(charges: any): void {
+    //     if (this.chargesTypes == undefined || this.chargesTypes.length == 0) {
+    //         this.actionService.getChargesType().subscribe(
+    //             chargesTypes => {
+    //                 this.chargesTypes = chargesTypes;
+    //                 // this.setChargesTypeDropdownText(charges);
+    //             }
+    //             ,
+    //             error => {
+    //             }
+    //         );
+    //     }
+    //     else {
+    //         // this.setChargesTypeDropdownText(charges);
+    //     }
+    //     if (this.vendors == undefined || this.vendors.length == 0) {
+    //         this.vendorservice.getWorkFlows().subscribe(
+    //             results => {
+    //                 this.vendors = results[0];
+    //                 this.setChargesVendorDropdownText(charges);
+    //             },
+    //             error => {
 
-                }
-            );
-        }
-        else {
-            this.setChargesVendorDropdownText(charges);
-        }
-    }
+    //             }
+    //         );
+    //     }
+    //     else {
+    //         this.setChargesVendorDropdownText(charges);
+    //     }
+    // }
 
-    private loadConditionData(material: any) {
-        if (this.materialCondition == undefined || this.materialCondition.length == 0) {
-            this.conditionService.getConditionList().subscribe(data => {
-                this.materialCondition = data[0];
-                this.setMaterialConditionDropdown(material);
-            });
-        }
-        else {
-            this.setMaterialConditionDropdown(material);
-        }
-    }
+    // private loadConditionData(material: any) {
+    //     if (this.materialCondition == undefined || this.materialCondition.length == 0) {
+    //         this.conditionService.getConditionList().subscribe(data => {
+    //             this.materialCondition = data[0];
+    //             this.setMaterialConditionDropdown(material);
+    //         });
+    //     }
+    //     else {
+    //         this.setMaterialConditionDropdown(material);
+    //     }
+    // }
 
-    private loadUOMData(material: any): void {
-        if (this.materialUOM == undefined || this.materialUOM.length == 0) {
-            this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
-                this.materialUOM = uomdata[0];
-                this.setMaterialUOMDropdownText(material);
-            });
-        }
-        else {
-            this.setMaterialUOMDropdownText(material);
-        }
-    }
+    // private loadUOMData(material: any): void {
+    //     if (this.materialUOM == undefined || this.materialUOM.length == 0) {
+    //         this.unitofmeasureService.getUnitOfMeasureList().subscribe(uomdata => {
+    //             this.materialUOM = uomdata[0];
+    //             this.setMaterialUOMDropdownText(material);
+    //         });
+    //     }
+    //     else {
+    //         this.setMaterialUOMDropdownText(material);
+    //     }
+    // }
 
-    private loadMaterialMandatoryData(material: any) {
-        if (this.materialMandatory == undefined || this.materialMandatory.length == 0) {
-            this.actionService.GetMaterialMandatory().subscribe(
-                mandatory => {
-                    this.materialMandatory = mandatory;
-                    this.setMaterialMandatoryText(material);
-                },
-                error => {
-                }
-            );
-        }
-        else {
-            this.setMaterialMandatoryText(material);
-        }
-    }
+    // private loadMaterialMandatoryData(material: any) {
+    //     if (this.materialMandatory == undefined || this.materialMandatory.length == 0) {
+    //         this.actionService.GetMaterialMandatory().subscribe(
+    //             mandatory => {
+    //                 this.materialMandatory = mandatory;
+    //                 this.setMaterialMandatoryText(material);
+    //             },
+    //             error => {
+    //             }
+    //         );
+    //     }
+    //     else {
+    //         this.setMaterialMandatoryText(material);
+    //     }
+    // }
 
-    private loadItemClassification(material: any) {
-        if (this.itemClassification == undefined || this.itemClassification.length == 0) {
-            this.itemClassificationService.getWorkFlows().subscribe(result => {
-                this.itemClassification = result[0];
-                this.setMaterialItemClassificationName(material);
-            });
-        }
-        else {
-            this.setMaterialItemClassificationName(material);
-        }
-    }
-    private loadDashNumberByManfacturerandModel(publication: any, airCraftTypeId: number, aircraftModelId: number) {
+    // private loadItemClassification(material: any) {
+    //     if (this.itemClassification == undefined || this.itemClassification.length == 0) {
+    //         this.itemClassificationService.getWorkFlows().subscribe(result => {
+    //             this.itemClassification = result[0];
+    //             this.setMaterialItemClassificationName(material);
+    //         });
+    //     }
+    //     else {
+    //         this.setMaterialItemClassificationName(material);
+    //     }
+    // }
+    // private loadDashNumberByManfacturerandModel(publication: any, airCraftTypeId: number, aircraftModelId: number) {
 
-    }
+    // }
 
     exportCSV(dt){
 		this.isSpinnerVisible = true;

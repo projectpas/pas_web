@@ -614,18 +614,13 @@ export class PublicationEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getpublicationListBySearchEndpoint(pageIndex, pageSize, publicationId, description, publicationType, publishby, employeeName, location));
       });
   }
-  getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftlistbypublicationidanditemmasterid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}`)
+  getAircraftManfacturerByPublicationId(itemMasterId, publicationRecordId, idList?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftlistbypublicationidanditemmasterid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&idList=${idList !== undefined ? idList : '0'}`)
   }
-
-  getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftmodelslistbyitemmasteridandaircrafttypeid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&aircraftTypeId=${aircraftTypeId}`)
+  getAircraftModelByAircraftManfacturerId(itemMasterId, publicationRecordId, aircraftTypeId, idList?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftmodelslistbyitemmasteridandaircrafttypeid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&aircraftTypeId=${aircraftTypeId}&idList=${idList !== undefined ? idList : '0'}`)
   }
-
-  getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId) {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftmodelslistbyitemmasteridandaircraftmodelid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&aircraftTypeId=${aircraftTypeId}&aircraftModelId=${aircraftModelId}`)
-
+  getDashNumberByModelandAircraftIds(itemMasterId, publicationRecordId, aircraftTypeId, aircraftModelId, idList?) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/Publication/aircraftmodelslistbyitemmasteridandaircraftmodelid?itemMasterId=${itemMasterId}&publicationId=${publicationRecordId}&aircraftTypeId=${aircraftTypeId}&aircraftModelId=${aircraftModelId}&idList=${idList !== undefined ? idList : '0'}`)
   }
-
-
 }
