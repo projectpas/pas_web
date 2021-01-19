@@ -71,7 +71,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             const data = {
                 ...this.editData,
                 partDescription: this.editData.epnDescription,
-                partNumber: this.editData.epn,
+                // partNumber: this.editData.epn,
                 estimtPercentOccurrance: (this.isQuote) ? this.editData.exstimtPercentOccuranceId : this.editData.exstimtPercentOccurance
             }
             this.workFlow.exclusions.push(data);
@@ -135,7 +135,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         this.disabledMemo = false;
     }
 
-    getConditionsList() {
+    getConditionsList() { 
         this.isSpinnerVisible = true;
         let consitionIds = [];
         if (this.UpdateMode) {
@@ -263,7 +263,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                     }
                 }
             }
-
+           
             this.getPNDetails(exclusion); 
         }
     }
@@ -318,6 +318,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
 
             this.reCalculate();
         }
+      
     }
 
     getDynamicVariableData(variable, index) {

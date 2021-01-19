@@ -6,7 +6,7 @@
                 <div class="header ">
                     <div class="row"> 
                       <div class="col">
-                        <h4 class="header-name">Workflows List</h4>
+                        <h4 class="header-name">Workflow List</h4>
                       </div>
                       <div>
                         <button
@@ -198,7 +198,7 @@
                                 </a>
                             </span>
                             <span data-toggle="modal" data-target="#view-material-lists"
-                                (click)="onViewMaterialList(rowData)">
+                                (click)="onViewMaterialList(rowData)"> 
                                 <a data-toggle="tooltip" matTooltipPosition="above"
                                     matTooltip="View Material Lists" tooltipPosition="bottom" title=""
                                     class="btn  nobg" data-original-title="">
@@ -257,7 +257,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns
-                    *ngIf="workflowList?.length == 0">
+                   >
                     <tr>
                     <td
                         [attr.colspan]="14"
@@ -364,46 +364,47 @@
                                         <div class="form-row" style="margin-top: 20px;">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Workflow ID: </label> {{sourceWorkFlow.workflowId}}
+                                                    <label>Workflow ID:<span class="clr-red">*</span> </label> {{sourceWorkFlow.workOrderNumber}}
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Workflow Description:
                                                     </label>{{sourceWorkFlow.workflowDescription}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Version: </label>{{sourceWorkFlow.version}}
+                                                    <label>Version: <span class="clr-red">*</span></label>{{sourceWorkFlow.version}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Create Date: </label>{{sourceWorkFlow.workflowCreateDate}}
+                                                    <label>Create Date: <span class="clr-red">*</span></label>{{sourceWorkFlow.workflowCreateDate}}
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Expiration Date:
                                                     </label>{{sourceWorkFlow.workflowExpirationDate}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Currency: </label>
+                                                    <label>Currency: <span class="clr-red">*</span></label>
                                                     {{sourceWorkFlow.currencySymbol + ' (' + sourceWorkFlow.currencyText + ')'}}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>PN: </label>{{sourceWorkFlow.itemMaster.partNumber}}
+                                                    <label>PN:<span class="clr-red">*</span> </label>{{sourceWorkFlow.itemMaster.partNumber}}
                                                 </div>
                                                 <div class="form-group">
                                                     <label>PN Description:
                                                     </label>{{sourceWorkFlow.itemMaster.partDescription}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Changed PN: </label>{{sourceWorkFlow.changedPartNumber}}
+                                                    <label>Revised PN: </label>{{sourceWorkFlow.changedPartNumber}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Work Scope: </label>{{sourceWorkFlow.workScope.description}}
+                                                    <label>Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.description}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Customer Name: </label>{{sourceWorkFlow.customerName}}
+                                                    <label>Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Memo: </label>{{sourceWorkFlow.memo}}
+                                                    <label>Memo: </label>
+                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="sourceWorkFlow.memo"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -425,7 +426,8 @@
                                                             <div class="form-group">
                                                                 <label style="margin-top: 5px;">BER Threshold: </label>
                                                                 <input class="w60 form-control wf-ber-thrld text-right"
-                                                                    type="text"
+                                                                    type="text" style="    color: red !important;
+                                                                    text-align: center !important;"
                                                                     value="{{sourceWorkFlow.berThresholdAmount}}"
                                                                     disabled>
                                                             </div>
@@ -632,7 +634,8 @@
                                                 <td class="text-right">{{measurement.max}}</td>
                                                 <td>{{measurement.expected}}</td>
                                                 <td>{{measurement.diagramURL}}</td>
-                                                <td>{{measurement.memo}}</td>
+                                                <td>   <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
+                                                   </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -663,7 +666,8 @@
                                                 <td class="text-right">{{exclusion.unitCost}}</td>
                                                 <td class="text-right">{{exclusion.extendedCost}}</td>
                                                 <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                                <td>{{exclusion.memo}}</td>
+                                                <td> <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
+                                                    </td>
                                             </tr>
                                             <tr>
                                                 <td><b>Total</b></td>
@@ -698,7 +702,9 @@
                                                 <td>{{direction.action}}</td>
                                                 <td>{{direction.description}}</td>
                                                 <td class="text-right">{{direction.sequence}}</td>
-                                                <td>{{direction.memo}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -842,15 +848,17 @@
                                                 <td>{{material.partNumber}}</td>
                                                 <td>{{material.partDescription}}</td>
                                                 <td>{{material.conditionName}}</td>
-                                                <td>{{material.mandatoryOrSupplementalName}}</td>
-                                                <td>{{material.itemClassificationName}}</td>
+                                                <td>{{material.materialMandatoriesName}}</td>
+                                                <td>{{material.itemClassification}}</td>
                                                 <td class="text-right">{{material.quantity}}</td>
-                                                <td>{{material.uomName}}</td>
+                                                <td>{{material.unitOfMeasure}}</td>
                                                 <td class="text-right">{{material.unitCost}}</td>
                                                 <td class="text-right">{{material.extendedCost}}</td>
                                                 <td class="text-right">{{material.price}}</td>
                                                 <td class="text-right">{{material.extendedPrice}}</td>
-                                                <td>{{material.memo}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
+                                                </td>
                                                 <td>{{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }}
                                                 </td>
                                             </tr>
@@ -888,14 +896,13 @@
 
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="view-material-lists" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xlg">
             <div class="modal-content" *ngIf="sourceWorkFlow != undefined">
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
                         name="">×</button>
                     <h4 class="modal-title">Material list of Workflow "{{ sourceWorkFlow.workOrderNumber}}" for
-                        "PN{{sourceWorkFlow.itemMaster.partNumber}}" and Scope
-                        "{{sourceWorkFlow.workScope.description}}"</h4>
+                        "PN{{sourceWorkFlow.itemMaster.partNumber}}"</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal wf-popup-form">
@@ -904,17 +911,17 @@
                                 <div class="form-row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Part No: </label>PN{{sourceWorkFlow.itemMaster.partNumber}}
+                                            <label>Part No: </label><span class="text-danger">{{sourceWorkFlow.itemMaster.partNumber}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Workflow ID: </label>{{sourceWorkFlow.workOrderNumber}}
+                                            <label>Workflow ID: </label><span class="text-danger">{{sourceWorkFlow.workOrderNumber}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Scope: </label>{{sourceWorkFlow.workScope.description}}
+                                            <label>Scope: </label><span class="text-danger">{{sourceWorkFlow.workScope.description}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -930,13 +937,13 @@
                                         <th>PN</th>
                                         <th>Description</th>
                                         <th>Cond</th>
-                                        <th>Mandatory / Supplemental</th>
-                                        <th>Item Classification</th>
+                                        <th>Request Type</th>
                                         <th>Qty</th>
+                                        <th>Item Classification</th>
                                         <th>UOM</th>
                                         <th>Unit Cost</th>
-                                        <th>Extended Cost</th>
-                                        <th>Price</th>
+                                        <th>Ext. Cost</th>
+                                        <!-- <th>Price</th> -->
                                         <th>Memo</th>
                                         <th>Deferred</th>
                                     </tr>
@@ -947,21 +954,23 @@
                                             <td>
                                                 <h5 class="po-head-wfl">{{task.Name}}</h5>
                                             </td>
-                                            <td colspan="13"></td>
+                                            <td colspan="11"></td>
                                         </tr>
                                         <tr *ngFor="let material of task.materialList;let i = index">
                                             <td class="text-right">{{(i+1)}}</td>
                                             <td>{{material.partNumber}}</td>
                                             <td>{{material.partDescription}}</td>
                                             <td>{{material.conditionName}}</td>
-                                            <td>{{material.mandatoryOrSupplementalName}}</td>
-                                            <td>{{material.itemClassificationName}}</td>
+                                            <td>{{material.materialMandatoriesName}}</td>
                                             <td class="text-right">{{material.quantity}}</td>
-                                            <td>{{material.uomName}}</td>
+                                            <td>{{material.itemClassification}}</td>
+                                            <td>{{material.unitOfMeasure}}</td>
                                             <td class="text-right">{{material.unitCost}}</td>
                                             <td class="text-right">{{material.extendedCost}}</td>
-                                            <td class="text-right">{{material.price}}</td>
-                                            <td>{{material.memo}}</td>
+                                            <!-- <td class="text-right">{{material.price}}</td> -->
+                                            <td>
+                                                <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
+                                            </td>
                                             <td>
                                                 <input type="checkbox" disabled="disabled"
                                                     [checked]="material.isDeferred"
@@ -974,12 +983,13 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <!-- <td></td> -->
                                             <td class="text-right"><b>{{task.materialTotalQty}}</b></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                             <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                            <td class="text-right"><b>{{task.materialTotalPrice}}</b></td>
+                                            <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -1006,105 +1016,9 @@
                     <h4 class="modal-title">History of Workflow</h4>
                 </div>
                 <div class="modal-body">
-                    <!-- <div class="form-horizontal wf-popup-form">
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="form-row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Part No: </label>PN45854
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Workflow ID: </label>ACC123
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Scope: </label>OVH
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-                        <div class="tableFixHead">
-                    <table class="table table-bordered header-table-width">
-                        <thead>
-                            <tr>
-                                <th>Memo</th>
-                                <th>Last Updated By</th>
-                                <th>Last Updated Time</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Updated Work Phone</td>
-                                <td>Admin</td>
-                                <td>02-03-2018 14:15:45</td>
-                                <td>
-
-                                    <span>
-                                        <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
-                                            tooltipPosition="bottom" title="" class="btn btn-info boxed-float-btn nobg"
-                                            data-toggle="modal" data-target="#view" data-original-title="View">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-
-
-
-                                    <span>
-                                        <a data-toggle="tooltip" class="btn btn-info boxed-float-btn nobg"
-                                            data-original-title="Toggle">
-                                            <i class="fa fa-{{toggle_detailhistory ? 'minus' : 'plus'}}"
-                                                (click)="toggle_detailhistory=!toggle_detailhistory"
-                                                style="color: #259e08"></i>
-                                        </a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr class="detailed-history" style="display: table-row;" *ngIf="toggle_detailhistory">
-                                <td colspan="4">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Field Name</th>
-                                                <th>New Value</th>
-                                                <th>Old Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Workflow Description</td>
-                                                <td>Gear Repairing</td>
-                                                <td>Gears</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Version</td>
-                                                <td>2</td>
-                                                <td>1</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Customer Name</td>
-                                                <td>Shabbir</td>
-                                                <td>Satish</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Workflow Expiration Date</td>
-                                                <td>02/20/2018</td>
-                                                <td>02/20/2019</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    </div>
+                    <div class="text-center">
+                        <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                        <h4 style="color: #ff5663;">No History Found </h4>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1195,7 +1109,9 @@
                                     <label>Customer Name: </label>{{sourceWorkFlow.customerName}}
                                 </div>
                                 <div class="form-group">
-                                    <label>Memo: </label>{{sourceWorkFlow.memo}}
+                                    <label>Memo: </label>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="sourceWorkFlow.memo"></span>
+                                 
                                 </div>
                             </div>
                         </div>
@@ -1410,14 +1326,16 @@
                         <tbody>
                             <tr *ngFor="let measurement of task.measurements;let i = index">
                                 <td class="text-right">{{(i+1)}}</td>
-                                <td>{{measurement.PartName}}</td>
+                                <td>{{measurement.partNumber}}</td>
                                 <td class="text-right">{{measurement.sequence}}</td>
                                 <td class="text-right">{{measurement.stage}}</td>
                                 <td class="text-right">{{measurement.min}}</td>
                                 <td class="text-right">{{measurement.max}}</td>
                                 <td class="text-right">{{measurement.expected}}</td>
                                 <td>{{measurement.diagramURL}}</td>
-                                <td>{{measurement.memo}}</td>
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -1448,7 +1366,9 @@
                                 <td class="text-right">{{exclusion.unitCost}}</td>
                                 <td class="text-right">{{exclusion.extendedCost}}</td>
                                 <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                <td>{{exclusion.memo}}</td>
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td><b>Total</b></td>
@@ -1483,7 +1403,9 @@
                                 <td>{{direction.action}}</td>
                                 <td>{{direction.description}}</td>
                                 <td class="text-right">{{direction.sequence}}</td>
-                                <td>{{direction.memo}}</td>
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span> 
+                                 </td>
                             </tr>
                         </tbody>
                     </table>
@@ -1567,8 +1489,8 @@
                                 <th>Qty</th>
                                 <th>Unit Cost</th>
                                 <th>Extended Cost</th>
-                                <th>Unit Price</th>
-                                <th>Extended Price</th>
+                                <!-- <th>Unit Price</th> -->
+                                <!-- <th>Extended Price</th> -->
                                 <th>Vendor Name</th>
                             </tr>
                         </thead>
@@ -1580,8 +1502,8 @@
                                 <td class="text-right">{{charge.quantity}}</td>
                                 <td class="text-right">{{charge.unitCost}}</td>
                                 <td class="text-right">{{charge.extendedCost}}</td>
-                                <td class="text-right">{{charge.unitPrice}}</td>
-                                <td class="text-right">{{charge.extendedPrice}}</td>
+                                <!-- <td class="text-right">{{charge.unitPrice}}</td> -->
+                                <!-- <td class="text-right">{{charge.extendedPrice}}</td> -->
                                 <td>{{charge.vendorName}}</td>
                             </tr>
                             <tr>
@@ -1591,8 +1513,8 @@
                                 <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
                                 <td></td>
                                 <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
-                                <td></td>
-                                <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td>
+                                <!-- <td></td> -->
+                                <!-- <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td> -->
                                 <td></td>
                             </tr>
                         </tbody>
@@ -1615,8 +1537,8 @@
                                 <th>UOM</th>
                                 <th>Unit Cost</th>
                                 <th>Extended Cost</th>
-                                <th>Unit Price</th>
-                                <th>Extended Price</th>
+                                <!-- <th>Unit Price</th> -->
+                                <!-- <th>Extended Price</th> -->
                                 <th>Memo</th>
                                 <th>Deferred</th>
                             </tr>
@@ -1633,9 +1555,11 @@
                                 <td>{{material.uomName}}</td>
                                 <td class="text-right">{{material.unitCost}}</td>
                                 <td class="text-right">{{material.extendedCost}}</td>
-                                <td class="text-right">{{material.price}}</td>
-                                <td class="text-right">{{material.extendedPrice}}</td>
-                                <td>{{material.memo}}</td>
+                                <!-- <td class="text-right">{{material.price}}</td> -->
+                                <!-- <td class="text-right">{{material.extendedPrice}}</td> -->
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span> 
+                                </td>
                                 <td>{{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }}
                                 </td>
                             </tr>
@@ -1650,8 +1574,8 @@
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                <td class="text-right"><b>{{task.materialTotalPrice}}</b></td>
-                                <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td>
+                                <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
+                                <!-- <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td> -->
                                 <td></td>
                                 <td></td>
                             </tr>
