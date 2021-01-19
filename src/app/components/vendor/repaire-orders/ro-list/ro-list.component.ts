@@ -191,7 +191,7 @@ export class RoListComponent implements OnInit {
 			this.roStatusList = this.roStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         },err => {const errorLog = err;
             this.isSpinnerVisible = false;
-		});
+        });
 	}
     getROListByStatus(status) {
         this.currentStatus = status;
@@ -263,8 +263,7 @@ export class RoListComponent implements OnInit {
 			});
 			this.isSpinnerVisible = false;
 		}, err => {           
-            const errorLog = err;	
-            this.isSpinnerVisible = false;		
+            this.isSpinnerVisible = false;
 		})
 	}
     
@@ -319,7 +318,7 @@ export class RoListComponent implements OnInit {
 				partList.level4 = res.Level4;
 			}
 		},err => {const errorLog = err;           
-			this.errorMessageHandler(errorLog);});
+			});
     }
 
     getManagementStructureCodesChild(partChild) {
@@ -338,7 +337,7 @@ export class RoListComponent implements OnInit {
 			}
 		}, err => {			
 			const errorLog = err;
-			this.errorMessageHandler(errorLog);})
+			})
     }
 
     get userName(): string {
@@ -506,34 +505,6 @@ export class RoListComponent implements OnInit {
             }, err => {  this.isSpinnerVisible = false;});
     } 
 
-
-    // exportCSV(tt) {
-    //     this.isSpinnerVisible = true;
-    //     let PagingData = {"first":0,"rows":tt.totalRecords,"sortOrder":1,"filters":{"status":this.currentStatus,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
-    //     let filters = Object.keys(tt.filters);
-    //     filters.forEach(x=>{
-	// 		PagingData.filters[x] = tt.filters[x].value;
-    //     })
-    //     this.repairOrderService.getROList(PagingData).subscribe(res => {
-    //         tt._value = res[0]['results'].map(x => {
-	// 			return {
-    //                 ...x,
-    //                 openDateInput : x.openDateInput ?  this.datePipe.transform(x.openDateInput, 'MMM-dd-yyyy'): '',
-    //                 closedDateInput : x.closedDateInput ?  this.datePipe.transform(x.closedDateInput, 'MMM-dd-yyyy'): '',
-    //                 //createdDate: new Date(x.createdDate).getFullYear() +'/'+ (new Date(x.createdDate).getMonth() + 1) +'/'+ new Date(x.createdDate).getDate() +'  '+ new Date(x.createdDate).getHours() +':'+ new Date(x.createdDate).getMinutes() +':'+ new Date(x.createdDate).getSeconds(),
-    //                 //updatedDate: new Date(x.updatedDate).getFullYear() +'/'+ (new Date(x.updatedDate).getMonth() + 1) +'/'+ new Date(x.updatedDate).getDate() +'  '+ new Date(x.updatedDate).getHours() +':'+ new Date(x.updatedDate).getMinutes() +':'+ new Date(x.updatedDate).getSeconds(),
-	// 			}
-	// 		});	
-    //         tt.exportCSV();
-    //         tt.value = this.data;
-    //         this.isSpinnerVisible = false;
-    //     },error => {
-    //             this.errorMessageHandler(error)
-    //         },
-    //     );
-    // }
-
-
     deleteRO() {
         const { repairOrderId } = this.rowDataToDelete;
         this.repairOrderService.deleteRO(repairOrderId, this.userName).subscribe(res => {
@@ -574,7 +545,7 @@ export class RoListComponent implements OnInit {
             //this.getManagementStructureCodes(res.managementStructureId);
         }, err => {			
 			const errorLog = err;
-			this.errorMessageHandler(errorLog);}
+			}
         );
     }
     getROPartsViewById(roId) {
@@ -597,7 +568,7 @@ export class RoListComponent implements OnInit {
         }
         , err => {			
 			const errorLog = err;
-			this.errorMessageHandler(errorLog);});
+		});
     }
 
     getRepairOrderSplit(partList) {
@@ -613,17 +584,16 @@ export class RoListComponent implements OnInit {
     }
     getApproversListById(roId) {
         if(this.roApprovaltaskId == 0) {
-            this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
-            if(response) {					
-                response.forEach(x => {
-                    if (x.label.toUpperCase() == "RO APPROVAL") {
-                        this.roApprovaltaskId = x.value;
-                    }              
-                });
+            this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => {
+                if (response) {
+                    response.forEach(x => {
+                        if (x.label.toUpperCase() == "RO APPROVAL") {
+                            this.roApprovaltaskId = x.value;
+                        }
+                    });
+                }
             }
-            },err => {               
-                const errorLog = err;             	
-            });
+            );
             }
 		this.isSpinnerVisible = true;
 		this.repairOrderService.getROTotalCostById(roId).subscribe(res => {
@@ -635,7 +605,7 @@ export class RoListComponent implements OnInit {
 			}
 			this.isSpinnerVisible = false;
 		}, err => {           
-            const errorLog = err;          
+            const errorLog = err;           
         });
     }
 
@@ -752,7 +722,7 @@ export class RoListComponent implements OnInit {
             })
 		},err => {const errorLog = err;
             this.isSpinnerVisible = false;
-                        this.errorMessageHandler(errorLog);});
+                 });
     }
    
     totalExportRow : number = 0;
