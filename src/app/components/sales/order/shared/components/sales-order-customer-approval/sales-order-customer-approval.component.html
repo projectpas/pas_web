@@ -1,21 +1,21 @@
 <div class="approver-tab-cstm">
   <h5 class="po-head mt-2">Customer Approvals List</h5>
-  <div class="table-responsive">
-    <div class="table-responsive" style="margin-top: 10px;">
-      <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table" id="mpn-list-table">
+  <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+    <div class="tableFixHead"> 
+    <table class="table table-bordered header-table-width"  id="mpn-list-table">
         <thead>
           <tr class="pad_workflo">
             <th>
               <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall"
                 [disabled]="isView" /> Select All
             </th>
-            <th style="min-width: 100px !important;" *ngFor="let header of columns">{{header.header}}</th>
+            <th *ngFor="let header of columns">{{header.header}}</th>
           </tr>
         </thead>
         <tbody>
           <ng-container *ngIf="!salesOrderCustomerApprovalListView || salesOrderCustomerApprovalListView.length==0">
             <tr>
-              <td colspan="21" class="no-records-cstm" style="text-align: center;">
+              <td colspan="21" class="no-records-cstm">
                 No records found
               </td>
             </tr>
@@ -190,7 +190,7 @@
         <h4 class="modal-title">Edit {{"Memo"}}</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-bordered table-fixed workflow-table-material">
+        <!-- <table class="table table-bordered table-fixed workflow-table-material">
           <thead>
             <th style="color: #fff;">{{"Memo"}}</th>
           </thead>
@@ -203,13 +203,16 @@
               </td>
             </tr>
           </tbody>
-        </table>
-        <div style="float:right">
-          <button type="button" class="btn btn-primary" data-dismiss="modal"
-            style="padding: 6px 12px !important;margin-top: 10px;" (click)="onSaveTextAreaInfo(textAreaInfo)">
+        </table> -->
+        <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required>
+        </p-editor>
+        <div class="editor-buttons">
+          <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+   (click)="onSaveTextAreaInfo(textAreaInfo)">
             Save
           </button>
-          <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+          <button type="button" class="btn btn-danger editor-buttons-margin"
+          
             data-dismiss="modal">
             Close
           </button>

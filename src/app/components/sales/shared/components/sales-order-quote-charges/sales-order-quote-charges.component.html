@@ -31,17 +31,17 @@
     </div>
   </div>
   <div class="clearfix"></div>
-  <div class="card-body header-body">
+  <div class="card-body header-body" style="overflow:auto">
     <p-table [columns]="cols" [value]="salesOrderChargesList" [lazy]="false" [paginator]="true" [rows]="10"
       class="rpo-table-cstm ptable-f10" [paginator]="true">
       <!--chargess-->
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th colspan="7" style="color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
+          <th colspan="7" style="width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
             &nbsp;
           </th>
           <ng-container *ngIf="isView">
-            <th colspan="4" style="color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
+            <th colspan="4" style="width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
               <div class="display-flex" style="padding-left: 10px;">
                 <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
                   <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
@@ -66,10 +66,10 @@
                 </div>
               </div>
             </th>
-            <th style="color:#fff !important;"></th>
+            <th style="width:130px;color:#fff !important;"></th>
           </ng-container>
           <ng-container *ngIf="!isView">
-            <th colspan="4" style="background: #fff; border: 1px solid #e7ecf1;padding: 0;">
+            <th colspan="4" style="width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;">
               <div class="display-flex" style=" padding-left: 10px;">
                 <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
                   <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92" name="costPlusType"
@@ -94,7 +94,7 @@
                 </div>
               </div>
             </th>
-            <th style="color:#fff !important;"></th>
+            <th style="width:130px;color:#fff !important;"></th>
           </ng-container>
         </tr>
         <tr>
