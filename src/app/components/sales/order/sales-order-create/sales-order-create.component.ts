@@ -1076,7 +1076,6 @@ export class SalesOrderCreateComponent implements OnInit {
       let invalidDate = false;
 
       for (let i = 0; i < this.selectedParts.length; i++) {
-        debugger;
         let selectedPart = this.selectedParts[i];
         var errmessage = '';
         if (!selectedPart.customerRequestDate) {

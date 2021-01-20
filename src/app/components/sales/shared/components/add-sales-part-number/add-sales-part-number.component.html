@@ -7,7 +7,7 @@
   </div>
   <div class="modal-body">
     <app-customer-detail [salesQuote]="salesQuote"></app-customer-detail>
-    <app-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfo"
+    <app-part-number-filter [salesQuote]="salesQuote" [parts]="parts" [allConditionInfo]="allConditionInfoArray"
       [selectedParts]="selectedParts" [isStockLineViewMode]="isStockLineViewMode" (onPartSearch)="onPartSearch($event)"
       [selectedSummaryRow]="selectedSummaryRow" (onSearchTypeChange)="onSearchTypeChange($event)">
     </app-part-number-filter>

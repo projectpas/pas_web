@@ -97,7 +97,7 @@ export class SalesQuoteListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.breadcrumbs = [
             { label: 'Sales Order Quote' },
-            { label: 'Quote List' },
+            { label: 'Sales Order Quote List' },
         ];
         this.salesQuote = new SalesQuote();
         this.salesOrderQuote = new SalesOrderQuote();
