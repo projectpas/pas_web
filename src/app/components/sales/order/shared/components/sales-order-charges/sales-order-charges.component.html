@@ -297,7 +297,7 @@
                                         <!-- (change)="onChargeTypeChange($event, charge)" -->
                                         <td>
                                             <select class="form-control custom-select wf-pub-id" (ngModelChange)="enableUpdate()" id="dllChargesType"
-                                                    [(ngModel)]="charge.chargesTypeId" style="width: 130px;" name="type_{{i}}" required>
+                                                    [(ngModel)]="charge.chargesTypeId" style="width: 130px;appearance: auto !important;" name="type_{{i}}" required>
                                                 <option [value]="">Select</option>
                                                 <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">
                                                     {{

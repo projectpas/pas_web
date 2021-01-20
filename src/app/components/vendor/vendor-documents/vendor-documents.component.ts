@@ -203,7 +203,8 @@ export class VendorDocumentsComponent implements OnInit {
             return {
                 ...x,
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+				updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+				docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
             }
         });
         documents.exportCSV();

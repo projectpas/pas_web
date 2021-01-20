@@ -264,7 +264,7 @@ import { Master1099Service } from './services/master-1099.service';
 import { AppSharedModule } from './app-shared.module';
 import { StocklineReferenceStorage } from './components/stockline/shared/stockline-reference-storage';
 import { CommunicationService } from './shared/services/communication.service';
-import { AllViewComponent } from './shared/components/all-view/all-view.component';
+
 import { TabViewModule } from 'primeng/tabview';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
 
@@ -326,8 +326,7 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
     EntityViewComponent,
     StocklineViewComponent,
     StocklineHistoryComponent,
-    RefreshAlert,    
-    AllViewComponent,
+    RefreshAlert, 
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },
@@ -543,7 +542,6 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
     StocklineViewComponent,
     StocklineHistoryComponent,
     EntityViewComponent,
-    AllViewComponent,
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],

@@ -359,7 +359,7 @@ export class SalesOrderPartNumberComponent {
           this.part.currencyDescription = this.defaultCurrencyDiscription;
           this.part.salesQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
           this.part.quoteVesrion = this.salesQuote.versionNumber;
-          // this.part.customerRef = this.salesQuote.customerReferenceName;
+          this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.uom = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
