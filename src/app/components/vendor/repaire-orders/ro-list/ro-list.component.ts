@@ -76,6 +76,8 @@ export class RoListComponent implements OnInit {
     vendorCodeInput: any;
     statusIdInput: any;
     requestedByInput: any;
+    createdByInput: any;    
+    updatedByInput: any;
     approvedByInput: any;
     @Input() isEnableROList: boolean;
     @Input() vendorId: number;
@@ -414,7 +416,13 @@ export class RoListComponent implements OnInit {
         }
         if(field == "updatedDate") {
             this.updatedDateInput = value;
-        }        
+        }  
+        if(field == "createdBy") {
+            this.createdByInput = value;
+        }      
+        if(field == "updatedBy") {
+            this.updatedByInput = value;
+        }      
 
         this.lazyLoadEventDataInput.filters = {
             repairOrderNo: this.repairOrderNoInput,
@@ -427,7 +435,9 @@ export class RoListComponent implements OnInit {
             approvedBy: this.approvedByInput,
             vendorId: this.vendorId ? this.vendorId : null,
             createdDate : this.createdDateInput,
-            updatedDate : this.updatedDateInput
+            updatedDate : this.updatedDateInput,
+            createdBy: this.createdByInput,           
+            updatedBy: this.updatedByInput,
         }        
         this.getList(this.lazyLoadEventDataInput);
     }
