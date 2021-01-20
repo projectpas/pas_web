@@ -39,7 +39,12 @@
                     [scrollable]="true"
                     scrollHeight="450px"
                     [totalRecords]="totalRecords"
-                >                            
+                >                 
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                      <col *ngFor="let col of columns" style="width: 130px;" />
+                    </colgroup>
+                  </ng-template>           
                 <ng-template pTemplate="caption">
                     <div class="row">
                         <div class="col">
