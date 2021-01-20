@@ -113,51 +113,56 @@
         <div>
           <div class="form-row">
             <div class="col-md-4">
-              <p><span class="label"><b>RO Num: </b></span><span
+              <p><span class="label"><b>Ro Num: </b></span><span
                   class="value">{{roHeaderAdd.repairOrderNumber ? roHeaderAdd.repairOrderNumber : '-'}}</span></p>
-              <p><span class="label"><b>Open Date: </b></span><span
+              <p><span class="label"><b>Open Date <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.openDate | date: 'MM/dd/yyyy'}}</span></p>
-              <p><span class="label"><b>Closed/Cancelled Date: </b></span><span
-                  class="value">{{roHeaderAdd.closedDate | date: 'MM/dd/yyyy'}}</span></p>
-              <p><span class="label"><b>Need By: </b></span><span
+              <p><span class="label"><b>Closed / Cancelled Date: </b></span><span
+                  class="value">{{roHeaderAdd.closedDate | date: 'MM/dd/yyyy' }}</span></p>
+              <p><span class="label"><b>Need By <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.needByDate | date: 'MM/dd/yyyy'}}</span></p>
-              <p><span class="label"><b>Priority: </b></span><span
+              <p><span class="label"><b>Priority <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.priority ? roHeaderAdd.priority : '-'}}</span></p>
-              <p><span class="label"><b>Vendor Name: </b></span><span
+              <p><span class="label"><b>Vendor Name <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.vendorName ? roHeaderAdd.vendorName : '-'}}</span></p>
-              <p><span class="label"><b>Vendor Code: </b></span><span
+              <p><span class="label"><b>Vendor Code<span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.vendorCode ? roHeaderAdd.vendorCode : '-'}}</span></p>
-              <p><span class="label"><b>Vendor Contact: </b></span><span
-                  class="value">{{roHeaderAdd.contactName ? roHeaderAdd.contactName : '-'}}</span></p>
+              <p><span class="label"><b>Vendor Contact <span _ngcontent-c22="" class="clr-red">*</span>:
+                  </b></span><span class="value">{{roHeaderAdd.vendorContact ? roHeaderAdd.vendorContact : '-'}}</span>
+              </p>
               <p><span class="label"><b>Contact Phone: </b></span><span
-                  class="value">{{roHeaderAdd.workPhone ? roHeaderAdd.workPhone : '-'}}</span></p>
+                  class="value">{{roHeaderAdd.workPhone ? roHeaderAdd.workPhone : '-' }}</span></p>
               <p>
                 <span class="label"><b>Credit Limit & Terms: </b></span><span class="value">
-                  {{roHeaderAdd.creditLimit ? roHeaderAdd.creditLimit : '-'}} &
-                  {{roHeaderAdd.creditTerm ? roHeaderAdd.creditTerm : '-'}}
+                  {{roHeaderAdd.creditLimit ? formatePrice(roHeaderAdd.creditLimit) : '-'}}
+                  {{roHeaderAdd.creditTerm ? roHeaderAdd.creditTerm : ''}}
                 </span>
               </p>
             </div>
             <div class="col-md-4">
-              <p><span class="label"><b>Requisitioner: </b></span><span
+              <p><span class="label"><b>Requisitioner <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.requisitioner ? roHeaderAdd.requisitioner : '-'}}</span></p>
-              <p><span class="label"><b>Approver: </b></span><span
-                  class="value">{{roHeaderAdd.approver ? roHeaderAdd.approver : '-'}}</span></p>
-              <p><span class="label"><b>Approved Date: </b></span><span
-                  class="value">{{roHeaderAdd.approvedDate | date: 'MM/dd/yyyy'}}</span></p>
-              <p><span class="label"><b>Status: </b></span><span
+              <p><span class="label"><b>Status <span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.status ? roHeaderAdd.status : '-'}}</span></p>
-              <p><span class="label"><b>Memo: </b></span><span
-                  class="value">{{roHeaderAdd.roMemo ? roHeaderAdd.roMemo : '-'}}</span></p>
-              <div class="form-group p-t-10">
-                <div class="checkbox-cstm">
-                  <label>
-                    <input type="checkbox" name="deferredReceiver" [(ngModel)]="roHeaderAdd.deferredReceiver" disabled>
-                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                    Deferred Receiver
-                  </label>
-                </div>
-              </div>
+              <p class="view-text-editor">
+                <span class="label view-text-editor"><b>Notes: </b></span>
+                <span class="value">
+                  <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.notes">
+                  </p>
+                </span></p>
+              <p class="view-text-editor">
+                <span class="label view-text-editor"><b>Memo: </b></span>
+                <span class="value">
+                  <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.roMemo">
+                  </p>
+                </span></p>
+              <p class="view-text-editor">
+                <span class="label view-text-editor"><b>Warning: </b></span>
+                <span class="value">
+                  <textarea name="warningId" class="form-control view-warning-msg" disabled
+                    value="{{roHeaderAdd.warningMessage}}">{{roHeaderAdd.warningMessage}}</textarea>
+                </span>
+              </p>
               <div class="form-group p-t-10">
                 <div class="checkbox-cstm">
                   <label>
@@ -167,10 +172,19 @@
                   </label>
                 </div>
               </div>
-            </div>
+              <div class="form-group p-t-10">
+                <div class="checkbox-cstm">
+                  <label>
+                    <input type="checkbox" name="deferredReceiver" [(ngModel)]="roHeaderAdd.deferredReceiver" disabled>
+                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                    Deferred Receiver
+                  </label>
+                </div>
+              </div>
+            </div>  
             <div class="col-md-4">
               <div class="form-row">
-                <div class="col-md-6">
+                <div class="col-md-9">
                   <div class="card view-management-structure-card">
                     <div class="card-header view-management-structure-card-header">
                       <h5 class="view-management-structure-header">Management Structure <span class="text-danger">*</span></h5>
@@ -197,7 +211,7 @@
                 </div>
               </div>            
             </div>
-          </div>
+          </div>         
         </div>
       </div>
 
@@ -600,9 +614,13 @@
                   <th>Functional CUR <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>FX Rate <span _ngcontent-c22="" class="clr-red">*</span></th>
                   <th>Report CUR <span _ngcontent-c22="" class="clr-red">*</span></th>
-                  <th>WO</th>
-                  <!-- <th>RO</th> -->
-                  <th>SO</th>
+                  <th>Stk Line Num <span class="clr-red">*</span></th>
+							    <th>Control Id</th>
+							    <th>Control Num</th>
+							    <th>PO Num</th>
+                  <th>WO Num</th>
+                  <th>Sub-WO Num</th>                  
+                  <th>SO Num</th>
                   <th>Item Type</th>
                   <th>GL Account</th>
                   <th>UOM</th>
@@ -631,7 +649,12 @@
                     <td>{{partList?.functionalCurrency}}</td>
                     <td class="text-right">{{partList?.foreignExchangeRate}}</td>
                     <td>{{partList?.reportCurrency}}</td>
+                    <td>{{partList?.stockLineNumber}}</td>
+                    <td>{{partList?.controlId}}</td>
+                    <td>{{partList?.controlNumber}}</td>
+                    <td>{{partList?.po}}</td>
                     <td>{{partList?.workOrderNo}}</td>
+                    <td>{{partList?.subWorkOrderNo}}</td>
                     <!-- <td>{{partList?.reapairOrderNo}}</td> -->
                     <td>{{partList?.salesOrderNo}}</td>
                     <td>{{partList?.itemType}}</td>
@@ -654,7 +677,7 @@
                     <th>Order Qty<span _ngcontent-c22="" class="clr-red">*</span></th>
                     <th>Need By<span _ngcontent-c22="" class="clr-red">*</span></th>
                     <th colspan="4" class="table-child-header-mgmt">Management Structure</th>
-                    <th colspan="11"></th>
+                    <th colspan="15"></th>
                   </tr>
                   <tr class="child-data child-data-back" *ngFor="let partChild of partList.repairOrderSplitParts">
                     <td></td>													
@@ -675,7 +698,7 @@
                     <td class="text-right">{{partChild?.quantityOrdered}}</td>
                     <td>{{partChild?.needByDate | date: 'MM/dd/yyyy' }}</td>
                     <td colspan="4">{{partChild?.level1}}, {{partChild?.level2}}, {{partChild?.level3}}, {{partChild?.level4}}</td>
-                    <td colspan="11"></td>
+                    <td colspan="15"></td>
                   </tr>												
                 </ng-container>
 
@@ -706,6 +729,12 @@
                   <td>&nbsp;</td>
                   <td colspan="4" class="table-child-header-mgmt">&nbsp;</td>
                   <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+                  <td>&nbsp;</td>
+   <td>&nbsp;</td>
+   
+                  
                 </tr>
                 <tr  *ngIf="roPartsList.length == 0" >
                   <td [attr.colspan]="29"   class="no-records-cstm no-records-msg">
@@ -880,7 +909,7 @@
         </p-tabPanel>
        
         <p-tabPanel header="Vendor Capes">
-           <app-vendor-capes *ngIf="capvendorId > 0 && showVendorCaptab"     
+           <app-vendor-capes *ngIf="capvendorId > 0"     
             [vendorId]= "capvendorId"            
             [isViewMode]="isViewMode">
           </app-vendor-capes>

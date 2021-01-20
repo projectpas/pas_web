@@ -452,6 +452,10 @@ var PurchaseSetupComponent = /** @class */ (function () {
     PurchaseSetupComponent.prototype.warningsandRestriction = function (Id) {
         var _this = this;
         this.WarningListId = vendorwarning_enum_1.VendorWarningEnum.Create_Purchase_Order;
+        this.warningMessage = "";
+        this.warningID = 0;
+        this.restrictID = 0;
+        this.restrictMessage = "";
         if (Id && this.WarningListId) {
             this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe(function (res) {
                 if (res) {
@@ -3178,6 +3182,13 @@ var PurchaseSetupComponent = /** @class */ (function () {
     PurchaseSetupComponent.prototype.onSaveMemo = function () {
         this.headerInfo.poMemo = this.headerMemo;
         this.enableHeaderSaveBtn = true;
+    };
+    PurchaseSetupComponent.prototype.onAddContactMemo = function () {
+        this.contactMemo = this.vendorContactInfo.notes;
+    };
+    PurchaseSetupComponent.prototype.onSaveContactMemo = function () {
+        this.vendorContactInfo.notes = this.contactMemo;
+        // this.enableHeaderSaveBtn = true;
     };
     PurchaseSetupComponent.prototype.onAddNotes = function () {
         this.headerNotes = this.headerInfo.notes;

@@ -284,6 +284,7 @@ export class PolistComponent implements OnInit {
     }
 
     getList(data) {
+        this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete;
         data.filters.employeeId = this.employeeId;
