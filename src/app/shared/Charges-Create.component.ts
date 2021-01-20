@@ -144,12 +144,8 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     filterVendor(event) {
-
-        this.vendorCollection = this.allVendors.filter(x => {
-            if (x.vendorName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-                return x;
-            }
-        });
+		if (event.query !== undefined && event.query !== null) {
+			this.loadAllVendors(event.query.toLowerCase()); }
     }
 
     onTaskChange(task) {
@@ -190,7 +186,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         }
     }
 
-    private loadAllVendors() {
+    private loadAllVendors(strText = '') {
         this.isSpinnerVisible = true;
         let arrayVendlsit = []
         if (this.UpdateMode) {
@@ -198,7 +194,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 return arrayVendlsit.push(acc.vendorId);
             }, 0)
         }
-        this.vendorservice.getVendorNameCodeListwithFilter('', 20, arrayVendlsit).subscribe(res => {
+        this.vendorservice.getVendorNameCodeListwithFilter(strText, 20, arrayVendlsit).subscribe(res => {
             this.allVendors = res.map(x => {
                 this.isSpinnerVisible = false;
                 return {
