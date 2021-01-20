@@ -860,7 +860,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     itemMasterRowData: any = {};
     showItemmasterView: any = false;
-    openView(row) {
+    openView(row) { 
+        console.log("row",row);
         this.itemMasterRowData = row;
         this.showItemmasterView = true;
         this.itemMasterId = row.itemMasterId;
