@@ -325,7 +325,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.salesOrderService.createSOQCharge(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
-                '',
+                'Success',
                 'Created Sales Order Charge Successfully',
                 MessageSeverity.success
             );

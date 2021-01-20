@@ -42,7 +42,7 @@ export class PartSearchParamters {
     public custRestrictedDer: boolean = false;
 
     public custRestrictedPMA: boolean = false;
-
+    public conditionIds: number[] = [];
     constructor() {
         this.itemSearchType = ItemSearchType.ItemMaster;
     }

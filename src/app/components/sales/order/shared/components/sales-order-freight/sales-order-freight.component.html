@@ -277,6 +277,7 @@
                         Add Freight
                         <i class="fa fa-plus" (click)="addNewRow()"></i>
                     </span>
+                            <!-- (click)="onEditShipVia('Add',0)" -->
                 </div>
                 <div class="tab-content">
                     <div class="table-responsive table-overflow" style="height: 300px;">
@@ -286,7 +287,20 @@
                                     <tr>
                                         <!-- <th rowspan="2">Task *</th> -->
                                         <!-- <th>Carrier *</th> -->
-                                        <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
+                                        <th rowspan="2">Ship Via<span class="clr-red">*</span>
+                                            <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
+                                                matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
+                                                data-target="#AddShipVia"></a></span> -->
+                                            <!-- <span style="margin-left:0px;cursor:pointer;"
+                                                ><a class="btn nobg"
+                                                  *ngIf="shipViaId > 0" 
+                                                  matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                                   data-toggle="modal" data-target="#AddShipVia" 
+                                                   (click)="onEditShipVia('Edit',0)"
+                                                  ><i class="fa fa-pencil"></i
+                                                ></a>
+                                                </span> -->
+                                            </th>
                                         <!-- <th>Dimensions *</th> -->
                                         <th rowspan="2">Weight</th>
                                         <th rowspan="2">UOM</th>
@@ -307,7 +321,7 @@
                                     <tr *ngFor="let f of freightForm; let i = index">
                                         <td>
                                             <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel"
-                                                        [options]="shipViaList" (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
+                                                        [options]="shipViaList" (ngModelChange)="enableUpdate(); getShipViaId($event);" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                                             </p-dropdown>
                                         </td>
                                         <td>
@@ -559,3 +573,26 @@
         <button type="button" class="btn btn-danger" (click)="dismissModelAlettRestore()">No</button>
     </div>
 </ng-template>
+
+<div class="modal fade" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog partsList-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Ship Via </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <app-ship-via-create></app-ship-via-create>
+                    <!-- <app-ship-via-create (on-shipvia-save)="refresh(false)"></app-ship-via-create> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" style="display: none;" [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this PO</button>
+                       
+                <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+            </div>
+        </div>
+    </div>
+  </div> 

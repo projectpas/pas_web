@@ -10,6 +10,7 @@ import { SOFreight } from '../../../../../../models/sales/SOFreight';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from "@angular/forms";
+import { ActionService } from '../../../../../../Workflow/ActionService';
 
 
 @Component({
@@ -62,7 +63,8 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         private alertService: AlertService,
         private commonService: CommonService,
         private cdRef: ChangeDetectorRef,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private actionService: ActionService) {
     }
     ngOnInit() {
         if (this.freightForm) {
@@ -111,7 +113,8 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.arrayPercentList.push(0);
         forkJoin(this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, 0),
             //this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.customerId),
-            this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join()),
+            ////this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join()),
+            this.commonService.getShipVia(),
             //this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName'),
             this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join()),
             //this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code'),
@@ -328,7 +331,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.salesOrdeService.createFreight(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
-                '',
+                'Success',
                 'Sales Order Freights saved successfully',
                 MessageSeverity.success
             );
@@ -447,6 +450,10 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
 
+        for (let x of auditHistory) {
+            x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
+            x.amount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g, '')));
+        }
 
         this.freightAudiHistory = auditHistory;
 
@@ -601,4 +608,28 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
 
     dismissModelAlettRestore() {}
     formatStringToNumberGlobal($event) {}
+
+    shipViaId:number = 0;
+    getShipViaId(event){
+        console.log(event);
+        this.shipViaId = event;
+    }
+    // IsAddShipVia:boolean = false;
+    // ShipViaEditID:number;
+	// onEditShipVia(value,id) {
+	// 	//this.IsAddShipVia = false;
+	// 	//this.ShipViaEditID = id;
+	// 	if(value == 'Add') {
+    //     //this.ShipViabutton = true;
+    //     this.ShipViaEditID = 0;
+	// 	}	
+	// 	else {
+    //         this.ShipViaEditID = this.shipViaId;
+	// 		//this.ShipViabutton = false;
+	// 		//this.isEditModeShipVia = true;	
+	// 	}
+	// 	//this.getValueforShipVia();
+	// 	this.IsAddShipVia = true;
+
+	// }
 }

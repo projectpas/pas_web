@@ -198,7 +198,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
   }
   
   calculate() {
-    if (this.query.partSearchParamters.conditionId > 0
+    if (this.query.partSearchParamters.conditionIds.length > 0
       && this.query.partSearchParamters.partNumber
       && formatStringToNumber(this.query.partSearchParamters.quantityRequested) > 0) {
       this.searchDisabled = false;
@@ -239,13 +239,13 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     // this.query.partSearchParamters.restrictDER = false;
     // this.query.partSearchParamters.restrictPMA = false;
     this.enableMultiSearch = false;
-    if (this.query.partSearchParamters.conditionId > 0 && this.query.partSearchParamters.quantityRequested > 0)
+    if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.quantityRequested > 0)
       this.searchDisabled = false;
     this.calculate();
   }
 
   onConditionSelect() {
-    if (this.query.partSearchParamters.conditionId > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
+    if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
       this.searchDisabled = false;
   }
 
@@ -368,7 +368,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
         this.searchDisabled = false;
     } else {
       this.enableMultiSearch = false;
-      if (this.query.partSearchParamters.conditionId > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
+      if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
         this.searchDisabled = false;
       else
         this.searchDisabled = true;
