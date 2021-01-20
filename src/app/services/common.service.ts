@@ -797,6 +797,20 @@ getPOAddressById(poId) : any {
 
 }
 
+getShipVia() {
+  return this.http.get<any>(`${this.baseUrl}/api/Common/getAllShipVia`, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.getShipVia());
+  });
+}
+
+createShipViaForMaster(object) {
+  const formData = new FormData;
+  formData.append('params1', JSON.stringify(object) );
+  return this.http.post<any>(`${this.baseUrl}/api/single-screen/add-new`, object, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.createShipVia(object));
+  });
+}
+
 // getAllEditID(purchaseOrderId) {
 //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
 // }
