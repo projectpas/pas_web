@@ -13755,7 +13755,8 @@ body .ui-table .ui-table-tbody>tr>td a.btn {
 }
 
 .btn-cstm {
-  color: #fff;
+  // color: #fff;
+  color: #333 !important;
   border-radius: 4px !important;
   padding: 6px 12px !important;
 }
@@ -14552,7 +14553,8 @@ input[type="checkbox"]:disabled {
 }
 
 .btn-cstm {
-  color: #fff;
+  // color: #fff;
+  color: #333 !important;
   border-radius: 4px !important;
   padding: 5px 10px !important;
 }
@@ -15987,7 +15989,8 @@ body .ui-autocomplete .ui-autocomplete-dropdown .ui-button-icon-left:before {
 }
 
 .new-margin {
-  margin-top: 10px;
+  // margin-top: 10px;
+  margin-left:10px !important;
 }
 
 .new-label {
