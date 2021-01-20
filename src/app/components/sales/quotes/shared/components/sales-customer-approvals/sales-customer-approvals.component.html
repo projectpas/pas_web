@@ -6,11 +6,11 @@
       <!-- <table class="table table-bordered table-striped table-fixed table-sorting mpn-list-table" id="mpn-list-table"> -->
         <thead>
           <tr class="pad_workflo">
-            <th class="approver-th-align th-width" >
+            <th >
               <input type="checkbox" (click)="selectAllApproval('internal', selectall)" [(ngModel)]="selectall"
                 [disabled]="isView" /> Select All
             </th>
-            <th style="min-width:100px !important;" *ngFor="let header of columns">{{header.header}}</th>
+            <th *ngFor="let header of columns">{{header.header}}</th>
           </tr>
         </thead>
         <tbody>
@@ -180,9 +180,10 @@
         </tbody>
       </table>
     </div>
-    <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
-      style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
+  
   </div>
+  <button *ngIf="!isView" class="btn btn-primary pull-right" (click)="saveApprovalProcess()"
+  style="margin-top: 10px; margin-bottom: 10px;">Submit</button>
 </div>
 
 <div class="modal fade" id="memo-popup" role="dialog" data-backdrop="static" data-keyboard="false">
