@@ -29,6 +29,7 @@ export class AddSalesPartNumberComponent implements OnInit {
   part: PartDetail;
   query: ItemMasterSearchQuery;
   allConditionInfo: any[] = [];
+  allConditionInfoArray: any[] = [];
 
   constructor(private itemMasterService: ItemMasterService, private salesQuoteService: SalesQuoteService, private conditionService: ConditionService) {
     this.searchType = ItemSearchType.ItemMaster;
@@ -67,6 +68,7 @@ export class AddSalesPartNumberComponent implements OnInit {
             }
           }
         }
+        this.allConditionInfoArray = this.allConditionInfo.map((item) => ({label: item.description, value: item.conditionId}));
       });
   }
 

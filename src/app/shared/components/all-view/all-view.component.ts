@@ -49,9 +49,9 @@ export class AllViewComponent implements OnInit {
   moduleName: any = "PurchaseOrder";
   isViewMode: boolean = true;
   vendorIdByParams: number;
-  @Input() OrderId;
-  @Input() OrderType;
-  @Input() PovendorId;
+  @Input() OrderId : any;
+  @Input() OrderType : any;
+  @Input() PovendorId : any;
   @Input() vendorId: number;
 
   addressType: any = 'PO';
@@ -126,33 +126,29 @@ export class AllViewComponent implements OnInit {
     private repairOrderService: RepairOrderService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.selectedPurchaseOrderId = this.OrderId;
     let OrderId = this.OrderId;
     this.OrderTypes = this.OrderType;
     this.id = this.OrderId;
     let PovendorId = this.PovendorId;
     this.vendorIdByParams = this.PovendorId;
+    this.isPoViewMode = true;
+    this.vendorId = PovendorId;
+    this.capvendorId = PovendorId;
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;
       this.getPOViewById(OrderId);
       this.getPOPartsViewById(OrderId);
       this.getApproversListById(OrderId);
       this.getApprovalProcessListById(OrderId);
-      this.tabindex = 0;
-      if (PovendorId) {
-        setTimeout(() => {
-          this.isPoViewMode = true;
-          this.vendorId = PovendorId;
-          this.capvendorId = PovendorId;
-          this.warnings(PovendorId);
-        }, 1200);
-      }
+      this.tabindex = 0;     
     } else if (this.OrderTypes == 'Repair Order') {
       this.getROViewById(OrderId);
       this.getROPartsViewById(OrderId);
       this.getApproversListById(OrderId);
       this.getApprovalProcessListById(OrderId);
+      this.tabindex = 0; 
     }
   }
 
@@ -197,8 +193,7 @@ export class AllViewComponent implements OnInit {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
-      };
-      this.getVendorCapesByID(this.poHeaderAdd.vendorId);
+      };     
     }, err => {
       this.isSpinnerVisible = false;
     });
@@ -218,23 +213,11 @@ export class AllViewComponent implements OnInit {
           extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
           foreignExchangeRate: x.foreignExchangeRate ? formatNumberAsGlobalSettingsModule(x.foreignExchangeRate, 5) : '0.00',
           purchaseOrderSplitParts: this.getPurchaseOrderSplit(x)
-        }
-        //this.getManagementStructureCodesParent(partList);
+        }       
         this.poPartsList.push(partList);
       });
     }, err => {
       this.isSpinnerVisible = false;
-    });
-  }
-
-  getVendorCapesByID(vendorId) {
-    this.vendorCapesInfo = [];
-    this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
-      this.vendorCapesInfo = res;
-    }, err => {
-      this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.errorMessageHandler(errorLog);
     });
   }
 
@@ -244,9 +227,7 @@ export class AllViewComponent implements OnInit {
         ...res,
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
-      };
-      this.getVendorCapesByID(this.roHeaderAdd.vendorId);
-      //this.getManagementStructureCodes(res.managementStructureId);
+      };     
     }, err => {
     }
     );
@@ -304,30 +285,12 @@ export class AllViewComponent implements OnInit {
     });
   }
 
-  warningMessage: any;
-  warningID: any = 0;
-  warnings(Id) {
-    if (Id) {
-      this.commonService.vendorWarnings(Id, this.WarningListId).subscribe((res: any) => {
-        if (res) {
-          this.warningMessage = res.warningMessage;
-          this.warningID = res.vendorWarningId;
-        }
-      }, err => {
-        this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);
-      });
-    }
-  }
-
   getPurchaseOrderSplit(partList) {
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
         const splitpart = {
           ...y,
-        }
-        //this.getManagementStructureCodesChild(splitpart);
+        }       
         return splitpart;
       })
     }

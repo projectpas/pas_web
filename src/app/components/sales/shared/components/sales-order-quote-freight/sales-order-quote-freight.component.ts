@@ -103,7 +103,9 @@ dismissModelAlettRestore() {
         this.isSpinnerVisible = true;
         this.arrayEmplsit.push(0);
         forkJoin(this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId,this.deletedStatusInfo),
-            this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join())).subscribe(response => {
+            //this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join())
+            this.commonService.getShipVia()
+            ).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);

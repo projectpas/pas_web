@@ -223,15 +223,15 @@
                   <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                     {{
                     col.field == 'revisionDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'nextReviewDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'nextReviewDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'expirationDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'verifiedDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
                     : rowData[col.field]
                     }}
                   </td>
@@ -350,7 +350,7 @@
           <table class="table table-bordered pubHistory-table" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
               <tr>
-                <th *ngFor="let x of cols">{{ x.header }}</th>
+                <th *ngFor="let x of auditCols">{{ x.header }}</th>
                 <th>IsActive</th>
                 <th>Updated By</th>
                 <th>Updated Date</th>
@@ -413,7 +413,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.revisionDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.revisionDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(
@@ -435,7 +435,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.nextReviewDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.nextReviewDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(
@@ -446,7 +446,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.expirationDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.expirationDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'location', audit.location)
@@ -475,7 +475,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
@@ -485,7 +485,7 @@
                   {{ audit.isActive }}
                 </td>
                 <td>{{ audit.updatedBy }}</td>
-                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy' }}</td>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
               </tr>
             </tbody>
           </table>
@@ -745,11 +745,11 @@
                                           {{
                                           col.field == 'createdDate'
                                           ? (rowData[col.field]
-                                          | date: 'MM/dd/yyyy')
+                                          | date: 'MM/dd/yyyy h:mm a')
                                           : rowData[col.field] &&
                                           col.field == 'updatedDate'
                                           ? (rowData[col.field]
-                                          | date: 'MM/dd/yyyy')
+                                          | date: 'MM/dd/yyyy h:mm a')
                                           : rowData[col.field]
                                           }}
                                         </ng-container>

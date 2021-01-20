@@ -227,8 +227,6 @@ export class SalesPartNumberComponent {
       { field: 'notes', header: "Notes", width: "120px" },
     ];
     this.summaryColumns = [
-
-      { field: 'hidePart', header: '', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN' },
       { field: 'partDescription', header: 'PN Description', width: '67px' },
       { field: 'pmaStatus', header: 'Stk Type' },
@@ -454,20 +452,14 @@ export class SalesPartNumberComponent {
         this.query.partSearchParamters.quantityAlreadyQuoted = this.part.quantityAlreadyQuoted;
       });
       this.salesMarginModal = this.modalService.open(contentPartEdit, { size: "lg", backdrop: 'static', keyboard: false });
-      this.salesMarginModal.result.then(
-        () => { },
-        () => { }
-      );
     }
   }
+
   openPartDelete(contentPartDelete, part) {
     this.part = part;
     this.deletePartModal = this.modalService.open(contentPartDelete, { size: "sm", backdrop: 'static', keyboard: false });
-    this.deletePartModal.result.then(
-      () => { },
-      () => { }
-    );
   }
+
   deletePart(): void {
     if (this.part.salesOrderQuotePartId) {
       this.salesQuoteService.deletePart(this.part.salesOrderQuotePartId).subscribe(response => {

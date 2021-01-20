@@ -102,6 +102,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     modal: NgbModalRef;
     /** Actions ctor */
     cols: any[];
+    auditCols: any[];
     selectedColumns: any[];
     publicationName: string;
     filteredBrands: any[];
@@ -214,6 +215,22 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'publishedBy', header: 'Published By' },
             { field: 'revisionDate', header: 'Revision Date' },
             { field: 'nextReviewDate', header: 'Next Review Date' },
+            { field: 'expirationDate', header: 'Expiration Date' },
+            { field: 'location', header: 'Location' },
+            { field: 'verifiedBy', header: 'Verified By' },
+            { field: 'verifiedDate', header: 'Verified Date' },
+        ];
+
+        this.auditCols = [
+            { field: 'partNos', header: 'PN' },
+            { field: 'pnDescription', header: 'PN Description' },
+            { field: 'revisionNum', header: 'Revision Num' },
+            { field: 'publicationId', header: 'Pub ID' },
+            { field: 'description', header: 'Pub Description' },
+            { field: 'publicationType', header: 'Pub Type' },
+            { field: 'publishedBy', header: 'Published By' },
+            // { field: 'revisionDate', header: 'Revision Date' },
+            // { field: 'nextReviewDate', header: 'Next Review Date' },
             { field: 'expirationDate', header: 'Expiration Date' },
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },

@@ -35,8 +35,12 @@ export class PolistComponent implements OnInit {
     totalPages: number = 0;
     breadcrumbs: MenuItem[];
     home: any;
+    orderId: number ;
+    orderType: string ='Purchase Order';
     dateObject: any = {};
     filterSearchText : string;
+    strVendorName: string;
+    strVendorCode: string;
     headers = [
 		{ field: 'purchaseOrderNumber', header: 'PO Num' },
         { field: 'openDate', header: 'Open Date' },
@@ -696,12 +700,13 @@ export class PolistComponent implements OnInit {
     //     }        
     // }
 
-    viewSelectedRow(rowData) {
-        //this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
-        this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-        this.modal.componentInstance.OrderId = rowData.purchaseOrderId;        
-        this.modal.componentInstance.OrderType = 'Purchase Order';
-        this.modal.componentInstance.PovendorId = rowData.vendorId;
+    viewSelectedRow(content, rowData) {        
+        this.strVendorName =  rowData.vendorName;
+        this.strVendorCode =  rowData.vendorCode;
+        this.vendorId = rowData.vendorId;
+        this.orderId = rowData.purchaseOrderId;
+        this.orderType = 'Purchase Order';
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
     WarningsList: any;
@@ -735,7 +740,7 @@ export class PolistComponent implements OnInit {
 
     viewSelectedRowdbl(rowData) {
        
-        this.viewSelectedRow(rowData);
+        this.viewSelectedRow('',rowData);
         //$('#poView').modal('show');
     }
 
