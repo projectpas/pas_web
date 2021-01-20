@@ -3,12 +3,11 @@
         <button type="button" class="btn btn-primary" (click)="addPartNumber()" [disabled]="salesQuote.isApproved">
             Add PN
         </button>
-        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex" style="min-height: 130px !important;">
+        <div class="table-responsive pas-table-cstm rro-part-table-cstm poro-table-cstm parts-list-table-align parts-zindex"
+            style="min-height: 130px !important;">
             <div class="tableFixHead">
                 <table class="table table-bordered" id="soq-table">
                     <tr class="header-table-width" style="font-size: 10px">
-                        <th style="min-width: 80px !important;"></th>
-                        <th style="min-width: 95px !important;"></th>
                         <th *ngFor="let summaryColumn of summaryColumns">
                             <ng-container *ngIf="summaryColumn.field == 'quantityToBeQuoted'
                                      || summaryColumn.field == 'customerRef'
@@ -21,29 +20,12 @@
                                 {{ summaryColumn.header }}
                             </ng-container>
                         </th>
-                        <th colspan="15"></th>
+                        <th colspan="14"></th>
+                        <th style="position: sticky !important; min-width: 100px">Actions</th>
                     </tr>
                     <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
                         <tbody>
                             <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                                <td class="center">
-                                    <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                        [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                        class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
-                                        matTooltip="Add/Edit PN" matTooltipPosition="above"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                    <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
-                                        matTooltip="View Stock Line" matTooltipPosition="above"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    <!-- <i class="fa fa-trash btn nobg" (click)="openPartDelete(deletePNContent, summaryPart)"
-                                        matTooltip="Delete" matTooltipPosition="above"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px"></i> -->
-                                </td>
-                                <td></td>
                                 <td *ngFor="let summaryColumn of summaryColumns" style="width:auto"
                                     pReorderableRowHandle>
                                     <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
@@ -84,27 +66,23 @@
                                         {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
                                     </span>
                                 </td>
-                                <!-- <td style="position:sticky;width:80px">
-                                    <span>
-                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                            class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="Add/Edit PN" matTooltipPosition="above">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                    </span>
-                                    <span>
-                                        <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
-                                            matTooltip="View Stock Line" matTooltipPosition="above">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-                                </td> -->
-                                <td colspan="16"></td>
+                                <td colspan="14"></td>
+                                <td class="center">
+                                    <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
+                                        matTooltip="View Stock Line" matTooltipPosition="above"
+                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                        [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
+                                        class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
+                                        matTooltip="Add/Edit PN" matTooltipPosition="above"
+                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                </td>
                             </tr>
                             <tr class="child-header splitship-head child-header-back">
-                                <th></th>
-                                <th></th>
                                 <th>PN</th>
                                 <th>PN Description</th>
                                 <th>Stk Line Num</th>
@@ -140,43 +118,12 @@
                                 <th style="min-width: 80px !important;">Cntrl Num</th>
                                 <th style="min-width: 92px !important;">Cntrl ID Num</th>
                                 <th style="min-width: 120px">Notes</th>
+                                <th style="min-width: 120px; position: sticky !important">Actions</th>
                             </tr>
                             <tr class="child-data splitship-child child-data-back"
                                 *ngFor="let part of summaryPart.childParts; let stockIndex = index"
                                 [hidden]="part.isDeleted">
-                                <td></td>
-                                <td class="zui-sticky-col" style="width:107px !important" *ngIf="isViewMode == false">
-                                    <a class="btn nobg" data-toggle="tooltip"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px"
-                                        (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    <span *ngIf="!isEditDisabled(salesQuote, part)">
-                                        <a [class.disabled]="isEditDisabled(salesQuote, part)"
-                                            [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
-                                            class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit Price"
-                                            matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                            <i class="fa fa-pencil"></i>
-                                        </a>
-                                    </span>
-                                    <span>
-                                        <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
-                                            [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
-                                            class="btn nobg" (click)="openPartDelete(deleteContent,part)"
-                                            matTooltip="Delete" matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#soqPartHistory">
-                                        <a [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}"
-                                            class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(part)"
-                                            matTooltip="History" matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px"><i
-                                                class="fa fa-history"></i></a>
-                                    </span>
-                                </td>
+                                <!-- <td></td> -->
                                 <!-- <td class="center"><i class="fa fa-trash parts-list-delete-msg"
                                         matTooltip="Delete Split Shipment" matTooltipPosition="above"
                                         (click)="deleteSplitShipment(summaryPart,row_no,row_index)"
@@ -342,14 +289,46 @@
                                     <div class="form-group notes-popup-cstm mat_emo"
                                         style="width: 120px; margin-bottom: 0;">
                                         <div [innerHTML]="part.notes" class="text_editor_box"></div>
-                                        <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon" data-toggle="modal"
-                                            data-target="#textarea-popupNotes" matTooltip="Notes"
+                                        <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                            data-toggle="modal" data-target="#textarea-popupNotes" matTooltip="Notes"
                                             matTooltipPosition="above"
                                             (click)="onAddTextAreaInfo(part,stockIndex, rowIndex)"></i>
                                     </div>
                                 </td>
                                 <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
                                     <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                                </td>
+                                <td class="zui-sticky-col" style="width:107px !important" *ngIf="isViewMode == false">
+                                    <a class="btn nobg" data-toggle="tooltip"
+                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px"
+                                        (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <span *ngIf="!isEditDisabled(salesQuote, part)">
+                                        <a [class.disabled]="isEditDisabled(salesQuote, part)"
+                                            [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
+                                            class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit Price"
+                                            matTooltipPosition="above"
+                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                            <i class="fa fa-pencil"></i>
+                                        </a>
+                                    </span>
+                                    <span>
+                                        <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
+                                            [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
+                                            class="btn nobg" (click)="openPartDelete(deleteContent,part)"
+                                            matTooltip="Delete" matTooltipPosition="above"
+                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </span>
+                                    <span data-toggle="modal" data-target="#soqPartHistory">
+                                        <a [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}"
+                                            class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(part)"
+                                            matTooltip="History" matTooltipPosition="above"
+                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px"><i
+                                                class="fa fa-history"></i></a>
+                                    </span>
                                 </td>
                             </tr>
                             <tr *ngIf="selectedParts.length == 0">
