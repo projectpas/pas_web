@@ -811,6 +811,18 @@ createShipViaForMaster(object) {
   });
 }
 
+SaveShipVia(object) {
+  return this.http.post<any>(`${this.baseUrl}/api/Common/saveshipvia`, JSON.stringify(object), this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.SaveShipVia(object));
+  });
+}
+
+getDocumentType() {
+  return this.http.get<any>(`${this.baseUrl}/api/Common/getDocumentType`, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.getDocumentType());
+  });
+}
+
 // getAllEditID(purchaseOrderId) {
 //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
 // }
