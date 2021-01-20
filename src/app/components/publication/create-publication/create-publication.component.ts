@@ -697,6 +697,7 @@ export class CreatePublicationComponent implements OnInit {
           )
           .subscribe(res => {
             this.isEnableNext = true;
+            this.uploadDocs.next(true);
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
             this.publicationRecordId = publicationRecordId,
