@@ -32,6 +32,11 @@ export class RoListComponent implements OnInit {
     breadcrumbs: MenuItem[];
     home: any;    
     dateObject: any = {};
+    strVendorName: string;
+    strVendorCode: string;
+    orderId: number ;
+    orderType: string ='Repair Order';
+    PovendorId:number;
     headers = [
 		{ field: 'repairOrderNumber', header: 'RO Num' },
         { field: 'openDate', header: 'Open Date' },
@@ -522,16 +527,26 @@ export class RoListComponent implements OnInit {
     //     this.getApprovalProcessListById(rowData.repairOrderId);
     // }
 
-    viewSelectedRow(rowData) {
-        this.selectedrepairOrderId  = rowData.repairOrderId;
-        this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-        this.modal.componentInstance.OrderId = this.selectedrepairOrderId;
-        this.modal.componentInstance.OrderType = 'Repair Order';
+    // viewSelectedRow(rowData) {
+    //     this.selectedrepairOrderId  = rowData.repairOrderId;
+    //     this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
+    //     this.modal.componentInstance.OrderId = this.selectedrepairOrderId;
+    //     this.modal.componentInstance.OrderType = 'Repair Order';
+    // }
+
+    viewSelectedRow(content, rowData) {        
+        this.strVendorName =  rowData.vendorName;
+        this.strVendorCode =  rowData.vendorCode;
+        this.vendorId = rowData.vendorId;
+        this.PovendorId = rowData.vendorId;
+        this.orderId = rowData.repairOrderId;
+        this.orderType = 'Repair Order';
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
     viewSelectedRowdbl(rowData) {
-        this.viewSelectedRow(rowData);
-        $('#roView').modal('show');
+        this.viewSelectedRow('',rowData);
+        //$('#roView').modal('show');
     }
 
     getROViewById(roId) {

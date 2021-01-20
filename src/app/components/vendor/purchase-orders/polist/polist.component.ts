@@ -37,6 +37,7 @@ export class PolistComponent implements OnInit {
     home: any;
     orderId: number ;
     orderType: string ='Purchase Order';
+    PovendorId:number;
     dateObject: any = {};
     filterSearchText : string;
     strVendorName: string;
@@ -704,6 +705,7 @@ export class PolistComponent implements OnInit {
         this.strVendorName =  rowData.vendorName;
         this.strVendorCode =  rowData.vendorCode;
         this.vendorId = rowData.vendorId;
+        this.PovendorId = rowData.vendorId;
         this.orderId = rowData.purchaseOrderId;
         this.orderType = 'Purchase Order';
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
