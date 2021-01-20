@@ -370,6 +370,10 @@
                                 <th>Functional CUR <span class="clr-red">*</span></th>
                                 <th>FX Rate <span class="clr-red">*</span></th>
                                 <th>Report CUR <span class="clr-red">*</span></th>
+                                <th>Stk Line Num <span class="clr-red">*</span></th>
+							    <th>Control Id</th>
+							    <th>Control Num</th>
+							    <th>PO</th>
                                 <th>WO Num</th>
                                 <th>Sub-WO Num</th>
                                 <!-- <th>RO Num</th> -->
@@ -471,14 +475,17 @@
                                             <!--[disabled]=true-->
                                         </p-autoComplete>
                                     </td>
-                                    <!-- <td>
-                                        <p-autoComplete field="stockLineNumber" class="pautocomp-cstm" [(ngModel)]="partList.stocklineId"
+                                    <td>
+                                        <p-autoComplete field="stockLineNumber" class="autocomplete" [(ngModel)]="partList.stocklineId"
                                          name="stocklineNum{{row_index}}" [suggestions]="partList.allStocklineDetails" 
                                          (completeMethod)="filterStocklineNum($event, partList)"  [size]="30" [minLength]="1" 
                                          [dropdown]="true" errorMessage="Records not found" [disabled]="!partList.conditionId" 
                                          (onSelect)="getStockLineDetails(partList)" [forceSelection]="true" 
                                          (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved" required></p-autoComplete>
-                                    </td> -->
+                                    </td>
+                                    <td><input type="text" class="form-control" [(ngModel)]="partList.controlId" name="controlId{{row_index}}" disabled></td>
+								    <td><input type="text" class="form-control" [(ngModel)]="partList.controlNumber" name="controlNumber{{row_index}}" disabled></td>
+								    <td><input type="text" class="form-control" [(ngModel)]="partList.purchaseOrderNum" name="purchaseOrderNum{{row_index}}" disabled></td>                                   
                                     <td>
                                         <p-autoComplete field="label" class="autocomplete" appendTo="body" [(ngModel)]="partList.workOrderId" 
                                         name="workOrderId{{row_index}}" id="workOrderId{{row_index}}"

@@ -1569,6 +1569,7 @@ export class RoSetupComponent implements OnInit {
 		this.newPartsList = [this.newObjectForParent];
 		if(data) {				
 			data[0].map((x, pindex) => {
+				console.log(x)
 				this.newPartsList = {
 					...x,							
 					partNumberId: {value: x.itemMasterId, label: x.partNumber},						
@@ -1594,6 +1595,7 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,							
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex,data[1]),
 					remQty: 0,
+					stocklineId:x.stocklineId
 				}
 				this.getManagementStructureForParentPart(this.newPartsList,data[1],data[3]);
 
@@ -1790,7 +1792,18 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}					
+					}	
+					if (parentdata.stockLineId) {
+						this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId).subscribe(resp => {
+							parentdata.allStocklineInfo = resp;
+							parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineInfo);
+							this.getStockLineDetails(parentdata);
+						},err => {const errorLog = err;});
+					}
+					// if(parentdata.conditionId && value != 'onEdit') {
+					// 	this.getStockLineByItemMasterId(parentdata);
+					// 	this.getPriceDetailsByCondId(parentdata);
+					// }					
 				}
 			}
 			
@@ -1985,7 +1998,18 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}					
+					}	
+					// if (parentdata.stockLineId) {
+					// 	this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId).subscribe(resp => {
+					// 		parentdata.allStocklineInfo = resp;
+					// 		parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineInfo);
+					// 		this.getStockLineDetails(parentdata);
+					// 	},err => {const errorLog = err;});
+					// }
+					// if(parentdata.conditionId && value != 'onEdit') {
+					// 	this.getStockLineByItemMasterId(parentdata);
+					// 	this.getPriceDetailsByCondId(parentdata);
+					// }				
 				}
 			}, err => {								
 			});			
@@ -2760,8 +2784,8 @@ export class RoSetupComponent implements OnInit {
 				//reapairOrderNo: this.partListData[i].repairOrderId && this.getValueFromObj(this.partListData[i].repairOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].repairOrderId) : null,				
 				salesOrderId: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getValueFromObj(this.partListData[i].salesOrderId) : null,
 				//salesOrderNo: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].salesOrderId) : null,				
-				//stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
-				stocklineId: 1,
+				stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
+				//stocklineId: 1,
 				managementStructureId: this.partListData[i].managementStructureId && this.partListData[i].managementStructureId != 0  ? this.partListData[i].managementStructureId : null,
 				memo: this.partListData[i].memo,
 				isApproved: this.partListData[i].isApproved ? this.partListData[i].isApproved : false, 
@@ -2770,7 +2794,8 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,	
 				employeeID: this.employeeId ? this.employeeId : 0,						
-			}			
+			}		
+			console.log(this.parentObject)	
 			if (!this.isEditMode) {			
 				this.parentObjectArray.push({
 					...this.parentObject,
@@ -3046,6 +3071,7 @@ export class RoSetupComponent implements OnInit {
 							this.newObjectForParent.conditionId = this.allconditioninfo[i].value;
 							this.newObjectForParent.itemMasterId = this.stocklineReferenceData.itemMasterId;
 							this.getPriceDetailsByCondId(this.newObjectForParent);
+							this.getStockLineByItemMasterId(this.newObjectForParent);
 						}
 					}
 				}       
@@ -3097,6 +3123,7 @@ export class RoSetupComponent implements OnInit {
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsById(newObject);
+					this.getStockLineByItemMasterId(newObject);
 					//this.getPriceDetailsByCondId(newObject);
 					this.partListData = [...this.partListData, newObject]
 				}
@@ -4461,14 +4488,14 @@ WarnRescticModel() {
 		}
 	}
 
-	filterStocklineNum(event, partsList) {
-		partsList.allStocklineDetails = partsList.allStocklineInfo;
+	filterStocklineNum(event, partList) {
+		partList.allStocklineDetails = partList.allStocklineInfo;
 
 		if (event.query !== undefined && event.query !== null) {
-			const stockline = [...partsList.allStocklineInfo.filter(x => {
+			const stockline = [...partList.allStocklineInfo.filter(x => {
 				return x.stockLineNumber.toLowerCase().includes(event.query.toLowerCase())
 			})]
-			partsList.allStocklineDetails = stockline;
+			partList.allStocklineDetails = stockline;
 		}
 	}
 	
@@ -4479,6 +4506,7 @@ WarnRescticModel() {
 		partList.controlNumber = '';
 		this.workOrderService.getStockLineByItemMasterId(partList.itemMasterId, partList.conditionId).subscribe(res => {
 			partList.allStocklineInfo = res;
+			console.log(partList.allStocklineInfo)
 			if(partList.allStocklineInfo.length > 0) {
 				partList.stocklineId = partList.allStocklineInfo[0];
 				this.getStockLineDetails(partList);
