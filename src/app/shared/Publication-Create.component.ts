@@ -106,7 +106,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
     }
 
     ngOnInit(): void {
-        this.dropdownSettings = {
+        this.dropdownSettings = { 
             singleSelection: false,
             idField: 'dashNumberId',
             textField: 'dashNumber',
@@ -180,6 +180,7 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 
     addRow(): void {
         var newRow = Object.assign({}, this.row);
+        newRow.workflowPublicationsId="0";
         newRow.id = "0";
         newRow.taskId = this.workFlow.taskId;
         newRow.publicationId = "0";
@@ -221,10 +222,28 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
             this.isSpinnerVisible = false;
         });
     }
-
-    public onPublicationChange(event, wfPublication) {
-        console.log("event",event)
-        const pubData = this.publicationDropdown;
+    showAlert:boolean=false;
+    public onPublicationChange(event, wfPublication,index) {
+        console.log("event",wfPublication)
+        console.log("workflow",this.workFlow)
+var isEpnExist = this.workFlow.publication.filter(x => x.publicationId == wfPublication.publicationId && x.taskId == this.workFlow.taskId);
+if (isEpnExist.length > 1) {
+                wfPublication.publicationId='';
+                wfPublication.publicationDescription='';
+                wfPublication.publicationType='';
+                wfPublication.revisionDate='';
+                wfPublication.sequence='';
+                wfPublication.source='';
+                wfPublication.location='';
+                wfPublication.verifiedBy='';
+                wfPublication.verifiedDate='';
+                wfPublication.status='';
+                wfPublication.attachmentDetails=[];
+                this.alertService.showMessage("Workflow", "Pub Id already exist in Exclusion List.", MessageSeverity.error);
+                this.showAlert=false;
+            }
+      
+const pubData = this.publicationDropdown;
         for (var i = 0; i < pubData.length; i++) {
             if (parseInt(pubData[i].publicationRecordId) === parseInt(wfPublication.publicationId)) {
                 wfPublication.attachmentDetails = pubData[i].attachmentDetails;
@@ -401,6 +420,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
     }
 
     downloadFileUpload(rowData) {
+        console.log("lin",rowData);
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }

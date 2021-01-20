@@ -106,7 +106,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="work scope">Work Scope <span class="clr-red">*</span></label>
-                                    <select [(ngModel)]="sourceWorkFlow.workScopeId" class="form-control"
+                                    <select [(ngModel)]="sourceWorkFlow.workScopeId"  class="form-control"
                                         (change)="checkEnableUpdate()" required>
                                         <option value="0" selected>--Select--</option>
                                         <option *ngFor="let workScope of worksScopeCollection"
@@ -301,6 +301,10 @@
                                             [value]="percentBERTh" disabled />
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary" (click)="calculateTotalWorkFlowCost(true)"
+                                    style="padding: 6px 12px !important;">Calculate Total Workflow Cost</button>
+                                </div>
                             </div>
 
                         </div>
@@ -348,7 +352,7 @@
                                                     name="fixedAmount" [(ngModel)]="sourceWorkFlow.fixedAmount"
                                                     pInputText pKeyFilter="money" [ngModelOptions]="{updateOn:'blur'}"
                                                     matTooltip="Fixed Amount" matTooltipPosition="above"
-                                                    (change)="berDetermination()">
+                                                    (input)="berDetermination($event.target.value,'html')">
                                             </div>
                                         </div>
                                     </div>
@@ -372,15 +376,15 @@
                                         <div [hidden]="!ispercent" style="padding-left: 36px;margin-top: 8px;">
                                             <div class="col-sm-4">
                                                 <label class="w80">Cost of New:</label>
-                                                <input type="text" [(ngModel)]="sourceWorkFlow.costOfNew"
+                                                <input type="text" [(ngModel)]="sourceWorkFlow.costOfNew" 
                                                     class="form-control w70 text-right" id="" name="" pInputText
-                                                    pKeyFilter="money"
+                                                    pKeyFilter="money"  (ngModelChange)="checkEnableUpdate()"
                                                     (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew)">
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="w70">Percent:</label>
                                                 <select [(ngModel)]="sourceWorkFlow.percentageOfNew"
-                                                    class="form-control w70"
+                                                    class="form-control w70"  (ngModelChange)="checkEnableUpdate()"
                                                     (change)="onPercentOfNew(sourceWorkFlow.costOfNew,sourceWorkFlow.percentageOfNew);">
                                                     <option value="-1">--Select--</option>
                                                     <option *ngFor="let percent of totalPercent"
@@ -420,7 +424,7 @@
                                                     <label class="w80">Cost of Replace:</label>
                                                     <input [(ngModel)]="sourceWorkFlow.costOfReplacement" pInputText
                                                         pKeyFilter="money" class="form-control w70 amount text-right"
-                                                        type="text"
+                                                        type="text"  (ngModelChange)="checkEnableUpdate()"
                                                         (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement)">
                                                 </div>
                                             </div>
@@ -430,7 +434,7 @@
                                                 </div>
                                                 <div style="float:left;">
                                                     <select [(ngModel)]="sourceWorkFlow.percentageOfReplacement"
-                                                        class="form-control w70"
+                                                        class="form-control w70"  (ngModelChange)="checkEnableUpdate()"
                                                         (change)="onPercentOfReplcaement(sourceWorkFlow.costOfReplacement,sourceWorkFlow.percentageOfReplacement); ">
                                                         <option value="-1">--Select--</option>
                                                         <option *ngFor="let percent of totalPercent"

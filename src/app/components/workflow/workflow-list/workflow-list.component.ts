@@ -26,6 +26,7 @@ import { listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
+import { ConfigurationService } from '../../../services/configuration.service';
 declare var $ : any;
 @Component({
     selector: 'app-workflow-list',
@@ -109,12 +110,15 @@ export class WorkflowListComponent implements OnInit {
         { field: 'updatedBy', header: 'UpdatedBy' }
     ];
     selectedColumn: any;
-    
+    sourceViewforDocumentListColumns = [
+        { field: 'fileName', header: 'File Name' },
+    ]
     constructor(private actionService: ActionService,
         private router: ActivatedRoute,
         private route: Router,
         private datePipe: DatePipe,
         private authService: AuthService,
+        private configurations: ConfigurationService,
         private modalService: NgbModal,
         private alertService: AlertService,
         public workFlowtService: WorkFlowtService,
@@ -607,7 +611,7 @@ export class WorkflowListComponent implements OnInit {
                 }
             }
         }
-        if (this.sourceWorkFlow.directions.length > 0) {
+        if (this.sourceWorkFlow.directions.length > 0) { 
             for (var item of this.sourceWorkFlow.directions) {
                 if (taskIds.indexOf(item.taskId) == -1) {
                     var task = this.tasks.filter(x => x.Id == item.taskId);
@@ -1164,5 +1168,17 @@ export class WorkflowListComponent implements OnInit {
 			dt.value = this.workflowList;
         	this.isSpinnerVisible = false;
         },error => this.onDataLoadFailed(error))
+    }
+    documentList:any=[];
+    openView(content,publication){
+        this.documentList=publication.attachmentDetails
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    dismissModelView() {
+        this.modal.close();
+    }
+    downloadFile(rowData) {
+        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
+        window.location.assign(url);
     }
 }
