@@ -247,12 +247,15 @@
                           matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                       </span>
 
-                      <span>
+                      <span><a class="btn nobg" (click)="openDocumentsList(documentsContent, rowData)"
+                          matTooltip="Documents" matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
+                      </span>
+                      <!-- <span>
                         <a class="btn btn-info boxed-float-btn nobg"
                           (click)="openDocumentsList(documentsContent, rowData)" data-toggle="tooltip"
                           data-toggle="modal" matTooltip="View Document" matTooltipPosition="above"><i
                             class="fa fa-file-text"></i></a>
-                      </span>
+                      </span> -->
 
                       <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit"
                           matTooltipPosition="above"><i class="fa fa-pencil"> </i></a>
@@ -334,6 +337,30 @@
     </button>
   </div>
 </ng-template>
+
+<ng-template #documentsContent let-c="close" let-d="dismiss" class="modal fade" role="dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">
+        ×
+      </button>
+      <h4 class="modal-title">Documents of {{ selectedRow['name'] }}</h4>
+    </div>
+    <div class="modal-body viewform">
+      <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfDocumentStatus($event)"
+        [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId" [isViewMode]="true" [offLineUpload]="true">
+      </app-common-documents>
+
+      <!-- <app-customer-documents [customerDataFromExternalComponents]="selectedRow"></app-customer-documents> -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="dismissModel()">
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
 
 <div id="publicationHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xl">
