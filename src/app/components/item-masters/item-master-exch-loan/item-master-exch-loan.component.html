@@ -21,8 +21,8 @@
                                 </div>
                                 
                                 <div class="form-group col-sm-12">                                        
-                                        <label for="exchListPRice" class="control-label" >Exchange List Price</label>                                                                              
-                                        <input type="text" class="form-control text-right" name="exchListPRice" [ngModel]="currentItem.exchangeListPrice | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeListPrice=$event" pInputText pKeyFilter="money"  matTooltip="Exchange List Price"    matTooltipPosition="above" (keyup)="updateBtnChange()">                                                                                
+                                        <label for="exchListPRice" class="control-label" >Exchange Fee</label>                                                                              
+                                        <input type="text" class="form-control text-right" name="exchListPRice" [ngModel]="currentItem.exchangeListPrice | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="currentItem.exchangeListPrice=$event" pInputText pKeyFilter="money"  matTooltip="Exchange Fee"    matTooltipPosition="above" (keyup)="updateBtnChange()">                                                                                
                                 </div>
                                 
                                 <div class="form-group">
