@@ -100,10 +100,9 @@
 
 <!-- <p-tabPanel *ngIf="!posettingModel.IsEnforceApproval" header="Internal Approvers"> -->
     <div class="approver-tab-cstm">
-        <div class="table-responsive">
-        <div class="table-responsive" style="margin-top: 10px; max-height: 600px !important; overflow-y: scroll !important;">
-            <table class="table table-bordered table-striped 
-            table-fixed table-sorting mpn-list-table"
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
+            <div class="tableFixHead">
+            <table class="table table-bordered header-table-width"
                    id="mpn-list-table">
                 <thead>
                     <tr class="pad_workflo">
@@ -121,8 +120,8 @@
                         <td>{{approver.approverName}}</td>
                         <td>{{approver.approverCode}}</td>
                         <td>{{approver.approverEmail}}</td>
-                        <td style="text-align: right;">
-                            <label style="text-align: right !important;">{{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}</label>
+                        <td class="text-right">
+                            <label class="text-right">{{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}</label>
                         </td>
                         <td>
                             {{approver.rule}}
@@ -133,7 +132,7 @@
                         <td [ngClass]="{red : approver.isExceeded == true}" >{{approver.message}}</td>
                     </tr>
                     <tr  *ngIf="internalApproversList.length == 0" >
-                        <td [attr.colspan]="29"   class="no-records-cstm" style="color: red; font-weight: bold; text-align: center">
+                        <td [attr.colspan]="29" class="no-records-cstm no-records-msg">
                             No records found
                         </td>	
                     </tr>
