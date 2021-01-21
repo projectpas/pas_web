@@ -147,10 +147,19 @@
                                 dt.filter($event.target.value, col.field, 'contains')
                             " />
                         </th>
-                        <th class="table-column-width" *ngIf="col.field != 'phoneNo' && col.field != 'contactBy'" [ngSwitch]="col.field">
+                        <th class="table-column-width" *ngIf="col.field != 'phoneNo' && col.field != 'contactBy' && col.field != 'createdDate' && col.field != 'updatedDate'" [ngSwitch]="col.field">
                             <input pInputText type="text"  class="incorn_border table-header-input-width" (input)="
                                 dt.filter($event.target.value, col.field, 'contains')
                             " />
+                        </th>
+
+                        <th class="table-column-width" *ngIf="col.field == 'createdDate'" [ngSwitch]="col.field">
+                            <input type="date" class="hidePlaceHolder table-header-input-width"
+                                name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+                        </th>
+                        <th class="table-column-width" *ngIf="col.field == 'updatedDate'" [ngSwitch]="col.field">
+                            <input type="date" class="hidePlaceHolder table-header-input-width"
+                                name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                         </th>
                     </ng-container>
                     <!-- <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">

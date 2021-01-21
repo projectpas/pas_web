@@ -244,6 +244,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
+    dataOriginal:any=[];
     getAllMemoList() {
         this.data = [];
         // if(this.workOrderId ==undefined){
@@ -266,6 +267,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                             return currentValue
                         })
                         this.data = (this.newdata) ? this.newdata.reverse() : [];
+                        this.dataOriginal = (this.newdata) ? this.newdata.reverse() : [];
                     } else {
                         this.data = [];
                     }
@@ -306,14 +308,30 @@ export class MemoCommonComponent implements OnInit, OnChanges {
 
 
 
-    dateFilterForTable(date, field) {
-        if(date){
-              date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
+//     dateFilterForTable(date, field) {
+//         if(date){
+//               date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+//         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
    
-        }else{
+//         }else{
 
- }     
-          }
-        }
+//  }     
+//           }
+//         }
+
+dateFilterForTable(date, field) {
+    if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+        this.data = this.dataOriginal;
+        const data = [...this.data.filter(x => {
+            if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                return x;
+            } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                return x;
+            }
+        })]
+        this.data = data;
+    } else {
+        this.data = this.dataOriginal;
+    }
+}
 }
