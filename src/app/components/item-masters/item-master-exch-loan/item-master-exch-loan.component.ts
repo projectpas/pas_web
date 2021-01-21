@@ -66,7 +66,7 @@ export class ItemMasterExchangeLoanComponent implements OnInit {
             this.exchCurrencyInfo = this.allCurrencyInfo;
             this.loanCurrencyInfo = this.allCurrencyInfo;
           }, error => this.saveFailedHelper(error));
-      }
+    }
 
     loadData(id: number): void {
         
