@@ -9,7 +9,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { MasterCompany } from '../../../../models/mastercompany.model';
 import { VendorService } from '../../../../services/vendor.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { CommonService } from '../../../../services/common.service';
@@ -476,8 +476,9 @@ export class VendorCapabilitiesListComponent implements OnInit {
         }
     }
 
-    gotoCreatePO(rowData) {
-
+    gotoCreatePO(rowData) {      
+        localStorage.setItem("itemMasterId",rowData.itemMasterId);
+        localStorage.setItem("partNumber",rowData.partNumber);       
         const { vendorId } = rowData;
         this._route.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/${vendorId}`);
     }
@@ -608,4 +609,6 @@ export class VendorCapabilitiesListComponent implements OnInit {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=VendorCapability&fileName=VendorCaps.xlsx`;
         window.location.assign(url);
     }
+
+    handleChanges(rowData, $event) {}
 }

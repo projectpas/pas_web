@@ -139,7 +139,7 @@
             -->
         </ng-template>
 
-        <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
+        <ng-template pTemplate="body" let-rowIndex="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
 
                 <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                  

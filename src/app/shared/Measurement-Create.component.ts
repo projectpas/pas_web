@@ -9,8 +9,8 @@ import { ConditionService } from "../services/condition.service";
 import { VendorService } from "../services/vendor.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
 import { CommonService } from "../services/common.service";
-import * as $ from 'jquery';
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+declare var $ : any;
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 
 @Component({ 
     selector: 'grd-measurement',
@@ -22,7 +22,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     allPartnumbersInfo: any[] = [];
     itemclaColl: any[];
     partCollection: any[];
-    @Input() workFlow: IWorkFlow;
+    @Input() workFlow:any={};
     @Input() UpdateMode: boolean;
     @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
     row: any;
@@ -46,7 +46,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         this.row.taskId = this.workFlow.taskId;
         if(this.workFlow.measurements && this.workFlow.measurements.length !=0){
             this.workFlow.measurements.map((x, index) => {
-                    this.workFlow.measurements[index].partName=x;
+                    this.workFlow.measurements[index].partName=x; 
             })
         }
     }
@@ -59,6 +59,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         newRow.workflowMeasurementId = "0";
         newRow.taskId = this.workFlow.taskId;
         newRow.partNumber = "";
+        newRow.partName="";
         newRow.partDescription = "";
         newRow.sequence = "";
         newRow.stage = "";
@@ -74,7 +75,9 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
     onPartSelect(event, measurement) {
         var anyMeasurement = this.workFlow.measurements.filter(measurement =>
             measurement.taskId == this.workFlow.taskId && measurement.partDescription == event);
+
         if (anyMeasurement.length > 1) {
+  
             measurement.partNumber = "";
             measurement.partDescription = "";
             event = "";
@@ -82,16 +85,19 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
             return;
         }
         else {
-            if (this.itemclaColl) {
-                for (let i = 0; i < this.itemclaColl.length; i++) {
-                    if (event == this.itemclaColl[i].partName) {
-                        measurement.partNumber = this.itemclaColl[i].partId;
-                        measurement.partDescription = this.itemclaColl[i].partName;
-                    }
-                };
-            }
+            // if (this.itemclaColl) {
+            //     for (let i = 0; i < this.itemclaColl.length; i++) {
+            //         if (event == this.itemclaColl[i].partName) {
+            //             measurement.partNumber = this.itemclaColl[i].partId;
+            //             measurement.partDescription = this.itemclaColl[i].partDescription;
+            //         }
+            //     };
+            // }
+            measurement.itemMasterId = event.partId;
+            measurement.partNumber = event.partNumber;
+                        measurement.partDescription = event.partDescription;
         }
-    }
+    } 
 
     loapartItems(strvalue = '', initialCall = false) {
         this.isSpinnerVisible = true;
@@ -113,6 +119,11 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
                         partName: x.label
                     }
                 });
+                this.partCollection.forEach(element => {
+             if(element.partId==this.workFlow.itemMasterId){
+                this.partCollection.splice(element, 1); 
+             }
+            });
                 this.itemclaColl = this.partCollection;
             }, error => {
                 this.isSpinnerVisible = false;

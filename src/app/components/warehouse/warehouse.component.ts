@@ -71,15 +71,15 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 	localCollection: any[] = [];
 
-	private isEditMode: boolean = false;
-	private isDeleteMode: boolean = false;
+	public isEditMode: boolean = false;
+	public isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;
 	closeCmpny: boolean = true;
 	loadingIndicator: boolean;
 	modal: NgbModalRef;
 	action_name: any = "";
-	private isSaving: boolean;
+	public isSaving: boolean;
 	actionName: string;
 	allComapnies: MasterCompany[] = [];
 	public auditHisory: AuditHistory[] = [];
@@ -92,7 +92,7 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 	warehouse_Name: any = "";
 	allWareHouses: any = [];
 	disableSaveForEdit: boolean = false;
-	
+
 	stateOrProvince: any;
 	zipCode: any;
 	localWareHouseCollction: any[];
@@ -119,7 +119,7 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 	AuditDetails: any[];
 	HasAuditDetails: boolean;
 	AuditHistoryTitle: string = 'History of WareHouse'
-	formData:FormData = null;
+	formData: FormData = null;
 	// pageSize: number = 10;
 	// totalPages: number;
 	uploadedRecords: Object = null
@@ -135,7 +135,7 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 	wareHousedata: any[] = [];
 	currentstatus: string = 'Active';
 
-    isDeleted: Boolean = false;
+	isDeleted: Boolean = false;
 
 	ngOnInit(): void {
 		this.cols = [
@@ -172,11 +172,11 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 
 
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 	/** site ctor */
 	constructor(public manageMentService: LegalEntityService,
-        private commonService: CommonService, private configurations: ConfigurationService, public workFlowtService1: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, public ataservice: AtaMainService, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public workFlowtService: WarehouseService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
+		private commonService: CommonService, private configurations: ConfigurationService, public workFlowtService1: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, public ataservice: AtaMainService, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public workFlowtService: WarehouseService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
 		this.dataSource = new MatTableDataSource();
 		this.sourceWarehouse = new Warehouse(); //change
 
@@ -188,10 +188,10 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 
 	getPageCount(totalNoofRecords, pageSize) {
-        return Math.ceil(totalNoofRecords / pageSize)
-    }
-	
-	 loadAllWareHousesData(event) {
+		return Math.ceil(totalNoofRecords / pageSize)
+	}
+
+	loadAllWareHousesData(event) {
 		this.lazyLoadEventData = event;
 		const pageIndex = parseInt(event.first) / event.rows;;
 		this.pageIndex = pageIndex;
@@ -205,9 +205,9 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 		this.workFlowtService.getSearchData(PagingData).subscribe(
 			results => {
 				//this.allWareHouses = results[0]['results'];
-				this.originalTableData=results[0]['results'];
-				this.getListByStatus(this.status ? this.status :this.currentstatus)
-					// this.totalRecords = results[0]['totalRecordsCount']
+				this.originalTableData = results[0]['results'];
+				this.getListByStatus(this.status ? this.status : this.currentstatus)
+				// this.totalRecords = results[0]['totalRecordsCount']
 				// this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 			},
 			error => this.onDataLoadFailed(error)
@@ -215,10 +215,10 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 	}
 
 	getmemo() {
-     
+
 		this.disableSaveForEdit = false;
-	
-}
+
+	}
 	constantFilters() {
 		return {
 			first: 0,
@@ -249,7 +249,7 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 			this.Active = "Active";
 			this.sourceWarehouse.isActive == true;
 			this.workFlowtService.updateWarehouse(this.sourceWarehouse).subscribe(
-				response => {this.getListByStatus(this.currentstatus); this.saveCompleted(this.sourceWarehouse)},
+				response => { this.getListByStatus(this.currentstatus); this.saveCompleted(this.sourceWarehouse) },
 				error => this.saveFailedHelper(error));
 			//alert(e);
 		}
@@ -431,7 +431,6 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 	public saveManagement(warehouseId, data1) //retriving SiteManagement Array
 	{
-		debugger;
 		for (let i = 0; i < data1.length; i++) {
 			if (data1[i].data.managementStructureId != null) {
 				data1[i].data.warehouseId = warehouseId;
@@ -445,7 +444,6 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 	}
 
 	nodeSelect(event) {
-		debugger;
 		//event.node = selected node
 		console.log("selected node", event, event.node);
 	}
@@ -521,11 +519,11 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
-        this.dataSource.data = getWarehouseList; //cha
-        this.allWareHouses = getWarehouseList;
+		this.dataSource.data = getWarehouseList; //cha
+		this.allWareHouses = getWarehouseList;
 		this.totalRecords = getWarehouseList.length;
 		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        //cha
+		//cha
 		//this.localWareHouseCollction = getWarehouseList;
 
 		//console.log(this.allActions);
@@ -617,7 +615,7 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 		this.isEditMode = true;
 		this.isSaving = true;
 		this.loadMasterCompanies();
-		this.disableSaveForEdit=true;
+		this.disableSaveForEdit = true;
 		this.showManagement = true;
 		this.disableSaveManufacturer = false;
 		this.sourceWarehouse = row;//chang
@@ -911,93 +909,94 @@ export class WarehouseComponent implements OnInit, AfterViewInit {
 
 	}
 
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
-        }
-        this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
-    getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.wareHousedata=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
 		}
-              this.wareHousedata = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.wareHousedata= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.wareHousedata= newarry;
-			}
-        }
-        this.totalRecords = this.wareHousedata.length ;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-		}
-		restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Warehouse',
-            'WarehouseId',this.restorerecord.warehouseId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
-                this.modal.close();
-                // this.geListByStatus(this.status ? this.status : 'Active');
-                this.loadAllWareHousesData(this.lazyLoadEventData);
-    
-                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-            })
-        }
-   
+		this.getListByStatus(this.status ? this.status : this.currentstatus)
+	}
 
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	status: any = "Active";
+	getListByStatus(status) {
+		const newarry = [];
+		if (status == 'Active') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.wareHousedata = newarry;
+		} else if (status == 'InActive') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.wareHousedata = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				// this.billingInfoList=this.originalTableData;
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.wareHousedata = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.wareHousedata = newarry;
+			}
+		}
+		this.totalRecords = this.wareHousedata.length;
+		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+	}
+	restore(content, rowData) {
+		this.restorerecord = rowData;
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+	restorerecord: any = {}
+	restoreRecord() {
+		this.commonService.updatedeletedrecords('Warehouse',
+			'WarehouseId', this.restorerecord.warehouseId).subscribe(res => {
+				this.currentDeletedstatus = true;
+				this.modal.close();
+				// this.geListByStatus(this.status ? this.status : 'Active');
+				this.loadAllWareHousesData(this.lazyLoadEventData);
+
+				this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+			})
+	}
+
+	openEdits(rowData) {}
+	changeStatus(rowData) {}
 }

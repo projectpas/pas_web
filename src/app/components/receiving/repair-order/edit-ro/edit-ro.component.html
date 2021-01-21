@@ -309,7 +309,7 @@
                             <td class="text-right">{{part.discountPerUnit}}</td>
                             <td>
                                 <input type="text" class="form-control text-right" pInputText pKeyFilter="pnum"
-                                       (focusout)="calculatePartExtendedCost(part, SL);"
+                                       (focusout)="calculatePartExtendedCost(part);"
                                        [disabled]="!part.isEnabled"
                                        [(ngModel)]="part.unitCost"> <!--SetStockLineUnitCost(part);-->
                             </td>
@@ -766,7 +766,7 @@
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!SL.isEnabled"
-                                                (change)="getStockLineWareHouse(SL)">
+                                                (change)="getStockLineWareHouse(SL, false)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let site of SL.SiteList" [value]="site.Key">{{site.Value}}</option>
                                         </select>
@@ -778,7 +778,7 @@
                                                 #selects="ngModel"
                                                 [ngModelOptions]="{standalone: true}"
                                                 [disabled]="!SL.isEnabled"
-                                                (change)="getStockLineLocation(SL)">
+                                                (change)="getStockLineLocation(SL, false)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let warehouse of SL.WareHouseList" [value]="warehouse.Key">{{warehouse.Value}}</option>
                                         </select>
@@ -790,7 +790,7 @@
                                                 #selects="ngModel"
                                                 [disabled]="!SL.isEnabled"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="getStockLineShelf(SL)">
+                                                (change)="getStockLineShelf(SL, false)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let loc of SL.LocationList" [value]="loc.Key">{{loc.Value}}</option>
                                         </select>
@@ -802,7 +802,7 @@
                                                 #selects="ngModel"
                                                 [disabled]="!SL.isEnabled"
                                                 [ngModelOptions]="{standalone: true}"
-                                                (change)="getStockLineBin(SL)">
+                                                (change)="getStockLineBin(SL, false)">
                                             <option value="0">Select</option>
                                             <option *ngFor="let shelf of SL.ShelfList" [value]="shelf.Key">{{shelf.Value}}</option>
                                         </select>

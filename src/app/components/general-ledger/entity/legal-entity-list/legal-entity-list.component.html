@@ -198,8 +198,8 @@
                     <th style="width:200px;position:sticky;border-left: 2px solid #c3c3c3 !important;"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns"> 
-                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(invView,rowData)">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex"> 
+                <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(rowData)">
                     <td style="width:160px"
                         *ngFor="let col of columns"
                         class="ui-resizable-column"
@@ -214,10 +214,10 @@
                         <div *ngIf="currentDeletedstatus==false">
                          <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"  (onChange)="toggleIsActive(rowData,$event)" [disabled]="rowData.isPrimary || isViewMode==true"></p-inputSwitch> 
-                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span> 
                                 <a class="btn nobg"
-                                   (click)="openContentEdit(contentEdit,rowData)" matTooltip="Edit"
+                                   (click)="openContentEdit(rowData)" matTooltip="Edit"
                                    matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
                             </span>
                             <span>
@@ -227,18 +227,18 @@
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </span>
-                            <span data-toggle="modal" data-target="#legalEntityHistory">
+                            <span >
                                 <a class="btn nobg btn-hist-cstm"
-                                   (click)="getLegalEntityHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                                   (click)="getLegalEntityHistoryById(contentAuditHist,rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
                         </div>
                         <div *ngIf="currentDeletedstatus==true">
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above"   [disabled]="true"></p-inputSwitch> 
-                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(invView,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                            <span data-toggle="modal" data-target="#legalEntityHistory">
-                                <a class="btn nobg btn-hist-cstm"
-                                   (click)="getLegalEntityHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+                            <span><a class="btn nobg" data-toggle="modal" data-target="#invView" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            <span >
+                                <a class="btn nobg btn-hist-cstm" 
+                                   (click)="getLegalEntityHistoryById(contentAuditHist,rowData)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
                             <span><a class="btn nobg" (click)="restore(restoreIdLegalEntity,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                         </div>
@@ -305,7 +305,6 @@
         <div class="col-md-6" style="margin-right: 0px !important;">
             <label class="fs12" style="width: 44%;">Company Name  : </label>
             <span class="new-label"> {{sourceLegalEntity.companyName}}</span>
-
         </div>
         </div>
     </div>
@@ -314,10 +313,7 @@
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
 </ng-template>
-
-<div id="legalEntityHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xlg">
-        <div class="modal-content">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeHistoryModal()">&times;</button>
                 <h4 class="modal-title">History of Legal Entity</h4>
@@ -328,7 +324,6 @@
                     <table class="table table-bordered" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
-                                <!-- <th>Legal Entity Id</th> -->
                                 <th>Legal Entity  <span class="clr-red">*</span></th>
                                 <th>Company Name  <span class="clr-red">*</span></th>
                                 <th>Company Code  <span class="clr-red">*</span></th>
@@ -423,13 +418,10 @@
                     </div>
                 </div>
             </div>
-            <!-- <app-spinner *ngIf="isSpinnerVisible"></app-spinner> -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
             </div>
-        </div>
-    </div>
-</div>
+</ng-template>
 <ng-template #restoreIdLegalEntity let-c="close" let-d="dismiss" data-backdrop="static">
 
     <div class="modal-header">

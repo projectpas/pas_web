@@ -54,6 +54,7 @@ export class SalesQuoteSettingsListComponent {
     totalRecords: number = 0;
     totalPages: number = 0;
     selected;
+    noDatavailable: any;
 
     constructor(private router: ActivatedRoute,
         public customerService: CustomerService,
@@ -117,7 +118,7 @@ export class SalesQuoteSettingsListComponent {
         this.route.navigateByUrl(`salesordersettingsmodule/salesordersettings/app-create-sales-quote-settings`);
     }
 
-    deleteQuoteSetting(rowData) {
+    deleteQuoteSetting() {
         this.isSpinnerVisible = true;
         this.salesQuoteService.deleteSoqSetting(this.selected, this.userName).subscribe(response => {
             this.isSpinnerVisible = false;

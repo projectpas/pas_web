@@ -23,7 +23,7 @@ import { CommonService } from '../../services/common.service';
     animations: [fadeInOut]
 })
 export class AssetIntangibleTypeComponent implements OnInit {
-    itemList: AssetIntangibleType[]=[];
+    itemList: AssetIntangibleType[] = [];
     filteredItemList: AssetIntangibleType[];
     columnHeaders: any[];
     itemDetails: any;
@@ -52,7 +52,8 @@ export class AssetIntangibleTypeComponent implements OnInit {
     code_Name: any = "";
     disableSaveForEdit: boolean = false;
     currentstatus: string = 'Active';
-
+    AuditDetails: any;
+    viewSelectedRow: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService, private configurations: ConfigurationService, private alertService: AlertService, private coreDataService: AssetIntangibleTypeService, private modalService: NgbModal, private authService: AuthService) {
     }
@@ -72,10 +73,10 @@ export class AssetIntangibleTypeComponent implements OnInit {
     }
 
     getmemo() {
-     
+
         this.disableSaveForEdit = false;
-    
-}
+
+    }
     //Step E1: Open row up for editing
     addNewItem(): void {
         this.currentRow = this.newItem(0);
@@ -102,7 +103,7 @@ export class AssetIntangibleTypeComponent implements OnInit {
     //Open the confirmation to delete
     confirmItemDelete(rowData) {
         this.currentRow = this.newItem(rowData);
-        this.code_Name=rowData.assetIntangibleTypeName
+        this.code_Name = rowData.assetIntangibleTypeName
         this.currentModeOfOperation = ModeOfOperation.Delete;
     }
 
@@ -136,8 +137,8 @@ export class AssetIntangibleTypeComponent implements OnInit {
         this.coreDataService.getAll().subscribe(res => {
             // const responseData = res[0];
 
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
             // this.itemList = responseData;
             // this.totalRecords = responseData.length;
             // this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -192,9 +193,9 @@ export class AssetIntangibleTypeComponent implements OnInit {
         var itemExists = this.checkItemExists(item);
         if (itemExists) {
             this.currentModeOfOperation = ModeOfOperation.Update;
-            console.log('item',item);
+            console.log('item', item);
             const data = {
-                ...item, updatedBy: this.userName, createdDate: item.createdDate, 
+                ...item, updatedBy: this.userName, createdDate: item.createdDate,
                 assetIntangibleName: editValueAssignByCondition('assetIntangibleName', item.assetIntangibleName),
             };
             console.log(data);
@@ -383,92 +384,93 @@ export class AssetIntangibleTypeComponent implements OnInit {
         this.modal.close();
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.itemList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.itemList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            }
         }
-        this.totalRecords = this.itemList.length ;
+        this.totalRecords = this.itemList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('AssetIntangibleType',
-            'AssetIntangibleTypeId',this.restorerecord.assetIntangibleTypeId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('AssetIntangibleType',
+            'AssetIntangibleTypeId', this.restorerecord.assetIntangibleTypeId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
+    changeStatus(rowData) {}
 }

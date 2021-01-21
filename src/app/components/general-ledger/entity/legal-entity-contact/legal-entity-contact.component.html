@@ -203,7 +203,7 @@
                         </tr>
 
                     </ng-template>
-                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                         <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewSelectedRowdbl(viewdbl,rowData)" >
                             <td style="width: 40px;">
                                 <span class="flag" style="width: 40px;">
@@ -444,7 +444,7 @@ col.field == 'createdDate'?
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="CloserCOnatcHistory()">&times;</button>
-                <div class="col-md-12 shadow-box-cstm">
+                <!-- <div class="col-md-12 shadow-box-cstm">
                     <div class="col-md-6">
                         <p class="fs12">
                             <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -457,17 +457,18 @@ col.field == 'createdDate'?
                             <span class="span-header-red" style="text-transform: capitalize"> {{companyCode }} </span>
                         </p>
                     </div>
-                </div>
+                </div> -->
                 <h4 class="modal-title">History of Legal Entity Contact</h4>
             </div>
             <div class="modal-body">
-                <div class="preloader" *ngIf="isSpinnerVisibleHistory">
+                <!-- <div class="preloader" *ngIf="isSpinnerVisibleHistory">
                     <div class="loading">
                         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                     </div>
-                </div>
-                <div class="table-responsive rrhistory history_hg">
-                    <table class="table table-bordered " *ngIf="auditHistory.length> 0 else noDatavailable">
+                </div> -->
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+                    <table class="table table-bordered header-table-width" *ngIf="auditHistory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
                                 <th>Tag <span class="clr-red">*</span></th>
@@ -547,6 +548,7 @@ col.field == 'createdDate'?
 
 
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
                             <h4 style="color: #ff5663;">No History Found </h4>
@@ -798,7 +800,7 @@ col.field == 'createdDate'?
                 <h4 class="modal-title">Edit Memo</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
                     </thead>
@@ -814,18 +816,22 @@ col.field == 'createdDate'?
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div style="float: right;">
+                </table> -->
+                <p-editor spellcheck="true"
+                [(ngModel)]="memoPopupContent"
+                [style]="{ height: '320px' }"
+                name="memoPopupContent"
+                (ngModelChange)="enableSaveText()"
+                required></p-editor>
+                <div class="editor-buttons">
                     <button type="button"
-                            class="btn btn-primary"
-                            style="padding: 6px 12px !important; margin-top: 10px;"
+                            class="btn btn-primary editor-buttons-margin"
                             data-dismiss="modal" [disabled]="ismemohideOnSave"
                             (click)="onClickPopupSave()">
                         Save
                     </button>
                     <button type="button"
-                            class="btn btn-danger"
-                            style="padding: 6px 12px !important; margin-top: 10px;"
+                            class="btn btn-danger editor-buttons-margin"
                             data-dismiss="modal">
                         Close
                     </button>

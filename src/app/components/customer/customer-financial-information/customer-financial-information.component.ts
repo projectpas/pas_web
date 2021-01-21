@@ -44,7 +44,7 @@ import { DBkeys } from '../../../services/db-Keys';
 import { LocalStoreManager } from '../../../services/local-store-manager.service';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
-import * as $ from 'jquery';
+declare var $ : any;
 @Component({
   selector: 'app-customer-financial-information',
   templateUrl: './customer-financial-information.component.html',
@@ -1533,4 +1533,6 @@ closeMemoModel() {
   {
     this.attachCertificateUpdateFlag = false;
   }
+
+  dateFilterForTableNew(event, field) {}
 }

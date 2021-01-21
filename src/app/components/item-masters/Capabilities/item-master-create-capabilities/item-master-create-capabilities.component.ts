@@ -27,7 +27,7 @@ import { takeUntil } from "rxjs/operators";
 import { Subject } from 'rxjs';
 import { DBkeys } from '../../../../services/db-Keys';
 import { DatePipe } from '@angular/common';
-import * as $ from 'jquery';
+declare var $ : any;
 
 
 @Component({
@@ -45,6 +45,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     manufacturerData: any = [];
     LoadValues: any;
     selectedAircraftId: any;
+    itemMasterCapesId: any;
     modelUnknown = false;
     dashNumberUnknown = false;
     dashNumberUrl = '';
@@ -88,6 +89,10 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     private onDestroy$: Subject<void> = new Subject<void>();
     selectedColums: any[];
     arrayEmplsit:any[] = [];
+    arrayItemMasterlist: any[] = [];
+    itemMasterListOriginal: any;
+    partListItemMaster: any;
+    managementStructureData: any = [];
 
     constructor(public itemser: ItemMasterService,
         private aircraftModelService: AircraftModelService,
@@ -399,6 +404,37 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
         return this[variable + index]
     }
 
+    FilterItemMaster(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getAllPartListSmartDropDown(event.query);
+        }
+    }
+
+    getAllPartListSmartDropDown(strText = '') {
+        if (this.arrayItemMasterlist.length == 0) {
+            this.arrayItemMasterlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
+            this.itemMasterListOriginal = response.map(x => {
+                return {
+                    partNumber: x.label, itemMasterId: x.value
+                }
+            })
+
+            this.partListItemMaster = [...this.itemMasterListOriginal];
+
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        });
+    }
+
+    selectedCapesParts(event) {
+        if (event.itemMasterId !== undefined && event.itemMasterId !== null) {
+            this.itemMasterCapesId = event.itemMasterId;
+        }
+    }
+
     async getPartPublicationByItemMasterId(itemMasterId) {
         this.capabilityTypeId = [];
         this.aircraftData = [];
@@ -534,6 +570,10 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
         if(this.itemMasterId){
             iMid = this.itemMasterId
         }
+        else
+        {
+            iMid = this.itemMasterCapesId;
+        }
 
         const capesData = [
             ...this.aircraftData.map(x => {
@@ -665,6 +705,30 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     closeMemoModel()
     {
         $('#capes-memo').modal('hide');
+    }
+
+    errorMessageHandler(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
     }
 
     // mapAircraftInformationOld() {
@@ -799,4 +863,6 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     //         }
     //     })
     // }
+
+    enableSave() {}
 }

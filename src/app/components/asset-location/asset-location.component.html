@@ -130,7 +130,7 @@
                                     <th style="width:200px;position:sticky"></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openView(view,rowData)">
                                     <td style="width:200px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{
@@ -194,7 +194,7 @@ col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[co
 
                                     <div *ngIf="currentDeletedstatus==true">
                                         <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                                        matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                                        matTooltipPosition="above"></p-inputSwitch> 
                                        <span data-toggle="modal" data-target="#view">
                                            <a class="btn nobg" (click)="openView(view,rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                       <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>

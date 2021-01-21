@@ -1,34 +1,16 @@
-﻿
-
-<!-- <div class="x_content"> -->
-    <!-- <div class="card">
-        <div class="card-header">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                    <li class="breadcrumb-item active" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} Asset Inventory</li>
-                </ol>
-            </nav>
-        </div> -->
-        <div class="x_content">
-               
-            <!-- <nav aria-label="breadcrumb">
-                <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                    <li class="breadcrumb-item active" aria-current="page">Asset Inventory</li>
-                    <li class="breadcrumb-item" aria-current="page">{{isEditMode ? 'Edit' : 'Create'}} Asset Inventory</li>
-                </ol>
-            </nav> -->
+﻿        <div class="x_content">
             <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
     <div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="header">
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading">
+          <h4 class="header-name">
               {{isEditMode ? 'Edit' : 'Create' }} Asset Inventory</h4>
         </div>
         <div>
           <button
             type="button"
-            class="btn-sm new-btn-primary"
+            class="btn-sm header-button"
             [routerLink]="[
             '/assetmodule/assetpages/app-asset-inventory-listing'
             ]"
@@ -235,7 +217,7 @@
                         <!-- </ng-container> -->
                         <div class="form-group">
                             <a style="color:#3498db" (click)="openCapes()"  data-toggle="modal" data-target="#capesData">
-                                <u>Link to Capes</u>
+                                <u>View Capes</u>
                             </a>
                         </div>
                     </div>
@@ -454,7 +436,7 @@
 <!-- // calibration  , certification , inspection , verification -->
 
 <div class="form-row m-t-10" *ngIf="currentAsset.isTangible">
-        <div class="col-md-3" [ngClass]="(currentAsset.calibrationRequired) ? 'border-box-cstm' : ''" *ngIf="currentAsset.calibrationRequired" style="margin-top: 4px;">
+        <div class="col-md-3 align_jdust" [ngClass]="(currentAsset.calibrationRequired) ? 'border-box-cstm' : ''" *ngIf="currentAsset.calibrationRequired" style="margin-top: 4px;">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -581,7 +563,7 @@
             </ng-container>
         </div>                        
 
-        <div class="col-md-3" [ngClass]="(currentAsset.certificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.certificationRequired">
+        <div class="col-md-3 align_jdust" [ngClass]="(currentAsset.certificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.certificationRequired">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -647,7 +629,7 @@
             </ng-container>
         </div>
 
-        <div  class="col-md-3" [ngClass]="(currentAsset.inspectionRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.inspectionRequired">
+        <div  class="col-md-3 align_jdust" [ngClass]="(currentAsset.inspectionRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.inspectionRequired">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -717,7 +699,7 @@
             </ng-container>
         </div>                        
 
-        <div class="col-md-3" [ngClass]="(currentAsset.verificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.verificationRequired">
+        <div class="col-md-3 align_jdust" [ngClass]="(currentAsset.verificationRequired) ? 'border-box-cstm m-t-5' : ''" *ngIf="currentAsset.verificationRequired">
             <div class="form-group">
                 <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                     <label>
@@ -1064,9 +1046,10 @@
                                             </div>
                                          <div class="col-md-6">
                                                 <div class="form-group">
+                                                    <!-- [minDate]="todaysDate" -->
                                                     <label>Warranty Start Date  <span *ngIf="currentAsset.isWarrantyRequired==true" class="clr-red">*</span></label>
                                                     <p-calendar [showIcon]="true" 
-                                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [required]="currentAsset.isWarrantyRequired==true" (ngModelChange)="getmemo($event)" [minDate]="todaysDate" [maxDate]="currentAsset.warrantyEndDate" name="warrantyStartDate" [(ngModel)]="currentAsset.warrantyStartDate"></p-calendar>
+                                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [required]="currentAsset.isWarrantyRequired==true" (ngModelChange)="getmemo($event)"  [maxDate]="currentAsset.warrantyEndDate" name="warrantyStartDate" [(ngModel)]="currentAsset.warrantyStartDate"></p-calendar>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Warranty End Date  <span *ngIf="currentAsset.isWarrantyRequired==true" class="clr-red">*</span></label>
@@ -2052,22 +2035,25 @@
                 <h4 class="modal-title">Edit {{ memoLabel }}</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th style="color: #fff;">{{ memoLabel }}</th>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <p-editor [(ngModel)]="headerMemo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}" name="headerMemo" required></p-editor>
+                                <p-editor [(ngModel)]="headerMemo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+                                 name="headerMemo" required></p-editor>
                             </td>
                         </tr>
                     </tbody> 
-                </table>
-                <div style="float:right">
-                    <button type="button" class="btn btn-primary" style="margin-top: 10px;"
+                </table> -->
+                <p-editor [(ngModel)]="headerMemo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}"
+                name="headerMemo" required></p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin"
                     data-dismiss="modal" (click)="onSaveMemo()" (ngModelChange)="getmemo($event)" [disabled]="disableEditor">Save</button>
-                    <button type="button" class="btn btn-danger" style="margin-top: 10px;"
+                    <button type="button" class="btn btn-danger editor-buttons-margin"
                      data-dismiss="modal">Close</button>
                </div> 
             </div>

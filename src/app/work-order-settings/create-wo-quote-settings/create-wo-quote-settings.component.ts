@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { ItemMasterService } from '../../services/itemMaster.service';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';

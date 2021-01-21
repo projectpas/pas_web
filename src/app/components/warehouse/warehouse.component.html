@@ -141,7 +141,7 @@
 									<th style="width:180px;position:sticky"></th>
 								</tr>
 							</ng-template>
-							<ng-template pTemplate="body" let-rowData let-columns="columns">
+							<ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
 								<tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdits(rowData)">
 									<td style="width:120px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
 										{{
@@ -476,7 +476,7 @@ col.field == 'createdDate'? (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[co
 					<th>Last Updated Time</th>
 				</tr>
 			</thead>
-			<tr *ngFor="let audit of auditHisory">
+			<tr *ngFor="let audit of auditHisory; let i = index;">
 				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'auditHistoryId', audit.auditHistoryId)  ? 'black' : 'red'  }">>{{audit.auditHistoryId}}</td>
 				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'columnName', audit.columnName)  ? 'black' : 'red'  }">>{{audit.columnName}}</td>
 				<td [ngStyle]="{'color': getColorCodeForHistory(i, 'previousValue', audit.previousValue)  ? 'black' : 'red'  }">>{{audit.previousValue}}</td>

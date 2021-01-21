@@ -54,6 +54,9 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.getROApprovalListById(repairOrderId);
   }
    
+  approverslistbyTaskId(taskId, id) {
+    return this.repairOrderEndpoint.approverslistbyTaskId(taskId, id);
+  }
 
   getVendorROHeaderById(repairOrderId) {
     return this.repairOrderEndpoint.getVendorROHeaderById(repairOrderId);
@@ -101,8 +104,8 @@ export class RepairOrderService {
     return this.repairOrderEndpoint.saveRepaireOrderSettings<any>(data);
   }
   
-  getRepairOrderSettingMasterData() {
-    return this.repairOrderEndpoint.getRepairOrderSettingMasterData();
+  getRepairOrderSettingMasterData(masterCompanyId) {
+    return this.repairOrderEndpoint.getRepairOrderSettingMasterData(masterCompanyId);
   }
 
   getAllEditID(reairOrderId) {

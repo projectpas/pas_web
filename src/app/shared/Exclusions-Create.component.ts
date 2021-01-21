@@ -3,13 +3,15 @@ import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
 import { ItemMasterService } from "../services/itemMaster.service";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-import * as $ from 'jquery'
+declare var $ : any;
 import { WorkOrderQuoteService } from "../services/work-order/work-order-quote.service";
 import { ItemClassificationService } from "../services/item-classfication.service";
 import { VendorService } from "../services/vendor.service";
 import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from "../services/auth.service";
+
 @Component({
     selector: 'grd-exclusions',
     templateUrl: './Exclusions-Create.component.html',
@@ -17,7 +19,7 @@ import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ExclusionsCreateComponent implements OnInit, OnChanges {
     @Input() isWorkOrder = false;
-    @Input() workFlow: IWorkFlow;
+    @Input() workFlow:any={};
     @Input() UpdateMode: boolean;
     @Input() isEdit = false;
     @Input() isQuote = false;
@@ -50,10 +52,10 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     deleteRowRecord:any={};
     deletedRowIndex:any;
     disabledMemo: boolean = false;
-
     constructor(private actionService: ActionService,
         private workOrderQuoteService: WorkOrderQuoteService,
         private itemClassService: ItemClassificationService,
+        private authService: AuthService,
         private vendorService: VendorService,
         private modalService: NgbModal,
         private itemser: ItemMasterService, private alertService: AlertService,
@@ -69,7 +71,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             const data = {
                 ...this.editData,
                 partDescription: this.editData.epnDescription,
-                partNumber: this.editData.epn,
+                // partNumber: this.editData.epn,
                 estimtPercentOccurrance: (this.isQuote) ? this.editData.exstimtPercentOccuranceId : this.editData.exstimtPercentOccurance
             }
             this.workFlow.exclusions.push(data);
@@ -120,12 +122,20 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.addRow();
         }
     }
+
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
+    }
     
     enableSaveMemo() {
         this.disabledMemo = false;
     }
 
-    getConditionsList() {
+    getConditionsList() { 
         this.isSpinnerVisible = true;
         let consitionIds = [];
         if (this.UpdateMode) {
@@ -157,7 +167,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             exclusionsIds = this.workFlow.exclusions.reduce((acc, x) => {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
-        }
+        } 
         this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, exclusionsIds)
             .subscribe(res => {
                 this.isSpinnerVisible = false;
@@ -173,6 +183,11 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                         conditionId:x.conditionId
                     }
                 });
+                this.partCollection.forEach(element => {
+                    if(element.partId==this.workFlow.itemMasterId){
+                       this.partCollection.splice(element, 1); 
+                    }
+                   });
                 this.itemclaColl = this.partCollection;
             }, error => {
                 this.isSpinnerVisible = false;
@@ -204,7 +219,10 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         newRow.unitCost = "";
         newRow.memo = "";
         newRow.itemMasterId = "";
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
+        newRow.updatedBy = this.userName;
+        newRow.createdBy = this.userName;
+        newRow.masterCompanyId = this.currentUserMasterCompanyId;
         this.workFlow.exclusions.push(newRow);
     }
 
@@ -227,6 +245,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             exclusion.partNumber = "";
             exclusion.partName = "";
             exclusion.itemClassificationId = '';
+            exclusion.createdBy = this.userName;
             event = "";
             this.alertService.showMessage("Workflow", "EPN is already in use in Exclusion List.", MessageSeverity.error);
             return;
@@ -242,10 +261,11 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
                         exclusion.conditionId = event.conditionId;
                         exclusion.itemClassificationId = this.itemclaColl[i].itemClassificationId;
                         exclusion.itemClassification = this.itemclaColl[i].itemClassification;
+                        exclusion.createdBy = this.userName;
                     }
                 }
             }
-
+           
             this.getPNDetails(exclusion); 
         }
     }
@@ -263,8 +283,8 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
     }
 
     calculateExtendedCost(exclusion): void {
-        exclusion.unitCost = exclusion.unitCost ? formatNumberAsGlobalSettingsModule(exclusion.unitCost, 2) : '';
-        exclusion.quantity = exclusion.quantity ? exclusion.quantity.toString().replace(/\,/g, '') : 0;
+        exclusion.unitCost = exclusion.unitCost ?   formatNumberAsGlobalSettingsModule(exclusion.unitCost, 2) : '0.00';
+        exclusion.quantity = exclusion.quantity ? formatNumberAsGlobalSettingsModule(exclusion.quantity, 0) : '0';
         var value: any = parseFloat(exclusion.quantity) * parseFloat(exclusion.unitCost.toString().replace(/\,/g, ''));
         if (value > 0) {
             exclusion.extendedCost = formatNumberAsGlobalSettingsModule(value, 2);
@@ -300,6 +320,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
 
             this.reCalculate();
         }
+      
     }
 
     getDynamicVariableData(variable, index) {
@@ -442,6 +463,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
+        this.modal.close();
     }
 
     onDataLoadFailed(log) {

@@ -8,15 +8,15 @@
         </nav> -->
         <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
                         <div class="card new-card">
-                            <div class="card-header bg-primary new-card-header">
+                            <div class="header ">
                               <div class="row">
                                 <div class="col">
-                                  <h4 class="new-card-heading">Asset List</h4>
+                                  <h4 class="header-name">Asset List</h4>
                                 </div>
                                 <div>
                                   <button
                                     type="button"
-                                    class="btn-sm new-btn-primary"
+                                    class="btn-sm header-button"
                                     (click)="navigateTogeneralInfo()">
                                   Add Asset
                                   </button>
@@ -153,7 +153,7 @@
                                     <th style="width:150px;position: sticky"></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-asset let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle
                                     (dblclick)="openView(view,rowData)">
 
@@ -205,7 +205,7 @@
                                         </div>
                                         <div *ngIf="currentDeletedstatus==true">
                                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
+                                            matTooltipPosition="above" ></p-inputSwitch> 
                                             <span data-toggle="modal" data-target="#view">
                                                 <a class="btn nobg btn-view-cstm" (onChange)="openView(view,rowData)"
                                                    (click)="openView(view,rowData)" matTooltip="View" matTooltipPosition="above">
@@ -260,7 +260,7 @@
                 <div id="adminsearchlocationajax" class="table-responsive default-bg clear">
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
-                            <div class="form-row" style="width: 100%;">
+                            <!-- <div class="form-row" style="width: 100%;">
                                 <div class="col-md-12 shadow-box-cstm" style="margin-left: 8px;max-width: 99.2%">
                                     <div class="col-md-3">
                                         <p class="fs12">
@@ -287,7 +287,7 @@
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="table-responsive default-bg clear">
                                 <div class="col-sm-6">
                                     <button type="button" class="btn btn-primary" (click)="openAllCollapse()">
@@ -501,7 +501,7 @@
                                                             <span class="label"><b>Depreciation Method: </b></span><span class="value">{{assetViewList.depreciationMethod}}</span>
                                                             </p>
                                                             <p>
-                                                            <span class="label col-sm-6"><b>Residual  %: </b></span><span class="value">{{assetViewList.residualPer}}</span>
+                                                            <span class="label col-sm-6"><b>Residual  %: </b></span><span class="value">{{assetViewList.residualPer}}  %</span>
                                                             </p>
                                                             <p>
                                                             <span class="label"><b>Asset Life: </b></span><span class="value">{{assetViewList.assetLife}}</span>

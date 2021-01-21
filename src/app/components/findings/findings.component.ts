@@ -5,7 +5,7 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { FindingService } from '../../services/finding.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { Finding } from '../../models/finding.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { NgbModalRef, NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -65,8 +65,8 @@ export class FindingsComponent {
     modal: NgbModalRef;
     /** Actions ctor */
 
-    private isEditMode: boolean = false;
-    private isDeleteMode: boolean = false;
+    public isEditMode: boolean = false;
+    public isDeleteMode: boolean = false;
     /** Currency ctor */
 	constructor(private breadCrumb: SingleScreenBreadcrumbService,private masterComapnyService: MasterComapnyService,private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService,public findingService: FindingService, private dialog: MatDialog) {
         this.displayedColumns.push('action');

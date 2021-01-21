@@ -69,7 +69,7 @@ export class EmployeeCertificationComponent implements OnInit, AfterViewInit {
     today = new Date();
     curcertificationDate = new Date();
     /** Actions ctor */
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     enableSaveBtn: boolean = false;
     Active: string = "Active";

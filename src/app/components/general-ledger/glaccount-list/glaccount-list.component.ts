@@ -68,7 +68,7 @@ export class GlaccountListComponent implements OnInit {
         this.allGLCashFlowClassInfo = cahsFlowClassdata[0];
       });
   }
-  private glAccountEdit(glAccount) {
+  public glAccountEdit(glAccount) {
     this.glAccountService.glAccountEditCollection = glAccount;
     this.router.navigateByUrl(
       "/generalledgermodule/generalledgerpage/app-glaccount-create"
@@ -76,7 +76,6 @@ export class GlaccountListComponent implements OnInit {
   }
 
   confirmDelete(content, id) {
-    debugger;
     this.glaccountToRemove = Object.assign(
       {},
       this.glAccountList.filter(function (glAccount) {
@@ -86,7 +85,6 @@ export class GlaccountListComponent implements OnInit {
     this.modal = this.modalService.open(content, { size: "sm" });
   }
   removeAssetType(): void {
-    debugger;
     this.glAccountService
       .remove(this.glaccountToRemove.glAccountId)
       .subscribe((response) => {

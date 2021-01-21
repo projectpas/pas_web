@@ -33,6 +33,7 @@ export class SalesOrderBillingAndInvoicing {
     updatedDate: Date;
     billToCustomerId: number;
     billToSiteId: number;
+    employeeName: string;
 }
 // {
 //     soBillingInvoicingId: 0;

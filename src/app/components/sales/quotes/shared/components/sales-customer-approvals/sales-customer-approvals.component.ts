@@ -16,7 +16,7 @@ import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CustomerService } from "../../../../../../services/customer.service";
 import { SalesQuoteViewComponent } from "../sales-quote-view/sales-quote-view.component";
 import { StocklineViewComponent } from "../../../../../../shared/components/stockline/stockline-view/stockline-view.component";
-import * as $ from 'jquery'
+declare var $ : any;
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
 import { CommonService } from "../../../../../../services/common.service";
 import { forkJoin } from "rxjs/observable/forkJoin";
@@ -49,7 +49,7 @@ export class SalesCustomerApprovalsComponent {
     isSpinnerVisible = false;
     quotesListPageSize: number = 10;
     defaultApprovalId = DBkeys.DEFAULT_SALES_QUOTE_APPROVAL_ID;
-
+    fields: any;
     columns: any = [
         { field: 'actionStatus', header: 'Action', width: "150px" },
         { field: 'internalSentDate', header: 'Internal Sent Date', width: "100px" },

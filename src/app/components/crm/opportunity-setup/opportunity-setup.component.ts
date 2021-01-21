@@ -22,7 +22,7 @@ import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/route
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { GMapModule } from 'primeng/gmap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { getObjectByValue, getPageCount, getObjectById, getValueFromObjectByKey, editValueAssignByCondition, getValueFromArrayOfObjectById } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
@@ -180,6 +180,10 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 	formData = new FormData();
 	disableSave: boolean = true;
 	loaderForPaymentCheck: boolean;
+	auditHistory: any;
+	isPrimary: any;
+	restorerecord: any;
+
 	constructor(private http: HttpClient, private commonService: CommonService,
 		 
 		 private authService: AuthService, private modalService: NgbModal,
@@ -255,10 +259,6 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 	}
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
-	}
-	addATAChapter(rowData) {
-		
-
 	}
 
 	enableDisableAdvancedSearch(val) {
@@ -418,4 +418,55 @@ export class OpportunitySetupComponent implements OnInit, AfterViewInit {
 		this.disableSave = false;
 
 	}
-}
+
+	getColorCodeForHistory(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
+        }
+	}
+	manufacturerData: any;
+	selectAircraftManfacturer: any;
+	aircraftModelList: any;
+	selectedAircraftModel: any;
+	dashNumberList: any;
+	selectedDashNumbers: any;
+	currentDeletedstatus: boolean;
+	LoadAtachapter:any;
+	selectedATAchapter: any;
+	selectedATASubChapter: any;
+	atasubchapterValues: any;
+	DisabledMode: any;
+	isTangible: any;
+	AssetAcquisitionTypeList: any;
+	currentstatus: any;
+	LoadValues: any;
+	selectedModelId: any;
+	getDashNumberByTypeandModel: any;
+	LoadDashnumber: any;
+	selectedDashnumber: any;
+	dashNumberUnknown: any;
+	add_ataChapterList: any;
+	add_ataSubChapterList: any;
+	add_SelectedId: any;
+	add_SelectedModels: any;
+	
+	dismissModel() {}
+
+	saveCheckPaymentInfo() {}
+
+	deleteConformation(str) {}
+
+	getVendorName() {}
+
+	restoreRecord() {}
+	getATAAuditHistoryById(rowData){} 
+	deleteContent1: any;
+	nextClick() {}
+	previousClick() {}
+ }

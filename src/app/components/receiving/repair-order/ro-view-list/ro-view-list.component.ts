@@ -36,7 +36,7 @@ export class ROViewListComponent implements OnInit {
         }
     }
 
-    private gotoStockLinePage(event: any, part: RepairOrderPart): void {
+    public gotoStockLinePage(event: any, part: RepairOrderPart): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {
@@ -76,4 +76,6 @@ export class ROViewListComponent implements OnInit {
     addStockLine() {
         this.toggleAddDetails = !this.toggleAddDetails;
     }
+
+    paginatorFocusOut($event, part) {}
 }

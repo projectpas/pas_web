@@ -3,15 +3,15 @@
     <div [@fadeInOut] class="page-content">        
         <div class="right_col" role="main">
             <div class="card new-card">
-                <div class="card-header bg-primary new-card-header">
-                    <div class="row">
+                <div class="header ">
+                    <div class="row"> 
                       <div class="col">
-                        <h4 class="new-card-heading">Workflows List</h4>
+                        <h4 class="header-name">Workflow List</h4>
                       </div>
                       <div>
                         <button
                            type="button"
-                           class="btn-sm new-btn-primary"
+                           class="btn-sm header-button"
                            (click)="AddPage()">
                            Create New Workflow
                         </button>
@@ -39,7 +39,12 @@
                     [scrollable]="true"
                     scrollHeight="450px"
                     [totalRecords]="totalRecords"
-                >                            
+                >                 
+                <ng-template pTemplate="colgroup" let-columns>
+                    <colgroup>
+                      <col *ngFor="let col of columns" style="width: 130px;" />
+                    </colgroup>
+                  </ng-template>           
                 <ng-template pTemplate="caption">
                     <div class="row">
                         <div class="col">
@@ -156,7 +161,7 @@
                         <th style="width: 140px !important;"></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                     <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdit(rowData)">
                         <td *ngFor="let col of columns" class="ui-resizable-column" style="width: 150px !important;" pReorderableRowHandle>
                             {{
@@ -198,7 +203,7 @@
                                 </a>
                             </span>
                             <span data-toggle="modal" data-target="#view-material-lists"
-                                (click)="onViewMaterialList(rowData)">
+                                (click)="onViewMaterialList(rowData)"> 
                                 <a data-toggle="tooltip" matTooltipPosition="above"
                                     matTooltip="View Material Lists" tooltipPosition="bottom" title=""
                                     class="btn  nobg" data-original-title="">
@@ -237,6 +242,14 @@
                                       <i class="fa fa-eye"></i>
                                   </a>
                                 </span>
+                                   
+                            <span data-toggle="modal" data-target="#history">
+                                <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="History"
+                                    tooltipPosition="bottom" title="" class="btn  nobg"
+                                    data-original-title="History">
+                                    <i class="fa fa-history"></i>
+                                </a>
+                            </span>
                                 <span><a
                                     class="btn nobg"
                                     (click)="restore(restoreConfirm, rowData)"
@@ -249,7 +262,7 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage" let-columns
-                    *ngIf="workflowList?.length == 0">
+                   >
                     <tr>
                     <td
                         [attr.colspan]="14"
@@ -294,7 +307,7 @@
         </div>
         <div class="modal-footer">
           <button
-            type="button" class="btn btn-success" (click)="removeWorkFlow()">
+            type="button" class="btn btn-primary" (click)="removeWorkFlow()">
             Yes
           </button>
           <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -313,7 +326,7 @@
         <div class="modal-body">
           <strong>
             Worklflow ACC:
-            <span class="new-label">{{ currentWorkflow.workflowId }}</span>
+            <span class="new-label">{{ restorerecord.workOrderNumber }}</span>
           </strong>
         </div>
         <div class="modal-footer">
@@ -327,7 +340,7 @@
     </ng-template>
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="view" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xlg">
             <div class="modal-content" *ngIf="sourceWorkFlow != undefined">
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
@@ -335,6 +348,7 @@
                     <h4 class="modal-title">Workflow Details of {{ sourceWorkFlow.workOrderNumber}} for
                         PN-{{sourceWorkFlow.itemMaster.partNumber}} and Scope {{sourceWorkFlow.workScope.description}}
                     </h4>
+                    
                 </div>
                 <div class="modal-body">
                     <div class="card">
@@ -344,10 +358,14 @@
                                     <li class="breadcrumb-item active" aria-current="page"
                                         style="font-size: 16px;margin-top: 3px;">Workflow Details</li>
                                 </ol>
-                            </nav>
-                            <button class="btn btn-primary pull-right" (click)="toggle_wf_header=!toggle_wf_header">
+                            </nav>   
+                            <button style="margin-top: 6px;" class="btn btn-primary pull-left" (click)="toggle_wf_header=!toggle_wf_header">
                                 {{toggle_wf_header ? 'Collapse' : 'Expand'}}
-                            </button>
+                            </button>                         
+                            <button style="margin-top: 6px;" type="button" class="pull-right" name="isActive" [ngClass]="sourceWorkFlow.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                                <span class="value">{{sourceWorkFlow.isActive ? 'Active' : 'In-Active'}}</span>
+                             </button> 
+                          
                         </div>
                         <div class="card-body" *ngIf="toggle_wf_header">
                             <div class="form-horizontal wf-popup-form">
@@ -356,46 +374,44 @@
                                         <div class="form-row" style="margin-top: 20px;">
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>Workflow ID: </label> {{sourceWorkFlow.workflowId}}
+                                                    <label>Workflow ID:<span class="clr-red">*</span> </label> {{sourceWorkFlow.workOrderNumber}}
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Workflow Description:
                                                     </label>{{sourceWorkFlow.workflowDescription}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Version: </label>{{sourceWorkFlow.version}}
+                                                    <label>Version: <span class="clr-red">*</span></label>{{sourceWorkFlow.version}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Create Date: </label>{{sourceWorkFlow.workflowCreateDate}}
+                                                    <label>Create Date: <span class="clr-red">*</span></label>{{sourceWorkFlow.workflowCreateDate}}
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Expiration Date:
                                                     </label>{{sourceWorkFlow.workflowExpirationDate}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Currency: </label>
-                                                    {{sourceWorkFlow.currencySymbol + ' (' + sourceWorkFlow.currencyText + ')'}}
+                                                    <label>Currency: <span class="clr-red">*</span></label>
+                                                    <!-- sourceWorkFlow.currencySymbol + ' (' + -->
+                                                    {{ sourceWorkFlow.currencyText }}
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label>PN: </label>{{sourceWorkFlow.itemMaster.partNumber}}
+                                                    <label>PN:<span class="clr-red">*</span> </label>{{sourceWorkFlow.itemMaster.partNumber}}
                                                 </div>
                                                 <div class="form-group">
                                                     <label>PN Description:
                                                     </label>{{sourceWorkFlow.itemMaster.partDescription}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Changed PN: </label>{{sourceWorkFlow.changedPartNumber}}
+                                                    <label>Revised PN: </label>{{sourceWorkFlow.revisedPartNumber}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Work Scope: </label>{{sourceWorkFlow.workScope.description}}
+                                                    <label>Work Scope: <span class="clr-red">*</span> </label>{{sourceWorkFlow.workScope.description}}
                                                 </div>
                                                 <div class="form-group">
-                                                    <label>Customer Name: </label>{{sourceWorkFlow.customerName}}
-                                                </div>
-                                                <div class="form-group">
-                                                    <label>Memo: </label>{{sourceWorkFlow.memo}}
+                                                    <label>Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
                                                 </div>
                                             </div>
                                         </div>
@@ -415,9 +431,11 @@
                                                     <div class="col-md-8">
                                                         <div style="float:right;">
                                                             <div class="form-group">
-                                                                <label style="margin-top: 5px;">BER Threshold: </label>
+                                                                <label style="margin-top: 5px;
+                                                                width: 130px;">BER Threshold: </label>
                                                                 <input class="w60 form-control wf-ber-thrld text-right"
-                                                                    type="text"
+                                                                    type="text" style="    color: red !important;
+                                                                    text-align: center !important;"
                                                                     value="{{sourceWorkFlow.berThresholdAmount}}"
                                                                     disabled>
                                                             </div>
@@ -492,57 +510,75 @@
 
                                     </div>
                                 </div>
-
-                                <div class="card" style="margin-top: 30px;">
-                                    <div class="card-header" style="padding: 4px 10px;">
-                                        <h5 style="margin-bottom: 0;font-size: 15px;">Total Workflow Cost</h5>
-                                    </div>
-                                    <div class="card-body" style="padding: 10px 20px 0;">
-                                        <div class="form-row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Material Cost: </label> {{MaterialCost}}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Expertise Cost: </label> {{TotalExpertiseCost}}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Charges: </label> {{TotalCharges}}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label>Other:
-                                                    </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
-                                                </div>
-                                            </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header" style="padding: 4px 10px;">
+                                            <h5 style="margin-bottom: 0;font-size: 15px;">Total Workflow Cost</h5>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label style="width: 130px;">Total Workflow Cost: </label>
-                                                    {{Total}}
+                                        <div class="card-body" style="padding: 10px 20px 0;">
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Material Cost: </label> {{MaterialCost}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Expertise Cost: </label> {{TotalExpertiseCost}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Charges: </label> {{TotalCharges}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label>Other:
+                                                        </label> {{sourceWorkFlow.otherCost > 0 ? sourceWorkFlow.otherCost : '0.00'}}
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label style="width: 130px;">% of BER Threshold: </label>
-                                                    {{PercentBERThreshold}}
+                                            <div class="form-row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label style="width: 130px;">Total Workflow Cost: </label>
+                                                        {{Total}}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label style="width: 130px;">% of BER Threshold: </label>
+                                                        {{PercentBERThreshold}}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="form-group memo-popup-cstm" style="padding-left: 4px;">
+                                        <label>
+                                            Notes
+                                        </label>
+                                        <span>
+                                            <div class="form-group memo-popup-cstm mat_emo">
+                                                <div [innerHTML]="sourceWorkFlow.memo"
+                                                    class="form-control"
+                                                    style="height: 100px !important; width:100% !important"
+                                                    class="text_editor_box">
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                            
                             </div>
                         </div>
                     </div>
 
                     <div>
-                        <hr />
+                        <hr /> 
                         <button type="button" class="btn btn-primary" (click)="onOpenAll()">Open All</button>
                         <button type="button" class="btn btn-primary" (click)="onCloseAll()">Close All</button>
                         <hr />
@@ -558,20 +594,20 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Pub ID</th>
+                                                <th>Pub ID<span class="clr-red">*</span></th>
                                                 <th>Pub Desc</th>
-                                                <th>Revision Date</th>
                                                 <th>Pub Type</th>
+                                                <th>Revision Date</th>                                                
                                                 <th>Sequence</th>
                                                 <th>Source</th>
-                                                <th>Aircraft Manufacturer</th>
+                                                <th>Aircraft</th>
                                                 <th>Model</th>
                                                 <th>Dash Number</th>
                                                 <th>Location</th>
                                                 <th>Verified By</th>
                                                 <th>Verified Date</th>
                                                 <th>Status</th>
-                                                <th>Image</th>
+                                                <th>File Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -579,8 +615,8 @@
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{publication.publicationName}}</td>
                                                 <td>{{publication.publicationDescription}}</td>
-                                                <td>{{publication.revisionDate}}</td>
                                                 <td>{{publication.publicationTypeName}}</td>
+                                                <td>{{publication.revisionDate}}</td>
                                                 <td class="text-right">{{publication.sequence}}</td>
                                                 <td>{{publication.source}}</td>
                                                 <td>{{publication.aircraftManufacturerName}}</td>
@@ -590,21 +626,111 @@
                                                 <td>{{publication.verifiedBy}}</td>
                                                 <td>{{publication.verifiedDate}}</td>
                                                 <td>{{publication.status ? 'Active': 'In Active' }}</td>
-                                                <td><a href="{{publication.attachmentURL}}" class="img-responsive"
-                                                        alt="">View</a></td>
+                                                <td>
+                                                    <button class="btn btn-danger nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                    <ng-template #content let-c="close" let-d="dismiss">
+                                        <div class="modal-header">        
+                                            <h4 class="modal-title">Documnet Details</h4>
+                                            <button type="button" class="close" aria-label="Close" (click)="dismissModelView()">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>      
+                                        </div>
+                                        <div class="modal-body">
+                                            <p-table
+                                            #dt
+                                            class="table-responsive ptable-cus-pma"
+                                            [paginator]="documentList.length > 0"
+                                            [value]="documentList"
+                                            [rows]="3"
+                                            [columns]="sourceViewforDocumentListColumns"
+                                          >
+                                            <ng-template pTemplate="header" let-columns>
+                                              <tr>
+                                                <th *ngFor="let col of columns">
+                                                  {{ col.header }}
+                                                </th>
+                                                <th>
+                                                  Download
+                                                </th>
+                                              </tr>
+                                              <tr>
+                                                <th
+                                                  style="width:auto"
+                                                  *ngFor="let col of columns"
+                                                  [ngSwitch]="col.field"
+                                                >
+                                                  <input
+                                                    style="width:100%;" class="incorn_border"
+                                                    pInputText
+                                                    type="text"
+                                                    (input)="
+                                                      dt.filter($event.target.value, col.field, 'contains')
+                                                    "
+                                                  />
+                                                </th>
+                                                <th></th>
+                                              </tr>
+                                            </ng-template>
+                                            <ng-template
+                                              pTemplate="body"
+                                              let-part
+                                              let-rowData
+                                              let-columns="columns"
+                                              let-i="rowIndex"
+                                            >
+                                              <tr>
+                                                <td *ngFor="let col of columns">
+                                                  <ng-container *ngIf="col.field == 'fileName'">
+                                                    {{ part[col.field] }}
+                                                  </ng-container>
+                                                </td>
+                                                <td class="text_c" style="text-align: center;">
+                                                  <button style="background: #fff;
+                                                  border: none;"
+                                                    (click)="downloadFile(part)"
+                                                    matTooltip="Download"  matTooltipPosition="above"
+                                                    class="downld"
+                                                    ><span><i class="fa fa-download"></i></span
+                                                  ></button>
+                                                </td>
+                                              </tr>
+                                            </ng-template>
+                                            <ng-template
+                                              pTemplate="emptymessage"
+                                              let-columns
+                                            >
+                                              <tr>
+                                                <td
+                                                  [attr.colspan]="2"
+                                                  style="color: red; font-weight: bold; text-align: center"
+                                                >
+                                                  No records found
+                                                </td>
+                                              </tr>
+                                            </ng-template>
+                                          </p-table>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" (click)="dismissModelView()">Close</button>
+                                        </div>
+                                      </ng-template>
                                 </div>
                             </div>
-                            <div *ngIf="task.measurements.length > 0">
+                            <div *ngIf="task.measurements && task.measurements.length > 0">
                                 <h5 class="po-head">Measurements</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>PN</th>
+                                                <th>PN<span class="clr-red">*</span></th>
+                                                <th>PN Description</th>
                                                 <th>Sequence</th>
                                                 <th>Stage</th>
                                                 <th>Min</th>
@@ -617,31 +743,36 @@
                                         <tbody>
                                             <tr *ngFor="let measurement of task.measurements;let i = index">
                                                 <td class="text-right">{{(i+1)}}</td>
-                                                <td>{{measurement.PartName}}</td>
+                                                <td>{{measurement.partNumber}}</td>
+                                                <td>{{measurement.partDescription}}</td>
                                                 <td class="text-right">{{measurement.sequence}}</td>
                                                 <td>{{measurement.stage}}</td>
                                                 <td class="text-right">{{measurement.min}}</td>
                                                 <td class="text-right">{{measurement.max}}</td>
                                                 <td>{{measurement.expected}}</td>
                                                 <td>{{measurement.diagramURL}}</td>
-                                                <td>{{measurement.memo}}</td>
+                                                <td>   <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
+                                                   </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.exclusions.length > 0">
+                            <div *ngIf="task.exclusions && task.exclusions.length > 0">
                                 <h5 class="po-head">Exclusions</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>EPN</th>
-                                                <th>EPN Description</th>
+                                                <th>EPN<span class="clr-red">*</span></th>
+                                                <th>Description</th>
+                                                <th>Condition<span class="clr-red">*</span></th>
+                                                <th>Item Classification</th>
+                                                <th>Stock Type</th>
                                                 <th>Qty</th>
                                                 <th>Unit Cost</th>
-                                                <th>Extended</th>
+                                                <th>Extended Cost</th>
                                                 <th>Estimated % Occurance</th>
                                                 <th>Memo</th>
                                             </tr>
@@ -651,14 +782,21 @@
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{exclusion.partNumber}}</td>
                                                 <td>{{exclusion.partDescription}}</td>
+                                                <td>{{exclusion.condition}}</td>
+                                                <td>{{exclusion.itemClassification}}</td>
+                                                <td>{{exclusion.stockType}}</td>                                                
                                                 <td class="text-right">{{exclusion.quantity}}</td>
                                                 <td class="text-right">{{exclusion.unitCost}}</td>
                                                 <td class="text-right">{{exclusion.extendedCost}}</td>
                                                 <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                                <td>{{exclusion.memo}}</td>
+                                                <td> <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
+                                                    </td>
                                             </tr>
                                             <tr>
                                                 <td><b>Total</b></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.exclusionQty}}</b></td>
@@ -671,14 +809,14 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.directions.length > 0">
+                            <div *ngIf="task.directions && task.directions.length > 0">
                                 <h5 class="po-head">Directions</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Action</th>
+                                                <th>Action<span class="clr-red">*</span></th>
                                                 <th>Description</th>
                                                 <th>Sequence</th>
                                                 <th>Memo</th>
@@ -690,20 +828,22 @@
                                                 <td>{{direction.action}}</td>
                                                 <td>{{direction.description}}</td>
                                                 <td class="text-right">{{direction.sequence}}</td>
-                                                <td>{{direction.memo}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.expertise.length > 0">
+                            <div *ngIf="task.expertise && task.expertise.length > 0">
                                 <h5 class="po-head">Expertise</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Expertise Type</th>
+                                                <th>Expertise Type<span class="clr-red">*</span></th>
                                                 <th>Estimated Hours</th>
                                                 <th>Labor Direct Rate</th>
                                                 <th>Direct Labor Cost</th>
@@ -737,45 +877,45 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.equipments.length > 0">
-                                <h5 class="po-head">Equipment</h5>
+                            <div *ngIf="task.equipments && task.equipments.length > 0">
+                                <h5 class="po-head">Tools</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Asset Id</th>
-                                                <th>Asset Type</th>
-                                                <th>Asset Description</th>
-                                                <th>Qty</th>
+                                                <th>Tool Name</th>
+                                                <th>Tool ID</th>                                               
+                                                <th>Tool Description</th>
+                                                <th>Tool Class</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let equipment of task.equipments;let i=index">
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{equipment.assetName}}</td>
-                                                <td>{{equipment.assetTypeName}}</td>
+                                                <td>{{equipment.assetName}}</td>
                                                 <td>{{equipment.assetDescription}}</td>
+                                                <td>{{equipment.assetTypeName}}</td>                                                
                                                 <td class="text-right">{{equipment.quantity}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.charges.length > 0">
+                            <div *ngIf="task.charges && task.charges.length > 0">
                                 <h5 class="po-head">Charges</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Type</th>
+                                                <th>Type<span class="clr-red">*</span></th>
                                                 <th>Description</th>
-                                                <th>Qty</th>
-                                                <th>Unit Cost</th>
-                                                <th>Extended Cost</th>
-                                                <th>Unit Price</th>
-                                                <th>Extended Price</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                                <th>Unit Cost<span class="clr-red">*</span></th>
+                                                <th>Extended Cost<span class="clr-red">*</span></th>
                                                 <th>Vendor Name</th>
                                             </tr>
                                         </thead>
@@ -787,8 +927,6 @@
                                                 <td class="text-right">{{charge.quantity}}</td>
                                                 <td class="text-right">{{charge.unitCost}}</td>
                                                 <td class="text-right">{{charge.extendedCost}}</td>
-                                                <td class="text-right">{{charge.unitPrice}}</td>
-                                                <td class="text-right">{{charge.extendedPrice}}</td>
                                                 <td>{{charge.vendorName}}</td>
                                             </tr>
                                             <tr>
@@ -799,31 +937,27 @@
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
                                                 <td></td>
-                                                <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td>
-                                                <td></td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.materialList.length > 0">
+                            <div *ngIf="task.materialList && task.materialList.length > 0">
                                 <h5 class="po-head">Material List</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>PN</th>
-                                                <th>Description</th>
-                                                <th>Cond</th>
+                                                <th>PN<span class="clr-red">*</span></th>
+                                                <th>Description<span class="clr-red">*</span></th>
+                                                <th>Cond<span class="clr-red">*</span></th>
                                                 <th>Mandatory / Supplemental</th>
                                                 <th>Item Classification</th>
-                                                <th>Qty</th>
-                                                <th>UOM</th>
-                                                <th>Unit Cost</th>
-                                                <th>Extended Cost</th>
-                                                <th>Unit Price</th>
-                                                <th>Extended Price</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                                <th>UOM<span class="clr-red">*</span></th>
+                                                <th>Unit Cost<span class="clr-red">*</span></th>
+                                                <th>Extended Cost<span class="clr-red">*</span></th>
                                                 <th>Memo</th>
                                                 <th>Deferred</th>
                                             </tr>
@@ -834,15 +968,15 @@
                                                 <td>{{material.partNumber}}</td>
                                                 <td>{{material.partDescription}}</td>
                                                 <td>{{material.conditionName}}</td>
-                                                <td>{{material.mandatoryOrSupplementalName}}</td>
-                                                <td>{{material.itemClassificationName}}</td>
+                                                <td>{{material.materialMandatoriesName}}</td>
+                                                <td>{{material.itemClassification}}</td>
                                                 <td class="text-right">{{material.quantity}}</td>
-                                                <td>{{material.uomName}}</td>
+                                                <td>{{material.unitOfMeasure}}</td>
                                                 <td class="text-right">{{material.unitCost}}</td>
                                                 <td class="text-right">{{material.extendedCost}}</td>
-                                                <td class="text-right">{{material.price}}</td>
-                                                <td class="text-right">{{material.extendedPrice}}</td>
-                                                <td>{{material.memo}}</td>
+                                                <td>
+                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
+                                                </td>
                                                 <td>{{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }}
                                                 </td>
                                             </tr>
@@ -857,8 +991,8 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                                <td class="text-right"><b>{{task.materialTotalPrice}}</b></td>
-                                                <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td>
+                                                <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
+                                                <!-- <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td> -->
                                                 <td></td>
                                                 <td></td>
                                             </tr>
@@ -880,14 +1014,13 @@
 
     <div class="modal fade bd-example-modal-xl" tabindex="-1" id="view-material-lists" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xlg">
             <div class="modal-content" *ngIf="sourceWorkFlow != undefined">
                 <div class="modal-header">
                     <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
                         name="">×</button>
                     <h4 class="modal-title">Material list of Workflow "{{ sourceWorkFlow.workOrderNumber}}" for
-                        "PN{{sourceWorkFlow.itemMaster.partNumber}}" and Scope
-                        "{{sourceWorkFlow.workScope.description}}"</h4>
+                        "PN{{sourceWorkFlow.itemMaster.partNumber}}"</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal wf-popup-form">
@@ -896,17 +1029,17 @@
                                 <div class="form-row">
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Part No: </label>PN{{sourceWorkFlow.itemMaster.partNumber}}
+                                            <label>Part No: </label><span class="text-danger">{{sourceWorkFlow.itemMaster.partNumber}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Workflow ID: </label>{{sourceWorkFlow.workOrderNumber}}
+                                            <label>Workflow ID: </label><span class="text-danger">{{sourceWorkFlow.workOrderNumber}}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>Scope: </label>{{sourceWorkFlow.workScope.description}}
+                                            <label>Scope: </label><span class="text-danger">{{sourceWorkFlow.workScope.description}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -922,13 +1055,13 @@
                                         <th>PN</th>
                                         <th>Description</th>
                                         <th>Cond</th>
-                                        <th>Mandatory / Supplemental</th>
-                                        <th>Item Classification</th>
+                                        <th>Request Type</th>
                                         <th>Qty</th>
+                                        <th>Item Classification</th>
                                         <th>UOM</th>
                                         <th>Unit Cost</th>
-                                        <th>Extended Cost</th>
-                                        <th>Price</th>
+                                        <th>Ext. Cost</th>
+                                        <!-- <th>Price</th> -->
                                         <th>Memo</th>
                                         <th>Deferred</th>
                                     </tr>
@@ -939,21 +1072,23 @@
                                             <td>
                                                 <h5 class="po-head-wfl">{{task.Name}}</h5>
                                             </td>
-                                            <td colspan="13"></td>
+                                            <td colspan="11"></td>
                                         </tr>
                                         <tr *ngFor="let material of task.materialList;let i = index">
                                             <td class="text-right">{{(i+1)}}</td>
                                             <td>{{material.partNumber}}</td>
                                             <td>{{material.partDescription}}</td>
                                             <td>{{material.conditionName}}</td>
-                                            <td>{{material.mandatoryOrSupplementalName}}</td>
-                                            <td>{{material.itemClassificationName}}</td>
+                                            <td>{{material.materialMandatoriesName}}</td>
                                             <td class="text-right">{{material.quantity}}</td>
-                                            <td>{{material.uomName}}</td>
+                                            <td>{{material.itemClassification}}</td>
+                                            <td>{{material.unitOfMeasure}}</td>
                                             <td class="text-right">{{material.unitCost}}</td>
                                             <td class="text-right">{{material.extendedCost}}</td>
-                                            <td class="text-right">{{material.price}}</td>
-                                            <td>{{material.memo}}</td>
+                                            <!-- <td class="text-right">{{material.price}}</td> -->
+                                            <td>
+                                                <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
+                                            </td>
                                             <td>
                                                 <input type="checkbox" disabled="disabled"
                                                     [checked]="material.isDeferred"
@@ -966,12 +1101,13 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td></td>
+                                            <!-- <td></td> -->
                                             <td class="text-right"><b>{{task.materialTotalQty}}</b></td>
                                             <td></td>
                                             <td></td>
+                                            <td></td>
                                             <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                            <td class="text-right"><b>{{task.materialTotalPrice}}</b></td>
+                                            <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
                                             <td></td>
                                             <td></td>
                                         </tr>
@@ -989,115 +1125,22 @@
         </div>
     </div>
 
-    <div class="modal fade bd-example-modal-xl" tabindex="-1" id="history" role="dialog"
+    <div class="modal fade" tabindex="-1" id="history" role="dialog"
         aria-labelledby="myLargeModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xlg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id=""
-                        name="">×</button>
-                    <h4 class="modal-title">History of Workflow ACC123</h4>
+                    <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">History of Workflow</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-horizontal wf-popup-form">
-                        <div class="form-row">
-                            <div class="col-md-12">
-                                <div class="form-row">
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Part No: </label>PN45854
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Workflow ID: </label>ACC123
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-group">
-                                            <label>Scope: </label>OVH
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="text-center">
+                        <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                        <h4 style="color: #ff5663;">No History Found </h4>
                     </div>
-                    <table class="table table-bordered table-fixed wfl-table-popup-cstm">
-                        <thead>
-                            <tr>
-                                <th>Memo</th>
-                                <th>Last Updated By</th>
-                                <th>Last Updated Time</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Updated Work Phone</td>
-                                <td>Admin</td>
-                                <td>02-03-2018 14:15:45</td>
-                                <td>
-
-                                    <span>
-                                        <a data-toggle="tooltip" matTooltipPosition="above" matTooltip="View"
-                                            tooltipPosition="bottom" title="" class="btn btn-info boxed-float-btn nobg"
-                                            data-toggle="modal" data-target="#view" data-original-title="View">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </span>
-
-
-
-                                    <span>
-                                        <a data-toggle="tooltip" class="btn btn-info boxed-float-btn nobg"
-                                            data-original-title="Toggle">
-                                            <i class="fa fa-{{toggle_detailhistory ? 'minus' : 'plus'}}"
-                                                (click)="toggle_detailhistory=!toggle_detailhistory"
-                                                style="color: #259e08"></i>
-                                        </a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr class="detailed-history" style="display: table-row;" *ngIf="toggle_detailhistory">
-                                <td colspan="4">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Field Name</th>
-                                                <th>New Value</th>
-                                                <th>Old Value</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Workflow Description</td>
-                                                <td>Gear Repairing</td>
-                                                <td>Gears</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Version</td>
-                                                <td>2</td>
-                                                <td>1</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Customer Name</td>
-                                                <td>Shabbir</td>
-                                                <td>Satish</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Workflow Expiration Date</td>
-                                                <td>02/20/2018</td>
-                                                <td>02/20/2019</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal" id="" name=""
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"
                         (click)="dismissModel()">Close</button>
                 </div>
             </div>
@@ -1184,7 +1227,9 @@
                                     <label>Customer Name: </label>{{sourceWorkFlow.customerName}}
                                 </div>
                                 <div class="form-group">
-                                    <label>Memo: </label>{{sourceWorkFlow.memo}}
+                                    <label>Memo: </label>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="sourceWorkFlow.memo"></span>
+                                 
                                 </div>
                             </div>
                         </div>
@@ -1312,7 +1357,7 @@
                                     <label style="width: 130px;">Total Workflow Cost: </label> {{Total}}
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label style="width: 130px;">% of BER Threshold: </label> {{PercentBERThreshold}}
                                 </div>
@@ -1330,11 +1375,12 @@
         <button type="button" class="btn btn-primary" (click)="onCloseAll()">Close All</button>
         <hr />
     </div>
-
-    <p-accordion [multiple]="true" class="p-accordion-cstm p-acc-thright">
-        <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected" header="{{task.Name}}"
-            (click)="onAccordTabClick1(task)">
-            <div *ngIf="task.publication.length > 0">
+    <!-- (click)="onAccordTabClick1(task)" [multiple]="true"-->
+    <p-accordion  class="p-accordion-cstm p-acc-thright">
+        <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected">
+          <p-header (click)="onAccordTabClick1(task)">{{task.Name}}</p-header>
+            <div *ngIf="task.publication && task.publication.length > 0">
+                
                 <h5 class="po-head">Publications</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1379,7 +1425,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.measurements.length > 0">
+            <div *ngIf="task.measurements && task.measurements.length > 0">
                 <h5 class="po-head m-t-20">Measurements</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1399,20 +1445,22 @@
                         <tbody>
                             <tr *ngFor="let measurement of task.measurements;let i = index">
                                 <td class="text-right">{{(i+1)}}</td>
-                                <td>{{measurement.PartName}}</td>
+                                <td>{{measurement.partNumber}}</td>
                                 <td class="text-right">{{measurement.sequence}}</td>
                                 <td class="text-right">{{measurement.stage}}</td>
                                 <td class="text-right">{{measurement.min}}</td>
                                 <td class="text-right">{{measurement.max}}</td>
                                 <td class="text-right">{{measurement.expected}}</td>
                                 <td>{{measurement.diagramURL}}</td>
-                                <td>{{measurement.memo}}</td>
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="measurement.memo"></span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.exclusions.length > 0">
+            <div *ngIf="task.exclusions && task.exclusions.length > 0">
                 <h5 class="po-head m-t-20">Exclusions</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1420,10 +1468,13 @@
                             <tr>
                                 <th>S.No</th>
                                 <th>EPN</th>
-                                <th>EPN Description</th>
+                                <th> Description</th>
+                                <th> Condition</th>
+                                <th>Item Classification</th>
+                                <th>Stock Type</th>
                                 <th>Qty</th>
                                 <th>Unit Cost</th>
-                                <th>Extended</th>
+                                <th>Extended Cost</th>
                                 <th>Estimated % Occurance</th>
                                 <th>Memo</th>
                             </tr>
@@ -1433,11 +1484,16 @@
                                 <td class="text-right">{{(i+1)}}</td>
                                 <td>{{exclusion.partNumber}}</td>
                                 <td>{{exclusion.partDescription}}</td>
+                                <td>{{exclusion.condition}}</td>
+                                <td>{{exclusion.itemClassification}}</td>
+                                <td>{{exclusion.stockType}}</td>
                                 <td class="text-right">{{exclusion.quantity}}</td>
                                 <td class="text-right">{{exclusion.unitCost}}</td>
                                 <td class="text-right">{{exclusion.extendedCost}}</td>
                                 <td class="text-right">{{exclusion.estimtPercentOccurrance}}%</td>
-                                <td>{{exclusion.memo}}</td>
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="exclusion.memo"></span>
+                                </td>
                             </tr>
                             <tr>
                                 <td><b>Total</b></td>
@@ -1453,7 +1509,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.directions.length > 0">
+            <div *ngIf="task.directions && task.directions.length > 0">
                 <h5 class="po-head m-t-20">Directions</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1472,13 +1528,15 @@
                                 <td>{{direction.action}}</td>
                                 <td>{{direction.description}}</td>
                                 <td class="text-right">{{direction.sequence}}</td>
-                                <td>{{direction.memo}}</td>
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="direction.memo"></span> 
+                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.expertise.length > 0">
+            <div *ngIf="task.expertise && task.expertise.length > 0">
                 <h5 class="po-head m-t-20">Expertise</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1519,8 +1577,8 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.equipments.length > 0">
-                <h5 class="po-head m-t-20">Equipment</h5>
+            <div *ngIf="task.equipments && task.equipments.length > 0">
+                <h5 class="po-head m-t-20">Tools</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
                         <thead>
@@ -1544,7 +1602,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.charges.length > 0">
+            <div *ngIf="task.charges && task.charges.length > 0">
                 <h5 class="po-head m-t-20">Charges</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1556,8 +1614,8 @@
                                 <th>Qty</th>
                                 <th>Unit Cost</th>
                                 <th>Extended Cost</th>
-                                <th>Unit Price</th>
-                                <th>Extended Price</th>
+                                <!-- <th>Unit Price</th> -->
+                                <!-- <th>Extended Price</th> -->
                                 <th>Vendor Name</th>
                             </tr>
                         </thead>
@@ -1569,8 +1627,8 @@
                                 <td class="text-right">{{charge.quantity}}</td>
                                 <td class="text-right">{{charge.unitCost}}</td>
                                 <td class="text-right">{{charge.extendedCost}}</td>
-                                <td class="text-right">{{charge.unitPrice}}</td>
-                                <td class="text-right">{{charge.extendedPrice}}</td>
+                                <!-- <td class="text-right">{{charge.unitPrice}}</td> -->
+                                <!-- <td class="text-right">{{charge.extendedPrice}}</td> -->
                                 <td>{{charge.vendorName}}</td>
                             </tr>
                             <tr>
@@ -1580,15 +1638,15 @@
                                 <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
                                 <td></td>
                                 <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
-                                <td></td>
-                                <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td>
+                                <!-- <td></td> -->
+                                <!-- <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td> -->
                                 <td></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.materialList.length > 0">
+            <div *ngIf="task.materialList && task.materialList.length > 0">
                 <h5 class="po-head m-t-20">Material List</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1604,8 +1662,8 @@
                                 <th>UOM</th>
                                 <th>Unit Cost</th>
                                 <th>Extended Cost</th>
-                                <th>Unit Price</th>
-                                <th>Extended Price</th>
+                                <!-- <th>Unit Price</th> -->
+                                <!-- <th>Extended Price</th> -->
                                 <th>Memo</th>
                                 <th>Deferred</th>
                             </tr>
@@ -1622,11 +1680,18 @@
                                 <td>{{material.uomName}}</td>
                                 <td class="text-right">{{material.unitCost}}</td>
                                 <td class="text-right">{{material.extendedCost}}</td>
-                                <td class="text-right">{{material.price}}</td>
-                                <td class="text-right">{{material.extendedPrice}}</td>
-                                <td>{{material.memo}}</td>
-                                <td>{{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }}
+                                <!-- <td class="text-right">{{material.price}}</td> -->
+                                <!-- <td class="text-right">{{material.extendedPrice}}</td> -->
+                                <td>
+                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span> 
                                 </td>
+                                <td>
+                                    <!-- {{material.isDeferred != null && material.isDeferred != ''  ? material.isDeferred : false }} -->
+                                    <input type="checkbox" disabled="disabled"
+                                    [checked]="material.isDeferred"
+                                    class="form-control names ui-autocomplete-input">
+                                </td>
+                                
                             </tr>
                             <tr>
                                 <td><b>Total</b></td>
@@ -1639,8 +1704,8 @@
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"><b>{{task.materialTotalExtendedCost}}</b></td>
-                                <td class="text-right"><b>{{task.materialTotalPrice}}</b></td>
-                                <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td>
+                                <!-- <td class="text-right"><b>{{task.materialTotalPrice}}</b></td> -->
+                                <!-- <td class="text-right"><b>{{task.materialTotalExtendedPrice}}</b></td> -->
                                 <td></td>
                                 <td></td>
                             </tr>

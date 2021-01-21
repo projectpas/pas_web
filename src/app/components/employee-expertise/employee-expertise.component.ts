@@ -48,7 +48,7 @@ export class EmployeeExpertiseComponent implements OnInit {
     disableSaveEmpExpertise: boolean = false;
     EmpExpertiseList: any;
     disableSaveForEdit: boolean = false;
-
+    AuditDetails: any;
     new = {
         description: "",
         masterCompanyId: 1,

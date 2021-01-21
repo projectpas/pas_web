@@ -1,29 +1,30 @@
 <div class="right_col" role="main">
     <div class="x_content">
         <div class="card new-card">
-            <div class="card-header bg-primary new-card-header">
+            <div class="card-header header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="new-card-heading">{{id ? 'Edit' : 'Create'}} Sales Order Quote</h4>
-                    </div>
-                    <div class="col-md-8">
-                        <button class="btn-sm new-btn-primary pull-left" (click)="expandHeader()">
+                        <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order Quote
+                   
+                    
+                        <button class="btn-sm header-button header-button-alignment" (click)="expandHeader()">
                             {{toggle_po_header ? 'Collapse' : 'Expand'}}
                         </button>
+                    </h4>
                     </div>
+                    
                     <div>
-                        <button type="button" class="btn-sm new-btn-primary pull-right" matTooltipPosition="above"
+                        <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
                             matTooltip=" SO Quote List" [routerLink]="['/salesmodule/salespages/sales-quote-list']">
                             SO Quote List
                         </button>
                     </div>
                 </div>
-
             </div>
-            <div class="card" style="padding: 5px; margin: 5px;" *ngIf="!toggle_po_header">
-                <div class="form-row">
-                    <div class="form-row">
-                        <div class="col-md-3" style="padding-left:15px;">
+            <div class="card-body" *ngIf="!toggle_po_header">
+               
+                    <div class="form-row body-alignment">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Customer Name
                                     <span class="clr-red">*</span>
@@ -42,14 +43,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Customer Code</label>
-                                <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
-                                    class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
+                                <input type="text"
+                                 [(ngModel)]="salesQuote.customerCode"
+                                  name="customerCode"
+                                    class="form-control" [disabled]="true"
+                                     id="customerCode" #customerCode="ngModel" />
                             </div>
                         </div>
-                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>SO Quote Num</label>
                                 <input type="text" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
@@ -57,7 +61,7 @@
                                     id="salesOrderQuoteNumber" #salesOrderQuoteNumber="ngModel" />
                             </div>
                         </div>
-                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                        <div class="col-md-3">
                             <div class="form-group" *ngIf="isEdit">
                                 <label>Version Num</label>
                                 <input type="text" [(ngModel)]="salesQuote.versionNumber" name="versionNumber"
@@ -66,7 +70,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                
             </div>
             <div class="form-controls">
                 <form #newSalesQuoteForm="ngForm" class="form-horizontal">
@@ -449,8 +453,7 @@
                             <div class="col-md-4 main_ar">
                                 <div class="form-group memo-popup-cstm">
                                     <label>
-                                        Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description"
-                                            matTooltipPosition="above" matTooltip="Notes"
+                                        Notes<i class="fa fa-pencil" data-toggle="modal" data-target="#add-description" matTooltipPosition="above" matTooltip="Notes"
                                             (click)="onAddDescription('notes')"></i>
                                     </label>
                                     <span>
@@ -502,7 +505,7 @@
                                 class="btn btn-primary">
                                 Create SO
                             </button>
-                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()">
+                            <button type="button" class="btn btn-primary" (click)="inititateEmailQuote()" [disabled]="(enforceApproval ? (verifySalesOrderQuoteObj.canCovertToSalesOrder === false ? true : false) : false)">
                                 Email Quote
                             </button>
                             <button type="button" class="btn btn-primary" (click)="initiateQuoteCopying()">
@@ -641,17 +644,15 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="add-description" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg" style="max-width: 400px !important;">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="close" aria-label="Close" (click)="closeModal()">&times;</button>
                 <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
             </div>
-
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th style="color: #fff;">{{tempMemoLabel}}</th>
                     </thead>
@@ -664,15 +665,15 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div style="float:right">
-
-
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-top: 10px;"
+                </table> -->
+                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
+                </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" 
                         (click)="onSaveDescription()">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger" style="margin-top: 10px;" data-dismiss="modal">
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal" (click)="closeModal()">
                         Close
                     </button>
 
@@ -681,7 +682,7 @@
             </div>
         </div>
     </div>
-</div>
+ </div>
 <ng-template #errorMessagePop let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeErrorMessage()">&times;</button>

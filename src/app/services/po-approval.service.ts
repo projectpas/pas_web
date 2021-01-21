@@ -1,39 +1,38 @@
 
-import { Injectable, Injector } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { EndpointFactory } from './endpoint-factory.service';
-import { ConfigurationService } from './configuration.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class POApprovalService extends EndpointFactory {
-  private readonly _getPoDataUrl: string = "/api/approvalRule/approvalrulelist";
-  private readonly _approvalrulestatusUrl: string = "/api/approvalRule/approvalrulestatus";
+  private readonly _getPoDataUrl: string = environment.baseUrl + "/api/approvalRule/approvalrulelist";
+  private readonly _approvalrulestatusUrl: string = environment.baseUrl + "/api/approvalRule/approvalrulestatus";
   private readonly _approvalrulelistbyTaskURL: string =
-    "/api/approvalRule/approvalrulelistbyTask";
+  environment.baseUrl + "/api/approvalRule/approvalrulelistbyTask";
   private readonly _createOrUpdatePOApproval: string =
-    "/api/approvalRule/createapprovalrule";
+  environment.baseUrl + "/api/approvalRule/createapprovalrule";
   private readonly _createapprovalrulecommon: string =
-    "/api/approvalRule/createapprovalrulecommon";
+  environment.baseUrl + "/api/approvalRule/createapprovalrulecommon";
   private readonly _approvalrulebyidwithEmployee: string =
-    "/api/approvalRule/approvalrulebyidwithEmployee?approvalRuleId=";
+  environment.baseUrl + "/api/approvalRule/approvalrulebyidwithEmployee?approvalRuleId=";
   private readonly _getApprovalById: string =
-    "/api/approvalRule/approvalrulebyid?approvalRuleId=";
+  environment.baseUrl + "/api/approvalRule/approvalrulebyid?approvalRuleId=";
     private readonly _getApprovalRuleHistorycommon?: string =
-    "/api/approvalRule/getApprovalRuleHistorycommon?approvalRuleId=";  
+    environment.baseUrl + "/api/approvalRule/getApprovalRuleHistorycommon?approvalRuleId=";  
   private readonly _deleteApprovalById: string =
-    "/api/approvalRule/deleteapprovalrule";
+  environment.baseUrl + "/api/approvalRule/deleteapprovalrule";
     private readonly _restoreApprovalById: string =
-    "/api/approvalRule/restoreApprovalRule";
+    environment.baseUrl + "/api/approvalRule/restoreApprovalRule";
   private readonly excelUpload: string =
-    "/api/Provision/uploadProvisionCustomdata";
+  environment.baseUrl + "/api/Provision/uploadProvisionCustomdata";
 
   getAllPOApprovalData<T>(): Observable<T> {
     return this.http.get<T>(this._getPoDataUrl, this.getRequestHeaders());
   }
 
-  getAllApprovalDataByTaskId<T>(taskID,isDeleted,currentStatus): Observable<T> {
+  getAllApprovalDataByTaskId<T>(taskID,isDeleted,currentStatus): Observable<T> {   
     return this.http
       .get<T>(
         `${this._approvalrulelistbyTaskURL}?taskID=${taskID}&currentStatus=${currentStatus}&isDeleted=${isDeleted}`,

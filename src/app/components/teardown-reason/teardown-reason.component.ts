@@ -51,7 +51,7 @@ export class TeardownReasonComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForEdit: boolean = false;
     descriptionList: any;
@@ -69,6 +69,7 @@ export class TeardownReasonComponent implements OnInit {
     viewRowData: any;
     selectedRowforDelete: any;  
     teadownTypesList: any;
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

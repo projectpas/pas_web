@@ -639,7 +639,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let audit of auditHistory">
+                            <tr *ngFor="let audit of auditHistory; let i = index;">
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'assetIntangibleName', audit.assetIntangibleNames)  ? 'black' : 'red'  }">{{audit.assetIntangibleName}}</td>
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'depreciationMethodName', audit.depreciationMethodName)  ? 'black' : 'red'  }">{{audit.depreciationMethodName}}</td>
                                 <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'intangibleLifeYears', audit.intangibleLifeYears)  ? 'black' : 'red'  }">{{audit.intangibleLifeYears}}</td>

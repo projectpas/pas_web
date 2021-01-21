@@ -5,7 +5,7 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { CustomerClassificationService } from '../../services/CustomerClassification.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { CustomerClassification } from '../../models/customer-classification.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -34,7 +34,7 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
     memo: string = "";
     isActive: boolean = true;
     createdBy: any = "";
-    tempMemo:any;
+    tempMemo: any;
     updatedBy: any = "";
     createdDate: any = "";
     updatedDate: any = "";
@@ -42,16 +42,16 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
     Active: string = "Active";
     /** CustomerClassification ctor */
     selectedActionName: any;
-    disableSave: boolean=false;
+    disableSave: boolean = false;
     descritpion: string = "";
     selectedRecordForEditDesc: string = "";
     selectedRecordForEdit: any;
     disableSaveForEdit: boolean = false;
-    customerClassificationId: number =0;
+    customerClassificationId: number = 0;
     actionamecolle: any[] = [];
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     displayedColumns = ['customerClassificationId', 'description', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     dataSource: MatTableDataSource<CustomerClassification>;
@@ -82,14 +82,14 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
 
     formData = new FormData()
     /** Currency ctor */
-    constructor(private breadCrumb: SingleScreenBreadcrumbService,       
-         private authService: AuthService, private _fb: FormBuilder,
-          private alertService: AlertService,
-           private masterComapnyService: MasterComapnyService, 
-           private modalService: NgbModal, 
-           public CustomerClassificationService: CustomerClassificationService,
-            private dialog: MatDialog, private commonService: CommonService,
-             private configurations: ConfigurationService ) {
+    constructor(private breadCrumb: SingleScreenBreadcrumbService,
+        private authService: AuthService, private _fb: FormBuilder,
+        private alertService: AlertService,
+        private masterComapnyService: MasterComapnyService,
+        private modalService: NgbModal,
+        public CustomerClassificationService: CustomerClassificationService,
+        private dialog: MatDialog, private commonService: CommonService,
+        private configurations: ConfigurationService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
 
@@ -117,7 +117,7 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
 
     private loadData() {
         this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;     
+        this.loadingIndicator = true;
         this.CustomerClassificationService.getCustomerClassificationList().subscribe(
             results => {
                 this.onDataLoadSuccessful(results[0]);
@@ -133,15 +133,15 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
     public applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue;
     }
-    
+
 
     private refresh() {
         // Causes the filter to refresh there by updating with recently added data.
         this.applyFilter(this.dataSource.filter);
     }
     private onDataLoadSuccessful(getCustomerClassificationList: CustomerClassification[]) {
-        this.CustomerClassificationService.getCustomerClassificationList().subscribe(res=>{
-            this.originalTableData=res[0];
+        this.CustomerClassificationService.getCustomerClassificationList().subscribe(res => {
+            this.originalTableData = res[0];
             this.getListByStatus(this.status ? this.status : this.currentstatus);
             this.alertService.stopLoadingMessage();
         });
@@ -158,15 +158,15 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
         this.allComapnies = allComapnies;
     }
     dismissMemoModel() {
-		$("#add-memo").modal("hide");
-	}
+        $("#add-memo").modal("hide");
+    }
     onAddMemo() {
-		this.tempMemo = this.memo;
-	}
+        this.tempMemo = this.memo;
+    }
     onSaveMemo() {
         this.memo = this.tempMemo;
         $("#add-memo").modal("hide");
-	}
+    }
     openAddClassficationDialog() {
         this.isEditMode = false;
         this.isDeleteMode = false;
@@ -262,12 +262,12 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
     openHelpText(content) {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
-   
-   
-    
+
+
+
     filterclassifications(event) {
         this.localClassificationsCollection = [];
-              this.localClassificationsCollection = [...this.allcustomerclassificationInfo.filter(x => { return x.description.toLowerCase().includes(event.query.toLowerCase()); })];
+        this.localClassificationsCollection = [...this.allcustomerclassificationInfo.filter(x => { return x.description.toLowerCase().includes(event.query.toLowerCase()); })];
     }
     private onHistoryLoadSuccessful(auditHistory: AuditHistory[], content) {
 
@@ -305,21 +305,21 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
         window.location.assign(url);
     }
     handleChange(rowData) {
-         this.sourceAction = rowData;
-          this.sourceAction.updatedBy = this.userName;
-             this.CustomerClassificationService.updatecustomerclass(this.sourceAction).subscribe(
-                response => this.saveCompleted(this.sourceAction),
-                error => this.saveFailedHelper(error));
+        this.sourceAction = rowData;
+        this.sourceAction.updatedBy = this.userName;
+        this.CustomerClassificationService.updatecustomerclass(this.sourceAction).subscribe(
+            response => this.saveCompleted(this.sourceAction),
+            error => this.saveFailedHelper(error));
     }
 
     editItemAndCloseModel() {
-      
+
         this.isSaving = true;
         const data = {
             ...this.sourceAction,
             createdBy: this.userName,
             updatedBy: this.userName,
-             description: editValueAssignByCondition('description', this.sourceAction),
+            description: editValueAssignByCondition('description', this.sourceAction),
             memo: this.memo,
             masterCompanyId: this.currentUserMasterCompanyId,
             isActive: this.isActive
@@ -391,9 +391,9 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     private saveFailedHelper(error: any) {
@@ -451,87 +451,88 @@ export class CustomerClassificationComponent implements OnInit, AfterViewInit {
 
         this.disableSave = !exists;
     }
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.allcustomerclassificationInfo=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.allcustomerclassificationInfo = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.allcustomerclassificationInfo= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.allcustomerclassificationInfo= newarry;
-			}
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.allcustomerclassificationInfo = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.allcustomerclassificationInfo = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.allcustomerclassificationInfo = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.allcustomerclassificationInfo = newarry;
+            }
         }
-        this.totalRecords = this.allcustomerclassificationInfo.length ;
+        this.totalRecords = this.allcustomerclassificationInfo.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('CustomerClassification',
-            'CustomerClassificationId',this.restorerecord.customerClassificationId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('CustomerClassification',
+            'CustomerClassificationId', this.restorerecord.customerClassificationId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 this.loadData();
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
-   
+    }
+
+    changeStatus(rowData) {}
 }

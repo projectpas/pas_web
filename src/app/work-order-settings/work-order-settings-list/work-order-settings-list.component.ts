@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 
 import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { ItemMasterService } from '../../services/itemMaster.service';
@@ -97,7 +97,7 @@ export class WorkOrderSettingsListComponent {
     publications: any[];
     allVendors: any[];
     responseDataForWorkFlow: Object;
-
+    noDatavailable: any;
     constructor(private workOrderService: WorkOrderService,
         private router: ActivatedRoute,
         private route: Router,

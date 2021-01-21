@@ -9,7 +9,8 @@ import { Vendor } from '../../../models/vendor.model';
 import { DepriciationMethod } from '../../../models/depriciation-method.model';
 import { CommonService } from '../../../services/common.service';
 import { ItemMasterCapabilitiesModel } from '../../../models/itemMasterCapabilities.model';
-import * as $ from 'jquery'
+// declare var $ : any; 
+declare var $ : any;
 import { listSearchFilterObjectCreation, formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
 import * as moment from 'moment';
@@ -183,7 +184,7 @@ export class AssetInventoryListingComponent implements OnInit {
     capesSelectedColumns = this.capesCols;
     isIntangible: any;
 
-    constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,private assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
+    constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,public assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
         // this.assetService.isEditMode = false;
         // this.assetService.listCollection = null;
         // this.currentAsset.isTangible = 1;
@@ -473,14 +474,14 @@ get userName(): string {
         }
     }
 
-    viewSelectedRowdbl(content,rowData) {
-        this.openView(content,rowData);
+    viewSelectedRowdbl(rowData) {
+        this.openView(rowData);
         $('#invView').modal('show');
     }
 
     // isSpinnerVisibleView:any=false;
     assetInventoryId:any;
-    openView(content,row) {
+    openView(row) {
         
         this.isSpinnerVisibleHistory = true;
         if(row && row.assetInventoryId !=undefined){

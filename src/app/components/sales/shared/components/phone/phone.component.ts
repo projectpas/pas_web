@@ -4,7 +4,7 @@ import { CommunicationService } from '../../../../../shared/services/communicati
 import { EmployeeService } from '../../../../../services/employee.service';
 import { CommonService } from '../../../../../services/common.service'
 
-import * as $ from 'jquery';
+declare var $ : any;
 import { getObjectById } from '../../../../../generic/autocomplete';
 import { DBkeys } from '../../../../../services/db-Keys';
 
@@ -47,6 +47,8 @@ export class PhoneComponent implements OnInit, OnChanges {
     addList: any = [];
     cusContactList: any;
     customerContact: any;
+    firstName: any;
+    
     constructor(private activeModal: NgbActiveModal, private communicationService: CommunicationService, private employeeService: EmployeeService, private commonService: CommonService) {}
     
     ngOnInit(): void {

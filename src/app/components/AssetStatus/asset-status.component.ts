@@ -38,7 +38,7 @@ export class AssetStatusComponent implements OnInit {
     formData = new FormData();
     public auditHisory: AuditHistory[] = [];
     private isDeleteMode: boolean = false;
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     modal: NgbModalRef;
     public sourceAction: AssetStatus;
     display: boolean = false;
@@ -575,5 +575,6 @@ export class AssetStatusComponent implements OnInit {
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
         }
- 
+        
+        changeStatus(rowData) {}
 }

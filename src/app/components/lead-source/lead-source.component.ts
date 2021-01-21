@@ -52,7 +52,7 @@ export class LeadSourceComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForDescription: boolean = false;
     disableSaveForDescriptionMsg: boolean=false;
@@ -71,6 +71,8 @@ export class LeadSourceComponent implements OnInit {
     selectedRecordForEdit: any;
     viewRowData: any;
     selectedRowforDelete: any;  
+    AuditDetails: any;
+    rowIndex: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

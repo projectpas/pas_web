@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
 import { PageHeaderComponent } from '../../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { WorkOrderService } from '../../../services/work-order/work-order.service';
 import { Table } from 'primeng/table';
 import { AuthService } from '../../../services/auth.service';
@@ -142,6 +142,9 @@ export class WorkOrderListComponent implements OnInit {
     showTabsGrid: boolean;
     showGridMenu: boolean;
     subWorkOrderId: any = 0;
+    quoteExclusionList: any;
+    freight: any;
+    isContractAvl: any;
     constructor(private workOrderService: WorkOrderService,
         private route: Router,
         private authService: AuthService,
@@ -382,7 +385,7 @@ export class WorkOrderListComponent implements OnInit {
         })
 
     }
-    fieldSearch(value, field) {
+    fieldSearch(field) {
         this.isGlobalFilter = false;
         if (field === 'workOrderStatus') {
             this.currentStatus = 'open';
@@ -1122,4 +1125,6 @@ export class WorkOrderListComponent implements OnInit {
             );
         }
     }
+
+    saveWorkOrderBilling($event) {}
 } 

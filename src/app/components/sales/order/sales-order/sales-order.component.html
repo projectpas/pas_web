@@ -1,13 +1,13 @@
 <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 
 <div class="card new-card">
-  <div class="card-header bg-primary new-card-header">
+  <div class="card-header header">
     <div class="row">
       <div class="col">
-        <h4 class="new-card-heading">Search Customer</h4>
+        <h4 class="header-name">Search Customer</h4>
       </div>
       <div>
-        <button type="button" class="btn-sm new-btn-primary pull-right" matTooltipPosition="above" matTooltip="SO List"
+        <button type="button" class="btn-sm header-button" matTooltipPosition="above" matTooltip="SO List"
           [routerLink]="['/salesmodule/salespages/sales-order-list']">
           SO List
         </button>
@@ -97,10 +97,9 @@
                   <i class="fa fa-eye"></i>
                 </a>
               </span>
-              <button class="btn-add" mat-icon-button (click)="createOrder(rowData)" matTooltip="Create Sales Order"
-                matTooltipPosition="above" style="font-weight: bold;"
+              <button class="btn-add" mat-icon-button (click)="createOrder(rowData)"
                 [disabled]="!rowData.isActive || rowData.isDeleted">
-                <i class="fa fa-plus"> </i>
+                <i class="fa fa-plus" [matTooltip]="!(!rowData.isActive || rowData.isDeleted) ? 'Create Sales Order' : (!rowData.isActive ? 'Inactive' : 'Deletd')" matTooltipPosition="above"> </i>
               </button>
             </div>
           </td>

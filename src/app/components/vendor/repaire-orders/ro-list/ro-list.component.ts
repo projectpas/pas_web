@@ -11,7 +11,7 @@ import { RepairOrderService } from '../../../../services/repair-order.service';
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../../services/common.service';
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
-import * as $ from 'jquery';
+declare var $ : any;
 import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { MenuItem } from 'primeng/api';
 import {AllViewComponent  } from '../../../../shared/components/all-view/all-view.component';
@@ -32,12 +32,17 @@ export class RoListComponent implements OnInit {
     breadcrumbs: MenuItem[];
     home: any;    
     dateObject: any = {};
+    strVendorName: string;
+    strVendorCode: string;
+    orderId: number ;
+    orderType: string ='Repair Order';
+    PovendorId:number;
     headers = [
 		{ field: 'repairOrderNumber', header: 'RO Num' },
         { field: 'openDate', header: 'Open Date' },
-        { field: 'closedDate', header: 'Closed/Can Date' },
+       // { field: 'closedDate', header: 'Closed/Can Date' },
         { field: 'vendorName', header: 'Vendor Name' },
-        { field: 'vendorCode', header: 'Vendor Code' },
+        //{ field: 'vendorCode', header: 'Vendor Code' },
         { field: 'status', header: 'Status' },
         { field: 'requestedBy', header: 'Requested By' },
         { field: 'approvedBy', header: 'Approved By' },
@@ -71,6 +76,8 @@ export class RoListComponent implements OnInit {
     vendorCodeInput: any;
     statusIdInput: any;
     requestedByInput: any;
+    createdByInput: any;    
+    updatedByInput: any;
     approvedByInput: any;
     @Input() isEnableROList: boolean;
     @Input() vendorId: number;
@@ -88,13 +95,7 @@ export class RoListComponent implements OnInit {
     ApprovedstatusId: number = 0;
     roApprovaltaskId: number = 0;
     selectedOnly: boolean = false;
-    targetData: any;
-    colsaircraftLD: any[] = [
-        { field: "aircraft", header: "Aircraft" },
-        { field: "model", header: "Model" },
-        { field: "dashNumber", header: "Dash Numbers" },
-        { field: "memo", header: "Memo" }
-    ];
+    targetData: any;    
     internalApproversList: any = [];
     roTotalCost: number;
     approvalProcessHeader = [        
@@ -150,7 +151,6 @@ export class RoListComponent implements OnInit {
         private vendorCapesService: VendorCapabilitiesService,
         private commonService: CommonService,
         private modalService: NgbModal,
-
         private datePipe: DatePipe) {
         this.vendorService.ShowPtab = false;     
 
@@ -158,17 +158,7 @@ export class RoListComponent implements OnInit {
 
     ngOnInit() {
         this.loadROStatus();
-        this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-ro-list';
-        this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);        
-        this.vendorCapesCols = [			
-			{ field: 'ranking', header: 'Ranking' },
-			{ field: 'partNumber', header: 'PN' },
-			{ field: 'partDescription', header: 'PN Description' },
-			{ field: 'capabilityType', header: 'Capability Type' },
-			{ field: 'cost', header: 'Cost' },
-			{ field: 'tat', header: 'TAT' },
-			{ field: 'name', header: 'PN Mfg' },
-        ];
+        this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-ro-list';        
         if(this.isReceivingRolist == false){
             this.breadcrumbs = [
                 { label: 'Repair Order' },
@@ -192,9 +182,10 @@ export class RoListComponent implements OnInit {
 			this.roStatusList = this.roStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
         },err => {const errorLog = err;
             this.isSpinnerVisible = false;
-			this.errorMessageHandler(errorLog);});
+        });
 	}
     getROListByStatus(status) {
+        
         this.currentStatus = status;
         const pageIndex = 0;
         this.pageIndex = pageIndex;
@@ -205,12 +196,36 @@ export class RoListComponent implements OnInit {
         this.getList(this.lazyLoadEventDataInput);
     }  
 
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
+	get employeeId() {
+	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+	}
+
     getList(data) {
+        this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
-        data.filters.isDeleted = isdelete;      
+        data.filters.isDeleted = isdelete;    
+        data.filters.employeeId = this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;  
         this.repairOrderService.getROList(data).subscribe(res => {
-            const vList = res[0]['results'];
+               const vList  = res[0]['results'].map(x => {
+                return {
+                    ...x,
+                //     openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
+                //     closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
+                //     createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                       openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',                     
+                       createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                       updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                }
+            });  
             this.data = vList;
+           
             if (this.data.length > 0) {
                 this.totalRecords = res[0]['totalRecordsCount'];
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -220,8 +235,7 @@ export class RoListComponent implements OnInit {
                 this.totalPages=0;
             } 
             this.isSpinnerVisible = false;
-        },err => {const errorLog = err;           
-			this.errorMessageHandler(errorLog);});
+        },err => {this.isSpinnerVisible = false;});
     }
 
 
@@ -231,36 +245,11 @@ export class RoListComponent implements OnInit {
                 if (x.label.toUpperCase() == "APPROVED") {
                     this.ApprovedstatusId = x.value;
 				}
-            },err => {              
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
             });
 		});
 	}
 
-    getApprovalProcessListById(roId) {
-		this.isSpinnerVisible = true;		
-		this.repairOrderService.getROApprovalListById(roId).subscribe(res => {
-			const arrayLen = res.length;
-			let count = 0;
-			this.approvalProcessList = res.map(x => {
-				if(x.actionId == this.ApprovedstatusId) {
-					count++;
-				}				
-				return {
-					...x,
-					sentDate: x.sentDate ? new Date(x.sentDate) : null, 
-					approvedDate: x.approvedDate ? new Date(x.approvedDate) : null,
-					unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
-					extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
-				}
-			});
-			this.isSpinnerVisible = false;
-		}, err => {           
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
-		})
-	}
+   
     
     errorMessageHandler(log) {
         this.isSpinnerVisible = false;
@@ -270,71 +259,7 @@ export class RoListComponent implements OnInit {
 			MessageSeverity.error
 		);
 	}
-
-    // getManagementStructureCodes(id) {
-    //     this.commonService.getManagementStructureCodes(id).subscribe(res => {
-	// 		if (res.Level1) {
-	// 			this.headerManagementStructure.level1 = res.Level1;
-    //         } else {
-    //             this.headerManagementStructure.level1 = '-';
-    //         }
-    //         if (res.Level2) {
-	// 			this.headerManagementStructure.level2 = res.Level2;
-    //         } else {
-    //             this.headerManagementStructure.level2 = '-';
-    //         }
-    //         if (res.Level3) {
-	// 			this.headerManagementStructure.level3 = res.Level3;
-    //         } else {
-    //             this.headerManagementStructure.level3 = '-';
-    //         }
-    //         if (res.Level4) {
-	// 			this.headerManagementStructure.level4 = res.Level4;
-	// 		} else {
-    //             this.headerManagementStructure.level4 = '-';
-    //         }
-	// 	},err => {			
-	// 		const errorLog = err;
-	// 		this.errorMessageHandler(errorLog);})
-    // }
-    
-    getManagementStructureCodesParent(partList) {
-        this.commonService.getManagementStructureCodes(partList.managementStructureId).subscribe(res => {
-			if (res.Level1) {
-				partList.level1 = res.Level1;
-            }
-            if (res.Level2) {
-				partList.level2 = res.Level2;
-            }
-            if (res.Level3) {
-				partList.level3 = res.Level3;
-            }
-            if (res.Level4) {
-				partList.level4 = res.Level4;
-			}
-		},err => {const errorLog = err;           
-			this.errorMessageHandler(errorLog);});
-    }
-
-    getManagementStructureCodesChild(partChild) {
-        this.commonService.getManagementStructureCodes(partChild.managementStructureId).subscribe(res => {
-			if (res.Level1) {
-				partChild.level1 = res.Level1;
-            }
-            if (res.Level2) {
-				partChild.level2 = res.Level2;
-            }
-            if (res.Level3) {
-				partChild.level3 = res.Level3;
-            }
-            if (res.Level4) {
-				partChild.level4 = res.Level4;
-			}
-		}, err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);})
-    }
-
+   
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
@@ -404,7 +329,13 @@ export class RoListComponent implements OnInit {
         }
         if(field == "updatedDate") {
             this.updatedDateInput = value;
-        }        
+        }  
+        if(field == "createdBy") {
+            this.createdByInput = value;
+        }      
+        if(field == "updatedBy") {
+            this.updatedByInput = value;
+        }      
 
         this.lazyLoadEventDataInput.filters = {
             repairOrderNo: this.repairOrderNoInput,
@@ -417,7 +348,9 @@ export class RoListComponent implements OnInit {
             approvedBy: this.approvedByInput,
             vendorId: this.vendorId ? this.vendorId : null,
             createdDate : this.createdDateInput,
-            updatedDate : this.updatedDateInput
+            updatedDate : this.updatedDateInput,
+            createdBy: this.createdByInput,           
+            updatedBy: this.updatedByInput,
         }        
         this.getList(this.lazyLoadEventDataInput);
     }
@@ -477,7 +410,7 @@ export class RoListComponent implements OnInit {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         let PagingData;
-        PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": tt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+        PagingData = { "filters": { "employeeId":this.employeeId,"masterCompanyId" :this.currentUserMasterCompanyId, "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": tt.totalRecords, "sortOrder": 1, "globalFilter": "" };
         // let PagingData: ISalesSearchParameters = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentStatus, "isDeleted": isdelete }, "globalFilter": "" }
         let filters = Object.keys(tt.filters);
         filters.forEach(x => {
@@ -497,156 +430,27 @@ export class RoListComponent implements OnInit {
                 tt.exportCSV();
                 tt.value = vList;
                 this.isSpinnerVisible = false;                
-            }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            }
-        );
+            }, err => {  this.isSpinnerVisible = false;});
     } 
-
-
-    // exportCSV(tt) {
-    //     this.isSpinnerVisible = true;
-    //     let PagingData = {"first":0,"rows":tt.totalRecords,"sortOrder":1,"filters":{"status":this.currentStatus,"isDeleted":this.currentDeletedstatus},"globalFilter":""}
-    //     let filters = Object.keys(tt.filters);
-    //     filters.forEach(x=>{
-	// 		PagingData.filters[x] = tt.filters[x].value;
-    //     })
-    //     this.repairOrderService.getROList(PagingData).subscribe(res => {
-    //         tt._value = res[0]['results'].map(x => {
-	// 			return {
-    //                 ...x,
-    //                 openDateInput : x.openDateInput ?  this.datePipe.transform(x.openDateInput, 'MMM-dd-yyyy'): '',
-    //                 closedDateInput : x.closedDateInput ?  this.datePipe.transform(x.closedDateInput, 'MMM-dd-yyyy'): '',
-    //                 //createdDate: new Date(x.createdDate).getFullYear() +'/'+ (new Date(x.createdDate).getMonth() + 1) +'/'+ new Date(x.createdDate).getDate() +'  '+ new Date(x.createdDate).getHours() +':'+ new Date(x.createdDate).getMinutes() +':'+ new Date(x.createdDate).getSeconds(),
-    //                 //updatedDate: new Date(x.updatedDate).getFullYear() +'/'+ (new Date(x.updatedDate).getMonth() + 1) +'/'+ new Date(x.updatedDate).getDate() +'  '+ new Date(x.updatedDate).getHours() +':'+ new Date(x.updatedDate).getMinutes() +':'+ new Date(x.updatedDate).getSeconds(),
-	// 			}
-	// 		});	
-    //         tt.exportCSV();
-    //         tt.value = this.data;
-    //         this.isSpinnerVisible = false;
-    //     },error => {
-    //             this.errorMessageHandler(error)
-    //         },
-    //     );
-    // }
-
 
     deleteRO() {
         const { repairOrderId } = this.rowDataToDelete;
         this.repairOrderService.deleteRO(repairOrderId, this.userName).subscribe(res => {
             this.getList(this.lazyLoadEventData);
             this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
-        },err => {const errorLog = err;            
-                  this.errorMessageHandler(errorLog);});
-    }
-
-    // viewSelectedRow(rowData) {       
-    //     this.selectedrepairOrderId  = rowData.repairOrderId;
-    //     this.getROViewById(rowData.repairOrderId);
-    //     this.getROPartsViewById(rowData.repairOrderId);
-    //     this.getApproversListById(rowData.repairOrderId);
-    //     this.getApprovalProcessListById(rowData.repairOrderId);
-    // }
-
-    viewSelectedRow(rowData) {
-        this.selectedrepairOrderId  = rowData.repairOrderId;
-        this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-        this.modal.componentInstance.OrderId = this.selectedrepairOrderId;
-        this.modal.componentInstance.OrderType = 'Repair Order';
-    }
-
-    viewSelectedRowdbl(rowData) {
-        this.viewSelectedRow(rowData);
-        $('#roView').modal('show');
-    }
-
-    getROViewById(roId) {
-        this.repairOrderService.getROViewById(roId).subscribe(res => {            
-            this.roHeaderAdd = {
-                ...res,
-                shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
-                handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
-            };
-            this.getVendorCapesByID(this.roHeaderAdd.vendorId);
-            //this.getManagementStructureCodes(res.managementStructureId);
-        }, err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);}
-        );
-    }
-    getROPartsViewById(roId) {
-		this.roPartsList = [];
-        this.repairOrderService.getROPartsViewById(roId).subscribe(res => {          
-            res.map(x => {
-                const partList = {
-                    ...x,
-                    unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
-                    discountPercent: x.discountPercent ? formatNumberAsGlobalSettingsModule(x.discountPercent, 2) : '0.00',
-                    discountPerUnit: x.discountPerUnit ? formatNumberAsGlobalSettingsModule(x.discountPerUnit, 2) : '0.00',
-                    discountAmount: x.discountAmount ? formatNumberAsGlobalSettingsModule(x.discountAmount, 2) : '0.00',
-                    extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
-                    foreignExchangeRate: x.foreignExchangeRate ? formatNumberAsGlobalSettingsModule(x.foreignExchangeRate, 5) : '0.00',
-                    repairOrderSplitParts: this.getRepairOrderSplit(x)              
-                }
-                this.getManagementStructureCodesParent(partList);
-                this.roPartsList.push(partList);
-            });
-        }
-        , err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);});
-    }
-
-    getRepairOrderSplit(partList) {
-        if(partList.repairOrderSplitParts) {
-			return partList.repairOrderSplitParts.map(y => {
-				const splitpart = {
-					...y,					
-				}
-				this.getManagementStructureCodesChild(splitpart);
-				return splitpart;
-			})
-		}
-    }
-    getApproversListById(roId) {
-        if(this.roApprovaltaskId == 0) {
-            this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
-            if(response) {					
-                response.forEach(x => {
-                    if (x.label.toUpperCase() == "RO APPROVAL") {
-                        this.roApprovaltaskId = x.value;
-                    }              
-                });
-            }
-            },err => {               
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
-            });
-            }
-		this.isSpinnerVisible = true;
-		this.repairOrderService.getROTotalCostById(roId).subscribe(res => {
-			if(res) {
-				this.roTotalCost = res.totalCost;			
-				this.repairOrderService.getApproversListByTaskIdModuleAmt(this.roApprovaltaskId, this.roTotalCost).subscribe(res => {
-					this.internalApproversList = res;
-				})
-			}
-			this.isSpinnerVisible = false;
-		}, err => {           
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
         });
     }
-
-    getVendorCapesByID(vendorId) {
-		this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
-			this.vendorCapesInfo = res;
-        }, err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);}
-        )
-	}
+    
+    viewSelectedRow(content, rowData) {        
+        this.strVendorName =  rowData.vendorName;
+        this.strVendorCode =  rowData.vendorCode;
+        this.vendorId = rowData.vendorId;
+        this.PovendorId = rowData.vendorId;
+        this.orderId = rowData.repairOrderId;
+        this.orderType = 'Repair Order';
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
+    }
+  
 
     globalSearch(value) {     
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
@@ -655,7 +459,6 @@ export class RoListComponent implements OnInit {
         this.lazyLoadEventDataInput.first = pageIndex;
         this.lazyLoadEventDataInput.globalFilter = value;
         this.filterText = value;
-
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentStatus };
         if (this.isEnableROList) {
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, vendorId: this.vendorId }
@@ -688,7 +491,7 @@ export class RoListComponent implements OnInit {
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         },err => {const errorLog = err;
             this.isSpinnerVisible = false;
-                        this.errorMessageHandler(errorLog);});
+         });
     }
     restore(content, rowData) {
         this.restorerecord = rowData;
@@ -699,11 +502,13 @@ export class RoListComponent implements OnInit {
     }
 
     getAuditHistoryById(rowData) {
+        this.isSpinnerVisible = true;
         this.repairOrderService.getROHistory(rowData.repairOrderId).subscribe(res => {                     
             this.auditHistory = res;
-        }, err => {			
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);});
+            this.isSpinnerVisible = false;
+        }, err => {
+            this.isSpinnerVisible = false;
+			});
     }
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
@@ -727,51 +532,18 @@ export class RoListComponent implements OnInit {
 
     closeDeleteModal() {
         $("#roDelete").modal("hide");
-    }
-
-    viewSelectedCapsRow(rowData) {       
-        const {vcId} = rowData;
-        this.getVendorCapabilitiesView(vcId);     
-        this.getVendorCapesAircraftView(vcId);     
-    }
-
-    getVendorCapabilitiesView(vendorCapesId) {
-		this.vendorCapesService.getVendorCapabilitybyId(vendorCapesId).subscribe(res => {			
-			this.vendorCapesGeneralInfo = res;
-		})
-	}
-
-	getVendorCapesAircraftView(vendorCapesId) {
-		this.vendorCapesService.getVendorAircraftGetDataByCapsId(vendorCapesId).subscribe(res => {          
-            this.aircraftListDataValues = res.map(x => {
-                return {
-                    ...x,
-                    aircraft: x.aircraftType,
-                    model: x.aircraftModel,
-                    dashNumber: x.dashNumber,
-                    memo: x.memo,
-                }
-            })
-		},err => {const errorLog = err;
-            this.isSpinnerVisible = false;
-                        this.errorMessageHandler(errorLog);});
-    }
+    } 
    
     totalExportRow : number = 0;
     exportSelectedBtn(tt){ 
         this.selectedOnly = true;
         this.totalExportRow = tt.selection.length;  
      }
-
-    public getSelectedRow(rowData) {
-        //this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
-        // this._router.navigateByUrl('/receivingmodule/receivingpages/app-receiving-ro');
+    public getSelectedRow(rowData) {       
         this._route.navigateByUrl(`/receivingmodule/receivingpages/app-receiving-ro?repairOrderId=${rowData.repairOrderId}`);
     }
 
-    public editStockLine(rowData) {
-        //this.receivingService.purchaseOrderId = rowData.purchaseOrderId;
-        //return this._router.navigate(['/receivingmodule/receivingpages/app-edit-ro']);
+    public editStockLine(rowData) {      
         this._route.navigateByUrl(`/receivingmodule/receivingpages/app-edit-ro?repairOrderId=${rowData.repairOrderId}`);
     }
 

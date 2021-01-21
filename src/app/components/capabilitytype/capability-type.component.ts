@@ -429,9 +429,9 @@ export class CapabilityTypeComponent implements OnInit {
         }
 
 
+        columnsChanges(){}
 
-
-
+        resetViewData() {}
 
 
 

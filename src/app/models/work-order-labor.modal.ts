@@ -9,7 +9,8 @@ export class WorkOrderLabor {
   hoursorClockorScan: number;
   workOrderLaborList: any;
   totalWorkHours: any;
-
+  costPlusType: any;
+  laborFlatBillingAmount: any;
   constructor() {
     this.workOrderLaborHeaderId = null;
     this.workFlowWorkOrderId = null;
@@ -19,6 +20,8 @@ export class WorkOrderLabor {
     this.isTaskCompletedByOne = false;
     this.workFloworSpecificTaskorWorkOrder = 'specificTasks';
     this.hoursorClockorScan = 1;
+    this.costPlusType = null;
+    this.laborFlatBillingAmount = null;
   }
 }
 

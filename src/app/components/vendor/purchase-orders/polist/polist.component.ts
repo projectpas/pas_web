@@ -13,7 +13,7 @@ import { Table } from 'primeng/table';
 import { PurchaseOrderService } from '../../../../services/purchase-order.service';
 import { VendorCapabilitiesService } from '../../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../../services/common.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { ReceivingService }  from '../../../../services/receiving/receiving.service';
@@ -35,8 +35,13 @@ export class PolistComponent implements OnInit {
     totalPages: number = 0;
     breadcrumbs: MenuItem[];
     home: any;
+    orderId: number ;
+    orderType: string ='Purchase Order';
+    PovendorId:number;
     dateObject: any = {};
     filterSearchText : string;
+    strVendorName: string;
+    strVendorCode: string;
     headers = [
 		{ field: 'purchaseOrderNumber', header: 'PO Num' },
         { field: 'openDate', header: 'Open Date' },
@@ -217,6 +222,17 @@ export class PolistComponent implements OnInit {
         }
 
     }
+
+    get currentUserMasterCompanyId(): number {
+		return this.authService.currentUser
+		  ? this.authService.currentUser.masterCompanyId
+		  : null;
+	}
+	get employeeId() {
+	return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
+	}
+    
+    
     closeModal() {
         $("#downloadConfirmation").modal("hide");
     }
@@ -225,9 +241,7 @@ export class PolistComponent implements OnInit {
 			this.poStatusList = response;
 			this.poStatusList = this.poStatusList.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
     }
     errorMessageHandler(log) {
@@ -258,32 +272,35 @@ export class PolistComponent implements OnInit {
             this.modal.close();
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		});
     }
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-        // this.modal.result.then(() => {           
-        // }, () => { })
     }
     dismissModel() {
         this.modal.close();
     }
 
     getList(data) {
+        this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
-        data.filters.isDeleted = isdelete
+        data.filters.isDeleted = isdelete;
+        data.filters.employeeId = this.employeeId;
+        data.filters.masterCompanyId = this.currentUserMasterCompanyId;
         this.purchaseOrderService.getPOList(data).subscribe(res => { 
             const vList  = res['results'].map(x => {
                 return {
                     ...x,
-                    openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
-                    closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
-                    createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
-                    updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MM/dd/yyyy'): '',
+                //     closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MM/dd/yyyy'): '',
+                //     createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy hh:mm a'): '',
+                //     updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a'): '',
+                       openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',
+                       closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MMM-dd-yyyy'): '',
+                       createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                       updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 }
             });  
             this.data = vList;
@@ -308,9 +325,7 @@ export class PolistComponent implements OnInit {
                     this.ApprovedstatusId = x.value;
 				}
             },err => {
-                this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);		
+                this.isSpinnerVisible = false;               
             });
 		});
     }
@@ -648,9 +663,7 @@ export class PolistComponent implements OnInit {
         this.purchaseOrderService.getPOStatus(rowData.purchaseOrderId, rowData.isActive, this.userName).subscribe(res => {
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;			
 		});
 
     }
@@ -667,9 +680,7 @@ export class PolistComponent implements OnInit {
             this.getList(this.lazyLoadEventData);
             this.alertService.showMessage("Success", `Successfully Deleted Record`, MessageSeverity.success);
         },err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;					
 		});
     }
 
@@ -691,12 +702,14 @@ export class PolistComponent implements OnInit {
     //     }        
     // }
 
-    viewSelectedRow(rowData) {
-        this.selectedPurchaseOrderId  = rowData.purchaseOrderId;
-        this.modal = this.modalService.open(AllViewComponent, { size: 'lg', backdrop: 'static', keyboard: false });
-        this.modal.componentInstance.OrderId = this.selectedPurchaseOrderId;        
-        this.modal.componentInstance.OrderType = 'Purchase Order';
-        this.modal.componentInstance.PovendorId = rowData.vendorId;
+    viewSelectedRow(content, rowData) {        
+        this.strVendorName =  rowData.vendorName;
+        this.strVendorCode =  rowData.vendorCode;
+        this.vendorId = rowData.vendorId;
+        this.PovendorId = rowData.vendorId;
+        this.orderId = rowData.purchaseOrderId;
+        this.orderType = 'Purchase Order';
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
 
     WarningsList: any;
@@ -710,9 +723,7 @@ export class PolistComponent implements OnInit {
 				}
 			});
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;				
 		}); 
 	}   
     warningMessage:any;
@@ -725,16 +736,14 @@ export class PolistComponent implements OnInit {
 					this.warningID = res.vendorWarningId;
 				}				
 			},err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);		
+				this.isSpinnerVisible = false;					
 			});
 		}
 	}
 
     viewSelectedRowdbl(rowData) {
        
-        this.viewSelectedRow(rowData);
+        this.viewSelectedRow('',rowData);
         //$('#poView').modal('show');
     }
 
@@ -865,9 +874,7 @@ export class PolistComponent implements OnInit {
 		this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
 			this.vendorCapesInfo = res;
 		}, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
 	}
     
@@ -910,9 +917,7 @@ export class PolistComponent implements OnInit {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
     }
     getColorCodeForHistory(i, field, value) {
@@ -964,9 +969,7 @@ export class PolistComponent implements OnInit {
 				cost: res.cost ? formatNumberAsGlobalSettingsModule(res.cost, 2) : '0.00'
 			};
 		},err => {
-			this.isSpinnerVisible = false;
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
+			this.isSpinnerVisible = false;			
 		});
 	}
 
@@ -983,9 +986,7 @@ export class PolistComponent implements OnInit {
                 }
             })
 		}, err => {
-            this.isSpinnerVisible = false;
-            const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;           
         });
     }
     
@@ -1034,7 +1035,7 @@ export class PolistComponent implements OnInit {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
 		//let PagingData = { ...dt, filters: listSearchFilterObjectCreation(dt.filters), status: status, "rows":dt.totalRecords }
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentStatusPO,"isDeleted":isdelete},"globalFilter":""}
+		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"employeeId":this.employeeId,"masterCompanyId" :this.currentUserMasterCompanyId,"status":this.currentStatusPO,"isDeleted":isdelete},"globalFilter":""}
 		let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
@@ -1056,9 +1057,7 @@ export class PolistComponent implements OnInit {
             dt.value = vList;
             this.isSpinnerVisible = false;           
         }, err => {
-            this.isSpinnerVisible = false;           
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);
+            this.isSpinnerVisible = false;  
         });
 	
     }

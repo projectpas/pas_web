@@ -98,7 +98,8 @@ export class CrmTabsComponent implements OnInit {
     disableSave: boolean = true;
     isSpinnerVisible: boolean = false;
     delNTAERow: any = {};
-
+    noDatavailable: any;
+    
     constructor(public itemser: ItemMasterService, private _actRoute: ActivatedRoute, 
         private alertService: AlertService,  private configurations: ConfigurationService, 
         private modalService: NgbModal,

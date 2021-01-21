@@ -129,7 +129,7 @@
 
                             </ng-template>
 
-                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" pReorderableRowHandle>
                                     <td style="width:120px" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle data-toggle="modal" data-target="#view" (dblclick)="viewSelectedRow(rowData)">
                                         {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm:ss a'):rowData[col.field]}}

@@ -267,10 +267,8 @@ export class EditUserRolesComponent implements OnInit {
     }
 
     UpdateUserRole(): void {
-        debugger;
         this.userRoleService.update(this.currentUserRole).subscribe(
             result => {
-                debugger;
                 this.alertService.showMessage('User Role', this.currentUserRole.name + ' Role updated successfully.', MessageSeverity.success);
                 for (let module of this.sortedHierarchy) {
                     this.resetRolePermission(module.rolePermission);

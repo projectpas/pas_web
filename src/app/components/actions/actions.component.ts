@@ -9,7 +9,7 @@ import { AlertService, DialogType, MessageSeverity } from '../../services/alert.
 import { Action } from '../../models/action.model';
 import { AuditHistory } from '../../models/audithistory.model';
 import { AuthService } from '../../services/auth.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -48,7 +48,7 @@ export class ActionsComponent implements OnInit {
     selectedColumns = this.headers;
     formData = new FormData()
     @ViewChild('dt',{static:false})
-
+    modal: any;
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
@@ -68,7 +68,9 @@ export class ActionsComponent implements OnInit {
     selectedRecordForEdit: any;
     viewRowData: any;
     selectedRowforDelete: any;
-    existingRecordsResponse = []
+    existingRecordsResponse = [];
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -283,5 +285,5 @@ export class ActionsComponent implements OnInit {
         }
     }
 
-    
+    dismissModel() {}
 }

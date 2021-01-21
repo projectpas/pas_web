@@ -1,6 +1,6 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, MatSnackBar, MatDialog } from '@angular/material';
-import * as $ from 'jquery';
+declare var $ : any;
 import { NgForm, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
@@ -37,8 +37,7 @@ import { CommonService } from '../../services/common.service';
     animations: [fadeInOut]
 })
 /** stockline-adjustment-reason component*/
-export class AdjustmentReasonComponent implements OnInit, AfterViewInit
-{
+export class AdjustmentReasonComponent implements OnInit, AfterViewInit {
     public sourceAdjustmentReason: any = {};
     dataSource: MatTableDataSource<StocklineAdjustmentReason>;
     adjustmentReasonList: StocklineAdjustmentReason[] = [];
@@ -53,8 +52,8 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
     createdDate: any = "";
     formData = new FormData();
     updatedDate: any = "";
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     filteredBrands: any[];
     displayedColumns = ['actionId', 'companyName', 'description', 'memo', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
     allActions: Action[] = [];
@@ -103,16 +102,15 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
     //paginatorState: any;
 
     /** Actions ctor */
-        
-    private isEdit: boolean = false;
+
+    public isEdit: boolean = false;
     private isDeleteMode: boolean = false;
 
     /** stockline-adjustment-reason ctor */
-    constructor(private breadCrumb: SingleScreenBreadcrumbService, 
+    constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
-        private stocklineAdjustReasonService: StocklineAdjustReasonService, 
-        private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService)
-    {
+        private stocklineAdjustReasonService: StocklineAdjustReasonService,
+        private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
         this.sourceAction = new StocklineAdjustmentReason();
@@ -133,14 +131,14 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
 
     }
 
- 
+
     private loadData() {
         // this.alertService.startLoadingMessage();
         // this.loadingIndicator = true;
         this.stocklineAdjustReasonService.getStockLineAdjustmentReasonList().subscribe(data => {
 
-            this.originalTableData=data[0].columnData;
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = data[0].columnData;
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
             this.allunitData = data[0].columHeaders;
             // this.adjustmentReasonList = data[0].columnData;
@@ -187,14 +185,14 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
         this.allComapnies = allComapnies;
 
     }
-    
+
     private onDataLoadSuccessful(allWorkFlows: any[]) {
         // alert('success');
         this.alertService.stopLoadingMessage();
         this.loadingIndicator = false;
         this.totalRecords = allWorkFlows.length;
         this.allActions = allWorkFlows;
-       
+
 
     }
 
@@ -225,7 +223,7 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
 
 
     }
-    
+
     open(content) {
         this.isEdit = false;
         this.isDeleteMode = false;
@@ -252,17 +250,17 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
-    getmemo() {     
-        this.disableSaveForEdit = false;    
+    getmemo() {
+        this.disableSaveForEdit = false;
     }
 
-	openEdit(content, row) {
+    openEdit(content, row) {
         this.isEdit = true;
         this.disableSave = false;
         this.isSaving = true;
-        this.disableSaveForEdit=true;
+        this.disableSaveForEdit = true;
         this.loadMasterCompanies();
-		this.sourceAction = row;       
+        this.sourceAction = row;
         this.stockAdjustmentReason = row.stockAdjustmentReason;
         this.loadMasterCompanies();
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
@@ -341,7 +339,7 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
         this.StockAdjustmentReasonName = row.stockAdjustmentReason;
         this.ID = row.iD;
         this.memo = row.memo;
-		this.isActive = row.isActive;
+        this.isActive = row.isActive;
         this.createdBy = row.createdBy;
         this.updatedBy = row.updatedBy;
         this.createdDate = row.createdDate;
@@ -376,7 +374,7 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
 
     editItemAndCloseModel() {
 
-        
+
         this.isSaving = true;
 
         const params = <any>{
@@ -451,7 +449,7 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
         this.alertService.stopLoadingMessage();
         this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-	}
+    }
 
 
     getAuditHistoryById(rowData) {
@@ -510,92 +508,93 @@ export class AdjustmentReasonComponent implements OnInit, AfterViewInit
         this.loadData();
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.adjustmentReasonList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.adjustmentReasonList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.adjustmentReasonList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.adjustmentReasonList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.adjustmentReasonList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.adjustmentReasonList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.adjustmentReasonList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.adjustmentReasonList = newarry;
+            }
         }
-        this.totalRecords = this.adjustmentReasonList.length ;
+        this.totalRecords = this.adjustmentReasonList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('StocklineAdjustmentReason',
-            'AdjustmentReasonId',this.restorerecord.iD, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('StocklineAdjustmentReason',
+            'AdjustmentReasonId', this.restorerecord.iD).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
+    changeStatus(rowData) {}
 }

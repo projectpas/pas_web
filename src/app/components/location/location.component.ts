@@ -31,8 +31,8 @@ import { CommonService } from '../../services/common.service';
 
 
 @Component({
-    selector: 'app-location',
-    templateUrl: './location.component.html',
+	selector: 'app-location',
+	templateUrl: './location.component.html',
 	styleUrls: ['./location.component.scss'],
 	animations: [fadeInOut]
 })
@@ -45,7 +45,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	addressId: any;
 	locationId: any;
 
-    totalRecords: number;
+	totalRecords: number;
 	memo: any = "";
 
 	address1: any;
@@ -66,7 +66,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	allCountryinfo: any[];
 	allATAMaininfo: ATAMain[] = [];
 	localCollection: any[] = [];
-	disableSaveForEdit:boolean=false;
+	disableSaveForEdit: boolean = false;
 
 	siteId: any;
 	warehouseId: any;
@@ -76,7 +76,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	siteName: any;
 
 	name: any;
-	private isEditMode: boolean = false;
+	public isEditMode: boolean = false;
 	private isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;
@@ -96,46 +96,45 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	location_Name: any = "";
 	allLocations: any = [];
 	stateOrProvince: any;
-    allSites: Site[];
-    allWareHouses: any[];
-    allAddress: any;
-    showAddress: boolean;
-    gridData: TreeNode[];//Managemnt
+	allSites: Site[];
+	allWareHouses: any[];
+	allAddress: any;
+	showAddress: boolean;
+	gridData: TreeNode[];//Managemnt
 	gridData1: TreeNode[];//Managemnt
 	gridData2: TreeNode[];//Managemnt
 	cols1: any[];
-    localSelectedManagement: any[] = [];
-    selectedManagementValues: any;
-    index: any;
-    selectedNodes3: any;
-    selectedNodeTest: any;
-    localManagementSiteCollection: any;
+	localSelectedManagement: any[] = [];
+	selectedManagementValues: any;
+	index: any;
+	selectedNodes3: any;
+	selectedNodeTest: any;
+	localManagementSiteCollection: any;
 	allManagemtninfo: any[];
 	localManagementLocationEditCollection: TreeNode[];
-    showManagement: boolean;
+	showManagement: boolean;
 	Active: string = "Active";
 	actionamecolle: any[] = [];
-    AuditDetails: any[];
-    localWareHouseManagementWarehouseCollection: any;
+	AuditDetails: any[];
+	localWareHouseManagementWarehouseCollection: any;
 	disableSaveManufacturer: boolean = false;
-	
+
 	currentstatus: string = 'Active';
 
-    isDeleted: Boolean = false;
+	isDeleted: Boolean = false;
 	locationData: any[] = [];
-    selectedLocation: any;
+	selectedLocation: any;
 	locationName: any;
 	HasAuditDetails: boolean;
 	AuditHistoryTitle: string = 'History of Location';
-	formData:FormData = null;
+	formData: FormData = null;
 	totalPages: number;
 	pageSize: number = 10;
 	uploadedRecords: Object = null;
 
-	ngOnInit(): void
-	{
+	ngOnInit(): void {
 		this.cols = [
-			
+
 			{ field: 'name', header: 'Location Name' },
 			{ field: 'warehouseName', header: 'Warehouse Name' },
 			{ field: 'siteName', header: 'Site Name' },
@@ -153,19 +152,19 @@ export class LocationComponent implements OnInit, AfterViewInit {
 			//{ field: 'createdDate', header: 'createdDate' }
 		];
 		this.loadData();
-        this.loadSiteData();
-        this.loadManagementdata(); //Calling Management Data
-	//	this.loadWareHouseData();
+		this.loadSiteData();
+		this.loadManagementdata(); //Calling Management Data
+		//	this.loadWareHouseData();
 		this.breadCrumb.currentUrl = '/singlepages/singlepages/app-location';
 		this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
 		this.selectedColumns = this.cols;
 	}
 
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 	/** location ctor */
-    constructor(public manageMentService: LegalEntityService,
-        private commonService: CommonService, private configurations: ConfigurationService,public wareHouseService: WarehouseService,public workFlowtService1: SiteService,private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, public ataservice: AtaMainService, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public workFlowtService: LocationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
+	constructor(public manageMentService: LegalEntityService,
+		private commonService: CommonService, private configurations: ConfigurationService, public wareHouseService: WarehouseService, public workFlowtService1: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, public ataservice: AtaMainService, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public workFlowtService: LocationService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
 		this.dataSource = new MatTableDataSource();
 		this.sourceLocation = new Location();
 
@@ -173,12 +172,12 @@ export class LocationComponent implements OnInit, AfterViewInit {
 
 	closethis() {
 		this.closeCmpny = false;
-    }
-    sampleExcelDownload() {
-        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Location&fileName=Location.xlsx`;
+	}
+	sampleExcelDownload() {
+		const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Location&fileName=Location.xlsx`;
 
-        window.location.assign(url);
-    }
+		window.location.assign(url);
+	}
 
 	handleChange(rowData, e) {
 		if (e.checked == false) {
@@ -205,14 +204,14 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	}
 
 	getPageCount(totalNoofRecords, pageSize) {
-        return Math.ceil(totalNoofRecords / pageSize)
+		return Math.ceil(totalNoofRecords / pageSize)
 	}
-	
+
 	getmemo() {
-     
+
 		this.disableSaveForEdit = false;
-	
-}
+
+	}
 
 	ngAfterViewInit() {
 		this.dataSource.paginator = this.paginator;
@@ -224,11 +223,11 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	private loadData() { //retrive Location Data
 		this.alertService.startLoadingMessage();
 		this.loadingIndicator = true;
-	
+
 		this.workFlowtService.getLocationList().subscribe(
 			results => this.onDataLoadSuccessful(results[0]),
 			error => this.onDataLoadFailed(error)
-			
+
 		);
 
 		//this.cols = [
@@ -314,12 +313,12 @@ export class LocationComponent implements OnInit, AfterViewInit {
 		this.loadingIndicator = false;
 		this.dataSource.data = getSiteList; //need
 		this.allSites = getSiteList; //Contain first array of Loaded table Data will put in Html as [value]
-		
+
 	}
 
 	siteValueChange(data) //Site Valu Selection in Form
 	{
-		this.showAddress = true;	
+		this.showAddress = true;
 		console.log(this.siteId);
 
 		if (this.sourceLocation.siteId) {
@@ -333,11 +332,10 @@ export class LocationComponent implements OnInit, AfterViewInit {
 				error => this.onDataLoadFailed(error)
 			);
 		}
-		
+
 	}
 
-	wareHouseValueChange(data)
-	{
+	wareHouseValueChange(data) {
 		this.showManagement = true;
 
 		this.workFlowtService.getManagementWareHouseData(data).subscribe(
@@ -388,64 +386,61 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	//	);
 	//}
 
-	
 
-    private loadManagementdata() //Loading Management Structure Data
-    {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
 
-        this.manageMentService.getManagemententity().subscribe(
-            results => this.onManagemtntdataLoad(results[0]),
-            error => this.onDataLoadFailed(error)
-        );
-        this.selectedColumns = this.cols;
-    }
+	private loadManagementdata() //Loading Management Structure Data
+	{
+		this.alertService.startLoadingMessage();
+		this.loadingIndicator = true;
 
-    private onManagemtntdataLoad(getAtaMainList: any[]) {
-        // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.dataSource.data = getAtaMainList;
-        this.allManagemtninfo = getAtaMainList;
-        //debugger;
-        if (this.allManagemtninfo) {
-            this.gridData = this.makeNestedObj(this.allManagemtninfo, null);
-        }
+		this.manageMentService.getManagemententity().subscribe(
+			results => this.onManagemtntdataLoad(results[0]),
+			error => this.onDataLoadFailed(error)
+		);
+		this.selectedColumns = this.cols;
+	}
 
-        this.cols1 = [
-            { field: 'code', header: 'Code' },
+	private onManagemtntdataLoad(getAtaMainList: any[]) {
+		// alert('success');
+		this.alertService.stopLoadingMessage();
+		this.loadingIndicator = false;
+		this.dataSource.data = getAtaMainList;
+		this.allManagemtninfo = getAtaMainList;
+		//debugger;
+		if (this.allManagemtninfo) {
+			this.gridData = this.makeNestedObj(this.allManagemtninfo, null);
+		}
+
+		this.cols1 = [
+			{ field: 'code', header: 'Code' },
 			{ field: 'name', header: 'Name' },
 			{ field: 'description', header: 'Description' },
-            // { field: 'legalEntityId', header: 'ID' },
-        ];
-    }
+			// { field: 'legalEntityId', header: 'ID' },
+		];
+	}
 
-    makeNestedObj(arr, parent) {
-        var out = []
-        for (var i in arr) {
-            if (arr[i].parentId == parent) {
-                var children = this.makeNestedObj(arr, arr[i].managementStructureId)
-                arr[i] = { "data": arr[i] };
-                if (children.length) {
-                    arr[i].children = children
-                }
-                out.push(arr[i])
-            }
-        }
-        return out
+	makeNestedObj(arr, parent) {
+		var out = []
+		for (var i in arr) {
+			if (arr[i].parentId == parent) {
+				var children = this.makeNestedObj(arr, arr[i].managementStructureId)
+				arr[i] = { "data": arr[i] };
+				if (children.length) {
+					arr[i].children = children
+				}
+				out.push(arr[i])
+			}
+		}
+		return out
 	}
 
 	makeNestedObj1(child, arr, parent) {
 
 		var out = []
 		if (child) {
-			for (var i = 0; i < child.length; i++)
-			{
-				for (var j = 0; j < arr.length; j++)
-				{
-					if (arr[j].data)
-					{
+			for (var i = 0; i < child.length; i++) {
+				for (var j = 0; j < arr.length; j++) {
+					if (arr[j].data) {
 						if (child[i].managementStructureId == arr[j].data.managementStructureId) {
 							arr[j].data.managementLocationId = child[i].managementLocationId;
 							arr[j].data.locationId = child[i].locationId;
@@ -454,29 +449,27 @@ export class LocationComponent implements OnInit, AfterViewInit {
 							break;
 						}
 					}
-					else if (child[i].managementStructureId == arr[j].managementStructureId)
-					{
-							arr[j].data.managementLocationId = child[i].managementLocationId;
-							arr[j].data.locationId = child[i].locationId;
-							out.push(arr[j]);
-							console.log(arr[j].data);
-							break;
-						}
+					else if (child[i].managementStructureId == arr[j].managementStructureId) {
+						arr[j].data.managementLocationId = child[i].managementLocationId;
+						arr[j].data.locationId = child[i].locationId;
+						out.push(arr[j]);
+						console.log(arr[j].data);
+						break;
+					}
 				}
 			}
 		}
 		return out;
 	}
 
-    nodeSelect(event) {
-        debugger;
-        //event.node = selected node
-        console.log("selected node", event, event.node);
-    }
+	nodeSelect(event) {
+		//event.node = selected node
+		console.log("selected node", event, event.node);
+	}
 
-    managementStructureClick(data) {
-        console.log(this.localSelectedManagement);
-    }
+	managementStructureClick(data) {
+		console.log(this.localSelectedManagement);
+	}
 
 
 	//ApplyFilter
@@ -492,26 +485,26 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	}
 
 
-	
+
 
 
 	//OnDataLoadSuccessful
 	private onDataLoadSuccessful(getLocationList: any[]) {
-		
+
 		// this.alertService.stopLoadingMessage();
 		// this.loadingIndicator = false;
 		// this.dataSource.data = getLocationList;
 		// this.allLocations = getLocationList;
 		this.workFlowtService.getLocationList().subscribe(res => {
 
-		this.originalTableData=res[0];
-		this.getListByStatus(this.status ? this.status :this.currentstatus)
+			this.originalTableData = res[0];
+			this.getListByStatus(this.status ? this.status : this.currentstatus)
 		});
-	// this.totalRecords = getLocationList.length;
-	// 	this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+		// this.totalRecords = getLocationList.length;
+		// 	this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
 
 
-	// 	console.log(this.allActions);
+		// 	console.log(this.allActions);
 	}
 
 	//OnDataLoadFailed
@@ -531,7 +524,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 
 	}
 
-	
+
 
 
 	//OnHistoryLoadSuccessful
@@ -588,7 +581,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 
 		this.isEditMode = false;
 		this.isDeleteMode = false;
-		this.isSaving = true;		
+		this.isSaving = true;
 		this.loadMasterCompanies();
 		this.loadManagementdata(); //Calling Management Data
 		this.selectedNodeTest = []; //while Open new Node Data Should Be Empty
@@ -630,7 +623,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 		this.isEditMode = true;
 		this.isSaving = true;
 		this.loadMasterCompanies();
-		this.disableSaveForEdit=true;
+		this.disableSaveForEdit = true;
 		this.disableSaveManufacturer = false;
 		this.sourceLocation = row;
 		this.showManagement = true;
@@ -641,8 +634,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 		//Getting ManagementSite Data
 		this.workFlowtService.getManagementLocationEditData(this.sourceLocation.locationId).subscribe(data11 => {
 			this.localManagementLocationEditCollection = data11; //local SiteManagement Data for Edit Collection
-			if (this.localManagementLocationEditCollection)
-			{
+			if (this.localManagementLocationEditCollection) {
 				if (this.gridData) {
 					//this.gridData = this.makeNestedObj(this.localManagementLocationEditCollection, null);
 					this.gridData1 = this.makeNestedObj1(this.localManagementLocationEditCollection, this.allManagemtninfo, null);
@@ -654,7 +646,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 			//this.selectedNodeTest = this.localManagementLocationEditCollection;
 			this.selectedNodeTest = this.gridData1;
 		})
-		
+
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
 		this.modal.result.then(() => {
 			console.log('When user closes');
@@ -729,21 +721,20 @@ export class LocationComponent implements OnInit, AfterViewInit {
 		this.alertService.stopLoadingMessage();
 		this.alertService.showStickyMessage("Save Error", "The below errors occured while saving your changes:", MessageSeverity.error, error);
 		this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-    }
+	}
 
-    public saveManagement(locationId, data1) //retriving SiteManagement Array
-    {
-        debugger;
-        for (let i = 0; i < data1.length; i++) {
-            if (data1[i].data.managementStructureId != null) {
-                data1[i].data.locationId = locationId;
-                this.workFlowtService.newManagementSite(data1[i].data).subscribe(data11 => {
-                    this.localManagementSiteCollection = data11; //local SiteManagement Data
-                })
-            }
+	public saveManagement(locationId, data1) //retriving SiteManagement Array
+	{
+		for (let i = 0; i < data1.length; i++) {
+			if (data1[i].data.managementStructureId != null) {
+				data1[i].data.locationId = locationId;
+				this.workFlowtService.newManagementSite(data1[i].data).subscribe(data11 => {
+					this.localManagementSiteCollection = data11; //local SiteManagement Data
+				})
+			}
 		}
 		this.loadData();
-    }
+	}
 
 
 	//EditItem
@@ -752,25 +743,23 @@ export class LocationComponent implements OnInit, AfterViewInit {
 
 		this.isSaving = true;
 
-		if (this.isEditMode == false)
-		{
+		if (this.isEditMode == false) {
 			this.showAddress = false;
 			this.showManagement = false;
 			this.sourceLocation.createdBy = this.userName;
 			this.sourceLocation.updatedBy = this.userName;
 			this.sourceLocation.masterCompanyId = 1;
 			this.sourceLocation.name = this.name;
-            this.workFlowtService.newLocation(this.sourceLocation).subscribe(data => {
+			this.workFlowtService.newLocation(this.sourceLocation).subscribe(data => {
 				this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
-                if (data != null) {
-                    this.saveManagement(data.locationId, this.selectedNodeTest); //pushing Site Management Need Site Value so after getting SiteId we are calling
+				if (data != null) {
+					this.saveManagement(data.locationId, this.selectedNodeTest); //pushing Site Management Need Site Value so after getting SiteId we are calling
 
-                }
+				}
 			})
 			this.loadData();
 		}
-		else
-		{
+		else {
 			this.showAddress = true;
 			this.showManagement = true;
 			this.sourceLocation.updatedBy = this.userName;
@@ -779,14 +768,14 @@ export class LocationComponent implements OnInit, AfterViewInit {
 			this.workFlowtService.updateLocation(this.sourceLocation).subscribe( //Update
 				response => this.saveCompleted(this.sourceLocation),
 				error => this.saveFailedHelper(error));
-            if (this.selectedNodeTest && this.selectedNodeTest.length>0) {
-                this.workFlowtService.deleteManagementLocation(this.selectedNodeTest).subscribe(data => {
-                    //alert("getting delete");
-                });
-            }
-            if (this.selectedNodeTest && this.selectedNodeTest.length > 0) {
-                this.saveManagement(this.selectedNodeTest[0].data.locationId, this.selectedNodeTest);
-            }// will call ManagementSite Edit Data
+			if (this.selectedNodeTest && this.selectedNodeTest.length > 0) {
+				this.workFlowtService.deleteManagementLocation(this.selectedNodeTest).subscribe(data => {
+					//alert("getting delete");
+				});
+			}
+			if (this.selectedNodeTest && this.selectedNodeTest.length > 0) {
+				this.saveManagement(this.selectedNodeTest[0].data.locationId, this.selectedNodeTest);
+			}// will call ManagementSite Edit Data
 			this.selectedNodeTest = []; //after Edit making empty
 		}
 
@@ -795,8 +784,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	}
 
 	//SaveSuccessHelper
-    private saveSuccessHelper(role?: any)
-    {
+	private saveSuccessHelper(role?: any) {
 		this.isSaving = false;
 		this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
 		this.loadData();
@@ -804,8 +792,7 @@ export class LocationComponent implements OnInit, AfterViewInit {
 
 
 	//DismissModel
-    public dismissModel()
-    {
+	public dismissModel() {
 		this.showAddress = false;
 		this.showManagement = false;
 		this.isDeleteMode = false;
@@ -814,28 +801,27 @@ export class LocationComponent implements OnInit, AfterViewInit {
 	}
 
 	//SaveSuccessCompleted
-    private savesuccessCompleted(user?: any)
-    {
+	private savesuccessCompleted(user?: any) {
 		this.isSaving = false;
 		this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
 		this.loadData();
-    }
+	}
 
-    showAuditPopup(template, id): void {
-        this.auditLocation(id);
-        this.modal = this.modalService.open(template, { size: 'sm', backdrop: 'static', keyboard: false });
-    }
+	showAuditPopup(template, id): void {
+		this.auditLocation(id);
+		this.modal = this.modalService.open(template, { size: 'sm', backdrop: 'static', keyboard: false });
+	}
 
-    auditLocation(locationId: number): void {
+	auditLocation(locationId: number): void {
 		this.AuditDetails = [];
 		this.HasAuditDetails = this.AuditDetails.length > 0;
-        this.workFlowtService.getLocationAudit(locationId).subscribe(audits => {
-            if (audits.length > 0) {
-                this.AuditDetails = audits[0].result;
+		this.workFlowtService.getLocationAudit(locationId).subscribe(audits => {
+			if (audits.length > 0) {
+				this.AuditDetails = audits[0].result;
 				this.HasAuditDetails = this.AuditDetails.length > 0;
-            }
-        });
-    }
+			}
+		});
+	}
 
 	/* 
 	    Bulk location upload
@@ -848,116 +834,118 @@ export class LocationComponent implements OnInit, AfterViewInit {
 		this.uploadedRecords = null;
 
 		const file = event.target.files;
-		
-        console.log(file);
-		
+
+		console.log(file);
+
 		if (file.length > 0) {
 
 			this.formData.append('file', file[0])
-			
-            this.workFlowtService.bulkUpload(this.formData).subscribe(response => {
-				
+
+			this.workFlowtService.bulkUpload(this.formData).subscribe(response => {
+
 				event.target.value = '';
 
-                this.uploadedRecords = response;
-				
+				this.uploadedRecords = response;
+
 				this.loadData();
-				
-                this.alertService.showMessage(
-                    'Success',
-                    `Successfully Uploaded  `,
-                    MessageSeverity.success
-                );
-            })
-        }
+
+				this.alertService.showMessage(
+					'Success',
+					`Successfully Uploaded  `,
+					MessageSeverity.success
+				);
+			})
+		}
 
 	}
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
-        }
-        this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
-    getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.locationData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
+		}
+		this.getListByStatus(this.status ? this.status : this.currentstatus)
+	}
+
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	status: any = "Active";
+	getListByStatus(status) {
+		const newarry = [];
+		if (status == 'Active') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
 				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.locationData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
+					if (element.isActive == true && element.isDeleted == false) {
 						newarry.push(element);
 					}
 				});
-				this.locationData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == true) {
 						newarry.push(element);
 					}
 				});
-				this.locationData= newarry;
 			}
-        }
-        this.totalRecords = this.locationData.length ;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+			this.locationData = newarry;
+		} else if (status == 'InActive') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.locationData = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				// this.billingInfoList=this.originalTableData;
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.locationData = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.locationData = newarry;
+			}
 		}
-		restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Location',
-            'LocationId',this.restorerecord.locationId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
-                this.modal.close();
-                // this.geListByStatus(this.status ? this.status : 'Active');
-                this.loadData();
-    
-                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-            })
-        }
-   	
+		this.totalRecords = this.locationData.length;
+		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+	}
+	restore(content, rowData) {
+		this.restorerecord = rowData;
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+	restorerecord: any = {}
+	restoreRecord() {
+		this.commonService.updatedeletedrecords('Location',
+			'LocationId', this.restorerecord.locationId).subscribe(res => {
+				this.currentDeletedstatus = true;
+				this.modal.close();
+				// this.geListByStatus(this.status ? this.status : 'Active');
+				this.loadData();
+
+				this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+			})
+	}
+
+	openEdits(rowData) {}
+	changeStatus(rowData) {}
 }

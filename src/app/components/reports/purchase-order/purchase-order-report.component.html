@@ -109,7 +109,7 @@
             <tr>
                 <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <!-- <input type="text" style="width:100%;" pInputText   (keyup)="filterData($event)"> -->
-                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch($event.target.value, col.field , 'contains' )">
+                    <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); ">
             </tr>
         </ng-template>
         <ng-template pTemplate="body"

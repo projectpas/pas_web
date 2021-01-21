@@ -1,14 +1,14 @@
 ﻿<p-breadcrumb [model]="breadcrumbs" [home]="home" *ngIf="isView==false"></p-breadcrumb>
 <div class="card new-card" >
-    <div class="card-header bg-primary" *ngIf="isView==false">
+    <div class="header " *ngIf="isView==false">
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading">  {{ assetServices.isEditMode == true ? 'Edit'  : 'Create'}} Asset Caps</h4>
+          <h4 class="header-name">  {{ assetServices.isEditMode == true ? 'Edit'  : 'Create'}} Asset Capabilities</h4>
         </div>
         <div>
           <button
             type="button"
-            class="btn-sm new-btn-primary"
+            class="btn-sm header-button"
             [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
             Asset List
           </button>
@@ -58,27 +58,29 @@
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" (click)="dismissModelWithAlert()">×</button>
                             <h4 class="modal-title">Add Capability</h4>
-
+                            <div class="form-row" style="width: 100%;">
+                                <div class="col-md-12 shadow-box-cstm">
+                                <div class="col-md-3">
+                                    <label class="fs12">Asset ID : </label>
+                                    <span class="span-header-red"> {{local?.assetId}}</span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fs12">Asset Name : </label>
+                                    <span class="span-header-red"> {{local?.name}}</span>
+    
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fs12">Alt Asset ID : </label>
+                                    <span class="span-header-red"> {{local?.alternateAssetName}}</span> 
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="fs12">Asset Class/Attribute : </label>
+                                    <span class="span-header-red"> {{local?.assetAttributeType}}</span> 
+                                </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-row" style="padding: 12px 20px;">
-                            <div class="col-md-3">
-                                <label class="fs12">Asset ID : </label>
-                                <span class="span-header-red"> {{local?.assetId}}</span>
-                            </div>
-                            <div class="col-md-3">
-                                <label class="fs12">Asset Name : </label>
-                                <span class="span-header-red"> {{local?.name}}</span>
-
-                            </div>
-                            <div class="col-md-3">
-                                <label class="fs12">Alt Asset ID : </label>
-                                <span class="span-header-red"> {{local?.alternateAssetName}}</span> 
-                            </div>
-                            <div class="col-md-3">
-                                <label class="fs12">Asset Class/Attribute : </label>
-                                <span class="span-header-red"> {{local?.assetAttributeType}}</span> 
-                            </div>
-                        </div>
+                      
                         
                         <div class="modal-body" style="padding: 12px;">
                             <form #genForm="ngForm" [formGroup]="capabilitiesForm">
@@ -428,28 +430,17 @@
             <div class="clear"></div>
             <hr />
             <div class="clear"></div>
-
-            <!-- <div class="col-md-12" style="margin-bottom: -10px;">
-                <h4 class="float-left">
-                    Capabilities
-                    <a class="plusicon-cstm new-margin" matTooltip="Add Capability" matTooltipPosition="above"
-                       data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
-                  
-                        <i class="fa fa-plus-circle fa-lg"></i>
-                    </a>
-                </h4>
-            </div> -->
-            <div class="card-header bg-primary" *ngIf="isView==false">
+            <div class="header" *ngIf="isView==false">
                 <div class="row">
                   <div class="col">
-                    <h4 class="new-card-heading"> Capabilities Info</h4>
+                    <h4 class="header-name"> Capabilities </h4>
                   </div>
                   <div>
                     <button
                       type="button"
-                      class="btn-sm new-btn-primary"  matTooltip="Add Capability" matTooltipPosition="above"
+                      class="btn-sm header-button"  matTooltip="Add Capability" matTooltipPosition="above"
                       data-toggle="modal" data-target="#addShippingInfo" (click)="openCapess()">
-                      Add New Capability
+                      Add  Capability
                     </button>
                   </div>
                 </div>
@@ -500,7 +491,7 @@
                             matTooltipPosition="above" style="padding: 5px 12px !important;"
                             pButton icon="fa-download" iconPos="left" label="Export Selected Data"
                             (click)="dt.exportCSV({selectionOnly:true})"></button>
-                    <div  *ngIf="isView==false" class="excel-upload  excel-upload-cstm">
+                    <!-- <div  *ngIf="isView==false" class="excel-upload  excel-upload-cstm">
                         <button name="download" id="download" type="button" class="btn btn-primary"
                                 matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForCapes()"
                                 style="padding: 5px 10px !important;">
@@ -515,7 +506,7 @@
                             </span>
                         </label>
                         &nbsp; &nbsp;
-                    </div>
+                    </div> -->
                     </div>
                     <div class="col"  >
                         <div class="">

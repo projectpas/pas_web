@@ -62,7 +62,7 @@ export class AtaMainComponent implements OnInit {
     disableSaveForDescription: boolean = false;
     disableSaveForDescriptionMsg: boolean = false;
     descriptionList: any;
-
+    AuditDetails: any;
     new = {
         ataChapterCode: "",
         ataChapterName: "",

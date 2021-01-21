@@ -427,21 +427,21 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http.post<any>(`${this.configurations.baseUrl}/api/salesorder/soapproval`, JSON.stringify(data), this.getRequestHeaders());
   }
 
-  close(salesOrderId: number): Observable<boolean> {
-    const URL = `${this.getCloseEndPointUrl}/${salesOrderId}`;
+  close(salesOrderId: number,updatedBy:string): Observable<boolean> {
+    const URL = `${this.getCloseEndPointUrl}/${salesOrderId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.close(salesOrderId));
+        return this.handleErrorCommon(error, () => this.close(salesOrderId,updatedBy));
       });
   }
 
-  cancel(salesOrderId: number): Observable<boolean> {
-    const URL = `${this.getCancelEndPointUrl}/${salesOrderId}`;
+  cancel(salesOrderId: number,updatedBy:string): Observable<boolean> {
+    const URL = `${this.getCancelEndPointUrl}/${salesOrderId}?updatedBy=${updatedBy}`;
     return this.http
       .put(URL, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.cancel(salesOrderId));
+        return this.handleErrorCommon(error, () => this.cancel(salesOrderId,updatedBy));
       });
   }
 
@@ -565,6 +565,13 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/salesorder/getSalesOrderHistory/?salesOrderId=${salesOrderId}`)
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getSOHistory(salesOrderId));
+      });
+  }
+
+  approverslistbyTaskId(taskId, id) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
       });
   }
   //end nitin

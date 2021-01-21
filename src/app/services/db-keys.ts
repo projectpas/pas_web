@@ -31,7 +31,7 @@ export class DBkeys {
     public static readonly DEFAULT_ROTABLE_ID = 13;
     public static readonly AUTO_COMPLETE_COUNT_LENGTH = 20; //Do Not change It from 20 If require another const.
     public static readonly UPDATED_BY = "admin";
-    public static readonly GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_QUOTE = "Create Sales Quote";
+    public static readonly GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_QUOTE = "Create Sales Order Quote";
     public static readonly GLOBAL_CUSTOMER_WARNING_TYOE_FOR_SALES_ORDER = "Create Sales Order";
     public static readonly GLOBAL_CUSTOMER_WARNING_ID_FOR_SALES_ORDER = 618;
     public static readonly DEFAULT_PRIORITY_ID = 2;

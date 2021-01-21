@@ -21,7 +21,7 @@ import { Router, ActivatedRoute, Params, NavigationExtras } from '@angular/route
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { GMapModule } from 'primeng/gmap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-steps-prime-ng.component';
@@ -157,7 +157,8 @@ export class VendorPaymentInformationComponent implements OnInit, AfterViewInit 
 	arrayCountrylist:any[] = [];
 	disableSavePaymentCountry: boolean = true;
 	vendorCodeandName: any;
-
+	contact: any;
+	
 	constructor(private http: HttpClient,private datePipe: DatePipe, private commonService: CommonService, private changeDetectorRef: ChangeDetectorRef, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public vendorService: VendorService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
 		if(window.localStorage.getItem('vendorService')){
             var obj = JSON.parse(window.localStorage.getItem('vendorService'));

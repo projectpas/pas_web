@@ -1,11 +1,11 @@
-﻿    import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
 
 import { ReasonService } from '../../services/reason.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { Reason } from '../../models/reason.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -46,9 +46,9 @@ export class ReasonComponent {
     field: any;
     shortNameInputFieldValue: any;
     selectedreason: any;
-    allreasn: any[]=[];
+    allreasn: any[] = [];
     disableSave: boolean = false;
-    disableSaveForEdit:boolean=false;
+    disableSaveForEdit: boolean = false;
     reason_Name: any = "";
     reasonForRemoval: any = "";
     memo: any = "";
@@ -57,14 +57,14 @@ export class ReasonComponent {
     createdDate: any = "";
     updatedDate: any = "";
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     Active: string = "Active";
     displayedColumns = ['reasonCode', 'reasonForRemoval', 'memo'];
     dataSource: MatTableDataSource<Reason>;
     allReasonsInfo: Reason[] = [];
     private isSaving: boolean;
-disableReason:boolean=false;
+    disableReason: boolean = false;
     auditHistory: any[] = [];
     private bodyText: string;
     loadingIndicator: boolean;
@@ -84,9 +84,9 @@ disableReason:boolean=false;
     filteredBrands: any[];
     localCollection: any[] = [];
     AuditDetails: SingleScreenAuditDetails[];
-  
+
     public allWorkFlows: Reason[] = [];
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
 
     pageSearch: { query: any; field: any; };
@@ -108,7 +108,7 @@ disableReason:boolean=false;
         }
     addNewReason = { ...this.newReason };
     disableSaveForReason: boolean = false;
-    disableSaveForReasons:boolean=false;
+    disableSaveForReasons: boolean = false;
     reasonList: any;
     reasonForRemovalList: any;
     isEdit: boolean = false;
@@ -119,32 +119,32 @@ disableReason:boolean=false;
     existingRecordsResponse: Object;
 
 
-    reasonPagination: any=[];//added
+    reasonPagination: any = [];//added
     totalRecords: number;
     totalPages: number;
     loading: boolean;
     /** Actions ctor */
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
-        private commonService: CommonService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal,   private masterComapnyService: MasterComapnyService,private _fb: FormBuilder, private alertService: AlertService, public reasonService: ReasonService, private dialog: MatDialog) {
+        private commonService: CommonService, private configurations: ConfigurationService, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private masterComapnyService: MasterComapnyService, private _fb: FormBuilder, private alertService: AlertService, public reasonService: ReasonService, private dialog: MatDialog) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
 
     }
-    
+
     ngOnInit(): void {
         this.getReasonList();
         this.cols = [
             //{ field: 'reasonId', header: 'Reason Id' },
-            { field: 'reasonCode', header: 'Reason Code'},
+            { field: 'reasonCode', header: 'Reason Code' },
             { field: 'reasonForRemoval', header: 'Reason For Removal' },
             { field: 'memo', header: 'Memo' }
             //{ field: 'createdBy', header: 'Created By' },
             //{ field: 'updatedBy', header: 'Updated By' },
             //{ field: 'updatedDate', header: 'Updated Date' },
-           // { field: 'createdDate', header: 'Created Date' }
-		];
-		this.breadCrumb.currentUrl = '/singlepages/singlepages/app-reason';
-		this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
+            // { field: 'createdDate', header: 'Created Date' }
+        ];
+        this.breadCrumb.currentUrl = '/singlepages/singlepages/app-reason';
+        this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
         this.selectedColumns = this.cols;
     }
 
@@ -152,7 +152,7 @@ disableReason:boolean=false;
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
-   
+
 
     changePage(event: { first: any; rows: number }) {
         console.log(event);
@@ -184,7 +184,7 @@ disableReason:boolean=false;
             results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
             error => this.onDataLoadFailed(error)
         );
-  
+
     }
     public applyFilter(filterValue: string) {
         this.dataSource.filter = filterValue;
@@ -223,10 +223,10 @@ disableReason:boolean=false;
 
         this.isEditMode = false;
         this.isDeleteMode = false;
-		this.disableSave = false;
+        this.disableSave = false;
         this.isSaving = true;
         this.loadMasterCompanies();
-		this.sourceAction = new Reason();
+        this.sourceAction = new Reason();
         this.sourceAction.isActive = true;
         this.reasonName = "";
 
@@ -279,7 +279,7 @@ disableReason:boolean=false;
         this.isSaving = true;
         this.loadMasterCompanies();
 
-		this.disableSave = false;
+        this.disableSave = false;
 
         this.sourceAction = row;
         this.reasonName = this.sourceAction.reasonCode;
@@ -311,7 +311,7 @@ disableReason:boolean=false;
                 this.disableSave = true;
                 this.selectedreason = event;
             }
-          
+
         }
     }
 
@@ -321,16 +321,16 @@ disableReason:boolean=false;
 
     filterReasons(event) {
 
-       
+
         this.localCollection = [];
         for (let i = 0; i < this.allReasonsInfo.length; i++) {
             let reasonName = this.allReasonsInfo[i].reasonCode;
             if (reasonName.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
                 this.allreasn.push([{
                     "reasonId": this.allReasonsInfo[i].reasonId,
-                    "reasonName":reasonName
+                    "reasonName": reasonName
                 }]),
-                this.localCollection.push(reasonName);
+                    this.localCollection.push(reasonName);
             }
         }
     }
@@ -437,7 +437,7 @@ disableReason:boolean=false;
 
     }
 
-    
+
 
     deleteItemAndCloseModel() {
         this.isSaving = true;
@@ -452,7 +452,7 @@ disableReason:boolean=false;
             );
 
         });
-            
+
         this.modal.close();
     }
 
@@ -539,8 +539,7 @@ disableReason:boolean=false;
         //alert(event.sortOrder);//yes
         //alert(event.sortField);//yes
         //event.sortFunction;//undefined
-        if (this.field)
-        {
+        if (this.field) {
             this.reason.push({
                 ReasonCode: this.reasonCodeInputFieldValue,
                 ReasonForRemoval: this.reasonForRemovalInputFieldValue,
@@ -565,8 +564,7 @@ disableReason:boolean=false;
             else {
             }
         }
-        else
-        {
+        else {
             setTimeout(() => {
                 if (this.allReasonsInfo) {
                     this.reasonService.getServerPages(event).subscribe( //we are sending event details to service
@@ -580,7 +578,7 @@ disableReason:boolean=false;
                 }
             }, 1000);
         }
-        
+
     }
 
     inputFiledFilter(event, filed, matchMode) {
@@ -632,15 +630,15 @@ disableReason:boolean=false;
 
     getReasonList() {
         this.reasonService.getAllReasonsList().subscribe(res => {
-           // const responseData = res[0];
+            // const responseData = res[0];
             // this.uomHeaders = responseData.columHeaders;
             // this.selectedColumns = responseData.columHeaders;
-           
-            this.originalTableData=res[0].columnData;
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
 
-           
-           
+            this.originalTableData = res[0].columnData;
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
+
+
+
             // this.reasonPagination = responseData.columnData;
             // this.totalRecords = responseData.totalRecords;
             // this.totelPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -657,7 +655,7 @@ disableReason:boolean=false;
 
     resetReasonForm() {
         this.isEdit = false;
-    
+
         this.disableSaveForReasonCode = false;
         this.selectedRecordForEdit = undefined;
         this.addNewReason = { ...this.newReason };
@@ -729,8 +727,8 @@ disableReason:boolean=false;
             })
         }
     }
-    getmemo(){
-        this.disableSaveForEdit=false;
+    getmemo() {
+        this.disableSaveForEdit = false;
     }
 
     editReason(rowData) {
@@ -780,91 +778,94 @@ disableReason:boolean=false;
 
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.reasonPagination=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.reasonPagination = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.reasonPagination = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.reasonPagination = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.reasonPagination= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.reasonPagination= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.reasonPagination = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.reasonPagination = newarry;
+            }
         }
-        this.totalRecords = this.reasonPagination.length ;
+        this.totalRecords = this.reasonPagination.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-		}
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Reason',
-            'ReasonId',this.restorerecord.reasonId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('Reason',
+            'ReasonId', this.restorerecord.reasonId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.getReasonList();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
+    }
+
+    changeStatus(rowData) {}
+    columnsChanges() {}
 }

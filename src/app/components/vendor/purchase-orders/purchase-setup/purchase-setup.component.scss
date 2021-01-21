@@ -11,7 +11,9 @@
     background: #fafafa !important;
 }
 
-
+.ship-address-memo{
+    margin-left:-16px;
+}
 .gray-background {
     background-color:#c9c9c9 !important;
 }
@@ -33,6 +35,10 @@ input[type="text"], input[type="number"], select {
 }
 textarea {
     border-radius: 5px !important;
+}
+.msHeader
+{
+    min-width: 160px !important;
 }
 // table.table-bordered thead tr {
 //     padding: 4px;
@@ -189,7 +195,8 @@ margin-bottom: -10px !important;
 
 
 .vendor-contact-icon{
-margin-left:3px;cursor:pointer;
+margin-left:5px;
+cursor:pointer;
 }
 .po-warning{
     height: 60px !important; width:100% !important

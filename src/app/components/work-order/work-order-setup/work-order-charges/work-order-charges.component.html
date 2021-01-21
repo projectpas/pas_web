@@ -65,7 +65,7 @@
                     </p-radioButton>
                     <div>
                       <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                        [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
@@ -110,7 +110,7 @@
                     </p-radioButton>
                     <div>
                       <select class="form-group select-markup" (change)="markupChanged({}, 'all')" [(ngModel)]="overAllMarkup"
-                        [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
                         <option value="">Select</option>
                         <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                       </select>
@@ -167,8 +167,8 @@
                 {{dt[col.field]}}
               </td>
               <td *ngIf="col.field == 'roNumberId'">
-                <select class="form-control select-read-only" id="roNum_{{i}}" [(ngModel)]="dt[col.field]"
-                  style="width: 130px;" name="roNum_{{i}}" disabled>
+                <select class="form-control select-read-only" id="roNum_{{mainIndex}}" [(ngModel)]="dt[col.field]"
+                  style="width: 130px;" name="roNum_{{mainIndex}}" disabled>
                   <option [value]="0">Select</option>
                   <option [value]="ctype.value" *ngFor="let ctype of roNumList">{{
                     ctype.label

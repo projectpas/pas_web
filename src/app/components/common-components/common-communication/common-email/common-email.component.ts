@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, ViewChild, Input, OnChanges, ElementRef, ViewEncapsulation } from '@angular/core';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
@@ -10,6 +10,7 @@ import { CommonService } from '../../../../services/common.service';
 import { AuthService } from '../../../../services/auth.service';
 import { emailPattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 @Component({
     selector: 'app-common-email',
     templateUrl: './common-email.component.html',
@@ -491,13 +492,15 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     dismissModelRestore() {
         this.modal.close();
     }
-    getDeleteListByStatus(value) {
+    getDeleteListByStatus(value) {        
         this.deletedStatusInfo = value ? value : false;
         this.getAllEmail();
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
+    dataOriginal:any=[];
     getAllEmail() {
+        this.data = [];
         this.isSpinnerVisible = true;
         this.communicationService.getCommonEmailList(this.referenceId, this.moduleId, this.deletedStatusInfo, this.type)
             .subscribe(
@@ -513,7 +516,8 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                             }
                         });
-                    }
+                    }            
+                    this.dataOriginal = this.data;
                 }, err => {
                     this.errorMessageHandler();
                 }
@@ -588,5 +592,21 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     }
     errorMessageHandler() {
         this.isSpinnerVisible = false;
+    }
+
+    downloadFile(x) {}
+
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.data = this.dataOriginal;
+            const data = [...this.data.filter(x => {
+                if (moment(x.contactDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'contactDate') {
+                    return x;
+                }
+            })]
+            this.data = data;
+        } else {
+            this.data = this.dataOriginal;
+        }
     }
 }

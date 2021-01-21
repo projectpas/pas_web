@@ -16,6 +16,7 @@ import * as $ from 'jquery';
 import { MasterCompany } from 'src/app/models/mastercompany.model';
 import { Router } from '@angular/router';
 
+declare var $ : any;
 @Component({
     selector: "app-login-control",
     templateUrl: './login-control.component.html',

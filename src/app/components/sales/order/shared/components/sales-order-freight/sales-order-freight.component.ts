@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnChanges, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
 import { AuthService } from '../../../../../../services/auth.service';
@@ -10,6 +10,7 @@ import { SOFreight } from '../../../../../../models/sales/SOFreight';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { NgForm } from "@angular/forms";
+import { ActionService } from '../../../../../../Workflow/ActionService';
 
 
 @Component({
@@ -30,7 +31,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     @Output() refreshData = new EventEmitter();
     @Input() view: boolean = false;
     @Input() isQuote = false;
-    markupList:any = [];
+    markupList: any = [];
     @Input() isView: boolean = false;
     shipViaList: any = [];
     mainEditingIndex: any;
@@ -56,13 +57,14 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     deletedStatusInfo: boolean = false;
     restorerecord: any = {}
     deletedrowIndex: any;
-
+    isUpdate: boolean = false;
     constructor(private salesOrdeService: SalesOrderService,
         private authService: AuthService,
         private alertService: AlertService,
         private commonService: CommonService,
         private cdRef: ChangeDetectorRef,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private actionService: ActionService) {
     }
     ngOnInit() {
         if (this.freightForm) {
@@ -81,7 +83,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             this.costPlusType = this.salesOrderFreightList[0].markupFixedPrice;
             this.overAllMarkup = Number(this.salesOrderFreightList[0].headerMarkupId);
         }
-        this.isView = this.isView ? this.isView :false;
+        this.isView = this.isView ? this.isView : false;
     }
 
     ngOnChanges() {
@@ -97,23 +99,35 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
     }
 
+    arrayEmplsit:any=[];
+    arrayUnitOfMeasureList:any=[];
+    arrayCurrencyList:any=[];
+    arrayPercentList:any=[];
+
     refresh(isView) {
         // this.isView = isView;
         this.isSpinnerVisible = true;
+        this.arrayEmplsit.push(0);
+        this.arrayUnitOfMeasureList.push(0);
+        this.arrayCurrencyList.push(0);
+        this.arrayPercentList.push(0);
         forkJoin(this.salesOrdeService.getSalesOrderFreights(this.salesOrderId, 0),
-            this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.customerId),
-            this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName'),
-            this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code'),
-            this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")).subscribe(response => {
+            //this.commonService.getShipViaDetailsByModule(getModuleIdByName('Customer'), this.customerId),
+            ////this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join()),
+            this.commonService.getShipVia(),
+            //this.commonService.smartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'ShortName'),
+            this.commonService.autoSuggestionSmartDropDownList('UnitOfMeasure', 'UnitOfMeasureId', 'shortName', '', true, 20, this.arrayUnitOfMeasureList.join()),
+            //this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code'),
+            this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', '', true, 20, this.arrayCurrencyList.join()),
+            //this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue"))
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
                 this.unitOfMeasureList = response[2];
                 this.currencyList = response[3];
                 this.markupList = response[4];
-
-            }, error => this.onDataLoadError(error))
-
+            }, error => this.onDataLoadError(error));
     }
 
     refreshFreightsOnSaveOrDelete(fromDelete = false) {
@@ -147,7 +161,7 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 this.getTotalBillingAmount();
                 this.updateFreightListForSO.emit(this.freightFlatBillingAmount);
             }
-        },error => {
+        }, error => {
             this.isSpinnerVisible = false;
         })
     }
@@ -160,9 +174,11 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
             if (Number(this.costPlusType) == 3) {
                 this.freightFlatBillingAmount = res[0].markupFixedPrice;
             }
+            this.isUpdate = true;
             // this.overAllMarkup = res[0].headerMarkupId;
         } else {
             this.salesOrderFreightList = [];
+            this.isUpdate = false;
         }
         this.freightForm = [];
         this.salesOrderFreightLists = [];
@@ -270,8 +286,14 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
         else {
             let temp = [];
+            // this.salesOrderFreightList.forEach((x) => {
+            //     temp = [...temp, ...x];
+            // })
             this.salesOrderFreightList.forEach((x) => {
-                temp = [...temp, ...x];
+                if(typeof x[Symbol.iterator] === 'function')
+                    temp = [...temp, ...x];
+                else
+                    temp = [...temp, x];
             })
             temp = [...temp, ...this.freightForm];
             this.salesOrderFreightLists = temp;
@@ -286,14 +308,20 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         }
         this.isEnableUpdateButton = true;
         this.isSaveChargesDesabled = false;
+        this.storedData=[...this.salesOrderFreightList];
     }
 
     createFreightsQuote() {
         let temp = this.salesOrderFreightList;
         let sendData = []
+        // for (let index = 0; index < temp.length; index++) {
+        //     sendData = [...sendData, ...temp[index]];
+        // }
         for (let index = 0; index < temp.length; index++) {
-            sendData = [...sendData, ...temp[index]];
-
+            if (typeof temp[index][Symbol.iterator] === 'function')
+                sendData = [...sendData, ...temp[index]];
+            else
+                sendData = [...sendData, temp[index]];                
         }
         sendData = sendData.map((f) => {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
@@ -303,17 +331,15 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         this.salesOrdeService.createFreight(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
-                '',
+                'Success',
                 'Sales Order Freights saved successfully',
                 MessageSeverity.success
             );
             this.refreshFreightsOnSaveOrDelete();
             this.saveFreightListForSO.emit(this.freightFlatBillingAmount);
         }, error => {
-                this.isSpinnerVisible = false;
-                const errorLog = error;
-                this.onDataLoadError(error)
-            })
+            this.isSpinnerVisible = false;
+        })
         this.isSaveChargesDesabled = true;
         this.storedData = [];
     }
@@ -424,6 +450,10 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
 
+        for (let x of auditHistory) {
+            x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
+            x.amount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g, '')));
+        }
 
         this.freightAudiHistory = auditHistory;
 
@@ -574,5 +604,41 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
     }
     deleteRow(index, form: NgForm): void {
         this.freightForm.splice(index, 1);
+    }
+
+    dismissModelAlettRestore() {}
+    formatStringToNumberGlobal($event) {}
+
+    shipViaId:number = 0;
+    getShipViaId(event){
+        console.log(event);
+        this.shipViaId = event;
+    }
+    IsAddShipVia:boolean = false;
+    ShipViaEditID:number;
+    shipviaindex;
+    isEditModeShipVia:boolean=false;
+	onEditShipVia(value,id,index) {
+        this.shipviaindex = index;
+		if(value == 'Add') {
+        //this.ShipViabutton = true;
+        this.ShipViaEditID = 0;
+		}	
+		else {
+            this.ShipViaEditID = id;
+			//this.ShipViabutton = false;
+			this.isEditModeShipVia = true;	
+		}
+		this.IsAddShipVia = true;
+    }
+    
+    RefreshAfterAddShipVia(ShippingViaId){
+        this.commonService.getShipVia().subscribe(response => {
+            this.isSpinnerVisible = false;
+            this.setShipViaList(response);
+            this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+            this.IsAddShipVia = false;
+            this.isEnableUpdateButton = false;
+        }, error => this.onDataLoadError(error));
     }
 }

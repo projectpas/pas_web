@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { AlertService, MessageSeverity } from '../../../../../../services/alert.service';
@@ -64,7 +64,8 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     deletedrowIndex: any;
     isEnableUpdateButton: boolean = true;
     isSaveChargesDesabled: boolean = true;
-
+    frieghtsCreateForm: any;
+    isUpdate: boolean = false;
     constructor(private salesOrderService: SalesOrderService,
         private authService: AuthService,
         private alertService: AlertService,
@@ -104,18 +105,31 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         }
     }
 
+    arrayVendlsit: any = [];
+    arrayPercentList: any = [];
+
     refresh(isView) {
+        this.arrayVendlsit = [];
+        this.arrayPercentList.push(0);
         // this.isView = isView;
         this.isSpinnerVisible = true;
         forkJoin(this.salesOrderService.getSalesQuoteCharges(this.salesOrderId,this.deletedStatusInfo),
             this.actionService.getCharges(),
-            this.vendorService.getVendorsForDropdown(),
-            this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")
+            //this.vendorService.getVendorsForDropdown(),
+            this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join()),
+            //this.commonService.smartDropDownList("[Percent]", "PercentId", "PercentValue")
+            this.commonService.autoSuggestionSmartDropDownList("[Percent]", "PercentId", "PercentValue", '', true, 200, this.arrayPercentList.join())
         ).subscribe(res => {
             this.isSpinnerVisible = false;
             this.setChargesData(res[0]);
             this.chargesTypes = res[1];
-            this.allVendors = res[2];
+            let vendorList : any = res[2]; 
+            this.allVendors = vendorList.map(x => {
+                return {
+                    vendorId: x.vendorId,
+                    vendorName: x.vendorName
+                }
+            }); 
             this.markupList = res[3];
             this.setVendors();
         }, error => this.onDataLoadError(error));
@@ -168,8 +182,10 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             if (Number(this.costPlusType) == 3) {
                 this.chargesFlatBillingAmount = res[0].markupFixedPrice;
             }
+            this.isUpdate = true;
         } else {
             this.salesOrderChargesList = [];
+            this.isUpdate = false;
         }
         this.chargeForm = [];
         this.salesOrderChargesLists = [];
@@ -257,12 +273,18 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
             this.salesOrderChargesList[this.mainEditingIndex] = this.chargeForm[0];
 
             $('#addNewCharges').modal('hide');
-            this.isEdit = false;
+            this.isEdit = true;
         }
         else {
             let temp = [];
+            // this.salesOrderChargesList.forEach((x) => {
+            //     temp = [...temp, ...x];
+            // })
             this.salesOrderChargesList.forEach((x) => {
-                temp = [...temp, ...x];
+                if(typeof x[Symbol.iterator] === 'function')
+                    temp = [...temp, ...x];
+                else
+                    temp = [...temp, x];
             })
             temp = [...temp, ...this.chargeForm];
             this.salesOrderChargesLists = temp;
@@ -283,9 +305,14 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     createChargesQuote() {
         let temp = this.salesOrderChargesList;
         let sendData = []
+        // for (let index = 0; index < temp.length; index++) {
+        //     sendData = [...sendData, ...temp[index]];
+        // }
         for (let index = 0; index < temp.length; index++) {
-            sendData = [...sendData, ...temp[index]];
-
+            if (typeof temp[index][Symbol.iterator] === 'function')
+                sendData = [...sendData, ...temp[index]];
+            else
+                sendData = [...sendData, temp[index]];                
         }
         sendData = sendData.map((f) => {
             return {
@@ -298,7 +325,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.salesOrderService.createSOQCharge(sendData).subscribe(result => {
             this.isSpinnerVisible = false;
             this.alertService.showMessage(
-                '',
+                'Success',
                 'Created Sales Order Charge Successfully',
                 MessageSeverity.success
             );
@@ -309,7 +336,7 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
         this.storedData = [];
     }
 
-    delete(rowData, rowIndex) {
+    delete() {
         this.deleteModal.close();
         this.isSpinnerVisible = true;
         if (!this.selectedRowForDelete.salesOrderChargesId) {
@@ -610,4 +637,6 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     validated() {
         this.isSaveChargesDesabled = false;
     }
+
+    formatStringToNumberGlobal($event) {}
 }

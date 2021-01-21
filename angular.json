@@ -24,7 +24,8 @@
             "tsConfig": "tsconfig.app.json",
             "aot": false,
             "assets": [
-              "src/favicon.ico",
+              "src/PAS-favicon.png",
+              "src/web.config",
               "src/assets"
             ],
             "styles": [
@@ -34,9 +35,14 @@
               "src/app/assets/themes/purple-green.scss",
               "node_modules/bootstrap/dist/css/bootstrap.css",
               "node_modules/primeicons/primeicons.css",
+              "node_modules/ng2-toasty/bundles/style-material.css",
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": ["node_modules/jquery/dist/jquery.min.js",
+              "src/assets/js/jquery-ui-1.12.1/jquery-ui.min.js",
+              "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "src/assets/js/cdnjs/bootstrap-multiselect.min.js"
+        ]
           },
           "configurations": {
             "production": {
@@ -51,15 +57,15 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
+              "aot": false,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
               "budgets": [
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",

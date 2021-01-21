@@ -20,10 +20,11 @@ import { AircraftManufacturerService } from '../../services/aircraft-manufacture
 import { AircraftModelService } from '../../services/aircraft-model/aircraft-model.service';
 import { DashNumberService } from '../../services/dash-number/dash-number.service';
 import { AtaMainService } from '../../services/atamain.service';
-import * as $ from 'jquery'
+declare var $: any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';
+// import { truncate } from 'fs';
 
 @Component({
     selector: 'app-publication',
@@ -83,8 +84,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     auditHistory: AuditHistory[];
     Active: string = "Active";
     isSpinnerVisible: Boolean = false;
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     displayedColumns = ['PublicationId', 'PartNumber', 'description'];
     //, 'Sequence', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'
     dataSource: MatTableDataSource<Publication>;
@@ -102,14 +103,16 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     modal: NgbModalRef;
     /** Actions ctor */
     cols: any[];
+    auditCols: any[];
+    selectedRow: any;
     selectedColumns: any[];
     publicationName: string;
     filteredBrands: any[];
     localCollection: any[] = [];
     private isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
-    private isActive: boolean = false;
-    viewCheck:boolean=true;
+    public isActive: boolean = false;
+    viewCheck: boolean = true;
     // totalRecords: any=0;
     generalInfo: any;
     // pageIndex: number = 0;
@@ -191,6 +194,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     viewType: any = 'mpn';
     advanceSearchReq: any = {};
     status: string = 'active';
+    documentsContent: any;
+    moduleName: any = 'Publications';
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private configurations: ConfigurationService,
@@ -219,6 +224,22 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
         ];
+
+        this.auditCols = [
+            { field: 'partNos', header: 'PN' },
+            { field: 'pnDescription', header: 'PN Description' },
+            { field: 'revisionNum', header: 'Revision Num' },
+            { field: 'publicationId', header: 'Pub ID' },
+            { field: 'description', header: 'Pub Description' },
+            { field: 'publicationType', header: 'Pub Type' },
+            { field: 'publishedBy', header: 'Published By' },
+            // { field: 'revisionDate', header: 'Revision Date' },
+            // { field: 'nextReviewDate', header: 'Next Review Date' },
+            { field: 'expirationDate', header: 'Expiration Date' },
+            { field: 'location', header: 'Location' },
+            { field: 'verifiedBy', header: 'Verified By' },
+            { field: 'verifiedDate', header: 'Verified Date' },
+        ];
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-publication';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
         this.selectedColumns = this.cols;
@@ -233,7 +254,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
     pageIndexChange(event) {
         this.pageSize = event.rows;
-    } 
+    }
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -243,9 +264,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private loadData(data) {
         this.isSpinnerVisible = true;
         this.lazyLoadEventDataInput = data;
-        const isdelete=this.currentDeletedstatus ? true:false;
+        const isdelete = this.currentDeletedstatus ? true : false;
         data.filters['viewType'] = this.viewType;
-        data.filters['status'] = this.status ? this.status :this.currentstatus;
+        data.filters['status'] = this.status ? this.status : this.currentstatus;
         data.filters['isDeleted'] = isdelete;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.publicationService.getPublications(PagingData).subscribe(
@@ -255,24 +276,28 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
                 this.isSpinnerVisible = false;
             }, err => {
-                this.isSpinnerVisible = false;           
+                this.isSpinnerVisible = false;
                 const errorLog = err;
                 this.errorMessageHandler(errorLog);
             });
 
     }
 
+    changeOfDocumentStatus(status) {
+        // this.disableSave = false;
+    }
+
     errorMessageHandler(log) {
-		this.alertService.showMessage(
-			'Error',
-			log.error,
-			MessageSeverity.error
-		);
-	}
+        this.alertService.showMessage(
+            'Error',
+            log.error,
+            MessageSeverity.error
+        );
+    }
     changeOfStatus(status, viewType) {
         const lazyEvent = this.lazyLoadEventDataInput;
         this.viewType = viewType === '' ? this.viewType : viewType;
-        this.isSpinnerVisible = true;  
+        this.isSpinnerVisible = true;
         this.loadData({
             ...lazyEvent,
             filters: {
@@ -286,7 +311,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.status = status;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        this.isSpinnerVisible = true;  
+        this.isSpinnerVisible = true;
         this.loadData(PagingData);
     }
     // geListByStatus(status) {
@@ -295,42 +320,48 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     //     const PagingData = { ...this.lazyLoadEventDataInput, filters:{status: status} }
     //     this.loadData(PagingData);
     // }
-    currentDeletedstatus:boolean=false;
+    currentDeletedstatus: boolean = false;
     currentstatus: string = 'Active';
-    getDeleteListByStatus(value){
-        this.currentDeletedstatus=true;
+    getDeleteListByStatus(value) {
+        this.currentDeletedstatus = true;
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
         this.pageIndex = pageIndex;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
         this.status = status;
         this.isSpinnerVisible = true;
-        if(value==true){
-            this.currentstatus="ALL";
-         
+        if (value == true) {
+            this.currentstatus = "ALL";
+
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL" };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData)
         } else {
-            this.currentDeletedstatus=false;
-            this.currentstatus="ALL"
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL"};
+            this.currentDeletedstatus = false;
+            this.currentstatus = "ALL"
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: "ALL" };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
             this.loadData(PagingData);
         }
     }
-    restorerecord:any={};
+    restorerecord: any = {};
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-        }, () => { console.log('Backdrop click') })
+        }, () => {
+            // console.log('Backdrop click')
+        })
     }
-    restoreRecord(record){
-        this.commonService.updatedeletedrecords('Publication','PublicationRecordId',this.restorerecord.publicationRecordId).subscribe(res => {
+    restoreRecord() {
+        this.isSpinnerVisible = true;
+        this.commonService.updatedeletedrecords('Publication', 'PublicationRecordId', this.restorerecord.publicationRecordId).subscribe(res => {
             this.modal.close();
+            this.isSpinnerVisible = false;
             this.getDeleteListByStatus(true)
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+        }, error => {
+            this.isSpinnerVisible = false;
         })
     }
     eventHandler(event) {
@@ -359,11 +390,19 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     private loadMasterCompanies() {
         this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
-
+        // this.loadingIndicator = true;
+        this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
-            results => this.onDataMasterCompaniesLoadSuccessful(results[0]),
-            error => this.onDataLoadFailed(error)
+            results => {
+                this.onDataMasterCompaniesLoadSuccessful(results[0])
+
+                this.isSpinnerVisible = false;
+            },
+            error => {
+                this.onDataLoadFailed(error)
+
+                this.isSpinnerVisible = false;
+            }
         );
 
     }
@@ -388,7 +427,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 //employee: getValueFromArrayOfObjectById('firstName', 'employeeId', x.employee, this.allEmployeeinfo),
             }
         });
-     
+
     }
 
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
@@ -425,7 +464,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     //         console.log('When user closes');
     //     }, () => { console.log('Backdrop click') })
     // }
-   
+
 
     openDelete(content, row) {
         this.selectedRowforDelete = row;
@@ -434,8 +473,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.sourceAction = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
         this.modal.result.then(() => {
-            console.log('When user closes');
-        }, () => { console.log('Backdrop click') })
+            // console.log('When user closes');
+        }, () => {
+            //  console.log('Backdrop click')
+        })
     }
 
     openStep1() {
@@ -461,7 +502,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.generalInfo = true;
         $('#step1').collapse('show');
 
-        console.log(row)
+        // console.log(row)
         //this.generalInfo = row;
         // this.sourceAction = row;
         // this.publication_Name = row.publicationId;
@@ -487,10 +528,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         //     console.log('When user closes');
         // }, () => { console.log('Backdrop click') })
 
+        this.isSpinnerVisible = true;
         //get general info
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {
+            this.isSpinnerVisible = false;
             this.generalInfo = res[0];
-            console.log(this.generalInfo);
 
             // this.attachmentList = res[0].attachmentDetails.map(x => {
             //     return {
@@ -500,12 +542,18 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             //     }
             // })
             // console.log(this.attachmentList);
+        }, error => {
+            this.isSpinnerVisible = false;
         })
 
         //get PN Mapping info
+        this.isSpinnerVisible = true;
+
         this.publicationService.getPublicationPNMapping(row.publicationRecordId)
             .subscribe(res => {
-                console.log(res);
+                // console.log(res);
+                this.isSpinnerVisible = false;
+
                 this.pnMappingList = res.map(x => {
                     return {
                         ...x,
@@ -513,13 +561,19 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         partDescription: x.partDescription,
                         itemClassification: x.itemClassification
                     };
+                }, error => {
+                    this.isSpinnerVisible = false;
                 });
             });
 
         //get aircraft info
+        this.isSpinnerVisible = true;
+
         this.publicationService
             .getAircraftMappedByPublicationId(row.publicationRecordId)
             .subscribe(res => {
+                this.isSpinnerVisible = false;
+
                 this.aircraftList = res.map(x => {
                     return {
                         ...x,
@@ -528,13 +582,18 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         dashNumber: x.dashNumber,
                         //memo: x.memo
                     };
+                }, error => {
+                    this.isSpinnerVisible = false;
+
                 });
             });
 
         // get ata chapter info
+        this.isSpinnerVisible = true;
         this.publicationService
             .getAtaMappedByPublicationId(row.publicationRecordId)
             .subscribe(res => {
+                this.isSpinnerVisible = false;
                 const responseData = res;
                 this.ataList = responseData.map(x => {
                     return {
@@ -548,36 +607,40 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         // ataChapterId: x.ataChapterId
                     };
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-            this.isSpinnerVisible = false;
+        this.isSpinnerVisible = false;
     }
 
     viewSelectedRowdbl(rowData) {
         this.openView(rowData);
         $('#view').modal('show');
     }
-   
-    
+
+
     closeDeleteModal() {
-        $("#downloadPublication").modal("hide");
+        // $("#downloadPublication").modal("hide");
+        $("#downloadConfirmation").modal("hide");
     }
- 
-    exportCSV(dt){
+
+    exportCSV(dt) {
         dt._value = dt._value.map(x => {
             return {
                 ...x,
-                revisionDate: x.revisionDate ?  this.datePipe.transform(x.revisionDate, 'MMM-dd-yyyy hh:mm a'): '',
-                nextReviewDate: x.nextReviewDate ?  this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a'): '',
-                expirationDate:x.expirationDate ?  this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a'): '',
-                verifiedDate:x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                revisionDate: x.revisionDate ? this.datePipe.transform(x.revisionDate, 'MMM-dd-yyyy hh:mm a') : '',
+                nextReviewDate: x.nextReviewDate ? this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a') : '',
+                expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a') : '',
+                verifiedDate: x.verifiedDate ? this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
     }
 
-   
+
+
     openDocumentsList(content, rowData) {
-        this.openDocumentsList = rowData;
+        this.selectedRow = rowData;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
     // openHelpText(content) {
@@ -624,12 +687,19 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     deleteItemAndCloseModel() {
         this.isSaving = true;
         this.sourceAction.updatedBy = this.userName;
+        this.isSpinnerVisible = true;
         this.publicationService.deleteAcion(this.sourceAction.publicationRecordId).subscribe(
             response => {
+                this.isSpinnerVisible = false;
                 this.loadData(this.lazyLoadEventDataInput);
                 this.saveCompleted(this.sourceAction)
             },
-            error => this.saveFailedHelper(error));
+            error => {
+
+                this.isSpinnerVisible = false;
+                this.saveFailedHelper(error)
+            })
+            ;
         this.modal.close();
     }
 
@@ -670,12 +740,15 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         filters: {
                             ...lazyEvent.filters,
                             viewType: this.viewType,
-                            status:this.status
+                            status: this.status
                         }
                     });
                     this.isSpinnerVisible = false;
                 },
-                    error => this.saveFailedHelper(error));
+                error => {
+                    this.saveFailedHelper(error)
+                    this.isSpinnerVisible = false;
+                });
             //alert(e);
         }
         else {
@@ -693,12 +766,15 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         filters: {
                             ...lazyEvent.filters,
                             viewType: this.viewType,
-                            status:this.Active
+                            status: this.Active
                         }
                     });
                     this.isSpinnerVisible = false;
                 },
-                error => this.saveFailedHelper(error));
+                error => {
+                    this.saveFailedHelper(error)
+                    this.isSpinnerVisible = false;
+                });
             //alert(e);
         }
 
@@ -731,7 +807,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.loadingIndicator = true;
 
         this.employeeService.getEmployeeList().subscribe(
-            results => { console.log(results), this.onempDataLoadSuccessful(results[0]) },
+            results => {
+                // console.log(results),
+                this.onempDataLoadSuccessful(results[0])
+            },
             error => this.onDataLoadFailed(error)
         );
     }
@@ -745,7 +824,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     publicationPagination(event: { first: any; rows: number }) {
-        console.log(event);
+        // console.log(event);
         const pageIndex = parseInt(event.first) / event.rows;
         this.pageIndex = pageIndex;
         this.pagesize = event.rows; //10
@@ -755,9 +834,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     // get All AircraftManufacturer
     getAllAircraftManufacturer() {
+        this.isSpinnerVisible = true;
         this.aircraftManufacturerService
             .getAll()
             .subscribe(aircraftManufacturer => {
+                this.isSpinnerVisible = false;
                 this.showModelAircraftModel = false;
                 const responseData = aircraftManufacturer[0];
                 responseData.map(x => {
@@ -766,6 +847,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         label: x.description
                     });
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
     }
 
@@ -784,9 +867,12 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         ];
         // checks where select is empty or not and calls the service
         if (this.selectAircraftManfacturer !== '') {
+
+            this.isSpinnerVisible = true;
             this.aircraftModelService
                 .getAircraftModelListByManufactureId(this.selectAircraftManfacturer)
                 .subscribe(models => {
+                    this.isSpinnerVisible = false;
                     const responseValue = models[0];
                     responseValue.map(models => {
                         this.aircraftModelList.push({
@@ -794,6 +880,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                             value: models.aircraftModelId
                         });
                     });
+                }, error => {
+
+                    this.isSpinnerVisible = false;
                 });
         } else {
             //this.getAllAircraftModels();
@@ -812,46 +901,60 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         // checks where multi select is empty or not and calls the service
 
         if (this.selectAircraftManfacturer !== '' && this.selectedAircraftModel !== '') {
+            this.isSpinnerVisible = true;
             this.Dashnumservice.getDashNumberByModelTypeId(
                 this.selectedAircraftModel,
                 this.selectAircraftManfacturer
             ).subscribe(dashnumbers => {
                 const responseData = dashnumbers;
+                this.isSpinnerVisible = false;
                 responseData.map(dashnumbers => {
                     this.dashNumberList.push({
                         label: dashnumbers.dashNumber,
                         value: dashnumbers.dashNumberId
                     })
                 });
+            }, error => {
+                this.isSpinnerVisible = false;
             });
         }
     }
 
     // get ata chapter for dropdown
     getAllATAChapter() {
+        this.isSpinnerVisible = true;
         this.ataMainSer.getAtaMainList().subscribe(Atachapter => {
+            this.isSpinnerVisible = false;
             const response = Atachapter[0];
             response.map(x => {
                 this.ataChapterList.push({
                     value: x.ataChapterId,
-                    label:  x.ataChapterCode + '-'+ x.ataChapterName
+                    label: x.ataChapterCode + '-' + x.ataChapterName
                 });
             });
+        }, error => {
+
+            this.isSpinnerVisible = false;
         });
     }
 
     getSubChapterByATAChapter() {
         if (this.selectedATAchapter !== '') {
+
+            this.isSpinnerVisible = true;
             this.ataMainSer
                 .getMultiATASubDesc(this.selectedATAchapter)
                 .subscribe(atasubchapter => {
+                    this.isSpinnerVisible = false;
                     const responseData = atasubchapter;
                     responseData.map(x => {
                         this.ataSubChapterList.push({
-                            label:x.ataChapterCode + '-'+ x.description,
+                            label: x.ataChapterCode + '-' + x.description,
                             value: x.ataSubChapterId
                         });
                     });
+                }, error => {
+                    this.isSpinnerVisible = false;
                 });
 
         } else {
@@ -860,13 +963,13 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     onSearchAircraftInfoAtaChapter() {
-        console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
+        // console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
         this.selectedATAchapter = this.selectedATAchapter ? this.selectedATAchapter : 0;
         this.selectedATASubChapter = this.selectedATASubChapter ? this.selectedATASubChapter : 0;
         this.selectAircraftManfacturer = this.selectAircraftManfacturer ? this.selectAircraftManfacturer : 0;
         this.selectedAircraftModel = this.selectedAircraftModel ? this.selectedAircraftModel : 0;
         this.selectedDashNumbers = this.selectedDashNumbers ? this.selectedDashNumbers : 0;
-        console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
+        // console.log(this.selectedATAchapter, this.selectedATASubChapter, this.selectAircraftManfacturer, this.selectedAircraftModel, this.selectedDashNumbers, this.pageIndex, this.pagesize);
         if (this.selectAircraftManfacturer !== undefined || this.selectedATAchapter !== undefined) {
             const requestParams = {
 
@@ -885,8 +988,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 }
 
             }
+
+            this.isSpinnerVisible = true;
             this.publicationService.getpublicationslistadvancesearch(requestParams).subscribe(results => {
-                console.log(results);
+                // console.log(results);
+                this.isSpinnerVisible = false;
                 this.onDataLoadSuccessful(results[0]['results']);
                 this.totalRecords = results[0]['totalRecordsCount']
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
@@ -895,6 +1001,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 //     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
                 // }
 
+            }, error => {
+                this.isSpinnerVisible = false;
             })
 
 
@@ -973,9 +1081,13 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         //const { customerShippingAddressId } = rowData.customerShippingAddressId;
         //const { customerShippingId } = rowData.customerShippingId;
 
+        this.isSpinnerVisible = true;
         this.commonService.GetAttachmentPublicationAudit(rowData.attachmentDetailId).subscribe(
-              res => {
+            res => {
+                this.isSpinnerVisible = false;
                 this.sourceViewforDocumentAudit = res;
+            }, error => {
+                this.isSpinnerVisible = false;
             })
 
     }
@@ -993,16 +1105,23 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
     toGetDocumentsList(publicationRecordId) {
         var moduleId = 50;
+        this.isSpinnerVisible = true;
         this.publicationService.getFilesBypublicationNew(publicationRecordId).subscribe(res => {
-
+            this.isSpinnerVisible = false;
             //this.customerService.GetCustomerFinanceDocumentsList(customerId, moduleId).subscribe(res => {
             this.allCustomerFinanceDocumentsList = res;
+        }, error => {
+            this.isSpinnerVisible = false;
         })
     }
 
     getAuditHistoryById(rowData) {
+        this.isSpinnerVisible = true;
         this.publicationService.getPublicationAuditDetails(rowData.publicationRecordId).subscribe(res => {
+            this.isSpinnerVisible = false;
             this.auditHistory = res;
+        }, error => {
+            this.isSpinnerVisible = true;
         })
     }
     getColorCodeForHistory(i, field, value) {
@@ -1017,28 +1136,34 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         }
     }
     dismissDocumentPopupModel(type) {
-      
+
         this.closeMyModel(type);
-        
+
     }
     closeMyModel(type) {
-        
+
         $(type).modal("hide");
 
     }
 
 
     onChangeInputField(value, field) {
+        this.isSpinnerVisible = true;
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.publicationService.getWorkFlows(PagingData).subscribe(
             results => {
+
+                this.isSpinnerVisible = false;
                 //this.onDataLoadSuccessful(results[0]['paginationList']);
                 this.onDataLoadSuccessful(results[0]);
                 //console.log(results[0]['totalRecordsCount']);
                 this.totalRecords = results[0][0]['totalRecords'];
                 this.totalPages = Math.ceil(this.totalRecords / this.pagesize);
             },
-            error => this.onDataLoadFailed(error)
+            error => {
+                this.isSpinnerVisible = false;
+                this.onDataLoadFailed(error)
+            }
         );
     }
     enableDisableAdvancedSearch(val) {
@@ -1048,7 +1173,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     getFilesByPublicationId(publicationRecordId) {
 
+        this.isSpinnerVisible = true;
         this.publicationService.getFilesBypublication(publicationRecordId).subscribe(res => {
+
+            this.isSpinnerVisible = false;
             this.attachmentList = res || [];
             if (this.attachmentList.length > 0) {
                 this.attachmentList.forEach(item => {
@@ -1058,6 +1186,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                     })
                 })
             }
+        }, error => {
+            this.isSpinnerVisible = false;
         });
     }
 

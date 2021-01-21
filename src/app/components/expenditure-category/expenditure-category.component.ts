@@ -39,6 +39,11 @@ export class ExpenditureCategoryComponent implements OnInit {
     modal: NgbModalRef;
     selectedColumns: any[];
     auditHistory: any[];
+    AuditDetails: any;
+    changeStatus: any;
+    bulkUpload: any;
+    selectedRowforDelete: any;
+    check: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
          private alertService: AlertService, private coreDataService: ExpenditureCategoryService, private modalService: NgbModal, private authService: AuthService) {
@@ -143,7 +148,6 @@ export class ExpenditureCategoryComponent implements OnInit {
         rowData.isActive = rowData.isActive || false;
         rowData.isDelete = rowData.isDelete || false;
         let item = new ExpenditureCategory(rowData.ExpenditureCategoryId, rowData.ExpenditureCategoryName, rowData.glcid, rowData.createdBy, rowData.createdDate, rowData.updatedDate, userName, rowData.isActive, rowData.isDelete);
-        debugger;
         return item;
     }
 

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit, Input,SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';//bread crumb
 import { ItemMasterService } from "../../../services/itemMaster.service";
@@ -12,7 +12,7 @@ import { CommonService } from '../../../services/common.service';
 import { Currency } from '../../../models/currency.model';
 import { ItemMasterLoanExchange } from '../../../models/item-master-loan-exchange.model';
 import { CurrencyService } from '../../../services/currency.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { getValueFromArrayOfObjectById, listSearchFilterObjectCreation } from '../../../generic/autocomplete';
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { TableModule, Table } from 'primeng/table';
@@ -259,7 +259,14 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 		this.getcurrencyExchangeLoan();
 		this.getItemMasterById();
 	}
-
+    ngOnChanges(changes: SimpleChanges) {
+        for (let property in changes) {
+            if (property == 'itemMasterRowData') {
+				this.itemMasterRowData=changes.itemMasterRowData.currentValue;
+				this.getItemMasterById();
+			}
+	}
+}
 	ngAfterViewInit() { }
 
 	colsaircraftLD: any[] = [
@@ -720,6 +727,7 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 
 		this.itemMasterService.getMappedAirCraftDetails(itemMasterId).subscribe(data => {
 			const responseData = data;
+		
 			this.aircraftListDataValues = responseData.map(x => { //aircraftListData
 				return {
 					...x,
@@ -742,7 +750,8 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 			this.viewItemMaster = res[0];
 			this.viewItemMaster.integrationPortal = this.viewItemMaster.integrationPortal.replace(/,/g, ', ');
 			//this.viewItemMaster.oemPN = res[0].oemPNData[0].partNumber + ' - ' + res[0].oemPNData[0].partDescription;
-			this.openView(this.itemMasterRowData);
+			// this.openView(this.itemMasterRowData);
+			this.openView(this.viewItemMaster);
 			this.isSpinnerVisible = false;
 		}, error => this.isSpinnerVisible = false);
 	}

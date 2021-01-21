@@ -110,7 +110,9 @@ export class DealAlternateComponent implements OnInit {
     disableSave: boolean = true;
     isSpinnerVisible: boolean = false;
     delNTAERow: any = {};
-
+    isEnableItemMasterView: any;
+    noDatavailable: any;
+    
     constructor(public itemser: ItemMasterService, private _actRoute: ActivatedRoute, private alertService: AlertService,  private configurations: ConfigurationService, private modalService: NgbModal, private authService: AuthService){
         this.itemMasterId = this._actRoute.snapshot.params['id'];
 

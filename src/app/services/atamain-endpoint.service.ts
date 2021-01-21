@@ -6,22 +6,21 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
+import { environment } from '../../../src/environments/environment';
 
 @Injectable()
 export class ATAMainEndpoint extends EndpointFactory {
-
 
     private readonly _actionsUrl: string = "/api/ATAMain/Get";
     private readonly _actionsUrlNew: string = "/api/ATAMain/actions";
 	private readonly _actionsUrlAuditHistory: string = "/api/ATAMain/ataauditHistoryById";
     private readonly getAtaChapterDataAuditById: string = "/api/ATAMain/audits";
     private readonly getATAUrl: string = "/api/ATAMain/GetATASUBS_BY_ATAMain_ID";
-    private readonly getMultiATAUrl: string = "/api/ATAMain/GetMultiATASUBSBYATAMainID";
+    private readonly getMultiATAUrl: string = environment.baseUrl + "/api/ATAMain/GetMultiATASUBSBYATAMainID";
     private readonly deleteATAURL: string = "/api/ATAMain/deleteATAMAIN";
     private readonly excelUpload: string = "/api/ATAMain/UploadataChapterCustomData";
     private readonly _actionsUrlAll: string = "/api/ATAMain/GetAll";
     private readonly getMultiAircraftUrl: string = "/api/Aircraft/GetMultiAirCraftModelByAircraftID";
-
     
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
     get actionsUrlAll() { return this.configurations.baseUrl + this._actionsUrlAll; }

@@ -377,7 +377,7 @@
                               class="btn  boxed-float-btn nobg" matTooltip="Asset Inventory View" matTooltipPosition="above"
                               data-toggle="modal"
                               data-target="#checkInOutView1"
-                              (click)="viewAsstes(asset)"
+                              (click)="viewAsstes(assets)"
                             >
                               <i class="fa fa-eye"></i>
                             </a>
@@ -444,7 +444,7 @@
                 </app-asset-inventory-listing> -->
               <!-- </div> -->
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo()">Save</button>
+                <button type="button" class="btn btn-primary" (click)="onSaveTextAreaInfo('')">Save</button>
                 <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
               </div>
             </div>

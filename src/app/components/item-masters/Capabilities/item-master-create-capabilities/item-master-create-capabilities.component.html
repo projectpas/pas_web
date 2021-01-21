@@ -1,11 +1,24 @@
 ﻿﻿
-		<app-pn-header [partData]="partData"></app-pn-header>
+		<app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
 		<form #addCapesForm="ngForm" *ngIf="isCapViewMode== false">
 			<div class="form-row mt-2">
 			  <div class="col-md-2" *ngIf="itemMasterId == undefined">
 				<div class="form-group">
 					<label class="popup-plusicon-cstm">Part Number <strong class="clr-red">*</strong> </label>
-					<p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true"  [(ngModel)]="itemMasterIDFromPartNumberSelection" name="itemMasterIDFromPartNumberSelection" id="partNumber" title="Part Number" required  placeholder="Select" [showClear]="true" (onChange)="getPartPublicationByItemMasterId(itemMasterIDFromPartNumberSelection)"></p-dropdown>
+					<p-autoComplete class="autocomp-customer-cstm" 
+						[forceSelection]="true"
+						name="itemMasterIDFromPartNumberSelection" 
+						field="partNumber" 
+						[(ngModel)]="itemMasterIDFromPartNumberSelection"
+						emptyMessage="No Match Found"
+						[suggestions]="partListItemMaster"
+						(ngModelChange)="enableSave()"
+						(completeMethod)="FilterItemMaster($event)" 
+						(onSelect)="selectedCapesParts($event)"
+						[size]="30" [minLength]="1" [dropdown]="true"
+						[inputStyle]="{ width: '100%' }" >
+					</p-autoComplete>              
+					<!-- <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true"  [(ngModel)]="itemMasterIDFromPartNumberSelection" name="itemMasterIDFromPartNumberSelection" id="partNumber" title="Part Number" required  placeholder="Select" [showClear]="true" (onChange)="getPartPublicationByItemMasterId(itemMasterIDFromPartNumberSelection)"></p-dropdown> -->
 				</div>
 			  </div>
 			  <div class="col-md-3">
@@ -14,23 +27,21 @@
 					</label>
 					<p-multiSelect
 					[maxSelectedLabels]="2"
-					class="imstock-pmselect"
 					[options]="capabalityTypeList"
 					[(ngModel)]="capabilityTypeId"
 					name="capabilityTypeId"					
 					required></p-multiSelect>
-				
 				</div>
 			  </div>
 			  <div class="col-md-2">
 				<button
 				  style="margin-top: 20px;"
 				  type="button"
-				  class="btn btn-primary"
-				  [disabled]="!addCapesForm.valid"
+				  class="btn btn-primary"				  
 				  (click)="mapAircraftInformation(); ">
 				  Add
 				</button>
+				<!-- [disabled]="!addCapesForm.valid" -->
 			  </div>
 			</div>
 			</form>

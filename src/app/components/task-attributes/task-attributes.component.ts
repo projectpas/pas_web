@@ -46,7 +46,7 @@ export class TaskAttributesComponent implements OnInit {
     selectedColumns = this.headers;
     formData = new FormData()
     @ViewChild('dt',{static:false})
-
+    modal: any;
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
@@ -66,7 +66,9 @@ export class TaskAttributesComponent implements OnInit {
     selectedRecordForEdit: any;
     viewRowData: any;
     selectedRowforDelete: any;
-    existingRecordsResponse = []
+    existingRecordsResponse = [];
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,
@@ -279,7 +281,7 @@ export class TaskAttributesComponent implements OnInit {
         }
     }
   
-
+    dismissModel() {}
 }
 
 

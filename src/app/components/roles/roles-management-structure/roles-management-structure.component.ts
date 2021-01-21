@@ -33,7 +33,7 @@ export class RolesManagementStructureComponent implements OnInit, AfterViewInit{
 	createdDate: any = "";
 	updatedDate: any = "";
 	name: any;
-	private isEditMode: boolean = false;
+	public isEditMode: boolean = false;
 	private isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	showLable: boolean;
@@ -67,6 +67,7 @@ export class RolesManagementStructureComponent implements OnInit, AfterViewInit{
 	disableSave: boolean;
 	allRoles: UserRoleLevel[] = [];
     roleInfo: any;
+	localCollection: any;
 
     /** roles-management-structure ctor */
 	ngAfterViewInit() {
@@ -194,7 +195,6 @@ export class RolesManagementStructureComponent implements OnInit, AfterViewInit{
 
 	public saveManagement(roleLevelId, data1) //retriving SiteManagement Array
 	{
-		debugger;
 		for (let i = 0; i < data1.length; i++) {
 			if (data1[i].data.managementStructureId != null) {
 				data1[i].data.UserRoleLevelId = roleLevelId;
@@ -470,4 +470,6 @@ export class RolesManagementStructureComponent implements OnInit, AfterViewInit{
 
 	}
 
+	handleChange(rowData,$event) {}
+	partnmId($event) {}
 }

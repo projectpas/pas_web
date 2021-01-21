@@ -28,7 +28,7 @@ export class PurchaseOrderReportComponent implements OnInit {
     totalRecords: any;
     totalPages: number;
     purchaseOrderReportList =[];
-
+    legalEntityList: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     managementStructure = {
         companyId: 0,
@@ -182,4 +182,5 @@ export class PurchaseOrderReportComponent implements OnInit {
     //    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
     //    this.stocklineService.downloadStockLineReport(PagingData);
     //}
+    downloadStockLineReport() {}
 }

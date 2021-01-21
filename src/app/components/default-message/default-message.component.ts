@@ -5,7 +5,7 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { DefaultMessageService } from '../../services/defaultmessage.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { DefaultMessage } from '../../models/defaultmessage.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -49,8 +49,8 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
     auditHisory: AuditHistory[];
     /** Currency ctor */
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     modal: NgbModalRef;
 
     displayedColumns = ['defaultMessageId', 'defaultMessageCode', 'description', 'memo', 'createdBy', 'updatedBy', 'updatedDate', 'createdDate'];
@@ -69,11 +69,11 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
     errorMessage: any;
     cols: any[];
     selectedColumns: any[];
-    private isEdit: boolean = false;
-    private isDeleteMode: boolean = false;
+    public isEdit: boolean = false;
+    public isDeleteMode: boolean = false;
     allComapnies: MasterCompany[];
-    private isSaving: boolean;
-   
+    public isSaving: boolean;
+
     selectedColumn: DefaultMessage[];
     messageName: string;
     filteredBrands: any[];
@@ -95,12 +95,12 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
 
     /** Currency ctor */
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
-         private authService: AuthService, private _fb: FormBuilder, 
-         private alertService: AlertService,
-          private masterComapnyService: MasterComapnyService,
-          private commonService: CommonService,
-           private modalService: NgbModal, 
-           public defaultmessageService: DefaultMessageService, private dialog: MatDialog) {
+        private authService: AuthService, private _fb: FormBuilder,
+        private alertService: AlertService,
+        private masterComapnyService: MasterComapnyService,
+        private commonService: CommonService,
+        private modalService: NgbModal,
+        public defaultmessageService: DefaultMessageService, private dialog: MatDialog) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();
 
@@ -153,17 +153,17 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
     }
 
     getmemo() {
-     
+
         this.disableSaveForEdit = false;
-    
-}
+
+    }
     private loadData() {
         // debugger;
         this.alertService.startLoadingMessage();
         this.loadingIndicator = true;
         this.defaultmessageService.getDefaultMessageList().subscribe(
             results => this.onDataLoadSuccessful(results[0]),
-        
+
             error => this.onDataLoadFailed(error)
         );
 
@@ -182,9 +182,9 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
     }
     private onDataLoadSuccessful(getDefaultMessageList: DefaultMessage[]) {
         // alert('success');
-        this.defaultmessageService.getDefaultMessageList().subscribe(res=>{
-        this.originalTableData=res[0];
-        this.getListByStatus(this.status ? this.status :this.currentstatus)
+        this.defaultmessageService.getDefaultMessageList().subscribe(res => {
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
         });
 
         // this.alertService.stopLoadingMessage();
@@ -463,93 +463,93 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
         });
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.allDefaultMessageInfo=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.allDefaultMessageInfo = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.allDefaultMessageInfo = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.allDefaultMessageInfo = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.allDefaultMessageInfo= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.allDefaultMessageInfo= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.allDefaultMessageInfo = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.allDefaultMessageInfo = newarry;
+            }
         }
-        this.totalRecords = this.allDefaultMessageInfo.length ;
+        this.totalRecords = this.allDefaultMessageInfo.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-		}
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('DefaultMessage',
-            'DefaultMessageId',this.restorerecord.defaultMessageId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('DefaultMessage',
+            'DefaultMessageId', this.restorerecord.defaultMessageId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
+    }
 
     // updatePaginatorState() //need to pass this Object after update or Delete to get Server Side pagination
     // {
@@ -625,4 +625,7 @@ export class DefaultMessageComponent implements OnInit, AfterViewInit {
     //     else {
     //     }
     // }
+
+    openEdits(rowData) {}
+    changeStatus(rowData) {}
 }

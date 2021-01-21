@@ -5,7 +5,7 @@
     <table class="table table-bordered table-fixed workflow-table-pub">
         <thead class="thead-light">
             <tr>
-                <th> Pub ID<span class="clr-red">*</span></th>
+                <th style="min-width: 120px;"> Pub ID<span class="clr-red" >*</span></th>
                 <th> Pub Desc </th>
                 <th> Pub Type </th>
                 <th> Revision Date </th>
@@ -13,7 +13,7 @@
                 <th> Source </th>
                 <th> Aircraft </th>
                 <th> Model </th>
-                <th> Dash Number </th>
+                <th style="min-width: 180px;"> Dash Number </th>
                 <th> Location </th>
                 <th> Verified By </th>
                 <th> Verified Date </th>
@@ -28,7 +28,7 @@
                     <div style="display: inline-flex;">
                         <select class="form-control wf-pub-id full-width" 
                             [(ngModel)]="publ.publicationId"
-                            (change)="onPublicationChange($event, publ); getAircraftByPublicationId($event.target.value, i)"
+                            (change)="onPublicationChange($event, publ,i); getAircraftByPublicationId($event.target.value, i)"
                             required>
                             <option [value]="0">--Select--</option>
                             <option *ngFor="let dropdown of publicationDropdown" [value]="dropdown.publicationRecordId">
@@ -44,10 +44,9 @@
                     {{publ.publicationDescription}}
                 </td>
                 <td>
-                    <select class="form-control wf-pub-id full-width" id="ddlPublicationTypes"
-                        [(ngModel)]="publ.publicationType" >
+                    <select class="form-control wf-pub-id full-width" [(ngModel)]="publ.publicationType" >
                         <option value="0">--select--</option>
-                        <option *ngFor="let type of publicationTypes" value={{type.publicationTypeId}}>
+                        <option *ngFor="let type of publicationTypes" [value]="type.publicationTypeId">
                             {{type.name}}
                         </option>
                     </select>
@@ -60,11 +59,11 @@
                 </td>
                 <td>
                     {{publ.source}}
-                </td>
+                </td> 
                 <td>
                     <select class="form-control wf-pub-id full-width" id="ddlAircraftManufacturer"
                         [(ngModel)]="publ.aircraftManufacturer"
-                        (change)="getModelByAircraftId(publ.publicationId, publ.aircraftManufacturer,i)">
+                        (change)="getModelByAircraftId(publ,i)">
                         <option value="0">--select--</option>
                         <option *ngFor="let manufact of getDynamicVariableData('aircraftListByPubId',i) "
                             value="{{manufact.aircraftTypeId}}">
@@ -75,7 +74,7 @@
 
                 <td>
                     <select class="form-control wf-pub-id full-width" id="ddlModel" [(ngModel)]="publ.model"
-                        (change)="getDashNumberByModelandAircraftIds(publ.publicationId, publ.aircraftManufacturer,publ.model, i)">
+                        (change)="getDashNumberByModelandAircraftIds(publ, i)">
                         <option value="0">--select--</option>
                         <option *ngFor="let model of getDynamicVariableData('aircraftModelListByPubId',i)"
                             value="{{model.aircraftModelId}}">
@@ -86,9 +85,7 @@
                 <td>
                     <ng-multiselect-dropdown class="form-control" [placeholder]="'--Select--'"
                         [data]="getDynamicVariableData('dashNumberListByModelId',i)"
-                        [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings"
-                        (onDeSelect)="onDeSelect(publ,$event)" (onSelect)="onItemSelect(publ,$event)"
-                        (onSelectAll)="onSelectAll(publ,$event)">
+                        [(ngModel)]="publ.workflowPublicationDashNumbers" [settings]="dropdownSettings">
                     </ng-multiselect-dropdown>
                 </td>
                 <td>
@@ -110,13 +107,13 @@
                     </select>
                 </td>
                 <td>
-                    <a (click)="downloadFileUpload(publ)" class="btn nobg btn-cstm">
+                    <a  class="btn nobg btn-cstm" style="color: #2e2ed8;">
                         <span class="blue-href" *ngFor="let x of publ.attachmentDetails"
                             (click)="downloadFileUpload(x)">{{x.fileName}},</span>
                     </a>
                 </td>
                 <td>
-                    <button class="btn btn-danger nobg" (click)="deleteRow(i)">
+                    <button class="btn btn-danger nobg" (click)="openDelete(content,publ,i)">
                         <i class="fa fa-trash"></i>
                     </button>
                 </td>
@@ -498,7 +495,24 @@
 
     </div>
 </div>
-
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">        
+        <h4 class="modal-title">Are You Sure Want to Delete?</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
+            <span aria-hidden="true">&times;</span>
+        </button>      
+    </div>
+    <div class="modal-body">
+        <strong *ngIf="deleteRowRecord && deleteRowRecord.publication">
+          Pub Id:
+            <span class="new-label" >{{deleteRowRecord.publication}}</span>
+        </strong>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="deleteRow()">Yes</button>
+        <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
+    </div>
+  </ng-template>
 <div class="preloader" *ngIf="isSpinnerVisible">
     <div class="loading">
         <div class="lds-roller">

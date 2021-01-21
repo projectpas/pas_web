@@ -7,10 +7,13 @@ import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
 import { StocklineListSalesFilter } from '../models/sales/StocklineListSalesFilter';
 import { CustomPaginate } from '../models/custom-paginate';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class StocklineEndpoint extends EndpointFactory {
-	private readonly _actionsUrlNew1: string = "/api/StockLine/stockLine";
+
+	baseUrl = environment.baseUrl;
+	private readonly _actionsUrlNew1: string = this.baseUrl + "/api/StockLine/stockLine";
 	private readonly _deleteStockUrl: string = "/api/StockLine/deleteIntegration";
 	private readonly _actionsUrlNew: string = "/api/StockLine/stockLinepost";//which will be specified in the Controller
 	private readonly _actionsCompanyUrl: string = "/api/StockLine/GetCompanyData";//which will be specified in the Controller
@@ -22,10 +25,10 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _stockLineListUrl: string = "/api/StockLine/Get";//which will be specified in the Controller
 	private readonly _actionsUrl1: string = "/api/StocklineAdjustment/Get";//which will be specified in the Controller
 	private readonly _integrationPortalById: string = "/api/StockLine/IntegrationPortalGet";
-	private readonly _timeLifeGetById: string = "/api/StockLine/timeLifeGetById";
+	private readonly _timeLifeGetById: string = this.baseUrl + "/api/StockLine/timeLifeGetById";
 	private readonly _stocklineGetById: string = "/api/StockLine/StocklineGetById";//which will be specified in the Controller
-	private readonly _adjustmentUrl: string = "/api/StockLine/AdjustmentGet";//which will be specified in the Controller
-	private readonly _adjustmentUrlNew: string = "/api/StockLine/stockLineAdjustmentpost";//which will be specified in the Controller 
+	private readonly _adjustmentUrl: string = this.baseUrl + "/api/StockLine/AdjustmentGet";//which will be specified in the Controller
+	private readonly _adjustmentUrlNew: string = this.baseUrl + "/api/StockLine/stockLineAdjustmentpost";//which will be specified in the Controller 
 	private readonly _actionsTimeUrlNew: string = "/api/StockLine/stockLineTimeLifeAdjustment"; // Which will be specified in the Controller
 	private readonly _actionsStocklineIntegrationUrlNew: string = "/api/StockLine/stockLineIntegration"; // Which will be specified in the Controller
 	private readonly _stockLineItemMasterPart: string = "/api/StockLine/itemMasterPartUpdate"; // Which will be specified in the Controller
@@ -35,13 +38,12 @@ export class StocklineEndpoint extends EndpointFactory {
 	private readonly _adjustmentReasonUrl: string = "/api/StockLine/GetAdjustmentReason";
 	private readonly _stockLineAdjustmentUpdate: string = "/api/StockLine/stockLineAdjustmentReasonPut";
 	private readonly _stockLinePOUnitCost: string = "/api/StockLine/stockLinePOUnitCostGet";
-	private readonly _POUnitCost: string = "/api/StockLine/PurchaseOrderUnitCost";
+	private readonly _POUnitCost: string = this.baseUrl + "/api/StockLine/PurchaseOrderUnitCost";
 	private readonly _ROUnitCost: string = "/api/StockLine/RepairOrderUnitCost";
 	private readonly _stockLineROUnitCost: string = "/api/StockLine/stockLineROUnitCostGet";
 	private readonly _stockLineAdjustmentDelete: string = "/api/StockLine/stockLineAdjustmentReasonDelete";
 	private readonly _searchStockLine: string = "/api/StockLine/search";
-	private readonly _searchStockLinefromSoqpop: string = "/api/StockLine/searchstocklinefromsoqpop";
-	
+	private readonly _searchStockLinefromSoqpop: string = "/api/StockLine/searchstocklinefromsoqpop";	
 	private readonly _multiSearchStockLineUrl: string = "/api/stockline/multisearch";
 	private readonly _stocklineGlobalSearch: string = '/api/StockLine/ListGlobalSearch'
 	private readonly _tagTypeUrl: string = '/api/StockLine/tagType';
@@ -59,8 +61,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	get companyUrl() { return this.configurations.baseUrl + this._actionsCompanyUrl; }
 	get legalEntityUrl() { return this.configurations.baseUrl + this._actionsLegalEntityUrl; }
 	get getSearchUrl() { return this.configurations.baseUrl + this._searchStockLine };
-	get getsearchstocklinefromsoqpopUrl() { return this.configurations.baseUrl + this._searchStockLinefromSoqpop };
-	
+	get getsearchstocklinefromsoqpopUrl() { return this.configurations.baseUrl + this._searchStockLinefromSoqpop };	
 	get getMultiSearchUrl() { return this.configurations.baseUrl + this._multiSearchStockLineUrl };
 	get stockListingUrl() { return this.configurations.baseUrl + this._stockListingUrl };
 	get stockListGlobalUrl() { return this.configurations.baseUrl + this._stockListGlobalUrl };
@@ -69,6 +70,7 @@ export class StocklineEndpoint extends EndpointFactory {
 	constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
 		super(http, configurations, injector);
 	}
+
 	//for getting stockline
 	getStockLineListEndpoint(data) {
 		return this.http.post(this.stockListUrl, JSON.stringify(data), this.getRequestHeaders())

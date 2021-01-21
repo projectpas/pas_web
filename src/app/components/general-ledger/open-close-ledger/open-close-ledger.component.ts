@@ -566,4 +566,14 @@ export class OpenCloseLedgerComponent implements OnInit {
             }
         }
     }
+
+    addPeriod() {}
+
+    changeStatus(obj, objStatus) {}
+
+    setDate(obj, row_no) {}
+
+    addPeriodName(obj, fiscalName) {}
+
+    deleteRow(row_no) {}
 }

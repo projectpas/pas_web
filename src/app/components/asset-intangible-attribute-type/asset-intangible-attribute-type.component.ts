@@ -89,7 +89,9 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
 
 
     currentstatus: string = 'Active';
-
+    AuditDetails: any;
+    viewSelectedRow: any;
+    assetIntangibleName: any;
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService, private commonservice: CommonService, private glAccountService: GlAccountService, public legalEntityService: LegalEntityService, private configurations: ConfigurationService, private alertService: AlertService, private coreDataService: AssetIntangibleAttributeTypeService, private modalService: NgbModal, private authService: AuthService, private assetIntangibleTypeService: AssetIntangibleTypeService) {
@@ -165,11 +167,11 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
 
 
     private onGlAccountLoad(getGlList: GlAccount[]) {
-         this.alertService.stopLoadingMessage();
-       this.loadingIndicator = false;
+        this.alertService.stopLoadingMessage();
+        this.loadingIndicator = false;
         this.allGlInfo = getGlList;
-  
-   this.loadSelectedNames();
+
+        this.loadSelectedNames();
     }
 
     filterIntangibleType(event): void {
@@ -511,10 +513,10 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
     //Get the page's grid data
     getItemList() {
         this.coreDataService.getAll().subscribe(res => {
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
-            
+
             // const responseData = res[0];
             // this.itemList = responseData;
             // this.totalRecords = responseData.length;
@@ -958,92 +960,105 @@ export class AssetIntangibleAttributeTypeComponent implements OnInit {
             this.disableSave = false;
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.itemList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.itemList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            }
         }
-        this.totalRecords = this.itemList.length ;
+        this.totalRecords = this.itemList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('AssetIntangibleType',
-            'AssetIntangibleTypeId',this.restorerecord.assetIntangibleAttributeTypeId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('AssetIntangibleType',
+            'AssetIntangibleTypeId', this.restorerecord.assetIntangibleAttributeTypeId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
+    }
+
+    getColorCodeForHistory(i, field, value) {
+        const data = this.auditHistory;
+        const dataLength = data.length;
+        if (i >= 0 && i <= dataLength) {
+            if ((i + 1) === dataLength) {
+                return true;
+            } else {
+                return data[i + 1][field] === value
+            }
         }
- 
+    }
+
+    changeStatus(rowData) {}
 }

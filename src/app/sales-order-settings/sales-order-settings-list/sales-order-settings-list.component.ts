@@ -53,7 +53,7 @@ export class SalesOrderSettingsListComponent {
     totalPages: number = 0;
     selected;
     selectedOnly: boolean = false;
-
+    noDatavailable: any;
     constructor(private router: ActivatedRoute,
         public customerService: CustomerService,
         public salesQuoteService: SalesQuoteService,

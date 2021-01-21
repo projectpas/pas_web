@@ -55,8 +55,8 @@ export class AircraftModelComponent implements OnInit {
     descriptionList: any;
     aircraftManufacturerList: any;
     currentstatus: string = 'Active';
-
-
+    AuditDetails: any;
+    rowIndex: any;
     new = {
         aircraftType: "",
         modelName: "",

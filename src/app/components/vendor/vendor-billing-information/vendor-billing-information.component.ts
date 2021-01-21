@@ -12,7 +12,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { MasterComapnyService } from '../../../services/mastercompany.service';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { getObjectById, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { ConfigurationService } from '../../../services/configuration.service';
@@ -764,7 +764,7 @@ export class VendorBillingInformationComponent {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
    
-    restoreRecord(value) {
+    restoreRecord() {
         this.vendorService.GetVendorBillingAddressRestore(this.restorerecord.vendorBillingAddressId, this.userName).subscribe(() => {
             this.loadData();
             this.modal.close();

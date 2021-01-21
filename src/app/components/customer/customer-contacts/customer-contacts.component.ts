@@ -1,9 +1,9 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Params, ActivatedRoute } from '@angular/router';
 import { Router, NavigationExtras } from '@angular/router';
-import {RadioButtonModule} from 'primeng/radiobutton';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, NgForm } from '@angular/forms';
@@ -55,7 +55,7 @@ export class CustomerContactsComponent implements OnInit {
 	pageSize: number = 10;
 	totalPages: number;
 	selectedOnly: boolean = false;
-    targetData: any;
+	targetData: any;
 	contactsListOriginal: any;
 	firstNamesList: any;
 	middleNamesList: any;
@@ -83,9 +83,9 @@ export class CustomerContactsComponent implements OnInit {
 		{ field: 'mobilePhone', header: 'Mobile Phone' },
 		{ field: 'fax', header: 'Fax' },
 		{ field: 'createdDate', header: 'Created Date' },
-        { field: 'createdBy', header: 'Created By' },    
+		{ field: 'createdBy', header: 'Created By' },
 		{ field: 'updatedDate', header: 'Updated Date' },
-        { field: 'updatedBy', header: 'Updated By' }         
+		{ field: 'updatedBy', header: 'Updated By' }
 	];
 	selectedColumns = this.customerContactsColumns;
 	selectedColumn: any;
@@ -124,7 +124,7 @@ export class CustomerContactsComponent implements OnInit {
 	ataListDataValues = []
 	auditHistory: any[] = [];
 	auditHistory1: any[] = [];
-	@ViewChild('ATAADD',{static:false}) myModal;
+	@ViewChild('ATAADD', { static: false }) myModal;
 
 	originalATASubchapterData: any = [];
 	isViewMode: boolean = false;
@@ -150,13 +150,14 @@ export class CustomerContactsComponent implements OnInit {
 	stopmulticlicks: boolean;
 	isPrimatyContactData: any;
 	currentstatus: string = 'Active';
-	originalTableData:any=[];
-	currentDeletedstatus:boolean=false;
-	currentATADeletedstatus:boolean=false;
-	status:any="Active";
-	restorerecord:any={}
-	restoreATArecord:any={}
-	arrayContactlist:any[] = [];
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	currentATADeletedstatus: boolean = false;
+	status: any = "Active";
+	restorerecord: any = {}
+	restoreATArecord: any = {}
+	arrayContactlist: any[] = [];
+	resetinputmodel: any;
 
 	constructor(private router: ActivatedRoute,
 		private route: Router,
@@ -210,10 +211,9 @@ export class CustomerContactsComponent implements OnInit {
 		for (let property in changes) {
 			if (property == 'selectedCustomerTab') {
 				if (changes[property].currentValue != {} && changes[property].currentValue == "Contacts") {
-					if(this.id > 0)
-					{
+					if (this.id > 0) {
 						this.getAllCustomerContact();
-					}	
+					}
 					this.getAllATAChapter();
 				}
 			}
@@ -223,10 +223,9 @@ export class CustomerContactsComponent implements OnInit {
 					this.id = this.customerDataFromExternalComponents.customerId;
 					this.customerCode = this.customerDataFromExternalComponents.customerCode;
 					this.customerName = this.customerDataFromExternalComponents.name;
-					if(this.id > 0)
-					{
+					if (this.id > 0) {
 						this.getAllCustomerContact();
-					}						
+					}
 					this.isViewMode = true;
 				}
 			}
@@ -237,131 +236,131 @@ export class CustomerContactsComponent implements OnInit {
 		$("#downloadConfirmation").modal("hide");
 	}
 
-	getDeleteListByStatus(value){
-		if(value){
-			this.currentDeletedstatus=true;
-		}else{
-			this.currentDeletedstatus=false;
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
 		}
 		this.geListByStatus(this.status ? this.status : 'Active')
-	} 
+	}
 
-	getATADeleteListByStatus(value){
-		if(value){
-			this.currentATADeletedstatus=true;
-		}else{
-			this.currentATADeletedstatus=false;
+	getATADeleteListByStatus(value) {
+		if (value) {
+			this.currentATADeletedstatus = true;
+		} else {
+			this.currentATADeletedstatus = false;
 		}
 		this.getATACustomerContactMapped();
 	}
-	
-	exportCSV(contact){
-        contact._value = contact._value.map(x => {
-            return {
-                ...x,
-                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
-            }
-        });
-        contact.exportCSV();
-    }
-  onClickMemo() {
-        this.memoPopupContent = this.contactInformation.notes;
-		this.enableSave();
-		this.disableSaveMemo=true;
-        //this.memoPopupValue = value;
-	}   
-	
-    onClickPopupSave() {
-        this.contactInformation.notes = this.memoPopupContent;
-        this.memoPopupContent = '';
-        $('#memo-popup-Doc').modal("hide");
-	}
-	
-    closeMemoModel() {
-        $('#memo-popup-Doc').modal("hide");
-    }
 
-    parsedText(text) {
-        if (text) {
-            const dom = new DOMParser().parseFromString(
-                '<!doctype html><body>' + text,
-                'text/html');
-            const decodedString = dom.body.textContent;
-            return decodedString;
-        }
-    }
-
-    geListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-			this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.customerContacts=newarry;
-        }else if(status=='InActive' ){
-			this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false  && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.customerContacts = newarry; 
-        }else if(status== 'ALL'){
-			this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.customerContacts= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.customerContacts= newarry;
+	exportCSV(contact) {
+		contact._value = contact._value.map(x => {
+			return {
+				...x,
+				createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+				updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
 			}
-        }
-        this.totalRecords = this.customerContacts.length ;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+		});
+		contact.exportCSV();
+	}
+	onClickMemo() {
+		this.memoPopupContent = this.contactInformation.notes;
+		this.enableSave();
+		this.disableSaveMemo = true;
+		//this.memoPopupValue = value;
+	}
+
+	onClickPopupSave() {
+		this.contactInformation.notes = this.memoPopupContent;
+		this.memoPopupContent = '';
+		$('#memo-popup-Doc').modal("hide");
+	}
+
+	closeMemoModel() {
+		$('#memo-popup-Doc').modal("hide");
+	}
+
+	parsedText(text) {
+		if (text) {
+			const dom = new DOMParser().parseFromString(
+				'<!doctype html><body>' + text,
+				'text/html');
+			const decodedString = dom.body.textContent;
+			return decodedString;
 		}
-		
+	}
+
+	geListByStatus(status) {
+		const newarry = [];
+		if (status == 'Active') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.customerContacts = newarry;
+		} else if (status == 'InActive') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.customerContacts = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.customerContacts = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.customerContacts = newarry;
+			}
+		}
+		this.totalRecords = this.customerContacts.length;
+		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+	}
+
 	restore(content, rowData) {
 		this.restorerecord = rowData;
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
-		
-	restoreRecord(){
+
+	restoreRecord() {
 		this.isSpinnerVisible = true;
-		this.commonService.updatedeletedrecords('CustomerContact','CustomerContactId',this.restorerecord.customerContactId, ).subscribe(res => {
-			this.currentDeletedstatus=true;
+		this.commonService.updatedeletedrecords('CustomerContact', 'CustomerContactId', this.restorerecord.customerContactId,).subscribe(res => {
+			this.currentDeletedstatus = true;
 			this.modal.close();
 			this.getAllCustomerContact();
 			this.alertService.showMessage("Success", `Updated Successfully`, MessageSeverity.success);
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	restoreATA(content, rowData) {
@@ -370,9 +369,9 @@ export class CustomerContactsComponent implements OnInit {
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 	}
 
-	restoreATARecord(){
+	restoreATARecord() {
 		this.isSpinnerVisible = true;
-		if (this.restoreATArecord.customerContactATAMappingId> 0) {
+		if (this.restoreATArecord.customerContactATAMappingId > 0) {
 			this.isSpinnerVisible = true;
 			this.customerService.restoreATAMappedByContactId(this.restoreATArecord.customerContactATAMappingId).subscribe(
 				response => {
@@ -393,8 +392,8 @@ export class CustomerContactsComponent implements OnInit {
 	}
 
 	enableSaveMemo() {
-        this.disableSaveMemo = false;
-    }
+		this.disableSaveMemo = false;
+	}
 
 	closeMyModel() {
 		$("#addContactDetails").modal("hide");
@@ -407,9 +406,9 @@ export class CustomerContactsComponent implements OnInit {
 
 	get currentUserMasterCompanyId(): number {
 		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
-    }
+			? this.authService.currentUser.masterCompanyId
+			: null;
+	}
 
 	getPageCount(totalNoofRecords, pageSize) {
 		return Math.ceil(totalNoofRecords / pageSize)
@@ -423,29 +422,29 @@ export class CustomerContactsComponent implements OnInit {
 		this.pageSize = event.rows;
 	}
 
-	getAllContactFirstNameSmartDropDown(strText = '', contactName = ''){
+	getAllContactFirstNameSmartDropDown(strText = '', contactName = '') {
 		this.isSpinnerVisible = true;
-		if(this.arrayContactlist.length == 0) {			
-			this.arrayContactlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownContactList('firstName',strText,true,this.arrayContactlist.join()).subscribe(response => {
+		if (this.arrayContactlist.length == 0) {
+			this.arrayContactlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownContactList('firstName', strText, true, this.arrayContactlist.join()).subscribe(response => {
 
 			var endResult = [];
-			for(let resInd = 0; resInd<response.length; resInd++){
+			for (let resInd = 0; resInd < response.length; resInd++) {
 				let alreadyExist = false;
-				for(let endInd = 0; endInd<endResult.length; endInd++){
-					if(endResult[endInd].firstName.toLowerCase() == response[resInd].label.toLowerCase()){
+				for (let endInd = 0; endInd < endResult.length; endInd++) {
+					if (endResult[endInd].firstName.toLowerCase() == response[resInd].label.toLowerCase()) {
 						alreadyExist = true;
 					}
 				}
-				if(!alreadyExist){
-					endResult.push({firstName: response[resInd].label})
+				if (!alreadyExist) {
+					endResult.push({ firstName: response[resInd].label })
 				}
 			}
 
 			this.firstNamesList = endResult;
 
-			if(contactName != '')
-			{
+			if (contactName != '') {
 				this.contactInformation = {
 					...this.ediData,
 					firstName: getObjectByValue('firstName', contactName, this.firstNamesList),
@@ -454,32 +453,32 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error));
+		}, error => this.saveFailedHelper(error));
 	}
 
-	getAllContactMiddleNameSmartDropDown(strText = '', contactName = ''){
+	getAllContactMiddleNameSmartDropDown(strText = '', contactName = '') {
 		this.isSpinnerVisible = true;
-		if(this.arrayContactlist.length == 0) {			
-			this.arrayContactlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownContactList('middleName',strText,true,this.arrayContactlist.join()).subscribe(response => {
-			
+		if (this.arrayContactlist.length == 0) {
+			this.arrayContactlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownContactList('middleName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+
 			var endResult = [];
-			for(let resInd = 0; resInd<response.length; resInd++){
+			for (let resInd = 0; resInd < response.length; resInd++) {
 				let alreadyExist = false;
-				for(let endInd = 0; endInd<endResult.length; endInd++){
-					if(endResult[endInd].middleName.toLowerCase() == response[resInd].label.toLowerCase()){
+				for (let endInd = 0; endInd < endResult.length; endInd++) {
+					if (endResult[endInd].middleName.toLowerCase() == response[resInd].label.toLowerCase()) {
 						alreadyExist = true;
 					}
 				}
-				if(!alreadyExist){
-					endResult.push({middleName: response[resInd].label})
+				if (!alreadyExist) {
+					endResult.push({ middleName: response[resInd].label })
 				}
 			}
 
 			this.middleNamesList = endResult;
-			
-			if(contactName != '')
-			{
+
+			if (contactName != '') {
 				this.contactInformation = {
 					...this.ediData,
 					middleName: getObjectByValue('middleName', contactName, this.middleNamesList),
@@ -488,32 +487,32 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error));
+		}, error => this.saveFailedHelper(error));
 	}
 
-	getAllContactLastNameSmartDropDown(strText = '', contactName = ''){
+	getAllContactLastNameSmartDropDown(strText = '', contactName = '') {
 		this.isSpinnerVisible = true;
-		if(this.arrayContactlist.length == 0) {			
-			this.arrayContactlist.push(0); }
-        this.commonService.autoSuggestionSmartDropDownContactList('lastName',strText,true,this.arrayContactlist.join()).subscribe(response => {
-			
+		if (this.arrayContactlist.length == 0) {
+			this.arrayContactlist.push(0);
+		}
+		this.commonService.autoSuggestionSmartDropDownContactList('lastName', strText, true, this.arrayContactlist.join()).subscribe(response => {
+
 			var endResult = [];
-			for(let resInd = 0; resInd<response.length; resInd++){
+			for (let resInd = 0; resInd < response.length; resInd++) {
 				let alreadyExist = false;
-				for(let endInd = 0; endInd<endResult.length; endInd++){
-					if(endResult[endInd].lastName.toLowerCase() == response[resInd].label.toLowerCase()){
+				for (let endInd = 0; endInd < endResult.length; endInd++) {
+					if (endResult[endInd].lastName.toLowerCase() == response[resInd].label.toLowerCase()) {
 						alreadyExist = true;
 					}
 				}
-				if(!alreadyExist){
-					endResult.push({lastName: response[resInd].label})
+				if (!alreadyExist) {
+					endResult.push({ lastName: response[resInd].label })
 				}
 			}
 
 			this.lastNamesList = endResult;
 
-			if(contactName != '')
-			{
+			if (contactName != '') {
 				this.contactInformation = {
 					...this.ediData,
 					lastName: getObjectByValue('lastName', contactName, this.lastNamesList),
@@ -522,22 +521,25 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			}
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error));
+		}, error => this.saveFailedHelper(error));
 	}
-	
+
 	filterFirstNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.getAllContactFirstNameSmartDropDown(event.query); }
+			this.getAllContactFirstNameSmartDropDown(event.query);
+		}
 	}
 
 	filterMiddleNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.getAllContactMiddleNameSmartDropDown(event.query); }
+			this.getAllContactMiddleNameSmartDropDown(event.query);
+		}
 	}
 
 	filterLastNames(event) {
 		if (event.query !== undefined && event.query !== null) {
-			this.getAllContactLastNameSmartDropDown(event.query); }
+			this.getAllContactLastNameSmartDropDown(event.query);
+		}
 	}
 
 	patternMobilevalidationWithSpl(event: any) {
@@ -550,23 +552,23 @@ export class CustomerContactsComponent implements OnInit {
 	}
 
 	async saveContactInformation() {
-		this.isSpinnerVisible = true;	
+		this.isSpinnerVisible = true;
 		// create a new contact in the contact table
 		const data = {
 			...this.contactInformation, createdBy: this.userName, updatedBy: this.userName, isActive: true,
-			masterCompanyId:this.currentUserMasterCompanyId,
+			masterCompanyId: this.currentUserMasterCompanyId,
 			customerId: this.id,
 			firstName: editValueAssignByCondition('firstName', this.contactInformation.firstName),
 			middleName: editValueAssignByCondition('middleName', this.contactInformation.middleName),
 			lastName: editValueAssignByCondition('lastName', this.contactInformation.lastName)
 
 		}
-		if(this.customerContacts && this.customerContacts==0){
-			data.isDefaultContact=true;
+		if (this.customerContacts && this.customerContacts == 0) {
+			data.isDefaultContact = true;
 		}
 		await this.customerService.newAddContactInfo(data).subscribe(res => {
 			const responseForCustomerCreate = {
-				...data,...res
+				...data, ...res
 			};
 
 			$("#addContactDetails").modal("hide");
@@ -577,7 +579,7 @@ export class CustomerContactsComponent implements OnInit {
 			this.refreshCustomerContactMapped.emit(this.id);
 			this.isSpinnerVisible = false;
 
-			this.alertService.showMessage('Success',`Sucessfully Created Contact`, MessageSeverity.success);
+			this.alertService.showMessage('Success', `Sucessfully Created Contact`, MessageSeverity.success);
 
 		}, err => {
 			this.isEditButton = false;
@@ -608,13 +610,13 @@ export class CustomerContactsComponent implements OnInit {
 
 	editCustomerContact(rowData) {
 		this.arrayContactlist = [];
-		if(rowData.contactId > 0)
-            this.arrayContactlist.push(rowData.contactId);
+		if (rowData.contactId > 0)
+			this.arrayContactlist.push(rowData.contactId);
 		this.getAllContactFirstNameSmartDropDown('', rowData.firstName)
 		this.getAllContactMiddleNameSmartDropDown('', rowData.middleName)
 		this.getAllContactLastNameSmartDropDown('', rowData.lastName)
-		
-		this.isPrimatyContactData=rowData.isDefaultContact;
+
+		this.isPrimatyContactData = rowData.isDefaultContact;
 		this.ediData = { ...rowData };
 		this.isEditButton = true;
 		this.sourceViewforContact = '';
@@ -660,18 +662,17 @@ export class CustomerContactsComponent implements OnInit {
 	}
 
 	// get Customer Contatcs 
-	getAllCustomerContact() {		
+	getAllCustomerContact() {
 		this.isSpinnerVisible = true;
-		this.id = this.id ? this.id :this.router.snapshot.params['id'];
-		if(this.id)
-		{
+		this.id = this.id ? this.id : this.router.snapshot.params['id'];
+		if (this.id) {
 			this.customerService.getContacts(this.id).subscribe(res => {
-				this.originalTableData=res[0];
+				this.originalTableData = res[0];
 				this.loaderForContacts = false;
 				this.geListByStatus(this.status ? this.status : this.currentstatus);
 				this.isSpinnerVisible = false;
-			},error => this.saveFailedHelper(error))
-		}		
+			}, error => this.saveFailedHelper(error))
+		}
 	}
 
 	handleChange(rowData) {
@@ -689,9 +690,9 @@ export class CustomerContactsComponent implements OnInit {
 				MessageSeverity.success
 			);
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error));
+		}, error => this.saveFailedHelper(error));
 	}
-	
+
 	resetfileds() {
 		this.add_SelectedId = '';
 		this.add_SelectedModels = '';
@@ -716,7 +717,7 @@ export class CustomerContactsComponent implements OnInit {
 	}
 
 	deleteItemAndCloseModel() {
-		
+
 		let contactId = this.contactId;
 		let customerContactId = this.customerContactId;
 		if (contactId > 0) {
@@ -775,7 +776,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	// get subchapter by Id in the add ATA Mapping
@@ -792,12 +793,12 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	// post the ata Mapping 
 	async addATAMapping() {
-		if(this.add_SelectedModels !=undefined && this.add_SelectedModels != '' &&  (this.add_SelectedModels && this.add_SelectedModels.length>0)){
+		if (this.add_SelectedModels != undefined && this.add_SelectedModels != '' && (this.add_SelectedModels && this.add_SelectedModels.length > 0)) {
 			const ataMappingData = this.add_SelectedModels.map(x => {
 				return {
 					CustomerId: this.id,
@@ -817,17 +818,17 @@ export class CustomerContactsComponent implements OnInit {
 			})
 			this.add_SelectedModels = undefined;
 			this.add_SelectedId = undefined;
-			let reqList= [];
-			for(let j=0; j<ataMappingData.length; j++){
+			let reqList = [];
+			for (let j = 0; j < ataMappingData.length; j++) {
 				let index = this.ataListDataValues.findIndex(e => e.ataChapterId === ataMappingData[j].ATAChapterId && e.ataSubChapterId === ataMappingData[j].ATASubChapterId);
-					if(index == -1){
-						reqList.push(ataMappingData[j])
+				if (index == -1) {
+					reqList.push(ataMappingData[j])
 				}
 			}
 			await this.saveCustomerContactATAMapped.emit(reqList);
-		}else{
-			let reqList= [];
-			reqList[0]={
+		} else {
+			let reqList = [];
+			reqList[0] = {
 				CustomerId: this.id,
 				CustomerContactId: this.selectedContact.customerContactId,
 				ATAChapterId: getValueFromObjectByKey('ataChapterId', this.add_SelectedId),
@@ -835,7 +836,7 @@ export class CustomerContactsComponent implements OnInit {
 				ATAChapterCode: getValueFromObjectByKey('ataChapterCode', this.add_SelectedId),
 				ATAChapterName: getValueFromObjectByKey('ataChapterName', this.add_SelectedId),
 				ATASubChapterDescription: '',
-				MasterCompanyId:getValueFromObjectByKey('masterCompanyId', this.add_SelectedId),
+				MasterCompanyId: getValueFromObjectByKey('masterCompanyId', this.add_SelectedId),
 				CreatedBy: this.userName,
 				UpdatedBy: this.userName,
 				CreatedDate: new Date(),
@@ -851,7 +852,7 @@ export class CustomerContactsComponent implements OnInit {
 		}, 1000);
 		this.refreshCustomerContactMapped.emit(this.id);
 	}
-	
+
 	openModel() {
 		this.myModal.nativeElement.className = 'modal fade show';
 		this.getATACustomerContactMapped();
@@ -863,7 +864,7 @@ export class CustomerContactsComponent implements OnInit {
 			const responseData = res[0];
 			this.originalATASubchapterData = responseData;
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	async getATACustomerContactMapped() {
@@ -878,10 +879,10 @@ export class CustomerContactsComponent implements OnInit {
 					this.ataListDataValues[i]['ataSubChapterDescription'] = this.ataListDataValues[i]['ataSubChapterCode'] + ' - ' + this.ataListDataValues[i]['ataSubChapterDescription']
 				} else {
 					this.ataListDataValues[i]['ataSubChapterDescription'] = "";
-                }
+				}
 			}
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	deleteATAMapped(content, rowData) {
@@ -891,7 +892,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.isDeleteMode = true;
 		this.contactATAId = rowData.customerContactATAMappingId;
 		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-		
+
 	}
 
 	deleteItemAndCloseModel1() {
@@ -922,7 +923,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.customerService.getCustomerContactAuditDetails(rowData.customerContactId, rowData.customerId).subscribe(res => {
 			this.auditHistory = res;
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	getColorCodeForHistory(i, field, value) {
@@ -986,7 +987,8 @@ export class CustomerContactsComponent implements OnInit {
 		this.disablesaveForFirstname = false;
 
 		if (value !== undefined && value !== null) {
-			 this.getAllContactFirstNameSmartDropDown(value); }
+			this.getAllContactFirstNameSmartDropDown(value);
+		}
 
 		for (let i = 0; i < this.firstNamesList.length; i++) {
 
@@ -1059,7 +1061,7 @@ export class CustomerContactsComponent implements OnInit {
 					MessageSeverity.success
 				);
 				this.isSpinnerVisible = false;
-			},error => this.saveFailedHelper(error))
+			}, error => this.saveFailedHelper(error))
 		}
 	}
 
@@ -1077,7 +1079,7 @@ export class CustomerContactsComponent implements OnInit {
 		this.customerService.getCustomerContactATAAuditDetails(rowData.customerContactATAMappingId).subscribe(res => {
 			this.auditHistory1 = res;
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 	}
 
 	getColorCodeForHistoryATA(i, field, value) {
@@ -1135,7 +1137,7 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error))
+		}, error => this.saveFailedHelper(error))
 		this.add_SelectedModels = undefined;
 	}
 
@@ -1166,6 +1168,8 @@ export class CustomerContactsComponent implements OnInit {
 				}
 			})
 			this.isSpinnerVisible = false;
-		},error => this.saveFailedHelper(error));
+		}, error => this.saveFailedHelper(error));
 	}
+
+	clearValue() {}
 }

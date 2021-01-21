@@ -759,7 +759,7 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
-    private showSplitShipmentParts(purchaseOrderPart: PurchaseOrderPart): void {
+    public showSplitShipmentParts(purchaseOrderPart: PurchaseOrderPart): void {
         console.log(this.purchaseOrderData.purchaseOderPart);
         console.log(purchaseOrderPart);
         
@@ -807,7 +807,7 @@ export class ReceivngPoComponent implements OnInit {
     //     }
     // }
 
-    private isSplitShipmentPart(itemMasterId: number): boolean {
+    public isSplitShipmentPart(itemMasterId: number): boolean {
         return this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.itemMasterId == itemMasterId && !x.isParent).length > 0;
     }
 
@@ -852,7 +852,7 @@ export class ReceivngPoComponent implements OnInit {
 
     }
 
-    private toggleStockLine(event: any, part: PurchaseOrderPart): void {
+    public toggleStockLine(event: any, part: PurchaseOrderPart): void {
 
        // alert(part.quantityActuallyReceived);
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
@@ -1079,7 +1079,7 @@ export class ReceivngPoComponent implements OnInit {
         return stock.siteId;
     }
 
-    private paginatorFocusOut(event: any, part: PurchaseOrderPart): void {
+    public paginatorFocusOut(event: any, part: PurchaseOrderPart): void {
         if (event.target.value == '') {
             if (!part.isSameDetailsForAllParts) {
                 part.currentSLIndex = 0;
@@ -1205,7 +1205,7 @@ export class ReceivngPoComponent implements OnInit {
         });
     }
 
-    private gotoStockLineMainPage(event: any, part: PurchaseOrderPart): void {
+    public gotoStockLineMainPage(event: any, part: PurchaseOrderPart): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {
@@ -1232,7 +1232,7 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
-    private gotoStockLinePage(event: any, part: PurchaseOrderPart): void {
+    public gotoStockLinePage(event: any, part: PurchaseOrderPart): void {
         let value = event.target.value;
         let index: number = 0;
         if (value == '') {
@@ -2068,7 +2068,7 @@ export class ReceivngPoComponent implements OnInit {
 
     }
 
-    private moveByKey(event, part) {
+    public moveByKey(event, part) {
         // CTRL + Down Arrow
         if (event.ctrlKey && event.keyCode == 40) {
             this.moveStockLinePage('stockline', part.currentSERIndex + 1, part);

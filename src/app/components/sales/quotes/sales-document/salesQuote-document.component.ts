@@ -13,7 +13,7 @@ import { getObjectByValue, getObjectById, getValueFromObjectByKey, editValueAssi
 import { SalesQuoteService } from '../../../../services/salesquote.service';
 import { ConfigurationService } from '../../../../services/configuration.service';
 import { AuditHistory } from '../../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Documents } from '../../../../models/documents.model';
 import { CommonService } from '../../../../services/common.service';
 import { CustomerService } from '../../../../services/customer.service';
@@ -366,7 +366,7 @@ export class SalesQuoteDocumentsComponent implements OnInit {
 		})
 	}
 
-	openView(content, row) {
+	openView(row) {
 
 		this.salesQuoteService.toGetUploadDocumentsList(row.attachmentId, row.salesOrderQuoteId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;

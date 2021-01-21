@@ -876,7 +876,7 @@ li.active.ng-star-inserted {
 
 @media (min-width: 1240px) {
     .total-wf-cost-form .col-md-2 {
-        max-width: 13.16%;
+		max-width: 15.16%;
     }
     .total-wf-cost-btn {
         margin-top: 17px;

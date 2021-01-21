@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { AllApprovalRuleComponent } from './all-approval-rule.component';
+import { ShipViaCreateComponent } from './ship-via-create.component';
 
-describe('AllApprovalRuleComponent', () => {
-  let component: AllApprovalRuleComponent;
-  let fixture: ComponentFixture<AllApprovalRuleComponent>;
+describe('ShipViaCreateComponent', () => {
+  let component: ShipViaCreateComponent;
+  let fixture: ComponentFixture<ShipViaCreateComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AllApprovalRuleComponent ]
+      declarations: [ ShipViaCreateComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AllApprovalRuleComponent);
+    fixture = TestBed.createComponent(ShipViaCreateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

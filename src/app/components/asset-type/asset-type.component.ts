@@ -62,6 +62,7 @@ export class AssetTypeComponent implements OnInit {
         memo: "",
     }
     addNew = { ...this.new };
+    AuditDetails: any;
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
@@ -492,4 +493,5 @@ export class AssetTypeComponent implements OnInit {
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
     }
+    changeStatus(rowData) {}
 }

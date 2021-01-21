@@ -16,12 +16,16 @@ import { SalesOrderCustomerApprovalView } from "../../../models/sales-order-cust
 import { SalesOrderCustomerApproval } from '../../../models/sales-order-customer-approval';
 import { WorkOrderQuoteService } from "../../../../../../services/work-order/work-order-quote.service";
 
-import * as $ from 'jquery'
+declare var $ : any;
 import { CommonService } from "../../../../../../services/common.service";
 import { MarginSummary } from "../../../../../../models/sales/MarginSummaryForSalesorder";
-// import { m } from "@angular/core/src/render3";
+//import { m } from "@angular/core/src/render3";
 import { forkJoin } from "rxjs/observable/forkJoin";
-import { ApprovalProcessEnum } from "../../../models/sales-approval-process-enum";
+//import { ApprovalProcessEnum } from "../../../models/sales-approval-process-enum";
+import { ApprovalProcessEnum } from "../../../../quotes/models/approval-process-enum";
+import { ApprovalTaskEnum } from "../../../../quotes/models/approval-task-enum";
+import { ApprovalStatusEnum, ApprovalStatusDescirptionEnum } from "../../../../quotes/models/approval-status-enum";
+
 @Component({
   selector: "app-sales-order-customer-approval",
   templateUrl: "./sales-order-customer-approval.component.html",
@@ -36,7 +40,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   @Output("on-part-approved-event") onPartApprovedEvent = new EventEmitter();
   @Input("is-view-mode") isViewMode: boolean = false;
   @Input() customerContactList: any = [];
-
+  @Output('on-quote-parts-approved-event') onPartsApprovedEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
   defaultApprovalStatusId: number = DBkeys.DEFAULT_SALES_ORDER_APPROVAL_STATUS_ID;
   approveAll: boolean = false;
   salesOrderCustomerApprovalList: ISalesOrderCustomerApproval[];
@@ -104,8 +108,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    console.log("customer-id", this.customerId);
-    console.log("sales-order-id", this.salesOrderId);
+    // console.log("customer-id", this.customerId);
+    // console.log("sales-order-id", this.salesOrderId);
     // this.getApproverStatusList();
     // this.getCustomerApprovalList();
     this.selectedColumns = this.columns;
@@ -141,16 +145,18 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       this.setDefaultContact();
     }
     forkJoin(this.commonService.smartDropDownList('ApprovalStatus', 'ApprovalStatusId', 'Name'),
-      this.workOrderService.getInternalApproversList(5, marginSummary.netSales),
+      //this.workOrderService.getInternalApproversList(5, marginSummary.netSales),
+      this.salesOrderService.approverslistbyTaskId(ApprovalTaskEnum.SOApproval, this.salesOrderId),
       this.salesOrderService.getCustomerApprovalList(this.salesOrderId)
     ).subscribe(response => {
       this.isSpinnerVisible = false;
       this.setAproverStatusList(response[0]);
-      if (response[1] && response[1].length > 0) {
-        this.approvers = response[1];
-      } else {
-        this.approvers = [];
-      }
+      // if (response[1] && response[1].length > 0) {
+      //   this.approvers = response[1];
+      // } else {
+      //   this.approvers = [];
+      // }
+      this.approvers = response[1];
       if (response[2] && response[2].length > 0) {
         this.loadApprovalListView(response[2][0]);
       }
@@ -190,9 +196,11 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     let tempList = [];
     if (statusList && statusList.length > 0) {
       for (let i = 0; i < statusList.length; i++) {
-        if (statusList[i].name === "Approved") {
+        //if (statusList[i].name === "Approved") {
+          if (statusList[i].name === ApprovalStatusDescirptionEnum.Approved) {
           tempList.push(statusList[i]);
-        } else if (statusList[i].name === "Rejected") {
+        //} else if (statusList[i].name === "Rejected") {
+        } else if (statusList[i].name === ApprovalStatusDescirptionEnum.Rejected) {
           tempList.push(statusList[i]);
         }
       }
@@ -268,7 +276,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     this.salesOrderCustomerApprovalListView.forEach(
       (x, i) => {
         let disableEdit = this.getPartToDisableOrNot(x);
-        if (!disableEdit) {
+        if (disableEdit) {//if (!disableEdit) {
           x.selected = !isSelected;
           this.onApprovalSelected(x, i);
         }
@@ -288,7 +296,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   onApprovalSelected(approver, i) {
-    if (approver.approvalActionId == 4) {
+    //if (approver.approvalActionId == 4) {
+      if (approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
       if (this.defaultContactId) {
         this.salesOrderCustomerApprovalListView[i].customerApprovedById = this.defaultContactId;
       } else {
@@ -318,7 +327,7 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
       });
 
       instance.originalStatusId = approval.statusId;
-      instance.selected = instance.originalStatusId == DBkeys.DEFAULT_SALES_ORDER_APPROVAL_STATUS_ID;
+      instance.selected = instance.originalStatusId == DBkeys.DEFAULT_SALES_ORDER_APPROVAL_STATUS_ID ? true : false;
       instance.openDate = new Date(approval.openDate);
       instance.approvalDate = new Date(approval.approvalDate);
       instance.approvedDate = new Date(approval.approvedDate);
@@ -446,7 +455,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     if (this.approvers && this.approvers.length > 0) {
       this.approvers.forEach(
         x => {
-          if (x.selected && x.approvalActionId == 3) {
+          //if (x.selected && x.approvalActionId == 3) {
+            if (x.selected && x.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
             openEmail = true;
           }
         }
@@ -469,9 +479,21 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
     if (!mastercompanyid) {
       mastercompanyid = { "masterCompanyId": 1 };
     }
+    let approvedParts = 0;
+    let hasError = false;
+    let validmessages = '';
     this.salesOrderCustomerApprovalListView.forEach(
       x => {
         if (x.selected) {
+          let validmessage = this.validateApprovalData(x);
+                    if (validmessage.length > 0) {
+                        hasError = true;
+                        validmessages += validmessage;
+                        return;
+                    }
+                    if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+                      approvedParts = + 1;
+                    }
           let obj = {
             "SalesOrderId": x.salesOrderId,
 
@@ -525,7 +547,14 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
         }
       }
     )
-
+    if (hasError) {
+      this.alertService.showMessage(
+          this.moduleName,
+          validmessages,
+          MessageSeverity.error
+      );
+      return;
+    }
     this.isSpinnerVisible = true;
     this.salesOrderService.sentForInternalApproval(payLoad)
       .subscribe(
@@ -537,6 +566,9 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
             MessageSeverity.success
           );
           this.isSpinnerVisible = false;
+          if (approvedParts > 0) {
+            this.onPartsApprovedEvent.emit(true);
+          }
           this.getCustomerApprovalList();
         },
         err => {
@@ -608,7 +640,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   getApprovalActionInternalStatus(approver) {
-    if (approver.selected && approver.approvalActionId == 2) {
+    //if (approver.selected && approver.approvalActionId == 2) {
+      if (approver.selected && approver.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
       return true;
     } else {
       return false;
@@ -616,7 +649,8 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   }
 
   getApprovalActionCustomerStatus(approver) {
-    if (approver.selected && approver.approvalActionId == 4) {
+    //if (approver.selected && approver.approvalActionId == 4) {
+      if (approver.selected && approver.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
       return true;
     } else {
       return false;
@@ -642,4 +676,37 @@ export class SalesOrderCustomerApprovalComponent implements OnInit, OnChanges {
   onCloseTextAreaInfo() {
     $("#memo-popup").modal("hide");
   }
+
+  validateApprovalData(x) {
+    var str = '';
+    if (x.approvalActionId == ApprovalProcessEnum.SentForInternalApproval) {
+        if (!x.internalSentDate) {
+            str += 'internal sent date is required <br/>';
+        }
+    }
+    else if (x.approvalActionId == ApprovalProcessEnum.SubmitInternalApproval) {
+        if (!(x.internalStatusId == ApprovalStatusEnum.Approved
+            || x.internalStatusId == ApprovalStatusEnum.Rejected)) {
+            str += 'internal status is required<br/>';
+        }
+        if (!x.internalApprovedDate) {
+            str += 'internal approved date is required<br/>';
+        }
+    }
+    else if (x.approvalActionId == ApprovalProcessEnum.SentForCustomerApproval) {
+        if (!x.customerSentDate) {
+            str += 'Customer sent date is required<br/>';
+        }
+    }
+    else if (x.approvalActionId == ApprovalProcessEnum.SubmitCustomerApproval) {
+        if (!(x.customerStatusId == ApprovalStatusEnum.Approved
+            || x.customerStatusId == ApprovalStatusEnum.Rejected)) {
+            str += 'Customer status is required<br/>';
+        }
+        if (!x.customerApprovedDate) {
+            str += 'Customer approved date is required<br/>';
+        }
+    }
+    return str;
+}
 }

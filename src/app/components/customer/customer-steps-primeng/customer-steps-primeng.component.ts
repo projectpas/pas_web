@@ -277,4 +277,6 @@ export class CustomerStepsPrimengComponent {
 				MessageSeverity.error
 			); }
 	}
+
+	expandShipping: any;
 }

@@ -35,6 +35,10 @@ export class Site {
 	public memo: string;
 	public countryId :any;
 	public isDeleted: Boolean;
-
-
+	public postalCode: any;
+	public stateOrProvince: any;
+	public city: any;
+	public address3: any;
+	public address2: any;
+	public address1: any;
 }

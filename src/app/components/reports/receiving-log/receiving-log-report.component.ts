@@ -27,7 +27,7 @@ export class ReceivingLogReportComponent implements OnInit {
     totalRecords: any;
     totalPages: number;
     receivingLogReportList = []
-
+    legalEntityList: any;
     private onDestroy$: Subject<void> = new Subject<void>();
     managementStructure = {
         companyId: 0,
@@ -185,4 +185,6 @@ export class ReceivingLogReportComponent implements OnInit {
     //    const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
     //    this.stocklineService.downloadStockLineReport(PagingData);
     //}
+
+    downloadStockLineReport() {}
 }

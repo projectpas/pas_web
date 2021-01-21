@@ -109,9 +109,10 @@ export class DocumentsComponent implements OnInit, AfterViewInit {
     loading: boolean;
 
     AuditDetails: SingleScreenAuditDetails[];
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
-
+    totelPages: any;
+    
 	constructor(private breadCrumb: SingleScreenBreadcrumbService,private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public documentService: DocumentService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
         this.displayedColumns.push('action');
         this.dataSource = new MatTableDataSource();

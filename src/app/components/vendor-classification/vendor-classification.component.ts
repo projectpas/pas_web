@@ -52,11 +52,11 @@ export class VendorClassificationComponent implements OnInit {
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     shortNameList: any;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private modalService: NgbModal,
          private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, private vendorclassificationService: VendorClassificationService, private commonService: CommonService) {

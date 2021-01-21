@@ -11,7 +11,7 @@ import { editValueAssignByCondition } from '../../../generic/autocomplete';
 import { VendorService } from '../../../services/vendor.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { AuditHistory } from '../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Documents } from '../../../models/documents.model';
 import { CustomerService } from '../../../services/customer.service';
 import * as moment from 'moment';
@@ -203,7 +203,8 @@ export class VendorDocumentsComponent implements OnInit {
             return {
                 ...x,
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+				updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+				docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
             }
         });
         documents.exportCSV();
@@ -371,7 +372,7 @@ export class VendorDocumentsComponent implements OnInit {
 		}, error => this.saveFailedHelper(error))
 	}
 
-	openView(content, row) {
+	openView(row) {
 		this.isSpinnerVisible = true;
 		this.vendorService.toGetUploadDocumentsList(row.attachmentId, row.vendorId, 3).subscribe(res => {
 			this.sourceViewforDocumentList = res;

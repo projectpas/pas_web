@@ -8,7 +8,7 @@ import { CustomerInternationalShippingModel, CustomerInternationalShipVia } from
 import { getValueFromObjectByKey, getObjectById, formatNumberAsGlobalSettingsModule, editValueAssignByCondition, getObjectByValue } from '../../../generic/autocomplete';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';
 @Component({

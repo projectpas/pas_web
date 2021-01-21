@@ -54,7 +54,7 @@ import { ActionsEditorComponent } from '../components/actions/actions-editor.com
 import { NodeTypeComponent } from '../components/node-type/node-type.component';
 import { Master1099Component } from '../components/master1099/master1099.component';
 
-import {EditorModule} from 'primeng/editor';
+import { EditorModule } from 'primeng/editor';
 //import { DefaultMessagesComponent } from '../components/default-messages/default-messages.component';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -164,6 +164,7 @@ import { TeardownReasonComponent } from "../components/teardown-reason/teardown-
 import { DocumentTypeComponent } from '../components/document-type/document-type.component';
 
 import { EmployeeTrainingTypeComponent } from "../components/employee-training-type/employee-training-type.component";
+// import { CommonDocumentsComponent } from "../components/common-components/common-documents/common-documents.component";
 
 
 
@@ -271,7 +272,8 @@ import { EmployeeTrainingTypeComponent } from "../components/employee-training-t
         VendorProcess1099Component,
         CapsReportComponent,
         CapabilityTypeComponent,
-        EmployeeTrainingTypeComponent,
+        EmployeeTrainingTypeComponent//,
+        //CommonDocumentsComponent
     ],
     providers: [
         PercentService,
@@ -296,7 +298,7 @@ import { EmployeeTrainingTypeComponent } from "../components/employee-training-t
         AssetTypeEndpointService,
         AssetIntangibleTypeService,
         AssetIntangibleTypeEndpointService,
-       
+
         AssetIntangibleAttributeTypeService,
         AssetIntangibleAttributeTypeEndpointService,
         StageCodeService,

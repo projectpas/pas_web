@@ -85,20 +85,22 @@ export class AssetAttributeTypeComponent implements OnInit {
     assetWriteDownList: any[] = [];
     filteredAssetWriteDownList: any[] = [];
     formData: FormData;
-
+    AuditDetails: any;
+    selectedRowforDelete: any;
+    check: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
-         private alertService: AlertService, private configurations: ConfigurationService,
-          private depriciationMethodService: DepriciationMethodService, 
-          private coreDataService: AssetAttributeTypeService, private assetTypeService: AssetTypeService, private glAccountService: GlAccountService, public legalEntityService: LegalEntityService, public percentService: PercentService, private modalService: NgbModal, private authService: AuthService
-        ,private commonservice: CommonService) {
+        private alertService: AlertService, private configurations: ConfigurationService,
+        private depriciationMethodService: DepriciationMethodService,
+        private coreDataService: AssetAttributeTypeService, private assetTypeService: AssetTypeService, private glAccountService: GlAccountService, public legalEntityService: LegalEntityService, public percentService: PercentService, private modalService: NgbModal, private authService: AuthService
+        , private commonservice: CommonService) {
     }
     ngOnInit(): void {
         //gather up all the required data to be displayed on the screen 
         this.loadData();
     }
 
-   
+
     //loading GlAccount from generalLedger//
     private glList() {
         this.alertService.startLoadingMessage();
@@ -202,7 +204,7 @@ export class AssetAttributeTypeComponent implements OnInit {
         this.companyListData = [];
         this.companyList = this.allmgmtData.filter(c => c.parentId == null);
         if (this.companyList.length > 0) {
-            for (let i = 0; i < this.companyList.length; i++ ) {
+            for (let i = 0; i < this.companyList.length; i++) {
                 this.companyListData.push(
                     { value: this.companyList[i].managementStructureId, label: this.companyList[i].code },
                 );
@@ -364,7 +366,7 @@ export class AssetAttributeTypeComponent implements OnInit {
 
     findmgmtSiblingRecords(parentid: number): any[] {
         return this.allmgmtData.filter(c => c.parentId == parentid);
-    } 
+    }
 
     getAllPercentage() {
         this.commonservice.smartDropDownList('[Percent]', 'PercentId', 'PercentValue').subscribe(res => {
@@ -497,8 +499,8 @@ export class AssetAttributeTypeComponent implements OnInit {
         this.coreDataService.getAll().subscribe(res => {
 
 
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
             // const responseData = res[0];
             // this.itemList = responseData;
             // this.totalRecords = responseData.length;
@@ -618,12 +620,12 @@ export class AssetAttributeTypeComponent implements OnInit {
     selectedAssetType(object) {
         //console.log('selectedAssetType.assetTypeName', this.currentRow.assetTypeId);
         //console.log('selectedAssetType.memo', object.assetTypeMemo);
-        
+
         console.log(object.assetTypeId);
         for (let i = 0; i < this.itemList.length; i++) {
             if ((this.itemList[i].assetTypeId === object.assetTypeId && this.currentModeOfOperation == 2)
                 || (this.itemList[i].assetTypeId === object.assetTypeId && this.currentModeOfOperation == 3 &&
-                this.currentRow.assetAttributeTypeId != this.itemList[i].assetAttributeTypeId)
+                    this.currentRow.assetAttributeTypeId != this.itemList[i].assetAttributeTypeId)
             ) {
                 this.recordExists = true;
                 this.disableSave = true;
@@ -711,7 +713,7 @@ export class AssetAttributeTypeComponent implements OnInit {
             this.itemList[i].selectedCompanyNames = companies;
         }
     }
- 
+
     getAccNameById(value) {
         for (let i = 0; i < this.allGlInfo.length; i++) {
             let accId = this.allGlInfo[i].glAccountId;
@@ -870,94 +872,94 @@ export class AssetAttributeTypeComponent implements OnInit {
         }
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.itemList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.itemList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.itemList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemList = newarry;
+            }
         }
-        this.totalRecords = this.itemList.length ;
+        this.totalRecords = this.itemList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('AssetAttributeType',
-            'AssetAttributeTypeId',this.restorerecord.assetAttributeTypeId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('AssetAttributeType',
+            'AssetAttributeTypeId', this.restorerecord.assetAttributeTypeId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
 
     showBulkUploadResult(items: any) {
         if (items) {
@@ -980,4 +982,7 @@ export class AssetAttributeTypeComponent implements OnInit {
         }
         this.getItemList();
     }
+
+    viewSelectedRow(rowData) {}
+    changeStatus(rowData) {}
 }

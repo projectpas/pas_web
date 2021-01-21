@@ -46,7 +46,6 @@ export class InterCompanySetupComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        debugger;
         this.getJournalTypes();
         this.getGlAccountList();
         this.getInterCompanySetupList();
@@ -147,7 +146,6 @@ export class InterCompanySetupComponent implements OnInit {
     }
 
     editInterCompanySetup(interCompanySetup: InterCompanySetup): void { 
-        debugger;
         this.editableMode = true;
         this.interCompanySetup = interCompanySetup;
     }
@@ -201,7 +199,6 @@ export class InterCompanySetupComponent implements OnInit {
     }
 
     onCustomercodeSelected(event): void {
-        debugger;
         for (let i = 0; i < this.filteredCustomerCodes.length; i++) {
             if (event == this.filteredCustomerCodes[i][0].code) {
                 this.disableSaveCusCode = true;
@@ -210,7 +207,6 @@ export class InterCompanySetupComponent implements OnInit {
     }
 
     filterCustomerNames(event): void {
-        debugger;
         this.customerNames = [];
         this.disableSaveCusName = false;
         this.filteredCustomerNames = [];
@@ -229,7 +225,6 @@ export class InterCompanySetupComponent implements OnInit {
     }
 
     onCustomernameSelected(event): void {
-        debugger;
         for (let i = 0; i < this.filteredCustomerNames.length; i++) {
             if (event == this.filteredCustomerNames[i][0].name) {
                 this.disableSaveCusName = true;

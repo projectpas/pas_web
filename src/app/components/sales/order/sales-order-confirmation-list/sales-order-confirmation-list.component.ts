@@ -26,7 +26,7 @@ import { MenuItem } from "primeng/api";
   styleUrls: ["./sales-order-confirmation-list.component.css"]
 })
 export class SalesOrderConfirmationListComponent {
-  @ViewChild("dt",{static:false})
+  @ViewChild("dt", { static: false })
   searchParameters: ISalesSearchParameters;
   sales: any[] = [];
   selected: any;
@@ -65,8 +65,9 @@ export class SalesOrderConfirmationListComponent {
   currentStatus: any = "0";
   home: any;
   breadcrumbs: MenuItem[];
-
-
+  salesOrderId: any;
+  customerId: any;
+  
   constructor(
     private salesQuoteService: SalesQuoteService,
     private salesOrderService: SalesOrderService,
@@ -96,8 +97,8 @@ export class SalesOrderConfirmationListComponent {
         this.isSpinnerVisible = false;
         this.sales = response[0];
 
-      },error => {
-        this.isSpinnerVisible =false;
+      }, error => {
+        this.isSpinnerVisible = false;
       });
 
 
@@ -179,8 +180,8 @@ export class SalesOrderConfirmationListComponent {
         this.showPaginator = this.totalRecords > 0;
         this.isSpinnerVisible = false;
         //this.alertService.stopLoadingMessage();
-      },error => {
-        this.isSpinnerVisible =false;
+      }, error => {
+        this.isSpinnerVisible = false;
       });
   }
   globalSearch(val) {
@@ -197,8 +198,8 @@ export class SalesOrderConfirmationListComponent {
         this.showPaginator = this.totalRecords > 0;
         this.isSpinnerVisible = false;
         //this.alertService.stopLoadingMessage();
-      },error => {
-        this.isSpinnerVisible =false;
+      }, error => {
+        this.isSpinnerVisible = false;
       });
 
   }
@@ -222,10 +223,10 @@ export class SalesOrderConfirmationListComponent {
       );
       this.isSpinnerVisible = false;
       //this.alertService.stopLoadingMessage();
-    },error => {
-      this.isSpinnerVisible =false;
+    }, error => {
+      this.isSpinnerVisible = false;
     });
   }
 
-
+  deleteQuote() {}
 }

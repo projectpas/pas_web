@@ -73,7 +73,9 @@ export class WorkScopeComponent implements OnInit {
     disableSaveForEdit: boolean = false;
     viewRowData: any;
     selectedRowforDelete: any;  
-    existingRecordsResponse = []
+    existingRecordsResponse = [];
+    AuditDetails: any;
+    
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

@@ -33,22 +33,22 @@ import { CommonService } from '../../services/common.service';
 /** Actions component*/
 export class PriorityComponent implements OnInit {
 
-    PriorityData: any=[];
+    PriorityData: any = [];
     // selectedColumns: any = [];
     viewRowData: any;
     selectedRowforDelete: any;
     newPriority =
-        {            
-            description: "",           
+        {
+            description: "",
             masterCompanyId: 1,
             isActive: true,
             isDeleted: false,
             memo: "",
-          
+
         }
-    addnewPriority = {...this.newPriority};
+    addnewPriority = { ...this.newPriority };
     currentstatus: string = 'Active';
-    disableSavePriority:boolean=false;
+    disableSavePriority: boolean = false;
     disableSaveForPriority: boolean = false;
     PriorityList: any;
     isEdit: boolean = false;
@@ -63,19 +63,19 @@ export class PriorityComponent implements OnInit {
     selectedColumns = this.priorityHeader;
     formData = new FormData()
 
-    @ViewChild('dt',{static:false})
+    @ViewChild('dt', { static: false })
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     manufacturerList: any;
-
+    AuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private modalService: NgbModal,
         private commonService: CommonService,
-         private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, public priorityService: PriorityService) {
+        private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, public priorityService: PriorityService) {
 
 
     }
@@ -98,9 +98,9 @@ export class PriorityComponent implements OnInit {
         this.getProrityData();
     }
     getmemo() {
-             this.disableSavePriority = false;
-      
-     }
+        this.disableSavePriority = false;
+
+    }
 
     dismissModel() {
         // this.isDeleteMode = false;
@@ -141,9 +141,9 @@ export class PriorityComponent implements OnInit {
     // }
 
     getProrityData() {
-        this.priorityService.getPriorityList().subscribe(res => {   
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)       
+        this.priorityService.getPriorityList().subscribe(res => {
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
             // const responseData = res[0];           
             // this.PriorityData = responseData;
             // this.totalRecords = responseData.length;
@@ -162,11 +162,11 @@ export class PriorityComponent implements OnInit {
         const exists = validateRecordExistsOrNot(field, value, this.PriorityData, this.selectedRecordForEdit);
         if (exists.length > 0) {
             this.disableSaveForPriority = true;
-           
+
         }
         else {
             this.disableSaveForPriority = false;
-           
+
         }
 
     }
@@ -182,10 +182,10 @@ export class PriorityComponent implements OnInit {
         const exists = selectedValueValidate('description', object, this.selectedRecordForEdit)
 
         this.disableSaveForPriority = !exists;
-       
+
     }
 
-    
+
     savePriority() {
         const data = {
             ...this.addnewPriority, createdBy: this.userName, updatedBy: this.userName,
@@ -228,14 +228,14 @@ export class PriorityComponent implements OnInit {
     editPriority(rowData) {
         console.log(rowData);
         this.isEdit = true;
-        this.disableSavePriority=true;
+        this.disableSavePriority = true;
         this.disableSaveForPriority = false;
-       // this.disableSaveForShortName = false;
+        // this.disableSaveForShortName = false;
         // this.addNewUOM = rowData;
 
         this.addnewPriority = {
             ...rowData, description: getObjectByValue('description', rowData.description, this.PriorityData),
-            
+
         };
         this.selectedRecordForEdit = { ...this.addnewPriority }
 
@@ -280,94 +280,94 @@ export class PriorityComponent implements OnInit {
             this.selectedRowforDelete = undefined;
         }
     }
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.PriorityData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.PriorityData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.PriorityData = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.PriorityData = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.PriorityData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.PriorityData= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.PriorityData = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.PriorityData = newarry;
+            }
         }
-        this.totalRecords = this.PriorityData.length ;
+        this.totalRecords = this.PriorityData.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Priority',
-            'PriorityId',this.restorerecord.priorityId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('Priority',
+            'PriorityId', this.restorerecord.priorityId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.getProrityData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
 
     getAuditHistoryById(rowData) {
         this.priorityService.historyPriority(rowData.priorityId).subscribe(res => {
@@ -387,5 +387,6 @@ export class PriorityComponent implements OnInit {
             }
         }
     }
-    
+    sampleExcelDownload() {}
+    customExcelUpload($event) {}
 }

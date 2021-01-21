@@ -184,7 +184,7 @@
                             <td class="text-center" *ngIf="isViewMode == false">
 <div *ngIf="deletedStatusInfo==false">
                                 <span>
-                                    <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(view,rowData)" matTooltipPosition="above"  matTooltip="View">
+                                    <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(rowData)" matTooltipPosition="above"  matTooltip="View">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </span>
@@ -210,7 +210,7 @@
 </div>
                                      <div *ngIf="deletedStatusInfo==true">
                                         <span>
-                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(view,rowData)" matTooltipPosition="above"  matTooltip="View">
+                                            <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(rowData)" matTooltipPosition="above"  matTooltip="View">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </span>
@@ -224,7 +224,7 @@
                             <td class="text-center" *ngIf="isViewMode == true">
 
                                 <span>
-                                    <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(view,rowData)" matTooltipPosition="above"  matTooltip="View">
+                                    <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#docView" (click)="openDocument(rowData)" matTooltipPosition="above"  matTooltip="View">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </span>

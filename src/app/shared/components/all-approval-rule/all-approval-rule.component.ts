@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AuditHistory } from '../../../models/audithistory.model';
 import { POApprovalService } from "../../../services/po-approval.service";
 import { CommonService } from "../../../services/common.service";
@@ -843,4 +843,5 @@ getAuditHistoryById(data) {
       )
   }
   
+  handleChanges(rowData, $event) {}
 }

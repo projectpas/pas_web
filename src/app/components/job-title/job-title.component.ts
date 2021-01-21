@@ -54,9 +54,10 @@ export class JobTitleComponent implements OnInit {
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
-
+    AuditDetails: any;
+    jobtitleHeader: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private modalService: NgbModal,

@@ -53,8 +53,8 @@ export class AircraftManufacturerComponent implements OnInit {
     disableSaveForDescription: boolean = false;
     descriptionList: any;
     currentstatus: string = 'Active';
-disableSave:boolean=false;
-
+    disableSave:boolean=false;
+    AuditDetails: any;
     new = {
         description: "",
         masterCompanyId: 1,

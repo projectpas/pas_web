@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { MenuItem, LazyLoadEvent } from 'primeng/api';//bread crumb
 
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -554,7 +554,7 @@ export class ManufacturerComponent implements OnInit {
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     manufacturerList: any;
@@ -565,7 +565,7 @@ export class ManufacturerComponent implements OnInit {
     currentstatus: string = 'Active';
 
     isDeleted: Boolean = false;
-
+    AuditDetails: any;
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService, private modalService: NgbModal, private commonService: CommonService,
          private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, public manufacturerService: ManufacturerService) {

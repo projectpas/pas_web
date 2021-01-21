@@ -1,9 +1,9 @@
-﻿import { Component,Input, ViewChild, OnInit,  ElementRef, SimpleChanges } from '@angular/core';
+﻿import { Component, Input, ViewChild, OnInit, ElementRef, SimpleChanges } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { MessageSeverity, AlertService } from '../../../../services/alert.service';
-import { FormBuilder, FormGroup,  FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
-import { NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { ATAMain } from '../../../../models/atamain.model';
@@ -18,7 +18,8 @@ import { AuthService } from '../../../../services/auth.service';
 import { listSearchFilterObjectCreation, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { AuditHistory } from '../../../../models/audithistory.model';
 import { ConfigurationService } from '../../../../services/configuration.service';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
 @Component({
@@ -26,13 +27,13 @@ import { DatePipe } from '@angular/common';
     templateUrl: './asset-capes.component.html',
     styleUrls: ['./asset-capes.component.scss'],
     animations: [fadeInOut],
-    providers:[DatePipe]
+    providers: [DatePipe]
 })
 
 export class AssetCapesComponent implements OnInit {
-    @ViewChild("tabRedirectConfirmationModal2",{static:false}) public tabRedirectConfirmationModal2: ElementRef;
-    @Input() isView =false;
-    @Input() viewassetRecordId:0
+    @ViewChild("tabRedirectConfirmationModal2", { static: false }) public tabRedirectConfirmationModal2: ElementRef;
+    @Input() isView = false;
+    @Input() viewassetRecordId: 0
     matSpinner: boolean;
     modal: NgbModalRef;
     loadingIndicator: boolean;
@@ -93,13 +94,13 @@ export class AssetCapesComponent implements OnInit {
     showLable: boolean;
     allCapesInfo: ItemMasterCapabilitiesModel[] = [];
     selectedColumns: any;
-    cols: { field: string; header: string;star:boolean }[];
+    cols: { field: string; header: string; star: boolean }[];
     isSaving: boolean;
     currentCapes: any = {};
     search_AircraftDashNumberList: any;
     capabilityTypeData: any[];
     currentRow: any;
-    disableAdd:any
+    disableAdd: any
     AssetId: any;
     static assetService;
     aircraftData: any;
@@ -140,39 +141,39 @@ export class AssetCapesComponent implements OnInit {
     lazyLoadEventDataInput: any;
     assetCapesId: number = 0;
     aircraftDataEdit: any = {};
-    actionHide:boolean=false;
+    actionHide: boolean = false;
     filterText: string = '';
     errorDisplay: any;
-    selectedRows:any=[];
+    selectedRows: any = [];
     constructor(private router: ActivatedRoute, private modalService: NgbModal, private alertService: AlertService, public itemMasterService: ItemMasterService, private route: Router,
-        private assetServices: AssetService, private dashnumberservices: DashNumberService, private authService: AuthService, private formBuilder: FormBuilder, private commonservice: CommonService
+        public assetServices: AssetService, private dashnumberservices: DashNumberService, private authService: AuthService, private formBuilder: FormBuilder, private commonservice: CommonService
         , private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private configurations: ConfigurationService, private datePipe: DatePipe) {
         this.cols = [
-            { field: 'partNumber', header: 'PN',star:true},
-            { field: 'partDescription', header: 'PN Description' ,star:false },
-            { field: 'captypedescription', header: 'Capability Type',star:true },
-            { field: 'manufacturer', header: 'Aircraft Manufacturer',star:true },
-            { field: 'modelname', header: 'Model',star:false },
-            { field: 'dashnumber', header: 'Dash Number' ,star:false},
-            { field: 'createdDate', header: 'Created Date' ,star:false},
-            { field: 'createdBy', header: 'Created By' ,star:false},
-            { field: 'updatedDate', header: 'Updated Date' ,star:false},
-            { field: 'updatedBy', header: 'Updated By',star:false },
+            { field: 'partNumber', header: 'PN', star: true },
+            { field: 'partDescription', header: 'PN Description', star: false },
+            { field: 'captypedescription', header: 'Capability Type', star: true },
+            { field: 'manufacturer', header: 'Aircraft Manufacturer', star: true },
+            { field: 'modelname', header: 'Model', star: false },
+            { field: 'dashnumber', header: 'Dash Number', star: false },
+            { field: 'createdDate', header: 'Created Date', star: false },
+            { field: 'createdBy', header: 'Created By', star: false },
+            { field: 'updatedDate', header: 'Updated Date', star: false },
+            { field: 'updatedBy', header: 'Updated By', star: false },
         ];
         this.selectedColumns = this.cols;
         this.AssetId = this.router.snapshot.params['id'];
         this.activeIndex = 1;
-       // if (this.assetServices.listCollection == undefined) {
+        // if (this.assetServices.listCollection == undefined) {
         // this.GetAssetData(this.AssetId);
-       // }
+        // }
         if (this.assetServices.listCollection != null && this.assetServices.isEditMode == true) {
             this.showLable = true;
             this.currentAsset = this.assetServices.listCollection;
             if (this.assetServices.listCollection) {
                 this.local = this.assetServices.listCollection;
             }
-            if(this.isView==false){
-            this.aircraftManfacturerData('');
+            if (this.isView == false) {
+                this.aircraftManfacturerData('');
             }
         }
         else if (this.assetServices.generalCollection != null) {
@@ -182,8 +183,8 @@ export class AssetCapesComponent implements OnInit {
                 this.local = this.assetServices.generalCollection;
                 this.currentCapes = this.local;
             }
-            if(this.isView==false){
-            this.aircraftManfacturerData('');
+            if (this.isView == false) {
+                this.aircraftManfacturerData('');
             }
         }
 
@@ -195,13 +196,13 @@ export class AssetCapesComponent implements OnInit {
         modelUnknown: false
     };
     ngOnInit(): void {
-        if( this.assetServices.isEditMode == false){
+        if (this.assetServices.isEditMode == false) {
 
             this.breadcrumbs = [
                 { label: 'Asset' },
                 { label: 'Create Asset' },
             ];
-        }else{
+        } else {
 
             this.breadcrumbs = [
                 { label: 'Asset' },
@@ -217,16 +218,16 @@ export class AssetCapesComponent implements OnInit {
             exchangeForm: this.formBuilder.array([])
         });
         this.AssetId = this.router.snapshot.params['id'];
-        if(this.isView==false){
-        this.GetAssetData(this.AssetId);
-        this.ptnumberlistdata('');
-        this.aircraftManfacturerData('');
-     this.getCapabilityTypeData('');
-        // this.GetAssetData(this.viewassetRecordId);
-}
+        if (this.isView == false) {
+            this.GetAssetData(this.AssetId);
+            this.ptnumberlistdata('');
+            this.aircraftManfacturerData('');
+            this.getCapabilityTypeData('');
+            // this.GetAssetData(this.viewassetRecordId);
+        }
     }
-    ngOnChanges(changes: SimpleChanges){
-this.viewassetRecordId=this.viewassetRecordId;
+    ngOnChanges(changes: SimpleChanges) {
+        this.viewassetRecordId = this.viewassetRecordId;
     }
     getmemo(event) {
         this.disableAdd = false;
@@ -236,7 +237,7 @@ this.viewassetRecordId=this.viewassetRecordId;
         this.getCapabilityTypeData(value);
     }
     setEditArray: any = [];
-     getCapabilityTypeData(value) {
+    getCapabilityTypeData(value) {
         this.setEditArray = [];
         if (this.assetServices.isCapsEditMode == true) {
             this.setEditArray.push(this.AssetCapesId ? this.AssetCapesId : 0);
@@ -254,17 +255,18 @@ this.viewassetRecordId=this.viewassetRecordId;
 
 
     colaircraft: any[] = [
-        { field: 'CapibilityType', header: 'Capability Type',star:true },
-        { field: 'PartNumber', header: 'PN' ,star:true},
-        { field: 'AircraftType', header: 'Aircraft Manufacturer',star:true },
-        { field: 'AircraftModel', header: 'Model',star:false },
-        { field: 'DashNumber', header: 'Dash Number',star:false }
+        { field: 'CapibilityType', header: 'Capability Type', star: true },
+        { field: 'PartNumber', header: 'PN', star: true },
+        { field: 'AircraftType', header: 'Aircraft Manufacturer', star: true },
+        { field: 'AircraftModel', header: 'Model', star: false },
+        { field: 'DashNumber', header: 'Dash Number', star: false }
     ];
     private GetAssetData(assetid) {
         this.assetServices.getByAssetId(assetid).subscribe(
-            results =>{ this.onassetdataSuccessful(results[0])},err => {			
+            results => { this.onassetdataSuccessful(results[0]) }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);}
+                this.errorMessageHandler(errorLog);
+            }
         );
     }
 
@@ -290,18 +292,19 @@ this.viewassetRecordId=this.viewassetRecordId;
             }
         }
     }
-    isSpinnerVisibleView:any=false;
+    isSpinnerVisibleView: any = false;
     getAuditHistoryById(rowData) {
-        this.isSpinnerVisibleView=true;
+        this.isSpinnerVisibleView = true;
         this.assetServices.getAssetCapesAudit(rowData.assetCapesId).subscribe(res => {
             this.auditHistory = res;
             setTimeout(() => {
-                this.isSpinnerVisibleView=false;
+                this.isSpinnerVisibleView = false;
             }, 1200);
-        },err => {			
-            this.isSpinnerVisibleView=false;
+        }, err => {
+            this.isSpinnerVisibleView = false;
             const errorLog = err;
-            this.errorMessageHandler(errorLog);})
+            this.errorMessageHandler(errorLog);
+        })
     }
 
     getColorCodeForHistory(i, field, value) {
@@ -331,13 +334,14 @@ this.viewassetRecordId=this.viewassetRecordId;
             this.formData.append('updatedBy', this.userName);
             this.formData.append('isActive', 'true');
             this.formData.append('isDeleted', 'false');
-            const data={'masterCompanyId': this.authService.currentUser.masterCompanyId,
-                        'createdBy':this.userName,
-                        'updatedBy':this.userName,
-                        'isActive':true,
-                        'isDeleted':false
-        }
-            this.assetServices.CapesUpload(this.formData, this.currentAsset.assetRecordId,data).subscribe(res => {
+            const data = {
+                'masterCompanyId': this.authService.currentUser.masterCompanyId,
+                'createdBy': this.userName,
+                'updatedBy': this.userName,
+                'isActive': true,
+                'isDeleted': false
+            }
+            this.assetServices.CapesUpload(this.formData, this.currentAsset.assetRecordId, data).subscribe(res => {
                 event.target.value = '';
 
                 this.formData = new FormData();
@@ -347,38 +351,39 @@ this.viewassetRecordId=this.viewassetRecordId;
                     `Successfully Uploaded  `,
                     MessageSeverity.success
                 );
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
 
         }
 
     }
 
-    arrayItemMasterlist:any=[];
-    ptnumberlistdata(strText = ''){
-        this.arrayItemMasterlist=[];
-		if(this.assetServices.isCapsEditMode==true) {			
-            this.arrayItemMasterlist.push(this.aircraftDataEdit.partNumber ? this.aircraftDataEdit.partNumber :0); 
-        }else{
+    arrayItemMasterlist: any = [];
+    ptnumberlistdata(strText = '') {
+        this.arrayItemMasterlist = [];
+        if (this.assetServices.isCapsEditMode == true) {
+            this.arrayItemMasterlist.push(this.aircraftDataEdit.partNumber ? this.aircraftDataEdit.partNumber : 0);
+        } else {
             this.arrayItemMasterlist.push(0);
         }
-            
 
-        this.commonservice.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber',strText,true,20,this.arrayItemMasterlist.join()).subscribe(response => {
+
+        this.commonservice.autoSuggestionSmartDropDownList('ItemMaster', 'ItemMasterId', 'PartNumber', strText, true, 20, this.arrayItemMasterlist.join()).subscribe(response => {
             this.allPartnumbersInfo = response.map(x => {
                 return {
                     partNumber: x.label, itemMasterId: x.value
                 }
-            })                   
-this.partCollection=this.allPartnumbersInfo;
-		},err => {
-			const errorLog = err;
-			this.errorMessageHandler(errorLog);		
-		});
+            })
+            this.partCollection = this.allPartnumbersInfo;
+        }, err => {
+            const errorLog = err;
+            this.errorMessageHandler(errorLog);
+        });
     }
 
- 
+
     loadData(event) {
 
         this.lazyLoadEventData = event;
@@ -393,64 +398,65 @@ this.partCollection=this.allPartnumbersInfo;
             ...this.lazyLoadEventDataInput.filters,
             status: this.status ? this.status : 'Active'
         }
-   const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters)}
+        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
         this.getList(PagingData);
     }
-    recordId:any;
+    recordId: any;
     async getList(data) {
         const isdelete = this.currentDeletedstatus ? true : false;
         data.filters.isDeleted = isdelete
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
-        if(this.isView==false){
-            this.recordId=this.currentAsset ? this.currentAsset.assetRecordId :this.AssetId;
-        }else{
-            this.recordId=this.viewassetRecordId;
+        if (this.isView == false) {
+            this.recordId = this.currentAsset ? this.currentAsset.assetRecordId : this.AssetId;
+        } else {
+            this.recordId = this.viewassetRecordId;
         }
-        if(this.recordId !=undefined){
-        this.isSpinnerVisible = true;
-        this.assetServices.getAssetCapesAll(PagingData,this.recordId).subscribe(res => {
-           this.data = res.results;
-             this.allCapesInfo = this.data;
-            this.totalRecords = res.totalRecordsCount; 
-            this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-            this.isSpinnerVisible = false;
-        },err => {	
-            this.isSpinnerVisible = false;		
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+        if (this.recordId != undefined) {
+            this.isSpinnerVisible = true;
+            this.assetServices.getAssetCapesAll(PagingData, this.recordId).subscribe(res => {
+                this.data = res.results;
+                this.allCapesInfo = this.data;
+                this.totalRecords = res.totalRecordsCount;
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                this.isSpinnerVisible = false;
+            }, err => {
+                this.isSpinnerVisible = false;
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
         }
     }
-    dateObject:any={}
+    dateObject: any = {}
     dateFilterForTable(date, field) {
-this.dateObject={}
-        date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY')
-if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-    if(field=='createdDate'){
-        this.dateObject={'createdDate':date}
-    }else if(field=='updatedDate'){
-        this.dateObject={'updatedDate':date}
-    }
-    
-    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters ,...this.dateObject};
-    const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-    this.getList(PagingData); 
-}else{
-    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
-    if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
-        delete this.lazyLoadEventDataInput.filters.createdDate;
-    }
-    if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
-        delete this.lazyLoadEventDataInput.filters.updatedDate;
-    }
-    this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
-        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        this.getList(PagingData); 
-}
-      
+        this.dateObject = {}
+        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY')
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if (field == 'createdDate') {
+                this.dateObject = { 'createdDate': date }
+            } else if (field == 'updatedDate') {
+                this.dateObject = { 'updatedDate': date }
+            }
+
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        } else {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
+                delete this.lazyLoadEventDataInput.filters.createdDate;
+            }
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
+                delete this.lazyLoadEventDataInput.filters.updatedDate;
+            }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        }
+
     }
     getCapesListByStatus(status) {
-        this.currentstatus2=status;
-        this.selectedRows=[];
+        this.currentstatus2 = status;
+        this.selectedRows = [];
         this.pageNumber = 0;
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;
         this.pageIndex = pageIndex;
@@ -458,12 +464,12 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         this.lazyLoadEventDataInput.first = pageIndex;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: status };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        PagingData.first= 0;
+        PagingData.first = 0;
         this.getList(PagingData);
     }
     getDeleteListByStatus(value) {
         this.pageNumber = 0;
-        this.selectedRows=[];
+        this.selectedRows = [];
         this.currentDeletedstatus = true;
 
         const pageIndex = parseInt(this.lazyLoadEventDataInput.first) / this.lazyLoadEventDataInput.rows;;
@@ -497,8 +503,8 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 
         this.status = this.currentstatus2;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus2 };
-        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters), globalFilter: value}
-       
+        const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters), globalFilter: value }
+
         this.getList(PagingData);
     }
     restorerecord: any = {}
@@ -508,18 +514,19 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
             this.modal.close();
 
             this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);})
+            this.errorMessageHandler(errorLog);
+        })
     }
     restore(content, rowData) {
         this.restorerecord = rowData;
         this.assetCapesId = rowData.assetCapesId;
-        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMangecls' });
+        this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMangecls' });
 
     }
 
- 
+
 
     get mfgFormArray(): FormArray {
         return this.capabilitiesForm.get('mfgForm') as FormArray;
@@ -546,7 +553,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
     }
     changeOfTab(value) {
         const { assetId } = this.AssetId;
-        this.AssetId=this.AssetId ? this.AssetId :this.assetServices.listCollection.assetRecordId;
+        this.AssetId = this.AssetId ? this.AssetId : this.assetServices.listCollection.assetRecordId;
         if (this.assetServices.isEditMode == true) {
             if (value === 'General') {
                 this.activeIndex = 0;
@@ -581,7 +588,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         }
     }
 
-    partPNentHandler(event) { 
+    partPNentHandler(event) {
         if (event.target.value != "") {
             let value = event.target.value.toLowerCase();
             if (this.selectedActionName) {
@@ -600,9 +607,9 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         this.ptnumberlistdata(event.target.value);
     }
 
-    onCapabilityTypeSelection(event) { 
-        
-        this.capabilityid=event.value;
+    onCapabilityTypeSelection(event) {
+
+        this.capabilityid = event.value;
 
         if (this.capabilityTypeData) {
             for (let i = 0; i < this.capabilityTypeData.length; i++) {
@@ -614,27 +621,27 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
     }
 
     partnmId(event) {
-      this.sourceItemMasterCap.partId = event.itemMasterId;
-      this.itemMasterId = event.itemMasterId;
-      this.disableSavepartNumber = true;
-      this.selectedActionName = event.partNumber;
-            this.disableSavepartDescription = true;
-        
+        this.sourceItemMasterCap.partId = event.itemMasterId;
+        this.itemMasterId = event.itemMasterId;
+        this.disableSavepartNumber = true;
+        this.selectedActionName = event.partNumber;
+        this.disableSavepartDescription = true;
+
     }
 
 
     filterPNpartItems(event) {
-		this.partCollection = this.allPartnumbersInfo;
-		if (event.query !== undefined && event.query !== null) {
+        this.partCollection = this.allPartnumbersInfo;
+        if (event.query !== undefined && event.query !== null) {
             this.ptnumberlistdata(event.query);
-        }else{
+        } else {
             this.ptnumberlistdata('');
         }
-			const partNum = [...this.allPartnumbersInfo.filter(x => {
-				return x.partNumber.toLowerCase().includes(event.query.toLowerCase())
-			})]
-			this.partCollection = partNum;
-	
+        const partNum = [...this.allPartnumbersInfo.filter(x => {
+            return x.partNumber.toLowerCase().includes(event.query.toLowerCase())
+        })]
+        this.partCollection = partNum;
+
     }
 
     onAssetIdselection(event) {
@@ -650,25 +657,25 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
             }
         }
     }
-    onFilteManufacturer(value){
+    onFilteManufacturer(value) {
         this.aircraftManfacturerData(value)
     }
-     aircraftManfacturerData(value) {
-    //     this.commonservice.smartDropDownList('AircraftType','AircraftTypeId','Description').subscribe(res => {
-    //         this.manufacturerData=res;
-    //         this.loadingIndicator = false;
-    // },err => {			
-    //     const errorLog = err;
-    //     this.errorMessageHandler(errorLog);})
+    aircraftManfacturerData(value) {
+        //     this.commonservice.smartDropDownList('AircraftType','AircraftTypeId','Description').subscribe(res => {
+        //         this.manufacturerData=res;
+        //         this.loadingIndicator = false;
+        // },err => {			
+        //     const errorLog = err;
+        //     this.errorMessageHandler(errorLog);})
 
         this.setEditArray = [];
-        if (this.assetServices.isCapsEditMode==true) {
+        if (this.assetServices.isCapsEditMode == true) {
             this.setEditArray.push(this.aircraftDataEdit.selectedAircraftTypes ? this.aircraftDataEdit.assetAcquisitionTypeId : 0);
         } else {
             this.setEditArray.push(0);
         }
         const strText = value ? value : '';
-        this.commonservice.autoSuggestionSmartDropDownList('AircraftType','AircraftTypeId','Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+        this.commonservice.autoSuggestionSmartDropDownList('AircraftType', 'AircraftTypeId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
             this.manufacturerData = res;
             this.loadingIndicator = false;
         }, err => {
@@ -679,7 +686,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 
 
 
-    } 
+    }
 
     loadModalsForExistingRecords(capData) {
         if (capData.selectedAircraftTypes) {
@@ -688,7 +695,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
             //         const errorLog = err;
             //         this.errorMessageHandler(errorLog);}
             // );
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe( results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -696,15 +703,17 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                         modelName: x.label
                     }
                 });
-                this.onDataLoadaircrafttypeSuccessfulForExisting(newResp, capData)},err => {			
+                this.onDataLoadaircrafttypeSuccessfulForExisting(newResp, capData)
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
         }
     }
 
     loadModalsForExistingRecords_1(capData, aircrafttypeid) {
         if (aircrafttypeid) {
-            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', aircrafttypeid).subscribe( results => {
+            this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', aircrafttypeid).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
                         ...x,
@@ -712,9 +721,11 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                         modelName: x.label
                     }
                 });
-                this.onDataLoadaircrafttypeSuccessfulForExisting(newResp, capData)},err => {			
+                this.onDataLoadaircrafttypeSuccessfulForExisting(newResp, capData)
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
             // this.itemMasterService.getAircraftTypes(aircrafttypeid).subscribe(
             //     results => {this.onDataLoadaircrafttypeSuccessfulForExisting(results[0], capData)},err => {			
             //         const errorLog = err;
@@ -726,23 +737,23 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
     private onDataLoadaircrafttypeSuccessfulForExisting(allWorkFlows: any[], capData) //getting Models Based on Manfacturer Selection
     {
         // console.log("caps",capData)
-        if(allWorkFlows && allWorkFlows.length !=0){
-        capData.selectedAircraftDataModels = [];
-        allWorkFlows.forEach(element => {
-            if(capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length !=0){
-            for (let z = 0; z < capData.selectedAircraftModelTypes.length; z++) {
-                if (element.aircraftModelId == capData.selectedAircraftModelTypes[z]) {
-                    capData.selectedModel.push({ value: element.aircraftModelId, label: element.modelName, aircraftTypeId: capData.selectedAircraftTypes })
+        if (allWorkFlows && allWorkFlows.length != 0) {
+            capData.selectedAircraftDataModels = [];
+            allWorkFlows.forEach(element => {
+                if (capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length != 0) {
+                    for (let z = 0; z < capData.selectedAircraftModelTypes.length; z++) {
+                        if (element.aircraftModelId == capData.selectedAircraftModelTypes[z]) {
+                            capData.selectedModel.push({ value: element.aircraftModelId, label: element.modelName, aircraftTypeId: capData.selectedAircraftTypes })
+                        }
+                    }
                 }
-            }
+                capData.selectedAircraftDataModels.push({ value: element.aircraftModelId, label: element.modelName, aircraftTypeId: capData.selectedAircraftTypes })
+            });
+            this.displayModalNames(capData);
+        } else {
+            capData.selectedAircraftDataModels = [];
+            capData.search_AircraftDashNumberList = [];
         }
-            capData.selectedAircraftDataModels.push({ value: element.aircraftModelId, label: element.modelName, aircraftTypeId: capData.selectedAircraftTypes })
-        });
-        this.displayModalNames(capData);
-    }else{
-        capData.selectedAircraftDataModels = [];
-        capData.search_AircraftDashNumberList = []; 
-    }
     }
     displayModalNames(capData) {
         switch (capData.formArrayName) {
@@ -789,7 +800,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
                 //         const errorLog = err;
                 //         this.errorMessageHandler(errorLog);}
                 // );
-                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe( results => {
+                this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe(results => {
                     const newResp = results.map(x => {
                         return {
                             ...x,
@@ -829,52 +840,54 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
         }
 
         this.dashnumberservices.getByModelId(this.aircraftdashId).subscribe(
-            results => {this.ondashnumberSuccessful(results)},err => {			
+            results => { this.ondashnumberSuccessful(results) }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);}
+                this.errorMessageHandler(errorLog);
+            }
         );
     }
 
- 
 
-    aircraftModalChange_1(event, aircraftTypeId,edit) {
+
+    aircraftModalChange_1(event, aircraftTypeId, edit) {
         let selectedData = event;
         if (edit != "edit") {
-             selectedData = event.target.value;
+            selectedData = event.target.value;
             if (selectedData) {
                 selectedData = selectedData.split(":")[1];
             }
         }
         // getCapesDashNumberByModelTypeId
-if(selectedData !="" && selectedData !=undefined &&  selectedData !=null){
-    this.dashnumberservices.getCapesDashNumberByModelTypeId(
-        selectedData,
-        aircraftTypeId
-    ).subscribe(dashnumbers => {
-        if(dashnumbers && dashnumbers.length !=0){
-        const responseData = dashnumbers.reduce((acc, current) => {
-            const x = acc.find(item => item.dashNumberId === current.dashNumberId);
-            if (!x) {
-              return acc.concat([current]);
-            } else {
-              return acc;
-            }
-          }, []);
-    
-        this.search_AircraftDashNumberList = responseData.map(dashnumbers => {
-            return {
-                label: dashnumbers.modelName + "-" + dashnumbers.dashNumber,
-                value: dashnumbers.dashNumberId,
-                modelId: dashnumbers.aircraftModelId,
-            };
-        });
-    }
-    },err => {			
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);});
-}else{
-    this.search_AircraftDashNumberList=[];
-}
+        if (selectedData != "" && selectedData != undefined && selectedData != null) {
+            this.dashnumberservices.getCapesDashNumberByModelTypeId(
+                selectedData,
+                aircraftTypeId
+            ).subscribe(dashnumbers => {
+                if (dashnumbers && dashnumbers.length != 0) {
+                    const responseData = dashnumbers.reduce((acc, current) => {
+                        const x = acc.find(item => item.dashNumberId === current.dashNumberId);
+                        if (!x) {
+                            return acc.concat([current]);
+                        } else {
+                            return acc;
+                        }
+                    }, []);
+
+                    this.search_AircraftDashNumberList = responseData.map(dashnumbers => {
+                        return {
+                            label: dashnumbers.modelName + "-" + dashnumbers.dashNumber,
+                            value: dashnumbers.dashNumberId,
+                            modelId: dashnumbers.aircraftModelId,
+                        };
+                    });
+                }
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
+        } else {
+            this.search_AircraftDashNumberList = [];
+        }
         this.aircraftDataEdit.aircraftDashNumberId = null;
     }
 
@@ -1064,28 +1077,28 @@ if(selectedData !="" && selectedData !=undefined &&  selectedData !=null){
 
 
     dismissModelWithAlert() {
-if(this.aircraftData && this.aircraftData.length>0){
-        this.nextOrPreviousTab = 'Close';
-        let content = this.tabRedirectConfirmationModal2;
-    this.modal = this.modalService.open(content, { size: "sm" });
+        if (this.aircraftData && this.aircraftData.length > 0) {
+            this.nextOrPreviousTab = 'Close';
+            let content = this.tabRedirectConfirmationModal2;
+            this.modal = this.modalService.open(content, { size: "sm" });
 
-}else{
-    this.isDeleteMode = false;
-    this.isEditMode = false;
-    $('#addShippingInfo').modal('hide'); 
-    // this.modal.close();
-}
+        } else {
+            this.isDeleteMode = false;
+            this.isEditMode = false;
+            $('#addShippingInfo').modal('hide');
+            // this.modal.close();
+        }
     }
-    closeHistory(){
-        $('#contentHist').modal('hide'); 
+    closeHistory() {
+        $('#contentHist').modal('hide');
     }
-    redirectToTab(){
+    redirectToTab() {
         this.isDeleteMode = false;
         this.isEditMode = false;
         this.modal.close();
-        this.totalRecords1 =0;
+        this.totalRecords1 = 0;
         this.totalPages1 = 0;
-        $('#addShippingInfo').modal('hide'); 
+        $('#addShippingInfo').modal('hide');
     }
 
     addModels(capData) {
@@ -1175,37 +1188,39 @@ if(this.aircraftData && this.aircraftData.length>0){
 
         let selectedData = event.value;
         capData.selectedModel = [];
-        capData.selectedDashNumbers=[]
-  this.search_AircraftDashNumberList=[];
-  if(this.modelUnknown==false && capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length !=0 && this.dashNumberUnknown==true){
-    this.disableCapesSave=false;
-  }else{
-    this.disableCapesSave=true;
-  }
-if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length !=0){
-        this.dashnumberservices.getDashNumberByModelTypeId( capData.selectedAircraftModelTypes,capData.selectedAircraftTypes).subscribe(dashnumbers => {
-            const responseData = dashnumbers;
-            this.search_AircraftDashNumberList = responseData.map(dashnumbers => {
-                return {
-                    label: dashnumbers.dashNumber,
-                    value: dashnumbers.dashNumberId,
-                    modelId: dashnumbers.aircraftModelId
-                }
-            }); 
+        capData.selectedDashNumbers = []
+        this.search_AircraftDashNumberList = [];
+        if (this.modelUnknown == false && capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length != 0 && this.dashNumberUnknown == true) {
+            this.disableCapesSave = false;
+        } else {
+            this.disableCapesSave = true;
+        }
+        if (capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length != 0) {
+            this.dashnumberservices.getDashNumberByModelTypeId(capData.selectedAircraftModelTypes, capData.selectedAircraftTypes).subscribe(dashnumbers => {
+                const responseData = dashnumbers;
+                this.search_AircraftDashNumberList = responseData.map(dashnumbers => {
+                    return {
+                        label: dashnumbers.dashNumber,
+                        value: dashnumbers.dashNumberId,
+                        modelId: dashnumbers.aircraftModelId
+                    }
+                });
 
-        },err => {			
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);});
-   
-     }     }
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            });
+
+        }
+    }
 
     dashNumberChange(event, capData) {
         let selectedData = event.value;
-        if(this.modelUnknown==false && capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length !=0 && this.dashNumberUnknown==false && selectedData){
-            this.disableCapesSave=false;
-          }else{
-            this.disableCapesSave=true;
-          }
+        if (this.modelUnknown == false && capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.length != 0 && this.dashNumberUnknown == false && selectedData) {
+            this.disableCapesSave = false;
+        } else {
+            this.disableCapesSave = true;
+        }
         capData.selectedDashNumbers2 = [];
         selectedData.forEach(element1 => {
             this.search_AircraftDashNumberList.forEach(element2 => {
@@ -1221,12 +1236,12 @@ if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.len
             this.cunstructItemMastars();
         }
     }
-    disableCapesSave:any=false;
+    disableCapesSave: any = false;
 
     resetAircraftModelsorDashNumbers(event, type) {
         this.disableSaveForEdit = false;
         if (this.modelUnknown) {
-            this.disableCapesSave=false;
+            this.disableCapesSave = false;
             this.selectedModelId = undefined;
             this.selectedDashnumber = undefined;
             this.capabilityForm.selectedAircraftDataModels = undefined;
@@ -1241,72 +1256,72 @@ if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.len
 
 
         }
-        if(type==1 && event.target.checked==false  && this.assetServices.isCapsEditMode == false){
- 
-            this.disableCapesSave=true;
-        }
-        if(type==1 && event.target.checked==true  && this.assetServices.isCapsEditMode == false){
+        if (type == 1 && event.target.checked == false && this.assetServices.isCapsEditMode == false) {
 
-            this.disableCapesSave=false;
+            this.disableCapesSave = true;
         }
-        if(type==2 && event.target.checked==false && this.assetServices.isCapsEditMode == false){
-     
-            this.disableCapesSave=true;
+        if (type == 1 && event.target.checked == true && this.assetServices.isCapsEditMode == false) {
+
+            this.disableCapesSave = false;
         }
-        if(type==2 && event.target.checked==true && this.assetServices.isCapsEditMode == false){
-   
-            this.disableCapesSave=false;
+        if (type == 2 && event.target.checked == false && this.assetServices.isCapsEditMode == false) {
+
+            this.disableCapesSave = true;
         }
-        if(type==1 && event.target.checked==false && this.assetServices.isCapsEditMode == true){
-            this.disableSaveForEdit=true;
-     
+        if (type == 2 && event.target.checked == true && this.assetServices.isCapsEditMode == false) {
+
+            this.disableCapesSave = false;
         }
-        if(type==2 && event.target.checked==false && this.assetServices.isCapsEditMode == true){
-            this.disableSaveForEdit=true;
-        
+        if (type == 1 && event.target.checked == false && this.assetServices.isCapsEditMode == true) {
+            this.disableSaveForEdit = true;
+
+        }
+        if (type == 2 && event.target.checked == false && this.assetServices.isCapsEditMode == true) {
+            this.disableSaveForEdit = true;
+
         }
         if (this.dashNumberUnknown) {
-            if(this.modelUnknown==false && this.capabilityForm.selectedAircraftModelTypes && this.capabilityForm.selectedAircraftModelTypes.length !=0 && this.dashNumberUnknown){
-                this.disableCapesSave=false;
-              }
+            if (this.modelUnknown == false && this.capabilityForm.selectedAircraftModelTypes && this.capabilityForm.selectedAircraftModelTypes.length != 0 && this.dashNumberUnknown) {
+                this.disableCapesSave = false;
+            }
             //   else{
             //     this.disableCapesSave=true;
- 
+
             //   }
 
-              //for Edit
-              if(this.modelUnknown==false && this.aircraftDataEdit.aircraftModelId  && this.dashNumberUnknown){
-                this.disableSaveForEdit=false;
-              }
+            //for Edit
+            if (this.modelUnknown == false && this.aircraftDataEdit.aircraftModelId && this.dashNumberUnknown) {
+                this.disableSaveForEdit = false;
+            }
             //   else{
             //     this.disableCapesSave=true;
-    
+
             //   }
             this.selectedDashnumber = undefined;
             this.capabilityForm.selectedDashNumbers = undefined;
             this.capabilityForm.selectedDashNumbers2 = undefined;
         }
-        if(type==1 && event.target.checked==false && this.assetServices.isCapsEditMode == true){
+        if (type == 1 && event.target.checked == false && this.assetServices.isCapsEditMode == true) {
 
-        this.loadModalsForExistingRecords_1(this.capabilityForm, this.aircraftDataEdit.aircraftTypeId);
-        this.aircraftDataEdit.aircraftModelId="";
-        this.aircraftDataEdit.aircraftDashNumberId="";
-        this.dashNumberUnknown=true;
+            this.loadModalsForExistingRecords_1(this.capabilityForm, this.aircraftDataEdit.aircraftTypeId);
+            this.aircraftDataEdit.aircraftModelId = "";
+            this.aircraftDataEdit.aircraftDashNumberId = "";
+            this.dashNumberUnknown = true;
         }
-        if(type==1 && event.target.checked==true && this.assetServices.isCapsEditMode == true){
-          
-            this.aircraftDataEdit.aircraftModelId="";
-            this.aircraftDataEdit.aircraftDashNumberId="";
-            }
-        if(type==2 && event.target.checked==false &&  this.assetServices.isCapsEditMode == true){
-     
-            this.aircraftModalChange_1(this.aircraftDataEdit.aircraftModelId, this.aircraftDataEdit.aircraftTypeId,"edit");
-            this.aircraftDataEdit.aircraftDashNumberId="";
+        if (type == 1 && event.target.checked == true && this.assetServices.isCapsEditMode == true) {
+
+            this.aircraftDataEdit.aircraftModelId = "";
+            this.aircraftDataEdit.aircraftDashNumberId = "";
         }
-        if(type==2 && event.target.checked==true &&  this.assetServices.isCapsEditMode == true){
-     
+        if (type == 2 && event.target.checked == false && this.assetServices.isCapsEditMode == true) {
+
+            this.aircraftModalChange_1(this.aircraftDataEdit.aircraftModelId, this.aircraftDataEdit.aircraftTypeId, "edit");
+            this.aircraftDataEdit.aircraftDashNumberId = "";
+        }
+        if (type == 2 && event.target.checked == true && this.assetServices.isCapsEditMode == true) {
+
             // this.aircraftModalChange_1(this.aircraftDataEdit.aircraftModelId, this.aircraftDataEdit.aircraftTypeId,"edit");
-            this.aircraftDataEdit.aircraftDashNumberId="";
+            this.aircraftDataEdit.aircraftDashNumberId = "";
         }
     }
     openDelete(content2, row) {
@@ -1314,7 +1329,7 @@ if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.len
         this.isEditMode = false;
         this.isDeleteMode = true;
         this.assetServices.CapeslistCollection = row;
-        this.modal = this.modalService.open(content2, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMangecls' });
+        this.modal = this.modalService.open(content2, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMangecls' });
 
     }
 
@@ -1324,9 +1339,10 @@ if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.len
 
             this.getList(this.lazyLoadEventData);
             this.modal.close();
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+            this.errorMessageHandler(errorLog);
+        });
     }
 
     resetFormArray(capData) {
@@ -1366,25 +1382,26 @@ if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.len
                     }
                 });
 
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);});
+                this.errorMessageHandler(errorLog);
+            });
             this.selectedModelId = undefined;
             this.selectedDashnumber = undefined;
         }
     }
     manufacturerChange(event, capData) {
-        this.capabilityForm.selectedAircraftModelTypes="";
-        this.capabilityForm.selectedAircraftDataModels="";
+        this.capabilityForm.selectedAircraftModelTypes = "";
+        this.capabilityForm.selectedAircraftDataModels = "";
         let selectedData = event.value;
         // let selectedData = event.target.value;
         capData.selectedManufacturer = [];
-        capData.selectedAircraftDataModels=[];
-        this.search_AircraftDashNumberList=[];
+        capData.selectedAircraftDataModels = [];
+        this.search_AircraftDashNumberList = [];
         // if (selectedData) {
         //     selectedData = selectedData.split(":")[1];
-            this.selectedAircraftId = selectedData;
-            this.aircraftTypeId=selectedData;
+        this.selectedAircraftId = selectedData;
+        this.aircraftTypeId = selectedData;
         // }
         if (this.assetServices.isCapsEditMode == true) {
             this.loadModalsForExistingRecords_1(capData, this.selectedAircraftId);
@@ -1404,31 +1421,31 @@ if( capData.selectedAircraftModelTypes && capData.selectedAircraftModelTypes.len
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
-    openCapess(){
-        this.aircraftData=[];
-        this.capabilityForm={};
+    openCapess() {
+        this.aircraftData = [];
+        this.capabilityForm = {};
         // this.dashNumberUnknown=null;
-        this.modelUnknown=true;
+        this.modelUnknown = true;
         this.assetServices.isCapsEditMode = false;
-        this.disableAdd=true;
-        this.actionHide=true;
-        this.dashNumberUnknown=true;
+        this.disableAdd = true;
+        this.actionHide = true;
+        this.dashNumberUnknown = true;
     }
     mapAircraftInformation(capdata) {
-const newCapesData={...capdata};
+        const newCapesData = { ...capdata };
 
 
-        if(newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length==0){
-            this.dashNumberUnknown=true;
+        if (newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length == 0) {
+            this.dashNumberUnknown = true;
         }
 
         this.viewTable = true;
-        if(!this.assetServices.isCapsEditMode) {
+        if (!this.assetServices.isCapsEditMode) {
             this.assetServices.isCapsEditMode = false;
         }
         this.searchAircraftParams = `CapabilityId=${newCapesData.CapabilityTypeId}&PartId=${this.itemMasterId}&AircraftTypeId=${newCapesData.selectedAircraftTypes}&AircraftModelId=${newCapesData.selectedAircraftModelTypes}&DashNumberId=${newCapesData.selectedDashNumbers ? newCapesData.selectedDashNumbers : undefined}`;
         this.assetServices.GetAssetCapesRecordCheck(this.currentAsset.assetRecordId, this.searchAircraftParams).subscribe(models => {
-            this.actionHide=false;
+            this.actionHide = false;
             const responseValue = models[0];
             if (models[0] != null) {
                 this.alertService.showMessage("", `Same Record Already Exists`, MessageSeverity.error);
@@ -1462,9 +1479,9 @@ const newCapesData={...capdata};
                                     isDelete: false
                                 }
                             });
-       
+
                         })
-                    } 
+                    }
                     if (this.selectedAircraftId !== undefined && this.modelUnknown) {
                         this.aircraftData = [{
                             AircraftType: this.newValue,
@@ -1491,37 +1508,37 @@ const newCapesData={...capdata};
                         }]
                     }
                     // if (this.selectedAircraftId !== undefined && newCapesData.selectedModel !== undefined && this.dashNumberUnknown) {
-                    if (newCapesData.selectedAircraftTypes !== undefined && newCapesData.selectedAircraftModelTypes !== undefined && (this.dashNumberUnknown || (newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length==0) )) {
-    if(newCapesData.selectedAircraftModelTypes && newCapesData.selectedAircraftModelTypes.length !=0){
-                        this.aircraftData = newCapesData.selectedAircraftModelTypes.map(x => {
-                            return {
-                                AircraftType: this.newValue,
-                                AircraftModel: x ? getValueFromArrayOfObjectById('label', 'value', x, newCapesData.selectedAircraftDataModels) : null,
-                                // DashNumber: 'Unknown',
-                                DashNumber: null,
-                                AircraftModelId: x,
-                                DashNumberId: '',
-                                CapibilityType: newCapesData.selectedCap,
-                                PartNumber: newCapesData.selectedPartId.partNumber,
-                                CapabilityId: newCapesData.CapabilityTypeId,
-                                ItemMasterId: this.itemMasterId,
-                                AircraftTypeId: newCapesData.selectedAircraftTypes,
-                                AircraftDashNumberId: null,
-                                AssetRecordId: this.currentAsset.assetRecordId,
-                                MasterCompanyId: this.authService.currentUser.masterCompanyId,
-                                CreatedBy: this.userName,
-                                UpdatedBy: this.userName,
-                                CreatedDate: new Date(),
-                                UpdatedDate: new Date(),
-                                isActive: true,
-                                isDelete: false
-                            }
-                        })
-                    }
+                    if (newCapesData.selectedAircraftTypes !== undefined && newCapesData.selectedAircraftModelTypes !== undefined && (this.dashNumberUnknown || (newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length == 0))) {
+                        if (newCapesData.selectedAircraftModelTypes && newCapesData.selectedAircraftModelTypes.length != 0) {
+                            this.aircraftData = newCapesData.selectedAircraftModelTypes.map(x => {
+                                return {
+                                    AircraftType: this.newValue,
+                                    AircraftModel: x ? getValueFromArrayOfObjectById('label', 'value', x, newCapesData.selectedAircraftDataModels) : null,
+                                    // DashNumber: 'Unknown',
+                                    DashNumber: null,
+                                    AircraftModelId: x,
+                                    DashNumberId: '',
+                                    CapibilityType: newCapesData.selectedCap,
+                                    PartNumber: newCapesData.selectedPartId.partNumber,
+                                    CapabilityId: newCapesData.CapabilityTypeId,
+                                    ItemMasterId: this.itemMasterId,
+                                    AircraftTypeId: newCapesData.selectedAircraftTypes,
+                                    AircraftDashNumberId: null,
+                                    AssetRecordId: this.currentAsset.assetRecordId,
+                                    MasterCompanyId: this.authService.currentUser.masterCompanyId,
+                                    CreatedBy: this.userName,
+                                    UpdatedBy: this.userName,
+                                    CreatedDate: new Date(),
+                                    UpdatedDate: new Date(),
+                                    isActive: true,
+                                    isDelete: false
+                                }
+                            })
+                        }
                     }
 
 
-              
+
                 }
                 else {
                     if (newCapesData.selectedAircraftModelTypes && newCapesData.selectedAircraftModelTypes.length > 1 || newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length > 1) {
@@ -1587,7 +1604,7 @@ const newCapesData={...capdata};
                         }
 
                         if (this.selectedAircraftId !== undefined && newCapesData.selectedModel !== undefined && this.dashNumberUnknown) {
-             console.log("dash nu,ber unknown",newCapesData)
+                            console.log("dash nu,ber unknown", newCapesData)
                             this.aircraftData = newCapesData.selectedModel.map(x => {
                                 return {
                                     AssetCapesId: this.AssetCapesId,
@@ -1616,38 +1633,39 @@ const newCapesData={...capdata};
                         }
 
 
-           
+
                     }
                 }
             }
-            this.totalRecords1 =this.aircraftData.length ?  this.aircraftData.length :0;
-            console.log("event2",this.totalRecords1,this.pageSize1)
+            this.totalRecords1 = this.aircraftData.length ? this.aircraftData.length : 0;
+            console.log("event2", this.totalRecords1, this.pageSize1)
             this.totalPages1 = Math.ceil(this.totalRecords1 / this.pageSize1);
-            console.log("event2",this.pageSize1)
-            this.capabilityForm.selectedDashNumbers="";
-            this.dashNumberUnknown=true;
-            this.capabilityForm.selectedAircraftModelTypes="";
-            this.modelUnknown=true;
-            this.capabilityForm.selectedAircraftTypes="";
-            this.capabilityForm.selectedPartId="";
-            this.capabilityForm.CapabilityTypeId="";
-        },err => {			
+            console.log("event2", this.pageSize1)
+            this.capabilityForm.selectedDashNumbers = "";
+            this.dashNumberUnknown = true;
+            this.capabilityForm.selectedAircraftModelTypes = "";
+            this.modelUnknown = true;
+            this.capabilityForm.selectedAircraftTypes = "";
+            this.capabilityForm.selectedPartId = "";
+            this.capabilityForm.CapabilityTypeId = "";
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
-             
+            this.errorMessageHandler(errorLog);
+        });
+
     }
     loadData2(event) {
         const pageIndex = parseInt(event.first) / event.rows;;
         this.pageIndex = pageIndex;
         this.pageSize1 = pageIndex;
         event.first = pageIndex;
-        console.log("event",this.pageSize1)
+        console.log("event", this.pageSize1)
     }
-    saveCapabilities(capdata,type) {
+    saveCapabilities(capdata, type) {
 
         const responseValue = this.aircraftData;
-        if (this.assetServices.isCapsEditMode == false) { 
-            this.assetServices.saveManfacturerinforcapes(responseValue,type).subscribe(data11 => {
+        if (this.assetServices.isCapsEditMode == false) {
+            this.assetServices.saveManfacturerinforcapes(responseValue, type).subscribe(data11 => {
                 this.alertService.showMessage("Success", `Asset capes saved successfully.`, MessageSeverity.success);
                 let data: any = {
                     selectedCap: "", CapabilityTypeId: 0, selectedPartId: [], selectedAircraftDataModels: [],
@@ -1656,31 +1674,32 @@ const newCapesData={...capdata};
                 this.capabilityForm = data;
                 //this.loadCapesData();
                 this.getList(this.lazyLoadEventData);
-                this.totalRecords1 =0;
+                this.totalRecords1 = 0;
                 this.totalPages1 = 0;
-   },err => {			
-    const errorLog = err;
-    this.errorMessageHandler(errorLog);})
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            })
             this.mfgFormArray.controls = [];
             // this.modal.close();
         }
-        else {  
+        else {
             this.allPartnumbersInfo.forEach(element => {
-                if(element.partNumber==this.aircraftDataEdit.partNumber){
-                   this.aircraftDataEdit.itemMasterId=element.itemMasterId
+                if (element.partNumber == this.aircraftDataEdit.partNumber) {
+                    this.aircraftDataEdit.itemMasterId = element.itemMasterId
                 }
-               });
-               this.aircraftDataEdit.itemMasterId=this.aircraftDataEdit.partNumber.itemMasterId;
-               this.aircraftDataEdit.partNumber=this.aircraftDataEdit.partNumber.partNumber;
+            });
+            this.aircraftDataEdit.itemMasterId = this.aircraftDataEdit.partNumber.itemMasterId;
+            this.aircraftDataEdit.partNumber = this.aircraftDataEdit.partNumber.partNumber;
             const responseValue = [{
                 ...this.aircraftDataEdit,
                 assetRecordId: this.AssetId,
                 masterCompanyId: this.authService.currentUser.masterCompanyId,
-                createdBy: this.userName, 
+                createdBy: this.userName,
                 updatedBy: this.userName
             }];
-           
-            this.assetServices.saveManfacturerinforcapes(responseValue,type).subscribe(data11 => {
+
+            this.assetServices.saveManfacturerinforcapes(responseValue, type).subscribe(data11 => {
                 this.alertService.showMessage("Success", `Asset capes updated successfully.`, MessageSeverity.success);
                 let data: any = {
                     selectedCap: "", CapabilityTypeId: 0, selectedPartId: [], selectedAircraftDataModels: [],
@@ -1689,14 +1708,15 @@ const newCapesData={...capdata};
                 this.capabilityForm = data;
                 this.getList(this.lazyLoadEventData);
 
-            },err => {			
+            }, err => {
                 const errorLog = err;
-                this.errorMessageHandler(errorLog);})
+                this.errorMessageHandler(errorLog);
+            })
             this.mfgFormArray.controls = [];
         }
-        if(type=='add'){
+        if (type == 'add') {
             $("#addShippingInfo").modal("hide");
-        }else{
+        } else {
             this.modal.close();
         }
     }
@@ -1751,9 +1771,10 @@ const newCapesData={...capdata};
     private loadCapesData() {
         if (this.currentAsset) {
             this.assetServices.getcapabilityListData(this.currentAsset.assetRecordId).subscribe(
-                results =>{ this.onCapesLoaded(results[0])},err => {			
+                results => { this.onCapesLoaded(results[0]) }, err => {
                     const errorLog = err;
-                    this.errorMessageHandler(errorLog);}
+                    this.errorMessageHandler(errorLog);
+                }
             );
 
         }
@@ -1778,11 +1799,11 @@ const newCapesData={...capdata};
         this.isSaving = true;
         this.AssetCapesId = row.assetCapesId;
         this.loadModalsForExistingRecords_1(this.capabilityForm, row.aircraftTypeId);
-        this.aircraftModalChange_1(row.aircraftModelId, row.aircraftTypeId,"edit");
+        this.aircraftModalChange_1(row.aircraftModelId, row.aircraftTypeId, "edit");
         this.assetServices.getAssetCapabilityData(row.assetCapesId).subscribe(data => {
             getSelectedCollection = data;
             this.aircraftDataEdit = data[0];
-            this.aircraftDataEdit.partNumber= {partNumber :data[0].partNumber,itemMasterId:data[0].itemMasterId};
+            this.aircraftDataEdit.partNumber = { partNumber: data[0].partNumber, itemMasterId: data[0].itemMasterId };
             if (getSelectedCollection) {
                 this.capabilityid = data[0].capabilityId;
                 this.partNumber = data[0].partNumber;
@@ -1790,30 +1811,31 @@ const newCapesData={...capdata};
                 this.aircraftTypeId = data[0].aircraftTypeId;
                 this.aircraftmodelId = data[0].aircraftModelId;
                 this.aircraftdashId = data[0].aircraftDashNumberId;
-        
+
             }
-      
-            if(this.aircraftDataEdit.aircraftModelId){
-                this.modelUnknown=false;
-            }else{
-                this.modelUnknown=true; 
+
+            if (this.aircraftDataEdit.aircraftModelId) {
+                this.modelUnknown = false;
+            } else {
+                this.modelUnknown = true;
             }
-            
-            if(this.aircraftDataEdit.aircraftDashNumberId){
-                this.dashNumberUnknown=false;
-            }else{
-                this.dashNumberUnknown=true;  
+
+            if (this.aircraftDataEdit.aircraftDashNumberId) {
+                this.dashNumberUnknown = false;
+            } else {
+                this.dashNumberUnknown = true;
             }
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);}
+            this.errorMessageHandler(errorLog);
+        }
         );
 
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
 
     }
 
-    saveCapes() { 
+    saveCapes() {
         this.assetServices.listCollection = this.local;
         this.activeIndex = 2;
         this.assetServices.indexObj.next(this.activeIndex);
@@ -1828,7 +1850,7 @@ const newCapesData={...capdata};
         this.assetServices.indexObj.next(this.activeIndex);
         this.assetServices.isEditMode = true;
         this.isSaving = true;
-        const { assetId } = this.local; 
+        const { assetId } = this.local;
         this.route.navigateByUrl(`/assetmodule/assetpages/app-edit-asset/${this.local.assetRecordId}`);
     }
 
@@ -1836,13 +1858,14 @@ const newCapesData={...capdata};
     toggleActiveStatus(rowData) {
 
 
-        this.assetServices.updateCapes({assetCapesId:rowData.assetCapesId, isActive:rowData.isActive},this.userName).subscribe(res => { 
+        this.assetServices.updateCapes({ assetCapesId: rowData.assetCapesId, isActive: rowData.isActive }, this.userName).subscribe(res => {
             this.alertService.showMessage("Success", `Asset capes updated successfully.`, MessageSeverity.success);
             //this.loadCapesData();
             this.getList(this.lazyLoadEventData);
-        },err => {			
+        }, err => {
             const errorLog = err;
-            this.errorMessageHandler(errorLog);});
+            this.errorMessageHandler(errorLog);
+        });
     }
 
     onCapesDataSuccessful(capesData, isActive) {
@@ -1863,59 +1886,60 @@ const newCapesData={...capdata};
     }
 
     closeDeleteModal() {
-		$("#downloadConfirmation").modal("hide");
-	}
-    isSpinnerVisible:boolean=false;
-    exportData:any=[];
-    exportCSV(dt){
-        this.exportData=[];
-            this.isSpinnerVisible = true;
-            const isdelete=this.currentDeletedstatus ? true:false;
-            const { assetRecordId } = this.currentAsset;
-            let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.currentstatus2,"isDeleted":isdelete},"globalFilter":""}
-            this.assetServices.downloadAllAssetCapsList(PagingData,assetRecordId).subscribe(
-                results => {
-                    this.loadingIndicator = false;
-                    dt._value = results['results'].map(x => {
-                        return {
-                            ...x,                  
-                            createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
-                            updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
-                        }
-                    }); 
-                    dt.exportCSV();
-                    dt.value = this.allCapesInfo;
-                    this.isSpinnerVisible = false;
-                },err => {			
-                    const errorLog = err;
-                    this.errorMessageHandler(errorLog);}
-            );
-    } 
+        $("#downloadConfirmation").modal("hide");
+    }
+    isSpinnerVisible: boolean = false;
+    exportData: any = [];
+    exportCSV(dt) {
+        this.exportData = [];
+        this.isSpinnerVisible = true;
+        const isdelete = this.currentDeletedstatus ? true : false;
+        const { assetRecordId } = this.currentAsset;
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.currentstatus2, "isDeleted": isdelete }, "globalFilter": "" }
+        this.assetServices.downloadAllAssetCapsList(PagingData, assetRecordId).subscribe(
+            results => {
+                this.loadingIndicator = false;
+                dt._value = results['results'].map(x => {
+                    return {
+                        ...x,
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    }
+                });
+                dt.exportCSV();
+                dt.value = this.allCapesInfo;
+                this.isSpinnerVisible = false;
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            }
+        );
+    }
 
 
 
 
-	errorMessageHandler(log) {
+    errorMessageHandler(log) {
         // console.log("error",log);
-        
-        this.isSpinnerVisible=false;
+
+        this.isSpinnerVisible = false;
         // var msg = '';
         this.alertService.showMessage(
             'Error',
             log,
             MessageSeverity.error
-        ); 
+        );
         // if( typeof log == 'string' ) {
         //     this.alertService.showMessage(
-		// 		'Error',
-		// 		log,
-		// 		MessageSeverity.error
-		// 	); 
+        // 		'Error',
+        // 		log,
+        // 		MessageSeverity.error
+        // 	); 
 
         // }else  if (log && log.error && log.error.errors.length > 0) {
-		// 			for (let i = 0; i < log.error.errors.length; i++){
-		// 				msg = msg + log.error.errors[i].message + '<br/>'
-		// 			}
+        // 			for (let i = 0; i < log.error.errors.length; i++){
+        // 				msg = msg + log.error.errors[i].message + '<br/>'
+        // 			}
         //             this.alertService.showMessage(
         //                 log.error.message,
         //                 msg,
@@ -1928,8 +1952,9 @@ const newCapesData={...capdata};
         //                     MessageSeverity.error
         //                 ); 
         //             }
-		   
-    
-}
 
+
+    }
+
+    changeStatus(rowData) {}
 }

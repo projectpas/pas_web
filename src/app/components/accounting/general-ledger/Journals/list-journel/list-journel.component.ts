@@ -40,7 +40,8 @@ export class ListJournelComponent implements OnInit {
 
     dataSource: MatTableDataSource<{}>;
     journalList: any[];
-    
+    cols: any;
+
     constructor(public employeeService: EmployeeService,
                 private legalEntityservice: LegalEntityService,
                 private router: Router,
@@ -204,4 +205,8 @@ export class ListJournelComponent implements OnInit {
     openCreateJournalPage(){
         this.router.navigate(['accountmodule/accountpages/app-create-journel']);
     }
+
+    
+    openContentEdit(rowData){}
+    openDelete(content,rowData) {}
 }

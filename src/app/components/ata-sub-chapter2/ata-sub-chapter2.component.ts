@@ -37,8 +37,8 @@ export class AtaSubChapter2Component implements OnInit, AfterViewInit {
 	updatedBy: any = "";
 	createdDate: any = "";
 	updatedDate: any = "";
-	private isEditMode: boolean = false;
-	private isDeleteMode: boolean = false;
+	public isEditMode: boolean = false;
+	public isDeleteMode: boolean = false;
 	Active: string = "Active";
 	selectedActionName: any;
 	disableSave: boolean;

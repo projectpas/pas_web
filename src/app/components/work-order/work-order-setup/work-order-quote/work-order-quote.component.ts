@@ -14,7 +14,7 @@ import { CurrencyService } from '../../../../services/currency.service';
 import { ConditionService } from '../../../../services/condition.service';
 import { UnitOfMeasureService } from '../../../../services/unitofmeasure.service';
 import { AuthService } from '../../../../services/auth.service';
-import * as $ from 'jquery'
+declare var $ : any;
 import {
     AlertService,
     MessageSeverity
@@ -339,7 +339,10 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
     mainIndex: any;
     subIndex: any;
     quoteStatusList: any = [];
-
+    isWorkOrder: any;
+    memoPopupContent: any;
+    selectall: any;
+    cols: any;
     constructor(private router: ActivatedRoute, private workOrderService: WorkOrderQuoteService, private commonService: CommonService, private _workflowService: WorkFlowtService, private alertService: AlertService, private workorderMainService: WorkOrderService, private currencyService: CurrencyService, private cdRef: ChangeDetectorRef, private conditionService: ConditionService, private unitOfMeasureService: UnitOfMeasureService, private authService: AuthService,) { }
     ngOnInit() {
         this.enableEditBtn = Boolean(this.enableEditBtn);
@@ -2096,7 +2099,7 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
         }
     }
 
-    editMaterialList(matData, index) {
+    editMaterialList(matData) {
         this.editMatData = [matData];
     }
 
@@ -3050,5 +3053,13 @@ export class WorkOrderQuoteComponent implements OnInit, OnChanges {
                 this.errorHandling(err);
             }
         )
+    }
+
+    getChargesListByWorkOrderId() {}
+    getFreightListByWorkOrderId() {}
+    updateWorkOrderFreightsList($event) {}
+
+    parseToInt(str : any) {
+        return Number(str);
     }
 }

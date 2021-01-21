@@ -109,6 +109,13 @@ export class RepairOrderEndpoint extends EndpointFactory {
     });
   }
 
+  approverslistbyTaskId(taskId, id) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
+    .catch(error => {
+      return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+    });
+    
+  }  
 
 
   // 12 4
@@ -213,10 +220,10 @@ export class RepairOrderEndpoint extends EndpointFactory {
         });
   }
 
-  getRepairOrderSettingMasterData() {
-    return this.http.get<any>(`${this.configurations.baseUrl}/api/repairOrder/getROSetting`)
+  getRepairOrderSettingMasterData(masterCompanyId:any) {
+    return this.http.get<any>(`${this.configurations.baseUrl}/api/repairOrder/getROSetting?masterCompanyId=${masterCompanyId}`)
         .catch(error => {
-            return this.handleErrorCommon(error, () => this.getRepairOrderSettingMasterData());
+            return this.handleErrorCommon(error, () => this.getRepairOrderSettingMasterData(masterCompanyId)); 
         });
   }
 

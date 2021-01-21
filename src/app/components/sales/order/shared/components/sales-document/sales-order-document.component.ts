@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material';
 import { SalesOrderService } from '../../../../../../services/salesorder.service';
 import { ConfigurationService } from '../../../../../../services/configuration.service';
 import { AuditHistory } from '../../../../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Documents } from '../../../../../../models/documents.model';
 import { CommonService } from '../../../../../../services/common.service';
 import { CustomerService } from '../../../../../../services/customer.service';
@@ -323,7 +323,7 @@ export class SalesOrderDocumentComponent implements OnInit {
 		})
 	}
 
-	openView(content, row) {
+	openView(row) {
 
 		this.salesOrderService.toGetUploadDocumentsList(row.attachmentId, row.salesOrderId, 46).subscribe(res => {
 			this.sourceViewforDocumentList = res;

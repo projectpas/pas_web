@@ -1,7 +1,8 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { fadeInOut } from '../../../../services/animations';
-import * as $ from 'jquery';
+// declare var $ : any;
+declare var $ : any;
 import { AuthService } from '../../../../services/auth.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
@@ -119,6 +120,8 @@ export class EntityEditComponent implements OnInit, AfterViewInit {
 	moduleName:any="LegalEntity";
 	referenceId:any;
 	pageNumber = 0;
+	isViewMode: boolean;
+
 	constructor(private route: Router,
 		private authService: AuthService,
 		private alertService: AlertService,
@@ -513,7 +516,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 		if (this.modal1) { this.modal1.close(); }
 	}
 
-	openContentEdit(content, row) {
+	openContentEdit(row) {
 		const { legalEntityId } = row;
 		localStorage.removeItem('currentLETab');
 		this.route.navigateByUrl(`generalledgermodule/generalledgerpage/app-legal-entity-edit/${legalEntityId}`);
@@ -625,7 +628,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 	sourceViewforDocumentList:any=[];
 	isSpinnerVisibleHistory:any=false;
 	showViewForTabs:any=false;
-	openView(content, row) {
+	openView(row) {
 // 		            $('.show').add();
 //             $('.modal').add();
 // $('.modal-backdrop').add(); 
@@ -649,9 +652,7 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
 			}else 	if(this.viewDataGeneralInformation.invoiceFaxPhonePosition==2){
 				this.viewDataGeneralInformation.invoiceFaxPhonePositionBottom=true;
 			}
-	
 
-			console.log("Res",this.viewDataGeneralInformation);
 			this.legalEntityMainId=res.legalEntityId
 		
 			this.bankingAps(legalEntityId);
@@ -847,10 +848,11 @@ this.isLockBox=false;
 
 
 
-	getLegalEntityHistoryById(rowData) {
+	getLegalEntityHistoryById(content,rowData) {
 		this.isSpinnerVisible = true;
 		this.entityService.getLeaglEntityHistoryById(rowData.legalEntityId).subscribe(res => {
 			this.auditHistory = res;
+			this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false,windowClass: 'assetMange' }); 
 			this.isSpinnerVisible = false;
 		}, err => {
 			this.isSpinnerVisible = false;
@@ -858,9 +860,8 @@ this.isLockBox=false;
 			this.errorMessageHandler(errorLog);
 		});
 	}
-	restorerecord: any = {}
+	restorerecord: any = {} 
 	downloadFileUpload(rowData) {
-		console.log("roe",rowData)
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }
@@ -890,7 +891,8 @@ this.isLockBox=false;
 	}
 
 	closeHistoryModal() {
-		$("#legalEntityHistory").modal("hide");
+		// $("#legalEntityHistory").modal("hide");
+		this.modal.close();
 	}
 
 	openStep1() {
@@ -1054,4 +1056,6 @@ this.isLockBox=false;
 			}
 		}
 	}
+
+	changeOfTab(event) {}
 }

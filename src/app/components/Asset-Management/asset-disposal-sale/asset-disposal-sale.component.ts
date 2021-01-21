@@ -7,7 +7,7 @@ import { fadeInOut } from '../../../services/animations';
 import { AlertService, DialogType, MessageSeverity } from '../../../services/alert.service';
 import { CommonService } from '../../../services/common.service';
 import { LegalEntityService } from '../../../services/legalentity.service';
-import * as $ from 'jquery'
+declare var $ : any;
 
 @Component({
     selector: 'app-asset-disposal-sale',
@@ -336,4 +336,8 @@ export class AssetDisposalSaleComponent implements OnInit {
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
+
+    toggleIsActive(rowData,$event) {}
+    openSaleHistory(rowData) {}
+    openView(rowData) {}
 }

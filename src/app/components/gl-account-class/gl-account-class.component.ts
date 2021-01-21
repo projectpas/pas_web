@@ -1,7 +1,7 @@
 ﻿import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { PageHeaderComponent } from '../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { MenuItem, LazyLoadEvent } from 'primeng/api';//bread crumb
 // import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 // import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
@@ -61,8 +61,8 @@ export class GlAccountClassComponent implements OnInit {
     selectedGlAccountClassName: any;
     auditHisory: any[];
     glaccountclassnamecolle: any[] = [];
-     currentstatus: string = 'Active';
-   
+    currentstatus: string = 'Active';
+
 
     cols: any[];
     GLCID: any = "";
@@ -140,14 +140,14 @@ export class GlAccountClassComponent implements OnInit {
     // totalRecords: number;
     //paginatorState: any;
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     glAccountClassPagination: GLAccountClass[];//added
     loading: boolean;
 
     /** GlAccountClass ctor */
-    constructor(private breadCrumb: SingleScreenBreadcrumbService, 
+    constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public glAccountService: GLAccountClassService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService) {
         //this.displayedColumns.push('action');
@@ -172,12 +172,12 @@ export class GlAccountClassComponent implements OnInit {
 
         // this.alertService.startLoadingMessage();
         // this.loadingIndicator = true;
-         this.glAccountService.getGlAccountClassList().subscribe(data => {
+        this.glAccountService.getGlAccountClassList().subscribe(data => {
             // const respData = data[0];
             // this.allunitData = data;
 
-            this.originalTableData=data[0].columnData;
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = data[0].columnData;
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
             //  this.originalTableData=data[0];
             // this.getListByStatus(this.status ? this.status :this.currentstatus)
 
@@ -274,7 +274,7 @@ export class GlAccountClassComponent implements OnInit {
     }
 
     openView(rowData) {
-       
+
         console.log(rowData);
         this.viewRowData = rowData;
     }
@@ -314,7 +314,7 @@ export class GlAccountClassComponent implements OnInit {
                 `Updated Status Successfully  `,
                 MessageSeverity.success
             );
-        })       
+        })
     }
 
     eventHandler(field, value) {
@@ -363,7 +363,7 @@ export class GlAccountClassComponent implements OnInit {
         if (!this.isEdit) {
             this.glAccountService.newGlAccountClass(data).subscribe(() => {
                 // this.resetCreditTermsForm();
-               this. resetForm();
+                this.resetForm();
                 this.loadData();
                 this.alertService.showMessage(
                     'Success',
@@ -389,7 +389,7 @@ export class GlAccountClassComponent implements OnInit {
     }
 
     getChange() {
-        if (this.disableSaveMsg == false ) {
+        if (this.disableSaveMsg == false) {
             this.disableSave = false;
         }
     }
@@ -397,7 +397,7 @@ export class GlAccountClassComponent implements OnInit {
     onBlur(event) {
         const value = event.target.value;
 
-         this.disableSaveMsg = false;
+        this.disableSaveMsg = false;
         for (let i = 0; i < this.GLAccountTypeList.length; i++) {
             let glAccountClassName = this.GLAccountTypeList[i].glAccountClassName;
             let glAccountId = this.GLAccountTypeList[i].glAccountClassId;
@@ -445,7 +445,7 @@ export class GlAccountClassComponent implements OnInit {
         this.isSaving = false;
         this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
         this.loadData();
-        
+
         this.alertService.stopLoadingMessage();
     }
 
@@ -463,7 +463,7 @@ export class GlAccountClassComponent implements OnInit {
             this.isDelete = false;
         }
         else {
-           
+
             this.alertService.showMessage("Success", `Action was edited successfully`, MessageSeverity.success);
         }
         this.loadData();
@@ -531,100 +531,101 @@ export class GlAccountClassComponent implements OnInit {
         }
 
     }
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.GLAccountTypeList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.GLAccountTypeList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.GLAccountTypeList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.GLAccountTypeList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.GLAccountTypeList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.GLAccountTypeList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.GLAccountTypeList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.GLAccountTypeList = newarry;
+            }
         }
-        this.totalRecords = this.GLAccountTypeList.length ;
+        this.totalRecords = this.GLAccountTypeList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('GLAccountClass',
-            'GLAccountClassId',this.restorerecord.glAccountClassId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('GLAccountClass',
+            'GLAccountClassId', this.restorerecord.glAccountClassId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
 
     getGLAccountClassList() {
 
-       // this.loadData();
+        // this.loadData();
     }
 
+    changeStatus(rowData) {}
 }
 
 

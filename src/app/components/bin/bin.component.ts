@@ -46,7 +46,7 @@ export class BinComponent {
 	addressId: any;
 	locationId: any;
 
-	
+
 
 
 	memo: any = "";
@@ -74,8 +74,8 @@ export class BinComponent {
 	showManagement: boolean;
 
 	name: any;
-	private isEditMode: boolean = false;
-	private isDeleteMode: boolean = false;
+	public isEditMode: boolean = false;
+	public isDeleteMode: boolean = false;
 	dataSource: MatTableDataSource<any>;
 	totalRecords: number;
 	showLable: boolean;
@@ -83,7 +83,7 @@ export class BinComponent {
 	loadingIndicator: boolean;
 	modal: NgbModalRef;
 	action_name: any = "";
-	private isSaving: boolean;
+	public isSaving: boolean;
 	actionName: string;
 	allComapnies: MasterCompany[] = [];
 	public auditHisory: AuditHistory[] = [];
@@ -114,28 +114,28 @@ export class BinComponent {
 	selectedNodeTest: any;
 	localManagementSiteCollection: any;
 	allManagemtninfo: any[];
-	localManagementBinEditCollection: TreeNode[]=[];
+	localManagementBinEditCollection: TreeNode[] = [];
 	actionamecolle: any[] = [];
 	location_Name: any;
 	allLocations: any;
-    locationName: any;
-    allShelfs: any;
-    showAddress: boolean;
+	locationName: any;
+	allShelfs: any;
+	showAddress: boolean;
 	testLocalNodeSlect: any;
 	Active: string = "Active";
 	localManagementShelfCollection: any;
 	localCollection: any[] = [];
 	disableSaveManufacturer: boolean = false;
-    selectedBin: any;
-    AuditDetails: any[];
+	selectedBin: any;
+	AuditDetails: any[];
 	HasAuditDetails: boolean;
 
 	totalPages: number;
 	pageSize: number = 10;
 	AuditHistoryTitle: string = 'History of Bin'
-	
+
 	currentstatus: string = 'Active';
-    isDeleted: Boolean = false;
+	isDeleted: Boolean = false;
 	binData: any[] = [];
 
 	ngOnInit(): void {
@@ -168,28 +168,28 @@ export class BinComponent {
 		this.HasAuditDetails = false;
 	}
 
-	@ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-	@ViewChild(MatSort,{static:false}) sort: MatSort;
+	@ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+	@ViewChild(MatSort, { static: false }) sort: MatSort;
 	/** bin ctor */
-    constructor(public manageMentService: LegalEntityService,
-        private commonService: CommonService, private configurations: ConfigurationService,public workFlowtService: BinService, public shelfService: ShelfService, public locationService: LocationService, public wareHouseService: WarehouseService, public siteService: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
+	constructor(public manageMentService: LegalEntityService,
+		private commonService: CommonService, private configurations: ConfigurationService, public workFlowtService: BinService, public shelfService: ShelfService, public locationService: LocationService, public wareHouseService: WarehouseService, public siteService: SiteService, private breadCrumb: SingleScreenBreadcrumbService, private http: HttpClient, private changeDetectorRef: ChangeDetectorRef, private router: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, private dialog: MatDialog, private masterComapnyService: MasterComapnyService) {
 		this.dataSource = new MatTableDataSource();
 		this.sourceBin = new Bin();
 
 	}
-	
+
 	closethis() {
 		this.closeCmpny = false;
-    }
-    sampleExcelDownload() {
-        const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Bin&fileName=Bin.xlsx`;
-
-        window.location.assign(url);
 	}
-	
+	sampleExcelDownload() {
+		const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=Bin&fileName=Bin.xlsx`;
+
+		window.location.assign(url);
+	}
+
 	getPageCount(totalNoofRecords, pageSize) {
-        return Math.ceil(totalNoofRecords / pageSize)
-    }
+		return Math.ceil(totalNoofRecords / pageSize)
+	}
 
 	handleChange(rowData, e) {
 		if (e.checked == false) {
@@ -203,7 +203,7 @@ export class BinComponent {
 			//alert(e);
 		}
 		else {
-			this.sourceBin = rowData; 
+			this.sourceBin = rowData;
 			this.sourceBin.updatedBy = this.userName;
 			this.Active = "Active";
 			this.sourceBin.isActive == true;
@@ -259,7 +259,7 @@ export class BinComponent {
 		this.allWareHouses = [];
 		this.allLocations = [];
 		this.allShelfs = [];
-		
+
 
 		console.log(this.siteId);
 		if (this.sourceBin.siteId) {
@@ -286,18 +286,16 @@ export class BinComponent {
 	}
 
 
-	locationValueChange(data)
-	{
+	locationValueChange(data) {
 		console.log(this.sourceBin.locationId);
 		this.workFlowtService.getShelfDate(this.sourceBin.locationId).subscribe( //calling and Subscribing for Location Data
 			results => this.onDataLoadShelf(results), //sending Location
 			error => this.onDataLoadFailed(error)
 		);
-		
+
 	}
 
-	shelfValueChange(data)
-	{
+	shelfValueChange(data) {
 		this.showManagement = true;
 		this.workFlowtService.getManagementShelfData(data).subscribe(
 			data2 => {
@@ -306,7 +304,7 @@ export class BinComponent {
 				this.selectedNodeTest = this.gridData2;
 			})
 		console.log(data);
-		 }
+	}
 
 	private onDataLoadWareHouse(getWarehousList: any) { //Storing WareHouse Data
 
@@ -324,8 +322,7 @@ export class BinComponent {
 
 	}
 
-	onDataLoadShelf(getShelfList: any)
-	{
+	onDataLoadShelf(getShelfList: any) {
 		this.alertService.stopLoadingMessage();
 		this.loadingIndicator = false;
 		this.allShelfs = getShelfList; //cha
@@ -432,17 +429,13 @@ export class BinComponent {
 		];
 	}
 
-	makeNestedObj(arr, parent)
-	{
+	makeNestedObj(arr, parent) {
 		var out = []
-		for (var i in arr)
-		{
-			if (arr[i].parentId == parent)
-			{
+		for (var i in arr) {
+			if (arr[i].parentId == parent) {
 				var children = this.makeNestedObj(arr, arr[i].managementStructureId)
 				arr[i] = { "data": arr[i] };
-				if (children.length)
-				{
+				if (children.length) {
 					arr[i].children = children
 				}
 				out.push(arr[i])
@@ -451,20 +444,14 @@ export class BinComponent {
 		return out
 	}
 
-	makeNestedObj1(child, arr, parent)
-	{
-		
+	makeNestedObj1(child, arr, parent) {
+
 		var out = []
-		if (child)
-		{
-			for (var i = 0; i < child.length; i++)
-			{
-				for (var j = 0; j < arr.length; j++)
-				{
-					if (arr[j].data)
-					{
-						if (child[i].managementStructureId == arr[j].data.managementStructureId)
-						{
+		if (child) {
+			for (var i = 0; i < child.length; i++) {
+				for (var j = 0; j < arr.length; j++) {
+					if (arr[j].data) {
+						if (child[i].managementStructureId == arr[j].data.managementStructureId) {
 							arr[j].data.managementBinId = child[i].managementBinId;
 							arr[j].data.binId = child[i].binId;
 							out.push(arr[j]);
@@ -472,17 +459,16 @@ export class BinComponent {
 							break;
 						}
 					}
-					else if (child[i].managementStructureId == arr[j].managementStructureId)
-					{
-							arr[j].data.managementBinId = child[i].managementBinId;
-							arr[j].data.binId = child[i].binId;
-							out.push(arr[j]);
-							console.log(arr[j].data);
-							break;
-						}
-					
+					else if (child[i].managementStructureId == arr[j].managementStructureId) {
+						arr[j].data.managementBinId = child[i].managementBinId;
+						arr[j].data.binId = child[i].binId;
+						out.push(arr[j]);
+						console.log(arr[j].data);
+						break;
+					}
+
 				}
-				
+
 
 			}
 		}
@@ -510,8 +496,7 @@ export class BinComponent {
 		console.log("selected node", event, event.node);
 	}
 
-	managementStructureClick(data)
-	{
+	managementStructureClick(data) {
 		this.testLocalNodeSlect = this.selectedNodeTest;
 	}
 
@@ -535,10 +520,10 @@ export class BinComponent {
 		// this.dataSource.data = getBinList;
 		// this.allBins = getBinList;
 		// this.originalTableData = this.allBins;
-		this.workFlowtService.getBinList().subscribe(res=>{
+		this.workFlowtService.getBinList().subscribe(res => {
 
-		this.originalTableData=res[0];
-		this.getListByStatus(this.status ? this.status :this.currentstatus)
+			this.originalTableData = res[0];
+			this.getListByStatus(this.status ? this.status : this.currentstatus)
 		});
 
 
@@ -602,19 +587,19 @@ export class BinComponent {
 	open(content) {
 		this.isEditMode = false;
 		this.isDeleteMode = false;
-		this.isSaving = true;		
+		this.isSaving = true;
 		this.loadMasterCompanies();
 		this.loadManagementdata(); //Calling Management Data
 		this.selectedNodeTest = []; //while Open new Node Data Should Be Empty
 		this.disableSaveManufacturer = false;
-		this.sourceBin = {};		
+		this.sourceBin = {};
 		this.address1 = "";
 		this.address2 = "";
 		this.address3 = "";
 		this.city = "";
-		this.country ="";
+		this.country = "";
 		this.postalCode = "";
-		this.stateOrProvince ="";
+		this.stateOrProvince = "";
 		this.name = "";
 		this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
 		this.modal.result.then(() => {
@@ -635,10 +620,10 @@ export class BinComponent {
 	}
 
 	getmemo() {
-     
+
 		this.disableSaveForEdit = false;
-	
-}
+
+	}
 	//OpenEdit
 	openEdit(content, row) {
 		this.isEditMode = true;
@@ -648,8 +633,7 @@ export class BinComponent {
 		this.disableSaveManufacturer = false;
 		this.disableSaveForEdit = true;
 		this.sourceBin = row;
-		if (row.siteId)
-		{
+		if (row.siteId) {
 			this.siteValueChange(row.siteId);
 			this.wareHouseValueChange(row.wareHouseId);
 			this.locationValueChange(row.locationId);
@@ -769,20 +753,19 @@ export class BinComponent {
 	//EditItem
 	editItemAndCloseModel() {
 		this.isSaving = true;
-		
-		var selectedNodes =  ( this.selectedNodeTest && this.selectedNodeTest.length > 0 ) 
-									? this.selectedNodeTest.slice()
-									: [];
 
-		if (this.isEditMode == false)
-		{
+		var selectedNodes = (this.selectedNodeTest && this.selectedNodeTest.length > 0)
+			? this.selectedNodeTest.slice()
+			: [];
+
+		if (this.isEditMode == false) {
 			this.showAddress = false;
 			this.showManagement = false;
 			this.sourceBin.createdBy = this.userName;
 			this.sourceBin.updatedBy = this.userName;
 			this.sourceBin.masterCompanyId = 1;
 			this.sourceBin.name = this.name;
-			this.workFlowtService.newBin({...this.sourceBin,isDelete: this.isDeleteMode}).subscribe(data => {
+			this.workFlowtService.newBin({ ...this.sourceBin, isDelete: this.isDeleteMode }).subscribe(data => {
 				this.alertService.showMessage("Success", `Action was created successfully`, MessageSeverity.success);
 				if (data != null) {
 					this.saveManagement(data.binId, selectedNodes); //pushing Site Management Need Site Value so after getting SiteId we are calling
@@ -790,8 +773,7 @@ export class BinComponent {
 			});
 			this.loadData();
 		}
-		else
-		{
+		else {
 			this.showAddress = true;
 			this.showManagement = true;
 			this.sourceBin.updatedBy = this.userName;
@@ -800,12 +782,12 @@ export class BinComponent {
 			this.workFlowtService.updateBin(this.sourceBin).subscribe( //Update
 				response => this.saveCompleted(this.sourceBin),
 				error => this.saveFailedHelper(error));
-			
-			
+
+
 
 			this.workFlowtService.deleteManagementBinById(this.sourceBin.binId).subscribe(data => {
 				console.log('deleted structure successfull');
-				this.saveManagement(this.sourceBin.binId, selectedNodes); 
+				this.saveManagement(this.sourceBin.binId, selectedNodes);
 			});
 
 			this.selectedNodeTest = [];
@@ -843,108 +825,111 @@ export class BinComponent {
 
 
 		this.loadData();
-    }
+	}
 
-    showAuditPopup(template, id): void {
-        this.auditBin(id);
-        this.modal = this.modalService.open(template, { size: 'sm', backdrop: 'static', keyboard: false });
-    }
+	showAuditPopup(template, id): void {
+		this.auditBin(id);
+		this.modal = this.modalService.open(template, { size: 'sm', backdrop: 'static', keyboard: false });
+	}
 
-    auditBin(binId: number): void {
+	auditBin(binId: number): void {
 		this.AuditDetails = [];
 		this.HasAuditDetails = this.AuditDetails.length > 0;
-        this.workFlowtService.getBinAudit(binId).subscribe(audits => {
-            if (audits.length > 0) {
-                this.AuditDetails = audits[0].result;
-				this.HasAuditDetails =  this.AuditDetails.length > 0;;
+		this.workFlowtService.getBinAudit(binId).subscribe(audits => {
+			if (audits.length > 0) {
+				this.AuditDetails = audits[0].result;
+				this.HasAuditDetails = this.AuditDetails.length > 0;;
 			}
-        });
+		});
 	}
-	getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
-        }
-        this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
-    getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.binData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+	getDeleteListByStatus(value) {
+		if (value) {
+			this.currentDeletedstatus = true;
+		} else {
+			this.currentDeletedstatus = false;
+		}
+		this.getListByStatus(this.status ? this.status : this.currentstatus)
+	}
+
+	originalTableData: any = [];
+	currentDeletedstatus: boolean = false;
+	status: any = "Active";
+	getListByStatus(status) {
+		const newarry = [];
+		if (status == 'Active') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
 				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.binData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-                // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
+					if (element.isActive == true && element.isDeleted == false) {
 						newarry.push(element);
 					}
 				});
-				this.binData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == true && element.isDeleted == true) {
 						newarry.push(element);
 					}
 				});
-				this.binData= newarry;
 			}
-        }
-        this.totalRecords = this.binData.length ;
-        this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+			this.binData = newarry;
+		} else if (status == 'InActive') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isActive == false && element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+			}
+			this.binData = newarry;
+		} else if (status == 'ALL') {
+			this.status = status;
+			if (this.currentDeletedstatus == false) {
+				// this.billingInfoList=this.originalTableData;
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == false) {
+						newarry.push(element);
+					}
+				});
+				this.binData = newarry;
+			} else {
+				this.originalTableData.forEach(element => {
+					if (element.isDeleted == true) {
+						newarry.push(element);
+					}
+				});
+				this.binData = newarry;
+			}
 		}
-		restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Bin',
-            'BinId',this.restorerecord.binId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
-                this.modal.close();
-                // this.geListByStatus(this.status ? this.status : 'Active');
-                this.loadData();
-    
-                this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
-            })
-        }
+		this.totalRecords = this.binData.length;
+		this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+	}
+	restore(content, rowData) {
+		this.restorerecord = rowData;
+		this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+		this.modal.result.then(() => {
+			console.log('When user closes');
+		}, () => { console.log('Backdrop click') })
+	}
+	restorerecord: any = {}
+	restoreRecord() {
+		this.commonService.updatedeletedrecords('Bin',
+			'BinId', this.restorerecord.binId).subscribe(res => {
+				this.currentDeletedstatus = true;
+				this.modal.close();
+				// this.geListByStatus(this.status ? this.status : 'Active');
+				this.loadData();
+
+				this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
+			})
+	}
+
+	openEdits(rowData) {}
+	changeStatus(rowData) {}
 }

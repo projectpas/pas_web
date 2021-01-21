@@ -1,14 +1,14 @@
 ﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
         <div class="card new-card">
-            <div class="card-header bg-primary new-card-header">
+            <div class="header ">
               <div class="row">
                 <div class="col">
-                  <h4 class="new-card-heading" style="font-size:19px">Receiving - Customer Work List</h4>
+                  <h4 class="header-name">Receiving - Customer Work List</h4>
                 </div>
                 <div>
                   <button
                     type="button"
-                    class="btn-sm new-btn-primary"
+                    class="btn-sm header-button"
                     [routerLink]="['/receivingmodule/receivingpages/app-customer-work-setup']">
                     Create Customer Work
                   </button>
@@ -118,7 +118,7 @@
                             {{col.header}}
                             <p-sortIcon [field]="col.field"></p-sortIcon>
                         </th>
-                        <th class="text-center" style="width:auto;." *ngIf="col.field=='levelCode1'" colspan="4" pResizableColumn
+                        <th class="text-center" style="width:auto;" *ngIf="col.field=='levelCode1'" colspan="4" pResizableColumn
                             pReorderableColumn [pSortableColumn]="col.field">
                             Management Structure
                         </th>
@@ -145,23 +145,30 @@
                     </td>
                     <td style="width:130px;">
                         <div *ngIf="currentDeletedstatus==false">
+                          
                             <span data-toggle="modal" data-target="#cusView">
                                 <a class="btn nobg" (click)="openView(rowData)"
                                    matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                             </span>
-                            <span>
-                                <a class="btn nobg" *ngIf="rowData['woNumber'] == '' || rowData['woNumber'] == null"
-                                   (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
+                            <span> 
+                                <button class="btn  nobg" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="openEdits(rowData)" style="padding:0%"  matTooltip="Edit" matTooltipPosition="above" >
+                                    <i class="fa fa-pencil" ></i>
+                                </button>
+                                <!-- <a class="btn nobg" 
+                                   (click)="openEdits(rowData)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> -->
                             </span>
-                            <span>
+                            <span> 
                                 <a class="btn nobg" (click)="openHistory(contentAuditHist,rowData)"
                                    matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
                             </span>
                             <span>
-                                <a class="btn nobg btn-pluspo-cstm"
+                                <!-- <a class="btn nobg btn-pluspo-cstm"
                                    *ngIf="rowData['woNumber'] == '' || rowData['woNumber'] == null"
-                                   (click)="gotoWorkOrder(rowData)" matTooltip="Create WO" matTooltipPosition="above"><i class="fa fa-plus"></i></a>
-                            </span>
+                                   (click)="gotoWorkOrder(rowData)" matTooltip="Create WO" matTooltipPosition="above"><i class="fa fa-plus"></i></a> -->
+                                   <button class="btn nobg btn-pluspo-cstm" [disabled]="!(rowData['woNumber'] == '' || rowData['woNumber'] == null)" (click)="gotoWorkOrder(rowData)" style="padding:0%"   matTooltip="Create WO" matTooltipPosition="above" >
+                                    <i class="fa fa-plus" ></i>
+                                </button>
+                                </span>
                             <span>
                                 <a class="btn nobg btn-ro-cstm" (click)="gotoCustomer(rowData)" matTooltip="Return to Customer" matTooltipPosition="above">
                                     <i class="fa fa-list"></i>
@@ -241,8 +248,9 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive history_hg">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th>Rec.No.</th>
@@ -326,6 +334,7 @@
                     </td>    
                 </tr>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
@@ -722,7 +731,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 tableview">
+                <div class="col-md-12 tableview" *ngIf="rcId">
                     <app-common-documents [moduleName]="moduleName" [referenceId]="rcId" [isViewMode]="true"
                     [offLineUpload]="true"></app-common-documents>
                 </div>

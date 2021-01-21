@@ -5,7 +5,7 @@ import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectByI
 import { AuthService } from '../../../services/auth.service';
 import { CustomerService } from '../../../services/customer.service';
 import { MessageSeverity, AlertService } from '../../../services/alert.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';

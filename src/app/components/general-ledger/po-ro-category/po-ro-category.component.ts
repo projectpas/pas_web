@@ -581,5 +581,7 @@ export class PoRoCategoryComponent implements OnInit, AfterViewInit {
         }
     }
 
+    columnsChanges() {}
+    deleteItemAndCloseModel() {}
 }
 

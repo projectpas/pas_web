@@ -91,7 +91,7 @@ export class StageCodeComponent implements OnInit {
     departmentList: any;
     disableSaveForSequence: boolean = false;
     currentstatus: string = 'Active';
-
+    AuditDetails: any;
 
     constructor(
         private breadCrumb: SingleScreenBreadcrumbService,

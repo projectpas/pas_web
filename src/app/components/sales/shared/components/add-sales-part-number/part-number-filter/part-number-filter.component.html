@@ -39,13 +39,10 @@
   <div class="col-2 column">
     <div class="form-group">
       <label>PN<span class="clr-red">*</span></label>
-      <p-autoComplete class="autocomp-customer-cstm" name="partNumber"
-        [(ngModel)]="query.partSearchParamters.partNumberObj"
-        [suggestions]="this.partDetails" [forceSelection]="true"
-        field="partNumber" 
-        (completeMethod)="searchPartByPartNumber($event)"
-        (onSelect)="onPartNumberSelect($event)" [size]="30" [minLength]="1" [dropdown]="true"
-        [disabled]="partEditDisable" required>
+      <p-autoComplete field="partNumber" class="autocomp-customer-cstm" name="partNumberObj"
+        [(ngModel)]="query.partSearchParamters.partNumberObj" [suggestions]="partDetails" [forceSelection]="true"
+        field="partNumber" (completeMethod)="searchPartByPartNumber($event)" (onSelect)="onPartNumberSelect($event)"
+        [size]="30" [minLength]="1" [dropdown]="true" [disabled]="partEditDisable" required>
       </p-autoComplete>
     </div>
   </div>
@@ -59,14 +56,21 @@
   <div class="col-7 column">
     <div class="col-2 column">
       <div class="form-group">
-        <label>Cond<span class="clr-red">*</span></label>
-        <select name="conditionId" [(ngModel)]="query.partSearchParamters.conditionId" [disabled]="partEditDisable"
+        <label>
+          <span class="pull-left">Cond</span>
+          <span class="clr-red">*</span>
+        </label>
+        <!-- <select name="conditionId" [(ngModel)]="query.partSearchParamters.conditionId" [disabled]="partEditDisable"
           (change)="onConditionSelect()" required>
           <option value="0" selected>--select--</option>
           <option *ngFor="let condition of allConditionInfo" [ngValue]="condition.conditionId">
             {{condition.description}}
           </option>
-        </select>
+        </select> -->
+        <p-multiSelect [options]="allConditionInfo" (onChange)="onConditionSelect()"
+          [(ngModel)]="query.partSearchParamters.conditionIds" name="conditionId"
+          defaultLabel="-- Select --" required="true" [disabled]="partEditDisable" class="classification">
+        </p-multiSelect>
       </div>
     </div>
     <!-- [(ngModel)]="query.partSearchParamters.quantityRequested"  (change)="calculate()" -->
@@ -83,8 +87,7 @@
     <div class="col-2 column">
       <div class="form-group">
         <label>Qty to Quote<span class="clr-red">*</span></label>
-        <input type="text" class="form-control text-right" pKeyFilter="pint"  required
-          pInputText name="quantityToQuote"
+        <input type="text" class="form-control text-right" pKeyFilter="pint" required pInputText name="quantityToQuote"
           [ngModel]="query.partSearchParamters.quantityToQuote  | globalNmberFormat"
           [ngModelOptions]="{updateOn:'blur'}"
           (ngModelChange)="query.partSearchParamters.quantityToQuote=formatStringToNumberGlobal($event)"
@@ -132,8 +135,7 @@
   <div class="col-2 column" style="margin-right: 8px;" *ngIf="enableMultiSearch">
     <div class="form-group">
       <!-- <label>&nbsp;</label> -->
-      <button class="btn btn-primary" (click)="openMultiPartSearch($event)"
-        style="background-color: #f0ad4e !important;">
+      <button class="btn btn-primary" (click)="openMultiPartSearch()" style="background-color: #f0ad4e !important;">
         Search Multiple PN's
       </button>
     </div>

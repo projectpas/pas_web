@@ -67,14 +67,14 @@ export class UnitOfMeasureComponent implements OnInit {
     modal: NgbModalRef;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     // disableSaveForStandard:boolean=false;
     disableSaveForUOMMsg: boolean = false;
     disableSaveForShortNameMsg: boolean = false;
     shortNameList: any;
-    
+    AuditDetails: any;
     
     constructor(private breadCrumb: SingleScreenBreadcrumbService, private modalService: NgbModal,
         private commonService: CommonService,

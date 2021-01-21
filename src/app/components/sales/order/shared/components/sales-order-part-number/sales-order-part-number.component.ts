@@ -18,7 +18,7 @@ import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView"
 import { AuthService } from "../../../../../../services/auth.service";
 import { CommonService } from "../../../../../../services/common.service";
 import { ISalesOrderPart } from "../../../../../../models/sales/ISalesOrderPart";
-import * as $ from 'jquery';
+declare var $ : any;
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 @Component({
   selector: "app-sales-order-part-number",
@@ -78,6 +78,7 @@ export class SalesOrderPartNumberComponent {
   isSpinnerVisible = false;
   saveButton = false;
   canSaveParts = false;
+  inputValidCheckHeader: any;
   constructor(
     private modalService: NgbModal,
     private salesQuoteService: SalesQuoteService,
@@ -250,7 +251,7 @@ export class SalesOrderPartNumberComponent {
     }
   }
 
-  onClosePartDelete(event) {
+  onClosePartDelete() {
     this.deletePartModal.close();
   }
 
@@ -358,7 +359,7 @@ export class SalesOrderPartNumberComponent {
           this.part.currencyDescription = this.defaultCurrencyDiscription;
           this.part.salesQuoteNumber = this.salesQuote.salesOrderQuoteNumber;
           this.part.quoteVesrion = this.salesQuote.versionNumber;
-          // this.part.customerRef = this.salesQuote.customerReferenceName;
+          this.part.customerRef = this.salesQuote.customerReferenceName;
           this.part.uom = this.selectedPart.uomDescription;
           this.part.pmaStatus = this.selectedPart.oempmader;
           if (!this.part.pmaStatus) {
@@ -661,6 +662,7 @@ export class SalesOrderPartNumberComponent {
           `PN  updated successfully.`,
           MessageSeverity.success
         );
+        this.saveButton = true;
         this.onPartsSavedEvent.emit(this.selectedParts);
       }, error => {
         this.isSpinnerVisible = false;

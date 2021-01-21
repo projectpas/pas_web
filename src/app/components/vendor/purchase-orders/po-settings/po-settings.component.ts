@@ -17,6 +17,8 @@ export class PoSettingsComponent implements OnInit {
 	isSpinnerVisible: boolean = true;
     posettingModel: any = {};
     enableHeaderSaveBtn: boolean = false;
+    errorMessages: any;
+
     constructor(private vendoreService: VendorService,
         private alertService: AlertService, private authService: AuthService,
         private purchaseOrderService:PurchaseOrderService) {
@@ -34,7 +36,7 @@ export class PoSettingsComponent implements OnInit {
         this.posettingModel.IsDeferredReceiver = false;
 		this.posettingModel.IsEnforceApproval = false;
         this.isSpinnerVisible = false;
-        this.getPurchaseOrderMasterData();
+        this.getPurchaseOrderMasterData(this.currentUserMasterCompanyId);
     }
 
     get userName(): string {
@@ -51,9 +53,9 @@ export class PoSettingsComponent implements OnInit {
             this.enableHeaderSaveBtn = true;
     }
 
-    getPurchaseOrderMasterData() {
-        this.purchaseOrderService.getPurchaseOrderSettingMasterData();
-        this.purchaseOrderService.getPurchaseOrderSettingMasterData().subscribe(res => {
+    getPurchaseOrderMasterData(currentUserMasterCompanyId) {
+        this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId);
+        this.purchaseOrderService.getPurchaseOrderSettingMasterData(currentUserMasterCompanyId).subscribe(res => {
             if (res) {
                 this.posettingModel.PurchaseOrderSettingId = res.purchaseOrderSettingId;
                 this.posettingModel.IsResale = res.isResale;
@@ -122,5 +124,5 @@ export class PoSettingsComponent implements OnInit {
     //        );
     //    }
     //}
-
+    closeErrorMessage() {}
 }

@@ -29,7 +29,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
 
     isNewUser = false;
     isChangePassword = false;
-    private isSaving = false;
+    public isSaving = false;
     private passwordWatcher: Subscription;
     private onUserSaved = new Subject<User>();
 
@@ -290,7 +290,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         }
     }
 
-    private changePassword() {
+    public changePassword() {
         this.isChangePassword = true;
         this.addCurrentPasswordValidators();
         this.addNewPasswordValidators();
@@ -305,7 +305,7 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
         this.confirmPassword.setValidators([Validators.required, EqualValidator('newPassword')]);
     }
 
-    private unlockUser() {
+    public unlockUser() {
         this.isSaving = true;
         this.alertService.startLoadingMessage("Unblocking user...");
 

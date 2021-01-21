@@ -96,10 +96,17 @@
                 </th>
             </tr>
             <tr>
-                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                <!-- <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input class="table-header-input-width" pInputText type="text" class="incorn_border" (input)="
-                            dt.filter($event.target.value, col.field, 'contains')
-                        " />
+                            dt.filter($event.target.value, col.field, 'contains')" />
+                </th> -->
+                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input class="incorn_border table-header-input-width"
+                        *ngIf="col.field != 'contactDate'" pInputText type="text"
+                        (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'contactDate'"
+                        name="contactDate" (change)="dateFilterForTable($event.target.value, col.field)" />
                 </th>
                 <th class="table-actions-column" ></th>
             </tr>
@@ -448,17 +455,18 @@
                             </div>
                         </div>
                     </div>
+                </div>
                     <!-- || checkValidEmails() -->
-                    <div class="modal-footer" style="padding-top:0px; padding-bottom:0px;">
-                        <button type="submit" class="btn btn-primary btn-primary" (click)="send(attachDocForm.valid)"
-                            style="padding: 6px 12px !important;margin-top: 10px;"
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary editor-buttons-margin" (click)="send(attachDocForm.valid)"
+                          
                             [disabled]="!attachDocForm.valid || bccEmail.errors || ccEmail.errors">
                             Send
                         </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"
-                            style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+                        <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal"
+                           >Close</button>
                     </div>
-                </div>
+               
             </form>
         </div>
 
@@ -598,11 +606,12 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="editor-buttons">
-                        <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                     </div>
                 </div>
-            </div>
+            
 
         </div>
 
@@ -622,10 +631,9 @@
                 Quote</a>
             <!-- <a href="{{pdfPath}}" class="btn btn-link" target="_blank" >Preview Quote</a> -->
         </div>
-        <div class="editor-buttons">
-
-            <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal" (click)="closeModal()">No</button>
-            <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">No</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal"
                 (click)="triggerMailSalesQuote()">Yes</button>
         </div>
     </ng-template>

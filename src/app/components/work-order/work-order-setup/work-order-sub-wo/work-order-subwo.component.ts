@@ -43,6 +43,8 @@ export class SubWorkOrderComponent implements OnInit {
     isSavedPartNumbers:boolean;
     addToExisting:any;
     mpnGridUpdated:boolean=false;
+    isView: boolean;
+    tearDownReportList: any;
     // url:any;
     constructor(private router: Router,
         private commonService: CommonService,

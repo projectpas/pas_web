@@ -216,7 +216,7 @@
                       <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
                   </td>
                   <td *ngIf="col.field == 'fileName'">
-                    <a class="filelink" (click)="downloadFileUpload(x)">
+                    <a class="filelink" (click)="downloadFileUpload(rowData)">
                       {{ rowData[col.field] }}</a
                     >
                   </td>

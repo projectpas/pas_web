@@ -123,35 +123,35 @@ export class SalesOrderCreateComponent implements OnInit {
   selectedCommunicationTab: any = '';
   customerInfoFromSalesQuote: any = {};
   marginSummary: MarginSummary = new MarginSummary();
-  @ViewChild("newSalesOrderForm",{static:false}) public newSalesOrderForm: NgForm;
-  @ViewChild("errorMessagePop",{static:false}) public errorMessagePop: ElementRef;
-  @ViewChild("newSalesQuoteForm",{static:false}) public newSalesQuoteForm: NgForm;
-  @ViewChild(SalesOrderFreightComponent,{static:false}) public salesOrderFreightComponent: SalesOrderFreightComponent;
-  @ViewChild(SalesOrderChargesComponent,{static:false}) public salesOrderChargesComponent: SalesOrderChargesComponent;
-  @ViewChild(SalesOrderPartNumberComponent,{static:false}) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
-  @ViewChild(ManagementStructureComponent,{static:false}) managementStructureComponent: ManagementStructureComponent;
-  @ViewChild(SalesAddressComponent,{static:false}) public salesAddressComponent: SalesAddressComponent;
-  @ViewChild(SalesOrderConfirmationModalComponent,{static:false}) salesOrderConfirmationModalComponent: SalesOrderConfirmationModalComponent;
-  @ViewChild(SalesOrderBillingComponent,{static:false}) public salesOrderBillingComponent: SalesOrderBillingComponent;
-  @ViewChild(SalesOrderShippingComponent,{static:false}) public salesOrderShippingComponent: SalesOrderShippingComponent;
-  @ViewChild(SalesOrderAnalysisComponent,{static:false}) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
+  @ViewChild("newSalesOrderForm", { static: false }) public newSalesOrderForm: NgForm;
+  @ViewChild("errorMessagePop", { static: false }) public errorMessagePop: ElementRef;
+  @ViewChild("newSalesQuoteForm", { static: false }) public newSalesQuoteForm: NgForm;
+  @ViewChild(SalesOrderFreightComponent, { static: false }) public salesOrderFreightComponent: SalesOrderFreightComponent;
+  @ViewChild(SalesOrderChargesComponent, { static: false }) public salesOrderChargesComponent: SalesOrderChargesComponent;
+  @ViewChild(SalesOrderPartNumberComponent, { static: false }) public salesOrderPartNumberComponent: SalesOrderPartNumberComponent;
+  @ViewChild(ManagementStructureComponent, { static: false }) managementStructureComponent: ManagementStructureComponent;
+  @ViewChild(SalesAddressComponent, { static: false }) public salesAddressComponent: SalesAddressComponent;
+  @ViewChild(SalesOrderConfirmationModalComponent, { static: false }) salesOrderConfirmationModalComponent: SalesOrderConfirmationModalComponent;
+  @ViewChild(SalesOrderBillingComponent, { static: false }) public salesOrderBillingComponent: SalesOrderBillingComponent;
+  @ViewChild(SalesOrderShippingComponent, { static: false }) public salesOrderShippingComponent: SalesOrderShippingComponent;
+  @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
   employeesList: any = [];
   customerWarning: any = {};
   status: IStatus[] = [];
   freight = [];
   charge = [];
   @Input() salesQuoteId: number = 0;
-  @ViewChild(SalesOrderApproveComponent,{static:false}) public salesOrderApproveComponent: SalesOrderApproveComponent;
-  @ViewChild(SalesOrderCustomerApprovalComponent,{static:false}) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
+  @ViewChild(SalesOrderApproveComponent, { static: false }) public salesOrderApproveComponent: SalesOrderApproveComponent;
+  @ViewChild(SalesOrderCustomerApprovalComponent, { static: false }) public salesOrderCustomerApprovalComponent: SalesOrderCustomerApprovalComponent;
   salesOrderCopyParameters: ISalesOrderCopyParameters;
   copyMode: boolean;
   copy: boolean;
   copyData: string;
   isCreateModeHeader: boolean = false;
   isHeaderSubmit: boolean = false;
-  @ViewChild("updateConfirmationModal",{static:false})
+  @ViewChild("updateConfirmationModal", { static: false })
   public updateConfirmationModal: ElementRef;
-  @ViewChild("viewQuote",{static:false})
+  @ViewChild("viewQuote", { static: false })
   public viewQuoteModal: ElementRef;
   submitType: boolean = true;
   totalFreights = 0;
@@ -176,7 +176,7 @@ export class SalesOrderCreateComponent implements OnInit {
   soStatusList: any = [];
   soTypeList: any = [];
   addressType: any = 'SO';
-
+  showAddresstab:boolean  = false;
   constructor(
     private customerService: CustomerService,
     private alertService: AlertService,
@@ -227,15 +227,15 @@ export class SalesOrderCreateComponent implements OnInit {
     });
 
     this.managementStructureId = this.currentUserManagementStructureId;
-    
-    if(!this.isEdit) {
+
+    if (!this.isEdit) {
       this.load(this.managementStructureId);
     }
-    
+
     setTimeout(() => {
       this.getSoInstance(true);
-    },							 
-    2200);
+    },
+      2200);
 
     this.salesQuoteService.salesOrderViewSubj$.subscribe(data => {
       this.salesOrderView = data;
@@ -308,17 +308,17 @@ export class SalesOrderCreateComponent implements OnInit {
 
   getSOMarginSummary() {
     this.salesOrderService.getSOMarginSummary(this.id).subscribe(result => {
-        if (result) {
-          let summary: any = result;
-          this.marginSummary = summary;
-          this.totalCharges = this.marginSummary.misc;
-          this.totalFreights = this.marginSummary.freightAmount;
-          this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
-          this.salesOrderService.setTotalCharges(this.marginSummary.misc);
-        } else {
-          this.marginSummary = new MarginSummary();
-        }
+      if (result) {
+        let summary: any = result;
+        this.marginSummary = summary;
+        this.totalCharges = this.marginSummary.misc;
+        this.totalFreights = this.marginSummary.freightAmount;
+        this.salesOrderService.setTotalFreights(this.marginSummary.freightAmount);
+        this.salesOrderService.setTotalCharges(this.marginSummary.misc);
+      } else {
+        this.marginSummary = new MarginSummary();
       }
+    }
     )
   }
 
@@ -330,6 +330,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.getSalesOrderInstance(this.id, initialCall);
       this.getSOMarginSummary();
       this.isEdit = true;
+      this.toggle_po_header = false;
     } else if (this.salesOrderView) {
       this.salesQuote = this.salesOrderView.salesOrder
       this.commonSalesOrderInstanceForConvertAndEdit(this.salesOrderView);
@@ -674,6 +675,7 @@ export class SalesOrderCreateComponent implements OnInit {
     if (this.salesOrderObj && this.salesOrderObj.salesOrderQuoteId && this.salesOrderObj.salesOrderQuoteId) {
       this.controlSettings.showViewQuote = true;
     }
+    
     let partList: any[] = this.salesOrderView.parts;
     for (let i = 0; i < partList.length; i++) {
       let selectedPart = partList[i];
@@ -764,6 +766,7 @@ export class SalesOrderCreateComponent implements OnInit {
     this.salesQuote.memo = this.salesOrderObj.memo;
     this.salesQuote.notes = this.salesOrderObj.notes;
     this.salesQuote.salesOrderQuoteNumber = this.salesOrderObj.salesOrderQuoteNumber;
+    this.salesQuote.statusName = this.salesOrderObj.statusName;
     this.salesQuote.isApproved = this.salesOrderObj.isApproved;
     this.salesQuote.companyId = this.salesOrderObj.masterCompanyId;
     this.salesQuote.buId = this.salesOrderObj.buId;
@@ -1133,9 +1136,19 @@ export class SalesOrderCreateComponent implements OnInit {
               `Sales Order updated successfully.`,
               MessageSeverity.success
             );
-            this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
+            this.getSalesOrderInstance(this.id, true);
+            //this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
+            if (createNewVersion) {
+              this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
+            }
+            this.toggle_po_header = false;
+            if (this.isEdit) {
+              this.isCreateModeHeader = false;
+            }
+            this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
+            this.toggle_po_header = true;
           });
         }
       } else {
@@ -1166,8 +1179,10 @@ export class SalesOrderCreateComponent implements OnInit {
           }
         }, error => {
           this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
         });
       }
+      this.toggle_po_header = false;
     }
   }
 
@@ -1206,7 +1221,7 @@ export class SalesOrderCreateComponent implements OnInit {
         break;
       case SalesOrderActionType.CloseSalesOrder:
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId).subscribe(result => {
+          this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1215,7 +1230,7 @@ export class SalesOrderCreateComponent implements OnInit {
         break;
       case SalesOrderActionType.CancelSalesOrder:
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
-          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId).subscribe(result => {
+          this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
           }, error => {
             this.isSpinnerVisible = false;
@@ -1283,13 +1298,24 @@ export class SalesOrderCreateComponent implements OnInit {
       this.salesOrderCustomerApprovalComponent.refresh(this.marginSummary, this.salesOrderView.salesOrder.salesOrderId, this.salesOrderView.salesOrder.salesOrderQuoteId);
     }
     if (event.index == 3) {
-      this.salesAddressComponent.refresh(this.salesOrderQuote)
+      //this.salesAddressComponent.refresh(this.salesOrderQuote)
+      this.showAddresstab = true;
     }
     if (event.index == 4) {
-      this.salesOrderFreightComponent.refresh(false);
+      //this.salesOrderFreightComponent.refresh(false);
+      if (this.salesQuote.status == "Open" || this.salesQuote.status == "Partially Approved") {
+        this.salesOrderFreightComponent.refresh(false);
+      } else {
+        this.salesOrderFreightComponent.refresh(true);
+      }
     }
     if (event.index == 5) {
-      this.salesOrderChargesComponent.refresh(false);
+      //this.salesOrderChargesComponent.refresh(false);
+      if (this.salesQuote.statusName == "Open" || this.salesQuote.statusName == "Partially Approved") {
+        this.salesOrderChargesComponent.refresh(false);
+      } else {
+        this.salesOrderChargesComponent.refresh(true);
+      }
     }
     if (event.index == 6) {
       this.salesOrderShippingComponent.refresh(this.selectedParts);
@@ -1594,4 +1620,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.isSpinnerVisible = false;
     });
   }
+
+  getChargesList() {}
+  getFreightList() {}
 }

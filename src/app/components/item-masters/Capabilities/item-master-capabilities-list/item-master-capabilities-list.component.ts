@@ -27,7 +27,7 @@ import { AtaMainService } from '../../../../services/atamain.service';
 import { AtaSubChapter1Service } from '../../../../services/atasubchapter1.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
 import { CommonService } from '../../../../services/common.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { ItemMasterCreateCapabilitiesComponent } from '../item-master-create-capabilities/item-master-create-capabilities.component';
 import { DBkeys } from '../../../../services/db-Keys';
 import { DatePipe } from '@angular/common';
@@ -394,7 +394,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         }
     }
 
-    openEdits(row, index) //this is for Edit Data get
+    openEdits(row) //this is for Edit Data get
     {
         const capData = row;
         this.arraylistCapabilityTypeId.push(row.capabilityTypeId);
@@ -1216,7 +1216,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
-    getAuditHistory(content, row){
+    getAuditHistory(row){
         this.getItemMasterDetailsById(row.itemMasterId)
             this.isSaving = true;
             this.itemMasterService.getItemMasterCapabilityAuditHistory(row.itemMasterCapesId).subscribe(
@@ -1325,5 +1325,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 				log.error,
 				MessageSeverity.error
 			); }
-	}
+    }
+    
+    columnsChanges() {}
 }

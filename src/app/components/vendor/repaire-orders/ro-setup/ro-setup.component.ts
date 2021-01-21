@@ -12,7 +12,7 @@ import { EmployeeService } from '../../../../services/employee.service';
 import { CustomerService } from '../../../../services/customer.service';
 import { CreatePOPartsList, PartDetails } from '../../../../models/create-po-partslist.model';
 import { NgForm } from '@angular/forms';
-import * as $ from 'jquery';
+declare var $ : any;
 import { MenuItem } from 'primeng/api';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
 import { getValueFromObjectByKey, getObjectByValue, getValueFromArrayOfObjectById, getObjectById, editValueAssignByCondition, getValueByFieldFromArrayofObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
@@ -53,6 +53,7 @@ export class RoSetupComponent implements OnInit {
 	showVendorCaptab:boolean  = false;
 	addressType:any  = 'RO';
 	id: number;
+	filterSearchText : string;
 	firstNamesbillTo1: any;
 	firstNamesShipTo1: any[];
 	vendorContactsForshipTo: any[] = [];
@@ -109,6 +110,7 @@ export class RoSetupComponent implements OnInit {
 	partNumbers: any;
 	tempMemo: any;
 	headerMemo: any;
+	contactMemo:any;
 	headerNotes:any;
 	partsMemo:any;	
 	multiplePNDetails: boolean;
@@ -124,8 +126,8 @@ export class RoSetupComponent implements OnInit {
 	@ViewChild('createROForm',{static:false}) createROForm: NgForm;
 	@ViewChild('createROPartsForm',{static:false}) createROPartsForm: NgForm;
 	@ViewChild('createROAddressForm',{static:false}) createROAddressForm: NgForm;
-	repairOrderId: any;
-	purchaseOrderPartRecordId: any;
+	repairOrderId: any;	
+	repairOrderPartRecordId : any
 	addAllMultiPN: boolean = false;	
 	childObject: any = {};
 	parentObject: any = {};
@@ -236,7 +238,7 @@ export class RoSetupComponent implements OnInit {
 	disableHeaderInfo: boolean = false; 
 	allWorkOrderInfo: any = [];
 	allsubWorkOrderInfo: any = [];
-	allRepairOrderInfo: any = [];
+	//allRepairOrderInfo: any = [];
 	allSalesOrderInfo: any = [];
 	allShipViaInfo: any = [];
 	allWorkOrderDetails: any = [];
@@ -274,7 +276,7 @@ export class RoSetupComponent implements OnInit {
 	displayWarningModal: boolean = false;
 	roFulfillingstatusID: number = -1;
 	roOpenstatusID: number = -1;
-	poApprovaltaskId = 0;
+	roApprovaltaskId = 0;
 	ApprovedstatusId = 0; 
 	WaitingForApprovalstatusId = 0; 
 	ShowWarning = 0; 
@@ -287,7 +289,7 @@ export class RoSetupComponent implements OnInit {
 	arrayCustlist:any[] = [];
 	arrayWOlist:any[] = [];
 	arraysubWOlist:any[] = [];
-	arrayROlist:any[] = [];
+	//arrayROlist:any[] = [];
 	arraySOlist:any[] = [];
 	breadcrumbs: MenuItem[];
 	splitAddbutton: boolean = false;
@@ -369,7 +371,6 @@ export class RoSetupComponent implements OnInit {
 	referenceId:any=0;
 	moduleName:any="RepairOrder";
 	home: any;
-
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,
@@ -452,9 +453,9 @@ export class RoSetupComponent implements OnInit {
 								else if (x.label == "SOWONO") {
                                     this.arraysubWOlist.push(x.value);
 								}								
-								else if (x.label == "RONO") {
-                                    this.arrayROlist.push(x.value);
-								}
+								// else if (x.label == "RONO") {
+                                //     this.arrayROlist.push(x.value);
+								// }
 								else if (x.label == "SONO") {
                                     this.arraySOlist.push(x.value);
 								}
@@ -507,7 +508,7 @@ export class RoSetupComponent implements OnInit {
         
 	}
 	getRepairOrderMasterData() {    
-        this.repairOrderService.getRepairOrderSettingMasterData().subscribe(res => {
+        this.repairOrderService.getRepairOrderSettingMasterData(this.currentUserMasterCompanyId).subscribe(res => {
             if (res) {
                 this.rosettingModel.repairOrderSettingId = res.repairOrderSettingId;
                 this.rosettingModel.IsResale = res.isResale;
@@ -532,8 +533,12 @@ export class RoSetupComponent implements OnInit {
 	WarningsList: any;
 	WarningListId:any;
 	warningsandRestriction(Id) {       
-            this.WarningListId = VendorWarningEnum.Create_Purchase_Requisition;
-            if (Id && this.WarningListId) {
+			this.WarningListId = VendorWarningEnum.Create_Repair_Order;
+			this.warningMessage = "";
+			this.warningID = 0;					
+			this.restrictID = 0;
+			this.restrictMessage= "";
+            if (Id && this.WarningListId) {						
                 this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
                     if (res) {
                         if(res.warning) {
@@ -552,7 +557,7 @@ export class RoSetupComponent implements OnInit {
                         else if (this.warningID != 0 && this.restrictID != 0) {
                             this.showAlertMessage();
                         } 
-                    }
+					}
                 },err => {
                     this.isSpinnerVisible = false;                   
                 });
@@ -1382,10 +1387,10 @@ export class RoSetupComponent implements OnInit {
 		this.arraysubWOlist.push(id);
 	}	
 
-	onROSelect(id)
-	{
-		this.arrayROlist.push(id);
-	}
+	// onROSelect(id)
+	// {
+	// 	this.arrayROlist.push(id);
+	// }
 
 	onSOSelect(id)
 	{
@@ -1440,15 +1445,16 @@ export class RoSetupComponent implements OnInit {
 	
 	//#endregion
 	// Load Vendor data
-	loadvendorDataById(vendorId) {		
-		if (vendorId) {
+	loadvendorDataById(vendorId) {			
+		if (vendorId) {		
             this.vendorContactList = [];
             this.getVendorContactsListByID(vendorId);
             this.getVendorCreditTermsByID(vendorId);
             this.warningsandRestriction(vendorId);
             if (this.arrayVendlsit.length == 0) {
                 this.arrayVendlsit.push(0);
-            }
+			}
+			this.arrayVendlsit.push(vendorId);
             this.isSpinnerVisible = true;
             this.vendorService.getVendorNameCodeListwithFilter('', 20, this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {
                 this.allActions = res;
@@ -1520,7 +1526,7 @@ export class RoSetupComponent implements OnInit {
 				resale: res.resale,
 				managementStructureId:res.managementStructureId,
 				companyId: this.getManagementStructureDetails(res.managementStructureId,this.employeeId,res.managementStructureId),
-                poMemo: res.poMemo,
+                roMemo: res.roMemo,
 				notes: res.notes,
                 createdDate: res.createdDate,
 				updatedDate:res.updatedDate,
@@ -1566,12 +1572,13 @@ export class RoSetupComponent implements OnInit {
 	BindAllParts(data) {		
 		this.partListData = [];
 		this.newPartsList = [this.newObjectForParent];
-		if(data) {	
+		if(data) {				
 			data[0].map((x, pindex) => {
+				console.log(x)
 				this.newPartsList = {
 					...x,							
 					partNumberId: {value: x.itemMasterId, label: x.partNumber},						
-					ifSplitShip: x.purchaseOrderSplitParts.length > 0 ? true : false,
+					ifSplitShip: x.roPartSplits.length > 0 ? true : false,
 					partNumber: x.partNumber,
 					partDescription: x.partDescription,
 					needByDate: x.needByDate ? new Date(x.needByDate) : '',
@@ -1591,8 +1598,9 @@ export class RoSetupComponent implements OnInit {
 					unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
 					extendedCost: x.extendedCost ? formatNumberAsGlobalSettingsModule(x.extendedCost, 2) : '0.00',
 					isApproved: x.isApproved ? x.isApproved : false,							
-					childList: this.getPurchaseOrderSplitPartsEdit(x, pindex,data[1]),
+					childList: this.getRepairOrderSplitPartsEdit(x, pindex,data[1]),
 					remQty: 0,
+					stocklineId:x.stocklineId
 				}
 				this.getManagementStructureForParentPart(this.newPartsList,data[1],data[3]);
 
@@ -1642,18 +1650,18 @@ export class RoSetupComponent implements OnInit {
             return decodedString;
         }
     }
-	getPurchaseOrderSplitPartsEdit(partList, pindex,ms?) {
-		if (partList.purchaseOrderSplitParts) {
-			return partList.purchaseOrderSplitParts.map((y, cindex) => {
+	getRepairOrderSplitPartsEdit(partList, pindex,ms?) {
+		if (partList.roPartSplits) {
+			return partList.roPartSplits.map((y, cindex) => {
 				const splitpart = {
 					...y,
 					needByDate: y.needByDate ? new Date(y.needByDate) : '',
 					isApproved: y.isApproved ? y.isApproved : false,
-					partListUserTypeId: y.poPartSplitUserTypeId,
-					poPartSplitSiteId : y.poPartSplitSiteId,
+					partListUserTypeId: y.roPartSplitUserTypeId,
+					roPartSplitSiteId : y.roPartSplitSiteId,
 					priorityId: partList.priorityId ? getValueFromArrayOfObjectById('label', 'value', partList.priorityId, this.allPriorityInfo) : null,
 					partListUserId: this.getPartSplitUserIdEdit(y, pindex, cindex),
-					partListAddressId: y.poPartSplitAddressId ? y.poPartSplitAddressId : 0,
+					partListAddressId: y.roPartSplitAddressId ? y.roPartSplitAddressId : 0,
 					quantityOrdered: y.quantityOrdered ? formatNumberAsGlobalSettingsModule(y.quantityOrdered, 0) : '0'				
 				}				
 				return splitpart;
@@ -1663,7 +1671,7 @@ export class RoSetupComponent implements OnInit {
 
 	getManagementStructureForChildPart(partChildList,response) {
 			if(response) {				
-				const result = response[partChildList.purchaseOrderPartRecordId];
+				const result = response[partChildList.repairOrderPartRecordId];
 				if(result[0] && result[0].level == 'Level1') {
 					partChildList.maincompanylist =  result[0].lstManagmentStrcture;
 					partChildList.childCompanyId = result[0].managementStructureId;
@@ -1736,7 +1744,7 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	getSubWOlsitId(parentdata,response) {		
-        const data1 = response[parentdata.purchaseOrderPartRecordId];
+        const data1 = response[parentdata.repairOrderPartRecordId];
 		if(data1) {
 				if (data1[0]) {
 					//parentdata.subWorkOrderlist = data1[0];
@@ -1765,7 +1773,7 @@ export class RoSetupComponent implements OnInit {
 		this.altPartNumList = [];
 		//parentdata.altEquiPartNumberId = null;
 		this.itemTypeId = 1;
-        const data1 = response[parentdata.purchaseOrderPartRecordId];
+        const data1 = response[parentdata.repairOrderPartRecordId];
 		if(data1) {
 				if (data1[0]) {
 					this.partWithId = data1[0];
@@ -1789,7 +1797,19 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}					
+					}				
+					this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId).subscribe(resp => {
+						   parentdata.allStocklineDetails = resp;
+							if (parentdata.stockLineId) {
+							parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineDetails);
+							}
+							this.getStockLineDetails(parentdata);
+					},err => {const errorLog = err;});
+					
+					// if(parentdata.conditionId && value != 'onEdit') {
+					// 	this.getStockLineByItemMasterId(parentdata);
+					// 	this.getPriceDetailsByCondId(parentdata);
+					// }					
 				}
 			}
 			
@@ -1814,7 +1834,7 @@ export class RoSetupComponent implements OnInit {
 
 	getManagementStructureForParentPart(partList,response,responseFC) {
 	     	if(response) {
-				const result = response[partList.purchaseOrderPartRecordId];
+				const result = response[partList.repairOrderPartRecordId];
 				if(result[0] && result[0].level == 'Level1') {
 					partList.maincompanylist = result[0].lstManagmentStrcture;
 					partList.parentCompanyId = result[0].managementStructureId;
@@ -1885,17 +1905,17 @@ export class RoSetupComponent implements OnInit {
 	}
 	
 	getPartSplitUserIdEdit(data, pindex, cindex) {
-		if (data.poPartSplitUserTypeId === this.customerModuleId) {		
-			this.onUserNameChange( this.customerModuleId,data.poPartSplitUserId, data, pindex, cindex);
-			return getObjectById('value', data.poPartSplitUserId, this.allCustomers);
+		if (data.roPartSplitUserTypeId === this.customerModuleId) {		
+			this.onUserNameChange( this.customerModuleId,data.roPartSplitUserId, data, pindex, cindex);
+			return getObjectById('value', data.roPartSplitUserId, this.allCustomers);
 		}
-		if (data.poPartSplitUserTypeId === this.vendorModuleId) {
-			this.onUserNameChange( this.vendorModuleId,data.poPartSplitUserId, data, pindex, cindex);
-			return getObjectById('vendorId', data.poPartSplitUserId, this.allActions);
+		if (data.roPartSplitUserTypeId === this.vendorModuleId) {
+			this.onUserNameChange( this.vendorModuleId,data.roPartSplitUserId, data, pindex, cindex);
+			return getObjectById('vendorId', data.roPartSplitUserId, this.allActions);
 		}
-		if (data.poPartSplitUserTypeId === this.companyModuleId) {
-			this.onUserNameChange(this.companyModuleId,data.poPartSplitUserId, data, pindex, cindex);
-			return getObjectById('value', data.poPartSplitUserId, this.legalEntity);
+		if (data.roPartSplitUserTypeId === this.companyModuleId) {
+			this.onUserNameChange(this.companyModuleId,data.roPartSplitUserId, data, pindex, cindex);
+			return getObjectById('value', data.roPartSplitUserId, this.legalEntity);
 		}
 	}
 
@@ -1919,14 +1939,14 @@ export class RoSetupComponent implements OnInit {
 					if(returnddataforbill.address && returnddataforbill.address.length > 0) {
 							for(var i =0; i < returnddataforbill.address.length; i++) {
 								if(returnddataforbill.address[i].isPrimary) {			
-									this.partListData[pindex].childList[cindex].poPartSplitSiteId = returnddataforbill.address[i].siteID;
+									this.partListData[pindex].childList[cindex].roPartSplitSiteId = returnddataforbill.address[i].siteID;
 								}
 							}
 					}
 				}
 				
 				if(siteID && siteID > 0)  {     
-					this.partListData[pindex].childList[cindex].poPartSplitSiteId = siteID;
+					this.partListData[pindex].childList[cindex].roPartSplitSiteId = siteID;
 				}
 			}
 			},err => {
@@ -1984,7 +2004,7 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}										
+					}					
 				}
 			}, err => {								
 			});			
@@ -2002,6 +2022,7 @@ export class RoSetupComponent implements OnInit {
 				this.onGetExtCost(parentdata);
 			}
 		})
+		this.getStockLineByItemMasterId(parentdata);		
 	}
 	
 	onGetDiscPerUnit(partList) {
@@ -2093,12 +2114,12 @@ export class RoSetupComponent implements OnInit {
 
 	getApproversListById(roId) {	
 		this.isSpinnerVisible = true;
-		if(this.poApprovaltaskId == 0) {
+		if(this.roApprovaltaskId == 0) {
 		this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => { 		        
 		if(response) {					
             response.forEach(x => {
-                if (x.label.toUpperCase() == "PO APPROVAL") {
-                    this.poApprovaltaskId = x.value;
+                if (x.label.toUpperCase() == "RO APPROVAL") {
+                    this.roApprovaltaskId = x.value;
                 }              
 			});
 			this.getApproversByTask(roId)
@@ -2114,7 +2135,7 @@ export class RoSetupComponent implements OnInit {
 	}
 	getApproversByTask(roId) {		
 		this.isSpinnerVisible = true;
-		this.purchaseOrderService.approverslistbyTaskId(this.poApprovaltaskId, roId).subscribe(res => {
+		this.repairOrderService.approverslistbyTaskId(this.roApprovaltaskId, roId).subscribe(res => {
 						 this.internalApproversList = res;
 						 this.internalApproversList.map(x => {
 							this.apporoverEmailList = x.approverEmails;
@@ -2131,7 +2152,7 @@ export class RoSetupComponent implements OnInit {
 		this.isSpinnerVisible = true;
 		this.selectallApprovers = false;
 		this.enableApproverSaveBtn = false;
-		this.purchaseOrderService.getPOApprovalListById(roId).subscribe(res => {
+		this.repairOrderService.getROApprovalListById(roId).subscribe(res => {			
 			const arrayLen = res.length;
 			let count = 0;
 			this.approvalProcessList = res.map(x => {
@@ -2149,13 +2170,13 @@ export class RoSetupComponent implements OnInit {
 					unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
 					extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
 				}
-			});
+			});			
 			if(this.approvalProcessList && this.approvalProcessList.length > 0) {
 			var approvalProcessListWithChild:any[] = [];
 			this.approvalProcessList = this.approvalProcessList.forEach(element => {
 				if(element.isParent) {
 					approvalProcessListWithChild.push(element);
-                    this.approvalProcessList.filter(x => x.parentId == element.purchaseOrderPartId).forEach(					
+                    this.approvalProcessList.filter(x => x.parentId == element.repairOrderPartId).forEach(					
 						child => {	if(child) {
 							approvalProcessListWithChild.push(child);
 						}}
@@ -2180,110 +2201,6 @@ export class RoSetupComponent implements OnInit {
 		this.isSpinnerVisible = false;    
 	}	
 
-	// getShipToUserIdEdit(data) {
-	// 	if (data.shipToUserType === this.customerModuleId) {
-	// 		this.tempShipTOAddressId = data.shipToAddressId;
-	// 		this.onShipToCustomerSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
-	// 		this.getShipViaEdit(data);
-	// 		return getObjectById('value', data.shipToUserId, this.allCustomers);
-	// 	}
-	// 	if (data.shipToUserType === this.vendorModuleId) {
-	// 		this.tempShipTOAddressId = data.shipToAddressId;
-	// 		this.onShipToVendorSelected(data.shipToUserId, data, data.shipToSiteId, 'shipEdit');
-	// 		this.getShipViaEdit(data);
-	// 		return getObjectById('vendorId', data.shipToUserId, this.allActions);
-	// 	}
-	// 	if (data.shipToUserType === this.companyModuleId) {			
-	// 		this.tempShipTOAddressId = data.shipToAddressId;		
-	// 		this.shipToSelectedvalue = data.shipToUserId;
-	// 		this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
-	// 			this.companySiteList_Shipping = response;
-	// 			if (this.isEditMode) {
-    //                 if (data.shipToSiteId == 0) {
-    //                     this.companySiteList_Shipping.push({ legalEntityShippingAddressId: 0, siteName: data.shipToSiteName, addressId: data.shipToAddressId });
-	// 					this.shipToAddress.address1 = data.shipToAddress1;
-	// 					this.shipToAddress.address2 = data.shipToAddress2;						
-	// 					this.shipToAddress.city = data.shipToCity;
-	// 					this.shipToAddress.stateOrProvince = data.shipToState;
-	// 					this.shipToAddress.postalCode = data.shipToPostalCode;
-	// 					this.shipToAddress.country = data.shipToCountry;
-	// 				} else {
-    //                     this.onShipToGetCompanyAddress(data.shipToSiteId);
-	// 				}
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
-	// 			this.contactListForCompanyShipping = response;
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', data.shipToContactId, this.contactListForCompanyShipping);
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		this.getShipViaEdit(data);			
-	// 		return getObjectById('value', data.shipToUserId, this.legalEntity);
-	// 	}
-	// }
-
-	// onShipToCustomerSelected(customerId, res?, id?, value?) {	
-	// 	this.clearInputOnClickUserIdShipTo();
-	// 	this.shipToSelectedvalue = customerId;
-	// 	this.customerService.getCustomerShipAddressGet(customerId).subscribe(
-	// 		returnddataforbill => {
-	// 			this.shipToCusData = returnddataforbill[0];
-	// 			for(var i =0; i < this.shipToCusData.length; i++) {
-	// 				if(this.shipToCusData[i].isPrimary && value != 'shipEdit') {
-	// 					this.sourcePoApproval.shipToSiteId = this.shipToCusData[i].customerShippingAddressId;
-	// 					this.sourcePoApproval.shipToAddressId = this.shipToCusData[i].AddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.shipToSiteId = id;
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if(res){
-	// 					if (res.shipToSiteId == 0) {
-	// 					this.shipToCusData.push({ customerShippingAddressId: 0, addressId:res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-	// 				}}
-	// 			}
-	// 			this.onShipToGetAddress(res, res.shipToSiteId);
-	// 		}, err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-
-	// 	this.customerService.getContacts(customerId).subscribe(data => {
-	// 		this.shipToContactData = data[0];
-	// 		for(var i =0; i < this.shipToContactData.length; i++) {
-	// 			if(this.shipToContactData[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.shipToContactData[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'shipEdit') {
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.shipToContactData);
-	// 		}
-	// 	},
-	// 	err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// 	this.getShipViaDetailsForShipTo(res.shipViaId);
-	// }
-
-	// clearInputOnClickUserIdShipTo() {
-	// 	this.sourcePoApproval.shipToSiteId = 0;
-	// 	this.sourcePoApproval.shipToAddressId = 0;
-	// 	this.sourcePoApproval.shipToContactId = 0;
-	// 	this.sourcePoApproval.shipToMemo = '';
-	// 	this.sourcePoApproval.shipViaId = 0;
-	// 	this.sourcePoApproval.shippingCost = 0;
-	// 	this.sourcePoApproval.handlingCost = 0;
-	// 	this.sourcePoApproval.shippingAcctNum = 0;		
-	// 	this.shipToAddress = {};
-	// 	this.shipViaList = [];
-	// 	this.shipToCusData = [];
-	// 	this.vendorSelected = [];
-	// 	this.companySiteList_Shipping = [];
-	// }
-	
 	getShipViaDetailsForShipTo(id?) {		
 		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, this.shipToSelectedvalue).subscribe(response => {
 			this.shipViaList = response;
@@ -2347,465 +2264,8 @@ export class RoSetupComponent implements OnInit {
 		},err => {
 			this.isSpinnerVisible = false;			
 		});
-	}
+	}	
 	
-	// onShipToVendorSelected(vendorId, res?, id?, value?) {
-	// 	this.clearInputOnClickUserIdShipTo();
-	// 	this.shipToSelectedvalue = vendorId;
-	// 	this.showInput = true;
-	// 	this.vendorService.getVendorShipAddressGet(vendorId).subscribe(
-	// 		returdaa => {
-	// 			this.vendorSelected = returdaa[0];
-	// 			for(var i =0; i < this.vendorSelected.length; i++) {
-	// 				if(this.vendorSelected[i].isPrimary && value != 'shipEdit') {
-    //                     this.sourcePoApproval.shipToSiteId = this.vendorSelected[i].vendorShippingAddressId;
-    //                     this.sourcePoApproval.shipToAddressId = this.vendorSelected[i].AddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-    //                 res.shipToSiteId = id;
-	// 			}
-	// 			if (this.isEditMode && res) {
-    //                 if (res.shipToSiteId == 0) {
-    //                     this.vendorSelected.push({ vendorShippingAddressId: 0, addressId: res.shipToAddressId, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToState, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-	// 				}
-	// 			}
-	// 			if(res) {
-    //                 this.onShipToGetAddress(res, res.shipToSiteId);
-	// 			} else {
-    //                 this.onShipToGetAddress(this.sourcePoApproval, this.sourcePoApproval.shipToSiteId);
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;						
-	// 		});
-	// 	this.vendorService.getContacts(vendorId).subscribe(data => {
-	// 		this.vendorContactsForshipTo = data[0];
-	// 		for(var i =0; i < this.vendorContactsForshipTo.length; i++) {
-	// 			if(this.vendorContactsForshipTo[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.vendorContactsForshipTo[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'shipEdit') {
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.vendorContactsForshipTo);
-	// 		}	
-
-	// 		this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.shipToUserTypeId, vendorId).subscribe(res => {
-	// 			this.shipViaList = res;
-	// 					},err => {
-	// 						this.isSpinnerVisible = false;								
-	// 					});
-    //         this.getShipViaDetailsForShipTo(res.shipViaId);
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// }
-
-	// onShipToGetCompanyAddress(id) {
-	// 	this.shipToAddress = {};		
-	// 	this.companyService.getShippingAddress(id).subscribe(res => {			
-	// 		const resp = res;
-    //         if (resp) {
-    //             this.shipToAddress.addressId = resp.addressId;
-	// 			this.shipToAddress.address1 = resp.line1;
-	// 			this.shipToAddress.address2 = resp.line2;				
-	// 			this.shipToAddress.city = resp.city;
-	// 			this.shipToAddress.stateOrProvince = resp.stateOrProvince;
-	// 			this.shipToAddress.postalCode = resp.postalCode;
-	// 			this.shipToAddress.countryId = resp.countryId;
-	// 			this.shipToAddress.country = getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList);
-    //         } else {
-    //             this.shipToAddress.addressId = 0;
-	// 			this.shipToAddress.address1 = '';
-	// 			this.shipToAddress.address2 = '';				
-	// 			this.shipToAddress.city = '';
-	// 			this.shipToAddress.stateOrProvince = '';
-	// 			this.shipToAddress.postalCode = '';
-	// 			this.shipToAddress.country = '';
-	// 			this.shipToAddress.countryId = null;
-	// 		}
-	// 			},
-	// 	err => {});		
-	// }	
-
-	// errorMessageHandler(log) {
-	// 	const errorLog = log;
-	// 	var msg = '';
-	// 	if(errorLog.message) {
-	// 	  if (errorLog.error && errorLog.error.errors.length > 0) {
-	// 				for (let i = 0; i < errorLog.error.errors.length; i++){
-	// 					msg = msg + errorLog.error.errors[i].message + '<br/>'
-	// 				}
-	// 			}
-	// 			this.alertService.showMessage(
-    //                 errorLog.error.message,
-	// 				msg,
-	// 				MessageSeverity.error
-	// 			);
-	// 	   }
-	// 	   else {
-	// 		this.alertService.showMessage(
-	// 			'Error',
-	// 			log.error,
-	// 			MessageSeverity.error
-	// 		); }
-	// }
-
-	// getLegalEntityDetailsById() {
-	// 	this.commonService.getLegalEntityIdByMangStrucId(this.currentUserManagementStructureId).subscribe(res => {
-	// 		this.currentUserLegalEntityId = res.legalEntityId;
-	// 		this.getInactiveObjectForLEOnEdit('value', this.currentUserLegalEntityId, this.legalEntity, 'LegalEntity', 'LegalEntityId', 'Name');
-	// 		this.isSpinnerVisible = false;			
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;					
-	// 	});
-	// }
-
-	
-	// getInactiveObjectForLEOnEdit(string, id, originalData, tableName, primaryColumn, description) {
-    //     if(id) {
-    //         for(let i=0; i < originalData.length; i++) {
-    //             if(originalData[i][string] == id) {
-    //                 this.sourcePoApproval.shipToUserId = originalData[i];
-	// 				this.sourcePoApproval.billToUserId = originalData[i];
-	// 				this.onShipToCompanySelected(originalData[i]);
-	// 				this.onBillToCompanySelected(originalData[i]);
-    //             } 
-    //         }
-    //         let obj: any = {};
-    //         this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
-	// 			obj = res[0];
-	// 			this.legalEntity = [...originalData, obj];
-	// 			this.sourcePoApproval.shipToUserId = obj;
-	// 			this.sourcePoApproval.billToUserId = obj;
-	// 			this.onShipToCompanySelected(obj);
-	// 			this.onBillToCompanySelected(obj);
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;				
-	// 		});
-	// 	} else {
-    //         return null;
-    //     }
-	// }	
-	
-	// onShipToCompanySelected(object?, res?, id?) {
-	// 	this.clearInputOnClickUserIdShipTo();
-	// 	this.shipToSelectedvalue = object ? object.value : this.shipToSelectedvalue;
-	// 	this.companyService.getShippingCompanySiteNames(this.shipToSelectedvalue).subscribe(response => {
-	// 		this.companySiteList_Shipping = response;
-	// 		for(var i =0; i < this.companySiteList_Shipping.length; i++) {
-	// 			if(this.companySiteList_Shipping[i].isPrimary) {
-	// 				this.sourcePoApproval.shipToSiteId = this.companySiteList_Shipping[i].legalEntityShippingAddressId;
-	// 				this.sourcePoApproval.shipToAddressId = this.companySiteList_Shipping[i].AddressId;
-	// 				this.onShipToGetCompanyAddress(this.sourcePoApproval.shipToSiteId);
-	// 			}
-	// 		}
-	// 		if (id) {
-	// 			res.shipToSiteId = id;
-	// 			this.onShipToGetCompanyAddress(id);
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;			
-	// 	});
-	// 	this.companyService.getCompanyContacts(this.shipToSelectedvalue).subscribe(response => {
-	// 		this.contactListForCompanyShipping = response;
-	// 		for(var i =0; i < this.contactListForCompanyShipping.length; i++) {
-	// 			if(this.contactListForCompanyShipping[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.contactListForCompanyShipping[i];
-	// 			}
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;					
-	// 	});
-	// 	this.getShipViaDetailsForShipTo();
-	// }
-
-	// onBillToCompanySelected(object?, response?, id?) {
-	// 	this.clearInputOnClickUserIdBillTo();
-	// 	this.billToSelectedvalue = object ? object.value : this.billToSelectedvalue;
-	// 	this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(res => {
-	// 		this.companySiteList_Billing = res;
-	// 		for(var i =0; i < this.companySiteList_Billing.length; i++) {
-	// 			if(this.companySiteList_Billing[i].isPrimary) {
-	// 				this.sourcePoApproval.billToSiteId = this.companySiteList_Billing[i].legalEntityBillingAddressId;
-	// 				this.sourcePoApproval.billToAddressId = this.companySiteList_Billing[i].AddressId;
-	// 				this.onBillToGetCompanyAddress(this.sourcePoApproval.billToSiteId);
-	// 			}
-	// 		}
-	// 		if (id) {
-	// 			response.billToSiteId = id;
-	// 			this.onBillToGetCompanyAddress(id);
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// 	this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(res => {
-	// 		this.contactListForCompanyBilling = res;
-	// 		for(var i =0; i < this.contactListForCompanyBilling.length; i++) {
-	// 			if(this.contactListForCompanyBilling[i].isDefaultContact) {
-	// 				this.sourcePoApproval.billToContactId = this.contactListForCompanyBilling[i];
-	// 			}
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// 	// this.commonService.getShipViaDetailsByModule(this.sourcePoApproval.billToUserTypeId, this.billToSelectedvalue).subscribe(res => {
-	// 	// 	this.shipViaList = res;
-	// 	// },err => {
-	// 	// 	this.isSpinnerVisible = false;
-	// 	// 	const errorLog = err;
-	// 	// 	this.errorMessageHandler(errorLog);		
-	// 	// });
-	// }
-
-	// clearInputOnClickUserIdBillTo() {
-	// 	this.sourcePoApproval.billToSiteId = 0;
-	// 	this.sourcePoApproval.billToContactId = 0;
-	// 	this.billToAddress = {};
-	// 	this.sourcePoApproval.billToMemo = '';
-	// 	this.billToCusData = [];
-	// 	this.vendorSelectedForBillTo = [];
-	// 	this.companySiteList_Billing = [];
-	// }
-
-	// onBillToGetCompanyAddress(id) {
-	// 	this.billToAddress = {};
-	// 	this.companyService.getBillingAddress(id).subscribe(res => {
-    //         if (res) {
-    //             this.billToAddress.addressId = res[0].addressId;
-	// 			this.billToAddress.address1 = res[0].address1;
-	// 			this.billToAddress.address2 = res[0].address2;				
-	// 			this.billToAddress.city = res[0].city;
-	// 			this.billToAddress.stateOrProvince = res[0].stateOrProvince;
-	// 			this.billToAddress.postalCode = res[0].postalCode;
-	// 			this.billToAddress.countryId= res[0].countryId;
-	// 			this.billToAddress.country = res[0].countryId ? getValueFromArrayOfObjectById('label', 'value', res[0].countryId, this.allCountriesList) : '';
-				
-    //         } else {
-    //             this.billToAddress.addressId = 0;
-	// 			this.billToAddress.address1 = '';
-	// 			this.billToAddress.address2 = '';			
-	// 			this.billToAddress.city = '';
-	// 			this.billToAddress.stateOrProvince = '';
-	// 			this.billToAddress.postalCode = '';
-	// 			this.billToAddress.country = '';
-	// 			this.billToAddress.countryId= null;
-	// 		}
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;					
-	// 	});
-	
-	// }
-	
-	// getBillToUserIdEdit(data) {
-	// 	if (data.billToUserType === this.customerModuleId) {
-	// 		this.tempBillTOAddressId = data.billToAddressId;
-	// 		this.onBillToCustomerSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
-	// 		return getObjectById('value', data.billToUserId, this.allCustomers);
-	// 	}
-	// 	if (data.billToUserType === this.vendorModuleId) {
-	// 		this.tempBillTOAddressId = data.billToAddressId;
-	// 		this.onBillToVendorSelected(data.billToUserId, data, data.billToSiteId, 'billEdit');
-	// 		return getObjectById('vendorId', data.billToUserId, this.allActions);
-	// 	}
-	// 	if (data.billToUserType === this.companyModuleId) {
-	// 		this.tempBillTOAddressId = data.billToAddressId;			
-	// 		this.billToSelectedvalue = data.billToUserId;
-	// 		this.companyService.getBillingCompanySiteNames(this.billToSelectedvalue).subscribe(response => {
-	// 			this.companySiteList_Billing = response;
-	// 			if (this.isEditMode) {
-	// 				if (data.billToSiteId == 0) {
-	// 					this.companySiteList_Billing.push({ legalEntityBillingAddressId: 0, siteName: data.billToSiteName });
-	// 					this.billToAddress.address1 = data.billToAddress1;
-	// 					this.billToAddress.address2 = data.billToAddress2;						
-	// 					this.billToAddress.city = data.billToCity;
-	// 					this.billToAddress.stateOrProvince = data.billToState;
-	// 					this.billToAddress.postalCode = data.billToPostalCode;
-	// 					this.billToAddress.country = data.billToCountry;
-	// 				} else {
-	// 					this.onBillToGetCompanyAddress(data.billToSiteId);
-	// 				}
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		this.companyService.getCompanyContacts(this.billToSelectedvalue).subscribe(response => {
-	// 			this.contactListForCompanyBilling = response;
-	// 			this.sourcePoApproval.billToContactId = getObjectById('contactId', data.billToContactId, this.contactListForCompanyBilling);
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 		return getObjectById('value', data.billToUserId, this.legalEntity);
-	// 	}
-	// }
-	
-    // bill to
-	// onBillToGetAddress(data, id) {	
-	// 	if (data.billToUserTypeId == this.customerModuleId || data.billToUserType == this.customerModuleId) {			
-	// 		const resp = getObjectById('customerBillingAddressId', id, this.billToCusData);		
-	// 		if (resp) {
-	// 			this.billToAddress.address1 = resp.address1;
-	// 			this.billToAddress.address2 = resp.address2;			
-	// 			this.billToAddress.city = resp.city;
-	// 			this.billToAddress.stateOrProvince = resp.stateOrProvince;
-	// 			this.billToAddress.postalCode = resp.postalCode;
-	// 			this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
-	// 		} else {
-	// 			this.billToAddress.address1 = '';
-	// 			this.billToAddress.address2 = '';				
-	// 			this.billToAddress.city = '';
-	// 			this.billToAddress.stateOrProvince = '';
-	// 			this.billToAddress.postalCode = '';
-	// 			this.billToAddress.country = '';
-	// 		}		
-	// 	} else if (data.billToUserTypeId == this.vendorModuleId || data.billToUserType == this.vendorModuleId) {
-	// 		if(id != 0) {
-	// 			this.vendorService.getVendorAddressById(id).subscribe(res => {
-	// 				const resp = res;
-	// 				if (resp) {
-	// 					this.billToAddress.addressId = resp.vba.addressId;
-	// 					this.billToAddress.address1 = resp.line1;
-	// 					this.billToAddress.address2 = resp.line2;						
-	// 					this.billToAddress.city = resp.city;
-	// 					this.billToAddress.stateOrProvince = resp.stateOrProvince;
-	// 					this.billToAddress.postalCode = resp.postalCode;
-	// 					this.billToAddress.countryId = resp.countryId;
-	// 					this.billToAddress.country = resp.countryId ? getValueFromArrayOfObjectById('label', 'value', resp.countryId, this.allCountriesList) : '';
-	// 				} else {
-	// 					this.billToAddress.address1 = '';
-	// 					this.billToAddress.address2 = '';						
-	// 					this.billToAddress.city = '';
-	// 					this.billToAddress.stateOrProvince = '';
-	// 					this.billToAddress.postalCode = '';
-	// 					this.billToAddress.countryId = null;
-	// 					this.billToAddress.country = '';
-	// 				}
-	// 			},err => {
-	// 				this.isSpinnerVisible = false;							
-	// 			});
-	// 		} else {
-	// 			const resp = getObjectById('vendorBillingAddressId', id, this.vendorSelectedForBillTo);
-	// 			if (resp) {
-	// 				this.billToAddress.address1 = resp.address1;
-	// 				this.billToAddress.address2 = resp.address2;
-	// 				this.billToAddress.city = resp.city;
-	// 				this.billToAddress.stateOrProvince = resp.stateOrProvince;
-	// 				this.billToAddress.postalCode = resp.postalCode;
-	// 				this.billToAddress.country = resp.countryName ? resp.countryName : resp.country;
-	// 			} else {
-	// 				this.billToAddress.address1 = '';
-	// 				this.billToAddress.address2 = '';
-	// 				this.billToAddress.city = '';
-	// 				this.billToAddress.stateOrProvince = '';
-	// 				this.billToAddress.postalCode = '';
-	// 				this.billToAddress.country = '';
-	// 			}
-	// 		}
-	// 	}
-	// }
-
-
-	// onBillToCustomerSelected(customerId, res?, id?, value?) {		
-	// 	if(res) {
-	// 		res.billToStateOrProvince = res.billToState ? res.billToState : '';
-	// 	}		
-	// 	this.clearInputOnClickUserIdBillTo();
-	// 	this.billToSelectedvalue = customerId;
-	// 	this.customerService.getCustomerBillViaDetails(customerId).subscribe(
-	// 		returnddataforbill => {
-	// 			this.billToCusData = returnddataforbill[0];
-	// 			for(var i =0; i < this.billToCusData.length; i++) {
-	// 				if(this.billToCusData[i].isPrimary && value != 'billEdit') {
-	// 					this.sourcePoApproval.billToSiteId = this.billToCusData[i].customerBillingAddressId;
-	// 					this.sourcePoApproval.billToAddressId = this.billToCusData[i].AddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.billToSiteId = id;
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if (res && res.billToSiteId == 0) {
-	// 					this.billToCusData.push({ customerBillingAddressId: 0, address1: res.billToAddress1, address2: res.billToAddress2, city: res.billToCity, stateOrProvince: res.billToStateOrProvince, postalCode: res.billToPostalCode, country: res.billToCountry, siteName: res.billToSiteName })
-	// 				}
-	// 			}
-	// 			if(res) {
-	// 				this.onBillToGetAddress(res, res.billToSiteId);
-	// 			} else {
-	// 				this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 	this.customerService.getContacts(customerId).subscribe(data => {
-	// 		this.billToContactData = data[0];
-	// 		for(var i =0; i < this.billToContactData.length; i++) {
-	// 			if(this.billToContactData[i].isDefaultContact) {
-	// 				this.sourcePoApproval.billToContactId = this.billToContactData[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'billEdit') {
-	// 			this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.billToContactData);
-	// 		}
-	// 	},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// }
-
-	
-	// async onBillToVendorSelected(vendorId, res?, id?, value?) {
-	// 	this.clearInputOnClickUserIdBillTo();
-	// 	this.billToSelectedvalue = vendorId;
-	// 	this.showInput = true;
-	// 	await this.vendorService.getVendorSiteNames(vendorId).subscribe(
-	// 		returdaa => {
-	// 			this.vendorSelectedForBillTo = returdaa;
-	// 			for(var i =0; i < this.vendorSelectedForBillTo.length; i++) {
-	// 				if(this.vendorSelectedForBillTo[i].isPrimary && value != 'billEdit') {
-	// 					this.sourcePoApproval.billToSiteId = this.vendorSelectedForBillTo[i].vendorBillingAddressId;
-	// 					this.sourcePoApproval.billToAddressId = this.vendorSelectedForBillTo[i].AddressId;
-						
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.billToSiteId = id;
-	// 				this.onBillToGetAddress(res, res.billToSiteId);
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if (res && res.billToSiteId == 0) {
-	// 					this.vendorSelectedForBillTo.push({ vendorBillingAddressId: 0, siteName: res.billToSiteName });
-	// 					this.billToAddress.address1 = res.billToAddress1;
-	// 					this.billToAddress.address2 = res.billToAddress2;
-	// 					this.billToAddress.city = res.billToCity;
-	// 					this.billToAddress.stateOrProvince = res.billToState;
-	// 					this.billToAddress.postalCode = res.billToPostalCode;
-	// 					this.billToAddress.country = res.billToCountry;
-	// 				} else {
-	// 					if(res) {
-	// 						this.onBillToGetAddress(res, res.billToSiteId);
-	// 					} else {
-	// 						this.onBillToGetAddress(this.sourcePoApproval, this.sourcePoApproval.billToSiteId);
-	// 					}
-	// 				}
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-	// 	this.vendorService.getContacts(vendorId).subscribe(
-	// 		returdaa => {
-	// 			this.vendorContactsForBillTO = returdaa[0];
-	// 			for(var i =0; i < this.vendorContactsForBillTO.length; i++) {
-	// 				if(this.vendorContactsForBillTO[i].isDefaultContact) {
-	// 					this.sourcePoApproval.billToContactId = this.vendorContactsForBillTO[i];
-	// 				}
-	// 			}
-	// 			if (this.isEditMode && value == 'billEdit') {
-	// 				this.sourcePoApproval.billToContactId = getObjectById('contactId', res.billToContactId, this.vendorContactsForBillTO);
-	// 			}
-	// 		},err => {
-	// 			this.isSpinnerVisible = false;					
-	// 		});
-		
-	// 	}
-
 	onChangeTabView(event) {
 		if(event.index == 0) {
 			this.getRepairOrderAllPartsById(this.roId);
@@ -2951,29 +2411,7 @@ export class RoSetupComponent implements OnInit {
 		}, err => {
 			this.isSpinnerVisible = false;			
 		})
-	}
-
-	
-
-	loadRepairOrderList(filterVal = '') {
-		if (this.arrayROlist.length == 0) {
-            this.arrayROlist.push(0); }
-		this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-			const data = res.map(x => {
-				return {
-					value: x.repairOrderId,
-					label: x.repairOrderNumber
-				}
-			});
-			this.allRepairOrderInfo = [
-				{value: 0, label: 'Select'}
-			];
-			this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
-			this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
-		},err => {
-			this.isSpinnerVisible = false;				
-		});
-	}
+	}	
 
 	loadSalesOrderList(filterVal = '') {
 		if (this.arraySOlist.length == 0) {
@@ -3026,14 +2464,13 @@ export class RoSetupComponent implements OnInit {
 		this.getLegalEntity();	
 		this.getCountriesList();
 		this.loadPercentData();
-		this.loadWorkOrderList();
-		this.loadRepairOrderList();
+		this.loadWorkOrderList();	
 		this.loadSalesOrderList();
 		this.loapartItems();
 		this.loadModuleListForVendorComp();
 	}
 
-	savePurchaseOrderHeader() {			
+	saveRepairOrderHeader() {			
 		if(this.createROForm.invalid || 
 			this.headerInfo.companyId == 0 
 		    || this.headerInfo.companyId == null) {
@@ -3076,7 +2513,7 @@ export class RoSetupComponent implements OnInit {
 				approvedDate: this.headerInfo.approvedDate,				
 				deferredReceiver: this.headerInfo.deferredReceiver ? this.headerInfo.deferredReceiver : false,
 				resale: this.headerInfo.resale ? this.headerInfo.resale : false,
-				poMemo: this.headerInfo.poMemo ? this.headerInfo.poMemo : '',
+				roMemo: this.headerInfo.roMemo ? this.headerInfo.roMemo : '',
                 notes: this.headerInfo.notes ? this.headerInfo.notes : '',				
 				managementStructureId: this.headerInfo.managementStructureId ? this.headerInfo.managementStructureId : 0,
 				masterCompanyId: this.currentUserMasterCompanyId,
@@ -3136,9 +2573,9 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	dismissModel() {
-		this.savePurchaseOrderPartsList(true); 
+		this.saveRepairOrderPartsList(true); 
     }
-	savePurchaseOrderPartsList(contwithoutVendorPrice = false) {
+	saveRepairOrderPartsList(contwithoutVendorPrice = false) {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
@@ -3175,6 +2612,10 @@ export class RoSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;	
 				errmessage = errmessage + '<br />' + "Functional CUR is required."
 			}
+			if(!this.partListData[i].stocklineId || this.partListData[i].stocklineId == 0) {	
+				this.isSpinnerVisible = false;	
+				errmessage = errmessage + '<br />' + "Stockline is required."
+			}			
 			if(!this.partListData[i].foreignExchangeRate) {	
 				this.isSpinnerVisible = false;	
 				errmessage = errmessage + '<br />' + "FX Rate is required."
@@ -3202,9 +2643,9 @@ export class RoSetupComponent implements OnInit {
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Name is required."
 					}
-					if(!this.partListData[i].childList[j].poPartSplitSiteId 
-						|| this.partListData[i].childList[j].poPartSplitSiteId == 0 
-						|| this.partListData[i].childList[j].poPartSplitSiteId == null) {	
+					if(!this.partListData[i].childList[j].roPartSplitSiteId 
+						|| this.partListData[i].childList[j].roPartSplitSiteId == 0 
+						|| this.partListData[i].childList[j].roPartSplitSiteId == null) {	
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Select Address is required."
 					}					
@@ -3252,20 +2693,20 @@ export class RoSetupComponent implements OnInit {
 				for (let j = 0; j < childDataList.length; j++) {					
 					this.childObject = {
 						repairOrderId: this.roId,
-						itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
+						itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,						
 						assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 						partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 						roPartSplitUserTypeId: childDataList[j].partListUserTypeId ? childDataList[j].partListUserTypeId : 0,
 						roPartSplitUserId: childDataList[j].partListUserId ? this.getIdByObject(childDataList[j].partListUserId) : 0,						
-						roPartSplitSiteId: childDataList[j].poPartSplitSiteId ? childDataList[j].poPartSplitSiteId : 0, 
-						roPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
-						roPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitCity: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitStateOrProvince: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
-						roPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
-						roPartSplitCountry: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].poPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitSiteId: childDataList[j].roPartSplitSiteId ? childDataList[j].roPartSplitSiteId : 0, 
+						roPartSplitAddressId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('addressId', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+						roPartSplitAddress1: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address1', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitAddress2: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('address2', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitCity: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('city', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitStateOrProvince: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('stateOrProvince', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitPostalCode: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('postalCode', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
+						roPartSplitCountryId: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('countryId', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : 0,
+						roPartSplitCountry: this["splitAddressData" + i + j].length > 0 ? getValueFromArrayOfObjectById('country', 'siteID', childDataList[j].roPartSplitSiteId, this["splitAddressData" + i + j]) : '',
 						UOMId: this.partListData[i].UOMId ? this.partListData[i].UOMId : 0,
 						quantityOrdered: childDataList[j].quantityOrdered ? parseFloat(childDataList[j].quantityOrdered.toString().replace(/\,/g,'')) : 0,
 						needByDate: this.datePipe.transform(childDataList[j].needByDate, "MM/dd/yyyy"),
@@ -3277,7 +2718,7 @@ export class RoSetupComponent implements OnInit {
 					this.childObjectArray.push(this.childObject)
 					this.childObjectArrayEdit.push({
 						...this.childObject,
-						purchaseOrderPartRecordId: childDataList[j].purchaseOrderPartRecordId ? childDataList[j].purchaseOrderPartRecordId : 0
+						repairOrderPartRecordId: childDataList[j].repairOrderPartRecordId ? childDataList[j].repairOrderPartRecordId : 0
 					});					
 				}
 			}
@@ -3287,7 +2728,7 @@ export class RoSetupComponent implements OnInit {
 				isParent: true,				
 				itemMasterId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,
 				//partNumber : this.partListData[i].itemMasterId ? this.getPartnumber(this.partListData[i].itemMasterId) : null,
-				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumByObject(this.partListData[i].altEquiPartNumberId) : null,
+				altEquiPartNumberId: this.partListData[i].altEquiPartNumberId ? this.getValueFromObj(this.partListData[i].altEquiPartNumberId) : null,
 				//altPartNumber : this.partListData[i].altEquiPartNumberId ? this.getAltEquiPartNumer(this.partListData[i].altEquiPartNumberId) : null,
 				assetId: this.partListData[i].assetId ? this.partListData[i].assetId : 0,
 				partNumberId: this.partListData[i].itemMasterId ? this.partListData[i].itemMasterId : 0,			
@@ -3320,8 +2761,8 @@ export class RoSetupComponent implements OnInit {
 				//reapairOrderNo: this.partListData[i].repairOrderId && this.getValueFromObj(this.partListData[i].repairOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].repairOrderId) : null,				
 				salesOrderId: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getValueFromObj(this.partListData[i].salesOrderId) : null,
 				//salesOrderNo: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].salesOrderId) : null,				
-				//stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
-				stocklineId: 1,
+				stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
+				//stocklineId: 1,
 				managementStructureId: this.partListData[i].managementStructureId && this.partListData[i].managementStructureId != 0  ? this.partListData[i].managementStructureId : null,
 				memo: this.partListData[i].memo,
 				isApproved: this.partListData[i].isApproved ? this.partListData[i].isApproved : false, 
@@ -3330,17 +2771,18 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,	
 				employeeID: this.employeeId ? this.employeeId : 0,						
-			}
+			}		
+			console.log(this.parentObject)	
 			if (!this.isEditMode) {			
 				this.parentObjectArray.push({
 					...this.parentObject,
-					purchaseOrderSplitParts: this.childObjectArray					
+					roPartSplits: this.childObjectArray					
 				});				
 			} else {
 				this.parentObjectArray.push({
 					...this.parentObject,
-					purchaseOrderSplitParts: this.childObjectArrayEdit,
-					purchaseOrderPartRecordId: this.partListData[i].purchaseOrderPartRecordId ? this.partListData[i].purchaseOrderPartRecordId : 0
+					roPartSplits: this.childObjectArrayEdit,
+					repairOrderPartRecordId: this.partListData[i].repairOrderPartRecordId ? this.partListData[i].repairOrderPartRecordId : 0
 				})
 			}
 		}	
@@ -3365,7 +2807,7 @@ export class RoSetupComponent implements OnInit {
 	
 	
 	goToCreatePOList() {
-		this.route.navigate(['/vendorsmodule/vendorpages/app-create-po']);
+		this.route.navigate(['/vendorsmodule/vendorpages/app-create-ro']);
 	}	
 
 	loadcustomerData(strText = '') {
@@ -3399,23 +2841,22 @@ export class RoSetupComponent implements OnInit {
 	
 
 	filterAltPartItems(event,partNo,partList) {
-		const itemMasterId = getValueFromObjectByKey('value', partNo)
+		const itemMasterId = getValueFromObjectByKey('value', partNo)		
 		this.itemser.getItemMasterAltEquiMappingParts(itemMasterId).subscribe(res => {
-				this.altPartNumList = res;
-				this.altPartCollection = this.altPartNumList;
-				partList.altPartCollection = this.altPartNumList;
+				this.altPartNumList = res;			
+				this.altPartCollection = this.altPartNumList.map(x => {
+					return {value: x.altEquiPartNumberId, label: x.altEquiPartNumber }});
+				partList.altPartCollection = this.altPartCollection;				
 				if (event.query !== undefined && event.query !== null) {
-					const partNumberFilter = [...this.altPartNumList.filter(x => {
-						return x.altEquiPartNumber.toLowerCase().includes(event.query.toLowerCase())
+					const partNumberFilter = [...this.altPartCollection.filter(x => {
+						return x.label.toLowerCase().includes(event.query.toLowerCase())
 					})]
 					partList.altPartCollection = partNumberFilter;
 				}				
-			}, err => {	
 			});
 	}
 
-	filterNames(event) {
-		
+	filterNames(event) {		
 		if (event.query !== undefined && event.query !== null) {
 			this.loadcustomerData(event.query); }
 	}
@@ -3446,9 +2887,9 @@ export class RoSetupComponent implements OnInit {
         this.enablePartSave();
 	
 
-		if(childata.purchaseOrderPartRecordId !== undefined && childata.purchaseOrderPartRecordId !== null) {
+		if(childata.repairOrderPartRecordId !== undefined && childata.repairOrderPartRecordId !== null) {
 			this.partListData[mainindex].childList = this.partListData[mainindex].childList.map(x => {
-				if (x.purchaseOrderPartRecordId == childata.purchaseOrderPartRecordId) {
+				if (x.repairOrderPartRecordId == childata.repairOrderPartRecordId) {
 					var remQty = this.partListData[mainindex].remQty ? parseInt(this.partListData[mainindex].remQty.toString().replace(/\,/g,'')) : 0;
 					var childQty = x.quantityOrdered ? parseInt(x.quantityOrdered.toString().replace(/\,/g,'')) : 0;						
 					this.partListData[mainindex].remQty = remQty + childQty;
@@ -3462,66 +2903,6 @@ export class RoSetupComponent implements OnInit {
 			this.partListData[mainindex].childList.splice(index, 1);
 		}
 	}
-
-	// filterCustomerContactsForShipTo(event) {
-	// 	this.firstNamesShipTo = this.shipToContactData;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const customerContacts = [...this.shipToContactData.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesShipTo = customerContacts;
-	// 	}
-	// }
-
-	// filterVendorContactsForShipTo(event) {
-	// 	this.firstNamesShipTo1 = this.vendorContactsForshipTo;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorContacts = [...this.vendorContactsForshipTo.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesShipTo1 = vendorContacts;		
-
-	// 	}
-	// }
-
-	// filterShippingContacts(event) {
-	// 	this.contactListForShippingCompany = this.contactListForCompanyShipping;
-	// 	const customerContacts = [...this.contactListForCompanyShipping.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.contactListForShippingCompany = customerContacts;
-	// }
-
-	// filterBillingContact(event) {
-	// 	this.contactListForBillingCompany = this.contactListForCompanyBilling;
-	// 	const customerContacts = [...this.contactListForCompanyBilling.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.contactListForBillingCompany = customerContacts;
-	// }
-
-	// filterCustomerContactsForBillTo(event) {
-	// 	this.firstNamesbillTo = this.billToContactData;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const customerContacts = [...this.billToContactData.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesbillTo = customerContacts;
-	// 	}
-	// }
-
-	// filterVendorContactsForBillTo(event) {
-	// 	this.firstNamesbillTo1 = this.vendorContactsForBillTO;
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorContacts = [...this.vendorContactsForBillTO.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesbillTo1 = vendorContacts;
-	// 	}
-	// }	
 
 	onClickShipMemo() {
 		this.addressMemoLabel = 'Edit Ship';
@@ -3605,6 +2986,7 @@ export class RoSetupComponent implements OnInit {
 							this.newObjectForParent.conditionId = this.allconditioninfo[i].value;
 							this.newObjectForParent.itemMasterId = this.stocklineReferenceData.itemMasterId;
 							this.getPriceDetailsByCondId(this.newObjectForParent);
+							this.getStockLineByItemMasterId(this.newObjectForParent);
 						}
 					}
 				}       
@@ -3656,7 +3038,7 @@ export class RoSetupComponent implements OnInit {
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsById(newObject);
-					//this.getPriceDetailsByCondId(newObject);
+					this.getStockLineByItemMasterId(newObject);				
 					this.partListData = [...this.partListData, newObject]
 				}
 			})
@@ -3910,40 +3292,6 @@ export class RoSetupComponent implements OnInit {
                 this.isSpinnerVisible = false;	});      
 	}
 
-	// clearInputShipTo() {
-	// 	this.sourcePoApproval.shipToUserId = 0;
-	// 	this.sourcePoApproval.shipToAddressId = 0;
-	// 	this.sourcePoApproval.shipToContactId = 0;
-	// 	this.sourcePoApproval.shipToMemo = '';
-	// 	this.sourcePoApproval.shipViaId = 0;
-	// 	this.sourcePoApproval.shippingCost = 0;
-	// 	this.sourcePoApproval.handlingCost = 0;
-	// 	this.sourcePoApproval.shippingAcctNum = null;		
-	// 	this.shipToAddress = {};
-	// 	this.shipViaList = [];
-	// 	this.shipToCusData = [];
-	// 	this.vendorSelected = [];
-	// 	this.companySiteList_Shipping = [];
-	// }
-
-	// clearInputBillTo() {
-	// 	this.sourcePoApproval.billToUserId = 0;
-	// 	this.sourcePoApproval.billToAddressId = 0;
-	// 	this.sourcePoApproval.billToContactId = 0;
-	// 	this.billToAddress = {};
-	// 	this.sourcePoApproval.billToMemo = '';
-	// 	this.billToCusData = [];
-	// 	this.vendorSelectedForBillTo = [];
-	// 	this.companySiteList_Billing = [];
-	// }
-
-	// clearShipToContact() {
-	// 	this.sourcePoApproval.shipToContactId = null;
-	// }
-	// clearBillToContact() {
-	// 	this.sourcePoApproval.billToContactId = null;
-	// }
-
 	eventHandler(event) {
 		if (event.target.value != "") {
 			let value = event.target.value.toLowerCase();
@@ -3957,13 +3305,10 @@ export class RoSetupComponent implements OnInit {
 					this.disableSaveVenName = false;
 				}
 			}
-
 		}
 	}
 
-
-
-	selectedVendorName(value) {
+	selectedVendorName(value) {		
 		this.loadvendorDataById(value.vendorId);
 	}
 	onChangeVendorContact(value) {
@@ -4049,13 +3394,6 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	filterRepairOrderList(event) {
-
-		if (event.query !== undefined && event.query !== null) {
-			this.loadRepairOrderList(event.query);
-	}
-}
-
 	filterSalesOrderList(event) {
 		if (event.query !== undefined && event.query !== null) {
 			this.loadSalesOrderList(event.query);
@@ -4109,9 +3447,9 @@ export class RoSetupComponent implements OnInit {
 
     onDelPNRow(partList, index) {
         this.enablePartSave();		
-		if(partList.purchaseOrderPartRecordId !== undefined && partList.purchaseOrderPartRecordId !== null) {
+		if(partList.repairOrderPartRecordId !== undefined && partList.repairOrderPartRecordId !== null) {
 			this.partListData = this.partListData.map(x => {
-				if(x.purchaseOrderPartRecordId == partList.purchaseOrderPartRecordId){
+				if(x.repairOrderPartRecordId == partList.repairOrderPartRecordId){
 					return{...x, isDeleted : true}		
 				} else {
 					return x;
@@ -4141,13 +3479,19 @@ export class RoSetupComponent implements OnInit {
 	}
 
 	onAddMemo() {
-		this.headerMemo = this.headerInfo.poMemo;
+		this.headerMemo = this.headerInfo.roMemo;
 	}
 	onSaveMemo() {
-		this.headerInfo.poMemo = this.headerMemo;
+		this.headerInfo.roMemo = this.headerMemo;
 		this.enableHeaderSaveBtn = true;
 	}
-
+	onAddContactMemo() {
+		this.contactMemo = this.vendorContactInfo.notes;
+	}
+	onSaveContactMemo() {
+		this.vendorContactInfo.notes = this.contactMemo;
+		// this.enableHeaderSaveBtn = true;
+	}
 
 	onAddNotes() {
 		this.headerNotes = this.headerInfo.notes;
@@ -4231,7 +3575,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	getAltEquiPartNumByObject(obj) {
+	getAltEquiPartNumByObject(obj) {		
 		if (obj.altEquiPartNumberId) {
 			return obj.altEquiPartNumberId;
 		}
@@ -4376,7 +3720,7 @@ export class RoSetupComponent implements OnInit {
 			this.splitAddbutton = false;
 			this.splitmoduleId = splitPart.partListUserTypeId;
 			this.splituserId = this.getIdByObject(splitPart.partListUserId);
-			this.tempSplitAddress = getObjectById('siteID', splitPart.poPartSplitSiteId, this["splitAddressData" + pindex + cindex]);
+			this.tempSplitAddress = getObjectById('siteID', splitPart.roPartSplitSiteId, this["splitAddressData" + pindex + cindex]);
 			this.editSiteName = this.tempSplitAddress.siteName;
 			if(this.tempSplitAddress.isPoOnly) 
 				this.isEditModeSplitPoOnly = true;
@@ -4452,7 +3796,7 @@ export class RoSetupComponent implements OnInit {
 			 }
 	}
 
-	saveShippingAddressToPO() {
+	saveShippingAddressToRO() {
 		const data = {
 			...this.addNewAddress,
 			createdBy: this.userName,
@@ -4461,7 +3805,7 @@ export class RoSetupComponent implements OnInit {
 			isActive: true,
 		}		
 		const addressData = { ...data,
-								  purchaseOrderID : this.id,
+			                      repairOrderId : this.id,
 								  isPoOnly: true,
 								  siteName: editValueAssignByCondition('siteName', data.siteName),
 								  userTypeId: this.splitmoduleId, 
@@ -4810,7 +4154,7 @@ export class RoSetupComponent implements OnInit {
 	onStatusChange(approver) {
 		if(approver.isParent) {
 			for(let j=0; j < this.approvalProcessList.length; j++) {
-				if(this.approvalProcessList[j].parentId == approver.purchaseOrderPartId 
+				if(this.approvalProcessList[j].parentId == approver.repairOrderPartId 
 					&& this.approvalProcessList[j].actionId != this.ApprovedstatusId &&
 						  this.approvalProcessList[j].actionStatus != 'Returned to Requisitioner') {
 					this.approvalProcessList[j].statusId = approver.statusId;	
@@ -4827,7 +4171,7 @@ export class RoSetupComponent implements OnInit {
 		if(approver.isParent) {
 			for(let j=0; j < this.approvalProcessList.length; j++) {
 				let disableEdit = this.getPartToDisableOrNot(this.approvalProcessList[j]);
-				if(this.approvalProcessList[j].parentId == approver.purchaseOrderPartId 
+				if(this.approvalProcessList[j].parentId == approver.repairOrderPartId 
 					 && this.approvalProcessList[j].actionId != this.ApprovedstatusId
 					 && disableEdit) {
 					this.approvalProcessList[j].isSelected = true;	
@@ -4840,7 +4184,7 @@ export class RoSetupComponent implements OnInit {
 		this.selectallApprovers = false;
 		if(approver.isParent) {
 			for(let j=0; j < this.approvalProcessList.length; j++) {
-				if(this.approvalProcessList[j].parentId == approver.purchaseOrderPartId ) {
+				if(this.approvalProcessList[j].parentId == approver.repairOrderPartId ) {
 					this.approvalProcessList[j].isSelected = false;	
 					this.selectallApprovers = false;
 					this.approvalProcessList[j].statusId = this.approvalProcessList[j].previousstatusId;	
@@ -4913,8 +4257,8 @@ export class RoSetupComponent implements OnInit {
 			this.isSpinnerVisible = false;
 			return;
 		}
-	
-        this.purchaseOrderService.savePurchaseOrderApproval(data).subscribe(res => {
+		
+        this.repairOrderService.saveRepairOrderApproval(data).subscribe(res => {
 			if(res) {
 				this.getApprovalProcessListById(this.roId);
 						this.headerInfo.statusId = res.response;
@@ -5046,19 +4390,18 @@ WarnRescticModel() {
 				partList.controlId = res.controlId;
 				partList.purchaseOrderNum = res.purchaseOrderNo;
 				partList.controlNumber = res.controlNumber;
-				partList.workOrderId = res.WorkOrderId;
+				//partList.workOrderId = res.WorkOrderId;
 			},err => {});
 		}
 	}
 
-	filterStocklineNum(event, partsList) {
-		partsList.allStocklineDetails = partsList.allStocklineInfo;
-
+	filterStocklineNum(event, partList) {
+		partList.allStocklineDetails = partList.allStocklineDetails;
 		if (event.query !== undefined && event.query !== null) {
-			const stockline = [...partsList.allStocklineInfo.filter(x => {
+			const stockline = [...partList.allStocklineDetails.filter(x => {
 				return x.stockLineNumber.toLowerCase().includes(event.query.toLowerCase())
 			})]
-			partsList.allStocklineDetails = stockline;
+			partList.allStocklineDetails = stockline;
 		}
 	}
 	
@@ -5068,9 +4411,9 @@ WarnRescticModel() {
 		partList.purchaseOrderNum = '';
 		partList.controlNumber = '';
 		this.workOrderService.getStockLineByItemMasterId(partList.itemMasterId, partList.conditionId).subscribe(res => {
-			partList.allStocklineInfo = res;
-			if(partList.allStocklineInfo.length > 0) {
-				partList.stocklineId = partList.allStocklineInfo[0];
+			partList.allStocklineDetails = res;			
+			if(partList.allStocklineDetails.length > 0) {
+				partList.stocklineId = partList.allStocklineDetails[0];
 				this.getStockLineDetails(partList);
 			}
 		},err => {});

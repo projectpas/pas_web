@@ -60,7 +60,7 @@
                 && col.field !== 'promisedDateType'
                 && col.field !== 'estimatedShipDateType'
                 && col.field !== 'estimatedCompletionDateType'" 
-                style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch($event.target.value, col.field , 'contains' )">
+                style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field, 'contains'); ">
                 <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date"  *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">
                 <input type="date"  *ngIf="col.field == 'promisedDateType'" name="promisedDate" style="width:100%;" (change)="dt.filter($event.target.value, col.field, 'contains')">

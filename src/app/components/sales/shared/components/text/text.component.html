@@ -104,7 +104,7 @@
                     <th style="width: 50px;" *ngIf="!isView"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                     <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                         <ng-container *ngFor="let col of columns">
                             <td style="width:auto"
@@ -127,7 +127,7 @@
                             </td>
                         </ng-container>
                         <td style="width:50px;position:sticky" class="ui-resizable-column" *ngIf="!isView">
-                            <span data-target="#addNewText" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                            <span data-target="#addNewText" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, rowIndex)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                             <span><a class="btn nobg btn-delete-cstm" (click)="deleteText(rowData);" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                             <!-- <button class="btn-edit ptable-wo-btns" mat-icon-button data-target="#addNewText" data-toggle="modal"
                             (click)="edit(rowData, i)" matTooltip="Edit">

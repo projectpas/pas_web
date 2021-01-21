@@ -1,22 +1,22 @@
 ﻿import { Component, OnInit, ViewChild } from '@angular/core';
 import { fadeInOut } from '../../services/animations';
 import { ChargeService } from '../../services/charge.service';
-import {VendorService} from '../../services/vendor.service';
-import {CurrencyService} from '../../services/currency.service';
-import {IntegrationService} from '../../services/integration-service';
+import { VendorService } from '../../services/vendor.service';
+import { CurrencyService } from '../../services/currency.service';
+import { IntegrationService } from '../../services/integration-service';
 import { AlertService, MessageSeverity } from '../../services/alert.service';
 import { AuthService } from '../../services/auth.service';
 import { SingleScreenBreadcrumbService } from "../../services/single-screens-breadcrumb.service";
 import { ConfigurationService } from '../../services/configuration.service';
-import { PurchaseOrderService} from '../../services/purchase-order.service';
-import {GLAccountService} from '../../services/glAccount.service';
+import { PurchaseOrderService } from '../../services/purchase-order.service';
+import { GLAccountService } from '../../services/glAccount.service';
 import { Charge } from '../../models/charge.model';
-import {PercentService} from '../../services/percent.service';
+import { PercentService } from '../../services/percent.service';
 import { AuditHistory } from '../../models/audithistory.model';
 import { MasterCompany } from '../../models/mastercompany.model';
 import { LegalEntityService } from '../../services/legalentity.service';
 import { Table } from 'primeng/table';
-import { validateRecordExistsOrNot, getObjectById,  selectedValueValidate, editValueAssignByCondition } from '../../generic/autocomplete';
+import { validateRecordExistsOrNot, getObjectById, selectedValueValidate, editValueAssignByCondition } from '../../generic/autocomplete';
 
 import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
@@ -33,21 +33,21 @@ export class ChargesComponent implements OnInit {
     totalRecords: number = 0;
     totalPages: number = 0;
     pageSize: number = 10;
-    chargeData: any=[];
+    chargeData: any = [];
     isEdit: boolean = false;
-    addNewCharge: Charge= new Charge();
+    addNewCharge: Charge = new Charge();
     chargeHeaders = [
         { field: 'chargeType', header: 'Charge Type' },
-        { field: 'glAccountName', header: 'GL Account' }, 
-       // { field: 'quantity', header: 'Quantity' },
+        { field: 'glAccountName', header: 'GL Account' },
+        // { field: 'quantity', header: 'Quantity' },
         { field: 'description', header: 'Description' },
-       // { field: 'symbol', header: 'Currency' },
-       // { field: 'functionalCurrencySymbol', header: 'Functional Currency' },
-       // { field: 'cost', header: 'Cost' },
-       // { field: 'markUpPercentage', header: 'Mark up %' },
-       // { field: 'purchaseOrderNumber', header: 'Purchase Order' },
-       // { field: 'vendorName', header: 'Vendor Name' },
-       // { field: 'integrationPortalDescription', header: 'Integration' },            
+        // { field: 'symbol', header: 'Currency' },
+        // { field: 'functionalCurrencySymbol', header: 'Functional Currency' },
+        // { field: 'cost', header: 'Cost' },
+        // { field: 'markUpPercentage', header: 'Mark up %' },
+        // { field: 'purchaseOrderNumber', header: 'Purchase Order' },
+        // { field: 'vendorName', header: 'Vendor Name' },
+        // { field: 'integrationPortalDescription', header: 'Integration' },            
         { field: 'memo', header: 'Memo' },
     ]
     selectedColumns = this.chargeHeaders;
@@ -55,59 +55,60 @@ export class ChargesComponent implements OnInit {
 
     modal: NgbModalRef;
     viewRowData: any;
-    vendorList:any[];
-    percentageList:any[];
-    integrationList:any[];
-    purchaseOrderList:any[];
-    glAccountList:any[];
-    filteredVendorList:any[];
-    filteredIntegrationList:any[];
-    currencyList:any[];
+    vendorList: any[];
+    percentageList: any[];
+    integrationList: any[];
+    purchaseOrderList: any[];
+    glAccountList: any[];
+    filteredVendorList: any[];
+    filteredIntegrationList: any[];
+    currencyList: any[];
     filteredPurchaseOrderList: any[];
-    filteredGLAccountList:any[];
-    filteredChargeList:any[];
-    companyList:any[];
-    buList:any[];
-    divisionList:any[];
-    departmentList:any[];
-    selectedCompanyID:number=0;
-    selectedBUId:number=0;
-    selectedDivisionID:number=0;
-    selectedDeptID:number=0;
-    allmgmtData:any[];
-    mgmtStructureId:any;
+    filteredGLAccountList: any[];
+    filteredChargeList: any[];
+    companyList: any[];
+    buList: any[];
+    divisionList: any[];
+    departmentList: any[];
+    selectedCompanyID: number = 0;
+    selectedBUId: number = 0;
+    selectedDivisionID: number = 0;
+    selectedDeptID: number = 0;
+    allmgmtData: any[];
+    mgmtStructureId: any;
     isEditMode: boolean = false;
     selectedRecordForEdit: any;
-   
-    disableSaveForChargeMsg: boolean=false;
-    disableSaveForGLMsg:boolean=false;
-    disableForMgmtStructure:boolean;
-    disableSaveForEdit:boolean=false;
+
+    disableSaveForChargeMsg: boolean = false;
+    disableSaveForGLMsg: boolean = false;
+    disableForMgmtStructure: boolean;
+    disableSaveForEdit: boolean = false;
     currentstatus: string = 'Active';
-    
 
-    auditHistory:any[]=[];
-    @ViewChild('dt',{static:false})
+
+    auditHistory: any[] = [];
+    @ViewChild('dt', { static: false })
     private table: Table;
+    AuditDetails: any;
 
-    constructor(private breadCrumb: SingleScreenBreadcrumbService,private modalService: NgbModal,
+    constructor(private breadCrumb: SingleScreenBreadcrumbService, private modalService: NgbModal,
         private commonService: CommonService, private configurations: ConfigurationService,
-        private authService: AuthService, private alertService: AlertService, public chargeService: ChargeService ,
-        public vendorService:VendorService , public currencyService:CurrencyService, public integrationService:IntegrationService,
-        public purchaseOrderService: PurchaseOrderService, public glAccountService:GLAccountService,
+        private authService: AuthService, private alertService: AlertService, public chargeService: ChargeService,
+        public vendorService: VendorService, public currencyService: CurrencyService, public integrationService: IntegrationService,
+        public purchaseOrderService: PurchaseOrderService, public glAccountService: GLAccountService,
         public legalEntityService: LegalEntityService, public percentService: PercentService) {
 
 
     }
     ngOnInit(): void {
         this.getChargeList();
-       // this.loadVendorData();
-       // this.loadCurrencyData();
+        // this.loadVendorData();
+        // this.loadCurrencyData();
         //this.loadIntegrationData();
-       // this.loadPurchaseOrderData();
+        // this.loadPurchaseOrderData();
         this.loadGLAccountData();
-       // this.loadManagementdata();
-       // this.loadPercentData();
+        // this.loadManagementdata();
+        // this.loadPercentData();
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-charges';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
     }
@@ -120,11 +121,11 @@ export class ChargesComponent implements OnInit {
         this.chargeService.getChargeList().subscribe(res => {
             // const responseData = res[0];
             //  this.chargeData = responseData;//.columnData;
-			// console.log('response data :' , responseData);
-            this.originalTableData=res[0];
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            // console.log('response data :' , responseData);
+            this.originalTableData = res[0];
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
-           
+
             // this.totalRecords = responseData==null?0: responseData.length;
             // this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         })
@@ -132,61 +133,61 @@ export class ChargesComponent implements OnInit {
 
 
 
-   
-   // loadPercentData():void {
-     //   this.percentService.getPercentages().subscribe(res=>{
-       //     this.percentageList=res[0];
-        //});
+
+    // loadPercentData():void {
+    //   this.percentService.getPercentages().subscribe(res=>{
+    //     this.percentageList=res[0];
+    //});
     //}
     //loadVendorData():void {
-		//this.alertService.startLoadingMessage();
-		//this.vendorService.getVendorsBasic().subscribe( res=>{
-          //  this.vendorList=res[0];
-           // this.alertService.stopLoadingMessage();
-        //});
-   // }
-   // loadIntegrationData():void{
-     //   this.integrationService.getIntegrationsBasic().subscribe( res=>{
-       //     this.integrationList=res;
-        //});
+    //this.alertService.startLoadingMessage();
+    //this.vendorService.getVendorsBasic().subscribe( res=>{
+    //  this.vendorList=res[0];
+    // this.alertService.stopLoadingMessage();
+    //});
+    // }
+    // loadIntegrationData():void{
+    //   this.integrationService.getIntegrationsBasic().subscribe( res=>{
+    //     this.integrationList=res;
+    //});
     //}
     //loadCurrencyData():void{
-      ///  this.currencyService.getCurrencyList().subscribe(res=>{
-         //   this.currencyList=res[0];
-        //})
+    ///  this.currencyService.getCurrencyList().subscribe(res=>{
+    //   this.currencyList=res[0];
+    //})
     //}
     //loadPurchaseOrderData():void{
-      //  this.purchaseOrderService.getPurchaseOrdersBasic().subscribe(res=>{
-        //    this.purchaseOrderList=res[0];
-       // });
-   // }
-    loadGLAccountData():void{
-        this.glAccountService.getGlAccountBasic().subscribe(res=>{
+    //  this.purchaseOrderService.getPurchaseOrdersBasic().subscribe(res=>{
+    //    this.purchaseOrderList=res[0];
+    // });
+    // }
+    loadGLAccountData(): void {
+        this.glAccountService.getGlAccountBasic().subscribe(res => {
             this.glAccountList = res[0];
         });
     }
-  //  loadManagementdata() {
-		//this.legalEntityService.getManagemententity().subscribe(
-		//	res => {this.loadHierarchy(res[0])
-  //          });
-  //  }
+    //  loadManagementdata() {
+    //this.legalEntityService.getManagemententity().subscribe(
+    //	res => {this.loadHierarchy(res[0])
+    //          });
+    //  }
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
     resetChargeForm(): void {
-        this.isEdit=false;
+        this.isEdit = false;
         this.disableForMgmtStructure = true;
         this.disableSaveForChargeMsg = false;
-        this.disableSaveForGLMsg=false;
+        this.disableSaveForGLMsg = false;
         this.addNewCharge = new Charge();
-        this.addNewCharge={...this.addNewCharge, isActive:true, isDeleted:false};
-        this.selectedCompanyID=0;
-        this.selectedDeptID=0;
-        this.selectedBUId=0;
-        this.selectedDivisionID=0;
+        this.addNewCharge = { ...this.addNewCharge, isActive: true, isDeleted: false };
+        this.selectedCompanyID = 0;
+        this.selectedDeptID = 0;
+        this.selectedBUId = 0;
+        this.selectedDivisionID = 0;
     }
-    resetViewData():void {
+    resetViewData(): void {
         this.viewRowData = undefined;
     }
 
@@ -201,7 +202,7 @@ export class ChargesComponent implements OnInit {
         this.pageSize = event.rows;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
     }
-    changeStatus(rowData):void {
+    changeStatus(rowData): void {
         console.log(rowData);
         const data = { ...rowData }
         this.chargeService.updateCharge(data).subscribe(() => {
@@ -216,7 +217,7 @@ export class ChargesComponent implements OnInit {
 
     }
 
-   
+
     columnsChanges() {
         this.refreshList();
     }
@@ -224,24 +225,25 @@ export class ChargesComponent implements OnInit {
         this.table.reset();
         this.getChargeList();
     }
- 
+
     editCharge(rowData) {
         console.log(rowData);
         this.isEdit = true;
         this.disableSaveForEdit = true;
         this.disableSaveForChargeMsg = false;
-        this.disableSaveForGLMsg=false;
+        this.disableSaveForGLMsg = false;
         //this.disableForMgmtStructure=false;
-        this.addNewCharge = { ...rowData, 
+        this.addNewCharge = {
+            ...rowData,
             chargeType: getObjectById('chargeId', rowData.chargeId, this.chargeData),
-         //   vendorId: getObjectById('vendorId', rowData.vendorId, this.vendorList) ,
-          //  purchaseOrderId:getObjectById('purchaseOrderId', rowData.purchaseOrderId, this.purchaseOrderList) ,
-          //  integrationPortalId: getObjectById('integrationPortalId', rowData.integrationPortalId, this.integrationList),
+            //   vendorId: getObjectById('vendorId', rowData.vendorId, this.vendorList) ,
+            //  purchaseOrderId:getObjectById('purchaseOrderId', rowData.purchaseOrderId, this.purchaseOrderList) ,
+            //  integrationPortalId: getObjectById('integrationPortalId', rowData.integrationPortalId, this.integrationList),
             glAccountId: getObjectById('glAccountId', rowData.glAccountId, this.glAccountList)
         };
         this.selectedRecordForEdit = { ...this.addNewCharge }
-      //  this.mgmtStructureId=this.selectedRecordForEdit.managementStructureId;
-       // this.populateMgmtStructure(this.selectedRecordForEdit.managementStructureId);
+        //  this.mgmtStructureId=this.selectedRecordForEdit.managementStructureId;
+        // this.populateMgmtStructure(this.selectedRecordForEdit.managementStructureId);
         console.log(this.addNewCharge);
     }
 
@@ -251,21 +253,21 @@ export class ChargesComponent implements OnInit {
         console.log(file);
         if (file.length > 0) {
 
-           // this.formData.append('file', file[0])
-           // this.chargeService. .taxtypeCustomUpload(this.formData).subscribe(res => {
-              //  event.target.value = '';
+            // this.formData.append('file', file[0])
+            // this.chargeService. .taxtypeCustomUpload(this.formData).subscribe(res => {
+            //  event.target.value = '';
 
-              //  this.formData = new FormData();
-               // this.existingRecordsResponse = res;
+            //  this.formData = new FormData();
+            // this.existingRecordsResponse = res;
 
-                // alert(JSON.stringify(this.existingRecordsResponse));
-               // this.getList();
-                this.alertService.showMessage(
-                    'Success',
-                    `Successfully Uploaded  `,
-                    MessageSeverity.success
-                );
-           // })
+            // alert(JSON.stringify(this.existingRecordsResponse));
+            // this.getList();
+            this.alertService.showMessage(
+                'Success',
+                `Successfully Uploaded  `,
+                MessageSeverity.success
+            );
+            // })
         };
     };
 
@@ -282,16 +284,16 @@ export class ChargesComponent implements OnInit {
     deleteConfirmation(value) {
         if (value === 'Yes') {
             this.chargeService.deleteCharge(
-                this.selectedRowforDelete.chargeId,this.userName).
+                this.selectedRowforDelete.chargeId, this.userName).
                 subscribe
                 (() => {
-                this.getChargeList();
-                this.alertService.showMessage(
-                    'Success',
-                    `Deleted Charge Successfully  `,
-                    MessageSeverity.success
-                );
-            })
+                    this.getChargeList();
+                    this.alertService.showMessage(
+                        'Success',
+                        `Deleted Charge Successfully  `,
+                        MessageSeverity.success
+                    );
+                })
         } else {
             this.selectedRowforDelete = undefined;
         }
@@ -300,19 +302,19 @@ export class ChargesComponent implements OnInit {
         console.log(rowData);
         this.viewRowData = rowData;
     }
- 
+
 
     saveCharge() {
         const data = {
             ...this.addNewCharge,
-             createdBy: this.userName,
-              updatedBy: this.userName,
+            createdBy: this.userName,
+            updatedBy: this.userName,
             chargeType: editValueAssignByCondition('chargeType', this.addNewCharge.chargeType),
-          //  vendorId:editValueAssignByCondition('vendorId', this.addNewCharge.vendorId),
-           // purchaseOrderId:editValueAssignByCondition('purchaseOrderId', this.addNewCharge.purchaseOrderId),
-           // integrationPortalId:editValueAssignByCondition('integrationPortalId', this.addNewCharge.integrationPortalId),
-            glAccountId:editValueAssignByCondition('glAccountId', this.addNewCharge.glAccountId),
-          //  managementStructureId:this.mgmtStructureId
+            //  vendorId:editValueAssignByCondition('vendorId', this.addNewCharge.vendorId),
+            // purchaseOrderId:editValueAssignByCondition('purchaseOrderId', this.addNewCharge.purchaseOrderId),
+            // integrationPortalId:editValueAssignByCondition('integrationPortalId', this.addNewCharge.integrationPortalId),
+            glAccountId: editValueAssignByCondition('glAccountId', this.addNewCharge.glAccountId),
+            //  managementStructureId:this.mgmtStructureId
 
         };
         if (!this.isEdit) {
@@ -325,15 +327,15 @@ export class ChargesComponent implements OnInit {
                     MessageSeverity.success
                 );
             },
-            (error)=>{
-                this.alertService.showMessage(
-                    'Error',
-                    error,
-                    MessageSeverity.error
-                );
-            })
+                (error) => {
+                    this.alertService.showMessage(
+                        'Error',
+                        error,
+                        MessageSeverity.error
+                    );
+                })
         } else {
-            
+
             this.chargeService.updateCharge(data).subscribe(() => {
                 this.selectedRecordForEdit = undefined;
                 this.isEdit = false;
@@ -348,32 +350,32 @@ export class ChargesComponent implements OnInit {
         }
     }
 
-    selectedCharge(rowData):void {
+    selectedCharge(rowData): void {
         const exists = selectedValueValidate
-        ('chargeType', rowData, this.selectedRecordForEdit)
+            ('chargeType', rowData, this.selectedRecordForEdit)
 
         this.disableSaveForChargeMsg = !exists;
-       
+
     }
     // selectedChargeGL(rowData):void {
     //     const exists = selectedValueValidate
     //     ('glAccountId', rowData, this.selectedRecordForEdit)
 
-     
+
     //     this.disableSaveForGLMsg=!exists;
     // }
-  
+
 
     checkChargeExists(value) {
 
 
         this.disableSaveForChargeMsg = false;
-        for (let i = 0; i < this.chargeData.length; 
+        for (let i = 0; i < this.chargeData.length;
             i++) {
 
-            if (this.addNewCharge.chargeType == 
+            if (this.addNewCharge.chargeType ==
                 this.chargeData[i].chargeType ||
-                 value == this.chargeData[i].chargeType) {
+                value == this.chargeData[i].chargeType) {
                 this.disableSaveForChargeMsg = true;
 
 
@@ -390,12 +392,12 @@ export class ChargesComponent implements OnInit {
     //     if (exists.length > 0) {
     //         this.disableSaveForChargeMsg=true;
     //         this.disableSaveForCharge= true;
-           
+
     //     }
     //     else {
     //         this.disableSaveForChargeMsg=false;
     //         this.disableSaveForCharge = false;
-           
+
     //     }
 
     // }
@@ -426,21 +428,21 @@ export class ChargesComponent implements OnInit {
     //     const exists = validateRecordExistsOrNot(field, value, this.chargeData, 
     //         this.selectedRecordForEdit);
     //     if (exists.length > 0) {
-          
+
     //         this.disableSaveForCharge= true;
     //         this.disableSaveForGLMsg=true;
     //     }
     //     else {
-            
+
     //         this.disableSaveForCharge = false;
     //         this.disableSaveForGLMsg=false;
     //     }
 
     // }
 
-    filterCharge(event):void {
+    filterCharge(event): void {
         this.filteredChargeList = this.chargeData;
-       
+
         const CHARGEDATA = [...this.filteredChargeList.filter(x => {
             return x.chargeType.toLowerCase().includes(event.query.toLowerCase())
         })]
@@ -469,8 +471,8 @@ export class ChargesComponent implements OnInit {
     //    })]
     //    this.filteredPurchaseOrderList = PODATA;
     //}
-    filterGLAccount(event):void{
-        this.filteredGLAccountList=this.glAccountList;
+    filterGLAccount(event): void {
+        this.filteredGLAccountList = this.glAccountList;
         const GLADATA = [...this.glAccountList.filter(x => {
             return x.accountName.toLowerCase().includes(event.query.toLowerCase())
         })]
@@ -481,26 +483,24 @@ export class ChargesComponent implements OnInit {
     //    this.companyList= this.allmgmtData.filter(c=> c.parentId==null);
     //    }
 
-    companyselected():void {
-            console.log(`Company :${ this.selectedCompanyID}`);
-    
-            if(this.selectedCompanyID.toString()!=="0")
-            {
-            this.mgmtStructureId=this.selectedCompanyID;
-            this.disableForMgmtStructure=false;
-            }
-            else
-            {
-                this.disableForMgmtStructure=true;
-            }
-            this.divisionList=[];
-            this.departmentList=[];
-            this.selectedBUId=0;
-            this.selectedDeptID=0;
-            this.selectedDivisionID=0;
-            this.buList=this.allmgmtData.filter(c=>c.parentId===this.selectedCompanyID);
+    companyselected(): void {
+        console.log(`Company :${this.selectedCompanyID}`);
+
+        if (this.selectedCompanyID.toString() !== "0") {
+            this.mgmtStructureId = this.selectedCompanyID;
+            this.disableForMgmtStructure = false;
         }
-       
+        else {
+            this.disableForMgmtStructure = true;
+        }
+        this.divisionList = [];
+        this.departmentList = [];
+        this.selectedBUId = 0;
+        this.selectedDeptID = 0;
+        this.selectedDivisionID = 0;
+        this.buList = this.allmgmtData.filter(c => c.parentId === this.selectedCompanyID);
+    }
+
     //buselected():void {
     //    console.log(`BU :${ this.selectedBUId}`);
     //    this.mgmtStructureId=this.selectedBUId;
@@ -516,7 +516,7 @@ export class ChargesComponent implements OnInit {
     //    this.selectedDivisionID=0;
     //     this.divisionList=this.allmgmtData.filter(c=>c.parentId===this.selectedBUId);
     //  }
-    
+
     //divisionselected():void{
     //    console.log(`Division id :${ this.selectedDivisionID}`);
     //    if(this.selectedDivisionID.toString()!=="0")
@@ -527,7 +527,7 @@ export class ChargesComponent implements OnInit {
     //    }
     //   this.departmentList=this.allmgmtData.filter(c=>c.parentId===this.selectedDivisionID);
     //}
-      
+
     //departmentselected():void{
     //      if(this.selectedDeptID.toString()!=="0")
     //      {
@@ -535,7 +535,7 @@ export class ChargesComponent implements OnInit {
     //      }else{
     //        this.mgmtStructureId=this.selectedDivisionID;
     //      }
-        
+
     //}
 
     //populateMgmtStructure(mgmtStructureId:number):void{
@@ -610,7 +610,7 @@ export class ChargesComponent implements OnInit {
     // // this means dept is selected
     // if(level3parent===null )
     // {
-         
+
     //      this.departmentList=level0siblings;
     //     this.selectedDeptID=mgmtStructureId;
     //     this.divisionList=level1siblings;
@@ -619,24 +619,24 @@ export class ChargesComponent implements OnInit {
     //     this.selectedBUId=level1parent.managementStructureId;
     //     this.selectedCompanyID=level2parent.managementStructureId;
     //     return;
-        
+
     // }
 
     //}
-     
+
     //findmgmtRecord(id:number):any{
     //     return  this.allmgmtData.find(c=> c.managementStructureId===id);
     // }
-     
+
     //findmgmtSiblingRecords(parentid:number):any[]{
     //    return  this.allmgmtData.filter(c=>c.parentId==parentid);
     //} 
     getAuditHistoryById(rowData) {
-      //  alert('hi');
-      //  debugger;
+        //  alert('hi');
+        //  debugger;
         this.chargeService.getChargeAudit(rowData.chargeId).subscribe(res => {
             this.auditHistory = res;
-        //    alert(JSON.stringify(this.auditHistory));
+            //    alert(JSON.stringify(this.auditHistory));
         })
     }
     getColorCodeForHistory(i, field, value) {
@@ -651,94 +651,95 @@ export class ChargesComponent implements OnInit {
         }
     }
 
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.chargeData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.chargeData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.chargeData = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.chargeData = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.chargeData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.chargeData= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.chargeData = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.chargeData = newarry;
+            }
         }
-        this.totalRecords = this.chargeData.length ;
+        this.totalRecords = this.chargeData.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('Charge',
-            'ChargeId',this.restorerecord.chargeId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('Charge',
+            'ChargeId', this.restorerecord.chargeId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.getChargeList();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
+    sampleExcelDownload() {}
 }
 
 

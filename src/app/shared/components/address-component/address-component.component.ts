@@ -1,5 +1,6 @@
+import { RepairOrder } from './../../../components/receiving/repair-order/receiving-ro/RepairOrder.model';
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { CustomerShippingModel } from '../../../models/customer-shipping.model';
@@ -23,7 +24,7 @@ export class AddressComponentComponent implements OnInit {
 
   @Input() addressType:any ;   
   @Input() id:any;     
-  @ViewChild('createPOAddressForm',{static:false}) createPOAddressForm: NgForm;
+  @ViewChild('createPOAddressForm',{static:true}) createPOAddressForm: NgForm;
   shipToUserTypeValidCheck: boolean;
   firstNamesShipTo: any[] = [];
   firstNamesBillTo: any[] = [];
@@ -130,11 +131,17 @@ export class AddressComponentComponent implements OnInit {
 				this.getShipToBillToDropDown(res)
 			});
 		}
-		else if(this.addressType == AddressTypeEnum.SalesOrder){
+		else if(this.addressType == AddressTypeEnum.SalesOrder) {
 			this.ModuleID = AppModuleEnum.SalesOrder;
 			this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
 				this.getShipToBillToDropDown(res)
 			});
+		}
+		else if(this.addressType == AddressTypeEnum.RepairOrder) {		
+			this.ModuleID = AppModuleEnum.RepairOrder;
+			this.commonService.getAllAddEditID(this.id,this.ModuleID).subscribe(res => {
+				this.getShipToBillToDropDown(res)
+			});	
 		}
 	}
 
@@ -1607,7 +1614,9 @@ if(this.billToAddressList && this.billToAddressList.length!=0){
 					moduleId: this.ModuleID,
 					shipToPOAddressId :  this.sourcePoApproval.shipToPOAddressId ? this.sourcePoApproval.shipToPOAddressId : 0 ,	
 					shipToUserTypeId: this.sourcePoApproval.shipToUserTypeId ? parseInt(this.sourcePoApproval.shipToUserTypeId) : 0,
+					shipToUserTypeName : getValueFromArrayOfObjectById('moduleName','moduleId',this.sourcePoApproval.shipToUserTypeId,this.userTypes),
 					shipToUserId: this.sourcePoApproval.shipToUserId && this.sourcePoApproval.shipToUserId.userID ? this.sourcePoApproval.shipToUserId.userID : 0,
+					shipToUserName : getValueFromArrayOfObjectById('userName', 'userID', this.sourcePoApproval.shipToUserId.userID, this.userShipingList),
 					shipToSiteId: this.sourcePoApproval.shipToSiteId ? this.sourcePoApproval.shipToSiteId : 0,					
 					shipToSiteName: this.postSiteNameForShipping(this.sourcePoApproval.shipToUserTypeId, this.sourcePoApproval.shipToSiteId),
 					shipToMemo: this.sourcePoApproval.shipToMemo ? this.sourcePoApproval.shipToMemo : '',
@@ -1625,7 +1634,9 @@ if(this.billToAddressList && this.billToAddressList.length!=0){
 					shipToCountryId: this.shipToAddress.countryId,
 					billToPOAddressId : this.sourcePoApproval.billToPOAddressId ? this.sourcePoApproval.billToPOAddressId : 0 ,	
 					billToUserTypeId: this.sourcePoApproval.billToUserTypeId ? parseInt(this.sourcePoApproval.billToUserTypeId) : 0,
+					billToUserTypeName : getValueFromArrayOfObjectById('moduleName','moduleId',this.sourcePoApproval.billToUserTypeId,this.userTypes),
 					billToUserId: this.sourcePoApproval.billToUserId &&this.sourcePoApproval.billToUserId.userID ? this.sourcePoApproval.billToUserId.userID : 0,
+					billToUserName : getValueFromArrayOfObjectById('userName', 'userID', this.sourcePoApproval.billToUserId.userID, this.userBillingList),
 					billToSiteId: this.sourcePoApproval.billToSiteId ? this.sourcePoApproval.billToSiteId : 0,
 					billToSiteName: this.postSiteNameForBilling(this.sourcePoApproval.billToUserTypeId, this.sourcePoApproval.billToSiteId),
 					billToMemo: this.sourcePoApproval.billToMemo ? this.sourcePoApproval.billToMemo : '',				
@@ -1660,55 +1671,55 @@ if(this.billToAddressList && this.billToAddressList.length!=0){
 				// 	this.SaveSalesOrderQuoteNew(poAddressEdit);
 				// }
 					this.SaveAllAddress(poAddressEdit);
-					this.isSpinnerVisible=false;		
+					//this.isSpinnerVisible=false;		
 			}
 		}
 
 		SaveAllAddress(poAddressEdit){
 			this.commonService.saveAllAddress({ ...poAddressEdit }).subscribe(res => {
-				if(res.value.shipToPOAddressId &&  res.value.shipToPOAddressId > 0) {
+				if(res.shipToPOAddressId &&  res.shipToPOAddressId > 0) {
 					this.sourcePoApproval = {
-						shipToPOAddressId: res.value.shipToPOAddressId,
-						shipToUserTypeId: res.value.shipToUserType,	
-						shipToUserId: getObjectById('userID', res.value.shipToUserId, this.userShipingList),				  // this.getShipToUserIdEdit(res),
-						shipToSiteId: res.value.shipToSiteId,
-						shipToSiteName: res.value.shipToSiteName,
-						shipAddIsPoOnly: res.value.shipAddIsPoOnly,
-						shipToContactId: res.value.shipToContactId,
-						shipToContact: res.value.shipToContact,  
-						shipToMemo: res.value.shipToMemo,	
-						shipToAddressId: res.value.shipToAddressId,
-						shipToAddress1: res.value.shipToAddress1,
-						shipToAddress2: res.value.shipToAddress2,			
-						shipToCity: res.value.shipToCity,
-						shipToStateOrProvince: res.value.shipToState,
-						shipToPostalCode: res.value.shipToPostalCode,
-						ShipToCountryId: res.value.shipToCountryId ?  getObjectByValue('value',res.value.shipToCountryId ,this.allCountriesList) : 0,
-						poShipViaId: res.value.poShipViaId,
+						shipToPOAddressId: res.shipToPOAddressId,
+						shipToUserTypeId: res.shipToUserType,	
+						shipToUserId: getObjectById('userID', res.shipToUserId, this.userShipingList),				  // this.getShipToUserIdEdit(res),
+						shipToSiteId: res.shipToSiteId,
+						shipToSiteName: res.shipToSiteName,
+						shipAddIsPoOnly: res.shipAddIsPoOnly,
+						shipToContactId: res.shipToContactId,
+						shipToContact: res.shipToContact,  
+						shipToMemo: res.shipToMemo,	
+						shipToAddressId: res.shipToAddressId,
+						shipToAddress1: res.shipToAddress1,
+						shipToAddress2: res.shipToAddress2,			
+						shipToCity: res.shipToCity,
+						shipToStateOrProvince: res.shipToState,
+						shipToPostalCode: res.shipToPostalCode,
+						ShipToCountryId: res.shipToCountryId ?  getObjectByValue('value',res.shipToCountryId ,this.allCountriesList) : 0,
+						poShipViaId: res.poShipViaId,
 
-						billToPOAddressId: res.value.billToPOAddressId,
-						billToUserTypeId: res.value.billToUserType,
-						billToUserId: getObjectById('userID', res.value.billToUserId, this.userBillingList),//this.getBillToUserIdEdit(res),
-						billToSiteId: res.value.billToSiteId,
-						billToSiteName: res.value.billToSiteName,
-						billAddIsPoOnly: res.value.billAddIsPoOnly,
-						billToContactId: res.value.billToContactId,
-						billToContactName: res.value.billToContactName,
-						billToMemo: res.value.billToMemo,								
-						billToAddressId: res.value.billToAddressId,	
-						billToAddress1: res.value.billToAddress1,
-						billToAddress2: res.value.billToAddress2,
-						billToCity: res.value.billToCity,
-						billToStateOrProvince: res.value.billToState,
-						billToPostalCode: res.value.billToPostalCode,
-						billToCountryId: res.value.billToCountryId ? getObjectByValue('value',res.value.billToCountryId,this.allCountriesList) : 0, 							
+						billToPOAddressId: res.billToPOAddressId,
+						billToUserTypeId: res.billToUserType,
+						billToUserId: getObjectById('userID', res.billToUserId, this.userBillingList),//this.getBillToUserIdEdit(res),
+						billToSiteId: res.billToSiteId,
+						billToSiteName: res.billToSiteName,
+						billAddIsPoOnly: res.billAddIsPoOnly,
+						billToContactId: res.billToContactId,
+						billToContactName: res.billToContactName,
+						billToMemo: res.billToMemo,								
+						billToAddressId: res.billToAddressId,	
+						billToAddress1: res.billToAddress1,
+						billToAddress2: res.billToAddress2,
+						billToCity: res.billToCity,
+						billToStateOrProvince: res.billToState,
+						billToPostalCode: res.billToPostalCode,
+						billToCountryId: res.billToCountryId ? getObjectByValue('value',res.billToCountryId,this.allCountriesList) : 0, 							
 					
-						shippingViaId: res.value.shippingViaId,
-						shipViaId: res.value.shipViaId,
-						shipVia: res.value.shipVia,
-						shippingCost: formatNumberAsGlobalSettingsModule(res.value.shippingCost, 2),
-						handlingCost: formatNumberAsGlobalSettingsModule(res.value.handlingCost, 2),	
-						shippingAccountNo: res.value.ShippingAccountNo
+						shippingViaId: res.shippingViaId,
+						shipViaId: res.shipViaId,
+						shipVia: res.shipVia,
+						shippingCost: formatNumberAsGlobalSettingsModule(res.shippingCost, 2),
+						handlingCost: formatNumberAsGlobalSettingsModule(res.handlingCost, 2),	
+						shippingAccountNo: res.ShippingAccountNo
 					};
 					this.isEditModeAdd = true;
 				} else {
@@ -1723,9 +1734,7 @@ if(this.billToAddressList && this.billToAddressList.length!=0){
 					MessageSeverity.success
 				);							
 			}, err => {
-				this.isSpinnerVisible = false;
-				const errorLog = err;
-				this.errorMessageHandler(errorLog);
+				this.isSpinnerVisible = false;				
 			});
 		}
 

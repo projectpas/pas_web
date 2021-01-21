@@ -15,11 +15,13 @@ import { environment } from 'src/environments/environment';
 export class ActionEndpoint extends EndpointFactory {
 
 
-    private readonly _actionsUrl: string = "/api/Action/Get";
-    private readonly _actionsUrlNew: string = "/api/Action/actions";
-    private readonly _actionsUrlAuditHistory: string = "/api/Action/auditHistoryById";
-    private getActionURL: string = "/api/Task/Get";
-    private getActionAttributesURL: string = "/api/taskattribute/taskattributelist";
+
+    private readonly _actionsUrl: string = environment.baseUrl+"/api/Action/Get";
+    private readonly _actionsUrlNew: string =environment.baseUrl+ "/api/Action/actions";
+    private readonly _actionsUrlAuditHistory: string =environment.baseUrl+ "/api/Action/auditHistoryById";
+    private getActionURL: string =environment.baseUrl+ "/api/Task/Get";
+    private getActionAttributesURL: string =environment.baseUrl+ "/api/taskattribute/taskattributelist";
+
     private getChargesTypeURL: string = environment.baseUrl + '/api/mastertest/ChargesType';
     private getChargesCurrencyURL: string = environment.baseUrl + '/api/mastertest/ChargesCurrency';
     private getEquipmentAssetTypesURL: string = environment.baseUrl + '/api/mastertest/EquipmentAssetType';
@@ -63,7 +65,7 @@ export class ActionEndpoint extends EndpointFactory {
     private UpdatePublicationURL: string = environment.baseUrl + "/api/workflow/updatePublication";
     private RemoveWorkFlowURL: string = environment.baseUrl + "/api/workflow/remove";
 
-    get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
+    get actionsUrl() { return  this._actionsUrl; }
 
     constructor(http: HttpClient, configurations: ConfigurationService, injector: Injector) {
         super(http, configurations, injector);
@@ -110,7 +112,8 @@ export class ActionEndpoint extends EndpointFactory {
             'itemMasterId': workflowData.itemMasterId,
             'partNumber': workflowData.partNumber,
             'partNumberDescription': workflowData.partNumberDescription,
-            'changedPartNumberId': workflowData.changedPartNumberId,
+            'revisedPartNumber':workflowData.revisedPartNumber,
+            // 'changedPartNumberId': workflowData.changedPartNumberId,
             'currencyId': workflowData.currencyId,
             'customerId': workflowData.customerId,
             'workflowExpirationDate': workflowData.workflowExpirationDate,
@@ -125,7 +128,7 @@ export class ActionEndpoint extends EndpointFactory {
             'percentageOfReplacement': workflowData.percentageOfReplacement,
             'berThresholdAmount': workflowData.berThresholdAmount,
             'memo': workflowData.memo,
-            'customerName': workflowData.customerName,
+            // 'customerName': workflowData.customerName,
             'masterCompanyId': workflowData.masterCompanyId,
             'createdBy': workflowData.createdBy,
             'updatedBy': workflowData.updatedBy,
@@ -185,7 +188,7 @@ export class ActionEndpoint extends EndpointFactory {
             'percentageOfReplacement': workflowData.percentageOfReplacement,
             'berThresholdAmount': workflowData.berThresholdAmount,
             'memo': workflowData.memo,
-            'customerName': workflowData.customerName,
+            // 'customerName': workflowData.customerName,
             'workflowId': workflowData.workflowId,
             'workScopeId': workflowData.workScopeId,
             'customerCode': workflowData.customerCode,
@@ -280,7 +283,9 @@ export class ActionEndpoint extends EndpointFactory {
             'quantity': exclusion.quantity,
             'unitCost': exclusion.unitCost,
             'isDelete': exclusion.isDelete,
-            'memo': exclusion.memo
+            'memo': exclusion.memo,
+            'createdBy': exclusion.createdBy,
+            'updatedBy': exclusion.updatedBy,
         }
         return this.http.post<T>(this.AddExclusionURL, JSON.parse(JSON.stringify(exclusion)), this.getRequestHeaders())
             .catch(error => {
@@ -318,7 +323,8 @@ export class ActionEndpoint extends EndpointFactory {
             'isDeferred': material.isDeferred,
             'itemClassificationId': material.itemClassificationId,
             'itemMasterId': material.itemMasterId,
-            'mandatoryOrSupplemental': material.mandatoryOrSupplemental,
+            'materialMandatoriesName': material.materialMandatoriesName,
+            'materialMandatoriesId': material.materialMandatoriesId,
             'partDescription': material.partDescription,
             'memo': material.memo,
             'price': material.price,
@@ -328,7 +334,10 @@ export class ActionEndpoint extends EndpointFactory {
             'unitOfMeasureId': material.unitOfMeasureId,
             'workflowId': material.workflowId,
             'isDelete': material.isDelete,
-            'partNumber': material.partNumber
+            'partNumber': material.partNumber,
+            'masterCompanyId': material.masterCompanyId,
+            'createdBy': material.createdBy,
+            'updatedBy': material.updatedBy,
         }
         return this.http.post<T>(this.AddMaterialListURL, JSON.parse(JSON.stringify(obj)), this.getRequestHeaders())
             .catch(error => {

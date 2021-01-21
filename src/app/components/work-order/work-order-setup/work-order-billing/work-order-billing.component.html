@@ -1089,11 +1089,11 @@
                                                     </td>
                                                     <td class="content-to-end">{{ matQuotation.billingRate }}</td>
                                                     <td>
-                                                        <input type="number" class="form-control" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2" (change)="matQuotation.billingAmount = Number(matQuotation.billingAmount.toString().split(',').join('')).toFixed(2)"/>
+                                                        <input type="number" class="form-control" [(ngModel)]="matQuotation.billingAmount" [disabled]="isView || matQuotation.billingMethodId != 2" (change)="matQuotation.billingAmount = parseToInt(matQuotation.billingAmount.toString().split(',').join('')).toFixed(2)"/>
                                                     </td>
                                                     <td *ngIf="!isView">
-                                                      <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="editMaterialList(matQuotation)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
-                                                      <span><a class="btn nobg btn-delete-cstm" (click)="deleteMaterialList(mainIndex, subIndex)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                                                      <span data-target="#addNewMaterials" data-toggle="modal"><a class="btn nobg btn-edit-cstm" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
+                                                      <span><a class="btn nobg btn-delete-cstm" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                                                     </td>
                                                    
                                                   </tr>

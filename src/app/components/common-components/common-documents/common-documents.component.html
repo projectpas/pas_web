@@ -171,9 +171,14 @@
                     [ngSwitch]="col.field"
                   >
                   <!-- *ngIf=" col.field != 'createdDate' && col.field != 'updatedDate'" -->
-                    <input type="text" class="incorn_border ui-widget table-header-input-width" [disabled]="col.field == 'fileName'" (input)="documents.filter($event.target.value,col.field,'contains')" pInputText >
+                    <input type="text" class="incorn_border ui-widget table-header-input-width" [disabled]="col.field == 'fileName'" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" (input)="documents.filter($event.target.value,col.field,'contains')" pInputText >
                     <!-- <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )"> 
                     <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )"> -->
+
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                            name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                            name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                   </th>
                   <th class="table-actions-column"></th>
                 </tr>
@@ -210,7 +215,7 @@
                       </td>
                   </ng-container>
   
-                  <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false">
+                  <td class="table-actions-column action-icons-cstm table-column-width" *ngIf="isViewMode == false">
                     <div  *ngIf="currentDeletedstatus==true" >
                         <span>
                           <a 
@@ -258,7 +263,7 @@
                           matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
                     </div>
                   </td>
-                  <td class="text-center" *ngIf="isViewMode == true">
+                  <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
                     <span>
                       <a
                         class="btn btn-info boxed-float-btn nobg"
@@ -321,7 +326,9 @@
               </ng-template>
             </p-table>
           </div>
-          <div style="margin-top:10px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
+          <div style="margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
+          <!-- <div style="margin-top:-40px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
+            <div style="margin-top:-10px;margin-bottom: 15px;" *ngIf="isViewMode == false && offLineUpload==true"> -->
             <button [disabled]="isEnableUpdateButton"
             type="button"
             class="btn btn-primary pull-right submit-btn"
@@ -361,7 +368,7 @@
         type="button"
         class="close"
         aria-label="Close"
-        data-dismiss="modal"
+        data-dismiss="modal" (click)="dismissModeldelete()"
       >
         <span aria-hidden="true">&times;</span>
       </button>
@@ -411,7 +418,7 @@
         (click)="deleteItemAndCloseModel()">
         Yes
       </button>
-      <button type="button" class="btn btn-danger" data-dismiss="modal">
+      <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModeldelete()">
         No
       </button>
     </div>
@@ -601,11 +608,30 @@
             </div> -->
           </div> 
         <!-- </div> -->
-        <div class="modal-body">
+       
         <form #addDocumentForm="ngForm" class="form-horizontal">
           <div class="modal-body">
             <div class="form-row">
               <div class="col-md-6">
+                <div class="form-group">
+                  <label>Document Type <span class="clr-red">*</span></label>
+                  <!-- <select [ngClass]='select-validate-cstm' class="form-control" name="documentTypeId" [(ngModel)]="documentInformation.documentTypeId" #documentTypeId="ngModel" (change)="doctype(documentTypeId);" required>
+                    <option value="0">-- Select --</option>
+                    <ng-container *ngFor="let item of documentType">
+                        <option [value]="item.documentTypeId">{{item.name}}</option>
+                    </ng-container>
+                  </select> -->
+                  <select [(ngModel)]="documentInformation.documentTypeId"
+                                                    name="documentTypeId" id="documentTypeId"
+                                                    #documentTypeId="ngModel"
+                                                    (ngModelChange)="enableSave()" required>
+                                                    <option value='0'>--Select</option>
+                                                    <option *ngFor="let item of documentType"
+                                                        [ngValue]="item.value">
+                                                        {{item.label}}
+                                                    </option>
+                                                </select>
+                </div>
                 <div class="form-group">
                   <label>Name <span class="clr-red">*</span></label>
                   <input
@@ -672,7 +698,7 @@
                     (ngModelChange)="enableSave()"
                     (onSelect)="fileUpload($event)"
                     (onRemove)="removeFile($event)"
-                  ></p-fileUpload>
+                    required></p-fileUpload>
                 </div> 
               </div>
               <div
@@ -766,8 +792,8 @@
             <button
               type="button"
               *ngIf="!isEditButton"
-              class="btn btn-primary pull-right submit-btn"
-              style="text-align:center"
+              class="btn btn-primary editor-buttons-margin"
+          
               (click)="saveDocumentInformation()"
               [disabled]="!addDocumentForm.valid || disableSave"
             >
@@ -776,8 +802,7 @@
             <button
               type="button"
               *ngIf="isEditButton"
-              class="btn btn-primary pull-right submit-btn"
-              style="text-align:center"
+              class="btn btn-primary editor-buttons-margin"
               (click)="saveDocumentInformation()"
               [disabled]="!addDocumentForm.valid || disableSave"
             >
@@ -785,14 +810,14 @@
             </button>
             <button
               type="button"
-              class="btn btn-danger"
+              class="btn btn-danger editor-buttons-margin"
               (click)="dismissDocumentPopupModel(); closeMyModel('#addDocumentDetails')"
             >
               Close
             </button>
           </div>
         </form>
-        </div>
+       
       </div>
     </div>
     <div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">

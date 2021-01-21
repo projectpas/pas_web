@@ -1,13 +1,13 @@
 <div class="form-group">
-    <div class="row" *ngIf="!isView" style="padding:8px 0px">
-        <div class="card-header bg-primary" style="width: 100%; padding: 0.1rem 1.25rem 0.1rem 1.25rem;">
+    <div class="row" *ngIf="!isView">
+        <div class="card-header header">
             <div class="row">
                 <div class="col">
-                    <h4 class="new-card-heading" style="font-size: 16px; line-height: 2;">  Freight</h4>
+                    <h4 class="header-name">  Freight</h4>
                 </div>
                 <div>
                     <button type="button"
-                            class="btn-sm new-btn-primary" data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
+                            class="btn-sm header-button" data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
                         Add Freight
                     </button>
                 </div>
@@ -66,11 +66,11 @@
                             <div class="display-inline-flex">
                                 <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
                                     <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusTypeSOQ"
-                                                   label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                                    (ngModelChange)="validated()" label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
                                     </p-radioButton>
                                     <div>
                                         <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                                                [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
+                                        (ngModelChange)="validated()" [(ngModel)]="overAllMarkup" [disabled]="isView || costPlusType != '1'" style="margin-top: 10px;">
                                             <option value="" selected>Select</option>
                                             <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
                                         </select>
@@ -78,11 +78,11 @@
                                 </div>
                                 <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
                                     <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="2" label="Actual"
-                                                   [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                                    (ngModelChange)="validated()" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()"></p-radioButton>
                                 </div>
                                 <div>
                                     <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusTypeSOQ" value="3"
-                                                   label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
+                                    (ngModelChange)="validated()" label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
                                     </p-radioButton>
                                 </div>
                             </div>
@@ -252,8 +252,8 @@
     <div *ngIf="!isView" style="padding: 10px;">
         <!--<button class="btn btn-primary pull-right side" (click)="createFreightsQuote()">Save</button>-->
         <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createFreightsQuote()">
-            <span *ngIf="salesOrderFreightList && salesOrderFreightList.length !=0">Update</span>
-            <span *ngIf="salesOrderFreightList && salesOrderFreightList.length ==0">Save</span>
+            <span *ngIf="isUpdate">Update</span>
+            <span *ngIf="!isUpdate">Save</span>
         </button>
     </div>
 
@@ -277,6 +277,7 @@
                         Add Freight
                         <i class="fa fa-plus" (click)="addNewRow()"></i>
                     </span>
+                            <!-- (click)="onEditShipVia('Add',0)" -->
                 </div>
                 <div class="tab-content">
                     <div class="table-responsive table-overflow" style="height: 300px;">
@@ -286,7 +287,20 @@
                                     <tr>
                                         <!-- <th rowspan="2">Task *</th> -->
                                         <!-- <th>Carrier *</th> -->
-                                        <th rowspan="2">Ship Via<span class="clr-red">*</span></th>
+                                        <th rowspan="2">Ship Via<span class="clr-red">*</span>
+                                            <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
+                                                matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
+                                                data-target="#AddShipVia" (click)="onEditShipVia('Add',0)"></a></span>
+                                            <span style="margin-left:0px;cursor:pointer;"
+                                                ><a class="btn nobg"
+                                                  *ngIf="shipViaId > 0" 
+                                                  matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                                   data-toggle="modal" data-target="#AddShipVia" 
+                                                   (click)="onEditShipVia('Edit',0)"
+                                                  ><i class="fa fa-pencil"></i
+                                                ></a>
+                                                </span> -->
+                                            </th>
                                         <!-- <th>Dimensions *</th> -->
                                         <th rowspan="2">Weight</th>
                                         <th rowspan="2">UOM</th>
@@ -306,16 +320,27 @@
                                 <tbody>
                                     <tr *ngFor="let f of freightForm; let i = index">
                                         <td>
-                                            <p-dropdown placeholder="Select Site Name" name="shipVia{{ i }}" #shipVia="ngModel"
-                                                        [options]="shipViaList" (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
+                                            <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel"
+                                                        [options]="shipViaList" (ngModelChange)="enableUpdate(); getShipViaId($event);" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                                             </p-dropdown>
+                                            <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
+                                                matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
+                                                data-target="#AddShipVia" (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
+                                            <span style="margin-left:0px;cursor:pointer;"
+                                                ><a class="btn nobg"
+                                                  *ngIf="f.shipViaId > 0" 
+                                                  matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                                   data-toggle="modal" data-target="#AddShipVia" 
+                                                   (click)="onEditShipVia('Edit',f.shipViaId,i)"
+                                                  ><i class="fa fa-pencil"></i></a>
+                                            </span>
                                         </td>
                                         <td>
                                             <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel" [(ngModel)]="f.weight"
                                                    class="form-control w50" />
                                         </td>
                                         <td>
-                                            <p-dropdown placeholder="Select UOM" (ngModelChange)="enableUpdate()" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
+                                            <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" name="unitOfMeasureId{{ i }}" [options]="unitOfMeasureList"
                                                         class="p-dropdown-custom-md" [(ngModel)]="f.uomId">
                                             </p-dropdown>
                                         </td>
@@ -332,12 +357,12 @@
                                                    class="form-control w50" />
                                         </td>
                                         <td>
-                                            <p-dropdown placeholder="Select UOM" (ngModelChange)="enableUpdate()" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
+                                            <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" name="dimensionUOMId{{ i }}" [options]="unitOfMeasureList"
                                                         class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
                                             </p-dropdown>
                                         </td>
                                         <td>
-                                            <p-dropdown placeholder="Select Currency" (ngModelChange)="enableUpdate()" name="currencyId{{ i }}" [options]="currencyList"
+                                            <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" name="currencyId{{ i }}" [options]="currencyList"
                                                         class="p-dropdown-custom-md" [(ngModel)]="f.currencyId">
                                             </p-dropdown>
                                         </td>
@@ -559,3 +584,26 @@
         <button type="button" class="btn btn-danger" (click)="dismissModelAlettRestore()">No</button>
     </div>
 </ng-template>
+
+<div class="modal fade" *ngIf="IsAddShipVia" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog partsList-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add Ship Via </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)"></app-ship-via-create>
+                    <!-- <app-ship-via-create (on-shipvia-save)="refresh(false)"></app-ship-via-create> -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" style="display: none;" [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this PO</button>
+                       
+                <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+            </div>
+        </div>
+    </div>
+  </div> 

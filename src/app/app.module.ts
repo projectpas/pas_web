@@ -187,7 +187,6 @@ import { InterCompanySetupEndPointService } from './services/intercompany-setup-
 import { UserRoleEndPointService } from './components/user-role/user-role-endpoint.service';
 import { UserRoleService } from './components/user-role/user-role-service';
 import { RolesGuardService } from './services/roles-guard.service';
-import { UnauthorizedAccessComponent } from '../unauthorizedaccess/unauthorized-access.component';
 import { CompanyService } from './services/company.service';
 import { CompanyEndpoint } from './services/company-endpoint.service';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
@@ -265,8 +264,9 @@ import { Master1099Service } from './services/master-1099.service';
 import { AppSharedModule } from './app-shared.module';
 import { StocklineReferenceStorage } from './components/stockline/shared/stockline-reference-storage';
 import { CommunicationService } from './shared/services/communication.service';
-import { AllViewComponent } from './shared/components/all-view/all-view.component';
+
 import { TabViewModule } from 'primeng/tabview';
+import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
 import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 
 
@@ -544,7 +544,6 @@ import { UpdatepasswordComponent } from './components/updatepassword/updatepassw
     StocklineViewComponent,
     StocklineHistoryComponent,
     EntityViewComponent,
-    AllViewComponent,
   ],
   bootstrap: [AppComponent],
   exports: [CommonModule],

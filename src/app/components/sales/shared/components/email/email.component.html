@@ -104,7 +104,7 @@
                     <th style="width: 50px;" *ngIf="!isViewFromWO"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                     <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                         <td style="width:auto"
                         *ngFor="let col of columns"
@@ -119,7 +119,7 @@
                             </button> -->
                         <span data-toggle="modal" data-target="#viewEmail"><a class="btn nobg btn-view-cstm"
                             (click)="emailView(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                        <span><a class="btn nobg btn-delete-cstm" (click)="data.splice(i, 1)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
+                        <span><a class="btn nobg btn-delete-cstm" (click)="data.splice(rowIndex, 1)" matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
                              <!-- <button class="btn btn-danger nobg" >
                                 <a href="#" data-toggle="modal" data-target="#viewEmail" (click)="emailView(rowData)">
                             <i _ngcontent-c313="" class="fa fa-eye view_icon_adjust"></i></a>

@@ -57,6 +57,8 @@ export class WorkOrderViewComponent implements OnInit, OnChanges {
     expertiseTypeList: any;
     technicianByExpertiseTypeList: any;
     salesOrderReferenceData: SalesOrderReference;
+    isSubWorkOrder: any;
+    paramsData: any;
     /** WorkOrderShipping ctor */
     constructor(private alertService: AlertService,
         private workOrderService: WorkOrderService,

@@ -873,7 +873,7 @@ export class EditRoComponent implements OnInit {
         }
     }
 
-    private getStockLineWareHouse(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineWareHouse(stockLine: StockLine, onPageLoad: boolean): void {
 
         stockLine.WareHouseList = [];
         stockLine.LocationList = [];
@@ -903,7 +903,7 @@ export class EditRoComponent implements OnInit {
         
     }
 
-    private getStockLineLocation(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineLocation(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.LocationList = [];
         stockLine.ShelfList = [];
         stockLine.BinList = [];
@@ -928,7 +928,7 @@ export class EditRoComponent implements OnInit {
         );
     }
 
-    private getStockLineShelf(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineShelf(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.ShelfList = [];
         stockLine.BinList = [];
 
@@ -951,7 +951,7 @@ export class EditRoComponent implements OnInit {
         );
     }
 
-    private getPartWareHouse(part: RepairOrderPart, onLoad?): void {
+    public getPartWareHouse(part: RepairOrderPart, onLoad?): void {
         part.WareHouseList = [];
         part.LocationList = [];
         part.ShelfList = [];
@@ -998,7 +998,7 @@ export class EditRoComponent implements OnInit {
         );
     }
 
-    private getPartLocation(part: RepairOrderPart, onLoad?): void {
+    public getPartLocation(part: RepairOrderPart, onLoad?): void {
         part.LocationList = [];
         part.ShelfList = [];
         part.BinList = [];
@@ -1038,7 +1038,7 @@ export class EditRoComponent implements OnInit {
         );
     }
 
-    private getPartShelf(part: RepairOrderPart, onLoad?): void {
+    public getPartShelf(part: RepairOrderPart, onLoad?): void {
         part.ShelfList = [];
         part.BinList = [];
 
@@ -1075,7 +1075,7 @@ export class EditRoComponent implements OnInit {
         );
     }
 
-    private getPartBin(part: RepairOrderPart, onLoad?): void {
+    public getPartBin(part: RepairOrderPart, onLoad?): void {
         part.BinList = [];
         part.binId = 0;
 
@@ -1106,7 +1106,7 @@ export class EditRoComponent implements OnInit {
         );
     }
 
-    private setPartBinIdToStockline(part: RepairOrderPart): void {
+    public setPartBinIdToStockline(part: RepairOrderPart): void {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
                 SL.binId = part.binId;
@@ -1114,7 +1114,7 @@ export class EditRoComponent implements OnInit {
         }
     }
 
-    private conditionChange(part: RepairOrderPart) {
+    public conditionChange(part: RepairOrderPart) {
         if (part.stockLine) {
             for (var SL of part.stockLine) {
                 SL.conditionId = part.conditionId;
@@ -1123,7 +1123,7 @@ export class EditRoComponent implements OnInit {
 
     }
 
-    private getStockLineBin(stockLine: StockLine, onPageLoad: boolean): void {
+    public getStockLineBin(stockLine: StockLine, onPageLoad: boolean): void {
         stockLine.BinList = [];
 
         if (!onPageLoad) {

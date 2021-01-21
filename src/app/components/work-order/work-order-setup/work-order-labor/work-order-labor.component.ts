@@ -8,7 +8,7 @@ import { WorkOrderService } from '../../../../services/work-order/work-order.ser
 import { CommonService } from '../../../../services/common.service';
 import { getObjectByValue, getValueFromObjectByKey, getObjectById, isEmptyObject, formatNumberAsGlobalSettingsModule } from '../../../../generic/autocomplete';
 import { AuthService } from '../../../../services/auth.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService,MessageSeverity } from '../../../../services/alert.service';
 @Component({
   selector: 'app-work-order-labor',
@@ -63,8 +63,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
   basicLabourDetail: any;
   defaultBurdenRate: any = 0;
   deletingLabourObj: any;
-
-
+  taskIndexToggle: any;
+  labourHeader: any;
   constructor(private workOrderService: WorkOrderService,
     private authService: AuthService,
     private commonService: CommonService,private alertService: AlertService) { }
@@ -89,7 +89,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     // this.employeesOriginalData = { employeeId: this.employeesOriginalData.value, ...this.employeesOriginalData }
 
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
-    this.laborForm['costPlusType'] = 'Mark Up';
+    this.laborForm.costPlusType = 'Mark Up';
 
     if (this.workOrderLaborList) {
       this.laborForm.workFlowWorkOrderId = (this.workOrderLaborList['workFlowWorkOrderId'])?this.workOrderLaborList['workFlowWorkOrderId']:this.laborForm.workFlowWorkOrderId;
@@ -121,13 +121,13 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.calculateAdjustedHours(task);
       }
     }
-    if (this.laborForm['costPlusType']) {
-      this.laborForm['costPlusType'] = this.laborForm['markupFixedPrice'];
+    if (this.laborForm.costPlusType) {
+      this.laborForm.costPlusType = this.laborForm['markupFixedPrice'];
       this.overAllMarkup = Number(this.laborForm['headerMarkupId']);
     }
     // this.getEmployeeData();
     if(this.buildMethodDetails){
-      this.laborForm['costPlusType'] = this.buildMethodDetails['laborBuildMethod'];
+      this.laborForm.costPlusType = this.buildMethodDetails['laborBuildMethod'];
       this.laborForm['laborFlatBillingAmount'] = this.buildMethodDetails['laborFlatBillingAmount'];
     }
     if(this.selectedPartNumber && this.selectedPartNumber.managementStructureId && !this.basicLabourDetail){
@@ -147,7 +147,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     if(!this.isQuote){
       this.getEmployeeData();
     }
-    this.laborForm['costPlusType'] = 'Mark Up'
+    this.laborForm.costPlusType = 'Mark Up'
     this.workOrderWorkFlowList = this.workOrderWorkFlowOriginalData;
     if (this.laborForm['workOrderHoursType']) {
       // if (this.laborForm['workOrderHoursType'] == 1) {
@@ -211,8 +211,8 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.calculateAdjustedHours(task);
       }
     }
-    if (this.laborForm['costPlusType']) {
-      this.laborForm['costPlusType'] = this.laborForm['markupFixedPrice'];
+    if (this.laborForm.costPlusType) {
+      this.laborForm.costPlusType = this.laborForm['markupFixedPrice'];
       this.overAllMarkup = Number(this.laborForm['headerMarkupId']);
     }
 
@@ -311,7 +311,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
         this.defaultBurdenRate = this.basicLabourDetail['burdenRateId'];
       }
       else if(this.basicLabourDetail['burdenRateIdText'] == 'Flat Amount Per Work Order'){
-        this.laborForm['costPlusType'] = 3;
+        this.laborForm.costPlusType = 3;
         this.laborForm['laborFlatBillingAmount'] = this.basicLabourDetail['flatAmount'];
       }
     }
@@ -856,7 +856,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
       workOrderLaborList: formedData,
       totalWorkHours: this.laborForm.totalWorkHours,
       WorkOrderQuoteTask: WorkOrderQuoteTask,
-      LaborBuildMethod: this.laborForm['costPlusType']
+      LaborBuildMethod: this.laborForm.costPlusType
     }
 
 
@@ -891,7 +891,7 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
     }
     if (this.isQuote) {
       this.saveFormdata.headerMarkupId = Number(this.overAllMarkup);
-      this.saveFormdata.markupFixedPrice = this.laborForm['costPlusType'];
+      this.saveFormdata.markupFixedPrice = this.laborForm.costPlusType;
       // for(let labor in this.saveFormdata.workOrderLaborList){
       //   this.saveFormdata.workOrderLaborList[labor].forEach(
       //     (lab)=>{
@@ -1068,10 +1068,10 @@ export class WorkOrderLaborComponent implements OnInit, OnChanges {
 
   tmchange() {
     this.overAllMarkup = '';
-    let billingMethodId = Number(this.laborForm['costPlusType']);
+    let billingMethodId = Number(this.laborForm.costPlusType);
     for (let t in this.laborForm.workOrderLaborList[0]) {
       for (let mData of this.laborForm.workOrderLaborList[0][t]) {
-        if(this.laborForm['costPlusType'] && this.laborForm['costPlusType'] == 3){
+        if(this.laborForm.costPlusType && this.laborForm.costPlusType == 3){
           mData.billingAmount = 0.00;
           mData.billingRate = 0.00;
           this.laborForm['laborFlatBillingAmount'] = 0.00;

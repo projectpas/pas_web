@@ -5,7 +5,7 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { ShipViaService } from '../../services/shipVia.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { Condition } from '../../models/condition.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -35,7 +35,7 @@ import { CommonService } from '../../services/common.service';
     animations: [fadeInOut]
 })
 /** Actions component*/
-export class ItemGroupComponent implements OnInit{
+export class ItemGroupComponent implements OnInit {
     selectedActionName: any;
     actionamecolle: any[] = [];
 
@@ -57,7 +57,7 @@ export class ItemGroupComponent implements OnInit{
     filteredBrands: any[];
     localCollection: any[] = [];
     Active: string = "Active";
-  
+
 
     viewRowData: any;
     auditHistory: any = [];
@@ -75,7 +75,7 @@ export class ItemGroupComponent implements OnInit{
     pageIndex: number = 0;
     pageSize: number = 10;
     totalPages: number;
-    @ViewChild('dt',{static:false})
+    @ViewChild('dt', { static: false })
     private table: Table;
     selectedRecordForEdit: any;
     newItemGroup =
@@ -87,22 +87,22 @@ export class ItemGroupComponent implements OnInit{
             isDeleted: false,
             memo: ""
         };
-     itemGroup: any = { ...this.newItemGroup };
+    itemGroup: any = { ...this.newItemGroup };
     disableSaveForCondition: boolean;
     disableSaveForConditionMsg: boolean;
     itemGroupDescList: any;
-    disableSaveForItemDescMsg: boolean =  false;
-    disableSaveForItemGroupCodeMsg: boolean =  false;
-   disableSaveForEdit:boolean=false;
+    disableSaveForItemDescMsg: boolean = false;
+    disableSaveForItemGroupCodeMsg: boolean = false;
+    disableSaveForEdit: boolean = false;
     isDeleted: boolean = false;
     currentstatus: string = 'Active';
 
     constructor(private itemMasterService: ItemMasterService,
-         private commonService: CommonService,public router: Router,
-          private breadCrumb: SingleScreenBreadcrumbService, private authService: AuthService, private _fb: FormBuilder, private alertService: AlertService, 
-          private masterComapnyService: MasterComapnyService, private modalService: NgbModal, public shipViaService: ShipViaService, private dialog: MatDialog, private configurations: ConfigurationService,
+        private commonService: CommonService, public router: Router,
+        private breadCrumb: SingleScreenBreadcrumbService, private authService: AuthService, private _fb: FormBuilder, private alertService: AlertService,
+        private masterComapnyService: MasterComapnyService, private modalService: NgbModal, public shipViaService: ShipViaService, private dialog: MatDialog, private configurations: ConfigurationService,
         private itemGroupService: ItemGroupService
-        ) {
+    ) {
 
 
     }
@@ -119,17 +119,17 @@ export class ItemGroupComponent implements OnInit{
     private getItemGroupList() {
         this.itemMasterService.getItemGroupList().subscribe(res => {
             const respData = res;
-            if(respData.length > 0) {
+            if (respData.length > 0) {
                 // this.itemGroupData = respData;
-                this.originalTableData=res;
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+                this.originalTableData = res;
+                this.getListByStatus(this.status ? this.status : this.currentstatus)
                 // this.totalRecords = respData.length;
                 // this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             } else {
                 this.totalRecords = 0;
                 this.totalPages = 0;
             }
-            
+
         });
     }
     dismissModel() {
@@ -180,7 +180,7 @@ export class ItemGroupComponent implements OnInit{
                 MessageSeverity.success
             );
             this.getItemGroupList();
-           
+
         })
     }
 
@@ -196,8 +196,8 @@ export class ItemGroupComponent implements OnInit{
         this.itemGroupDescList = this.originalTableData;
 
         const itemGData = [...this.originalTableData.filter(x => {
-            return x.description.toLowerCase().includes(event.query.toLowerCase())   
-          
+            return x.description.toLowerCase().includes(event.query.toLowerCase())
+
         })]
         this.itemGroupDescList = itemGData;
     }
@@ -210,7 +210,7 @@ export class ItemGroupComponent implements OnInit{
         const exists = validateRecordExistsOrNot(field, value, this.originalTableData, this.selectedRecordForEdit);
         if (exists.length > 0) {
             this.disableSaveForItemDescMsg = true;
-           
+
         }
         else {
 
@@ -239,29 +239,29 @@ export class ItemGroupComponent implements OnInit{
         // }
     }
 
-    checkItemGroupCodeExists(field, value) {        
+    checkItemGroupCodeExists(field, value) {
         for (let i = 0; i < this.originalTableData.length; i++) {
-            if (this.itemGroup.itemGroupCode == this.originalTableData[i].itemGroupCode || value == this.originalTableData[i].itemGroupCode) {                
-                if(this.selectedRecordForEdit){
-                    if(this.selectedRecordForEdit.itemGroupCode.itemGroupCode == value){
+            if (this.itemGroup.itemGroupCode == this.originalTableData[i].itemGroupCode || value == this.originalTableData[i].itemGroupCode) {
+                if (this.selectedRecordForEdit) {
+                    if (this.selectedRecordForEdit.itemGroupCode.itemGroupCode == value) {
                         this.disableSaveForItemGroupCodeMsg = false;
                         return;
                     }
                     else {
                         this.disableSaveForItemGroupCodeMsg = true;
                         return;
-                    }   
+                    }
                 }
                 else {
                     this.disableSaveForItemGroupCodeMsg = true;
                     return;
-                }             
+                }
             } else {
                 this.disableSaveForItemGroupCodeMsg = false;
-        }
+            }
 
         }
-        
+
         // const exists = validateRecordExistsOrNot(field, value, this.itemGroupData, this.selectedRecordForEdit);
         // if (exists.length > 0) {
         //     this.disableSaveForConditionMsg = true;
@@ -281,11 +281,11 @@ export class ItemGroupComponent implements OnInit{
         //     }
         // }
     }
-    selectedItemGroupCode(value) {       
+    selectedItemGroupCode(value) {
         if (this.originalTableData.find
-            (x => x.itemGroupCode === 
+            (x => x.itemGroupCode ===
                 value.itemGroupCode)) {
-            if(this.selectedRecordForEdit.itemGroupCode.itemGroupCode == value.itemGroupCode){
+            if (this.selectedRecordForEdit.itemGroupCode.itemGroupCode == value.itemGroupCode) {
                 this.disableSaveForItemGroupCodeMsg = false;
             } else {
                 this.disableSaveForItemGroupCodeMsg = true;
@@ -295,15 +295,15 @@ export class ItemGroupComponent implements OnInit{
             this.disableSaveForItemGroupCodeMsg = false;
         }
     }
-    selectedItemGroupDesc(value) {       
+    selectedItemGroupDesc(value) {
         if (this.originalTableData.find
-            (x => x.description === 
+            (x => x.description ===
                 value.description)) {
-                if(this.selectedRecordForEdit.description.description == value.description){
-                    this.disableSaveForItemDescMsg = false;
-                } else {
-                    this.disableSaveForItemDescMsg = true;
-                }
+            if (this.selectedRecordForEdit.description.description == value.description) {
+                this.disableSaveForItemDescMsg = false;
+            } else {
+                this.disableSaveForItemDescMsg = true;
+            }
         }
         else {
             this.disableSaveForItemDescMsg = false;
@@ -315,7 +315,7 @@ export class ItemGroupComponent implements OnInit{
     //     this.getShipViaList();
     // }
 
-    
+
     delete(rowData) {
         this.selectedRowforDelete = rowData;
     }
@@ -339,26 +339,26 @@ export class ItemGroupComponent implements OnInit{
         this.viewRowData = rowData;
     }
 
-    resetViewData() { 
+    resetViewData() {
         this.viewRowData = undefined;
     }
     edit(rowData) {
         console.log(rowData);
         this.isEditMode = true;
-        this.disableSaveForEdit=true;
-        
+        this.disableSaveForEdit = true;
+
         this.disableSaveForConditionMsg = false;
         // this.itemGroupData = rowData;
         this.itemGroup = {
-            ...rowData, 
+            ...rowData,
             itemGroupCode: getObjectByValue('itemGroupCode', rowData.itemGroupCode, this.itemGroupData),
-            description: getObjectByValue('description', rowData.description ,  this.itemGroupData )          
-    };
-               this.selectedRecordForEdit = {...this.itemGroup}
+            description: getObjectByValue('description', rowData.description, this.itemGroupData)
+        };
+        this.selectedRecordForEdit = { ...this.itemGroup }
 
 
         console.log(this.itemGroupData, "this.itemGroupData+++")
-        
+
     }
 
     saveItemGroup() {
@@ -449,102 +449,102 @@ export class ItemGroupComponent implements OnInit{
             })
         }
     }
-    
+
     getPageCount(totalNoofRecords, pageSize) {
-		return Math.ceil(totalNoofRecords / pageSize)
+        return Math.ceil(totalNoofRecords / pageSize)
     }
-    
+
     sampleExcelDownload() {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadsamplefile?moduleName=ItemGroup&fileName=itemgroup.xlsx`;
         window.location.assign(url);
     }
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.itemGroupData=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.itemGroupData = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemGroupData = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.itemGroupData = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.itemGroupData= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.itemGroupData= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemGroupData = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.itemGroupData = newarry;
+            }
         }
-        this.totalRecords = this.itemGroupData.length ;
+        this.totalRecords = this.itemGroupData.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('ItemGroup',
-            'ItemGroupId',this.restorerecord.itemGroupId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('ItemGroup',
+            'ItemGroupId', this.restorerecord.itemGroupId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.getItemGroupList();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
-    
-    
+    }
+
+    columnsChanges() {}
 }

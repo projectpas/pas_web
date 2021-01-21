@@ -29,7 +29,7 @@ export class EmployeeStepsPrimeNgComponent implements OnInit{
   
     /** employee-steps-primeNg ctor */
 	constructor(private router: ActivatedRoute,
-		private acRouter: ActivatedRoute	, private route: Router, private employeeService: EmployeeService) {
+		private acRouter: ActivatedRoute	, private route: Router, public employeeService: EmployeeService) {
 		let currentUrl = this.route.url;
 		this.employeeService.alertChangeObject$.subscribe(value => {
 			this.showComponentPTab = value;

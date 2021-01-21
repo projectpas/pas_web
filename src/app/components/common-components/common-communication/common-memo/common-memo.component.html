@@ -133,6 +133,8 @@
                             name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
                         <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
                             name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
+                        <!-- <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"
+                            (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
                     </th>
 
 
@@ -140,7 +142,7 @@
                     <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <ng-container *ngFor="let col of columns">
                         <td class="table-column-width" *ngIf="col.field == 'SERIAL_NO'" class="ui-resizable-column"
@@ -174,7 +176,7 @@
                                 (click)="getViewData(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false && !isView" data-toggle="modal"
-                            data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, i)"
+                            data-target="#addNewMemo"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, rowIndex)"
                                 matTooltip="Edit" matTooltipPosition="above" data-dismiss="modal"><i
                                     class="fa fa-pencil"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false  && !isView"><a class="btn nobg btn-delete-cstm"

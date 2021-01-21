@@ -34,7 +34,7 @@ export class DisposalTypeComponent implements OnInit {
     formData = new FormData();
     public auditHisory: AuditHistory[] = [];
     private isDeleteMode: boolean = false;
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     modal: NgbModalRef;
     public sourceAction: DisposalType;
     selectedRow: any;
@@ -634,4 +634,7 @@ export class DisposalTypeComponent implements OnInit {
         }*/
     }
 
+    updatedepriciationmethod() {}
+
+    changeStatus(rowData) {}
 }

@@ -1,15 +1,15 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-import * as $ from 'jquery';
-import {  MatTableDataSource, MatDialog } from '@angular/material';
+declare var $ : any;
+import { MatTableDataSource, MatDialog } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { CrmService } from '../../../services/crm.service';
-import {  Table } from 'primeng/table';
+import { Table } from 'primeng/table';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
-import {  Inject, Input, Output, EventEmitter, ElementRef } from '@angular/core';
+import { Inject, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 
 
 import { NgbModal, ModalDismissReasons, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -31,7 +31,7 @@ export class CrmListComponent implements OnInit {
     totalPages: number = 0;
     isDeleteMode: boolean = false;
     home: any;
-      headers = [
+    headers = [
         { field: 'accountName', header: 'Account Name' },
         { field: 'accountType', header: 'Accont Type' },
         { field: 'parent', header: 'Parent' },
@@ -53,64 +53,65 @@ export class CrmListComponent implements OnInit {
         { field: 'openDate', header: 'Open Date' },
         { field: 'closingDate', header: 'Closing Date' },
         { field: 'accountName', header: 'Account Name' },
-		{ field: 'accountContact', header: 'Account Contact' },
-		{ field: 'probability', header: 'Probability' },
+        { field: 'accountContact', header: 'Account Contact' },
+        { field: 'probability', header: 'Probability' },
         { field: 'expectedRevenue', header: 'Expected Revenue' },
         { field: 'dealStage', header: 'Deal Stage' },
-		{ field: 'outCome', header: 'Outcome' },
-	
-		{ field: 'source', header: 'Source' },
+        { field: 'outCome', header: 'Outcome' },
+
+        { field: 'source', header: 'Source' },
         { field: 'followup', header: 'Follow Up' },
         { field: 'salesPerson', header: 'Salesperson' },
-       
-	]
-	selectedColumnsDeals=this.dealHeaders;
+
+    ]
+    selectedColumnsDeals = this.dealHeaders;
     data: any;
     pageSize: number = 10;
     pageIndex: number = 0;
     first = 0;
     isNTAEDisabledSteps = true;
-    @ViewChild('dt',{static:false})
+    @ViewChild('dt', { static: false })
     private table: Table;
     lazyLoadEventData: any;
     viewData: any[];
-    modal: NgbModalRef;  
+    modal: NgbModalRef;
     selectedRow: any;
-    selectedColumn:any;
+    selectedColumn: any;
     crmauditHistory: any[];
     selectedRowforDelete: any;
     currentNTAETab: string = 'Activities';
-	activeNTAEMenuItem: number = 1;
+    activeNTAEMenuItem: number = 1;
     dataSource: MatTableDataSource<any>;
     breadcrumbs: MenuItem[];
     status: string = 'Active';
     currentstatus: string = 'Active';
-    currentcomponentstatus:string='Customer';
-    currentDeletedstatus:boolean=false;
+    currentcomponentstatus: string = 'Customer';
+    currentDeletedstatus: boolean = false;
     lazyLoadEventDataInput: any;
+    content1: any;
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,
         private alertService: AlertService,
-        public crmService:CrmService,
+        public crmService: CrmService,
         private commonService: CommonService,
         private configurations: ConfigurationService) {
         this.dataSource = new MatTableDataSource();
     }
     ngOnInit() {
-       this.breadcrumbs = [
+        this.breadcrumbs = [
             { label: 'CRM' },
             { label: 'CRM List' },
         ];
     }
-   
+
     loadData(event) {
-       this.lazyLoadEventData = event;
+        this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;
         this.pageIndex = pageIndex;
         this.pageSize = event.rows;
         event.first = pageIndex;
-        event.globalFilter='';
+        event.globalFilter = '';
         this.lazyLoadEventDataInput = event;
         this.lazyLoadEventDataInput.filters = {
             ...this.lazyLoadEventDataInput.filters,
@@ -119,14 +120,14 @@ export class CrmListComponent implements OnInit {
         this.getList(event)
     }
     getList(data) {
- const isdelete=this.currentDeletedstatus ? true:false;
-        data.filters.isDeleted=isdelete
+        const isdelete = this.currentDeletedstatus ? true : false;
+        data.filters.isDeleted = isdelete
         this.isSpinnerVisible = true;
         const PagingData = { ...data, filters: listSearchFilterObjectCreation(data.filters) }
         this.crmService.getAllCrmList(PagingData).subscribe(res => {
             this.isSpinnerVisible = false;
             this.data = res.results;
-           if (res.results.length > 0) {
+            if (res.results.length > 0) {
                 this.totalRecords = res.totalRecordsCount;
                 this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             }
@@ -148,26 +149,26 @@ export class CrmListComponent implements OnInit {
             this.activeNTAEMenuItem = 4;
         }
 
-	}
-  
-   
+    }
+
+
     filterData(data) {
     }
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
-  
+
     edit(rowData) {
         const { csrId } = rowData;
         this._route.navigateByUrl(`customersmodule/customerpages/app-crm-edit/`);
     }
 
-   
+
     dismissModel() {
         this.isDeleteMode = false;
         this.modal.close();
     }
-   
+
     private saveCompleted(user?: any) {
 
         if (this.isDeleteMode == true) {
@@ -180,13 +181,13 @@ export class CrmListComponent implements OnInit {
         }
         this.getList(this.lazyLoadEventData);
     }
-   
-   
+
+
     private onDataLoadFailed(error: any) {
         this.alertService.stopLoadingMessage();
 
     }
-  
+
     private onAuditHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
 
@@ -214,9 +215,18 @@ export class CrmListComponent implements OnInit {
         const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${rowData.link}`;
         window.location.assign(url);
     }
-
-   
-
+    allContacts: any;
+    selectedContactColumns: any;
+    cols: any;
+    ItemMasterId: any;
+    sourceItemMaster: any;
+    restorerecord: any;
+    columnsChanges() { }
+    globalSearch(targetvalue) { }
+    changeStatus(rowData) { }
+    viewSelectedRow(rowData) { }
+    getAuditHistoryById(rowData) {}
+    restoreRecord() {}
 }
 
 

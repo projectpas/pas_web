@@ -14,10 +14,11 @@ import { AccountListingService } from '../../../services/account-listing/account
 import { GlAccountService } from '../../../services/glAccount/glAccount.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs'
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
 import * as moment from 'moment';
 import { CommonService } from '../../../services/common.service';
 import { DatePipe } from '@angular/common';
+declare let $ : any;
 
 
 @Component({
@@ -162,11 +163,10 @@ export class AccountListingComponent implements OnInit {
             this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
                 const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
                 this.getList(PagingData); 
-        }
-              
-            }
+        }              
+    }
 
-    exportCSV(dt) {
+    exportCSV(dt) {       
         this.isSpinnerVisible = true;   
         const isdelete = this.currentDeletedstatus ? true : false;
         let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status ? this.status : 'Active',"isDeleted":isdelete},"globalFilter":""}
@@ -337,7 +337,7 @@ export class AccountListingComponent implements OnInit {
         }, err => {
             this.isSpinnerVisible = false;          
         });
-
+        
     }
 
 
@@ -370,8 +370,8 @@ export class AccountListingComponent implements OnInit {
         this.isSpinnerVisible = false;           
         }, err => {
             this.isSpinnerVisible = false;            
-        });
-       
+        });        
+        
     } 
     
     changeStatus(row, e) {        
@@ -383,4 +383,6 @@ export class AccountListingComponent implements OnInit {
             this.isSpinnerVisible = false;           
         });
     }
+
+    columnsChanges() {}
 }

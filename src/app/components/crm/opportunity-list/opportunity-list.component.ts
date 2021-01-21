@@ -1,7 +1,7 @@
 
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { fadeInOut } from '../../../services/animations';
-import * as $ from 'jquery';
+declare var $ : any;
 import {  MatTableDataSource, MatDialog } from '@angular/material';
 import { AuthService } from '../../../services/auth.service';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
@@ -62,6 +62,11 @@ export class OpportunityListComponent implements OnInit {
     currentstatus: string = 'Active';
     currentDeletedstatus:boolean=false;
     lazyLoadEventDataInput: any;
+    allContacts: any;
+    selectedContactColumns: any;
+    restorerecord: any;
+    customerauditHisory: any;
+    
     constructor(private _route: Router,
         private authService: AuthService,
         private modalService: NgbModal,

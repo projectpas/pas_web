@@ -101,15 +101,25 @@
                     </th>
                 </tr>
                 <tr>
-                    <th class="table-column-width" *ngFor="let col of headers" [ngSwitch]="col.field">
+                    <!-- <th class="table-column-width" *ngFor="let col of headers" [ngSwitch]="col.field">
                         <input pInputText type="text" class="incorn_border table-header-input-width" (input)="
                             dt.filter($event.target.value, col.field, 'contains')
                         " />
+                    </th> -->
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input class="incorn_border table-header-input-width"
+                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                            name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                            name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                     </th>
                     <th class="table-actions-column"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData">
                     <!-- <ng-container *ngFor="let col of headers">
                             <td style="width:50px"
@@ -151,7 +161,7 @@
                                 (click)="getViewData(rowData)" matTooltip="View" matTooltipPosition="above"><i
                                     class="fa fa-eye"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false  && !isView" data-target="#addNewText"
-                            data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, i)"
+                            data-toggle="modal"><a class="btn nobg btn-edit-cstm" (click)="edit(rowData, rowIndex)"
                                 matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                         <span *ngIf="deletedStatusInfo==false  && !isView" data-toggle="modal"
                             data-target="#deleteRowConfirmation"><a class="btn nobg btn-delete-cstm"
@@ -334,13 +344,11 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary btn-primary" data-dismiss="modal" (click)="savePhone()"
-                        style="padding: 6px 12px !important;margin-top: 10px;"
+                    <button class="btn btn-primary editor-buttons-margin" data-dismiss="modal" (click)="savePhone()"
                         [disabled]="!textForm.valid || updateDisabledText">
                         {{(isEdit)?'Update':'Save'}}
                     </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;">Close</button>
+                    <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>
                 </div>
             </form>
         </div>
@@ -451,8 +459,8 @@
                     <div class="clear"></div>
                 </div>
             </div>
-            <div class="editor-buttons">
-                <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -493,10 +501,10 @@
                     <span class="new-label">{{deletingRecord.mobile}}</span>
                 </strong>
             </div>
-            <div class="editor-buttons">
-                <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
                     (click)="deleteText(deletingRecord)">Yes</button>
-                <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
             </div>
         </div>
 
@@ -582,8 +590,8 @@
                     </table>
                 </div>
             </div>
-            <div class="editor-buttons">
-                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="dismissModelHistory()">Close</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
             </div>
         </div>
 

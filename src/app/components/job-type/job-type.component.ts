@@ -47,11 +47,13 @@ export class JobTypeComponent implements OnInit {
 
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     shortNameList: any;
-
+    AuditDetails: any;
+    uomHeaders: any;
+    modal: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private commonService: CommonService,
         private configurations: ConfigurationService, private authService: AuthService, private alertService: AlertService, private jobTypeService: JobTypeService) {
@@ -281,5 +283,6 @@ export class JobTypeComponent implements OnInit {
             }
         }
     }
-
+    
+    dismissModel() {}
 }

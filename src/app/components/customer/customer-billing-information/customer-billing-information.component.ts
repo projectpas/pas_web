@@ -7,7 +7,7 @@ import { getValueFromObjectByKey, getObjectByValue, editValueAssignByCondition }
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { AuditHistory } from '../../../models/audithistory.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { CommonService } from '../../../services/common.service';

@@ -99,7 +99,7 @@
                                                     matTooltip="Download  Data"
                                                     matTooltipPosition="above"
                                                     iconPos="left"
-                                                    label="Export  Data"
+                                                    label="Export Data"
                                                     data-toggle="modal" 
                                                     (click)="selectedOnly = false; targetData = documents;"
                                                      data-target="#downloadConfirmation" 
@@ -195,7 +195,7 @@
                                             <div *ngIf="!currentDeletedstatus" >
                                                 <span data-toggle="modal" data-target="#docView">
                                                     <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                       (click)="openView(docView,rowData)" matTooltip="View" matTooltipPosition="above">
+                                                       (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 </span>
@@ -224,7 +224,7 @@
                                             <div *ngIf="currentDeletedstatus" >
                                                 <span data-toggle="modal" data-target="#docView">
                                                     <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                       (click)="openView(docView,rowData)" matTooltip="View" matTooltipPosition="above">
+                                                       (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above">
                                                         <i class="fa fa-eye"></i>
                                                     </a>
                                                 </span>

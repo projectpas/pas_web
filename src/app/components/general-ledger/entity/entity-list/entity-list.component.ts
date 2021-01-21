@@ -1,7 +1,7 @@
 ﻿import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { fadeInOut } from '../../../../services/animations';
 import { PageHeaderComponent } from '../../../../shared/page-header.component';
-import * as $ from 'jquery';
+declare var $ : any;
 import { LegalEntityEndpontService } from '../../../../services/legalentity-endpoint.service';
 import { AuthService } from '../../../../services/auth.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -189,7 +189,6 @@ export class LegalEntityStructureComponent implements OnInit, AfterViewInit {
 		return out
 	}
 	nodeSelect(event) {
-		debugger;
 		//event.node = selected node
 		console.log("selected node", event, event.node);
 	}

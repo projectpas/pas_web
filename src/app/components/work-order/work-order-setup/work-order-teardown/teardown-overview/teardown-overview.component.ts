@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges, OnInit } from '@angular/core';
 import { WorkOrderService } from '../../../../../services/work-order/work-order.service';
-import * as $ from 'jquery';
+declare var $ : any;
 
 @Component({
   selector: 'app-teardown-overview',

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
-import * as $ from "jquery";
+declare var $ : any;
 import { SalesQuoteService } from "../../../../services/salesquote.service";
 import { ISalesSearchParameters } from "../../../../models/sales/ISalesSearchParameters";
 import { SalesSearchParameters } from "../../../../models/sales/SalesSearchParameters";
@@ -79,13 +79,13 @@ export class SalesQuoteListComponent implements OnInit {
     isSettingsReceived = false;
     @ViewChild("filterStatusInput",{static:false}) public filterText: ElementRef;
     clearStatusText: boolean = false;
-
+    salesOrderQuoteId: any;
+    
     constructor(
         private salesQuoteService: SalesQuoteService,
         private alertService: AlertService,
         private modalService: NgbModal,
         private router: Router,
-        private customerService: CustomerService,
         public employeeService: EmployeeService,
         private commonservice: CommonService,
         public currencyService: CurrencyService,
@@ -97,7 +97,7 @@ export class SalesQuoteListComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.breadcrumbs = [
             { label: 'Sales Order Quote' },
-            { label: 'Quote List' },
+            { label: 'Sales Order Quote List' },
         ];
         this.salesQuote = new SalesQuote();
         this.salesOrderQuote = new SalesOrderQuote();
@@ -223,7 +223,8 @@ export class SalesQuoteListComponent implements OnInit {
     }
 
     closeModal() {
-        $("#downloadConfirmation").modal("hide");
+        //$("#downloadConfirmation").modal("hide");
+        this.modal.close();
     }
 
     dismissModel() {
@@ -254,10 +255,10 @@ export class SalesQuoteListComponent implements OnInit {
 
     openQuoteToEdit(row) {
         this.isSpinnerVisible = true;
-        const { salesOrderQuoteId } = row;
+        this.salesOrderQuoteId = row.salesOrderQuoteId;
         let customerId = row.customerId;
         this.router.navigateByUrl(
-            `salesmodule/salespages/sales-quote-edit/${customerId}/${salesOrderQuoteId}`
+            `salesmodule/salespages/sales-quote-edit/${customerId}/${this.salesOrderQuoteId}`
         );
     }
 
@@ -373,7 +374,8 @@ export class SalesQuoteListComponent implements OnInit {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
         let PagingData;
-        PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+        //PagingData = { "filters": { "statusId": "0", "viewType": "pnview", "isDeleted": this.currentDeletedstatus }, "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "globalFilter": "" };
+        PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"StatusId":this.currentStatus,"isDeleted":isdelete,"ViewType": this.viewType},"globalFilter":""}
         let filters = Object.keys(dt.filters);
         filters.forEach(x => {
             PagingData.filters[x] = dt.filters[x].value;
@@ -393,6 +395,7 @@ export class SalesQuoteListComponent implements OnInit {
                 dt._value = vList;
                 dt.exportCSV();
                 dt.value = this.sales;
+                this.modal.close();
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
@@ -400,8 +403,13 @@ export class SalesQuoteListComponent implements OnInit {
 
     }
     closeHistoryModal() {
-        $("#soqHistory").modal("hide");
+        this.modal.close();
     }
+
+    openHistoryPopup(content) {
+        this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
+    }
+
     getAuditHistoryById(rowData) {
         this.isSpinnerVisible = true;
         this.salesQuoteService.getSOQHistory(rowData.salesOrderQuoteId).subscribe(res => {
@@ -438,4 +446,7 @@ export class SalesQuoteListComponent implements OnInit {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
+    openDownload(content) {
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
 }

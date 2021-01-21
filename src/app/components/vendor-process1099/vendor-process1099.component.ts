@@ -62,7 +62,10 @@ export class VendorProcess1099Component implements OnInit {
     selectedRecordForEdit: any;
     disableSaveForShortName: boolean = false;
     shortNameList: any;
-
+    AuditDetails: any;
+    rowIndex: any;
+    AuditHistoryTitle: any;
+    HasAuditDetails: any;
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
          private configurations: ConfigurationService, 
          private authService: AuthService, 

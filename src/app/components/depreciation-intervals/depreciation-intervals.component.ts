@@ -37,7 +37,7 @@ export class DepreciationIntervalsComponent implements OnInit {
     auditHistory: any[] = [];
     public auditHisory: AuditHistory[] = [];
     private isDeleteMode: boolean = false;
-    private isEdit: boolean = false;
+    public isEdit: boolean = false;
     modal: NgbModalRef;
     public sourceAction: DepreciationIntervals;
     display: boolean = false;
@@ -66,15 +66,15 @@ export class DepreciationIntervalsComponent implements OnInit {
     private isDelete: boolean = false;
     codeName: string = "";
 
-   
+
     pageIndex: number = 0;
     pageSize: number = 10;
     totalPages: number;
     disableSaveForEdit: boolean = false;
     currentstatus: string = 'Active';
 
-    @ViewChild(MatPaginator,{static:false}) paginator: MatPaginator;
-    @ViewChild(MatSort,{static:false}) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
     /** DepreciationInterval ctor */
 
     paginatorState: { rows: number; first: number; };
@@ -94,14 +94,14 @@ export class DepreciationIntervalsComponent implements OnInit {
     ngOnInit(): void {
         this.loadData();
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-depreciation-intervals';
-        this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);  
+        this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
 
     }
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
 
-  
+
     ngAfterViewInit() {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -112,8 +112,8 @@ export class DepreciationIntervalsComponent implements OnInit {
         // this.loadingIndicator = true;
         this.depreciationIntervalsService.getAll().subscribe(data => {
 
-            this.originalTableData=data[0].columnData;
-            this.getListByStatus(this.status ? this.status :this.currentstatus)
+            this.originalTableData = data[0].columnData;
+            this.getListByStatus(this.status ? this.status : this.currentstatus)
 
 
             this.allunitData = data[0].columHeaders;
@@ -257,9 +257,9 @@ export class DepreciationIntervalsComponent implements OnInit {
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
-    getmemo() {     
-        this.disableSaveForEdit = false;    
-     }
+    getmemo() {
+        this.disableSaveForEdit = false;
+    }
 
     openEdit(content, row) {
 
@@ -400,13 +400,13 @@ export class DepreciationIntervalsComponent implements OnInit {
             console.log('When user closes');
         }, () => { console.log('Backdrop click') })
     }
-  
+
 
     resetdepreciationIntervals(): void {
         this.updateMode = false;
         this.currentDepreciationIntervals = new DepreciationIntervals();
     }
-   
+
 
     getAuditHistoryById(rowData) {
         this.depreciationIntervalsService.getAudit(rowData.assetDepreciationIntervalId).subscribe(res => {
@@ -463,92 +463,93 @@ export class DepreciationIntervalsComponent implements OnInit {
 
         this.loadData();
     }
-    getDeleteListByStatus(value){
-        if(value){
-            this.currentDeletedstatus=true;
-        }else{
-            this.currentDeletedstatus=false;
+    getDeleteListByStatus(value) {
+        if (value) {
+            this.currentDeletedstatus = true;
+        } else {
+            this.currentDeletedstatus = false;
         }
         this.getListByStatus(this.status ? this.status : this.currentstatus)
-            }
-            
-	originalTableData:any=[];
-    currentDeletedstatus:boolean=false;
-    status:any="Active";
+    }
+
+    originalTableData: any = [];
+    currentDeletedstatus: boolean = false;
+    status: any = "Active";
     getListByStatus(status) {
-        const newarry=[];
-        if(status=='Active'){ 
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-			   this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==false){
-				newarry.push(element);
-				}
-			   });
-	       }else{
-		        this.originalTableData.forEach(element => {
-				if(element.isActive ==true && element.isDeleted ==true){
-			     newarry.push(element);
-				}
-			   });
-	   }
-         this.depreciationIntervalsList=newarry;
-        }else if(status=='InActive' ){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
-				this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==false){
-				 newarry.push(element);
-				 }
-				});
-			}else{
-				 this.originalTableData.forEach(element => {
-				 if(element.isActive ==false && element.isDeleted ==true){
-				  newarry.push(element);
-				 }
-				});
-		}
-              this.depreciationIntervalsList = newarry; 
-        }else if(status== 'ALL'){
-            this.status=status;
-			if(this.currentDeletedstatus==false){
+        const newarry = [];
+        if (status == 'Active') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == true && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.depreciationIntervalsList = newarry;
+        } else if (status == 'InActive') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isActive == false && element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+            }
+            this.depreciationIntervalsList = newarry;
+        } else if (status == 'ALL') {
+            this.status = status;
+            if (this.currentDeletedstatus == false) {
                 // this.billingInfoList=this.originalTableData;
-                this.originalTableData.forEach(element=>{
-					if(element.isDeleted==false){
-						newarry.push(element);
-					}
-				});
-				this.depreciationIntervalsList= newarry;
-			}else{
-				this.originalTableData.forEach(element=>{
-					if(element.isDeleted==true){
-						newarry.push(element);
-					}
-				});
-				this.depreciationIntervalsList= newarry;
-			}
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == false) {
+                        newarry.push(element);
+                    }
+                });
+                this.depreciationIntervalsList = newarry;
+            } else {
+                this.originalTableData.forEach(element => {
+                    if (element.isDeleted == true) {
+                        newarry.push(element);
+                    }
+                });
+                this.depreciationIntervalsList = newarry;
+            }
         }
-        this.totalRecords = this.depreciationIntervalsList.length ;
+        this.totalRecords = this.depreciationIntervalsList.length;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-        }
-        restore(content, rowData) {
-            this.restorerecord = rowData;
-            this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-            this.modal.result.then(() => {
-                console.log('When user closes');
-            }, () => { console.log('Backdrop click') })
-        }
-        restorerecord:any={}
-        restoreRecord(){  
-            this.commonService.updatedeletedrecords('AssetDepreciationInterval',
-            'AssetDepreciationIntervalId',this.restorerecord.assetDepreciationIntervalId, ).subscribe(res => {
-                this.currentDeletedstatus=true;
+    }
+    restore(content, rowData) {
+        this.restorerecord = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        this.modal.result.then(() => {
+            console.log('When user closes');
+        }, () => { console.log('Backdrop click') })
+    }
+    restorerecord: any = {}
+    restoreRecord() {
+        this.commonService.updatedeletedrecords('AssetDepreciationInterval',
+            'AssetDepreciationIntervalId', this.restorerecord.assetDepreciationIntervalId).subscribe(res => {
+                this.currentDeletedstatus = true;
                 this.modal.close();
                 // this.geListByStatus(this.status ? this.status : 'Active');
                 this.loadData();
-    
+
                 this.alertService.showMessage("Success", `Successfully Updated Status`, MessageSeverity.success);
             })
-        }
- 
+    }
+
+    changeStatus(rowData) {}
 }

@@ -60,8 +60,7 @@
                                    optionLabel="header"
                                    [(ngModel)]="selectedColumns"
                                    [style]="{ minWidth: '220px' }"
-                                   style="float:left"
-                                   (onChange)="columnsChanges()"></p-multiSelect>
+                                   style="float:left"></p-multiSelect>
 
                                 </div>
                                 <div class="col">
@@ -74,7 +73,6 @@
                                pInputText
                                size="50"
                                class="form-control"
-                               (input)="globalSearch($event.target.value)"
                                placeholder="Filter" />
                     </div>
                 </div>
@@ -173,8 +171,8 @@
                     <th style="width:200px;position:sticky"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRow(rowData)">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle >
                     <td style="width:auto"
                         *ngFor="let col of columns"
                         class="ui-resizable-column"
@@ -190,16 +188,15 @@
                     <td class="action-icons-cstm" style="width:200px" *ngIf="selectedColumns.length > 0">
                         <div *ngIf="currentDeletedstatus==false">
                             <p-inputSwitch [(ngModel)]="rowData['isActive']"  name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
-                            <span><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                            matTooltipPosition="above" ></p-inputSwitch> 
+                            <span><a class="btn nobg" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                             <span><a class="btn nobg" (click)="edit(rowData)" matTooltip="Edit"  matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                           
                             <span><a href="#" class="btn btn-info boxed-float-btn nobg"  matTooltip="Convert"  matTooltipPosition="above">
                                 <i class="fa fa-exchange" style="font-size:15px;color:#0d57b0"></i></a></span>
 
                             <span data-target="#contentHist" data-toggle="modal"><a class="btn nobg" 
-                                (click)="getAuditHistoryById(rowData)"
-                                 matTooltip="History"  matTooltipPosition="above">
+                                matTooltip="History"  matTooltipPosition="above">
                                  <i class="fa fa-history"></i></a></span>
 
 
@@ -207,9 +204,9 @@
                         <p></p>>
                         <div *ngIf="currentDeletedstatus==true">
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
-                            matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
-                           <span><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                          <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                            matTooltipPosition="above" ></p-inputSwitch> 
+                           <span><a class="btn nobg"  matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+                          <span ><a class="btn nobg" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                        </div> 
                     </td>
                 </tr>
@@ -298,7 +295,7 @@
     
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                        
-                        <tr [pSelectableRow]="rowData" (dblclick)="toggledbldisplay(rowData)">
+                        <tr [pSelectableRow]="rowData" >
                           
                             <td style="width: 40px;"> <span class="flag">
                                 <i  *ngIf="rowData.isDefaultContact == true"     matTooltip="Primary"
@@ -311,7 +308,7 @@
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
                             </td>
                             <td style="width:140px">
-                                <span data-toggle="modal" data-target="#ListContactview"> <a class="btn btn-info boxed-float-btn nobg"  matTooltip="Edit" matTooltipPosition="View"   (click)="viewContactSelectedRow(rowData)" ><i class="fa fa-eye"></i></a> </span>
+                                <span data-toggle="modal" data-target="#ListContactview"> <a class="btn btn-info boxed-float-btn nobg"  matTooltip="Edit" matTooltipPosition="View"   ><i class="fa fa-eye"></i></a> </span>
 
                                 </td>
                         </tr>
@@ -354,7 +351,7 @@
             </strong>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+            <button type="button" class="btn btn-success" >Yes</button>
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>   
@@ -374,7 +371,7 @@
             </strong>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">Yes</button>
+            <button type="button" class="btn btn-success" >Yes</button>
             <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
         </div>
     </ng-template>

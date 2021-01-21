@@ -1,14 +1,14 @@
 ﻿<p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="header ">
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading">  {{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset Calibration</h4>
+          <h4 class="header-name">  {{ assetService.isEditMode == true ? 'Edit'  : 'Create'}} Asset Calibration</h4>
         </div>
         <div>
           <button
             type="button"
-            class="btn-sm new-btn-primary"
+            class="btn-sm header-button"
             [routerLink]="['/assetmodule/assetpages/app-asset-listing']">
             Asset List
           </button>
@@ -82,8 +82,8 @@
                             <div class="col-md-12">
                                 <div class="card new-card">
                            
-                                    <div class="card-header bg-primary">
-                                        <h4 class="new-card-heading"> Calibration</h4>
+                                    <div class="header">
+                                        <h4 class="header-name"> Calibration</h4>
                                     </div>
                                     </div>
                                     </div>
@@ -524,7 +524,7 @@
                                 <h4 class="modal-title">Edit Memo</h4>
                             </div>
                             <div class="modal-body">
-                                <table class="table table-bordered table-fixed workflow-table-material">
+                                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                                     <thead>
                                         <th style="color: #fff;">Memo</th>
                                     </thead>
@@ -536,10 +536,12 @@
                                             </td>
                                         </tr>
                                     </tbody> 
-                                </table>
-                                <div style="float:right;margin-top: 12px;">
-                                    <button type="button" class="btn btn-primary" (ngModelChange)="setvaliDate($event)" (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
-                                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo()">Close</button>
+                                </table> -->
+                                <p-editor [(ngModel)]="textAreaInfo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo($event)"
+                                name="textAreaInfo" required></p-editor>
+                                <div class="editor-buttons">
+                                    <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="setvaliDate($event)" (click)="onSaveTextAreaInfo(textAreaInfo)" [disabled]="disableEditor">Save</button>
+                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo()">Close</button>
                                </div> 
                             </div>
                         </div>

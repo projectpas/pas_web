@@ -285,7 +285,7 @@
                     <th style="width:200px;position:sticky"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRow(rowData)">
                     <td style="width:auto"
                         *ngFor="let col of columns"
@@ -322,7 +322,7 @@
                             <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                             matTooltipPosition="above" (onChange)="changeStatus(rowData)"></p-inputSwitch> 
                            <span><a class="btn nobg" (click)="viewSelectedRow(rowData)" matTooltip="View"  matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                          <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                          <span ><a class="btn nobg"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                        </div> 
                     </td>
                 </tr>
@@ -411,7 +411,7 @@
     
                     <ng-template pTemplate="body" let-rowData let-columns="columns">
                        
-                        <tr [pSelectableRow]="rowData" (dblclick)="toggledbldisplay(rowData)">
+                        <tr [pSelectableRow]="rowData" >
                           
                             <td style="width: 40px;"> <span class="flag">
                                 <i  *ngIf="rowData.isDefaultContact == true"     matTooltip="Primary"
@@ -424,7 +424,7 @@
                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy'):rowData[col.field]}}
                             </td>
                             <td style="width:140px">
-                                <span data-toggle="modal" data-target="#ListContactview"> <a class="btn btn-info boxed-float-btn nobg"  matTooltip="Edit" matTooltipPosition="View"   (click)="viewContactSelectedRow(rowData)" ><i class="fa fa-eye"></i></a> </span>
+                                <span data-toggle="modal" data-target="#ListContactview"> <a class="btn btn-info boxed-float-btn nobg"  matTooltip="Edit" matTooltipPosition="View"   ><i class="fa fa-eye"></i></a> </span>
 
                                 </td>
                         </tr>
@@ -650,9 +650,9 @@
                                                         </tr>
                                                     </ng-template>
                 
-                                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                                    <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
-                                                            pReorderableRowHandle (dblclick)="openView(view,rowData)">
+                                                            pReorderableRowHandle >
                 
                                                             <td style="width: 40px;"> <span class="flag" matTooltip="Primary"
                                                                     matTooltipPosition="above">
@@ -669,42 +669,42 @@
                                                                 <div *ngIf="currentDeletedstatus==false">
                                                                 <p-inputSwitch  *ngIf="rowData['isActive']==true"
                                                                     matTooltip="Active" matTooltipPosition="above" onLabel="on"
-                                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                                    offLabel="off" [disabled]="rowData.isPrimayPayment == true"
                                                                     [(ngModel)]="rowData['isActive']">
                                                                 </p-inputSwitch>
                                                                 <p-inputSwitch  *ngIf="rowData['isActive']==false"
                                                                     matTooltip="In Active" matTooltipPosition="above" onLabel="on"
-                                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                                    offLabel="off"[disabled]="rowData.isPrimayPayment == true"
                                                                     [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                                                 <p-inputSwitch  *ngIf="rowData['isActive']==null"
                                                                     matTooltip="In Active" matTooltipPosition="above" onLabel="on"
-                                                                    offLabel="off" (onChange)="handleChanges(rowData,$event)" [disabled]="rowData.isPrimayPayment == true"
+                                                                    offLabel="off" [disabled]="rowData.isPrimayPayment == true"
                                                                     [(ngModel)]="rowData['isActive']">
                                                                 </p-inputSwitch>
                 
                                                                 <span data-toggle="modal" data-target="#view"> <a
                                                                         class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                                        (click)="openView(view,rowData)" matTooltip="View"
+                                                                        matTooltip="View"
                                                                         matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                                                
                                                                
                                                                
                                                                         <span><a class="btn nobg btn-edit-cstm" data-target="#addPaymentInfo"
-                                                                            data-toggle="modal" (click)="openEdit(rowData)"
+                                                                            data-toggle="modal"
                                                                              matTooltip="Edit"
                                                                              matTooltipPosition="above">
                                                                             <i class="fa fa-pencil"></i></a> </span>
                 
                 
                                                                         <span><button class="btn nobg btn-delete-cstm" [disabled]="rowData.isPrimayPayment == true"
-                                                                            (click)=" openDelete(deletePaymentInfo,rowData);dt.reset();" matTooltip="Delete" 
+                                                                            (click)="dt.reset();" matTooltip="Delete" 
                                                                              matTooltipPosition="above"><i class="fa fa-trash"></i></button> </span>
                                                                         
                                                                         
                                                                           
                                                                         
                                                                              <span data-toggle="modal">
-                                                                            <a class="btn nobg btn-hist-cstm" (click)="openHist(contentHist,rowData)" 
+                                                                            <a class="btn nobg btn-hist-cstm"  
                                                                             matTooltip="History" matTooltipPosition="above">
                                                                             <i class="fa fa-history"></i></a></span>
                 
@@ -716,9 +716,9 @@
                     matTooltipPosition="above" ></p-inputSwitch> 
                     <span data-toggle="modal" data-target="#view"> <a
                         class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                        (click)="openView(view,rowData)" matTooltip="View"
+                         matTooltip="View"
                         matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
-                    <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                    <span ><a class="btn nobg"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                   </div>
                                                             </td>
                 
@@ -751,7 +751,7 @@
                                     <div *ngIf="isViewMode">
                                         <p-table #dt class="rpo-table-cstm"  [metaKeySelection]="true"
                                             [rows]="pageSize" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
-                                            (onPage)="pageIndexChange($event)" [columns]="selectedColumns" selectionMode="multiple"
+                                            [columns]="selectedColumns" selectionMode="multiple"
                                             [(selection)]="selectedColumn" [resizableColumns]="true" [reorderableColumns]="true"
                                             [scrollable]="true">
                                           
@@ -809,7 +809,7 @@
                 
                                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
                                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
-                                                    (dblclick)="openView(view,rowData)">
+                                                    >
                 
                                                     <td style="width: 40px;"> <span class="flag">
                                                             <i *ngIf="rowData.isPrimayPayment == true" class="fa fa-flag"
@@ -823,10 +823,10 @@
                                                     <td class="text-center" style="width:140px;">
                                                         <span data-toggle="modal" data-target="#view"> <a
                                                                 class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                                                (click)="openView(view,rowData)" matTooltip="View"
+                                                                matTooltip="View"
                                                                 matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
                                                         <button class="btn-history" mat-icon-button matTooltip="history"
-                                                            matTooltipPosition="above" (click)="openHist(contentHist,rowData)">
+                                                            matTooltipPosition="above" >
                                                             <mat-icon color="green">history</mat-icon>
                                                         </button>
                                                     </td>

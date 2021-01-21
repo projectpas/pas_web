@@ -5,7 +5,7 @@ import { PageHeaderComponent } from '../../shared/page-header.component';
 import { CurrencyService } from '../../services/currency.service';
 import { AlertService, DialogType, MessageSeverity } from '../../services/alert.service';
 import { Currency } from '../../models/currency.model';
-import * as $ from 'jquery';
+declare var $ : any;
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSort, MatPaginator, MatDialog, MatTableDataSource } from '@angular/material';
 import { MasterCompany } from '../../models/mastercompany.model';
@@ -70,13 +70,14 @@ export class CurrencyComponent implements OnInit {
     selectedRowforDelete: any;
     private table: Table;
     auditHistory: any[] = [];
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     countrycollection: any[];
     countryListOriginal: any[];
     disableSaveCurrency:boolean=false;
 
     currentstatus: string = 'Active';
-
+    rowIndex: any;
+    AuditDetails: any;
     // curreencyPaginationList: any[] = [];
     // totelPages
     // event: any;

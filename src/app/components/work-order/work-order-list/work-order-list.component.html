@@ -176,7 +176,7 @@
                     && col.field !== 'promisedDateType'
                     && col.field !== 'estimatedShipDateType'
                     && col.field !== 'estimatedCompletionDateType'" style="width:100%;" pInputText type="text"
-                           (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch($event.target.value, col.field , 'contains' )">
+                           (input)="dt.filter($event.target.value, col.field, 'contains'); fieldSearch(col.field)">
                     <input type="date" *ngIf="col.field == 'openDate'" name="openDate" style="width:100%;"
                            (change)="dt.filter($event.target.value, col.field, 'contains')">
                     <input type="date" *ngIf="col.field == 'customerRequestDateType'" name="customerRequestDate"
@@ -892,7 +892,7 @@
                                             </table> -->
                                             <app-work-order-charges workFlowObject="[]" [isWorkOrder]="isWorkOrder"
                                                                     [workOrderChargesList]="workOrderChargesList" [taskList]="taskList"
-                                                                    (refreshData)="getChargesListByWorkOrderId()"></app-work-order-charges>
+                                                                    (refreshData)="getChargesListByWorkOrderId(0, 0)"></app-work-order-charges>
                                         </div>
                                     </div>
                                     <div class="clear"></div>
@@ -909,7 +909,7 @@
                         <div *ngIf="selectedOtherSubTask === 'exclusion'">
                             <app-work-order-exclusions [workFlowObject]="workFlowObject" [isWorkOrder]="isWorkOrder"
                                                        [workOrderExclusionsList]="workOrderExclusionsList" [taskList]="taskList"
-                                                       (refreshData)="getExclusionListByWorkOrderId()" [isView]="isView"></app-work-order-exclusions>
+                                                       (refreshData)="getExclusionListByWorkOrderId(0, 0)" [isView]="isView"></app-work-order-exclusions>
 
                             <!-- <div class="equipment-tab-content">
                                 <div class="x_panel" *ngIf="workOrderExclusionsList">
@@ -952,7 +952,7 @@
                         </div>
                         <div *ngIf="selectedOtherSubTask === 'freight'">
                             <app-work-order-freight [freightForm]="freight" [workOrderFreightList]="workOrderFreightList"
-                                                    [savedWorkOrderData]="savedWorkOrderData" (refreshData)="getFreightListByWorkOrderId()" [taskList]="taskList" [isView]="isView">
+                                                    [savedWorkOrderData]="savedWorkOrderData" [taskList]="taskList" [isView]="isView">
                             </app-work-order-freight>
                         </div>
                     </p-tabPanel>

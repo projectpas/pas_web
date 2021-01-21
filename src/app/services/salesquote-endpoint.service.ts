@@ -21,49 +21,49 @@ import { SOQuoteMarginSummary } from "../models/sales/SoQuoteMarginSummary";
 import { environment } from 'src/environments/environment';
 @Injectable()
 export class SalesQuoteEndpointService extends EndpointFactory {
-  private readonly getNewSalesQuoteInstanceUrl: string = "/api/salesquote/new";
-  private readonly saleQuote: string = "/api/salesquote";
+  private readonly getNewSalesQuoteInstanceUrl: string = environment.baseUrl + "/api/salesquote/new";
+  private readonly saleQuote: string = environment.baseUrl + "/api/salesquote";
   private readonly saleQuoteSettings: string = environment.baseUrl + "/api/SOQuoteSettings/delete";
-  private readonly soqMarginSummary: string = "/api/SalesQuote/create-quote-margin-data";
-  private readonly getSoqMarginSummary: string = "/api/SalesQuote/get-sales-quote-margin-data";
-  private readonly saleQuoteChargesSave: string = "/api/SalesQuote/createsalesorderquotecharges";
-  private readonly saleQuoteFreightsSave: string = "/api/SalesQuote/createsalesorderquotefreight";
-  private readonly _deleteSalesOrderFrignt: string = "/api/salesquote/deletesalesorderquotefreight";
-  private readonly _deleteSalesOrderCharge: string = "/api/SalesQuote/deletesalesorderquotecharge";
-  private readonly saveCustomerQuotesApprovedEndPointUrl: string = "/api/SalesQuote/soquoteapproval"
+  private readonly soqMarginSummary: string = environment.baseUrl + "/api/SalesQuote/create-quote-margin-data";
+  private readonly getSoqMarginSummary: string = environment.baseUrl + "/api/SalesQuote/get-sales-quote-margin-data";
+  private readonly saleQuoteChargesSave: string = environment.baseUrl + "/api/SalesQuote/createsalesorderquotecharges";
+  private readonly saleQuoteFreightsSave: string = environment.baseUrl + "/api/SalesQuote/createsalesorderquotefreight";
+  private readonly _deleteSalesOrderFrignt: string = environment.baseUrl + "/api/salesquote/deletesalesorderquotefreight";
+  private readonly _deleteSalesOrderCharge: string = environment.baseUrl + "/api/SalesQuote/deletesalesorderquotecharge";
+  private readonly saveCustomerQuotesApprovedEndPointUrl: string = environment.baseUrl + "/api/SalesQuote/soquoteapproval"
   // private readonly searchSalesQuote: string = "/api/salesquote/search";
-  private readonly searchSalesQuote: string = "/api/salesquote/salesquotesearch";
-  private readonly globalSearchSalesQuote: string = "/api/salesquote/salesquoteglobalsearch";
-  private readonly getSalesQuoteDetails: string = "/api/salesquote/get";
-  private readonly getSalesQuoteViewDetails: string = "/api/salesquote/getview";
-  private readonly getSalesQuoteTotalDetails: string = "/api/salesquote/togetquoteheadermargindetails";
-  private readonly getCopyEndpointUrl: string = "/api/salesquote/copy"
-  private readonly getVerifyEndpointUrl: string = "/api/salesquote/verify"
+  private readonly searchSalesQuote: string = environment.baseUrl + "/api/salesquote/salesquotesearch";
+  private readonly globalSearchSalesQuote: string = environment.baseUrl + "/api/salesquote/salesquoteglobalsearch";
+  private readonly getSalesQuoteDetails: string = environment.baseUrl + "/api/salesquote/get";
+  private readonly getSalesQuoteViewDetails: string = environment.baseUrl + "/api/salesquote/getview";
+  private readonly getSalesQuoteTotalDetails: string = environment.baseUrl + "/api/salesquote/togetquoteheadermargindetails";
+  private readonly getCopyEndpointUrl: string = environment.baseUrl + "/api/salesquote/copy"
+  private readonly getVerifyEndpointUrl: string = environment.baseUrl + "/api/salesquote/verify"
   // private readonly getCustomerQuotesListUrl: string = "/api/salesquote/customerquotelistbycustomerid"
-  private readonly getCustomerQuotesListUrl: string = "/api/salesquote/soquoteapprovallist"
+  private readonly getCustomerQuotesListUrl: string = environment.baseUrl + "/api/salesquote/soquoteapprovallist"
   // customerquotelistbycustomeridandsalesquoteid/3?salesQuoteId=22
-  private readonly getCloseEndointUrl: string = "/api/salesquote/close"
-  private readonly getEmailQuoteEndointUrl: string = "/api/salesquote/soqsendmail"
-  private readonly getConvertfromquoteEndPoint: string = "/api/salesorder/convertfromquote"
-  private readonly saleQuoteDeletePart: string = "/api/salesquote/deletepart";
+  private readonly getCloseEndointUrl: string = environment.baseUrl + "/api/salesquote/close"
+  private readonly getEmailQuoteEndointUrl: string = environment.baseUrl + "/api/salesquote/soqsendmail"
+  private readonly getConvertfromquoteEndPoint: string = environment.baseUrl + "/api/salesorder/convertfromquote"
+  private readonly saleQuoteDeletePart: string = environment.baseUrl + "/api/salesquote/deletepart";
 
   //*Start savesarvice end point creation implementation --nitin
-  private readonly _addSalesOrderQuoteFileUpload: string = "/api/salesquote/SalesQuoteGeneralDocumentUpload";
-  private readonly _addDocumentDetails: string = "/api/salesquote/SalesQuoteDocumentUpload";
-  private readonly _getsalesquoteDocslist: string = "/api/salesquote/getSalesQuoteDocumentDetailList";
-  private readonly _getsalesquoteDocumentAttachmentslist: string = "/api/FileUpload/getattachmentdetails";
-  private readonly _geSaleQuoteDocumentHistory: string = "/api/salesquote/getSaleQuoteDocumentAudit";
+  private readonly _addSalesOrderQuoteFileUpload: string = environment.baseUrl + "/api/salesquote/SalesQuoteGeneralDocumentUpload";
+  private readonly _addDocumentDetails: string = environment.baseUrl + "/api/salesquote/SalesQuoteDocumentUpload";
+  private readonly _getsalesquoteDocslist: string = environment.baseUrl + "/api/salesquote/getSalesQuoteDocumentDetailList";
+  private readonly _getsalesquoteDocumentAttachmentslist: string = environment.baseUrl + "/api/FileUpload/getattachmentdetails";
+  private readonly _geSaleQuoteDocumentHistory: string = environment.baseUrl + "/api/salesquote/getSaleQuoteDocumentAudit";
   private readonly _geSaleQuoteFreights: string = environment.baseUrl + "/api/SalesQuote/salesorderquotefreightlist";
   private readonly _geSaleQuoteCharges: string = environment.baseUrl + "/api/SalesQuote/gesalesorderquotechargeslist";
-  private readonly _savequoteHeader: string = "/api/salesquote/saveSalesQuoteHeader";
-  private readonly getAllSalesOrderTypesURL: string = "/api/WorkOrder/workOrderTypes";
-  private readonly saveSOQSetting: string = "/api/SOQuoteSettings/save";
-  private readonly getSalesOrderQuoteSetting: string = "/api/SOQuoteSettings/getlist";
+  private readonly _savequoteHeader: string = environment.baseUrl + "/api/salesquote/saveSalesQuoteHeader";
+  private readonly getAllSalesOrderTypesURL: string = environment.baseUrl + "/api/WorkOrder/workOrderTypes";
+  private readonly saveSOQSetting: string = environment.baseUrl + "/api/SOQuoteSettings/save";
+  private readonly getSalesOrderQuoteSetting: string = environment.baseUrl + "/api/SOQuoteSettings/getlist";
   private readonly _geSaleQuoteSettingsHistory: string = environment.baseUrl + "/api/SOQuoteSettings/getauditdatabyid";
-  private readonly getSalesOrderQuoteAnalysis: string = "/api/SalesQuote/togetsoquoteanalysis";
-  private readonly getFreightAudihistory: string = 'api/SalesQuote/quote-freight-history';
-  private readonly getChargesAudihistory: string = 'api/salesquote/quote-charges-history';
-  private readonly getAllSOQEditIDUrl: string = 'api/SalesQuote/getAllSOQEditID';
+  private readonly getSalesOrderQuoteAnalysis: string = environment.baseUrl + "/api/SalesQuote/togetsoquoteanalysis";
+  private readonly getFreightAudihistory: string = environment.baseUrl + '/api/SalesQuote/quote-freight-history';
+  private readonly getChargesAudihistory: string = environment.baseUrl + '/api/salesquote/quote-charges-history';
+  private readonly getAllSOQEditIDUrl: string = environment.baseUrl + '/api/SalesQuote/getAllSOQEditID';
   //**End  savesarvice end point creation implementation --nitin
 
   constructor(

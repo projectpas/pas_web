@@ -6,16 +6,16 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
-
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class ActionEndpoint extends EndpointFactory {
+    baseUrl = environment.baseUrl;
 
-
-    private readonly _actionsUrl: string = "/api/Task/Get";
-    private readonly _actionsUrlNew: string = "/api/Task/add";
-    private readonly _actionUpdateURL: string = "/api/Task/Tasks";
-    private readonly _actionsUrlAuditHistory: string = "c/auditHistoryById";
-    private readonly _auditUrl: string = '/api/Task/audits'
+    private readonly _actionsUrl: string =this.baseUrl+ "/api/Task/Get";
+    private readonly _actionsUrlNew: string =this.baseUrl+ "/api/Task/add";
+    private readonly _actionUpdateURL: string =this.baseUrl+ "/api/Task/Tasks";
+    private readonly _actionsUrlAuditHistory: string =this.baseUrl+ "c/auditHistoryById";
+    private readonly _auditUrl: string =this.baseUrl+ '/api/Task/audits'
 
     get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 

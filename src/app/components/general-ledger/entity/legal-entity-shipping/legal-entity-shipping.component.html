@@ -190,7 +190,7 @@
                             </tr>
                         </ng-template>
 
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewSelectedRowdbl(rowData)"> 
                                 <td   style="width: 40px;">
                                     <span class="flag">
@@ -680,7 +680,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Details of Domestic Shipping Info</h4>
                 <button type="button" class="close"  (click)="closeDomesticView()">&times;</button>
-            </div>
+            
 
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
@@ -697,7 +697,7 @@
                 </div>
             </div>
 
-
+        </div>
             <!-- Modal body -->
             <div class="modal-body" *ngIf="sourceViewforShipping">
                 <div class="col-sm-12">
@@ -864,8 +864,9 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                <div class="tableFixHead">  
+                <table class="table table-bordered header-table-width">
                     <thead>
                         <tr>
                             <th>Ship Via <span class="clr-red">*</span></th>
@@ -916,6 +917,7 @@
 
                     </tr>
                 </table>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -1040,7 +1042,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Details of International Shipping Info</h4>
                 <button type="button" class="close"  (click)="closeInternationalModal()">&times;</button>
-            </div>
+          
 
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
@@ -1057,7 +1059,7 @@
                 </div>
             </div>
 
-
+        </div>
             <!-- Modal body -->
             <div class="modal-body" *ngIf="sourceViewforInterShipping">
                 <div class="col-sm-12">
@@ -1103,7 +1105,7 @@
                   
                     <button type="button" class="close" (click)="closeDomesticViaModel()">&times;</button>
 
-                    <div class="col-md-12 shadow-box-cstm">
+                    <!-- <div class="col-md-12 shadow-box-cstm">
                         <div class="col-md-6">
                             <p class="fs12">
                                 <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -1116,7 +1118,7 @@
                                 <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
                             </p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-body">
                     <div class="form-row" *ngIf="isViewMode == false">
@@ -1193,7 +1195,7 @@
                                 <h4 class="modal-title">Edit Memo</h4>
                             </div>
                             <div class="modal-body">
-                                <table class="table table-bordered table-fixed workflow-table-material">
+                                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                                     <thead>
                                         <th style="color: #fff;">Memo</th>
                                     </thead>
@@ -1205,11 +1207,13 @@
                                             </td>
                                         </tr>
                                     </tbody> 
-                                </table>
-                                <div style="float:right;margin-top: 12px;">
-                                    <button type="button" class="btn btn-primary"
+                                </table> -->
+                                <p-editor [(ngModel)]="textDomesticMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                name="textDomesticMemo" required></p-editor>
+                                <div class="editor-buttons">
+                                    <button type="button" class="btn btn-primary editor-buttons-margin"
                                      (ngModelChange)="enableSave2()" (click)="onSaveDomesticMemo()" [disabled]="disableEditor">Save</button>
-                                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(1)">Close</button>
+                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo(1)">Close</button>
                                </div> 
                             </div>
                         </div>
@@ -1443,7 +1447,7 @@
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <br>
+            <!-- <br>
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
@@ -1457,7 +1461,7 @@
                         <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
                     </p>
                 </div>
-            </div><br>
+            </div><br> -->
         </div>
         <div class="modal-body">
             <strong>
@@ -1479,8 +1483,9 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="table-responsive">
-                <table class="table table-bordered">
+            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                <div class="tableFixHead">  
+                <table class="table table-bordered header-table-width">
                     <thead>
                         <tr>
                             <th>Ship Via <span class="clr-red">*</span></th>
@@ -1533,6 +1538,7 @@
                           </td>
                     </tr>
                 </table>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -1593,7 +1599,7 @@
 
                     <h4 class="modal-title">Add Ship Via details for Export License#  {{selectedShipViaInternational.exportLicense}}</h4> <!--{{isEditInternationalShipVia ? 'Edit' : 'Add'}} International -->
                     <button type="button" class="close" data-dismiss="modal" (click)="closIntSHipVia()">&times;</button>
-                    <div class="col-md-12 shadow-box-cstm">
+                    <!-- <div class="col-md-12 shadow-box-cstm">
                         <div class="col-md-6">
                             <p class="fs12">
                                 <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -1606,7 +1612,7 @@
                                 <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
                             </p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-body">
                     <div class="form-row" *ngIf="isViewMode == false">
@@ -1685,7 +1691,7 @@
                                 <h4 class="modal-title">Edit Memo</h4>
                             </div>
                             <div class="modal-body">
-                                <table class="table table-bordered table-fixed workflow-table-material">
+                                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                                     <thead>
                                         <th style="color: #fff;">Memo</th>
                                     </thead>
@@ -1697,11 +1703,13 @@
                                             </td>
                                         </tr>
                                     </tbody> 
-                                </table>
-                                <div style="float:right;margin-top: 12px;">
-                                    <button type="button" class="btn btn-primary" (ngModelChange)="enableSave2()"
+                                </table> -->
+                                <p-editor [(ngModel)]="textInternationalMemo"  [style]="{'height':'320px'}" (ngModelChange)="editorgetmemo();"
+                                name="textAreaInf2o" required></p-editor>
+                                <div class="editor-buttons">
+                                    <button type="button" class="btn btn-primary editor-buttons-margin" (ngModelChange)="enableSave2()"
                                     (click)="onSaveInternationalMemo()" [disabled]="disableEditor">Save</button>
-                                <button type="button" class="btn btn-danger" (click)="onCloseTextAreaInfo(2)">Close</button>
+                                <button type="button" class="btn btn-danger editor-buttons-margin" (click)="onCloseTextAreaInfo(2)">Close</button>
                                </div> 
                             </div>
                         </div>
@@ -1958,7 +1966,7 @@
             <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <br>
+            <!-- <br>
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
@@ -1972,7 +1980,7 @@
                         <span class="span-header-red" style="text-transform: capitalize"> {{ legalEntityCode }} </span>
                     </p>
                 </div>
-            </div><br>
+            </div><br> -->
         </div>
         <div class="modal-body">
             <strong>
@@ -1994,9 +2002,9 @@
             <div class="modal-header">
                 <h4 class="modal-title">Details of International Shipping Via Info</h4>
                 <button type="button" class="close"  (click)="closeInternationalModalView()">&times;</button>
-            </div>
+            
 
-            <div class="col-md-12 shadow-box-cstm">
+            <!-- <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
                     <p class="fs12">
                         <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -2009,9 +2017,9 @@
                         <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
                     </p>
                 </div>
-            </div>
+            </div> -->
 
-
+        </div>
             <!-- Modal body -->
             <div class="modal-body" *ngIf="sourceViewforInterShippingVia">
                 <div class="col-sm-12">
@@ -2057,7 +2065,7 @@
             <div class="modal-header">
                 <h4 class="modal-title">Details of Domestic Shipping Via Info</h4>
                 <button type="button" class="close"  (click)="closeDomesticSipViaView()">&times;</button>
-            </div>
+           
 
             <div class="col-md-12 shadow-box-cstm">
                 <div class="col-md-6">
@@ -2073,6 +2081,7 @@
                     </p>
                 </div>
             </div>
+        </div>
 
 
             <!-- Modal body -->
@@ -2188,7 +2197,7 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <div class="col-md-12 shadow-box-cstm">
+        <!-- <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
                     <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -2201,11 +2210,12 @@
                     <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
                 </p>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="modal-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th>Site Name <span class="clr-red">*</span></th>
@@ -2260,6 +2270,7 @@
                       </td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
@@ -2273,7 +2284,7 @@
         <button type="button" class="close" aria-label="Close" (click)="dismissModel()">
             <span aria-hidden="true">&times;</span>
         </button>
-        <div class="col-md-12 shadow-box-cstm">
+        <!-- <div class="col-md-12 shadow-box-cstm">
             <div class="col-md-6">
                 <p class="fs12">
                     <label class="control-label labels-font-header" style="width: auto;">Legal Entity Name: </label>
@@ -2286,11 +2297,12 @@
                     <span class="span-header-red" style="text-transform: capitalize"> {{legalEntityCode }} </span>
                 </p>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="modal-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th>Export License</th>
@@ -2345,6 +2357,7 @@
                       </td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

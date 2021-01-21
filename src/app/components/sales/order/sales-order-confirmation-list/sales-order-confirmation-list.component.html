@@ -62,7 +62,7 @@
                     <th style="width:100px;position:sticky"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-sale let-columns="columns" let-rowIndex="rowIndex">
+            <ng-template pTemplate="body" let-rowData="rowData" let-sale let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRow]="sale" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle
                     [pSelectableRowDblClick]="rowData">
                     <td *ngFor="let col of columns" pReorderableRowHandle>

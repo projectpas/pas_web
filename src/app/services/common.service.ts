@@ -6,7 +6,7 @@ import { ConfigurationService } from './configuration.service';
 import { EndpointFactory } from './endpoint-factory.service';
 import { environment } from 'src/environments/environment';
 
-@Injectable()
+@Injectable() 
 
 
 // module Types : 
@@ -69,9 +69,9 @@ export class CommonService extends EndpointFactory {
     });
   }
 
-  autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList?) {
-    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownEmployeeList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'}`, this.getRequestHeaders()).catch(error => {
-      return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList));
+  autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList?,masterCompanyId?) {
+    return this.http.get<any>(`${this.baseUrl}/api/Common/autoCompleteSmartDropDownEmployeeList?textColumn=${textColumn}&searchText=${searchText}&startWith=${startWith}&idList=${idList !== undefined ? idList : '0'} &masterCompanyId=${masterCompanyId !== undefined ? masterCompanyId : 1}  `, this.getRequestHeaders()).catch(error => {
+      return this.handleErrorCommon(error, () => this.autoCompleteSmartDropDownEmployeeList(textColumn, searchText, startWith, idList,masterCompanyId));
     });
   }
 
@@ -795,6 +795,32 @@ getAllAddEditID(purchaseOrderId,ModuleID) {
 
 getPOAddressById(poId) : any {
 
+}
+
+getShipVia() {
+  return this.http.get<any>(`${this.baseUrl}/api/Common/getAllShipVia`, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.getShipVia());
+  });
+}
+
+createShipViaForMaster(object) {
+  const formData = new FormData;
+  formData.append('params1', JSON.stringify(object) );
+  return this.http.post<any>(`${this.baseUrl}/api/single-screen/add-new`, object, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.createShipVia(object));
+  });
+}
+
+SaveShipVia(object) {
+  return this.http.post<any>(`${this.baseUrl}/api/Common/saveshipvia`, JSON.stringify(object), this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.SaveShipVia(object));
+  });
+}
+
+getDocumentType() {
+  return this.http.get<any>(`${this.baseUrl}/api/Common/getDocumentType`, this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.getDocumentType());
+  });
 }
 
 // getAllEditID(purchaseOrderId) {

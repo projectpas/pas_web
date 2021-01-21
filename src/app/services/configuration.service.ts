@@ -11,6 +11,7 @@ import { AppTranslationService } from './app-translation.service';
 import { LocalStoreManager } from './local-store-manager.service';
 import { DBkeys } from './db-Keys';
 import { Utilities } from './utilities';
+import { environment } from 'src/environments/environment';
 
 type UserConfiguration = {
     language: string,
@@ -26,7 +27,7 @@ type UserConfiguration = {
 export class ConfigurationService {
     public static readonly appVersion: string = "1.0.1";
 
-    public baseUrl: string = Utilities.baseUrl();
+    public baseUrl: string = environment.baseUrl; //Utilities.baseUrl();
     public loginUrl: string = "/Login";
 
     public static readonly defaultLanguage: string = "en";

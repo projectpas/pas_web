@@ -18,6 +18,7 @@ export class RoSettingsComponent implements OnInit {
   isSpinnerVisible: boolean = false;
   rosettingModel: any = {};
   enableHeaderSaveBtn: boolean = false;
+  errorMessages: any;
 
   constructor(
     private vendoreService: VendorService,
@@ -49,7 +50,7 @@ export class RoSettingsComponent implements OnInit {
   ROSettingId: number = 0;
 
   getPurchaseOrderMasterData() {    
-    this.repairOrderService.getRepairOrderSettingMasterData().subscribe(res => {
+    this.repairOrderService.getRepairOrderSettingMasterData(this.currentUserMasterCompanyId).subscribe(res => {
       if (res) {        
         this.rosettingModel.RepairOrderSettingId = res.repairOrderSettingId;
         this.ROSettingId = res.repairOrderSettingId;
@@ -107,4 +108,5 @@ export class RoSettingsComponent implements OnInit {
     this.enableHeaderSaveBtn = true;
   }
 
+  closeErrorMessage() {}
 }

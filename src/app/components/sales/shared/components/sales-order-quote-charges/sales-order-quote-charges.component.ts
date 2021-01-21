@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../../services/alert.service';
 import { WorkOrderService } from '../../../../../services/work-order/work-order.service';
 import { AuthService } from '../../../../../services/auth.service';
@@ -58,7 +58,8 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
   deleteModal: NgbModalRef;
   modal: NgbModalRef;
   isUpdate: boolean = false;
-
+  frieghtsCreateForm: any;
+  
   constructor(private salesOrderQuoteService: SalesQuoteService,
     private authService: AuthService,
     private alertService: AlertService,
@@ -240,7 +241,10 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     else {
       let temp = [];
       this.salesOrderChargesList.forEach((x) => {
-        temp = [...temp, ...x];
+        if (typeof x[Symbol.iterator] === 'function')
+          temp = [...temp, ...x];
+        else
+          temp = [...temp, x];
       })
       temp = [...temp, ...this.chargeForm];
       this.salesOrderChargesLists = temp;
@@ -262,8 +266,10 @@ export class SalesOrderQuoteChargesComponent implements OnChanges, OnInit {
     let temp = this.salesOrderChargesList;
     let sendData = []
     for (let index = 0; index < temp.length; index++) {
-      sendData = [...sendData, ...temp[index]];
-
+      if (typeof temp[index][Symbol.iterator] === 'function')
+        sendData = [...sendData, ...temp[index]];
+      else
+        sendData = [...sendData, temp[index]];
     }
     sendData = sendData.map((f) => {
       return {

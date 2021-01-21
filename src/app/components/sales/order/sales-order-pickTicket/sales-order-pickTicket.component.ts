@@ -23,7 +23,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
     todayDate: Date = new Date();
     parts: any = [];
     management: any = {};
-    
+    salesOrderpartConditionDescription: any;
 
     constructor(private modalService: NgbModal, private salesOrderService: SalesOrderService,
         private router: Router) {

@@ -13,26 +13,21 @@ import { Table } from 'primeng/table';
 import { PurchaseOrderService } from '../../../services/purchase-order.service';
 import { VendorCapabilitiesService } from '../../../services/vendorcapabilities.service';
 import { CommonService } from '../../../services/common.service';
-import * as $ from 'jquery';
-import { formatNumberAsGlobalSettingsModule } from '../../../generic/autocomplete';
+declare var $: any;
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from '../../../generic/autocomplete';
 import { MenuItem } from 'primeng/api';
 import { ReceivingService } from '../../../services/receiving/receiving.service';
 import { RepairOrderService } from '../../../services/repair-order.service';
-
 
 @Component({
   selector: 'app-all-view',
   templateUrl: './all-view.component.html',
   styleUrls: ['./all-view.component.scss'],
   animations: [fadeInOut],
-  providers: [DatePipe]
+  providers: [DatePipe],
+
 })
 export class AllViewComponent implements OnInit {
-
-  @Input() OrderId;
-  @Input() OrderType;
-  @Input() PovendorId;
-  @Input() vendorId: number;
 
   poHeaderAdd: any = {};
   roHeaderAdd: any = {};
@@ -40,20 +35,40 @@ export class AllViewComponent implements OnInit {
   vendorCapesInfo: any = [];
   headerManagementStructure: any = {};
   poPartsList: any = [];
+  roPartsList: any = [];
   isSpinnerVisible: boolean = false;
   loadingIndicator: boolean;
   poApprovaltaskId: number = 0;
+  roApprovaltaskId: number = 0;
   ApprovedstatusId: number = 0;
   internalApproversList: any = [];
+  rointernalApproversList: any = [];
+
   approvalProcessList: any = [];
   tabindex: number = 0;
   OrderTypes: string;
-  isPoViewMode: boolean = false;  
+  isPoViewMode: boolean = false;
   capvendorId: number;
   selectedPurchaseOrderId: any;
-  moduleName:any="PurchaseOrder";
-  vendorIdByParams: boolean = false;
+  selectedRepairOrderId : any;
+  moduleName: any = "PurchaseOrder";
+  romoduleName: any = "RepairOrder";
+
   isViewMode: boolean = true;
+  vendorIdByParams: number;
+  @Input() OrderId: any;
+  @Input() OrderType: any;
+  @Input() PovendorId: any;
+  @Input() vendorId: number;
+  roTotalCost: number;
+
+  addressType: any = 'PO';
+  showAddresstab: boolean = false;
+  id: number;
+
+  //showPartListtab: boolean = false;
+  showVendorCaptab: boolean = false;
+
   approvalProcessHeader = [
     {
       header: 'Action',
@@ -121,32 +136,64 @@ export class AllViewComponent implements OnInit {
 
   ngOnInit() {
     this.selectedPurchaseOrderId = this.OrderId;
+    this.selectedRepairOrderId = this.OrderId;    
     let OrderId = this.OrderId;
     this.OrderTypes = this.OrderType;
-    let PovendorId = this.PovendorId;  
-
+    this.id = this.OrderId;
+    let PovendorId = this.vendorId;     
+    this.vendorIdByParams = this.PovendorId;
+    this.isPoViewMode = true;
+    this.vendorId = this.PovendorId;
+    this.capvendorId = this.PovendorId;    
     if (this.OrderTypes == 'Purchase Order') {
-      this.loadingIndicator = true;      
+      this.loadingIndicator = true;
       this.getPOViewById(OrderId);
       this.getPOPartsViewById(OrderId);
       this.getApproversListById(OrderId);
       this.getApprovalProcessListById(OrderId);
       this.tabindex = 0;
-      if (PovendorId) {
-        setTimeout(() => {
-          this.isPoViewMode = true;
-          this.vendorId = PovendorId;
-          this.capvendorId = PovendorId;
-          this.warnings(PovendorId);
-        }, 1200);
-      }
     } else if (this.OrderTypes == 'Repair Order') {
       this.getROViewById(OrderId);
       this.getROPartsViewById(OrderId);
-      this.getApproversListById(OrderId);
-      this.getApprovalProcessListById(OrderId);
+      this.getRoApproversListById(OrderId);
+      this.getRoApprovalProcessListById(OrderId);
+      this.tabindex = 0;
     }
   }
+
+  onChangeTabView(event) {
+
+    if (event.index == 0) {
+      //this.showPartListtab = true;
+      //this.getPOPartsViewById(this.OrderId);      
+    }
+    if (event.index == 1) {
+    }
+    if (event.index == 2) {
+      //this.getApproversListById(this.OrderId);
+    }
+    if (event.index == 3) {
+      //	this.getApproversListById(this.OrderId);
+      //  this.getApprovalProcessListById(this.OrderId);
+      //	this.enableApproverSaveBtn = false;     
+      this.showVendorCaptab = true;
+      const id = editValueAssignByCondition('vendorId', this.vendorId);
+    }
+    if (event.index == 4) {
+      //this.showVendorCaptab = true;
+      //const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+      this.showAddresstab = true;
+      this.id = this.OrderId;
+    }
+    if (event.index == 5) {
+      //this.showDocumenttab = true;
+    }
+    if (event.index == 6) {
+      //this.showComunicationtab = true;
+    }
+
+  }
+
 
   getPOViewById(poId) {
     this.purchaseOrderService.getPOViewById(poId).subscribe(res => {
@@ -155,7 +202,6 @@ export class AllViewComponent implements OnInit {
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
       };
-      this.getVendorCapesByID(this.poHeaderAdd.vendorId);          
     }, err => {
       this.isSpinnerVisible = false;
     });
@@ -176,22 +222,10 @@ export class AllViewComponent implements OnInit {
           foreignExchangeRate: x.foreignExchangeRate ? formatNumberAsGlobalSettingsModule(x.foreignExchangeRate, 5) : '0.00',
           purchaseOrderSplitParts: this.getPurchaseOrderSplit(x)
         }
-        //this.getManagementStructureCodesParent(partList);
         this.poPartsList.push(partList);
       });
     }, err => {
       this.isSpinnerVisible = false;
-    });
-  }
-
-  getVendorCapesByID(vendorId) {
-    this.vendorCapesInfo = [];
-    this.vendorCapesService.getVendorCapesById(vendorId).subscribe(res => {
-      this.vendorCapesInfo = res;
-    }, err => {
-      this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.errorMessageHandler(errorLog);
     });
   }
 
@@ -202,15 +236,11 @@ export class AllViewComponent implements OnInit {
         shippingCost: res.shippingCost ? formatNumberAsGlobalSettingsModule(res.shippingCost, 2) : '0.00',
         handlingCost: res.handlingCost ? formatNumberAsGlobalSettingsModule(res.handlingCost, 2) : '0.00',
       };
-      this.getVendorCapesByID(this.roHeaderAdd.vendorId);
-      //this.getManagementStructureCodes(res.managementStructureId);
-    }, err => {
-    }
-    );
+    }, err => { });
   }
 
   getROPartsViewById(roId) {
-    this.poPartsList = [];
+    this.roPartsList = [];
     this.repairOrderService.getROPartsViewById(roId).subscribe(res => {
       if (res) {
         res.map(x => {
@@ -225,11 +255,10 @@ export class AllViewComponent implements OnInit {
             repairOrderSplitParts: this.getRepairOrderSplit(x)
           }
           //this.getManagementStructureCodesParent(partList);
-          this.poPartsList.push(partList);
+          this.roPartsList.push(partList);          
         });
       }
-    }, err => {
-    });
+    }, err => { });
   }
 
   getRepairOrderSplit(partList) {
@@ -243,48 +272,13 @@ export class AllViewComponent implements OnInit {
       })
     }
   }
-
-  WarningsList: any;
-  WarningListId: any;
-  getWarningsList(): void {
-    this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name').subscribe(res => {
-      res.forEach(element => {
-        if (element.label == 'Create Purchase Order') {
-          this.WarningListId = element.value;
-          return;
-        }
-      });
-    }, err => {
-      this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.errorMessageHandler(errorLog);
-    });
-  }
-
-  warningMessage: any;
-  warningID: any = 0;
-  warnings(Id) {
-    if (Id) {
-      this.commonService.vendorWarnings(Id, this.WarningListId).subscribe((res: any) => {
-        if (res) {
-          this.warningMessage = res.warningMessage;
-          this.warningID = res.vendorWarningId;
-        }
-      }, err => {
-        this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);
-      });
-    }
-  }  
-
+  
   getPurchaseOrderSplit(partList) {
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
         const splitpart = {
           ...y,
         }
-        //this.getManagementStructureCodesChild(splitpart);
         return splitpart;
       })
     }
@@ -303,25 +297,60 @@ export class AllViewComponent implements OnInit {
           this.getApproversByTask(poId)
         }
       }, err => {
-        this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);
+        this.isSpinnerVisible = false;        
       });
     }
     else {
       this.getApproversByTask(poId)
     }
+  }
 
+  getRoApproversListById(roId) {
+    this.isSpinnerVisible = true;
+    if (this.roApprovaltaskId == 0) {
+      this.commonService.smartDropDownList('ApprovalTask', 'ApprovalTaskId', 'Name').subscribe(response => {
+        if (response) {
+          response.forEach(x => {
+            if (x.label.toUpperCase() == "RO APPROVAL") {
+              this.roApprovaltaskId = x.value;
+            }
+          });
+          this.getroApproversByTask(roId)
+        }
+      }, err => {
+        this.isSpinnerVisible = false;
+      });
+    }
+    else {
+      this.getroApproversByTask(roId)
+    }
+
+  }
+
+  getroApproversByTask(roId) {
+    this.rointernalApproversList = [];
+    this.isSpinnerVisible = true;
+    this.repairOrderService.approverslistbyTaskId(this.roApprovaltaskId, roId).subscribe(res => {
+      this.rointernalApproversList = res;
+      // this.internalApproversList.map(x => {
+      //   this.apporoverEmailList = x.approverEmails;
+      //   this.apporoverNamesList.push(x.approverName);
+      // })
+      this.isSpinnerVisible = false;
+    },
+      err => {
+        this.isSpinnerVisible = false;
+      });
   }
 
   getApproversByTask(poId) {
     this.isSpinnerVisible = true;
     this.purchaseOrderService.approverslistbyTaskId(this.poApprovaltaskId, poId).subscribe(res => {
-      this.internalApproversList = res;      
+      this.internalApproversList = res;
       this.isSpinnerVisible = false;
-    },err => {
-        this.isSpinnerVisible = false;
-      });
+    }, err => {
+      this.isSpinnerVisible = false;
+    });
   }
 
   getApprovalProcessListById(poId) {
@@ -355,11 +384,33 @@ export class AllViewComponent implements OnInit {
           }
         });
         this.approvalProcessList = approvalProcessListWithChild;
-        console.log(this.approvalProcessList)
-      }      
+      }
     }, err => {
-      this.isSpinnerVisible = false;    
+      this.isSpinnerVisible = false;
     });
+  }
+
+  getRoApprovalProcessListById(roId) {
+    this.isSpinnerVisible = true;
+    this.repairOrderService.getROApprovalListById(roId).subscribe(res => {
+      const arrayLen = res.length;
+      let count = 0;
+      this.approvalProcessList = res.map(x => {
+        if (x.actionId == this.ApprovedstatusId) {
+          count++;
+        }
+        return {
+          ...x,
+          sentDate: x.sentDate ? new Date(x.sentDate) : null,
+          approvedDate: x.approvedDate ? new Date(x.approvedDate) : null,
+          unitCost: x.unitCost ? formatNumberAsGlobalSettingsModule(x.unitCost, 2) : '0.00',
+          extCost: x.extCost ? formatNumberAsGlobalSettingsModule(x.extCost, 2) : '0.00'
+        }
+      });
+      this.isSpinnerVisible = false;
+    }, err => {
+      this.isSpinnerVisible = false;
+    })
   }
 
   getTotalDiscAmount(array) {
@@ -389,15 +440,7 @@ export class AllViewComponent implements OnInit {
   dismissModel() {
     this.activeModal.close();
   }
-
-  errorMessageHandler(log) {
-    this.alertService.showMessage(
-      'Error',
-      log.error,
-      MessageSeverity.error
-    );
-  }
-
+ 
   formatePrice(value) {
     if (value) {
       return formatNumberAsGlobalSettingsModule(value, 2);

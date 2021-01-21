@@ -1,6 +1,6 @@
 ﻿import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService } from '../../../../services/alert.service';
 import { fadeInOut } from '../../../../services/animations';
 import { CommonService } from '../../../../services/common.service';
@@ -392,5 +392,7 @@ sourceViewforContact:any;
                 return data[i + 1][field] === value
             }
         }
-    }    
+    }   
+    
+    deleteItemAndCloseModel() {}
 }

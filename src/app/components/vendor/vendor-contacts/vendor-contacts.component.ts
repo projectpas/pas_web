@@ -16,7 +16,7 @@ import { ConfigurationService } from '../../../services/configuration.service';
 import { getValueFromArrayOfObjectById, editValueAssignByCondition, getValueFromObjectByKey, getObjectByValue, getObjectById } from '../../../generic/autocomplete';
 import { emailPattern, titlePattern, phonePattern, mobilePattern } from '../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
-import * as $ from 'jquery'
+declare var $ : any;
 
 import { AtaSubChapter1Service } from '../../../services/atasubchapter1.service';
 import { AtaMainService } from '../../../services/atamain.service';
@@ -456,7 +456,7 @@ export class VendorContactsComponent implements OnInit {
         }
     }
 
-    openEdit(content, row) {
+    openEdit(row) {
         this.isEditContactInfo=true;
         this.isEditMode = true;
         this.disableSave = true;
@@ -569,7 +569,8 @@ export class VendorContactsComponent implements OnInit {
                 this.isSpinnerVisible = true;
                 // before you commit make sure u don't have conlog, debug, commented code...
                 this.vendorService.newAddContactInfo(this.sourceVendor).subscribe(data => {
-                    $("#addContactInfo").modal("hide");
+                    this.isSpinnerVisible = false;
+                    
                     this.localCollection = data;                    
                     this.localCollection.VendorId = this.vendorId;
                     this.localCollection.ContactId = this.local.contactId;
@@ -589,7 +590,8 @@ export class VendorContactsComponent implements OnInit {
                     this.sourceVendor = {};
                     this.isEditContactInfo = false;
                     this.disableSave = true;
-                    this.isSpinnerVisible = false;
+                    $("#addContactInfo").modal("hide");
+                    
                 }, err => {
                     this.isSpinnerVisible = false;
                     this.isEditContactInfo = false;

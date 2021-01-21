@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectorRef, OnInit, OnChanges, ViewEncapsulation } from '@angular/core';
-import * as $ from 'jquery';
+declare var $ : any;
 import { AlertService, MessageSeverity } from '../../../../../services/alert.service';
 import { SalesQuoteService } from '../../../../../services/salesquote.service';
 import { AuthService } from '../../../../../services/auth.service';
@@ -103,7 +103,9 @@ dismissModelAlettRestore() {
         this.isSpinnerVisible = true;
         this.arrayEmplsit.push(0);
         forkJoin(this.salesOrderQuoteService.getSalesQuoteFreights(this.salesOrderQuoteId,this.deletedStatusInfo),
-            this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join())).subscribe(response => {
+            //this.commonService.getShipViaDetailsByModuleActiveInactive(getModuleIdByName('Customer'), this.customerId, this.arrayEmplsit.join())
+            this.commonService.getShipVia()
+            ).subscribe(response => {
                 this.isSpinnerVisible = false;
                 this.setFreightsData(response[0]);
                 this.setShipViaList(response[1]);
@@ -233,8 +235,10 @@ dismissModelAlettRestore() {
         let temp = this.salesOrderFreightList;
         let sendData = []
         for (let index = 0; index < temp.length; index++) {
-            sendData = [...sendData, ...temp[index]];
-
+            if (typeof temp[index][Symbol.iterator] === 'function')
+                sendData = [...sendData, ...temp[index]];
+            else
+                sendData = [...sendData, temp[index]];                
         }
         sendData = sendData.map((f) => {
             return { ...f, headerMarkupId: Number(this.costPlusType), headerMarkupPercentageId: this.overAllMarkup, markupFixedPrice: this.freightFlatBillingAmount }
@@ -551,7 +555,10 @@ dismissModelAlettRestore() {
         else {
             let temp = [];
             this.salesOrderFreightList.forEach((x) => {
-                temp = [...temp, ...x];
+                if(typeof x[Symbol.iterator] === 'function')
+                    temp = [...temp, ...x];
+                else
+                    temp = [...temp, x];
             })
             temp = [...temp, ...this.freightForm];
             this.salesOrderFreightLists = temp;
@@ -567,5 +574,9 @@ dismissModelAlettRestore() {
         this.isEnableUpdateButton=true;
         this.isSaveChargesDesabled=false;
         this.storedData=[...this.salesOrderFreightList];
+    }
+
+    openFreight(content) {
+        this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
     }
 }

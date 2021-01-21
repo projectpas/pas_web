@@ -46,7 +46,7 @@ export class LaberAndOverheadCostSetupComponent implements OnInit, AfterViewInit
     errorMessage: any;
     modal: NgbModalRef;
     /** Actions ctor */
-    private isEditMode: boolean = false;
+    public isEditMode: boolean = false;
     private isDeleteMode: boolean = false;
     LaborOverheadCostName: string;
     filteredBrands: any[];
@@ -437,7 +437,6 @@ export class LaberAndOverheadCostSetupComponent implements OnInit, AfterViewInit
     }
 
     showAuditPopup(template, id): void {
-        debugger;
         this.getHistoryLaborandOverheadCostAuditDetails(id);
         this.modal = this.modalService.open(template, { size: 'sm' });
     }

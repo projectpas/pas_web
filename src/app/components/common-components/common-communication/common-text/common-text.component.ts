@@ -1,6 +1,6 @@
 ﻿import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import * as $ from 'jquery';
+declare var $ : any;
 import { getObjectById } from '../../../../generic/autocomplete';
 import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 import { AuthService } from '../../../../services/auth.service';
@@ -9,6 +9,7 @@ import { CommunicationService } from '../../../../shared/services/communication.
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { phonePattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 @Component({
     selector: 'app-common-text',
     templateUrl: './common-text.component.html',
@@ -323,7 +324,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
         this.getAllTextList();
     }
     deletedStatusInfo: boolean = false;
-
+    dataOriginal:any=[];
     getAllTextList() {
         this.isSpinnerVisible = true;
         this.communicationService.getCOmmonTextList(this.referenceId, this.moduleId, this.deletedStatusInfo)
@@ -337,6 +338,7 @@ export class TextCommonComponent implements OnInit, OnChanges {
                     this.data = res;
                     this.totalRecords = res.length;
                     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                    this.dataOriginal = this.data;
                 }, err => {
                     this.errorMessageHandler();
                 }
@@ -406,5 +408,23 @@ export class TextCommonComponent implements OnInit, OnChanges {
     }
     errorMessageHandler() {
         this.isSpinnerVisible = false;
+    }
+
+    enableSave() {}
+
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.data = this.dataOriginal;
+            const data = [...this.data.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.data = data;
+        } else {
+            this.data = this.dataOriginal;
+        }
     }
 }

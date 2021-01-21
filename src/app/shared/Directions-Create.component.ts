@@ -3,7 +3,8 @@ import { IWorkFlow } from "../Workflow/WorkFlow";
 import { ActionService } from "../Workflow/ActionService";
 import { IDirections } from "../Workflow/Directions";
 import { AlertService, MessageSeverity } from "../services/alert.service";
-import * as $ from 'jquery';
+declare var $ : any;
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
     selector: 'grd-directions',
     templateUrl: './Directions-Create.component.html',
@@ -20,8 +21,8 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     memoIndex;
     textAreaInfo: any;
-
-    constructor(private alertService: AlertService) {
+    modal: NgbModalRef;
+    constructor(private modalService: NgbModal,private alertService: AlertService) {
     }
 
     ngOnInit(): void {
@@ -49,14 +50,7 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
         this.workFlow.directions.push(newRow);
     }
 
-    deleteRow(index): void {
-        if (this.workFlow.directions[index].workflowDirectionId == "0" || this.workFlow.directions[index].workflowDirectionId == "") {
-            this.workFlow.directions.splice(index, 1);
-        }
-        else {
-            this.workFlow.directions[index].isDelete = true;
-        }
-    }
+
 
     checkDuplicateSequence(event, direction: any): void {
         if (this.workFlow.directions != undefined && this.workFlow.directions.length > 0) {
@@ -85,4 +79,25 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
     onCloseTextAreaInfo() {
         $("#textarea-popupMemo").modal("hide");
     }
+    dismissModel() {
+        this.modal.close();
+    }
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+      this.deleteRowRecord = row;
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    deleteRow(): void {
+        if (this.workFlow.directions[this.deletedRowIndex].workflowDirectionId == "0" || this.workFlow.directions[this.deletedRowIndex].workflowDirectionId == "") {
+            this.workFlow.directions.splice(this.deletedRowIndex, 1);
+        }
+        else {
+            this.workFlow.directions[this.deletedRowIndex].isDelete = true;
+        }
+        this.dismissModel();
+    }
+
 }

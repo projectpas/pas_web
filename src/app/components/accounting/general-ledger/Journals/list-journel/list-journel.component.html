@@ -154,10 +154,10 @@
 						<p-inputSwitch *ngIf="rowData['isActive']==null" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="toggleIsActive(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
 
 						<span data-toggle="modal" data-target="#view"> <a class="btn btn-info boxed-float-btn nobg" 
-							data-toggle="tooltip" (click)="openView(view,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
+							data-toggle="tooltip"  matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
 						
 							<span><a class="btn nobg" 
-								(click)="openContentEdit(contentEdit,rowData)" matTooltip="Edit" 
+								(click)="openContentEdit(rowData)" matTooltip="Edit" 
 								matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
 						
 						

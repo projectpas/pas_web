@@ -9,7 +9,7 @@ import { getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectBy
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref';
 import { ConfigurationService } from '../../../services/configuration.service';
-import * as $ from 'jquery';
+declare var $ : any;
 import * as moment from 'moment';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

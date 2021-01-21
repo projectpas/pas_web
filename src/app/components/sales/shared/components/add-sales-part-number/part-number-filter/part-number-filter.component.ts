@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy } from "@angular/core";
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import { ItemSearchType } from "../../../../quotes/models/item-search-type";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -15,6 +15,7 @@ import { Router } from "@angular/router";
 import { formatNumberAsGlobalSettingsModule, formatStringToNumber } from "../../../../../../generic/autocomplete";
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 import { AlertService, MessageSeverity } from "../../../../../../services/alert.service";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: "app-part-number-filter",
@@ -22,7 +23,7 @@ import { AlertService, MessageSeverity } from "../../../../../../services/alert.
   styleUrls: ["./part-number-filter.component.scss"],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PartNumberFilterComponent {
+export class PartNumberFilterComponent implements OnInit, OnDestroy {
   @Input() customer: any;
   @Input() salesQuote: ISalesQuote;
   @Input() allConditionInfo: any;
@@ -32,7 +33,7 @@ export class PartNumberFilterComponent {
   @Input() selectedSummaryRow: SummaryPart;
   @Output() onPartSearch: EventEmitter<any> = new EventEmitter<any>();
   @Output() onSearchTypeChange: EventEmitter<ItemSearchType> = new EventEmitter<ItemSearchType>();
-  @ViewChild("searchMultiPart",{static:false}) searchMultiPart: ElementRef;
+  @ViewChild("searchMultiPart", { static: false }) searchMultiPart: ElementRef;
   query: ItemMasterSearchQuery;
   partDetails: any[];
   partDetailsList = [];
@@ -49,6 +50,10 @@ export class PartNumberFilterComponent {
   isSpinnerVisible: boolean = false;
   columns: any[];
   partEditDisable = false;
+  salesMargin: any;
+  showPaginator: any;
+  pageLinks: any;
+  subscription: Subscription;
 
   constructor(
     private modalService: NgbModal,
@@ -85,22 +90,23 @@ export class PartNumberFilterComponent {
       part.partId = selectedSummaryRow.partId;
       part.partNumber = selectedSummaryRow.partNumber;
       part.stockType = selectedSummaryRow.pmaStatus;
-      this.partDetails.push(part);
+      
       this.query.partSearchParamters.partNumberObj = part;
+      this.partDetails.push(part);
       this.calculate();
     }
   }
 
   ngOnInit() {
     //this.ptnumberlistdata();
-    this.loadData();
+    //this.loadData();
     this.salesQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
         // this.query.partSearchParamters.conditionId = 0;
         this.calculate();
-
       });
+
     if (this.selectedSummaryRow) {
       this.onPartNumberSelect(this.selectedSummaryRow);
       this.openSalesMarginWithSummaryRow(this.selectedSummaryRow);
@@ -111,7 +117,8 @@ export class PartNumberFilterComponent {
     } else {
       this.partEditDisable = false;
     }
-    // this.searchPartByPartNumber({ query: '' });
+
+    this.bindPartsDroppdown('');
   }
 
   initColumns() {
@@ -132,16 +139,6 @@ export class PartNumberFilterComponent {
     let tempValue = Number(val.toString().replace(/\,/g, ''));
     return formatStringToNumber(tempValue)
   }
-
-  private loadData() {
-
-
-    // this.conditionService.getConditionList().subscribe(
-    //   results => {
-    //     this.allConditionInfo = results[0];
-    //   });
-  }
-
 
   resetActionButtons() {
     this.searchDisabled = true;
@@ -179,14 +176,9 @@ export class PartNumberFilterComponent {
               this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
-              const errorLog = error;
-              //this.onDataLoadFailed(errorLog)
             });
-
           break;
-
         default:
-
           this.isSpinnerVisible = true;
           this.itemMasterService.searchitemmasterfromsoqpop(searchQuery)
             .subscribe(result => {
@@ -199,15 +191,14 @@ export class PartNumberFilterComponent {
               this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
-              const errorLog = error;
-              // this.onDataLoadFailed(errorLog)
             });
           break;
       }
     }
   }
+  
   calculate() {
-    if (this.query.partSearchParamters.conditionId > 0
+    if (this.query.partSearchParamters.conditionIds.length > 0
       && this.query.partSearchParamters.partNumber
       && formatStringToNumber(this.query.partSearchParamters.quantityRequested) > 0) {
       this.searchDisabled = false;
@@ -227,18 +218,6 @@ export class PartNumberFilterComponent {
     this.salesQuoteService.updateSearchPartObject(this.query);
   }
 
-  private ptnumberlistdata() {
-
-    this.itemMasterService.getPrtnumberslistList().subscribe(
-      results => this.onptnmbersSuccessful(results[0]),
-      //error => this.onDataLoadFailed(error)
-    );
-  }
-
-  private onptnmbersSuccessful(allWorkFlows: any[]) {
-    //this.dataSource.data = allWorkFlows;
-    this.partDetails = allWorkFlows;
-  }
   onPartNumberSelect(part: any) {
     this.resetActionButtons();
     this.query.partSearchParamters.partNumber = part.partNumber;
@@ -260,23 +239,27 @@ export class PartNumberFilterComponent {
     // this.query.partSearchParamters.restrictDER = false;
     // this.query.partSearchParamters.restrictPMA = false;
     this.enableMultiSearch = false;
-    if (this.query.partSearchParamters.conditionId > 0 && this.query.partSearchParamters.quantityRequested > 0)
+    if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.quantityRequested > 0)
       this.searchDisabled = false;
     this.calculate();
   }
 
   onConditionSelect() {
-    if (this.query.partSearchParamters.conditionId > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
+    if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
       this.searchDisabled = false;
   }
 
+  async searchPartByPartNumber(event) {
+    if (event.query !== undefined && event.query !== null) {
+      this.bindPartsDroppdown(event.query);
+    }
+  }
 
-  searchPartByPartNumber(event) {
-    this.isSpinnerVisible = false;
+  bindPartsDroppdown(query) {
     this.searchDisabled = true;
-    this.partDetails = [...this.partDetailsList];
+    //this.partDetails = [...this.partDetailsList];
     let partSearchParamters = {
-      'partNumber': event.query,
+      'partNumber': query,
       "restrictPMA": this.query.partSearchParamters.restrictPMA,
       "restrictDER": this.query.partSearchParamters.restrictDER,
       "customerId": this.salesQuote.customerId,
@@ -285,51 +268,21 @@ export class PartNumberFilterComponent {
       "includeAlternatePartNumber": this.query.partSearchParamters.includeAlternatePartNumber,
       "includeEquivalentPartNumber": this.query.partSearchParamters.includeEquivalentPartNumber,
       "idlist": '0'
-    }
-
-    this.itemMasterService.searchPartNumberAdvanced(partSearchParamters).subscribe(
-      (result: any[]) => {
-        this.isSpinnerVisible = false;
-        if (result && result.length > 0) {
-          this.partDetailsList = result;
-          this.partDetails = [...this.partDetailsList];
-        } else {
-          this.partDetailsList = [];
-          this.partDetails = [];
-        }
-      }, error => {
-        this.partDetailsList = [];
-        this.partDetails = [];
-        this.isSpinnerVisible = false;
-        const errorLog = error;
+    };
+    //this.isSpinnerVisible = true;
+    this.subscription = this.itemMasterService.searchPartNumberAdvanced(partSearchParamters).subscribe(
+      (result: any) => {
+          //this.isSpinnerVisible = false;
+          if (result && result.length > 0) {
+            this.partDetailsList = result;
+            this.partDetails = [...this.partDetailsList];
+          }
+          else {
+            this.partDetailsList = [];
+            this.partDetails = [];
+          }
       }
     )
-
-  }
-
-  onDataLoadFailed(log) {
-    this.isSpinnerVisible = false;
-    const errorLog = log;
-    var msg = '';
-    if (errorLog.message) {
-      if (errorLog.error && errorLog.error.errors.length > 0) {
-        for (let i = 0; i < errorLog.error.errors.length; i++) {
-          msg = msg + errorLog.error.errors[i].message + '<br/>'
-        }
-      }
-      this.alertService.showMessage(
-        errorLog.error.message,
-        msg,
-        MessageSeverity.error
-      );
-    }
-    else {
-      this.alertService.showMessage(
-        'Error',
-        log.error,
-        MessageSeverity.error
-      );
-    }
   }
 
   onChangeSearchType(event) {
@@ -343,24 +296,15 @@ export class PartNumberFilterComponent {
       case "2":
         searchType = ItemSearchType.StockLine;
         break;
-
     }
     this.onSearchTypeChange.emit(searchType);
   }
 
   openMultiPartSearch() {
-
     this.multiPartModal = this.modalService.open(this.searchMultiPart, { size: "lg" });
-    this.multiPartModal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
   }
 
   getMultipartsQuery() {
-
     let multiParts = [];
     for (let i = 0; i < this.multiSearchResult.length; i++) {
       if (this.multiSearchResult[i].exist) {
@@ -383,8 +327,6 @@ export class PartNumberFilterComponent {
               this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
-              const errorLog = error;
-              //this.onDataLoadFailed(errorLog)
             });
           break;
 
@@ -394,18 +336,13 @@ export class PartNumberFilterComponent {
               this.onPartSearch.emit(result);
             }, error => {
               this.isSpinnerVisible = false;
-              const errorLog = error;
-              //this.onDataLoadFailed(errorLog)
             });
           break;
       }
     }
-
-
-
   }
-  searchMultiPartNumbers(): void {
 
+  searchMultiPartNumbers(): void {
     let partSearchParamters = {
       'parts': this.multiPartNumbers.split(","),
       "restrictPMA": this.salesQuote.restrictPMA,
@@ -417,14 +354,11 @@ export class PartNumberFilterComponent {
       this.multiSearchResult = response;
       if (this.multiSearchResult.length > 0)
         this.searchDisabled = false;
-      // this.multiPartModal.close();
     }, error => {
       this.isSpinnerVisible = false;
-      const errorLog = error;
-      //this.onDataLoadFailed(errorLog)
     });
-
   }
+
   includeMultiplePN(event) {
     let checked: boolean = event.srcElement.checked;
     if (checked) {
@@ -434,21 +368,24 @@ export class PartNumberFilterComponent {
         this.searchDisabled = false;
     } else {
       this.enableMultiSearch = false;
-      if (this.query.partSearchParamters.conditionId > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
+      if (this.query.partSearchParamters.conditionIds.length > 0 && this.query.partSearchParamters.partNumber && this.query.partSearchParamters.quantityRequested > 0)
         this.searchDisabled = false;
       else
         this.searchDisabled = true;
     }
-
   }
-  onCloseMultiPartNumbers(event) {
 
+  onCloseMultiPartNumbers() {
     this.multiPartModal.close();
-
   }
+
   public navigateToAddItemMaster() {
+    this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock');
+  }
 
-    this.router.navigateByUrl('/itemmastersmodule/itemmasterpages/app-item-master-stock')
+  onChange($event, part, salesMargin) { }
 
+  ngOnDestroy() {
+    if (this.subscription !== undefined) this.subscription.unsubscribe();
   }
 }

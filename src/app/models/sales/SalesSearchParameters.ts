@@ -1,7 +1,7 @@
 import { ISalesSearchParameters } from './ISalesSearchParameters';
 export class SalesSearchParameters implements ISalesSearchParameters {
     first: number;
-    page: number;
+    PageNo: number;
     pageCount: number;
     rows: number;
     limit: number;

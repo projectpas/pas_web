@@ -52,7 +52,7 @@ export class TagTypeComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     disableSaveGroupId: boolean = false;
-    existingRecordsResponse: Object;
+    existingRecordsResponse: any;
     PortalList: any;
     disableSaveForDescription: boolean = false;
     descriptionList: any;
@@ -69,7 +69,8 @@ export class TagTypeComponent implements OnInit {
     currentstatus: string = 'Active';
     selectedRecordForEdit: any;
     viewRowData: any;
-    selectedRowforDelete: any;  
+    selectedRowforDelete: any; 
+    AuditDetails: any; 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private authService: AuthService,
         private modalService: NgbModal,

@@ -62,6 +62,8 @@ export class CreditTermsComponent implements OnInit {
     private table: Table;
     auditHistory: any[] = [];
     selectedRecordForEdit: any;
+    AuditDetails: any;
+    rowIndex: any;
     newCreditTerm =
         {
             name: "",
