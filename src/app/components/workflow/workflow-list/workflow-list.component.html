@@ -348,6 +348,7 @@
                     <h4 class="modal-title">Workflow Details of {{ sourceWorkFlow.workOrderNumber}} for
                         PN-{{sourceWorkFlow.itemMaster.partNumber}} and Scope {{sourceWorkFlow.workScope.description}}
                     </h4>
+                    
                 </div>
                 <div class="modal-body">
                     <div class="card">
@@ -357,11 +358,11 @@
                                     <li class="breadcrumb-item active" aria-current="page"
                                         style="font-size: 16px;margin-top: 3px;">Workflow Details</li>
                                 </ol>
-                            </nav>
-                            <button class="btn btn-primary pull-right" (click)="toggle_wf_header=!toggle_wf_header">
+                            </nav>   
+                            <button style="margin-top: 6px;" class="btn btn-primary pull-left" (click)="toggle_wf_header=!toggle_wf_header">
                                 {{toggle_wf_header ? 'Collapse' : 'Expand'}}
-                            </button>
-                            <button type="button" class="pull-right" name="isActive" [ngClass]="sourceWorkFlow.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
+                            </button>                         
+                            <button style="margin-top: 6px;" type="button" class="pull-right" name="isActive" [ngClass]="sourceWorkFlow.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
                                 <span class="value">{{sourceWorkFlow.isActive ? 'Active' : 'In-Active'}}</span>
                              </button> 
                           

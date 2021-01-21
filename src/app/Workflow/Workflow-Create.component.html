@@ -348,11 +348,11 @@
                                             </div>
                                             <div class="col-sm-4">
                                                 <label class="w80">Amount: </label>
-                                                <input class="w70 amount form-control text-right" type="text"
+                                                <input  class="form-control w70 text-right" type="text"
                                                     name="fixedAmount" [(ngModel)]="sourceWorkFlow.fixedAmount"
                                                     pInputText pKeyFilter="money" [ngModelOptions]="{updateOn:'blur'}"
-                                                    matTooltip="Fixed Amount" matTooltipPosition="above"
-                                                    (input)="berDetermination($event.target.value,'html')">
+                                                    (change)="berDetermination($event.target.value,'html')"
+                                                    matTooltip="Fixed Amount" matTooltipPosition="above">
                                             </div>
                                         </div>
                                     </div>
