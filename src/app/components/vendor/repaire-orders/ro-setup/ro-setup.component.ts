@@ -4390,7 +4390,7 @@ WarnRescticModel() {
 				partList.controlId = res.controlId;
 				partList.purchaseOrderNum = res.purchaseOrderNo;
 				partList.controlNumber = res.controlNumber;
-				partList.workOrderId = res.WorkOrderId;
+				//partList.workOrderId = res.WorkOrderId;
 			},err => {});
 		}
 	}

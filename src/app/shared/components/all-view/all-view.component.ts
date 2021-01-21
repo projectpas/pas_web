@@ -143,8 +143,8 @@ export class AllViewComponent implements OnInit {
     let PovendorId = this.vendorId;     
     this.vendorIdByParams = this.PovendorId;
     this.isPoViewMode = true;
-    this.vendorId = PovendorId;
-    this.capvendorId = PovendorId;
+    this.vendorId = this.PovendorId;
+    this.capvendorId = this.PovendorId;    
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;
       this.getPOViewById(OrderId);
