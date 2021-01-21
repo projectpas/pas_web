@@ -413,10 +413,6 @@
                                                 <div class="form-group">
                                                     <label>Customer Name: <span class="clr-red">*</span></label>{{sourceWorkFlow.customerName}}
                                                 </div>
-                                                <!-- <div class="form-group">
-                                                    <label>Notes: </label>
-                                                    <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="sourceWorkFlow.memo"></span>
-                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
@@ -566,7 +562,6 @@
                                             Notes
                                         </label>
                                         <span>
-                                            <!-- [matTooltip]="parsedText(sourceWorkFlow.memo)" -->
                                             <div class="form-group memo-popup-cstm mat_emo">
                                                 <div [innerHTML]="sourceWorkFlow.memo"
                                                     class="form-control"
@@ -599,20 +594,20 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Pub ID</th>
+                                                <th>Pub ID<span class="clr-red">*</span></th>
                                                 <th>Pub Desc</th>
-                                                <th>Revision Date</th>
                                                 <th>Pub Type</th>
+                                                <th>Revision Date</th>                                                
                                                 <th>Sequence</th>
                                                 <th>Source</th>
-                                                <th>Aircraft Manufacturer</th>
+                                                <th>Aircraft</th>
                                                 <th>Model</th>
                                                 <th>Dash Number</th>
                                                 <th>Location</th>
                                                 <th>Verified By</th>
                                                 <th>Verified Date</th>
                                                 <th>Status</th>
-                                                <th>Image</th>
+                                                <th>File Name</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -620,8 +615,8 @@
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{publication.publicationName}}</td>
                                                 <td>{{publication.publicationDescription}}</td>
-                                                <td>{{publication.revisionDate}}</td>
                                                 <td>{{publication.publicationTypeName}}</td>
+                                                <td>{{publication.revisionDate}}</td>
                                                 <td class="text-right">{{publication.sequence}}</td>
                                                 <td>{{publication.source}}</td>
                                                 <td>{{publication.aircraftManufacturerName}}</td>
@@ -632,12 +627,10 @@
                                                 <td>{{publication.verifiedDate}}</td>
                                                 <td>{{publication.status ? 'Active': 'In Active' }}</td>
                                                 <td>
-                                                    <!-- <a href="{{publication.attachmentURL}}" class="img-responsive"
-                                                        alt="">View</a> -->
-                                                        <button class="btn btn-danger nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
-                                                            <i class="fa fa-eye"></i>
-                                                          </button>
-                                                    </td>
+                                                    <button class="btn btn-danger nobg"  matTooltipPosition="above" matTooltip="View"  (click)="openView(content,publication)">
+                                                        <i class="fa fa-eye"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -736,7 +729,8 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>PN</th>
+                                                <th>PN<span class="clr-red">*</span></th>
+                                                <th>PN Description</th>
                                                 <th>Sequence</th>
                                                 <th>Stage</th>
                                                 <th>Min</th>
@@ -750,6 +744,7 @@
                                             <tr *ngFor="let measurement of task.measurements;let i = index">
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{measurement.partNumber}}</td>
+                                                <td>{{measurement.partDescription}}</td>
                                                 <td class="text-right">{{measurement.sequence}}</td>
                                                 <td>{{measurement.stage}}</td>
                                                 <td class="text-right">{{measurement.min}}</td>
@@ -770,9 +765,9 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>EPN</th>
-                                                <th> Description</th>
-                                                <th> Condition</th>
+                                                <th>EPN<span class="clr-red">*</span></th>
+                                                <th>Description</th>
+                                                <th>Condition<span class="clr-red">*</span></th>
                                                 <th>Item Classification</th>
                                                 <th>Stock Type</th>
                                                 <th>Qty</th>
@@ -789,8 +784,7 @@
                                                 <td>{{exclusion.partDescription}}</td>
                                                 <td>{{exclusion.condition}}</td>
                                                 <td>{{exclusion.itemClassification}}</td>
-                                                <td>{{exclusion.stockType}}</td>
-                                                
+                                                <td>{{exclusion.stockType}}</td>                                                
                                                 <td class="text-right">{{exclusion.quantity}}</td>
                                                 <td class="text-right">{{exclusion.unitCost}}</td>
                                                 <td class="text-right">{{exclusion.extendedCost}}</td>
@@ -822,7 +816,7 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Action</th>
+                                                <th>Action<span class="clr-red">*</span></th>
                                                 <th>Description</th>
                                                 <th>Sequence</th>
                                                 <th>Memo</th>
@@ -849,7 +843,7 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Expertise Type</th>
+                                                <th>Expertise Type<span class="clr-red">*</span></th>
                                                 <th>Estimated Hours</th>
                                                 <th>Labor Direct Rate</th>
                                                 <th>Direct Labor Cost</th>
@@ -890,18 +884,20 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Asset Id</th>
-                                                <th>Asset Type</th>
-                                                <th>Asset Description</th>
-                                                <th>Qty</th>
+                                                <th>Tool Name</th>
+                                                <th>Tool ID</th>                                               
+                                                <th>Tool Description</th>
+                                                <th>Tool Class</th>
+                                                <th>Qty<span class="clr-red">*</span></th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let equipment of task.equipments;let i=index">
                                                 <td class="text-right">{{(i+1)}}</td>
                                                 <td>{{equipment.assetName}}</td>
-                                                <td>{{equipment.assetTypeName}}</td>
+                                                <td>{{equipment.assetName}}</td>
                                                 <td>{{equipment.assetDescription}}</td>
+                                                <td>{{equipment.assetTypeName}}</td>                                                
                                                 <td class="text-right">{{equipment.quantity}}</td>
                                             </tr>
                                         </tbody>
@@ -915,13 +911,11 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>Type</th>
+                                                <th>Type<span class="clr-red">*</span></th>
                                                 <th>Description</th>
-                                                <th>Qty</th>
-                                                <th>Unit Cost</th>
-                                                <th>Extended Cost</th>
-                                                <!-- <th>Unit Price</th> -->
-                                                <!-- <th>Extended Price</th> -->
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                                <th>Unit Cost<span class="clr-red">*</span></th>
+                                                <th>Extended Cost<span class="clr-red">*</span></th>
                                                 <th>Vendor Name</th>
                                             </tr>
                                         </thead>
@@ -933,8 +927,6 @@
                                                 <td class="text-right">{{charge.quantity}}</td>
                                                 <td class="text-right">{{charge.unitCost}}</td>
                                                 <td class="text-right">{{charge.extendedCost}}</td>
-                                                <!-- <td class="text-right">{{charge.unitPrice}}</td> -->
-                                                <!-- <td class="text-right">{{charge.extendedPrice}}</td> -->
                                                 <td>{{charge.vendorName}}</td>
                                             </tr>
                                             <tr>
@@ -944,8 +936,6 @@
                                                 <td class="text-right"><b>{{task.chargesTotalQty}}</b></td>
                                                 <td></td>
                                                 <td class="text-right"><b>{{task.chargesTotalExtendedCost}}</b></td>
-                                                <!-- <td></td> -->
-                                                <!-- <td class="text-right"><b>{{task.chargesTotalChargesCost}}</b></td> -->
                                                 <td></td>
                                             </tr>
                                         </tbody>
@@ -959,17 +949,15 @@
                                         <thead>
                                             <tr>
                                                 <th>S.No</th>
-                                                <th>PN</th>
-                                                <th>Description</th>
-                                                <th>Cond</th>
+                                                <th>PN<span class="clr-red">*</span></th>
+                                                <th>Description<span class="clr-red">*</span></th>
+                                                <th>Cond<span class="clr-red">*</span></th>
                                                 <th>Mandatory / Supplemental</th>
                                                 <th>Item Classification</th>
-                                                <th>Qty</th>
-                                                <th>UOM</th>
-                                                <th>Unit Cost</th>
-                                                <th>Extended Cost</th>
-                                                <!-- <th>Unit Price</th> -->
-                                                <!-- <th>Extended Price</th> -->
+                                                <th>Qty<span class="clr-red">*</span></th>
+                                                <th>UOM<span class="clr-red">*</span></th>
+                                                <th>Unit Cost<span class="clr-red">*</span></th>
+                                                <th>Extended Cost<span class="clr-red">*</span></th>
                                                 <th>Memo</th>
                                                 <th>Deferred</th>
                                             </tr>
@@ -986,8 +974,6 @@
                                                 <td>{{material.unitOfMeasure}}</td>
                                                 <td class="text-right">{{material.unitCost}}</td>
                                                 <td class="text-right">{{material.extendedCost}}</td>
-                                                <!-- <td class="text-right">{{material.price}}</td> -->
-                                                <!-- <td class="text-right">{{material.extendedPrice}}</td> -->
                                                 <td>
                                                     <span class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="material.memo"></span>
                                                 </td>
