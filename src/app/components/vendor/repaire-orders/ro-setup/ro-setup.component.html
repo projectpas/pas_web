@@ -370,6 +370,10 @@
                                 <th>Functional CUR <span class="clr-red">*</span></th>
                                 <th>FX Rate <span class="clr-red">*</span></th>
                                 <th>Report CUR <span class="clr-red">*</span></th>
+                                <th>Stk Line Num <span class="clr-red">*</span></th>
+							    <th>Control Id</th>
+							    <th>Control Num</th>
+							    <th>PO</th>
                                 <th>WO Num</th>
                                 <th>Sub-WO Num</th>
                                 <!-- <th>RO Num</th> -->
@@ -377,7 +381,7 @@
                                 <th>Item Type</th>
                                 <th>GL Account</th>
                                 <th>UOM</th>                                
-                                <th colspan="4">Management Structure <span class="clr-red">*</span></th>
+                                <th class="msHeader" colspan="4">Management Structure <span class="clr-red">*</span></th>
                                 <th>Notes</th>
                             </tr>
                         </thead>
@@ -471,14 +475,17 @@
                                             <!--[disabled]=true-->
                                         </p-autoComplete>
                                     </td>
-                                    <!-- <td>
-                                        <p-autoComplete field="stockLineNumber" class="pautocomp-cstm" [(ngModel)]="partList.stocklineId"
+                                    <td>
+                                        <p-autoComplete appendTo="body" field="stockLineNumber" class="autocomplete" [(ngModel)]="partList.stocklineId"
                                          name="stocklineNum{{row_index}}" [suggestions]="partList.allStocklineDetails" 
                                          (completeMethod)="filterStocklineNum($event, partList)"  [size]="30" [minLength]="1" 
                                          [dropdown]="true" errorMessage="Records not found" [disabled]="!partList.conditionId" 
                                          (onSelect)="getStockLineDetails(partList)" [forceSelection]="true" 
                                          (ngModelChange)="enablePartSave()" [disabled]="partList.isApproved" required></p-autoComplete>
-                                    </td> -->
+                                    </td>
+                                    <td><input type="text" class="form-control" [(ngModel)]="partList.controlId" name="controlId{{row_index}}" disabled></td>
+								    <td><input type="text" class="form-control" [(ngModel)]="partList.controlNumber" name="controlNumber{{row_index}}" disabled></td>
+								    <td><input type="text" class="form-control" [(ngModel)]="partList.purchaseOrderNum" name="purchaseOrderNum{{row_index}}" disabled></td>                                   
                                     <td>
                                         <p-autoComplete field="label" class="autocomplete" appendTo="body" [(ngModel)]="partList.workOrderId" 
                                         name="workOrderId{{row_index}}" id="workOrderId{{row_index}}"
@@ -602,7 +609,7 @@
                                         <th>Order Qty <span class="clr-red">*</span></th>
                                         <th>Need By <span class="clr-red">*</span></th>
                                         <th colspan="4">Management Structure <span class="clr-red">*</span></th>
-                                        <th colspan="15"></th>
+                                        <th colspan="18"></th>
                                     </tr>
                                     <tr class="child-data splitship-child child-data-back" *ngFor="let partChildList of partList.childList; let row_no = index" [hidden]="partChildList.isDeleted">
                                         
@@ -756,7 +763,7 @@
                                                 <option *ngFor="let department of partChildList.childDepartmentlist" value="{{department.value}}">{{department.label}}</option>
                                             </select>
                                         </td>
-                                        <td colspan="16"></td>
+                                        <td colspan="18"></td>
                                     </tr>
                                     <tr class="child-header splitship-head child-header-back" *ngIf="partList.ifSplitShip">
                                         <td  class="child-td-align"></td>
@@ -775,7 +782,7 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                        <td colspan="16"></td>
+                                        <td colspan="20"></td>
                                     </tr>
                                 </ng-container>
                             </ng-container>
@@ -798,6 +805,10 @@
                                 <td class="text-right"><b>{{totalDiscAmount}}</b></td>
                                 <td>&nbsp;</td>
                                 <td class="text-right"><b>{{totalExtCost}}</b></td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
                                 <td>&nbsp;</td>
@@ -883,12 +894,9 @@
                 <table class="table table-bordered header-table-width">
                         <thead>                        
                         <tr class="pad_workflo">
-                            <th class="approver-th-align">
-                                <input type="checkbox" (click)="selectAllApproval(selectallApprovers)" [(ngModel)]="selectallApprovers" [disabled]="disableApproverSelectAll" /> Select All
-                            </th>
-                             <th class="approver-th-align approver-display" style="display: none;">
-                                Split Shipment
-                            </th>
+                            <th class="approver-th-align" style="min-width: 30px !important;" >
+                                <input type="checkbox" (click)="selectAllApproval(selectallApprovers)" [(ngModel)]="selectallApprovers" [disabled]="disableApproverSelectAll" />
+                            </th>                            
                             <th *ngFor="let header of approvalProcessHeader">
                                 {{header.header}}
                             </th>
@@ -896,12 +904,12 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let approver of approvalProcessList; let i=index;"  [ngStyle]="{'background-color':approver.isParent === false ? '#fafafa' : 'white' }"  >
-                            <td class="approver-process-td">                             
+                            <td class="approver-process-td" style="min-width: 30px !important;">                             
                                 <input *ngIf="approver.isParent" type="checkbox" [(ngModel)]="approver.isSelected" (change)="selectApproval(approver)" [disabled]= "!getPartToDisableOrNot(approver)" />
                             </td>
-                            <td class="approver-process-td approver-display" >
+                            <!-- <td class="approver-process-td approver-display" >
                                 <input *ngIf="!approver.isParent" type="checkbox" [(ngModel)]="approver.isSelected" (change)="selectApproval(approver)" [disabled]= "!getPartToDisableOrNot(approver)" />
-                            </td> 
+                            </td>  -->
                             <ng-container *ngFor="let field of approvalProcessHeader">
                                 <td  class="qty-width" *ngIf="field.field == 'qty'
                                       || field.field == 'unitCost'
@@ -1057,7 +1065,7 @@
         </p-tabPanel>-->
     </p-tabView>
     <div *ngIf="isEditMode" class="w-100 pull-right">
-        <button class="btn btn-primary pull-right m-t-10 approver-btn" (click)="goToCreatePOList()">Create New PO</button>
+        <button class="btn btn-primary pull-right m-t-10 approver-btn" (click)="goToCreatePOList()">Create New RO</button>
     </div>
 </ng-container>
 
@@ -1395,7 +1403,7 @@
                       
                         <div class="form-group col-md-12" style="margin-top: 8px;">
                             <button type="button" class="btn btn-primary" *ngIf="(!isEditModeSplitPoOnly && !isEditModeSplitAddress) || isEditModeSplitAddress" (click)="saveShippingAddress();"  [disabled]="!(addSplitSiteNameForm.valid && splitAddbutton && !issplitSiteNameAlreadyExists)"  data-dismiss="modal">{{isEditModeSplitAddress ? 'Update' : 'Save' }}</button> <!--resetAddressShippingForm();-->
-                            <button type="button" class="btn btn-primary" *ngIf="(!isEditModeSplitPoOnly && !isEditModeSplitAddress) || isEditModeSplitPoOnly" [disabled]="!(addSplitSiteNameForm.valid && splitAddbutton && !issplitSiteNameAlreadyExists) || addNewAddress.isPrimary" (click)="saveShippingAddressToRO();"   data-dismiss="modal">{{isEditModeSplitPoOnly ? 'Update to this PO' : 'Save to this PO' }}</button>
+                            <button type="button" class="btn btn-primary" *ngIf="(!isEditModeSplitPoOnly && !isEditModeSplitAddress) || isEditModeSplitPoOnly" [disabled]="!(addSplitSiteNameForm.valid && splitAddbutton && !issplitSiteNameAlreadyExists) || addNewAddress.isPrimary" (click)="saveShippingAddressToRO();"   data-dismiss="modal">{{isEditModeSplitPoOnly ? 'Update to this RO' : 'Save to this RO' }}</button>
                         </div>
 
                     </form>
