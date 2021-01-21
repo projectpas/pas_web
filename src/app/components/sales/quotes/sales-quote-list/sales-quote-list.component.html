@@ -108,7 +108,7 @@
             {{ col.header }}
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th style="width:100px;position:sticky !important">
+          <th style="width:130px;position:sticky !important">
             Actions
           </th>
         </tr>
@@ -237,7 +237,7 @@
     <h6 class="modal-body">SO Quote Number : {{restorerecord.salesOrderQuoteNumber}}</h6>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>
@@ -280,7 +280,7 @@
   </div>
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteQuote()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="deleteQuote()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 

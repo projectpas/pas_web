@@ -210,7 +210,7 @@
                       </td>
                   </ng-container>
   
-                  <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false">
+                  <td class="table-actions-column action-icons-cstm table-column-width" *ngIf="isViewMode == false">
                     <div  *ngIf="currentDeletedstatus==true" >
                         <span>
                           <a 
@@ -321,8 +321,9 @@
               </ng-template>
             </p-table>
           </div>
-          <!-- <div style="margin-top:-40px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true"> -->
-            <div style="margin-top:-10px;margin-bottom: 15px;" *ngIf="isViewMode == false && offLineUpload==true">
+          <div style="margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
+          <!-- <div style="margin-top:-40px;margin-bottom: 30px;" *ngIf="isViewMode == false && offLineUpload==true">
+            <div style="margin-top:-10px;margin-bottom: 15px;" *ngIf="isViewMode == false && offLineUpload==true"> -->
             <button [disabled]="isEnableUpdateButton"
             type="button"
             class="btn btn-primary pull-right submit-btn"

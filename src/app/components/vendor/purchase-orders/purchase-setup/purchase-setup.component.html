@@ -1052,7 +1052,7 @@
           </app-vendor-capes>
         </p-tabPanel>
         <p-tabPanel header="Documents" > 
-            <app-common-documents  *ngIf="showDocumenttab" [moduleName]="moduleName" [offLineUpload]="true" [referenceId]="id">
+            <app-common-documents  *ngIf="showDocumenttab" [isViewMode]="false" [moduleName]="moduleName" [offLineUpload]="true" [referenceId]="id">
               </app-common-documents>
           </p-tabPanel>
         <p-tabPanel header="Communication">            
