@@ -295,17 +295,17 @@ export class CommonDocumentsComponent implements OnInit {
 
     dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
-            this.commondocumentsDestructuredData = this.commondocumentsDestructuredDataOriginal;
-            const data = [...this.commondocumentsDestructuredData.filter(x => {
+            this.documentCollection = this.documentCollectionOriginal;
+            const data = [...this.documentCollection.filter(x => {
                 if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
                     return x;
                 } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
                     return x;
                 }
             })]
-            this.commondocumentsDestructuredData = data;
+            this.documentCollection = data;
         } else {
-            this.commondocumentsDestructuredData = this.commondocumentsDestructuredDataOriginal;
+            this.documentCollection = this.documentCollectionOriginal;
         }
     }
 
@@ -520,7 +520,7 @@ export class CommonDocumentsComponent implements OnInit {
 
         }
     }
-
+    documentCollectionOriginal:any=[];
     getList() {
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
@@ -571,6 +571,7 @@ export class CommonDocumentsComponent implements OnInit {
                     });
                 }
             }
+            this.documentCollectionOriginal = this.documentCollection;
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
