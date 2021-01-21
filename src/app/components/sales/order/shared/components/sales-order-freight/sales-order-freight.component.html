@@ -290,8 +290,8 @@
                                         <th rowspan="2">Ship Via<span class="clr-red">*</span>
                                             <!-- <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
                                                 matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
-                                                data-target="#AddShipVia"></a></span> -->
-                                            <!-- <span style="margin-left:0px;cursor:pointer;"
+                                                data-target="#AddShipVia" (click)="onEditShipVia('Add',0)"></a></span>
+                                            <span style="margin-left:0px;cursor:pointer;"
                                                 ><a class="btn nobg"
                                                   *ngIf="shipViaId > 0" 
                                                   matTooltip="Edit Ship Via" matTooltipPosition="above"
@@ -323,6 +323,17 @@
                                             <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel"
                                                         [options]="shipViaList" (ngModelChange)="enableUpdate(); getShipViaId($event);" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId" required>
                                             </p-dropdown>
+                                            <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
+                                                matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
+                                                data-target="#AddShipVia" (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
+                                            <span style="margin-left:0px;cursor:pointer;"
+                                                ><a class="btn nobg"
+                                                  *ngIf="f.shipViaId > 0" 
+                                                  matTooltip="Edit Ship Via" matTooltipPosition="above"
+                                                   data-toggle="modal" data-target="#AddShipVia" 
+                                                   (click)="onEditShipVia('Edit',f.shipViaId,i)"
+                                                  ><i class="fa fa-pencil"></i></a>
+                                            </span>
                                         </td>
                                         <td>
                                             <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel" [(ngModel)]="f.weight"
@@ -574,7 +585,7 @@
     </div>
 </ng-template>
 
-<div class="modal fade" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" *ngIf="IsAddShipVia" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog partsList-modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -583,7 +594,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-row">
-                    <app-ship-via-create></app-ship-via-create>
+                    <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)"></app-ship-via-create>
                     <!-- <app-ship-via-create (on-shipvia-save)="refresh(false)"></app-ship-via-create> -->
                 </div>
             </div>
