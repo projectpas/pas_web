@@ -180,7 +180,10 @@
 				</tr>
 				<tr>
 					<th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-						<input type="text"class="table-header-input-width"  *ngIf="col.field !== 'openDate' && col.field !== 'closedDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'" [disabled]="col.field == 'status' &&  currentStatus !='All'" pInputText (keyup)="onChangeInputField($event.target.value, col.field ,$event.target)">
+						<input type="text" *ngIf="col.field !== 'openDate' && col.field !== 'closedDate' && col.field !== 'createdDate' && col.field !== 'updatedDate' && col.field !== 'status'" 
+						 class="table-header-input-width" pInputText (keyup)="onChangeInputField($event.target.value, col.field ,$event.target)">					
+						<input type="text" pInputText [(ngModel)]="filterSearchText" *ngIf="col.field == 'status'" name="status" class="table-header-input-width"
+						(keyup)="onChangeInputField($event.target.value, col.field ,$event.target)" [disabled]="col.field == 'status' &&  currentStatusPO !='All'"> 					
 						<input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'openDate'" name="openDate" (change)="dateFilterForROList($event.target.value, col.field ,$event.target)">
 						<input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'closedDate'" name="closedDate" (change)="dateFilterForROList($event.target.value, col.field ,$event.target)">
 						<input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate" (change)="dateFilterForROList($event.target.value, col.field ,$event.target)">
@@ -236,7 +239,7 @@
 								   (click)="viewSelectedRow(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
 							</span> -->
 							<span>
-								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
+								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(viewRO,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
                             </span>
 							<span *ngIf="isReceivingRolist == false">
 								<a class="btn nobg btn-edit-cstm" (click)="edit(rowData)"
@@ -270,9 +273,13 @@
 						</div>
 						<div *ngIf="currentDeletedstatus == true">							
 						    <span>
-								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
+								<a class="btn nobg btn-view-cstm" (click)="viewSelectedRow(viewRO,rowData)" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>                
                             </span>
 							<span><a class="btn nobg" (click)="restore(restoreIdRo,rowData);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+							<span *ngIf="isReceivingRolist == false" data-toggle="modal" data-target="#roHistory">
+								<a class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(rowData)"
+								   matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
+							</span>
 							<!-- <span data-toggle="modal" data-target="#contentAuditHist"><a class="btn nobg" (click)="getAuditHistoryById(contentAuditHist,rowData)" matTooltip="History"  matTooltipPosition="above"><i class="fa fa-history"></i></a></span> -->
 						</div>
 
@@ -314,7 +321,7 @@
 			</ng-template>
 			<ng-template pTemplate="emptymessage" *ngIf="totalRecords == 0">
 				<tr>
-					<td [attr.colspan]="9" class="no-records-cstm no-records-msg">
+					<td [attr.colspan]="11" class="no-records-cstm no-records-msg">
 						No records found
 					</td>
 				</tr>
@@ -339,53 +346,6 @@
 		</p-table>
 	</div>
 </div>
-<!-- </form> -->
-
-<!--<div class="card">
-	<div class="card-body">
-		<div class="inline-block display-flex" *ngIf="!isEnableROList">
-			<h3 class="po-head lead">Repair Order List</h3>
-			&nbsp;&nbsp;
-			<a class="plusicon-cstm new-margin" matTooltip="Create RO" matTooltipPosition="above"
-			   [routerLink]="[
-			'/vendorsmodule/vendorpages/app-ro-setup'
-		  ]">
-				<i class="fa fa-plus-circle fa-lg"></i>
-			</a>
-		</div>
-
-		<div class="form-row status-radio">
-			<div class="col-md-8">
-				<div class="form-group">
-					<label class="radiobtn-label">Status:</label>
-					<div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let item of roStatusList">
-						<label class="radio-cstm wauto">
-							<input type="radio" name="rostatus" class="form-control" [value]="item.label" (click)="getROListByStatus(item.label)" [(ngModel)]="currentStatus">
-							<span class="checkmark"></span>{{item.label}}
-						</label>
-					</div>
-					<div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-						<label class="radio-cstm wauto">
-							<input type="radio" name="rostatus" class="form-control" value="All" (click)="getROListByStatus('All')" [(ngModel)]="currentStatus">
-							<span class="checkmark"></span>All
-						</label>
-					</div>
-					<div class="checkbox-cstm" style="margin-left: 0;">
-						<label style="width: auto !important;margin-top: 3px;">
-							<input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
-							<span class="cr"><i class="cr-icon pi pi-check"></i></span>
-							Show  Deleted List
-						</label>
-					</div>
-
-				</div>
-			</div>
-		</div>
-
-		
-	</div>
-</div> -->
-
 <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
@@ -451,10 +411,8 @@
 							<tr>
 								<th>RO ID</th>
 								<th>RO Number</th>
-								<th>Open Date</th>
-								<th>Closed Date</th>
-								<th>Vendor Name</th>
-								<th>Vendor Code</th>								
+								<th>Open Date</th>								
+								<th>Vendor Name</th>														
 								<th>Status</th>
 								<th>Requested By</th>
 								<th>Approved By</th>
@@ -473,9 +431,9 @@
 								<td [ngStyle]="{'color':  getColorCodeForHistory(i, 'repairOrderId', audit.repairOrderId)  ? 'black' : 'red'  }">{{audit.repairOrderId}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'repairOrderNumber', audit.repairOrderNumber)  ? 'black' : 'red'  }">{{audit.repairOrderNumber}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'openDate', audit.openDate)  ? 'black' : 'red'  }">{{audit.openDate | date: 'MM/dd/yyyy'}}</td>
-								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'closedDate', audit.closedDate)  ? 'black' : 'red'  }">{{audit.closedDate | date: 'MM/dd/yyyy'}}</td>
+								
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'vendorName', audit.vendorName)  ? 'black' : 'red'  }">{{audit.vendorName}}</td>
-								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'vendorCode', audit.vendorCode)  ? 'black' : 'red'  }">{{audit.vendorCode}}</td>
+								
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'status', audit.status)  ? 'black' : 'red'  }">{{audit.status}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'requestedBy', audit.requestedBy)  ? 'black' : 'red'  }">{{audit.requestedBy}}</td>
 								<td [ngStyle]="{'color': getColorCodeForHistory(i, 'approvedBy', audit.approvedBy)  ? 'black' : 'red'  }">{{audit.approvedBy}}</td>
@@ -497,11 +455,17 @@
 					</ng-template>
 				</div>
 			</div>
+			
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" (click)="closeHistoryModal()">Close</button>
 			</div>
 		</div>
 
+	</div>
+	<div class="preloader" *ngIf="isSpinnerVisible">
+		<div class="loading">
+			<div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+		</div>
 	</div>
 </div>
 
@@ -528,458 +492,29 @@
 	</div>
 </div>
 
-<div class="modal fade" id="roView" role="dialog" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-xl">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" (click)="closeViewModal()">&times;</button>
-				<!-- <h4 class="modal-title">Details of Repair Order</h4> -->
-				<div class="col-sm-3">
-					<h4 class="modal-title">Details of Repair Order</h4>
-				</div>
-				<div class="col-sm-3">
-					Vendor Name<span class="text-danger"> : {{roHeaderAdd.vendorName}}</span>
-				</div>
-				<div class="col-sm-3">
-					Vendor Code<span class="text-danger"> : {{roHeaderAdd.vendorCode}}</span>
-				</div>
-			</div>
-			<div class="modal-body">
-				<div>
-					<div class="card">
-						<div class="card-body" *ngIf="roHeaderAdd">
-							<div>
-								<div class="form-row">
-									<div class="col-md-4">
-										<p><span class="label"><b>RO Num: </b></span><span class="value">{{roHeaderAdd.repairOrderNumber ? roHeaderAdd.repairOrderNumber : '-'}}</span></p>
-										<p><span class="label"><b>Open Date: </b></span><span class="value">{{roHeaderAdd.openDate | date: 'MM/dd/yyyy'}}</span></p>
-										<p><span class="label"><b>Closed/Cancelled Date: </b></span><span class="value">{{roHeaderAdd.closedDate | date: 'MM/dd/yyyy'}}</span></p>
-										<p><span class="label"><b>Need By: </b></span><span class="value">{{roHeaderAdd.needByDate | date: 'MM/dd/yyyy'}}</span></p>
-										<p><span class="label"><b>Priority: </b></span><span class="value">{{roHeaderAdd.priority ? roHeaderAdd.priority : '-'}}</span></p>
-										<p><span class="label"><b>Vendor Name: </b></span><span class="value">{{roHeaderAdd.vendorName ? roHeaderAdd.vendorName : '-'}}</span></p>
-										<p><span class="label"><b>Vendor Code: </b></span><span class="value">{{roHeaderAdd.vendorCode ? roHeaderAdd.vendorCode : '-'}}</span></p>
-										<p><span class="label"><b>Vendor Contact: </b></span><span class="value">{{roHeaderAdd.contactName ? roHeaderAdd.contactName : '-'}}</span></p>
-										<p><span class="label"><b>Contact Phone: </b></span><span class="value">{{roHeaderAdd.workPhone ? roHeaderAdd.workPhone : '-'}}</span></p>
-										<p>
-											<span class="label"><b>Credit Limit & Terms: </b></span><span class="value">
-												{{roHeaderAdd.creditLimit ? roHeaderAdd.creditLimit : '-'}} &
-												{{roHeaderAdd.creditTerm ? roHeaderAdd.creditTerm : '-'}}
-											</span>
-										</p>
-									</div>
-									<div class="col-md-4">
-										<p><span class="label"><b>Requisitioner: </b></span><span class="value">{{roHeaderAdd.requisitioner ? roHeaderAdd.requisitioner : '-'}}</span></p>
-										<p><span class="label"><b>Approver: </b></span><span class="value">{{roHeaderAdd.approver ? roHeaderAdd.approver : '-'}}</span></p>
-										<p><span class="label"><b>Approved Date: </b></span><span class="value">{{roHeaderAdd.approvedDate | date: 'MM/dd/yyyy'}}</span></p>
-										<p><span class="label"><b>Status: </b></span><span class="value">{{roHeaderAdd.status ? roHeaderAdd.status : '-'}}</span></p>
-										<p><span class="label"><b>Memo: </b></span><span class="value">{{roHeaderAdd.roMemo ? roHeaderAdd.roMemo : '-'}}</span></p>
-										<div class="form-group p-t-10">
-											<div class="checkbox-cstm">
-												<label>
-													<input type="checkbox" name="deferredReceiver"
-														   [(ngModel)]="roHeaderAdd.deferredReceiver" disabled>
-													<span class="cr"><i class="cr-icon pi pi-check"></i></span>
-													Deferred Receiver
-												</label>
-											</div>
-										</div>
-										<div class="form-group p-t-10">
-											<div class="checkbox-cstm">
-												<label>
-													<input type="checkbox" name="resale"
-														   [(ngModel)]="roHeaderAdd.resale" disabled>
-													<span class="cr"><i class="cr-icon pi pi-check"></i></span>
-													Resale
-												</label>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-4">
-										<div class="form-row">
-											<div class="col-md-6">
-												<div class="card" style="margin-top: 6px;">
-													<div class="card-header" style="padding: 0 10px;">
-														<h5 style="margin-bottom: 0; font-size: 12px;">Management Structure <span class="text-danger">*</span></h5>
-													</div>
-													<div class="card-body" style="padding: 8px 12px 6px;">
-														<div class="form-group" style="margin-bottom: 4px;">
-															<input class="form-control" type="text" name="companyName"
-																   [(ngModel)]="headerManagementStructure.level1" disabled>
-														</div>
-														<div class="form-group" style="margin-bottom: 4px;">
-															<input class="form-control" type="text" name="BUName"
-																   [(ngModel)]="headerManagementStructure.level2" disabled>
-														</div>
-														<div class="form-group" style="margin-bottom: 4px;">
-															<input class="form-control" type="text" name="divisionName"
-																   [(ngModel)]="headerManagementStructure.level3" disabled>
-														</div>
-														<div class="form-group" style="margin-bottom: 4px;">
-															<input class="form-control" type="text" name="deptName"
-																   [(ngModel)]="headerManagementStructure.level4" disabled>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-										
-									</div>
-								</div>
-							</div>
-						</div>
-						<p-tabView class="pas-tabview">
-							<p-tabPanel header="Parts List">
-								<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-									<div class="tableFixHead">
-									<table class="table table-bordered" id="po-table">
-										<thead>
-											<tr class="header-table-width">
-												<th>PN</th>
-												<th>Alt PN</th>
-												<th>PN Description</th>
-												<th>Item Type</th>
-												<th>Mfr</th>
-												<th>GL Account</th>
-												<th>UOM</th>
-												<th>Need By</th>
-												<th>Cond</th>
-												<th>Order Qty</th>
-												<th>Unit Cost</th>
-												<th>Disc Percent</th>
-												<th>Disc./unit</th>
-												<th>Disc. Amount</th>
-												<th>Ext Cost</th>
-												<th>Functional CUR</th>
-												<th>FX Rate</th>
-												<th>Report CUR</th>
-												<th>Stockline Num</th>
-												<th>Control Id</th>
-												<th>Control Num</th>
-												<th>PO</th>
-												<th>WO</th>
-												<th>RO</th>
-												<th>SO</th>
-												<th colspan="4" style="min-width: 300px !important;">Management Structure</th>
-												<th>Memo</th>
-											</tr>
-										</thead>
-										<tbody>
-											<ng-container *ngFor="let partList of roPartsList">
-												<tr class="parent-data">
-													<td>{{partList?.partNumber}}</td>
-													<td>{{partList?.altEquiPartNumber}}</td>
-													<td>{{partList?.partDescription}}</td>
-													<td>{{partList?.itemType}}</td>
-													<td>{{partList?.manufacturer}}</td>
-													<td>{{partList?.glAccount}}</td>
-													<td>{{partList?.unitOfMeasure}}</td>
-													<td>{{partList?.needByDate | date: 'MM/dd/yyyy' }}</td>
-													<td>{{partList?.condition}}</td>
-													<td class="text-right">{{partList?.quantityOrdered}}</td>
-													<td class="text-right">{{partList?.unitCost}}</td>
-													<td class="text-right">{{partList?.discountPercent}}</td>
-													<td class="text-right">{{partList?.discountPerUnit}}</td>
-													<td class="text-right">{{partList?.discountAmount}}</td>
-													<td class="text-right">{{partList?.extendedCost}}</td>
-													<td>{{partList?.functionalCurrency}}</td>
-													<td class="text-right">{{partList?.foreignExchangeRate}}</td>
-													<td>{{partList?.reportCurrency}}</td>
-													<td>{{partList?.stockLineNumber}}</td>
-													<td>{{partList?.controlId}}</td>
-													<td>{{partList?.controlNumber}}</td>
-													<td>{{partList?.po}}</td>
-													<td>{{partList?.workOrderNo}}</td>
-													<td>{{partList?.reapairOrderNo}}</td>
-													<td>{{partList?.salesOrderNo}}</td>
-													<td colspan="4">{{partList?.level1}},{{partList?.level2}},{{partList?.level3}},{{partList?.level4}}</td>
-													<td>{{partList?.memo}}</td>
-												</tr>
-												<tr class="child-header splitship-head child-header-back" *ngIf="partList.repairOrderSplitParts">
-													<th></th>
-													<th></th>
-													<th>PN</th>
-													<th>PN Description</th>
-													<th>User Type</th>
-													<th>Name</th>
-													<th colspan="5">Select Address</th>
-													<th>UOM</th>
-													<th>Order Qty</th>
-													<th>Need By</th>
-													<th colspan="4" class="table-child-header-mgmt">Management Structure</th>
-													<th colspan="10"></th>
-												</tr>
-												<tr class="child-data child-data-back" *ngFor="let partChild of partList.repairOrderSplitParts">
-													<td></td>
-													<td></td>
-													<td>{{partList?.partNumber}}</td>
-													<td>{{partList?.partDescription}}</td>
-													<td>{{partChild?.userType}}</td>
-													<td>{{partChild?.user}}</td>
-													<td colspan="5">
-														{{partChild.roPartSplitAddress1 ? partChild.roPartSplitAddress1 : ''}},
-														{{partChild.roPartSplitCity ? partChild.roPartSplitCity : ''}},
-														{{partChild.roPartSplitState ? partChild.roPartSplitState : ''}} ,
-														{{partChild.roPartSplitPostalCode ? partChild.roPartSplitPostalCode : ''}},
-														{{partChild.roPartSplitCountry ? partChild.roPartSplitCountry : ''}}
-													</td>
-													<td>{{partList?.unitOfMeasure}}</td>
-													<td class="text-right">{{partChild?.quantityOrdered}}</td>
-													<td>{{partChild?.needByDate | date: 'MM/dd/yyyy' }}</td>
-													<td colspan="4">{{partChild?.level1}},{{partChild?.level2}},{{partChild?.level3}},{{partChild?.level4}}</td>
-													<td colspan="10"></td>
-												</tr>
-											</ng-container>
-										</tbody>
-									</table>
-									</div>
-								</div>
-							</p-tabPanel>
-
-							<p-tabPanel header="Internal Approvers">
-								<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" style="margin-top: 5px;">
-									<div class="tableFixHead">
-									<table class="table table-bordered" id="po-table">
-										<thead>
-											<tr class="header-table-width">
-													<th>Approver Name</th>
-													<th>Approver Code</th>
-													<th>Approver Email</th>
-													<th>Total PO Cost</th>
-													<th>Min Amount</th>
-													<th>Max Amount</th>
-													<th>Message</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr [ngClass]="{red : approver.isExceeded == true}" *ngFor="let approver of internalApproversList; let i=index;">
-													<td>{{approver.approverName}}</td>
-													<td>{{approver.approverCode}}</td>
-													<td>{{approver.approverEmail}}</td>
-													<td style="text-align: right;">
-														<label style="text-align: right !important;">{{approver.totalCost | twoDecimalGlobalNumberFormatPipe}}</label>
-													</td>
-													<td style="text-align: right;">
-														<label style="text-align: right !important;">{{approver.lowerValue | twoDecimalGlobalNumberFormatPipe}}</label>
-													</td>
-													<td style="text-align: right;">
-														<label style="text-align: right !important;">{{approver.upperValue | twoDecimalGlobalNumberFormatPipe}}</label>
-													</td>
-													<td>{{approver.message}}</td>
-												</tr>
-											</tbody>
-										</table>
-										</div>
-								</div>
-							</p-tabPanel>
-							<p-tabPanel header="Approver Process">
-								<div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-									<div class="tableFixHead"> 
-									<table class="table table-bordered" id="po-table">
-										<thead>
-											<tr class="header-table-width">
-												<th *ngFor="let header of approvalProcessHeader">{{header.header}}</th>
-												</tr>
-											</thead>
-											<tbody>
-												<tr *ngFor="let approver of approvalProcessList; let i=index;">
-													<ng-container *ngFor="let field of approvalProcessHeader">
-													<td *ngIf="field.field != 'sentDate' && field.field != 'approvedDate' && field.field != 'memo' ">
-														{{approver[field.field]}}
-													</td>
-													<td *ngIf="field.field == 'sentDate' || field.field == 'approvedDate' ">
-														{{approver[field.field] | date: 'MM/dd/yyyy' }}														
-													</td>
-													<td *ngIf="field.field == 'memo'  ">
-														<div [innerHTML]="approver[field.field] " ></div>
-													</td>
-												    </ng-container>
-												</tr>
-											</tbody>
-										</table>
-										</div>
-								</div>
-							</p-tabPanel>
-
-							<p-tabPanel header="Vendor Capes">
-								<div class="card new-card">
-									<div class="card-header bg-primary header">
-										<div class="row">
-										   <div class="col">
-											<h4 class="header-name">Vendor Capes List</h4>
-										  </div>
-										</div>
-									</div>
-									<div class="card-body header-body">
-								<p-table class="rpo-table-cstm" #dt [value]="vendorCapesInfo" [metaKeySelection]="true"
-										 [rows]="10" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10,20,50,100]"
-										 [columns]="vendorCapesCols" selectionMode="multiple"
-										 [resizableColumns]="true" [reorderableColumns]="true" [responsive]="true">
-
-									<ng-template pTemplate="header" let-columns>
-										<tr>
-											<th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-												{{col.header}}
-												<p-sortIcon [field]="col.field"></p-sortIcon>
-											</th>
-											<th class="table-actions-column">
-												Actions
-											</th>
-										</tr>
-										<tr>
-											<th  class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-												<input class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
-											</th>
-											<th class="table-actions-column"></th>
-										</tr>
-									</ng-template>
-
-									<ng-template pTemplate="body" let-rowData let-columns="columns">
-										<tr [pSelectableRow]="rowData">
-											<td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-												{{rowData[col.field]}}
-											</td>
-											<td class="action-icons-cstm table-column-width"><span>
-												<a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-												 (click)="viewSelectedCapsRow(rowData)" data-target="#vendorCapesView"
-												  data-toggle="modal" matTooltip="View" matTooltipPosition="above">
-													<i class="fa fa-eye"></i>
-												</a>
-												</span>
-											</td>
-										</tr>
-									</ng-template>
-								</p-table>
-								</div>
-								</div>
-							</p-tabPanel>
-
-							<p-tabPanel header="Address">
-								<div class="table-responsive default-bg clear">
-									<div class="col-sm-4">
-										<h5 class="po-head">Ship To</h5>
-										<p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.shipToUserType ? roHeaderAdd.shipToUserType : '-'}}</span></p>
-										<p><span class="label"><b>User: </b></span><span class="value">{{roHeaderAdd.shipToUser ? roHeaderAdd.shipToUser : '-'}}</span></p>
-										<p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.shipToSiteName ? roHeaderAdd.shipToSiteName : '-'}}</span></p>
-										<p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.shipToAddress1 ? roHeaderAdd.shipToAddress1 : '-'}}</span></p>
-										<!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{roHeaderAdd.shipToAddress2 ? roHeaderAdd.shipToAddress2 : '-'}}</span></p>
-										<p><span class="label"><b>Address3: </b></span><span class="value">{{roHeaderAdd.shipToAddress3 ? roHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
-										<p><span class="label"><b>City: </b></span><span class="value">{{roHeaderAdd.shipToCity ? roHeaderAdd.shipToCity : '-'}}</span></p>
-										<p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.shipToState ? roHeaderAdd.shipToState : '-'}}</span></p>
-										<p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.shipToPostalCode ? roHeaderAdd.shipToPostalCode : '-'}}</span></p>
-										<p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.shipToCountry ? roHeaderAdd.shipToCountry : '-'}}</span></p>
-										<p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
-										<p><span class="label"><b>Memo: </b></span><span class="value">
-											<!-- {{roHeaderAdd.shipToMemo ? roHeaderAdd.shipToMemo : '-'}} -->
-											<p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.shipToMemo"></p>
-
-										</span></p>
-										<p><span class="label"><b>Ship Via: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
-										<p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{roHeaderAdd.shippingCost ? roHeaderAdd.shippingCost : '-'}}</span></p>
-										<p><span class="label"><b>Handling Cost: </b></span><span class="value">{{roHeaderAdd.handlingCost ? roHeaderAdd.handlingCost : '-'}}</span></p>
-										<p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{roHeaderAdd.shippingAccountNo ? roHeaderAdd.shippingAccountNo : '-'}}</span></p>
-										<!-- <p><span class="label"><b>Shipping Id (AWB): </b></span><span class="value">{{roHeaderAdd.shippingId ? roHeaderAdd.shippingId : '-'}}</span></p>
-										<p><span class="label"><b>URL: </b></span><span class="value">{{roHeaderAdd.shippingURL ? roHeaderAdd.shippingURL : '-'}}</span></p> -->
-									</div>
-									<div class="col-sm-4">
-										<h5 class="po-head">Bill To</h5>
-										<p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.billToToUserType ? roHeaderAdd.billToToUserType : '-'}}</span></p>
-										<p><span class="label"><b>User: </b></span><span class="value">{{roHeaderAdd.billToUser ? roHeaderAdd.billToUser : '-'}}</span></p>
-										<p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.billToSiteName ? roHeaderAdd.billToSiteName : '-'}}</span></p>
-										<p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.billToAddress1 ? roHeaderAdd.billToAddress1 : '-'}}</span></p>
-										<!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{roHeaderAdd.billToAddress2 ? roHeaderAdd.billToAddress2 : '-'}}</span></p>
-										<p><span class="label"><b>Address3: </b></span><span class="value">{{roHeaderAdd.billToAddress3 ? roHeaderAdd.billToAddress3 : '-'}}</span></p> -->
-										<p><span class="label"><b>City: </b></span><span class="value">{{roHeaderAdd.billToCity ? roHeaderAdd.billToCity : '-'}}</span></p>
-										<p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.billToState ? roHeaderAdd.billToState : '-'}}</span></p>
-										<p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.billToPostalCode ? roHeaderAdd.billToPostalCode : '-'}}</span></p>
-										<p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.billToCountry ? roHeaderAdd.billToCountry : '-'}}</span></p>
-										<p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.billToContact ? roHeaderAdd.billToContact : '-'}}</span></p>
-										<p><span class="label"><b>Memo: </b></span><span class="value">
-											<!-- {{roHeaderAdd.billToMemo ? roHeaderAdd.billToMemo : '-'}} -->
-											<p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>
-
-										</span></p>
-									</div>
-								</div>
-							</p-tabPanel>
-						</p-tabView>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<!-- <button type="button" class="btn btn-success" *ngIf="roHeaderAdd.status === 'Open'" (click)="closeViewModal()" [routerLink]="[
-						'/vendorsmodule/vendorpages/app-ro-setup/edit/'+selectedrepairOrderId]">
-					Edit
-				</button> -->
-				<button type="button" class="btn btn-danger" (click)="closeViewModal()">Close</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div class="modal fade" id="vendorCapesView" role="dialog" data-backdrop="static" data-keyboard="false" style="z-index: 10000;">
-	<div class="modal-dialog modal-xl">
-	  <div class="modal-content">
-		<div class="modal-header" *ngIf="vendorCapesGeneralInfo">
-		  <button type="button" class="close" data-dismiss="modal">&times;</button>
-		  <h4 class="modal-title">Capability Details of Vendor: <span>"{{vendorCapesGeneralInfo.vendorName}}"</span></h4>
-		</div>
-		<div class="modal-body">
-		  <div>
-			<div class="card">
-				<div class="card-body" *ngIf="vendorCapesGeneralInfo">
-					<h4 class="po-head">General Information:</h4>
-					<div class="table-responsive default-bg clear vendorCapes-generalInfo">
-						<div class="col-sm-3">
-							<p><span class="label"><b>Vendor Name: </b></span><span class="value">{{vendorCapesGeneralInfo.vendorName ? vendorCapesGeneralInfo.vendorName : '-'}}</span></p>
-							<p><span class="label"><b>Vendor Code: </b></span><span class="value">{{vendorCapesGeneralInfo.vendorCode ? vendorCapesGeneralInfo.vendorCode : '-'}}</span></p>
-							<p><span class="label"><b>PN: </b></span><span class="value">{{vendorCapesGeneralInfo.partNumber ? vendorCapesGeneralInfo.partNumber : '-'}}</span></p>
-							<p><span class="label"><b>PN Description: </b></span><span class="value">{{vendorCapesGeneralInfo.partDescription ? vendorCapesGeneralInfo.partDescription : '-'}}</span></p>
-						</div>
-						<div class="col-sm-3">
-							<p><span class="label"><b>PN Mfg: </b></span><span class="value">{{vendorCapesGeneralInfo.manufacturerName ? vendorCapesGeneralInfo.manufacturerName : '-'}}</span></p>
-							<p><span class="label"><b>Capability Type: </b></span><span class="value">{{vendorCapesGeneralInfo.capabilityType ? vendorCapesGeneralInfo.capabilityType : '-'}}</span></p>
-							<p><span class="label"><b>Vendor Ranking: </b></span><span class="value">{{vendorCapesGeneralInfo.vendorRanking ? vendorCapesGeneralInfo.vendorRanking : '-'}}</span></p>
-						</div>
-						<div class="col-sm-3">
-							<p><span class="label"><b>PMA: </b></span><span class="value">{{vendorCapesGeneralInfo.isPMA ? vendorCapesGeneralInfo.isPMA : '-'}}</span></p>
-							<p><span class="label"><b>DER: </b></span><span class="value">{{vendorCapesGeneralInfo.isDER ? vendorCapesGeneralInfo.isDER : '-'}}</span></p>
-							<p><span class="label"><b>Cost: </b></span><span class="value">{{vendorCapesGeneralInfo.cost ? vendorCapesGeneralInfo.cost : '-'}}</span></p>
-						</div>
-						<div class="col-sm-3">
-							<p><span class="label"><b>TAT (Days): </b></span><span class="value">{{vendorCapesGeneralInfo.tat ? vendorCapesGeneralInfo.tat : '-'}}</span></p>
-							<p><span class="label"><b>Cap Description: </b></span><span class="value">{{vendorCapesGeneralInfo.capabilityDescription ? vendorCapesGeneralInfo.capabilityDescription : '-'}}</span></p>
-							<p><span class="label"><b>Memo: </b></span><span class="value">{{vendorCapesGeneralInfo.memo ? vendorCapesGeneralInfo.memo : '-'}}</span></p>
-						</div>
-					</div>
-					<h4 class="po-head">Aircraft Information:</h4>
-					<p-table class="ptable-custom" [value]="aircraftListDataValues" [rows]="6" [columns]="colsaircraftLD" [scrollable]="true" [style]="{width:'100%'}" [paginator]="true">
-						<ng-template pTemplate="header" let-columns>
-							<tr>
-								<!-- <th>Id</th> -->
-								<th *ngFor="let col of columns">
-									{{col.header}}
-								</th>
-							</tr>
-						</ng-template>
-						<ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
-							<tr>
-								<!-- <td>{{i+1}}</td> -->
-								<td *ngFor="let col of columns">
-									{{rowData[col.field]}}
-								</td>
-							</tr>
-						</ng-template>
-					</p-table>
-				</div>
-			</div>
-		  </div>
-		</div>
-		<div class="modal-footer">
-		  <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-		</div>
+<ng-template #viewRO let-c="close" let-d="dismiss">
+	<div class="modal-header">
+	  <button type="button" class="close" (click)="dismissModel()">
+		&times;
+	  </button>
+	  <div class="col-sm-3">
+		<h4 class="modal-title">Details of Repair Order</h4>
+	  </div>	 
+	  <div class="view-header-label col-sm-3" >
+		Vendor Name <span _ngcontent-c22="" class="clr-red">*</span><span class="text-danger"> :
+		  {{strVendorName}}</span>
 	  </div>
-	</div>
-  </div>
+	  <div class="view-header-label col-sm-3" >
+		Vendor Code <span _ngcontent-c22="" class="clr-red">*</span><span class="text-danger"> :
+		  {{strVendorCode}}</span>
+	  </div>
+	</div> 
+	<app-all-view [OrderId]="orderId" [PovendorId]="vendorId"
+		[OrderType]="orderType"></app-all-view>	
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
+	</div>  
+  </ng-template>
 
 <div class="preloader" *ngIf="isSpinnerVisible">
 	<div class="loading">

@@ -415,7 +415,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.itemclaColl = [];
         if (this.allPartnumbersInfo != undefined && this.allPartnumbersInfo.length > 0) {
             for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-                let partName = this.allPartnumbersInfo[i].partNumber;
+                let partName = this.allPartnumbersInfo[i].label;
                 let canPush = true;
                 for (let mpnPartIndex = 0; mpnPartIndex < this.mpnPartNumbersList.length; mpnPartIndex++) {
                     if (this.mpnPartNumbersList[mpnPartIndex]['label'] == partName) {
@@ -423,10 +423,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                     }
                 }
                 if (partName.toLowerCase().indexOf(event.query.toLowerCase()) == 0 && canPush) {
-                    var alreadySelected = this.workFlow.materialList.find(x => x.itemMasterId == this.allPartnumbersInfo[i].itemMasterId && this.workFlow.taskId == x.taskId);
-                    if (this.workFlow.partNumber != this.allPartnumbersInfo[i].itemMasterId && alreadySelected == undefined) {
+                    var alreadySelected = this.workFlow.materialList.find(x => x.itemMasterId == this.allPartnumbersInfo[i].value && this.workFlow.taskId == x.taskId);
+                    if (this.workFlow.partNumber != this.allPartnumbersInfo[i].value && alreadySelected == undefined) {
                         this.itemclaColl.push([{
-                            "partId": this.allPartnumbersInfo[i].itemMasterId,
+                            "partId": this.allPartnumbersInfo[i].value,
                             "partName": partName,
                             "description": this.allPartnumbersInfo[i].partDescription,
                             "masterCompanyId": this.allPartnumbersInfo[i].masterCompanyId,
@@ -534,11 +534,19 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     getPartnumbers(value) {
         this.isSpinnerVisible = true;
-        this.commonService.getPartnumList(value).subscribe(res => {
+        let exclusionsIds = [];
+        if (this.UpdateMode) {
+            exclusionsIds = this.workFlow.materialList.reduce((acc, x) => {
+                return exclusionsIds.push(acc.itemMasterId);
+            }, 0)
+        } 
+        // this.commonService.getPartnumList(value).subscribe(res => {
+            this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds?exclusionsIds :0)
+            .subscribe(res => {
             this.isSpinnerVisible = false;
             this.allPartnumbersInfo = res;
             this.allPartnumbersInfo.forEach(element => {
-                if(element.partId==this.workFlow.itemMasterId){
+                if(element.value==this.workFlow.itemMasterId){
                    this.partCollection.splice(element, 1); 
                 }
                });
@@ -860,7 +868,8 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     itemMasterRowData: any = {};
     showItemmasterView: any = false;
-    openView(row) {
+    openView(row) { 
+        console.log("row",row);
         this.itemMasterRowData = row;
         this.showItemmasterView = true;
         this.itemMasterId = row.itemMasterId;

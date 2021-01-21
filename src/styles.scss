@@ -15323,33 +15323,6 @@ input[type='number']::-webkit-outer-spin-button {
   text-align: center;
 }
 
-.rro-part-table-cstm .ui-table-wrapper thead th {
-  position: -webkit-sticky;
-  position: sticky;
-  top: -1px;
-  background: #0d57b0;
-}
-
-.rro-part-table-cstm th:last-child,
-.lastcol-fix th:last-child {
-  right: 0;
-  z-index: 1;
-  padding-left: 5px;
-  position: sticky;
-}
-
-.rro-part-table-cstm tbody td:last-child,
-.lastcol-fix tbody td:last-child {
-  position: -webkit-sticky;
-  position: sticky;
-  right: 0;
-  //background: #fafafa !important;
-  background: #f1efef !important;
-  border-right: 1px solid #ccc;
-  padding-left: 5px;
-  text-align: center;
-}
-
 .prow-primary {
   background-color: #79ffe3;
 }

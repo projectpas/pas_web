@@ -136,6 +136,10 @@
                                 <input type="number" name="gSequence" class="form-control" [maxLength]="15"
                                     #pubID="ngModel" [(ngModel)]="sourcePublication.sequence" />
                             </div>
+                        </div>
+
+                        <div class="col-md-3">
+
                             <div class="form-group">
                                 <label for="Publishedby">Published By <span class="clr-red">*</span></label>
                                 <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gPublishBy" [(ngModel)]="sourcePublication.publishby"  /> -->
@@ -147,13 +151,13 @@
                                 <select class="mb-2" name="publishedById" [(ngModel)]="sourcePublication.publishedById"
                                     (change)="changePublishedById()" required>
                                     <option value="null"> -- Select --</option>
-                                    <option *ngFor="let module of publishedByModulesList" [ngValue]="module.moduleId">
-                                        {{ module.moduleName }}
+                                    <option *ngFor="let module of publishedByModulesList" [ngValue]="module.value">
+                                        {{ module.label }}
                                     </option>
                                 </select>
                                 <div class="form-row"
                                     *ngIf="sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3">
-                                    <div class="col-sm-12">
+                                    <div class="col-sm-12 align_published_by">
                                         <p-autoComplete class="p-autoComplete-ctsm" name="publishedByRefId "
                                             [(ngModel)]="sourcePublication.publishedByRefId" field="label"
                                             [suggestions]="publishedByReferences" [forceSelection]="true"
@@ -185,10 +189,6 @@
                                     (onClear)="clearValue()" class="form-control ui-autocomplete-input"
                                     required="{{sourcePublication.publishedById == 4}}" placeholder="Specify Others" />
                             </div>
-                        </div>
-
-                        <div class="col-md-3">
-
                             <div class="form-group">
                                 <label for="sequence">Revision Num</label>
                                 <input type="text" name="revisionNumber" class="form-control" [maxLength]="15"
@@ -232,6 +232,10 @@
                                   </label>
                               </div>
                             </div> -->
+
+                        </div>
+
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <!-- <span class="clr-red" *ngIf="sourcePublication.verifiedStatus == true">*</span> -->
                                 <label>Verified By <span class="clr-red">*</span></label>
@@ -446,13 +450,16 @@
                                 </div>
                             </div>
                         </div> -->
-                        <div class="col-md-6">
-                            <div class="col-md-12">
-                                <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"
-                                    [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId"
-                                    [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
-                            </div>
+
+                    </div>
+                    <div class="form-row col-row">
+                        <!-- <div class="col-md-6"> -->
+                        <div class="col-md-12">
+                            <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"
+                                [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId" [isViewMode]="false"
+                                [offLineUpload]="true"></app-common-documents>
                         </div>
+                        <!-- </div> -->
                     </div>
 
                     <div class="pull-right">

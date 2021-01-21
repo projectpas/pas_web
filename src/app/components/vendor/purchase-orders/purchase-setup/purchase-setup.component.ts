@@ -531,10 +531,15 @@ export class PurchaseSetupComponent implements OnInit {
 	WarningsList: any;
 	WarningListId:any;
 	warningsandRestriction(Id) {       
-            this.WarningListId = VendorWarningEnum.Create_Purchase_Order;
+			this.WarningListId = VendorWarningEnum.Create_Purchase_Order;
+			this.warningMessage = "";
+			this.warningID = 0;					
+			this.restrictID = 0;
+			this.restrictMessage= "";
             if (Id && this.WarningListId) {
                 this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
                     if (res) {
+						
                         if(res.warning) {
                         this.warningMessage = res.warningMessage;
                         this.warningID = res.vendorWarningId;
