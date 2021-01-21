@@ -31,7 +31,9 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>PO Num</label>
-                                <input class="form-control" type="text" name="purchaseOrderNumber" value="Creating" disabled [(ngModel)]="headerInfo.purchaseOrderNumber">
+                                <input class="form-control" type="text" 
+                                name="purchaseOrderNumber" value="Creating"
+                                 disabled [(ngModel)]="headerInfo.purchaseOrderNumber">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -596,7 +598,7 @@
                                     <tr class="child-header splitship-head child-header-back" *ngIf="partList.ifSplitShip">
                                         
                                         <th></th>
-                                        <th><i class="fa fa-plus btn btn-success btn-cstm btn-xs" matTooltip="Add Split Shipment" matTooltipPosition="above" style="padding: 4px 8px !important;" (click)="addRow(partList)" *ngIf="!partList.isApproved"></i></th>
+                                        <th><i class="fa fa-plus btn btn-success btn-cstm poro-plus-cstm btn-xs" matTooltip="Add Split Shipment" matTooltipPosition="above" style="padding: 4px 8px !important;" (click)="addRow(partList)" *ngIf="!partList.isApproved"></i></th>
                                         <th>PN</th>
                                         <th>PN Description</th>
                                         <th>User Type <span class="clr-red">*</span></th>
@@ -1264,17 +1266,17 @@
                 <p>
                     <span class="col-sm-3"><b>List of PN's (Separated by Comma): </b></span>
                     <span class="col-sm-7 "><textarea class="form-control" name="partNumbers" [(ngModel)]="partNumbers"></textarea></span>
-                    <span class="col-sm-2"><button type="button" class="btn btn-primary height40 black-search-button multiple-pns-search-btn btn-cstm" (click)="getAllparts()" [disabled]="!partNumbers"><i class="fa fa-search"></i></button></span>
+                    <span class="col-sm-2"><button type="button" class="btn btn-primary height40 black-search-button multiple-pns-search-btn btn-cstm" (click)="getAllparts()" [disabled]="!partNumbers"><i style="color:#fff !important;" class="fa fa-search"></i></button></span>
                 </p>
                 <form #addMultiPNTable="ngForm">
                     <div class="table-responsive pas-table-cstm">
                         <div class="tableFixHead-multiple-pn">
                         <table class="table table-bordered ">
                             <thead>
-                                <tr>
-                                    <th class="multiple-pn" style="text-align:left">
+                                <tr class="header-table-width">
+                                    <th class="multiple-pn th-width">
                                         <span class="checkbox-cstm">
-                                            <label class="multiple-pn-label">
+                                            <label style="width:40px" class="multiple-pn-label">
                                                 <input type="checkbox" name="addAllMultiPN" [(ngModel)]="addAllMultiPN" (change)="onChangeAddAllMultiPN($event)">
                                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                             </label>
