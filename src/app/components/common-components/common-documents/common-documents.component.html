@@ -79,7 +79,7 @@
                     matTooltipPosition="above"
                     iconPos="left"
                     label="Export  Data"
-                    (click)="documents.exportCSV()"
+                    (click)="selectedOnly = false; targetData = documents;"
                     style="padding: 5px 10px !important;"
                     data-toggle="modal"
                     data-target="#downloadConfirmation"
@@ -120,27 +120,7 @@
           </div>
       </div>
             </ng-template>
-            <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
-              <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
-                    <h4 class="modal-title">Are You Sure Want to Download?</h4>
-                  </div>
-                  <div class="modal-body" *ngIf="targetData">
-                    <strong>
-                      <span>
-                        You are attempting to export {{targetData.totalRecords}} of records. 
-                      </span> 
-                    </strong>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" (click)="documents.exportCSV()">Confirm</button>
-                    <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
-                  </div>
-                </div>
-              </div> 
-            </div>
+           
             <ng-template pTemplate="colgroup" let-columns>
               <colgroup>
                 <col *ngFor="let col of columns" class="table-column-width" />
@@ -423,6 +403,28 @@
       </button>
     </div>
   </ng-template>
+
+  <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+          <h4 class="modal-title">Are You Sure Want to Download?</h4>
+        </div>
+        <div class="modal-body" *ngIf="targetData">
+          <strong>
+            <span>
+              You are attempting to export {{targetData.totalRecords}} of records. 
+            </span> 
+          </strong>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="(selectedOnly)?targetData.exportCSV({ selectionOnly: true }):exportCSV(targetData); closeDeleteModal();">Confirm</button>
+          <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+        </div>
+      </div>
+    </div> 
+  </div>
   
   <div id="docView" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog">

@@ -12,11 +12,13 @@ import { CommonService } from '../../../services/common.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { Subject } from 'rxjs/Subject';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-common-documents',
     templateUrl: './common-documents.component.html',
     styleUrls: ['./common-documents.component.scss'],
+    providers: [DatePipe]
 })
 /** common component*/
 export class CommonDocumentsComponent implements OnInit {
@@ -91,7 +93,7 @@ export class CommonDocumentsComponent implements OnInit {
     enableUpdate: boolean = false;
     hideUpoladThing:boolean=false;
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
-        private dialog: MatDialog, private configurations: ConfigurationService) {
+        private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
 
     ngOnInit() {
@@ -586,7 +588,16 @@ export class CommonDocumentsComponent implements OnInit {
         $('#docView').modal("hide");
     }
 
-    exportCSV(data) {
+    exportCSV(documents) {
+        documents._value = documents._value.map(x => {
+            return {
+                ...x,
+                docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        documents.exportCSV();
     }
 
     fileUpload(event) {

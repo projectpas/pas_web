@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 
 export class MemoCommonComponent implements OnInit, OnChanges {
     @Input() workOrderId: any;
+    disableSaveMemo: boolean = true;
     @Input() isView: boolean = false;
     @Input() savedWorkOrderData: any = [];
     @Input() selectedPartNumber: any = {};
@@ -89,6 +90,9 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     dismissModel() {
         this.activeModal.close();
     }
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
     loadData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;;
@@ -110,6 +114,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
 		$("#memodownloadConfirmation").modal("hide");
 	}
     addMemo() {
+        this.enableSaveMemo();
+        this.disableSaveMemo = true;
         this.isEdit = false;
         this.addList = [];
         this.addList.push({ memoId: '', description: '' })
@@ -117,6 +123,9 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     edit(rowData, index) {
         this.isEdit = true;
         this.addList = [rowData];
+
+        this.enableSaveMemo();
+        this.disableSaveMemo = true;
     }
     deleteMemo(rowData) {
         this.communicationService.deleteCommonMemoList(rowData.memoId,this.userName)
