@@ -728,7 +728,7 @@
                                       </ng-template>
                                 </div>
                             </div>
-                            <div *ngIf="task.measurements.length > 0">
+                            <div *ngIf="task.measurements && task.measurements.length > 0">
                                 <h5 class="po-head">Measurements</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -762,7 +762,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.exclusions.length > 0">
+                            <div *ngIf="task.exclusions && task.exclusions.length > 0">
                                 <h5 class="po-head">Exclusions</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -814,7 +814,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.directions.length > 0">
+                            <div *ngIf="task.directions && task.directions.length > 0">
                                 <h5 class="po-head">Directions</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -841,7 +841,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.expertise.length > 0">
+                            <div *ngIf="task.expertise && task.expertise.length > 0">
                                 <h5 class="po-head">Expertise</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -882,7 +882,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.equipments.length > 0">
+                            <div *ngIf="task.equipments && task.equipments.length > 0">
                                 <h5 class="po-head">Tools</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -907,7 +907,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.charges.length > 0">
+                            <div *ngIf="task.charges && task.charges.length > 0">
                                 <h5 class="po-head">Charges</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -951,7 +951,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <div *ngIf="task.materialList.length > 0">
+                            <div *ngIf="task.materialList && task.materialList.length > 0">
                                 <h5 class="po-head">Material List</h5>
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1388,11 +1388,12 @@
         <button type="button" class="btn btn-primary" (click)="onCloseAll()">Close All</button>
         <hr />
     </div>
-
-    <p-accordion [multiple]="true" class="p-accordion-cstm p-acc-thright">
-        <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected" header="{{task.Name}}"
-            (click)="onAccordTabClick1(task)">
-            <div *ngIf="task.publication.length > 0">
+    <!-- (click)="onAccordTabClick1(task)" [multiple]="true"-->
+    <p-accordion  class="p-accordion-cstm p-acc-thright">
+        <p-accordionTab *ngFor="let task of addedTasks" [selected]="task.selected">
+          <p-header (click)="onAccordTabClick1(task)">{{task.Name}}</p-header>
+            <div *ngIf="task.publication && task.publication.length > 0">
+                
                 <h5 class="po-head">Publications</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1437,7 +1438,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.measurements.length > 0">
+            <div *ngIf="task.measurements && task.measurements.length > 0">
                 <h5 class="po-head m-t-20">Measurements</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1472,7 +1473,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.exclusions.length > 0">
+            <div *ngIf="task.exclusions && task.exclusions.length > 0">
                 <h5 class="po-head m-t-20">Exclusions</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1521,7 +1522,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.directions.length > 0">
+            <div *ngIf="task.directions && task.directions.length > 0">
                 <h5 class="po-head m-t-20">Directions</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1548,7 +1549,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.expertise.length > 0">
+            <div *ngIf="task.expertise && task.expertise.length > 0">
                 <h5 class="po-head m-t-20">Expertise</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1589,7 +1590,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.equipments.length > 0">
+            <div *ngIf="task.equipments && task.equipments.length > 0">
                 <h5 class="po-head m-t-20">Tools</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1614,7 +1615,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.charges.length > 0">
+            <div *ngIf="task.charges && task.charges.length > 0">
                 <h5 class="po-head m-t-20">Charges</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
@@ -1658,7 +1659,7 @@
                     </table>
                 </div>
             </div>
-            <div *ngIf="task.materialList.length > 0">
+            <div *ngIf="task.materialList && task.materialList.length > 0">
                 <h5 class="po-head m-t-20">Material List</h5>
                 <div class="table-responsive">
                     <table class="table table-bordered table-fixed wfl-table-popup-cstm">
