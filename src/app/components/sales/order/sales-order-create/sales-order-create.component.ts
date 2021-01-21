@@ -330,6 +330,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.getSalesOrderInstance(this.id, initialCall);
       this.getSOMarginSummary();
       this.isEdit = true;
+      this.toggle_po_header = false;
     } else if (this.salesOrderView) {
       this.salesQuote = this.salesOrderView.salesOrder
       this.commonSalesOrderInstanceForConvertAndEdit(this.salesOrderView);
@@ -1147,6 +1148,7 @@ export class SalesOrderCreateComponent implements OnInit {
             this.enableUpdateButton = true;
           }, error => {
             this.isSpinnerVisible = false;
+            this.toggle_po_header = true;
           });
         }
       } else {
@@ -1177,8 +1179,10 @@ export class SalesOrderCreateComponent implements OnInit {
           }
         }, error => {
           this.isSpinnerVisible = false;
+          this.toggle_po_header = true;
         });
       }
+      this.toggle_po_header = false;
     }
   }
 
