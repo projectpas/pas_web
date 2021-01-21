@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { EndpointFactory } from './endpoint-factory.service';
 import { ConfigurationService } from './configuration.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class EmployeeEndpoint extends EndpointFactory {
@@ -21,7 +22,7 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _CountriesUrl: string = "/api/Employee/CountriesGet";
 	private readonly _EmployeeLeaveTypeUrl: string = "/api/Employee/EmployeeLeaveTypeGet";
 	private readonly _EmployeeTrainingTypeUrl: string = "/api/Employee/GetEmployeeTrainingType";
-	private readonly _actionsUrlNew: string = "/api/Employee/employeepost";
+	private readonly _actionsUrlNew: string =environment.baseUrl +  "/api/Employee/employeepost";
 	private readonly _actionsUrlNewUpdate: string = "/api/Employee/employeelistgpost";
 
 
@@ -67,16 +68,18 @@ export class EmployeeEndpoint extends EndpointFactory {
 	private readonly _actionsUrlEmployeeMemoUpdate: string = "/api/Employee/employeeupdatememo";
 	private readonly _addEmployeeTrainingFileUpload: string = "/api/Employee/employeeDocumentUpload";
 
-	private readonly _getEmployeeDetailsByEmpId: string = "/api/Employee/employeeDetailsById";
+	private readonly _getEmployeeDetailsByEmpId: string = environment.baseUrl+ "/api/Employee/employeeDetailsById";
 
 	private readonly _employeeListsUrl: string = "/api/Employee/employeelist";
 
 	private readonly _employeeTotallistUrl: string = "/api/Employee/exportemployeelist";
 
+	private readonly _employeeUpdatePasswordUrl: string = environment.baseUrl+"/api/Employee/updateemployeepassword";
+
 	private readonly _employeeGlobalSrchUrl: string = "/api/Employee/employeeglobalsearch";
 	get actionsUrl() { return this.configurations.baseUrl + this._actionsUrl; }
 	get getEmployeeCommonDataUrl() { return this.configurations.baseUrl + this._employeeCommonDatatUrl; }
-	get actionsNameUrl() { return this.configurations.baseUrl + this._actionsNameUrl; }
+	get actionsNameUrl() { return environment.baseUrl + this._actionsNameUrl; }
 	get getView() { return this.configurations.baseUrl + this._getView; }
 	get rolesUrl() { return this.configurations.baseUrl + this._rolesUrl; }
 	get userrolevelList() { return this.configurations.baseUrl + this._userRolelevelList; }
@@ -544,5 +547,12 @@ export class EmployeeEndpoint extends EndpointFactory {
 			});
 	}
 	
+	getUpdateEmployeePasswordEndpoint<T>(password,employeeId): Observable<T> {
+		let url = this._employeeUpdatePasswordUrl;
+		return this.http.post<T>(url,{password,employeeId}, this.getRequestHeaders())
+			.catch(error => {
+				return this.handleError(error, () => this.getUpdateEmployeePasswordEndpoint(password,employeeId));
+			});
+	}
 
 }

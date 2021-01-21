@@ -267,6 +267,7 @@ import { StocklineReferenceStorage } from './components/stockline/shared/stockli
 import { CommunicationService } from './shared/services/communication.service';
 import { AllViewComponent } from './shared/components/all-view/all-view.component';
 import { TabViewModule } from 'primeng/tabview';
+import { UpdatepasswordComponent } from './components/updatepassword/updatepassword.component';
 
 
 @NgModule({
@@ -327,7 +328,7 @@ import { TabViewModule } from 'primeng/tabview';
     StocklineViewComponent,
     StocklineHistoryComponent,
     RefreshAlert,    
-    AllViewComponent,
+    AllViewComponent, UpdatepasswordComponent,
   ],
   providers: [
     { provide: 'BASE_URL', useFactory: getBaseUrl },

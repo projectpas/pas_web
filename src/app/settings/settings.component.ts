@@ -19,6 +19,8 @@ import { AccountService, RolesChangedEventArg } from "../services/account.servic
 import { AlertService, DialogType, MessageSeverity } from '../services/alert.service';
 import { fadeInOut } from '../services/animations';
 import { Utilities } from '../services/utilities';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
     selector: 'settings',
@@ -41,16 +43,19 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
         private router: Router,
         private route: ActivatedRoute,
         private translationService: AppTranslationService,
-        private accountService: AccountService
+        private accountService: AccountService,
+        private authService:AuthService
     ) { }
 
     ngOnInit() {
         this.fragmentSubscription = this.route.fragment.subscribe(anchor => {
             switch (anchor) {
                 case 'preferences':
+                    console.log(this.preferencesPanel);
                     this.preferencesPanel.open();
                     break;
                 default:
+                    console.log(this.profilePanel);
                     this.profilePanel.open();
             }
         });
@@ -76,7 +81,7 @@ export class SettingsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private loadCurrentUserData() {
         this.alertService.startLoadingMessage();
-
+        //var userId=this.authService.currentUser.userName;
         if (this.canViewRoles) {
             this.accountService.getUserAndRoles().subscribe(
                 results => this.onCurrentUserDataLoadSuccessful(results[0], results[1]),

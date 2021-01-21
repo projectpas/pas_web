@@ -110,7 +110,7 @@ private defaultEmployeeDetails= new Subject<any>()
         if (this.isLoggedIn)
             this.logout();
 
-        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password)
+        return this.endpointFactory.getLoginEndpoint<LoginResponse>(user.userName, user.password,user.masterCompanyId)
             .map(response => this.processLoginResponse(response, user.rememberMe));
     }
 
@@ -219,11 +219,12 @@ private defaultEmployeeDetails= new Subject<any>()
             decodedAccessToken.employeeId,
             decodedAccessToken.managementStructureId,
             decodedAccessToken.masterCompanyId,
-            decodedAccessToken.legalEntityId
+            decodedAccessToken.legalEntityId,
+            
             );
             console.log(user, "user++++")
         user.isEnabled = true;
-
+        user.isResetPassword=decodedAccessToken.isResetPassword,
 
         this.saveUserDetails(user, permissions, accessToken, refreshToken, accessTokenExpiry, rememberMe);
         this.getUserRolePermissionByUserId(user.id);

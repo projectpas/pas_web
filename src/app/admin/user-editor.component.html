@@ -86,7 +86,7 @@
 
         <mat-form-field fxFlex.gt-sm="0 1 calc(50% - 0.5em)">
             <mat-label>{{'users.editor.Roles' | translate}}</mat-label>
-            <mat-select formControlName="roles" multiple [disabled]="!isEditMode || !canAssignRoles">
+            <mat-select formControlName="roles" multiple [attr.disabled]="!isEditMode || !canAssignRoles">
                 <mat-option *ngFor="let role of assignableRoles" [value]="role.name">
                     <span matTooltip="{{role.description}}">{{role.name}}</span>
                 </mat-option>
@@ -104,7 +104,7 @@
         </div>
 
         <div>
-            <button mat-button *ngIf="user.isLockedOut" (click)="unlockUser()" [disabled]="isSaving" color="accent"><mat-icon class="mat-button-icon">lock_open</mat-icon>{{'users.editor.Unblock' | translate}}</button>
+            <button mat-button *ngIf="user.isLockedOut" (click)="unlockUser()" [attr.disabled]="isSaving" color="accent"><mat-icon class="mat-button-icon">lock_open</mat-icon>{{'users.editor.Unblock' | translate}}</button>
         </div>
 
     </div>

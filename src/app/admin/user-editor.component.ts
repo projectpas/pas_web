@@ -253,7 +253,8 @@ export class UserEditorComponent implements OnChanges, OnDestroy {
             employeeId:this.user.employeeId,
             managementStructureId: this.user.managementStructureId,
             masterCompanyId: this.user.masterCompanyId,
-            legalEntityId: this.user.legalEntityId
+            legalEntityId: this.user.legalEntityId,
+            isResetPassword:this.user.isResetPassword
         };
     }
 
