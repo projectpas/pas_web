@@ -334,7 +334,7 @@ export class CreatePublicationComponent implements OnInit {
   getPublicationTypes() {
     let publicationTypeId = this.sourcePublication.publicationTypeId ? this.sourcePublication.publicationTypeId : 0;
     // this.commonService.smartDropDownList('PublicationType', 'PublicationTypeId', 'Name')
-    this.commonService.autoSuggestionSmartDropDownList("PublicationType", "PublicationTypeId", "Name", '', true, 200, [publicationTypeId].join())
+    this.commonService.autoSuggestionSmartDropDownList("PublicationType", "PublicationTypeId", "Name", '', true, 0, [publicationTypeId].join(), this.masterCompanyId)
       .subscribe(res => {
         this.publicationTypes = res;
       });
@@ -344,7 +344,7 @@ export class CreatePublicationComponent implements OnInit {
     if (this.arrayIntegrationlist.length == 0) {
       this.arrayIntegrationlist.push(0);
     }
-    await this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 100, this.arrayIntegrationlist.join()).subscribe(res => {
+    await this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 0, this.arrayIntegrationlist.join(), this.masterCompanyId).subscribe(res => {
       this.publicationTypes = res.map(x => {
         return {
           label: x.label, value: x.value
@@ -484,10 +484,16 @@ export class CreatePublicationComponent implements OnInit {
   }
 
 
+  get currentUserManagementStructureId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.managementStructureId
+      : null;
+  }
 
   async getAllEmployeeList() {
     let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
-    this.commonService.autoSuggestionSmartDropDownList("Employee", "EmployeeId", "FirstName", '', true, 200, [verifiedBy].join())
+    // this.commonService.getAllSalesEmployeeListByJobTitle("Employee", "EmployeeId", "FirstName", '', true, 200, [verifiedBy].join(), this.masterCompanyId)
+    this.commonService.autoCompleteDropdownsEmployeeByMS('', true, 20, [verifiedBy].join(), this.currentUserManagementStructureId, this.masterCompanyId)
       .subscribe(res => {
         this.employeeList = res;
       });
@@ -609,6 +615,13 @@ export class CreatePublicationComponent implements OnInit {
 
   //}
 
+
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
   saveGeneralInfo() {
     this.data = this.sourcePublication;
     this.data.employeeId = this.data.employeeId ? this.data.employeeId : 0;
@@ -684,6 +697,7 @@ export class CreatePublicationComponent implements OnInit {
           )
           .subscribe(res => {
             this.isEnableNext = true;
+            this.uploadDocs.next(true);
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
             this.publicationRecordId = publicationRecordId,
@@ -1675,7 +1689,7 @@ export class CreatePublicationComponent implements OnInit {
     // if(event.query.length < 2)
     // return false;
     let locationId = this.sourcePublication.locationId ? this.sourcePublication.locationId : 0;
-    this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', '', true, 200, [locationId].join()).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query ? event.query : '', true, 20, [locationId].join(), this.masterCompanyId).subscribe(res => {
 
       // await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
       this.gLocationsList = res;
@@ -1709,9 +1723,15 @@ export class CreatePublicationComponent implements OnInit {
   //Get Published By Modules List
 
   getPublishedByModulesList() {
-    this.publicationService.getPublishedByModuleList().subscribe(res => {
+    let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
+    this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
+
+      // await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
       this.publishedByModulesList = res;
     });
+    // this.publicationService.getPublishedByModuleList().subscribe(res => {
+    //   this.publishedByModulesList = res;
+    // });
   }
   getPublishedByReferencesList(event, id) {
     let tableName = "";
@@ -1729,7 +1749,7 @@ export class CreatePublicationComponent implements OnInit {
     let publishedBy = this.sourcePublication.publishedByRefId ? this.sourcePublication.publishedByRefId : 0;
     // this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH)
 
-    this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, '', true, 200, [publishedBy].join()).subscribe(res => {
+    this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query ? event.query : '', true, 20, [publishedBy].join(), this.masterCompanyId).subscribe(res => {
       this.publishedByReferences = res;
     });
   }
