@@ -4,12 +4,12 @@
             <div class="card-header header">
                 <div class="row">
                     <div class="col">
-                        <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order</h4>
-                    </div>
-                    <div class="col-md-9">
+                        <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order
+                   
                         <button class="btn-sm header-button header-button-alignment" (click)="toggle_po_header=!toggle_po_header">
                             {{toggle_po_header ? 'Collapse' : 'Expand'}}
                         </button>
+                    </h4>
                     </div>
                     <div>
                         <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
@@ -32,10 +32,9 @@
                     SO List
                 </button> -->
             </div>
-            <div class="card" style="padding: 5px; margin: 5px;" *ngIf="!toggle_po_header">
-                <div class="form-row">
-                    <div class="form-row">
-                        <div class="col-md-3" style="padding-left:15px;">
+            <div class="card-body" *ngIf="!toggle_po_header">
+                <div class="form-row body-alignment">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Customer Name
                                     <span class="clr-red">*</span>
@@ -54,14 +53,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>Customer Code</label>
                                 <input type="text" [(ngModel)]="salesQuote.customerCode" name="customerCode"
                                     class="form-control" [disabled]="true" id="customerCode" #customerCode="ngModel" />
                             </div>
                         </div>
-                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>SO Num <span class="clr-red">*</span></label>
                                 <input type="text" class="form-control" name="salesOrderNumber"
@@ -75,14 +74,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3" style="padding-left:25px; padding-top:5px">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label>SO Quote Num</label>
                                 <input type="text" class="form-control" [(ngModel)]="salesQuote.salesOrderQuoteNumber"
                                     name="salesOrderQuoteNumber" [disabled]="true" />
                             </div>
                         </div>
-                    </div>
+                    
                 </div>
             </div>
             <div class="form-controls">
@@ -657,7 +656,7 @@
                 <h4 class="modal-title">Edit {{tempMemoLabel}}</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                         <th style="color: #fff;">{{tempMemoLabel}}</th>
                     </thead>
@@ -669,13 +668,15 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div style="float:right">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal"
-                        style="padding: 6px 12px !important;margin-top: 10px;" (click)="onSaveDescription()">
+                </table> -->
+                <p-editor [(ngModel)]="tempMemo" [style]="{'height':'320px'}" name="tempMemo" required>
+                </p-editor>
+                <div class="editor-buttons">
+                    <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal"
+                        (click)="onSaveDescription()">
                         Save
                     </button>
-                    <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+                    <button type="button" class="btn btn-danger editor-buttons-margin" 
                         data-dismiss="modal">
                         Close
                     </button>
