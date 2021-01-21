@@ -196,8 +196,7 @@ export class SalesOrderPartNumberComponent {
       this.columns.push({ header: "Notes", width: "120px" });
     }
     this.summaryColumns = [
-
-      { field: 'hidePart', header: '', width: '30px', textalign: 'center' },
+      // { field: 'hidePart', header: '', width: '30px', textalign: 'center' },
       { field: 'partNumber', header: 'PN' },
       { field: 'partDescription', header: 'PN Description' },
       { field: 'pmaStatus', header: 'Stk Type' },
