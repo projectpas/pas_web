@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
+﻿import { Component, OnInit, AfterViewInit, Input,SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';//bread crumb
 import { ItemMasterService } from "../../../services/itemMaster.service";
@@ -259,7 +259,14 @@ export class ItemMasterViewComponent implements OnInit, AfterViewInit {
 		this.getcurrencyExchangeLoan();
 		this.getItemMasterById();
 	}
-
+    ngOnChanges(changes: SimpleChanges) {
+        for (let property in changes) {
+            if (property == 'itemMasterRowData') {
+				this.itemMasterRowData=changes.itemMasterRowData.currentValue;
+				this.getItemMasterById();
+			}
+	}
+}
 	ngAfterViewInit() { }
 
 	colsaircraftLD: any[] = [

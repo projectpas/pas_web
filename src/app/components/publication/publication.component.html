@@ -223,15 +223,15 @@
                   <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                     {{
                     col.field == 'revisionDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'nextReviewDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'nextReviewDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'expirationDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'verifiedDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy ')
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
                     : rowData[col.field]
                     }}
                   </td>
@@ -247,12 +247,15 @@
                           matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                       </span>
 
-                      <span>
+                      <span><a class="btn nobg" (click)="openDocumentsList(documentsContent, rowData)"
+                          matTooltip="Documents" matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
+                      </span>
+                      <!-- <span>
                         <a class="btn btn-info boxed-float-btn nobg"
                           (click)="openDocumentsList(documentsContent, rowData)" data-toggle="tooltip"
                           data-toggle="modal" matTooltip="View Document" matTooltipPosition="above"><i
                             class="fa fa-file-text"></i></a>
-                      </span>
+                      </span> -->
 
                       <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit"
                           matTooltipPosition="above"><i class="fa fa-pencil"> </i></a>
@@ -335,6 +338,30 @@
   </div>
 </ng-template>
 
+<ng-template #documentsContent let-c="close" let-d="dismiss" class="modal fade" role="dialog">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" (click)="dismissModel()" data-dismiss="modal" id="" name="">
+        ×
+      </button>
+      <h4 class="modal-title">Documents of {{ selectedRow['name'] }}</h4>
+    </div>
+    <div class="modal-body viewform">
+      <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfDocumentStatus($event)"
+        [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId" [isViewMode]="true" [offLineUpload]="true">
+      </app-common-documents>
+
+      <!-- <app-customer-documents [customerDataFromExternalComponents]="selectedRow"></app-customer-documents> -->
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="dismissModel()">
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+
 <div id="publicationHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xl">
     <!-- Modal content-->
@@ -350,7 +377,7 @@
           <table class="table table-bordered pubHistory-table" *ngIf="auditHistory.length > 0; else noDatavailable">
             <thead>
               <tr>
-                <th *ngFor="let x of cols">{{ x.header }}</th>
+                <th *ngFor="let x of auditCols">{{ x.header }}</th>
                 <th>IsActive</th>
                 <th>Updated By</th>
                 <th>Updated Date</th>
@@ -413,7 +440,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.revisionDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.revisionDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(
@@ -435,7 +462,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.nextReviewDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.nextReviewDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(
@@ -446,7 +473,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.expirationDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.expirationDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'location', audit.location)
@@ -475,7 +502,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
+                  {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
                 </td>
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
@@ -485,7 +512,7 @@
                   {{ audit.isActive }}
                 </td>
                 <td>{{ audit.updatedBy }}</td>
-                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy' }}</td>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
               </tr>
             </tbody>
           </table>
@@ -745,11 +772,11 @@
                                           {{
                                           col.field == 'createdDate'
                                           ? (rowData[col.field]
-                                          | date: 'MM/dd/yyyy')
+                                          | date: 'MM/dd/yyyy h:mm a')
                                           : rowData[col.field] &&
                                           col.field == 'updatedDate'
                                           ? (rowData[col.field]
-                                          | date: 'MM/dd/yyyy')
+                                          | date: 'MM/dd/yyyy h:mm a')
                                           : rowData[col.field]
                                           }}
                                         </ng-container>

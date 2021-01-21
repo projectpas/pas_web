@@ -28,6 +28,7 @@
     <div  class="col-md-6">
     <div class="form-group memo-popup-cstm" > 
             <div [innerHTML]="addShipViaFormForFreight.Memo" class="form-control"
+            [matTooltip]="parsedText(addShipViaFormForFreight.Memo)"
            class="text_editor_box" style="width:100%;padding:0px !important;line-height:1.6">
         </div>
                     <i class="fa fa-pencil btn nobg pull-right"  style="margin-top:-25px;margin-right:-29px" 

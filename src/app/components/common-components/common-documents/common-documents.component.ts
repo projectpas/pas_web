@@ -35,6 +35,7 @@ export class CommonDocumentsComponent implements OnInit {
     @Output()parentTrigger=new EventEmitter<any>();
     @Input() uploadDocsToser: Subject<boolean>;
     documentInformation = {
+        documentTypeId: 0,
         docName: '',
         docMemo: '',
         docDescription: '',
@@ -48,6 +49,7 @@ export class CommonDocumentsComponent implements OnInit {
     DocumentsColumns = [
         { field: 'docName', header: 'Name' },
         { field: 'docDescription', header: 'Description' },
+        { field: 'name', header: 'Doc Type' },
         { field: 'fileName', header: 'File Name' },
         { field: 'docMemo', header: 'Memo' },
         { field: 'createdDate', header: 'Created Date' },
@@ -154,6 +156,7 @@ export class CommonDocumentsComponent implements OnInit {
             this.attachmoduleList = res;
         //   setTimeout(() => {
             this.getList();
+            this.getDocumentTypeList();
         //   }, 5000);
         }
         // ,
@@ -221,6 +224,7 @@ export class CommonDocumentsComponent implements OnInit {
         this.sourceViewforDocumentList = [];
         this.isEditButton = false;
         this.documentInformation = {
+            documentTypeId: 0,
             docName: '',
             docMemo: '',
             docDescription: '',
@@ -637,7 +641,7 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     newDocumentDetails: any = {};
-
+    
     saveDocumentInformation() {
         this.newDocumentDetails = {};
         this.documentInformation;
@@ -653,7 +657,8 @@ export class CommonDocumentsComponent implements OnInit {
                 createdDate: Date.now(),
                 updatedDate: Date.now(),
                 isDeleted: false,
-                attachmentDetails: this.selectedFileAttachment
+                attachmentDetails: this.selectedFileAttachment,
+                documentTypeId: this.documentInformation.documentTypeId
             })
         }
         this.newDocumentDetails = { ...this.documentInformation };
@@ -671,6 +676,7 @@ export class CommonDocumentsComponent implements OnInit {
                         this.commondocumentsDestructuredData[i].docMemo = this.documentInformation.docMemo;
                         this.commondocumentsDestructuredData[i].docDescription = this.documentInformation.docDescription;
                         this.commondocumentsDestructuredData[i].attachmentDetails = this.newDocumentDetails.attachmentDetails;
+                        this.commondocumentsDestructuredData[i].documentTypeId = this.documentInformation.documentTypeId;
                         break;
                     }
                 }
@@ -679,6 +685,7 @@ export class CommonDocumentsComponent implements OnInit {
                         this.commondocumentsDestructuredData[i].docName = this.documentInformation.docName;
                         this.commondocumentsDestructuredData[i].docMemo = this.documentInformation.docMemo;
                         this.commondocumentsDestructuredData[i].docDescription = this.documentInformation.docDescription;
+                        this.commondocumentsDestructuredData[i].documentTypeId = this.documentInformation.documentTypeId;
                         break;
                     }
                 }
@@ -725,4 +732,21 @@ export class CommonDocumentsComponent implements OnInit {
 this.parentTrigger.emit(true)
     }
     commondocumentsList: any = []
+
+    documentType:any=[];
+    getDocumentTypeList() {
+        // this.commonService.getDocumentType().subscribe(res => {
+        //   this.documentType = res;
+        //   console.log("res",res);
+        // },err => {
+        //   this.isSpinnerVisible = false;	
+        // });
+
+        this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name')
+            .subscribe(
+                (res)=>{
+                    this.documentType = res;
+                }
+            )
+      }
 }

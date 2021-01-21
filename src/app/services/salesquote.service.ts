@@ -399,10 +399,10 @@ export class SalesQuoteService {
       })
       marginSummary.sales = sales;
       marginSummary.misc = parseFloat(marginSummary.misc == undefined || marginSummary.misc === '' ? 0 : marginSummary.misc.toString().replace(/\,/g, ''));;
-      marginSummary.productCost = productCost;
-      marginSummary.netSales = this.getNetSalesAmount(marginSummary);
-      marginSummary.marginAmount = this.getMarginAmount(marginSummary);
-      marginSummary.marginPercentage = this.getMarginPercentage(marginSummary);
+      marginSummary.productCost = productCost ? productCost : 0;
+      marginSummary.netSales = marginSummary ? this.getNetSalesAmount(marginSummary): 0;
+      marginSummary.marginAmount = marginSummary ? this.getMarginAmount(marginSummary) : 0;
+      marginSummary.marginPercentage = marginSummary ? this.getMarginPercentage(marginSummary) : 0;
     }
     return marginSummary;
   }
@@ -446,8 +446,8 @@ export class SalesQuoteService {
     partNumberObj.priorityId = selectedPart.priorityId;
     partNumberObj.itemMasterId = selectedPart.itemMasterId;
     partNumberObj.fxRate = selectedPart.fixRate;
-    partNumberObj.qtyQuoted = formatStringToNumber(selectedPart.quantityToBeQuoted);
-    partNumberObj.qtyRequested = formatStringToNumber(selectedPart.quantityRequested);
+    partNumberObj.qtyQuoted = selectedPart.quantityToBeQuoted ? formatStringToNumber(selectedPart.quantityToBeQuoted) : 0;
+    partNumberObj.qtyRequested = selectedPart.quantityRequested ? formatStringToNumber(selectedPart.quantityRequested) : 0;
     partNumberObj.unitSalePrice = selectedPart.salesPricePerUnit;
     partNumberObj.salesBeforeDiscount = formatStringToNumber(selectedPart.salesPriceExtended);
     partNumberObj.discount = selectedPart.discount ? Number(selectedPart.discount) : 0;
@@ -467,21 +467,21 @@ export class SalesQuoteService {
     partNumberObj.updatedBy = userName;
     partNumberObj.createdOn = new Date().toDateString();
     partNumberObj.updatedOn = new Date().toDateString();
-    partNumberObj.unitCost = selectedPart.unitCostPerUnit;
+    partNumberObj.unitCost = selectedPart.unitCostPerUnit ? selectedPart.unitCostPerUnit : 0;
     partNumberObj.altOrEqType = selectedPart.altOrEqType;
     partNumberObj.qtyPrevQuoted = selectedPart.quantityAlreadyQuoted;
     partNumberObj.methodType =
       selectedPart.method === "Stock Line" ? "S" : "I";
-    partNumberObj.salesPriceExtended = formatStringToNumber(selectedPart.salesPriceExtended);
-    partNumberObj.markupExtended = formatStringToNumber(selectedPart.markupExtended);
+    partNumberObj.salesPriceExtended = selectedPart.salesPriceExtended ? formatStringToNumber(selectedPart.salesPriceExtended) : 0;
+    partNumberObj.markupExtended = selectedPart.markupExtended ? formatStringToNumber(selectedPart.markupExtended) : 0;
     partNumberObj.markUpPercentage = selectedPart.markUpPercentage ? Number(selectedPart.markUpPercentage) : 0;
     partNumberObj.markupPerUnit = selectedPart.markupPerUnit;
     partNumberObj.salesDiscountExtended = selectedPart.salesDiscountExtended;
     partNumberObj.netSalePriceExtended = selectedPart.netSalePriceExtended;
-    partNumberObj.unitCostExtended = formatStringToNumber(selectedPart.unitCostExtended);
-    partNumberObj.marginAmount = formatStringToNumber(selectedPart.marginAmount);
-    partNumberObj.marginAmountExtended = formatStringToNumber(selectedPart.marginAmountExtended);
-    partNumberObj.marginPercentage = selectedPart.marginPercentageExtended;
+    partNumberObj.unitCostExtended = selectedPart.unitCostExtended ? formatStringToNumber(selectedPart.unitCostExtended) : 0;
+    partNumberObj.marginAmount = selectedPart.marginAmount ? formatStringToNumber(selectedPart.marginAmount) : 0;
+    partNumberObj.marginAmountExtended = selectedPart.marginAmountExtended ? formatStringToNumber(selectedPart.marginAmountExtended) : 0;
+    partNumberObj.marginPercentage = selectedPart.marginPercentageExtended ? selectedPart.marginPercentageExtended : 0;
     partNumberObj.conditionId = selectedPart.conditionId;
     partNumberObj.currencyId = selectedPart.currencyId;
     partNumberObj.uom = selectedPart.uom;

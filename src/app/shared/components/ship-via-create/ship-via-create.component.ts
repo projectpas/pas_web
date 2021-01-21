@@ -25,7 +25,7 @@ export class ShipViaCreateComponent implements OnInit {
   lstfilterShippVia: any[];
   addShipViaFormForFreight = new ShipVia()
   isShipViaNameAlreadyExists:boolean=false;
-  MasterCompanyId = 1;
+  //MasterCompanyId = 1;
   constructor(private commonService: CommonService,
               private authService: AuthService,
               private alertService: AlertService,) { }
@@ -33,15 +33,16 @@ export class ShipViaCreateComponent implements OnInit {
   ngOnInit() {
     this.loadShippingViaList();
     // this.isEditModeShipVia = this.shipViaValue.isEditModeShipVia;
-    // if(this.ShipViaEditID != undefined && this.isEditModeShipVia){
-    //this.EditShipVia();
-    // }else{
-    //   this.resetAddressShipViaForm();
-    // }
   }
 
   get userName(): string {	
     return this.authService.currentUser ? this.authService.currentUser.userName : "";		
+  }
+
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
   }
   
   // get currentUserMasterCompanyId(): number {
@@ -54,6 +55,13 @@ export class ShipViaCreateComponent implements OnInit {
     this.commonService.getShipVia().subscribe(res => {
       this.allShipViaInfo = res;
       console.log("res",res);
+      if(this.ShipViaEditID > 0){
+        this.EditShipVia();
+        this.isEditModeShipVia = true;
+    }else{
+        this.isEditModeShipVia = false;
+        this.resetAddressShipViaForm();
+    }
     },err => {
       this.isSpinnerVisible = false;	
     });
@@ -96,56 +104,103 @@ onSaveTextAreaInfo() {
   $('#ship-via-memo').modal('hide');
 }
 
+// saveShipVia() {
+//   const postData = [];
+//   //const mgmtStructure = []
+//   // const shipviaData = {
+//   //   ...this.addShipViaFormForFreight,
+//   //   IsActive : true,
+//   //   CreatedBy:this.userName,
+//   //   UpdatedBy:this.userName			
+
+//   // }
+//   postData.push(
+//     {fieldName: "Name", fieldValue: this.addShipViaFormForFreight.Name},
+//     {fieldName: "Memo", fieldValue: this.addShipViaFormForFreight.Memo},
+//     {fieldName: "MasterCompanyId", fieldValue: this.MasterCompanyId},
+//     {fieldName: "CreatedBy", fieldValue: this.userName},
+//     {fieldName: "UpdatedBy", fieldValue: this.userName},
+//   )
+//   const frmData = {
+//     table: 'ShippingVia',
+//     data: postData,
+//   };
+
+//   //if (!this.shipViaValue.isEditModeShipVia) {
+//     this.commonService.createShipViaForMaster(frmData).subscribe(response => {
+//       this.alertService.showMessage(
+//         'Success',
+//         `Saved Ship Via Information Sucessfully `,
+//         MessageSeverity.success
+//       );
+//       //this.Event.emit(false);
+//     },err => {
+//       this.isSpinnerVisible = false;
+//       //const errorLog = err;
+//       //this.errorMessageHandler(errorLog);		
+//     });
+//   // } else {
+//   //   this.commonService.createShipViaForMaster(frmData).subscribe(response => {
+//   //     //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,0,0,response.shipViaId);
+//   //     //this.enableAddSaveBtn = true;
+//   //     this.alertService.showMessage(
+//   //       'Success',
+//   //       `Updated Ship Via Information Sucessfully`,
+//   //       MessageSeverity.success
+//   //     );
+//   //     //this.Event.emit(response);
+//   //   },err => {
+//   //     this.isSpinnerVisible = false;		
+//   //   })
+//   // }
+
+
+//   $('#shipToShipVia').modal('hide');
+// }
+
 saveShipVia() {
-  const postData = [];
-  //const mgmtStructure = []
-  // const shipviaData = {
-  //   ...this.addShipViaFormForFreight,
-  //   IsActive : true,
-  //   CreatedBy:this.userName,
-  //   UpdatedBy:this.userName			
+  const data = {
+    ...this.addShipViaFormForFreight,
+    IsActive : true,
+    CreatedBy:this.userName,
+    UpdatedBy:this.userName,			
+    MasterCompanyId:this.masterCompanyId,
+    ShippingViaId:this.ShipViaEditID,
+    //Name: getValueFromArrayOfObjectById('label', 'value', this.addShipViaFormForFreight.ShippingViaId, this.allShipViaInfo),
+    //Name:this.addShipViaFormForFreight.Name.name
+   }
+   const  shipviaData = {
+     ...data,
+     Name: editValueAssignByCondition('name', data.Name),									 
+   }
 
-  // }
-  postData.push(
-    {fieldName: "Name", fieldValue: this.addShipViaFormForFreight.Name},
-    {fieldName: "Memo", fieldValue: this.addShipViaFormForFreight.Memo},
-    {fieldName: "MasterCompanyId", fieldValue: this.MasterCompanyId},
-    {fieldName: "CreatedBy", fieldValue: this.userName},
-    {fieldName: "UpdatedBy", fieldValue: this.userName},
-  )
-  const frmData = {
-    table: 'ShippingVia',
-    data: postData,
-  };
-
-  //if (!this.shipViaValue.isEditModeShipVia) {
-    this.commonService.createShipViaForMaster(frmData).subscribe(response => {
-      this.alertService.showMessage(
-        'Success',
-        `Saved Ship Via Information Sucessfully `,
-        MessageSeverity.success
-      );
-      //this.Event.emit(false);
-    },err => {
-      this.isSpinnerVisible = false;
-      //const errorLog = err;
-      //this.errorMessageHandler(errorLog);		
-    });
-  // } else {
-  //   this.commonService.createShipViaForMaster(frmData).subscribe(response => {
-  //     //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,0,0,response.shipViaId);
-  //     //this.enableAddSaveBtn = true;
-  //     this.alertService.showMessage(
-  //       'Success',
-  //       `Updated Ship Via Information Sucessfully`,
-  //       MessageSeverity.success
-  //     );
-  //     //this.Event.emit(response);
-  //   },err => {
-  //     this.isSpinnerVisible = false;		
-  //   })
-  // }
-
+   if(this.ShipViaEditID == 0){
+      this.commonService.SaveShipVia(shipviaData).subscribe(response => {
+        this.alertService.showMessage(
+          'Success',
+          `Saved Ship Via Information Sucessfully`,
+          MessageSeverity.success
+        );
+        //this.Event.emit(response);
+        console.log("response",response);
+        this.Event.emit(response.shippingViaId);
+      },err => {
+        this.isSpinnerVisible = false;		
+      })
+    }else{
+      this.commonService.SaveShipVia(shipviaData).subscribe(response => {
+        this.alertService.showMessage(
+          'Success',
+          `Updated Ship Via Information Sucessfully`,
+          MessageSeverity.success
+        );
+        //this.Event.emit(response);
+        console.log("response",response);
+        this.Event.emit(response.shippingViaId);
+      },err => {
+        this.isSpinnerVisible = false;		
+      })
+    }
 
   $('#shipToShipVia').modal('hide');
 }
@@ -155,17 +210,14 @@ shipAddChange(){
 }
 
   EditShipVia(){
+    this.resetAddressShipViaForm();
     if(this.allShipViaInfo && this.allShipViaInfo.length !=0){
 			for(var i =0; i < this.allShipViaInfo.length; i++) {
           if (this.allShipViaInfo[i].shippingViaId == this.ShipViaEditID) {
 					this.addShipViaFormForFreight.ShippingViaId = this.allShipViaInfo[i].shippingViaId;
-					this.addShipViaFormForFreight.Name = this.allShipViaInfo[i].Name;
-					this.addShipViaFormForFreight.Memo = this.allShipViaInfo[i].Memo;		
-					// this.addShipViaFormForShipping.shippingAccountInfo = this.shipViaList[i].shippingAccountInfo;
-					// this.addShipViaFormForShipping.shippingId = '';
-					// this.addShipViaFormForShipping.shippingURL = '';
-					// this.addShipViaFormForShipping.memo = this.shipViaList[i].memo;
-					// this.addShipViaFormForShipping.isPrimary = this.shipViaList[i].isPrimary;
+          //this.addShipViaFormForFreight.Name = this.allShipViaInfo[i].name;
+          this.addShipViaFormForFreight.Name = getObjectByValue('name',this.allShipViaInfo[i].name, this.allShipViaInfo);
+					this.addShipViaFormForFreight.Memo = this.allShipViaInfo[i].memo;
 				}
 			}
     }
@@ -174,62 +226,19 @@ shipAddChange(){
   shipViaChange(){
 		this.ShipViabutton = true;
   }
-  
-  // onAddShipMemo() {
-  //   this.tempAddshipViaMemo = this.addShipViaFormForShipping.memo;
-  // }
-  // onSaveTextAreaInfo() {
-  //   this.addShipViaFormForShipping.memo = this.tempAddshipViaMemo;
-  //   this.ShipViabutton = true;
-  //   $('#ship-via-memo').modal('hide');
-  // }
 
-  async saveShipViaForShipTo() {
-    const customerData = {
-      ...this.shipViaValue,
-			...this.addShipViaFormForShipping,			
-			name: getValueFromArrayOfObjectById('label', 'value', this.addShipViaFormForShipping.shipViaId, this.allShipViaInfo),			
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
     }
-    console.log("save",customerData);
-
-    if (!this.shipViaValue.isEditModeShipVia) {
-      await this.commonService.createShipVia(customerData).subscribe(response => {
-        //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,0,0,response.shipViaId);
-        //this.enableAddSaveBtn = true;					
-        this.alertService.showMessage(
-          'Success',
-          `Saved Ship Via Information Sucessfully `,
-          MessageSeverity.success
-        );
-        this.Event.emit(response);
-      },err => {
-        this.isSpinnerVisible = false;
-        //const errorLog = err;
-        //this.errorMessageHandler(errorLog);		
-      });
-    } else {
-      await this.commonService.createShipVia(customerData).subscribe(response => {
-        //this.onShipToSelected(this.sourcePoApproval.shipToUserId,0,0,0,0,response.shipViaId);
-        //this.enableAddSaveBtn = true;
-        this.alertService.showMessage(
-          'Success',
-          `Updated Ship Via Information Sucessfully`,
-          MessageSeverity.success
-        );
-        this.Event.emit(response);
-      },err => {
-        this.isSpinnerVisible = false;
-        //const errorLog = err;
-        //this.errorMessageHandler(errorLog);		
-      })
-    }
-  
-  
-    $('#shipToShipVia').modal('hide');
   }
 
   resetAddressShipViaForm() {
-    this.addShipViaFormForShipping = new CustomerInternationalShipVia();
+    this.addShipViaFormForFreight = new ShipVia();
     this.isEditModeShipVia = false;
   }
 

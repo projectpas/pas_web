@@ -167,7 +167,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
             exclusionsIds = this.workFlow.exclusions.reduce((acc, x) => {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
-        }
+        } 
         this.commonService.autoCompleteSmartDropDownItemMasterList(strvalue, true, 20, exclusionsIds)
             .subscribe(res => {
                 this.isSpinnerVisible = false;

@@ -1,71 +1,61 @@
 ﻿<div class="card new-card">
     <div class="card-header bg-primary">
-      <div class="row">
-        <div class="col">
-          <h4 class="new-card-heading">
-              {{isEditMode ? 'Edit' : 'Create' }} Publication</h4>
+        <div class="row">
+            <div class="col">
+                <h4 class="new-card-heading">
+                    {{isEditMode ? 'Edit' : 'Create' }} Publication</h4>
+            </div>
+            <div>
+                <button type="button" class="btn-sm new-btn-primary"
+                    [routerLink]="['/singlepages/singlepages/app-publication']">
+                    Publication List
+                </button>
+            </div>
         </div>
-        <div>
-          <button
-            type="button"
-            class="btn-sm new-btn-primary"
-            [routerLink]="['/singlepages/singlepages/app-publication']"
-          >
-            Publication List
-          </button>
-        </div>
-      </div>
     </div>
     <div class="card-body new-card-body">
-      <div>
-    <div class="md-stepper-horizontal orange new-stepper-align">
-        <div class="md-step "
-             [ngClass]="{ active: activeMenuItem >= 1 ,  editable : activeMenuItem === 1 }"
-             (click)="changeOfTab('General')">
-            <div class="md-step-circle"><span>1</span></div>
-            <div class="md-step-title">General Info</div>
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
-        </div>
-        <div class="md-step"
-             [ngClass]="{ active: activeMenuItem >= 2 ,  editable : activeMenuItem === 2 }"
-             id="step2"
-             [class.isDisabled]="!isDisabledSteps"
-             (click)="changeOfTab('PnMap')">
-            <div class="md-step-circle"><span>2</span></div>
-            <div class="md-step-title">PN Mapping</div>
+        <div>
+            <div class="md-stepper-horizontal orange new-stepper-align">
+                <div class="md-step " [ngClass]="{ active: activeMenuItem >= 1 ,  editable : activeMenuItem === 1 }"
+                    (click)="changeOfTab('General')">
+                    <div class="md-step-circle"><span>1</span></div>
+                    <div class="md-step-title">General Info</div>
+                    <div class="md-step-bar-left"></div>
+                    <div class="md-step-bar-right"></div>
+                </div>
+                <div class="md-step" [ngClass]="{ active: activeMenuItem >= 2 ,  editable : activeMenuItem === 2 }"
+                    id="step2" [class.isDisabled]="!isDisabledSteps" (click)="changeOfTab('PnMap')">
+                    <div class="md-step-circle"><span>2</span></div>
+                    <div class="md-step-title">PN Mapping</div>
 
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
-        </div>
-        <div class="md-step"
-             [ngClass]="{ active: activeMenuItem >= 3 ,   editable : activeMenuItem === 3 }"
-             (click)="changeOfTab('Aircraft')"
-             [class.isDisabled]="!isDisabledSteps">
-            <div class="md-step-circle"><span>3</span></div>
-            <div class="md-step-title">View Aircraft Info</div>
+                    <div class="md-step-bar-left"></div>
+                    <div class="md-step-bar-right"></div>
+                </div>
+                <div class="md-step" [ngClass]="{ active: activeMenuItem >= 3 ,   editable : activeMenuItem === 3 }"
+                    (click)="changeOfTab('Aircraft')" [class.isDisabled]="!isDisabledSteps">
+                    <div class="md-step-circle"><span>3</span></div>
+                    <div class="md-step-title">View Aircraft Info</div>
 
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
-        </div>
-        <div class="md-step "
-             [ngClass]="{ active: activeMenuItem >= 4 ,  editable : activeMenuItem === 4 }"
-             (click)="changeOfTab('Atachapter')"
-             [class.isDisabled]="!isDisabledSteps">
-            <div class="md-step-circle"><span>4</span></div>
-            <div class="md-step-title">View ATA Chapter</div>
+                    <div class="md-step-bar-left"></div>
+                    <div class="md-step-bar-right"></div>
+                </div>
+                <div class="md-step " [ngClass]="{ active: activeMenuItem >= 4 ,  editable : activeMenuItem === 4 }"
+                    (click)="changeOfTab('Atachapter')" [class.isDisabled]="!isDisabledSteps">
+                    <div class="md-step-circle"><span>4</span></div>
+                    <div class="md-step-title">View ATA Chapter</div>
 
-            <div class="md-step-bar-left"></div>
-            <div class="md-step-bar-right"></div>
+                    <div class="md-step-bar-left"></div>
+                    <div class="md-step-bar-right"></div>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-    </div>
-    <div class="col-md-12 shadow-box-cstm" *ngIf="currentTab !== 'General'" style="padding: 5px 15px; margin-top: 10px;">
+    <div class="col-md-12 shadow-box-cstm" *ngIf="currentTab !== 'General'"
+        style="padding: 5px 15px; margin-top: 10px;">
 
         <div class="col-md-4">
             <p class="fs12">
-                <label class="control-label labels-font-header" style="width: auto; ">Publication ID:  </label>
+                <label class="control-label labels-font-header" style="width: auto; ">Publication ID: </label>
                 <span class="span-header-red"> {{this.sourcePublication.publicationId }} </span>
             </p>
         </div>
@@ -98,17 +88,21 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="workflowid">Entry Date</label>
-                                <p-calendar [showIcon]="true" [disabled]="true" name="gEntryDate" [(ngModel)]="sourcePublication.entryDate"></p-calendar>
+                                <p-calendar [showIcon]="true" [disabled]="true" name="gEntryDate"
+                                    [(ngModel)]="sourcePublication.entryDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label for="publicationid">Publication ID <span class="clr-red">*</span></label>
-                                <input class="form-control" #pubID="ngModel" type="text" autocomplete="off" [maxLength]="35" name="gPublicationid" [(ngModel)]="sourcePublication.publicationId" required />
+                                <input class="form-control" #pubID="ngModel" type="text" autocomplete="off"
+                                    [maxLength]="35" name="gPublicationid" [(ngModel)]="sourcePublication.publicationId"
+                                    required />
                             </div>
 
                             <div class="form-group">
                                 <label for="PublicationDescription">Publication Description</label>
-                                <textarea pInputTextarea class="form-control" [maxLength]="256" #pubDescription="ngModel" type="text"
-                                          name="gDescription" [(ngModel)]="sourcePublication.description"></textarea>
+                                <textarea pInputTextarea class="form-control" [maxLength]="256"
+                                    #pubDescription="ngModel" type="text" name="gDescription"
+                                    [(ngModel)]="sourcePublication.description"></textarea>
                             </div>
 
                             <div class="form-group">
@@ -133,13 +127,19 @@
 
                             <div class="form-group">
                                 <label for="asd">Author/Source/Directive</label>
-                                <input class="form-control" #pubID="ngModel" type="text" [maxLength]="55" name="gAsd" [(ngModel)]="sourcePublication.asd" />
+                                <input class="form-control" #pubID="ngModel" type="text" [maxLength]="55" name="gAsd"
+                                    [(ngModel)]="sourcePublication.asd" />
                             </div>
 
                             <div class="form-group">
                                 <label for="sequence">Sequence</label>
-                                <input type="number" name="gSequence" class="form-control" [maxLength]="15" #pubID="ngModel" [(ngModel)]="sourcePublication.sequence" />
+                                <input type="number" name="gSequence" class="form-control" [maxLength]="15"
+                                    #pubID="ngModel" [(ngModel)]="sourcePublication.sequence" />
                             </div>
+                        </div>
+
+                        <div class="col-md-3">
+
                             <div class="form-group">
                                 <label for="Publishedby">Published By <span class="clr-red">*</span></label>
                                 <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gPublishBy" [(ngModel)]="sourcePublication.publishby"  /> -->
@@ -148,26 +148,23 @@
                                     {{ employee.label }}
                                   </option>
                                 </select> -->
-                                <select class="mb-2" name="publishedById" [(ngModel)]="sourcePublication.publishedById" (change)="changePublishedById()" required>
+                                <select class="mb-2" name="publishedById" [(ngModel)]="sourcePublication.publishedById"
+                                    (change)="changePublishedById()" required>
                                     <option value="null"> -- Select --</option>
-                                    <option *ngFor="let module of publishedByModulesList" [ngValue]="module.moduleId">
-                                        {{ module.moduleName }}
+                                    <option *ngFor="let module of publishedByModulesList" [ngValue]="module.value">
+                                        {{ module.label }}
                                     </option>
                                 </select>
-                                <div class="form-row" *ngIf="sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3">
-                                    <div class="col-sm-12">
-                                        <p-autoComplete class="p-autoComplete-ctsm"
-                                                        name="publishedByRefId "
-                                                        [(ngModel)]="sourcePublication.publishedByRefId"
-                                                        field="label"
-                                                        [suggestions]="publishedByReferences"
-                                                        [forceSelection]="true"
-                                                        emptyMessage="No Match Found"
-                                                        [size]="30"
-                                                        [minLength]="1"
-                                                        (completeMethod)="getPublishedByReferencesList($event, sourcePublication.publishedById)"
-                                                        [dropdown]="true"
-                                                        required="{{sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3}}">
+                                <div class="form-row"
+                                    *ngIf="sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3">
+                                    <div class="col-sm-12 align_published_by">
+                                        <p-autoComplete class="p-autoComplete-ctsm" name="publishedByRefId "
+                                            [(ngModel)]="sourcePublication.publishedByRefId" field="label"
+                                            [suggestions]="publishedByReferences" [forceSelection]="true"
+                                            emptyMessage="No Match Found" [size]="30" [minLength]="1"
+                                            (completeMethod)="getPublishedByReferencesList($event, sourcePublication.publishedById)"
+                                            [dropdown]="true"
+                                            required="{{sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3}}">
                                         </p-autoComplete>
                                     </div>
                                     <!-- <div class="col-sm-1">
@@ -187,34 +184,32 @@
                                 </div>
 
 
-                                <input *ngIf="sourcePublication.publishedById == 4"
-                                       type="text"
-                                       pInputText
-                                       name="publishedByOthers"
-                                       size="50" [(ngModel)]="sourcePublication.publishedByOthers" (onClear)="clearValue()"
-                                       class="form-control ui-autocomplete-input"
-                                       required="{{sourcePublication.publishedById == 4}}"
-                                       placeholder="Specify Others" />
+                                <input *ngIf="sourcePublication.publishedById == 4" type="text" pInputText
+                                    name="publishedByOthers" size="50" [(ngModel)]="sourcePublication.publishedByOthers"
+                                    (onClear)="clearValue()" class="form-control ui-autocomplete-input"
+                                    required="{{sourcePublication.publishedById == 4}}" placeholder="Specify Others" />
                             </div>
-                        </div>
-
-                        <div class="col-md-3">
-
                             <div class="form-group">
                                 <label for="sequence">Revision Num</label>
-                                <input type="text" name="revisionNumber" class="form-control" [maxLength]="15" #pubID="ngModel" [(ngModel)]="sourcePublication.revisionNumber" />
+                                <input type="text" name="revisionNumber" class="form-control" [maxLength]="15"
+                                    #pubID="ngModel" [(ngModel)]="sourcePublication.revisionNumber" />
                             </div>
                             <div class="form-group">
                                 <label>Revision Date</label>
-                                <p-calendar [showIcon]="true" name="revisionDate" [(ngModel)]="sourcePublication.revisionDate"></p-calendar>
+                                <p-calendar [showIcon]="true" name="revisionDate"
+                                    [(ngModel)]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Next Review Date</label>
-                                <p-calendar [showIcon]="true" name="nextReviewDate" [(ngModel)]="sourcePublication.nextReviewDate" [minDate]="sourcePublication.revisionDate"></p-calendar>
+                                <p-calendar [showIcon]="true" name="nextReviewDate"
+                                    [(ngModel)]="sourcePublication.nextReviewDate"
+                                    [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Expiration Date</label>
-                                <p-calendar [showIcon]="true" name="expirationDate" [(ngModel)]="sourcePublication.expirationDate" [minDate]="sourcePublication.revisionDate"></p-calendar>
+                                <p-calendar [showIcon]="true" name="expirationDate"
+                                    [(ngModel)]="sourcePublication.expirationDate"
+                                    [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <!-- [disabled]="true"     -->
                             <!-- <div class="form-group">
@@ -237,9 +232,13 @@
                                   </label>
                               </div>
                             </div> -->
+
+                        </div>
+
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <!-- <span class="clr-red" *ngIf="sourcePublication.verifiedStatus == true">*</span> -->
-                                <label>Verified By  <span class="clr-red">*</span></label>
+                                <label>Verified By <span class="clr-red">*</span></label>
                                 <!-- <p-dropdown [options]="employeeList" name="verifiedBy" class="pub-type-select" [(ngModel)]="sourcePublication.verifiedBy" #pubID="ngModel" [required]="sourcePublication.status == true"></p-dropdown> -->
                                 <!-- [required]="sourcePublication.verifiedStatus == true" -->
                                 <select name="discountId" [(ngModel)]="sourcePublication.verifiedBy" required>
@@ -255,313 +254,228 @@
                             </div> -->
                             <div class="form-group">
                                 <label>Verified Date <span class="clr-red">*</span></label>
-                                <p-calendar [showIcon]="true" name="gVerifiedDate" required [(ngModel)]="sourcePublication.verifiedDate"></p-calendar>
+                                <p-calendar [showIcon]="true" name="gVerifiedDate" required
+                                    [(ngModel)]="sourcePublication.verifiedDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Location<span class="clr-red">*</span></label>
-                                <p-autoComplete class="p-autoComplete-ctsm"
-                                                name="locationId"
-                                                [(ngModel)]="sourcePublication.locationId"
-                                                field="label"
-                                                [suggestions]="gLocationsList"
-                                                [forceSelection]="true"
-                                                emptyMessage="No Match Found"
-                                                (onSelect)="getLocationNameById($event)"
-                                                (completeMethod)="getGlocationsList($event)"
-                                                [size]="30"
-                                                [minLength]="1"
-                                                [dropdown]="true"
-                                                required>
+                                <p-autoComplete class="p-autoComplete-ctsm" name="locationId"
+                                    [(ngModel)]="sourcePublication.locationId" field="label"
+                                    [suggestions]="gLocationsList" [forceSelection]="true" emptyMessage="No Match Found"
+                                    (onSelect)="getLocationNameById($event)"
+                                    (completeMethod)="getGlocationsList($event)" [size]="30" [minLength]="1"
+                                    [dropdown]="true" required>
                                 </p-autoComplete>
                                 <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gLocation" [(ngModel)]="sourcePublication.location"  /> -->
 
                             </div>
                             <div style="width: auto; float: left;">
-                            <div class="form-group">
-                            <div class="checkbox-cstm">
-                                <label
-                                  style="width: 50px !important; margin-top: 3px;"
-                                >
-                                  <!--  -->
-                                  <input
-                                    type="checkbox"
-                                    [(ngModel)]="sourcePublication.isActive"
-                                    name="isActive"
-                                    id="active"
-                                   
-                                  />
-                                  <span class="cr"
-                                    ><i class="cr-icon pi pi-check"></i
-                                  ></span>
-                                  Active
-                                </label>
-                              </div>
+                                <div class="form-group">
+                                    <div class="checkbox-cstm">
+                                        <label style="width: 50px !important; margin-top: 3px;">
+                                            <!--  -->
+                                            <input type="checkbox" [(ngModel)]="sourcePublication.isActive"
+                                                name="isActive" id="active" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Active
+                                        </label>
+                                    </div>
 
-                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                <label
-                                  style="width: auto !important; margin-top: 3px;"
-                                >
-                                  <!--  -->
-                                  <input
-                                    type="checkbox"
-                                    [(ngModel)]="sourcePublication.inactive"
-                                    name="inactive"
-                                    id="inactive"
-                                  
-                                  />
-                                  <span class="cr"
-                                    ><i class="cr-icon pi pi-check"></i
-                                  ></span>
-                                  In-Active
-                                </label>
-                              </div>
-                              </div>
-                              </div>
+                                    <div class="checkbox-cstm" style="margin-left: 0;">
+                                        <label style="width: auto !important; margin-top: 3px;">
+                                            <!--  -->
+                                            <input type="checkbox" [(ngModel)]="sourcePublication.inactive"
+                                                name="inactive" id="inactive" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            In-Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
-
+                        <!-- 
                         <div class="col-md-6">
                             <div class="card" style="padding: 10px">
                                 <div class="form-row">
                                     <div class="col-md-4">
-                                        <!-- <div class="form-group">
-                                            <label for="fileupload">Tag Type </label>
-                                            <select name="tagTypeId" [(ngModel)]="sourcePublication.tagTypeId">
-                                                <option *ngFor="let tagTypeItem of fileTagTypesList" [ngValue]="tagTypeItem.value">
-                                                    {{ tagTypeItem.label }}
-                                                </option>
-                                            </select>
-                                        </div> -->
+
                                     </div>
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <span>File Upload </span>
-                                            <!--<p-fileUpload name="gFileupload[]" #tagsFileUploadInput multiple="multiple" [showCancelButton]="false" [showUploadButton]="false" customUpload="true" (onSelect)="fileUpload($event)"></p-fileUpload>--> <!--(uploadHandler)="publicationFileUpload($event)" url="./upload.php"-->
-                                            <button (click)="addDocumentDetails()" class="plusicon-cstm" data-toggle="modal" data-target="#addDocumentDetailsNew"  style="background: #ffffff;
+                                            <button (click)="addDocumentDetails()" class="plusicon-cstm"
+                                                data-toggle="modal" data-target="#addDocumentDetailsNew" style="background: #ffffff;
                                             border: 1px solid #fff;">
-                                                <i class="fa fa-plus-circle fa-lg"
-                                                   matTooltip="Create Documents" matTooltipPosition="above" [ngClass]="{ grayColor: !sourcePublication.tagTypeId }"></i>
+                                                <i class="fa fa-plus-circle fa-lg" matTooltip="Create Documents"
+                                                    matTooltipPosition="above"
+                                                    [ngClass]="{ grayColor: !sourcePublication.tagTypeId }"></i>
                                             </button>
 
                                         </div>
                                         <div class="form-group">
 
-    </div>                                    </div>
-                                        <!--<div class="col-md-2">
-      <div class="form-group">
-         <button type="button" class="btn btn-primary" [disabled]="!sourcePublication.tagTypeId || disableFileAttachmentSubmit == true" (click)="addFileTagsToPublication()">Add</button>
-      </div>
-    </div>-->
+                                        </div>
                                     </div>
-                                <div>
-                                    <h6 class="panel-title" style="padding-left: 10px; margin-top: 20px;">Attachment Details</h6>
-                                    <!--<p-table
-                                    class="rpo-table-cstm"
-                                      [columns]="headersforAttachment"
-                                      [value]="attachmentList"
-                                      [paginator]="true"
-                                      [rows]="3"
-                                      [rowsPerPageOptions]="[3, 6, 9, 15]"
 
-                                    >
-                                      <ng-template pTemplate="header" let-columns>
-                                        <tr>
-                                          <th *ngFor="let col of columns" style="width: 100px;">
-                                            {{ col.header }}
-                                          </th>
-                                          <th style="width: 200px;">File(s)</th>
-                                          <th style="width: 70px;">Action</th>
-                                         </tr>
-                                      </ng-template>
-                                      <ng-template
-                                        pTemplate="body"
-                                        let-rowData
-                                        let-columns="columns"
-                                        let-rowIndex="rowIndex"
-                                      >
-                                        <tr>
-                                          <td *ngFor="let col of columns" style="text-align: center; padding: 0px !important; width: 100px;">
-                                            {{ rowData[col.field] }}
-                                          </td>
-                                          <td style="width: 200px; text-align: center;" >
-                                            <ng-container  *ngFor="let fileItem of rowData.attachmentDetails">
-                                              <a *ngIf="fileItem.isFileFromServer == true"
-                                              (click)="downloadFileUpload(fileItem.link)"
-                                              matTooltip="Download"  matTooltipPosition="above"
-                                              class="filelink" style="padding-right: 5px;"
-                                              >{{fileItem.fileName}}</a>
-                                                <a *ngIf="fileItem.isFileFromServer == false"
-                                              [href]="fileItem.link"
-                                              download="{{fileItem.fileName}}"
-                                                matTooltip="Download"  matTooltipPosition="above"
-                                                class="filelink"
-                                                >{{fileItem.fileName}}
-                                            </a>
-                                            </ng-container>
-                                          </td>
-                                          <td style="width: 70px;">
-                                            <a class="btn btn-danger nobg" (click)="deleteAttachmentRow(rowData, rowIndex)"
-                                            matTooltip="Delete" matTooltipPosition="above"  data-target="#delete" data-toggle="modal">
-                                              <i class="fa fa-trash"></i>
-                                            </a>
-                                          </td>
+                                </div>
+                                <div>
+                                    <h6 class="panel-title" style="padding-left: 10px; margin-top: 20px;">Attachment
+                                        Details</h6>
+                                    <p-table #table4 class="rpo-table-cstm" [columns]="selectedColumnsDoc"
+                                        [value]="sourceViewforDocumentList" [paginator]="true" [rows]="3"
+                                        [rowsPerPageOptions]="[5, 10, 15, 20]">
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" style="width: 100px;">
+                                                    {{ col.header }}
+                                                </th>
+                                                <th style="width: 100px;">Action</th>
                                             </tr>
 
-                                      </ng-template>
-                                    </p-table>-->
+                                        </ng-template>
+                                        <ng-template pTemplate="header" let-columns>
+                                            <tr>
+                                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                                    [pSortableColumn]="col.field">
+                                                    {{ col.header }}
+                                                    <p-sortIcon [field]="col.field">
+                                                    </p-sortIcon>
+                                                </th>
+                                                <th>Actions</th>
 
-                                <p-table #table4 class="rpo-table-cstm"
-                                         [columns]="selectedColumnsDoc"
-                                         [value]="sourceViewforDocumentList"
-                                         [paginator]="true"
-                                         [rows]="3"
-                                         [rowsPerPageOptions]="[5, 10, 15, 20]">
-                                    <ng-template pTemplate="header" let-columns>
-                                        <tr>
-                                            <th *ngFor="let col of columns" style="width: 100px;">
-                                                {{ col.header }}
-                                            </th>
-                                            <th style="width: 100px;">Action</th>
-                                            <!-- <th style="width: 100px;">Download</th> -->
-                                            <!-- <th>Action</th> -->
-                                        </tr>
+                                            </tr>
+                                            <tr>
+                                                <th style="width:120px" *ngFor="let col of columns"
+                                                    [ngSwitch]="col.field">
+                                                    <input type="text"
+                                                        (input)="table4.filter($event.target.value, col.field,'contains') "
+                                                        *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
+                                                        style="width:100%;" pInputText>
+                                                    <input type="date" class="hidePlaceHolder"
+                                                        *ngIf="col.field == 'createdDate'" name="createdDate"
+                                                        style="width:100%;"
+                                                        (change)="dateFilterForTableNew($event.target.value, col.field )">
+                                                    <input type="date" class="hidePlaceHolder"
+                                                        *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                                                        style="width:100%;"
+                                                        (change)="dateFilterForTableNew($event.target.value, col.field )">
+                                                </th>
+                                                <th style="width:140px;position:sticky"></th>
 
-                                    </ng-template>
-                                    <ng-template pTemplate="header" let-columns>
-                                        <tr>
-                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                                                [pSortableColumn]="col.field">
-                                                {{ col.header }}
-                                                <p-sortIcon [field]="col.field">
-                                                </p-sortIcon>
-                                            </th>
-                                            <th>Actions</th>
+                                            </tr>
+                                        </ng-template>
 
-                                        </tr>
-                                        <tr>
-                                            <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                                <input type="text"
-                                                       (input)="table4.filter($event.target.value, col.field,'contains') "
-                                                       *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                       style="width:100%;" pInputText>
-                                                <input type="date" class="hidePlaceHolder"
-                                                       *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                       style="width:100%;"
-                                                       (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                                <!--[ngModel]="currentdate | date:'yyyy-MM-dd'"-->
-                                                <input type="date" class="hidePlaceHolder"
-                                                       *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                       style="width:100%;"
-                                                       (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                            </th>
-                                            <th style="width:140px;position:sticky"></th>
+                                        <ng-template pTemplate="body" let-rowData let-columns="columns"
+                                            let-rowIndex="rowIndex">
+                                            <tr [pSelectableRow]="rowData">
+                                                <ng-container *ngFor="let col of columns">
+                                                    <td *ngIf="col.field != 'fileName'" class="ui-resizable-column"
+                                                        pReorderableRowHandle>
+                                                        {{
+                                                        col.field == 'createdDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                                        : rowData[col.field] && col.field == 'updatedDate'
+                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                                        : rowData[col.field]
+                                                        }}
+                                                    </td>
+                                                    <td *ngIf="col.field == 'fileName'">
+                                                        <a class="filelink" *ngIf="rowData.isFileFromServer == true"
+                                                            (click)="downloadFileUpload(rowData.link)">
+                                                            {{ rowData[col.field] }}
+                                                        </a>
+                                                        <a *ngIf="rowData.isFileFromServer == false"
+                                                            [href]="rowData.link" download="{{rowData.fileName}}"
+                                                            matTooltip="Download" matTooltipPosition="above"
+                                                            class="filelink">
+                                                            {{ rowData[col.field] }}
 
-                                        </tr>
-                                    </ng-template>
+                                                        </a>
+                                                    </td>
+                                                </ng-container>
 
-                                    <ng-template pTemplate="body"
-                                                 let-rowData
-                                                 let-columns="columns"
-                                                 let-rowIndex="rowIndex">
-                                        <tr [pSelectableRow]="rowData">
-                                            <ng-container *ngFor="let col of columns">
-                                                <td *ngIf="col.field != 'fileName'"
-                                                    class="ui-resizable-column"
-                                                    pReorderableRowHandle>
-                                                    {{
-                      col.field == 'createdDate'
-                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                        : rowData[col.field] && col.field == 'updatedDate'
-                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                        : rowData[col.field]
-                                                    }}
-                                                </td>
-                                                <td *ngIf="col.field == 'fileName'">
-                                                    <a class="filelink" *ngIf="rowData.isFileFromServer == true" (click)="downloadFileUpload(rowData.link)">
-                                                        {{ rowData[col.field] }}
+                                                <td style="width: 70px;">
+                                                    <span data-toggle="modal" data-target="#addDocumentDetailsNew">
+                                                        <a class="btn nobg"
+                                                            (click)="editCustomerDocument(rowData,rowIndex)"
+                                                            matTooltip="Edit" matTooltipPosition="above"><i
+                                                                class="fa fa-pencil"></i></a>
+                                                    </span>
+
+                                                    <a class="btn btn-danger nobg"
+                                                        (click)="deleteAttachmentRow(rowData, rowIndex,deleteContent)"
+                                                        matTooltip="Delete" matTooltipPosition="above"
+                                                        data-target="#delete" data-toggle="modal">
+                                                        <i class="fa fa-trash"></i>
                                                     </a>
-                                                    <a *ngIf="rowData.isFileFromServer == false"
-                                                       [href]="rowData.link"
-                                                       download="{{rowData.fileName}}"
-                                                       matTooltip="Download" matTooltipPosition="above"
-                                                       class="filelink">
-                                                        {{ rowData[col.field] }}
 
-                                                    </a>
-                                                </td>
-                                            </ng-container>
-
-                                            <td style="width: 70px;">
-                                                <span data-toggle="modal"
-                                                      data-target="#addDocumentDetailsNew">
-                                                    <a class="btn nobg"
-                                                       (click)="editCustomerDocument(rowData,rowIndex)" matTooltip="Edit"
-                                                       matTooltipPosition="above"><i class="fa fa-pencil"></i></a>
-                                                </span>
-
-                                                <a class="btn btn-danger nobg" (click)="deleteAttachmentRow(rowData, rowIndex,deleteContent)"
-                                                   matTooltip="Delete" matTooltipPosition="above" data-target="#delete" data-toggle="modal">
-                                                    <i class="fa fa-trash"></i>
-                                                </a>
-                                                <!--<span>
-                    <a class="btn nobg"
-                       (click)="openHistory(contentAuditHist, rowData)"
-                       matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a>
-                </span>-->
-                                                <button [disabled]="!rowData.isFileFromServer" class="btn-edit set_proper_align set_position"
-                                                        mat-icon-button (click)="openHistory(contentAuditHist,rowData)"
+                                                    <button [disabled]="!rowData.isFileFromServer"
+                                                        class="btn-edit set_proper_align set_position" mat-icon-button
+                                                        (click)="openHistory(contentAuditHist,rowData)"
                                                         matTooltip="History" matTooltipPosition="above">
-                                                    <i class="fa fa-history"
-                                                       [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
-                                                </button>
+                                                        <i class="fa fa-history"
+                                                            [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
+                                                    </button>
 
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
 
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage"
-                                                 let-columns
-                                                 *ngIf="sourceViewforDocumentList.length == 0">
-                                        <tr>
-                                            <td [attr.colspan]="10"
-                                                style="color: red; font-weight: bold; text-align: center">
-                                                No records found
-                                            </td>
+                                        </ng-template>
+                                        <ng-template pTemplate="emptymessage" let-columns
+                                            *ngIf="sourceViewforDocumentList.length == 0">
+                                            <tr>
+                                                <td [attr.colspan]="10"
+                                                    style="color: red; font-weight: bold; text-align: center">
+                                                    No records found
+                                                </td>
 
-                                        </tr>
-                                    </ng-template>
+                                            </tr>
+                                        </ng-template>
 
-                                    <ng-template pTemplate="summary" id="footer">
-                                        <label id="footer" class="footer">Total:</label>
-                                        <input style="width: 5%;" [(ngModel)]="totalRecordNew" name="no'of records" disabled
-                                               pInputText type="text" />
+                                        <ng-template pTemplate="summary" id="footer">
+                                            <label id="footer" class="footer">Total:</label>
+                                            <input style="width: 5%;" [(ngModel)]="totalRecordNew" name="no'of records"
+                                                disabled pInputText type="text" />
 
-                                        &nbsp;&nbsp;
-                                        <label id="footer" class="footer1">Pages Count:</label>
+                                            &nbsp;&nbsp;
+                                            <label id="footer" class="footer1">Pages Count:</label>
 
-                                        <input style="width: 5%;" [ngModel]="totalPagesNew"
-                                               name="page count" disabled pInputText type="text" />
-                                    </ng-template>
+                                            <input style="width: 5%;" [ngModel]="totalPagesNew" name="page count"
+                                                disabled pInputText type="text" />
+                                        </ng-template>
 
-                                </p-table>
+                                    </p-table>
 
                                 </div>
                             </div>
+                        </div> -->
+
+                    </div>
+                    <div class="form-row col-row">
+                        <!-- <div class="col-md-6"> -->
+                        <div class="col-md-12">
+                            <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"
+                                [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId" [isViewMode]="false"
+                                [offLineUpload]="true"></app-common-documents>
                         </div>
+                        <!-- </div> -->
                     </div>
 
                     <div class="pull-right">
-                        <!-- data-toggle="modal" data-target="#revisionNum" -->
-                        <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!generalInfoForm.valid" type="submit" (click)="saveGeneralInfo(); ">
+                        <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!generalInfoForm.valid"
+                            type="submit" (click)="saveGeneralInfo(); ">
                             {{isEditMode ? 'Update' : 'Save' }}
                         </button>
-                        <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit" (click)="nextClick('Next')">
+                        <button class="btn btn-primary button-save-cstm-cstm" [disabled]="!isEnableNext" type="submit"
+                            (click)="nextClick('Next')">
                             Next
                         </button>
                     </div>
                     <ng-template #tabRedirectConfirmationModal let-c="close" let-d="dismiss">
                         <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
+                            <button type="button" class="close" data-dismiss="modal"
+                                (click)="dismissModel()">&times;</button>
                             <h4 class="modal-title">Confirmation</h4>
                         </div>
                         <div class="modal-body">
@@ -571,8 +485,10 @@
                         </div>
                         <div class="modal-footer">
 
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="dismissModel()">No</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="redirectToTab()">Yes</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal"
+                                (click)="dismissModel()">No</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                (click)="redirectToTab()">Yes</button>
                         </div>
                     </ng-template>
 
@@ -595,15 +511,15 @@
                                 <label class="fs12">
                                     Part Number
                                 </label>
-                                <p-multiSelect [options]="partNumberList"
-                                               [(ngModel)]="selectedPartNumbers"
-                                               (click)="openModelPopups(selectedPartNumbers)"
-                                               class="pub-multi align-x"></p-multiSelect>
+                                <p-multiSelect [options]="partNumberList" [(ngModel)]="selectedPartNumbers"
+                                    (click)="openModelPopups(selectedPartNumbers)" class="pub-multi align-x">
+                                </p-multiSelect>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <button class="btn btn-primary mtop20 btn-cstm" [disabled]="!disabledPartNumber" (click)="savePNMapping()">
+                                <button class="btn btn-primary mtop20 btn-cstm" [disabled]="!disabledPartNumber"
+                                    (click)="savePNMapping()">
                                     Add
                                 </button>
                             </div>
@@ -613,74 +529,46 @@
                 </div>
                 <div class="col-md-12">
                     <div class="shadow-Box">
-                        <p-table #pnMappingTable
-                                 class="rpo-table-cstm rro-table-cstm"
-                                 [columns]="selectedPNmappingColumns"
-                                 [value]="pnMappingList"
-                                 [paginator]="true"
-                                 [rows]="pnMappingPageSize"
-                                 [first]="first"
-                                 [rowsPerPageOptions]="[10, 20, 50, 100]"
-                                 selectionMode="multiple"
-                                 [metaKeySelection]="true"
-                                 [resizableColumns]="true"
-                                 [reorderableColumns]="true"
-                                 [scrollable]="true"
-                                 scrollHeight="450px"
-                                 (onPage)="PNMappingPageIndexChange($event)">
+                        <p-table #pnMappingTable class="rpo-table-cstm rro-table-cstm"
+                            [columns]="selectedPNmappingColumns" [value]="pnMappingList" [paginator]="true"
+                            [rows]="pnMappingPageSize" [first]="first" [rowsPerPageOptions]="[10, 20, 50, 100]"
+                            selectionMode="multiple" [metaKeySelection]="true" [resizableColumns]="true"
+                            [reorderableColumns]="true" [scrollable]="true" scrollHeight="450px"
+                            (onPage)="PNMappingPageIndexChange($event)">
                             <ng-template pTemplate="caption">
                                 <div class="row">
                                     <div class="col">
-                                    <p-multiSelect [options]="headersforPNMapping"
-                                                   [(ngModel)]="selectedPNmappingColumns"
-                                                   name="customerContactsm1"
-                                                   optionLabel="header"
-                                                   selectedItemsLabel="{0} columns selected"
-                                                   [style]="{ minWidth: '200px' }"
-                                                   defaultLabel="Choose Columns"
-                                                   style="float:left"></p-multiSelect>
-                                                </div>
-                                                <div class="col">
-                                                  <div
-                                                    style="width: auto !important; float: right;"
-                                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                                  >
-                                        <i class="fa fa-search"></i>
-                                        <input type="text"
-                                               pInputText
-                                               size="50" [(ngModel)]="resetinputmodel" (onClear)="clearValue()"
-                                               class="form-control"
-                                               (input)="pnMappingTable.filterGlobal($event.target.value, 'contains')"
-                                               placeholder="Filter"
-                                               style="height: 28px !important;" />
-                                            </div>
+                                        <p-multiSelect [options]="headersforPNMapping"
+                                            [(ngModel)]="selectedPNmappingColumns" name="customerContactsm1"
+                                            optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                            [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns"
+                                            style="float:left"></p-multiSelect>
+                                    </div>
+                                    <div class="col">
+                                        <div style="width: auto !important; float: right;"
+                                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" pInputText size="50" [(ngModel)]="resetinputmodel"
+                                                (onClear)="clearValue()" class="form-control"
+                                                (input)="pnMappingTable.filterGlobal($event.target.value, 'contains')"
+                                                placeholder="Filter" style="height: 28px !important;" />
                                         </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col">
-                                    <button type="button"
-                                            class="btn btn-primary new-table-button"
-                                            pButton
-                                            icon="fa-download"
-                                            iconPos="left"
-                                            label="Export  Data"
-                                            matTooltip="Download  Data"
-                                            matTooltipPosition="above"
-                                            data-toggle="modal" 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export  Data"
+                                            matTooltip="Download  Data" matTooltipPosition="above" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = pnMappingTable;"
-                                             data-target="#downloadPublicationConfirmation"
+                                            data-target="#downloadPublicationConfirmation"
                                             style="padding: 5px 10px !important;"></button>
-                                    <button type="button"
-                                            class="btn btn-primary new-table-button"
-                                            pButton
-                                            icon="fa-download"
-                                            iconPos="left"
-                                            label="Export Selected Data"
-                                            matTooltip="Download Selected Data"
-                                            matTooltipPosition="above"
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export Selected Data"
+                                            matTooltip="Download Selected Data" matTooltipPosition="above"
                                             (click)="pnMappingTable.exportCSV({ selectionOnly: true })"
                                             style="padding: 5px 10px !important;"></button>
-                                </div>
+                                    </div>
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
@@ -691,9 +579,7 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <!-- <th>Sl.No</th> -->
-                                    <th *ngFor="let col of columns"
-                                        pResizableColumn
-                                        pReorderableColumn
+                                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{ col.header }}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -701,75 +587,57 @@
                                     <th>Actions</th>
                                 </tr>
                                 <tr>
-                                    <th *ngFor="let col of columns"
-                                        [ngSwitch]="col.field">
-                                        <input style="width:100%;"
-                                               pInputText
-                                               type="text"
-                                               (input)="
+                                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text" (input)="
                         pnMappingTable.filter($event.target.value, col.field, 'contains')
                         " />
                                     </th>
                                     <th></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body"
-                                         let-rowData
-                                         let-columns="columns"
-                                         let-rowIndex="rowIndex">
-                                <tr [pSelectableRow]="rowData"
-                                    [pContextMenuRow]="rowData">
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <!-- <td>{{ rowIndex + 1 }}</td> -->
-                                    <td *ngFor="let col of columns" class="ui-resizable-column"
-                                        pReorderableRowHandle>
+                                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
                                     <td>
                                         <a class="btn btn-danger nobg" (click)="onDeletePNMappingRow(rowData)"
-                                           matTooltip="Delete" matTooltipPosition="above" data-target="#delete" data-toggle="modal">
+                                            matTooltip="Delete" matTooltipPosition="above" data-target="#delete"
+                                            data-toggle="modal">
                                             <i class="fa fa-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="emptymessage"
-                                         let-columns
-                                         *ngIf="pnMappingList.length == 0">
+                            <ng-template pTemplate="emptymessage" let-columns *ngIf="pnMappingList.length == 0">
                                 <tr>
-                                    <td colspan="6"
-                                        style="color: red; font-weight: bold; text-align: center">
+                                    <td colspan="6" style="color: red; font-weight: bold; text-align: center">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total:</label>
-                                <input style="width: 5%;"
-                                       [(ngModel)]="pnMappingTable._totalRecords"
-                                       [disabled]="true"
-                                       pInputText
-                                       type="text" />
+                                <input style="width: 5%;" [(ngModel)]="pnMappingTable._totalRecords" [disabled]="true"
+                                    pInputText type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
 
                                 <input style="width: 5%;"
-                                       [ngModel]="getPageCount(pnMappingTable._totalRecords, pnMappingPageSize)"
-                                       [disabled]="true"
-                                       pInputText
-                                       type="text" />
+                                    [ngModel]="getPageCount(pnMappingTable._totalRecords, pnMappingPageSize)"
+                                    [disabled]="true" pInputText type="text" />
                             </ng-template>
                         </p-table>
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm"
-                            type="submit"
-                            (click)="changeOfTab('Aircraft'); saveTab('PN Mapping')">
+                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                        (click)="changeOfTab('Aircraft'); saveTab('PN Mapping')">
                         Next
                     </button>
-                    <button class="btn btn-primary pull-right button-save-cstm"
-                            type="submit"
-                            (click)="changeOfTab('General')">
+                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                        (click)="changeOfTab('General')">
                         Previous
                     </button>
 
@@ -797,16 +665,19 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">Part Number </label>
-                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnAircraftData" filter="true" [(ngModel)]="selectedAircraftPartNumber" name="selectedAircraftPartNumber" id="selectedAircraftPartNumber" title="Part Number" placeholder="Select Part Number" [showClear]="true"></p-dropdown>
+                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnAircraftData"
+                                    filter="true" [(ngModel)]="selectedAircraftPartNumber"
+                                    name="selectedAircraftPartNumber" id="selectedAircraftPartNumber"
+                                    title="Part Number" placeholder="Select Part Number" [showClear]="true">
+                                </p-dropdown>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group ">
                                 <label class="fs12">Aircraft </label>
-                                <p-multiSelect [options]="airCraftTypesList"
-                                               [(ngModel)]="selectAircraftManfacturer"
-                                               (onChange)="getAircraftModelByManfacturerType()"
-                                               class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                <p-multiSelect [options]="airCraftTypesList" [(ngModel)]="selectAircraftManfacturer"
+                                    (onChange)="getAircraftModelByManfacturerType()" class="pub-multi"
+                                    [resetFilterOnHide]="true"></p-multiSelect>
                             </div>
                         </div>
 
@@ -815,21 +686,18 @@
                                 <label class="fs12">
                                     Aircraft Model
                                 </label>
-                                <p-multiSelect [options]="aircraftModelList"
-                                               [(ngModel)]="selectedAircraftModel"
-                                               [selectionLimit]="30"
-                                               (onChange)="getDashNumberByManfacturerandModel(); multiSelectMaxLengthAlert();"
-                                               class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                <p-multiSelect [options]="aircraftModelList" [(ngModel)]="selectedAircraftModel"
+                                    [selectionLimit]="30"
+                                    (onChange)="getDashNumberByManfacturerandModel(); multiSelectMaxLengthAlert();"
+                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="form-group ">
                                 <label class="fs12">DashNumber </label>
-                                <p-multiSelect [options]="dashNumberList"
-                                               [selectionLimit]="30"
-                                               [(ngModel)]="selectedDashNumbers"
-                                               (onChange)="multiSelectMaxLengthAlert();"
-                                               class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                <p-multiSelect [options]="dashNumberList" [selectionLimit]="30"
+                                    [(ngModel)]="selectedDashNumbers" (onChange)="multiSelectMaxLengthAlert();"
+                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
                             </div>
                         </div>
 
@@ -845,88 +713,56 @@
                 </div>
                 <div class="col-md-12">
                     <div class="shadow-Box">
-                        <p-table #aircraftTable
-                                 class="rpo-table-cstm rro-table-cstm"
-                                 [columns]="selectedaircraftInformationCols"
-                                 [value]="aircraftList"
-                                 [paginator]="true"
-                                 [rows]="aircraftPageSize"
-                                 [first]="first"
-                                 [rowsPerPageOptions]="[10, 20, 50, 100]"
-                                 selectionMode="multiple"
-                                 [metaKeySelection]="true"
-                                 [resizableColumns]="true"
-                                 [reorderableColumns]="true"
-                                 [scrollable]="true"
-                                 scrollHeight="450px"
-                                 (onPage)="aircraftPageIndexChange($event)">
+                        <p-table #aircraftTable class="rpo-table-cstm rro-table-cstm"
+                            [columns]="selectedaircraftInformationCols" [value]="aircraftList" [paginator]="true"
+                            [rows]="aircraftPageSize" [first]="first" [rowsPerPageOptions]="[10, 20, 50, 100]"
+                            selectionMode="multiple" [metaKeySelection]="true" [resizableColumns]="true"
+                            [reorderableColumns]="true" [scrollable]="true" scrollHeight="450px"
+                            (onPage)="aircraftPageIndexChange($event)">
                             <ng-template pTemplate="caption">
                                 <div class="row">
                                     <div class="col">
-                                    <p-multiSelect [options]="aircraftInformationCols"
-                                                   [(ngModel)]="selectedaircraftInformationCols"
-                                                   name="customerContactsm1"
-                                                   optionLabel="header"
-                                                   selectedItemsLabel="{0} columns selected"
-                                                   [style]="{ minWidth: '200px' }"
-                                                   defaultLabel="Choose Columns"
-                                                   style="float:left"></p-multiSelect>
-                                                </div>
-                                                <div class="col">
-                                                  <div
-                                                    style="width: auto !important; float: right;"
-                                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                                  >
-                                        <i class="fa fa-search"></i>
-                                        <input type="text"
-                                               pInputText
-                                               size="50" [(ngModel)]="resetinputmodel" (onClear)="clearValue()"
-                                               class="form-control"
-                                               (input)="aircraftTable.filterGlobal($event.target.value, 'contains')"
-                                               placeholder="Filter"
-                                               style="height: 28px !important;" />
-                                            </div>
+                                        <p-multiSelect [options]="aircraftInformationCols"
+                                            [(ngModel)]="selectedaircraftInformationCols" name="customerContactsm1"
+                                            optionLabel="header" selectedItemsLabel="{0} columns selected"
+                                            [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns"
+                                            style="float:left"></p-multiSelect>
+                                    </div>
+                                    <div class="col">
+                                        <div style="width: auto !important; float: right;"
+                                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" pInputText size="50" [(ngModel)]="resetinputmodel"
+                                                (onClear)="clearValue()" class="form-control"
+                                                (input)="aircraftTable.filterGlobal($event.target.value, 'contains')"
+                                                placeholder="Filter" style="height: 28px !important;" />
                                         </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col">
-                                    <button type="button"
-                                            class="btn btn-primary new-table-button"
-                                            pButton
-                                            icon="fa-download"
-                                            iconPos="left"
-                                            label="Export  Data"
-                                            matTooltip="Download  Data"
-                                            matTooltipPosition="above"
-                                            data-toggle="modal" 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export  Data"
+                                            matTooltip="Download  Data" matTooltipPosition="above" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = aircraftTable;"
-                                             data-target="#downloadAircraftConfirmation"
+                                            data-target="#downloadAircraftConfirmation"
                                             style="padding: 5px 10px !important;"></button>
-                                    <button type="button"
-                                            class="btn btn-primary new-table-button"
-                                            pButton
-                                            icon="fa-download"
-                                            iconPos="left"
-                                            label="Export Selected Data"
-                                            matTooltip="Download Selected Data"
-                                            matTooltipPosition="above"
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export Selected Data"
+                                            matTooltip="Download Selected Data" matTooltipPosition="above"
                                             (click)="aircraftTable.exportCSV({ selectionOnly: true })"
                                             style="padding: 5px 10px !important;"></button>
-                                    <button class="btn btn-primary"
-                                            style="padding: 5px 12px !important;"
-                                            *ngIf="showAdvancedSearchCardAircraft == false"
-                                            type="button"
+                                        <button class="btn btn-primary" style="padding: 5px 12px !important;"
+                                            *ngIf="showAdvancedSearchCardAircraft == false" type="button"
                                             (click)="enableDisableAdvancedSearchAircraft(true)">
-                                        Advanced Search <i class="fa fa-caret-down"></i>
-                                    </button>
-                                    <button class="btn btn-primary"
-                                            style="padding: 5px 12px !important;"
-                                            *ngIf="showAdvancedSearchCardAircraft == true"
-                                            type="button"
+                                            Advanced Search <i class="fa fa-caret-down"></i>
+                                        </button>
+                                        <button class="btn btn-primary" style="padding: 5px 12px !important;"
+                                            *ngIf="showAdvancedSearchCardAircraft == true" type="button"
                                             (click)="enableDisableAdvancedSearchAircraft(false)">
-                                        Advanced Search <i class="fa fa-caret-up"></i>
-                                    </button>
-                                </div>
+                                            Advanced Search <i class="fa fa-caret-up"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
@@ -937,8 +773,7 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <!-- <th>ID</th> -->
-                                    <th *ngFor="let col of columns" pResizableColumn
-                                        pReorderableColumn
+                                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{ col.header }}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -946,76 +781,57 @@
                                     <th>Action</th>
                                 </tr>
                                 <tr>
-                                    <th *ngFor="let col of columns"
-                                        [ngSwitch]="col.field">
-                                        <input style="width:100%;"
-                                               pInputText
-                                               type="text"
-                                               (input)="
+                                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text" (input)="
                         aircraftTable.filter($event.target.value, col.field, 'contains')
                         " />
                                     </th>
                                     <th></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body"
-                                         let-rowData
-                                         let-columns="columns"
-                                         let-rowIndex="rowIndex">
-                                <tr [pSelectableRow]="rowData"
-                                    [pContextMenuRow]="rowData">
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <!-- <td>{{ rowIndex + 1 }}</td> -->
-                                    <td *ngFor="let col of columns" class="ui-resizable-column"
-                                        pReorderableRowHandle>
+                                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
                                     <td>
                                         <span data-toggle="modal" data-target="#airCraftView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                               (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
-                                               matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                                (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
+                                                matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                         </span>
                                     </td>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="emptymessage"
-                                         let-columns
-                                         *ngIf="aircraftList.length == 0">
+                            <ng-template pTemplate="emptymessage" let-columns *ngIf="aircraftList.length == 0">
                                 <tr>
-                                    <td colspan="8"
-                                        style="color: red; font-weight: bold; text-align: center">
+                                    <td colspan="8" style="color: red; font-weight: bold; text-align: center">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total:</label>
-                                <input style="width: 5%;"
-                                       [(ngModel)]="aircraftTable._totalRecords"
-                                       [disabled]="true"
-                                       pInputText
-                                       type="text" />
+                                <input style="width: 5%;" [(ngModel)]="aircraftTable._totalRecords" [disabled]="true"
+                                    pInputText type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
 
                                 <input style="width: 5%;"
-                                       [ngModel]="getPageCount(aircraftTable._totalRecords, aircraftPageSize)"
-                                       [disabled]="true"
-                                       pInputText
-                                       type="text" />
+                                    [ngModel]="getPageCount(aircraftTable._totalRecords, aircraftPageSize)"
+                                    [disabled]="true" pInputText type="text" />
                             </ng-template>
                         </p-table>
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm"
-                            type="submit"
-                            (click)="changeOfTab('Atachapter');  saveTab('Aircraft')">
+                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                        (click)="changeOfTab('Atachapter');  saveTab('Aircraft')">
                         Next
                     </button>
-                    <button class="btn btn-primary pull-right button-save-cstm"
-                            type="submit"
-                            (click)="changeOfTab('PnMap')">
+                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                        (click)="changeOfTab('PnMap')">
                         Previous
                     </button>
 
@@ -1041,24 +857,25 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="popup-plusicon-cstm">Part Number </label>
-                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true" [(ngModel)]="selectedPartNumber" name="selectedPartNumber" id="selectedPartNumber" title="Part Number" required placeholder="Select Part Number" [showClear]="true"></p-dropdown>
+                                <p-dropdown class="imstock-pddowm imcapes-pddowm" [options]="pnData" filter="true"
+                                    [(ngModel)]="selectedPartNumber" name="selectedPartNumber" id="selectedPartNumber"
+                                    title="Part Number" required placeholder="Select Part Number" [showClear]="true">
+                                </p-dropdown>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group ">
                                 <label class="fs12">ATA Chapter</label>
-                                <p-multiSelect [options]="ataChapterList"
-                                               [(ngModel)]="selectedATAchapter"
-                                               (onChange)="getSubChapterByATAChapter()"
-                                               class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                <p-multiSelect [options]="ataChapterList" [(ngModel)]="selectedATAchapter"
+                                    (onChange)="getSubChapterByATAChapter()" class="pub-multi"
+                                    [resetFilterOnHide]="true"></p-multiSelect>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="fs12">ATA Sub Chapter</label>
-                                <p-multiSelect [options]="ataSubChapterList"
-                                               [(ngModel)]="selectedATASubChapter"
-                                               class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
+                                <p-multiSelect [options]="ataSubChapterList" [(ngModel)]="selectedATASubChapter"
+                                    class="pub-multi" [resetFilterOnHide]="true"></p-multiSelect>
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -1073,90 +890,55 @@
                 </div>
                 <div class="col-md-12">
                     <div class="shadow-Box" style="padding-left: 0px; padding-right: 0px;">
-                        <p-table #ataTable
-                                 class="rpo-table-cstm rro-table-cstm"
-                                 [columns]="selectedatacols"
-                                 [value]="ataList"
-                                 [paginator]="true"
-                                 [rows]="ataPageSize"
-                                 [first]="first"
-                                 [rowsPerPageOptions]="[10, 20, 50, 100]"
-                                 selectionMode="multiple"
-                                 [metaKeySelection]="true"
-                                 [resizableColumns]="true"
-                                 [reorderableColumns]="true"
-                                 [scrollable]="true"
-                                 scrollHeight="450px"
-                                 (onPage)="ataPageIndexChange($event)">
+                        <p-table #ataTable class="rpo-table-cstm rro-table-cstm" [columns]="selectedatacols"
+                            [value]="ataList" [paginator]="true" [rows]="ataPageSize" [first]="first"
+                            [rowsPerPageOptions]="[10, 20, 50, 100]" selectionMode="multiple" [metaKeySelection]="true"
+                            [resizableColumns]="true" [reorderableColumns]="true" [scrollable]="true"
+                            scrollHeight="450px" (onPage)="ataPageIndexChange($event)">
                             <ng-template pTemplate="caption">
                                 <div class="row">
                                     <div class="col">
-                                    <p-multiSelect [options]="atacols"
-                                                   [(ngModel)]="selectedatacols"
-                                                   name="customerContactsm1"
-                                                   optionLabel="header"
-                                                   selectedItemsLabel="{0} columns selected"
-                                                   [style]="{ minWidth: '200px' }"
-                                                   defaultLabel="Choose Columns"
-                                                   style="float:left"></p-multiSelect>
-                                                </div>
-                                                <div class="col">
-                                                  <div
-                                                    style="width: auto !important; float: right;"
-                                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                                  >
-                                  
-                                        <i class="fa fa-search"></i>
-                                        <input type="text"
-                                               pInputText
-                                               size="50" [(ngModel)]="resetinputmodel" (onClear)="clearValue()"
-                                               class="form-control"
-                                               (input)="ataTable.filterGlobal($event.target.value, 'contains')"
-                                               placeholder="Filter"
-                                               style="height: 28px !important;" />
-                                            </div>
+                                        <p-multiSelect [options]="atacols" [(ngModel)]="selectedatacols"
+                                            name="customerContactsm1" optionLabel="header"
+                                            selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
+                                            defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                    </div>
+                                    <div class="col">
+                                        <div style="width: auto !important; float: right;"
+                                            class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+
+                                            <i class="fa fa-search"></i>
+                                            <input type="text" pInputText size="50" [(ngModel)]="resetinputmodel"
+                                                (onClear)="clearValue()" class="form-control"
+                                                (input)="ataTable.filterGlobal($event.target.value, 'contains')"
+                                                placeholder="Filter" style="height: 28px !important;" />
                                         </div>
-                                      </div>
-                                      <div class="row">
-                                        <div class="col">
-                                    <button type="button"
-                                            class="btn btn-primary new-table-button"
-                                            pButton
-                                            icon="fa-download"
-                                            iconPos="left"
-                                            label="Export  Data"
-                                            matTooltip="Download  Data"
-                                            matTooltipPosition="above"
-                                         
-                                            data-toggle="modal" 
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export  Data"
+                                            matTooltip="Download  Data" matTooltipPosition="above" data-toggle="modal"
                                             (click)="selectedOnly = false; targetData = ataTable;"
-                                             data-target="#downloadAtaConfirmation"
+                                            data-target="#downloadAtaConfirmation"
                                             style="padding: 5px 10px !important;"></button>
-                                    <button type="button"
-                                            class="btn btn-primary new-table-button"
-                                            pButton
-                                            icon="fa-download"
-                                            iconPos="left"
-                                            label="Export Selected Data"
-                                            matTooltip="Download Selected Data"
-                                            matTooltipPosition="above"
+                                        <button type="button" class="btn btn-primary new-table-button" pButton
+                                            icon="fa-download" iconPos="left" label="Export Selected Data"
+                                            matTooltip="Download Selected Data" matTooltipPosition="above"
                                             (click)="ataTable.exportCSV({ selectionOnly: true })"
                                             style="padding: 5px 10px !important;"></button>
-                                    <button class="btn btn-primary"
-                                            style="padding: 5px 12px !important;"
-                                            *ngIf="showAdvancedSearchCardAta == false"
-                                            type="button"
+                                        <button class="btn btn-primary" style="padding: 5px 12px !important;"
+                                            *ngIf="showAdvancedSearchCardAta == false" type="button"
                                             (click)="enableDisableAdvancedSearchAta(true)">
-                                        Advanced Search <i class="fa fa-caret-down"></i>
-                                    </button>
-                                    <button class="btn btn-primary"
-                                            style="padding: 5px 12px !important;"
-                                            *ngIf="showAdvancedSearchCardAta == true"
-                                            type="button"
+                                            Advanced Search <i class="fa fa-caret-down"></i>
+                                        </button>
+                                        <button class="btn btn-primary" style="padding: 5px 12px !important;"
+                                            *ngIf="showAdvancedSearchCardAta == true" type="button"
                                             (click)="enableDisableAdvancedSearchAta(false)">
-                                        Advanced Search <i class="fa fa-caret-up"></i>
-                                    </button>
-                                </div>
+                                            Advanced Search <i class="fa fa-caret-up"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
@@ -1167,8 +949,7 @@
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
                                     <!-- <th>ID</th> -->
-                                    <th *ngFor="let col of columns" pResizableColumn
-                                        pReorderableColumn
+                                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{ col.header }}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
@@ -1176,71 +957,51 @@
                                     <th>Actions</th>
                                 </tr>
                                 <tr>
-                                    <th *ngFor="let col of columns"
-                                        [ngSwitch]="col.field">
-                                        <input style="width:100%;"
-                                               pInputText
-                                               type="text"
-                                               (input)="
+                                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                        <input style="width:100%;" pInputText type="text" (input)="
                       ataTable.filter($event.target.value, col.field, 'contains')
                       " />
                                     </th>
                                     <th></th>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="body"
-                                         let-rowData
-                                         let-columns="columns"
-                                         let-rowIndex="rowIndex">
-                                <tr [pSelectableRow]="rowData"
-                                    [pContextMenuRow]="rowData">
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+                                <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <!-- <td>{{ rowIndex + 1 }}</td> -->
-                                    <td *ngFor="let col of columns" class="ui-resizable-column"
-                                        pReorderableRowHandle>
+                                    <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
                                     <td>
                                         <span data-toggle="modal" data-target="#ataView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
-                                               (click)="openAtaView(rowData, ataView)" matTooltip="View"
-                                               matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                                (click)="openAtaView(rowData, ataView)" matTooltip="View"
+                                                matTooltipPosition="above"><i class="fa fa-eye"></i></a>
                                         </span>
                                     </td>
                                 </tr>
                             </ng-template>
-                            <ng-template pTemplate="emptymessage"
-                                         let-columns
-                                         *ngIf="ataList.length == 0">
+                            <ng-template pTemplate="emptymessage" let-columns *ngIf="ataList.length == 0">
                                 <tr>
-                                    <td colspan="6"
-                                        style="color: red; font-weight: bold; text-align: center">
+                                    <td colspan="6" style="color: red; font-weight: bold; text-align: center">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total:</label>
-                                <input style="width: 5%;"
-                                       [(ngModel)]="ataTable._totalRecords"
-                                       [disabled]="true"
-                                       pInputText
-                                       type="text" />
+                                <input style="width: 5%;" [(ngModel)]="ataTable._totalRecords" [disabled]="true"
+                                    pInputText type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
 
-                                <input style="width: 5%;"
-                                       [ngModel]="getPageCount(ataTable._totalRecords, ataPageSize)"
-                                       [disabled]="true"
-                                       pInputText
-                                       type="text" />
+                                <input style="width: 5%;" [ngModel]="getPageCount(ataTable._totalRecords, ataPageSize)"
+                                    [disabled]="true" pInputText type="text" />
                             </ng-template>
                         </p-table>
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <button class="btn btn-primary pull-right button-save-cstm"
-                            type="button"
-                            (click)="addNewRecord()">
+                    <button class="btn btn-primary pull-right button-save-cstm" type="button" (click)="addNewRecord()">
                         Add New
                     </button>
                     <!--  <button
@@ -1250,9 +1011,8 @@
                       >
                       Save
                     </button> -->
-                    <button class="btn btn-primary pull-right button-save-cstm"
-                            type="submit"
-                            (click)="changeOfTab('Aircraft')">
+                    <button class="btn btn-primary pull-right button-save-cstm" type="submit"
+                        (click)="changeOfTab('Aircraft')">
                         Previous
                     </button>
 
@@ -1263,69 +1023,72 @@
 </div>
 <!-- Add DashNumber Popup -->
 <div class="modal fade" id="downloadPublicationConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
-				<h4 class="modal-title">Are You Sure Want to Download?</h4>
-			</div>
-			<div class="modal-body" *ngIf="targetData">
-				<strong>
-					<span>
-						You are attempting to export {{targetData.totalRecords}} of records. 
-					</span> 
-				</strong>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" (click)="pnMappingTable.exportCSV(); closeDeleteModal();">Confirm</button>
-				<button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeDeleteModal()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+            </div>
+            <div class="modal-body" *ngIf="targetData">
+                <strong>
+                    <span>
+                        You are attempting to export {{targetData.totalRecords}} of records.
+                    </span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="pnMappingTable.exportCSV(); closeDeleteModal();">Confirm</button>
+                <button type="button" class="btn btn-danger" (click)="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="downloadAircraftConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" (click)="closeDeleteAircraftModal()">&times;</button>
-				<h4 class="modal-title">Are You Sure Want to Download?</h4>
-			</div>
-			<div class="modal-body" *ngIf="targetData">
-				<strong>
-					<span>
-						You are attempting to export {{targetData.totalRecords}} of records. 
-					</span> 
-				</strong>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" (click)="aircraftTable.exportCSV(); closeDeleteAircraftModal();">Confirm</button>
-				<button type="button" class="btn btn-danger" (click)="closeDeleteAircraftModal()">Cancel</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeDeleteAircraftModal()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+            </div>
+            <div class="modal-body" *ngIf="targetData">
+                <strong>
+                    <span>
+                        You are attempting to export {{targetData.totalRecords}} of records.
+                    </span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="aircraftTable.exportCSV(); closeDeleteAircraftModal();">Confirm</button>
+                <button type="button" class="btn btn-danger" (click)="closeDeleteAircraftModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="downloadAtaConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
-	<div class="modal-dialog modal-sm">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" (click)="closeDeleteAtaModal()">&times;</button>
-				<h4 class="modal-title">Are You Sure Want to Download?</h4>
-			</div>
-			<div class="modal-body" *ngIf="targetData">
-				<strong>
-					<span>
-						You are attempting to export {{targetData.totalRecords}} of records. 
-					</span> 
-				</strong>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" (click)="ataTable.exportCSV(); closeDeleteAtaModal();">Confirm</button>
-				<button type="button" class="btn btn-danger" (click)="closeDeleteAtaModal()">Cancel</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" (click)="closeDeleteAtaModal()">&times;</button>
+                <h4 class="modal-title">Are You Sure Want to Download?</h4>
+            </div>
+            <div class="modal-body" *ngIf="targetData">
+                <strong>
+                    <span>
+                        You are attempting to export {{targetData.totalRecords}} of records.
+                    </span>
+                </strong>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary"
+                    (click)="ataTable.exportCSV(); closeDeleteAtaModal();">Confirm</button>
+                <button type="button" class="btn btn-danger" (click)="closeDeleteAtaModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -1429,8 +1192,10 @@
                 </strong>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteConformation('Yes')">Yes</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deleteConformation('No')">No</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="deleteConformation('Yes')">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"
+                    (click)="deleteConformation('No')">No</button>
             </div>
         </div>
 
@@ -1444,26 +1209,32 @@
     <div class="modal-body">
         <div class="col-sm-12">
             <p>
-                <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAircraftData.partNumber }}</span>
+                <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAircraftData.partNumber
+                    }}</span>
             </p>
             <p>
-                <span class="label"><b>Part Description: </b></span><span class="value">{{ viewAircraftData.partDescription }}</span>
+                <span class="label"><b>Part Description: </b></span><span class="value">{{
+                    viewAircraftData.partDescription }}</span>
             </p>
             <p>
-                <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAircraftData.manufacturerName }}</span>
+                <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAircraftData.manufacturerName
+                    }}</span>
             </p>
             <p>
-                <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAircraftData.itemGroup }}</span>
+                <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAircraftData.itemGroup
+                    }}</span>
             </p>
             <p>
-                <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType }}</span>
+                <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType
+                    }}</span>
             </p>
 
             <p>
                 <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
             </p>
             <p>
-                <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber }}</span>
+                <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber
+                    }}</span>
             </p>
 
 
@@ -1492,20 +1263,24 @@
                 <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAtaData.partNumber }}</span>
             </p>
             <p>
-                <span class="label"><b>Part Description: </b></span><span class="value">{{ viewAtaData.partDescription }}</span>
+                <span class="label"><b>Part Description: </b></span><span class="value">{{ viewAtaData.partDescription
+                    }}</span>
             </p>
             <p>
-                <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAtaData.manufacturerName }}</span>
+                <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAtaData.manufacturerName
+                    }}</span>
             </p>
             <p>
                 <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAtaData.itemGroup }}</span>
             </p>
             <p>
-                <span class="label"><b>ATA Chapter: </b></span><span class="value">{{ viewAtaData.ataChapterName }}</span>
+                <span class="label"><b>ATA Chapter: </b></span><span class="value">{{ viewAtaData.ataChapterName
+                    }}</span>
             </p>
 
             <p>
-                <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{ viewAtaData.ataSubChapterDescription }}</span>
+                <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{
+                    viewAtaData.ataSubChapterDescription }}</span>
             </p>
 
 
@@ -1523,16 +1298,11 @@
     </div>
 
 </ng-template>
-<div class="modal fade"
-     id="addDocumentDetailsNew"
-     role="dialog"
-     data-backdrop="static">
+<div class="modal fade" id="addDocumentDetailsNew" role="dialog" data-backdrop="static">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button"
-                        class="close"
-                        (click)="closeMyModel('#addDocumentDetailsNew')">
+                <button type="button" class="close" (click)="closeMyModel('#addDocumentDetailsNew')">
                     &times;
                 </button>
                 <h4 class="modal-title">{{ isEditButton ? 'Edit' : 'Add' }} Document Details</h4>
@@ -1543,7 +1313,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="fileupload">Tag Type <span class="clr-red">*</span> </label>
-                                <select name="tagTypeId" [(ngModel)]="sourcePublication.tagTypeId" (ngModelChange)="enableSave()" required>
+                                <select name="tagTypeId" [(ngModel)]="sourcePublication.tagTypeId"
+                                    (ngModelChange)="enableSave()" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let tagTypeItem of fileTagTypesList" [ngValue]="tagTypeItem.value">
                                         {{ tagTypeItem.label }}
@@ -1552,19 +1323,13 @@
                             </div>
                             <div class="form-group">
                                 <label>Name <span class="clr-red">*</span></label>
-                                <input class="form-control"
-                                       type="text"
-                                       name="name"
-                                       (ngModelChange)="enableSave()" 
-                                       [(ngModel)]="documentInformation.docName"
-                                       required />
+                                <input class="form-control" type="text" name="name" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="documentInformation.docName" required />
                             </div>
                             <div class="form-group">
                                 <label>Description </label>
-                                <textarea class="form-control"
-                                          name="description"
-                                          (ngModelChange)="enableSave()" 
-                                          [(ngModel)]="documentInformation.docDescription"></textarea>
+                                <textarea class="form-control" name="description" (ngModelChange)="enableSave()"
+                                    [(ngModel)]="documentInformation.docDescription"></textarea>
                             </div>
                             <!-- <div class="form-group">
                                 <label>Memo </label>
@@ -1576,53 +1341,38 @@
                             <div class="form-group">
                                 <span class="label">Memo </span>
                                 <div class="col-sm-11">
-                                  <span>                    
-                                    <div class="form-group memo-popup-cstm mat_emo">
-                                      <div
-                                      (ngModelChange)="enableSave()"
-                                        [innerHTML]="documentInformation.docMemo"
-                                        [matTooltip]="parsedText(documentInformation.docMemo)"
-                                        matTooltipPosition="above"
-                                        (change)="attachCertificateUpdateFlag = false"
-                                        class="form-control"
-                                        style="width: 109%;line-height:1.5"
-                                        class="text_editor_box"
-                                      ></div>
-                                    </div>
-                                  </span>
+                                    <span>
+                                        <div class="form-group memo-popup-cstm mat_emo">
+                                            <div (ngModelChange)="enableSave()"
+                                                [innerHTML]="documentInformation.docMemo"
+                                                [matTooltip]="parsedText(documentInformation.docMemo)"
+                                                matTooltipPosition="above"
+                                                (change)="attachCertificateUpdateFlag = false" class="form-control"
+                                                style="width: 109%;line-height:1.5" class="text_editor_box"></div>
+                                        </div>
+                                    </span>
                                 </div>
                                 <div class="col-sm-1">
-                                  <span style="margin-left:10px">
-                                    <a
-                                    class="btn nobg"
-                                    data-toggle="modal"
-                                    (ngModelChange)="enableSave()"
-                                    data-target="#memo-popup-Doc"
-                                    (click)="onClickMemo()"
-                                    matTooltip="Add Memo"
-                                    matTooltipPosition="above">
-                                    <i style="color: #337ab7" class="fa fa-pencil"></i>
-                                    </a>
-                                  </span>
+                                    <span style="margin-left:10px">
+                                        <a class="btn nobg" data-toggle="modal" (ngModelChange)="enableSave()"
+                                            data-target="#memo-popup-Doc" (click)="onClickMemo()" matTooltip="Add Memo"
+                                            matTooltipPosition="above">
+                                            <i style="color: #337ab7" class="fa fa-pencil"></i>
+                                        </a>
+                                    </span>
                                 </div>
-                              </div>
+                            </div>
                         </div>
 
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label style="float: none;">Attachments <span class="clr-red">*</span></label>
-                                <p-fileUpload #fileUploadInput
-                                               name="fileupload[]"
-                                              multiple="multiple"
-                                              [showCancelButton]="false"
-                                              [showUploadButton]="false"
-                                              customUpload="true"
-                                              (onSelect)="fileUpload($event)"
-                                              (onRemove)="removeFile($event)"></p-fileUpload>
+                                <p-fileUpload #fileUploadInput name="fileupload[]" multiple="multiple"
+                                    [showCancelButton]="false" [showUploadButton]="false" customUpload="true"
+                                    (onSelect)="fileUpload($event)" (onRemove)="removeFile($event)"></p-fileUpload>
                             </div>
                         </div>
-                        <div class="table-responsive table-overflow"
-                             *ngIf="isEditButton">
+                        <div class="table-responsive table-overflow" *ngIf="isEditButton">
                             <h4 class="panel-title" style="padding-left: 10px;">
                                 Attachment Details:
                             </h4>
@@ -1635,16 +1385,15 @@
                                 <tr>
                                     <td>{{sourceViewforDocument.fileName}}</td>
                                     <td>
-                                        <a *ngIf="sourceViewforDocument.attachmentDetailId > 0" (click)="downloadFileUpload(sourceViewforDocument.link)"
-                                           matTooltip="Download" matTooltipPosition="above"
-                                           class="btn nobg btn-cstm">
+                                        <a *ngIf="sourceViewforDocument.attachmentDetailId > 0"
+                                            (click)="downloadFileUpload(sourceViewforDocument.link)"
+                                            matTooltip="Download" matTooltipPosition="above" class="btn nobg btn-cstm">
                                             <span><i class="fa fa-download"></i></span>
                                         </a>
                                         <a *ngIf="sourceViewforDocument.attachmentDetailId==0"
-                                           [href]="sourceViewforDocument.link"
-                                           download="{{sourceViewforDocument.fileName}}"
-                                           matTooltip="Download" matTooltipPosition="above"
-                                           class="filelink">
+                                            [href]="sourceViewforDocument.link"
+                                            download="{{sourceViewforDocument.fileName}}" matTooltip="Download"
+                                            matTooltipPosition="above" class="filelink">
                                             <span><i class="fa fa-download"></i></span>
                                         </a>
                                     </td>
@@ -1654,25 +1403,20 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button"
-                            *ngIf="!isEditButton"
-                            class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
-                            (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
-                            [disabled]="!addDocumentForm.valid ||  disableFileAttachmentSubmit==false">
+                    <button type="button" *ngIf="!isEditButton" class="btn btn-primary pull-right submit-btn"
+                        style="text-align:center"
+                        (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
+                        [disabled]="!addDocumentForm.valid ||  disableFileAttachmentSubmit==false">
                         Add
                     </button>
-                    <button type="button"
-                            *ngIf="isEditButton"
-                            class="btn btn-primary pull-right submit-btn"
-                            style="text-align:center"
-                            (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
-                            [disabled]="!addDocumentForm.valid || disableSave">
+                    <button type="button" *ngIf="isEditButton" class="btn btn-primary pull-right submit-btn"
+                        style="text-align:center"
+                        (click)="addDocumentInformation('#addDocumentDetailsNew',documentInformation)"
+                        [disabled]="!addDocumentForm.valid || disableSave">
                         Update
                     </button>
-                    <button type="button"
-                            class="btn btn-danger"
-                            (click)="dismissDocumentPopupModel('#addDocumentDetailsNew'); closeMyModel('#addDocumentDetailsNew')">
+                    <button type="button" class="btn btn-danger"
+                        (click)="dismissDocumentPopupModel('#addDocumentDetailsNew'); closeMyModel('#addDocumentDetailsNew')">
                         Close
                     </button>
                 </div>
@@ -1684,68 +1428,52 @@
 </div>
 
 <!-- memo code starts here -->
-<div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;" role="dialog" data-backdrop="static"
+    data-keyboard="false">
     <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">
-            &times;
-          </button>
-          <h4 class="modal-title">Edit Memo</h4>
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h4 class="modal-title">Edit Memo</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-fixed workflow-table-material">
+                    <thead>
+                        <th style="color: #fff;">Memo</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="white-space: inherit">
+                                <p-editor spellcheck="true" (ngModelChange)="enableSaveMemo()"
+                                    [(ngModel)]="memoPopupContent" [style]="{ height: '320px' }" name="memoPopupContent"
+                                    required></p-editor>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="float: right;">
+                    <button type="button" class="btn btn-primary"
+                        style="padding: 6px 12px !important; margin-top: 10px;" (click)="onClickPopupSave()"
+                        [disabled]="disableSaveMemo">
+                        Save
+                    </button>
+                    <button type="button" class="btn btn-danger" style="padding: 6px 12px !important; margin-top: 10px;"
+                        (click)="closeMemoModel()">
+                        Close
+                    </button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <table class="table table-bordered table-fixed workflow-table-material">
-            <thead>
-              <th style="color: #fff;">Memo</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="white-space: inherit">
-                  <p-editor
-                   spellcheck="true"
-                   (ngModelChange)="enableSaveMemo()"
-                    [(ngModel)]="memoPopupContent"
-                    [style]="{ height: '320px' }"
-                    name="memoPopupContent"
-                    required
-                  ></p-editor>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="float: right;">
-            <button
-              type="button"
-              class="btn btn-primary"
-              style="padding: 6px 12px !important; margin-top: 10px;"
-              (click)="onClickPopupSave()" [disabled]="disableSaveMemo">
-              Save
-            </button>
-            <button
-              type="button"
-              class="btn btn-danger"
-              style="padding: 6px 12px !important; margin-top: 10px;"
-              (click)="closeMemoModel()" >
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 <!-- memo code ends here -->
 
-<ng-template #contentAuditHist
-             let-c="close"
-             let-d="dismiss"
-             style="width:auto"
-             data-backdrop="static">
+<ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
     <div class="modal-header">
-        <h4 class="modal-title">History of  Documents</h4>
-        <button type="button"
-                class="close"
-                aria-label="Close"
-                (click)="dismissModelNew()">
+        <h4 class="modal-title">History of Documents</h4>
+        <button type="button" class="close" aria-label="Close" (click)="dismissModelNew()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -1797,7 +1525,7 @@
                 color: getColorCodeForHistory(i, 'docMemo', audit.docMemo)
                   ? 'black'
                   : 'red'
-              }" [innerHTML]="audit.docMemo" >
+              }" [innerHTML]="audit.docMemo">
                             <!-- {{ audit.docMemo }} -->
                         </td>
                         <td [ngStyle]="{
@@ -1825,16 +1553,10 @@
 </ng-template>
 
 
-<ng-template #deleteContent
-             let-c="close"
-             let-d="dismiss"
-             data-backdrop="static">
+<ng-template #deleteContent let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">
         <h4 class="modal-title">Are You Sure Want to Delete?</h4>
-        <button type="button"
-                class="close"
-                aria-label="Close"
-                (click)="dismissModelNew()">
+        <button type="button" class="close" aria-label="Close" (click)="dismissModelNew()">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
@@ -1846,9 +1568,7 @@
         </strong>
     </div>
     <div class="modal-footer">
-        <button type="button"
-                class="btn btn-success"
-                (click)="deleteItemAndCloseModelNew()">
+        <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModelNew()">
             Yes
         </button>
         <button type="button" class="btn btn-danger" (click)="dismissModelNew()">
@@ -1865,11 +1585,15 @@
                 <h4 class="modal-title">Update Revision Number</h4>
             </div>
             <div class="modal-body">
-                <p style="font-size: 14px;">Do you want to update <b>RevisionNum</b> from <b>{{sourcePublication.revisionNum}}</b> to <b>{{sourcePublication.revisionNum+1}}</b> ?</p>
+                <p style="font-size: 14px;">Do you want to update <b>RevisionNum</b> from
+                    <b>{{sourcePublication.revisionNum}}</b> to <b>{{sourcePublication.revisionNum+1}}</b> ?
+                </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="changeRevisionNum('Yes');">Yes & Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="changeRevisionNum('No');">No & Save</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                    (click)="changeRevisionNum('Yes');">Yes & Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="changeRevisionNum('No');">No
+                    & Save</button>
             </div>
         </div>
     </div>

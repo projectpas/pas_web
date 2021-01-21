@@ -53,6 +53,7 @@ export class RoSetupComponent implements OnInit {
 	showVendorCaptab:boolean  = false;
 	addressType:any  = 'RO';
 	id: number;
+	filterSearchText : string;
 	firstNamesbillTo1: any;
 	firstNamesShipTo1: any[];
 	vendorContactsForshipTo: any[] = [];
@@ -532,8 +533,12 @@ export class RoSetupComponent implements OnInit {
 	WarningsList: any;
 	WarningListId:any;
 	warningsandRestriction(Id) {       
-            this.WarningListId = VendorWarningEnum.Create_Repair_Order;
-            if (Id && this.WarningListId) {
+			this.WarningListId = VendorWarningEnum.Create_Repair_Order;
+			this.warningMessage = "";
+			this.warningID = 0;					
+			this.restrictID = 0;
+			this.restrictMessage= "";
+            if (Id && this.WarningListId) {						
                 this.commonService.vendorWarningsAndRestrction(Id, this.WarningListId).subscribe((res: any) => {
                     if (res) {
                         if(res.warning) {
@@ -552,7 +557,7 @@ export class RoSetupComponent implements OnInit {
                         else if (this.warningID != 0 && this.restrictID != 0) {
                             this.showAlertMessage();
                         } 
-                    }
+					}
                 },err => {
                     this.isSpinnerVisible = false;                   
                 });
@@ -1440,8 +1445,8 @@ export class RoSetupComponent implements OnInit {
 	
 	//#endregion
 	// Load Vendor data
-	loadvendorDataById(vendorId) {		
-		if (vendorId) {
+	loadvendorDataById(vendorId) {			
+		if (vendorId) {		
             this.vendorContactList = [];
             this.getVendorContactsListByID(vendorId);
             this.getVendorCreditTermsByID(vendorId);
@@ -1569,6 +1574,7 @@ export class RoSetupComponent implements OnInit {
 		this.newPartsList = [this.newObjectForParent];
 		if(data) {				
 			data[0].map((x, pindex) => {
+				console.log(x)
 				this.newPartsList = {
 					...x,							
 					partNumberId: {value: x.itemMasterId, label: x.partNumber},						
@@ -1594,6 +1600,7 @@ export class RoSetupComponent implements OnInit {
 					isApproved: x.isApproved ? x.isApproved : false,							
 					childList: this.getRepairOrderSplitPartsEdit(x, pindex,data[1]),
 					remQty: 0,
+					stocklineId:x.stocklineId
 				}
 				this.getManagementStructureForParentPart(this.newPartsList,data[1],data[3]);
 
@@ -1790,7 +1797,19 @@ export class RoSetupComponent implements OnInit {
 						parentdata.altEquiPartNumberId = getObjectById('value', parentdata.altEquiPartNumberId, parentdata.altPartCollection);
 					} else if(this.altPartNumList.length > 0) {
 						parentdata.altEquiPartNumberId = parentdata.altPartCollection[0];
-					}					
+					}				
+					this.workOrderService.getStockLineByItemMasterId(parentdata.itemMasterId, parentdata.conditionId).subscribe(resp => {
+						   parentdata.allStocklineDetails = resp;
+							if (parentdata.stockLineId) {
+							parentdata.stocklineId = getObjectById('stockLineId', parentdata.stockLineId, parentdata.allStocklineDetails);
+							}
+							this.getStockLineDetails(parentdata);
+					},err => {const errorLog = err;});
+					
+					// if(parentdata.conditionId && value != 'onEdit') {
+					// 	this.getStockLineByItemMasterId(parentdata);
+					// 	this.getPriceDetailsByCondId(parentdata);
+					// }					
 				}
 			}
 			
@@ -1892,7 +1911,7 @@ export class RoSetupComponent implements OnInit {
 		}
 		if (data.roPartSplitUserTypeId === this.vendorModuleId) {
 			this.onUserNameChange( this.vendorModuleId,data.roPartSplitUserId, data, pindex, cindex);
-			return getObjectById('vendorId', data.poPartSplitUserId, this.allActions);
+			return getObjectById('vendorId', data.roPartSplitUserId, this.allActions);
 		}
 		if (data.roPartSplitUserTypeId === this.companyModuleId) {
 			this.onUserNameChange(this.companyModuleId,data.roPartSplitUserId, data, pindex, cindex);
@@ -2003,6 +2022,7 @@ export class RoSetupComponent implements OnInit {
 				this.onGetExtCost(parentdata);
 			}
 		})
+		this.getStockLineByItemMasterId(parentdata);		
 	}
 	
 	onGetDiscPerUnit(partList) {
@@ -2391,29 +2411,7 @@ export class RoSetupComponent implements OnInit {
 		}, err => {
 			this.isSpinnerVisible = false;			
 		})
-	}
-
-	
-
-	// loadRepairOrderList(filterVal = '') {
-	// 	if (this.arrayROlist.length == 0) {
-    //         this.arrayROlist.push(0); }
-	// 	this.commonService.getRODataFilter(filterVal,20,this.arrayROlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
-	// 		const data = res.map(x => {
-	// 			return {
-	// 				value: x.repairOrderId,
-	// 				label: x.repairOrderNumber
-	// 			}
-	// 		});
-	// 		this.allRepairOrderInfo = [
-	// 			{value: 0, label: 'Select'}
-	// 		];
-	// 		this.allRepairOrderInfo = [...this.allRepairOrderInfo, ...data];
-	// 		this.allRepairOrderDetails = [...this.allRepairOrderInfo, ...data];
-	// 	},err => {
-	// 		this.isSpinnerVisible = false;				
-	// 	});
-	// }
+	}	
 
 	loadSalesOrderList(filterVal = '') {
 		if (this.arraySOlist.length == 0) {
@@ -2466,8 +2464,7 @@ export class RoSetupComponent implements OnInit {
 		this.getLegalEntity();	
 		this.getCountriesList();
 		this.loadPercentData();
-		this.loadWorkOrderList();
-		//this.loadRepairOrderList();
+		this.loadWorkOrderList();	
 		this.loadSalesOrderList();
 		this.loapartItems();
 		this.loadModuleListForVendorComp();
@@ -2615,6 +2612,10 @@ export class RoSetupComponent implements OnInit {
 				this.isSpinnerVisible = false;	
 				errmessage = errmessage + '<br />' + "Functional CUR is required."
 			}
+			if(!this.partListData[i].stocklineId || this.partListData[i].stocklineId == 0) {	
+				this.isSpinnerVisible = false;	
+				errmessage = errmessage + '<br />' + "Stockline is required."
+			}			
 			if(!this.partListData[i].foreignExchangeRate) {	
 				this.isSpinnerVisible = false;	
 				errmessage = errmessage + '<br />' + "FX Rate is required."
@@ -2760,8 +2761,8 @@ export class RoSetupComponent implements OnInit {
 				//reapairOrderNo: this.partListData[i].repairOrderId && this.getValueFromObj(this.partListData[i].repairOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].repairOrderId) : null,				
 				salesOrderId: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getValueFromObj(this.partListData[i].salesOrderId) : null,
 				//salesOrderNo: this.partListData[i].salesOrderId && this.getValueFromObj(this.partListData[i].salesOrderId) != 0 ? this.getlabelFromObj(this.partListData[i].salesOrderId) : null,				
-				//stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
-				stocklineId: 1,
+				stocklineId: this.partListData[i].stocklineId ? this.getValueByStocklineObj(this.partListData[i].stocklineId) : null,
+				//stocklineId: 1,
 				managementStructureId: this.partListData[i].managementStructureId && this.partListData[i].managementStructureId != 0  ? this.partListData[i].managementStructureId : null,
 				memo: this.partListData[i].memo,
 				isApproved: this.partListData[i].isApproved ? this.partListData[i].isApproved : false, 
@@ -2770,7 +2771,8 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,	
 				employeeID: this.employeeId ? this.employeeId : 0,						
-			}			
+			}		
+			console.log(this.parentObject)	
 			if (!this.isEditMode) {			
 				this.parentObjectArray.push({
 					...this.parentObject,
@@ -2805,7 +2807,7 @@ export class RoSetupComponent implements OnInit {
 	
 	
 	goToCreatePOList() {
-		this.route.navigate(['/vendorsmodule/vendorpages/app-create-po']);
+		this.route.navigate(['/vendorsmodule/vendorpages/app-create-ro']);
 	}	
 
 	loadcustomerData(strText = '') {
@@ -2851,12 +2853,10 @@ export class RoSetupComponent implements OnInit {
 					})]
 					partList.altPartCollection = partNumberFilter;
 				}				
-			}, err => {	
 			});
 	}
 
-	filterNames(event) {
-		
+	filterNames(event) {		
 		if (event.query !== undefined && event.query !== null) {
 			this.loadcustomerData(event.query); }
 	}
@@ -2903,66 +2903,6 @@ export class RoSetupComponent implements OnInit {
 			this.partListData[mainindex].childList.splice(index, 1);
 		}
 	}
-
-	// filterCustomerContactsForShipTo(event) {
-	// 	this.firstNamesShipTo = this.shipToContactData;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const customerContacts = [...this.shipToContactData.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesShipTo = customerContacts;
-	// 	}
-	// }
-
-	// filterVendorContactsForShipTo(event) {
-	// 	this.firstNamesShipTo1 = this.vendorContactsForshipTo;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorContacts = [...this.vendorContactsForshipTo.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesShipTo1 = vendorContacts;		
-
-	// 	}
-	// }
-
-	// filterShippingContacts(event) {
-	// 	this.contactListForShippingCompany = this.contactListForCompanyShipping;
-	// 	const customerContacts = [...this.contactListForCompanyShipping.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.contactListForShippingCompany = customerContacts;
-	// }
-
-	// filterBillingContact(event) {
-	// 	this.contactListForBillingCompany = this.contactListForCompanyBilling;
-	// 	const customerContacts = [...this.contactListForCompanyBilling.filter(x => {
-	// 		return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 	})]
-	// 	this.contactListForBillingCompany = customerContacts;
-	// }
-
-	// filterCustomerContactsForBillTo(event) {
-	// 	this.firstNamesbillTo = this.billToContactData;
-
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const customerContacts = [...this.billToContactData.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesbillTo = customerContacts;
-	// 	}
-	// }
-
-	// filterVendorContactsForBillTo(event) {
-	// 	this.firstNamesbillTo1 = this.vendorContactsForBillTO;
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorContacts = [...this.vendorContactsForBillTO.filter(x => {
-	// 			return x.firstName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.firstNamesbillTo1 = vendorContacts;
-	// 	}
-	// }	
 
 	onClickShipMemo() {
 		this.addressMemoLabel = 'Edit Ship';
@@ -3046,6 +2986,7 @@ export class RoSetupComponent implements OnInit {
 							this.newObjectForParent.conditionId = this.allconditioninfo[i].value;
 							this.newObjectForParent.itemMasterId = this.stocklineReferenceData.itemMasterId;
 							this.getPriceDetailsByCondId(this.newObjectForParent);
+							this.getStockLineByItemMasterId(this.newObjectForParent);
 						}
 					}
 				}       
@@ -3097,7 +3038,7 @@ export class RoSetupComponent implements OnInit {
 					}
 					this.getManagementStructureForParentEdit(newObject);
 					this.getPNDetailsById(newObject);
-					//this.getPriceDetailsByCondId(newObject);
+					this.getStockLineByItemMasterId(newObject);				
 					this.partListData = [...this.partListData, newObject]
 				}
 			})
@@ -3367,7 +3308,7 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	selectedVendorName(value) {
+	selectedVendorName(value) {		
 		this.loadvendorDataById(value.vendorId);
 	}
 	onChangeVendorContact(value) {
@@ -3452,13 +3393,6 @@ export class RoSetupComponent implements OnInit {
 			this.loadSubWorkOrderList(event.query, workOrderId,partList,index);
 		}
 	}
-
-// 	filterRepairOrderList(event) {
-
-// 		if (event.query !== undefined && event.query !== null) {
-// 			this.loadRepairOrderList(event.query);
-// 	}
-// }  
 
 	filterSalesOrderList(event) {
 		if (event.query !== undefined && event.query !== null) {
@@ -4461,14 +4395,13 @@ WarnRescticModel() {
 		}
 	}
 
-	filterStocklineNum(event, partsList) {
-		partsList.allStocklineDetails = partsList.allStocklineInfo;
-
+	filterStocklineNum(event, partList) {
+		partList.allStocklineDetails = partList.allStocklineDetails;
 		if (event.query !== undefined && event.query !== null) {
-			const stockline = [...partsList.allStocklineInfo.filter(x => {
+			const stockline = [...partList.allStocklineDetails.filter(x => {
 				return x.stockLineNumber.toLowerCase().includes(event.query.toLowerCase())
 			})]
-			partsList.allStocklineDetails = stockline;
+			partList.allStocklineDetails = stockline;
 		}
 	}
 	
@@ -4478,9 +4411,9 @@ WarnRescticModel() {
 		partList.purchaseOrderNum = '';
 		partList.controlNumber = '';
 		this.workOrderService.getStockLineByItemMasterId(partList.itemMasterId, partList.conditionId).subscribe(res => {
-			partList.allStocklineInfo = res;
-			if(partList.allStocklineInfo.length > 0) {
-				partList.stocklineId = partList.allStocklineInfo[0];
+			partList.allStocklineDetails = res;			
+			if(partList.allStocklineDetails.length > 0) {
+				partList.stocklineId = partList.allStocklineDetails[0];
 				this.getStockLineDetails(partList);
 			}
 		},err => {});

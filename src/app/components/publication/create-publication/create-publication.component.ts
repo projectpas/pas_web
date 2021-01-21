@@ -29,8 +29,9 @@ import { LocalStoreManager } from '../../../services/local-store-manager.service
 import { DBkeys } from '../../../services/db-Keys';
 import { error } from '@angular/compiler/src/util';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Subject } from 'rxjs';
 
-declare var $ : any;
+declare var $: any;
 
 
 @Component({
@@ -133,6 +134,7 @@ export class CreatePublicationComponent implements OnInit {
   publicationTypes: any[] = [];
   pnMappingPageSize: number = 10;
   aircraftPageSize: number = 10;
+  moduleName: any = 'Publications';
   // dropdown
 
   // publicationTypes = [
@@ -182,6 +184,7 @@ export class CreatePublicationComponent implements OnInit {
   viewAircraftData: any = {};
   viewAtaData: any = {};
   fileTagTypesList: any = [];
+  uploadDocs: Subject<boolean> = new Subject();
   selectedFileAttachment: any = {};
   disableFileAttachmentSubmit: boolean = true;
   publishedByModulesList: any = [];
@@ -329,16 +332,19 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   getPublicationTypes() {
-    this.commonService.smartDropDownList('PublicationType', 'PublicationTypeId', 'Name').subscribe(res => {
-      this.publicationTypes = res;
-    });
+    let publicationTypeId = this.sourcePublication.publicationTypeId ? this.sourcePublication.publicationTypeId : 0;
+    // this.commonService.smartDropDownList('PublicationType', 'PublicationTypeId', 'Name')
+    this.commonService.autoSuggestionSmartDropDownList("PublicationType", "PublicationTypeId", "Name", '', true, 0, [publicationTypeId].join(), this.masterCompanyId)
+      .subscribe(res => {
+        this.publicationTypes = res;
+      });
   }
 
   async getAllIntegrations() {
     if (this.arrayIntegrationlist.length == 0) {
       this.arrayIntegrationlist.push(0);
     }
-    await this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 100, this.arrayIntegrationlist.join()).subscribe(res => {
+    await this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 0, this.arrayIntegrationlist.join(), this.masterCompanyId).subscribe(res => {
       this.publicationTypes = res.map(x => {
         return {
           label: x.label, value: x.value
@@ -478,12 +484,23 @@ export class CreatePublicationComponent implements OnInit {
   }
 
 
+  get currentUserManagementStructureId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.managementStructureId
+      : null;
+  }
 
   async getAllEmployeeList() {
-    this.commonService.smartDropDownList('Employee', 'employeeId', 'firstName').subscribe(res => {
-      this.employeeList = res;
-      // this.employeeList = [{ label: 'Select Employee', value: null }, ...this.employeeList]
-    })
+    let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
+    // this.commonService.getAllSalesEmployeeListByJobTitle("Employee", "EmployeeId", "FirstName", '', true, 200, [verifiedBy].join(), this.masterCompanyId)
+    this.commonService.autoCompleteDropdownsEmployeeByMS('', true, 20, [verifiedBy].join(), this.currentUserManagementStructureId, this.masterCompanyId)
+      .subscribe(res => {
+        this.employeeList = res;
+      });
+    // this.commonService.smartDropDownList('Employee', 'employeeId', 'firstName').subscribe(res => {
+    //   this.employeeList = res;
+    //   // this.employeeList = [{ label: 'Select Employee', value: null }, ...this.employeeList]
+    // })
     // await this.employeeService.getEmployeeList().subscribe(res => {
     //   const responseData = res[0];
     //   this.employeeList = responseData.map(x => {
@@ -598,6 +615,13 @@ export class CreatePublicationComponent implements OnInit {
 
   //}
 
+
+  get masterCompanyId(): number {
+    return this.authService.currentUser
+      ? this.authService.currentUser.masterCompanyId
+      : 1;
+  }
+
   saveGeneralInfo() {
     this.data = this.sourcePublication;
     this.data.employeeId = this.data.employeeId ? this.data.employeeId : 0;
@@ -673,6 +697,7 @@ export class CreatePublicationComponent implements OnInit {
           )
           .subscribe(res => {
             this.isEnableNext = true;
+            this.uploadDocs.next(true);
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
             this.publicationRecordId = publicationRecordId,
@@ -998,19 +1023,15 @@ export class CreatePublicationComponent implements OnInit {
       this.aircraftModelsIdUrl !== '' &&
       this.dashNumberIdUrl !== '' && this.selectedAircraftPartNumber !== ""
     ) {
-      this.searchParams = `aircrafttypeid=${
-        this.aircraftManfacturerIdsUrl
-        }&aircraftmodelid=${this.aircraftModelsIdUrl}&dashNumberId=${
-        this.dashNumberIdUrl}&partNumber=${
-        this.selectedAircraftPartNumber}`;
+      this.searchParams = `aircrafttypeid=${this.aircraftManfacturerIdsUrl
+        }&aircraftmodelid=${this.aircraftModelsIdUrl}&dashNumberId=${this.dashNumberIdUrl}&partNumber=${this.selectedAircraftPartNumber}`;
     }
     // search only by manfacturer and Model and  publicationId
     else if (
       this.aircraftManfacturerIdsUrl !== '' &&
       this.aircraftModelsIdUrl !== ''
     ) {
-      this.searchParams = `aircrafttypeid=${
-        this.aircraftManfacturerIdsUrl
+      this.searchParams = `aircrafttypeid=${this.aircraftManfacturerIdsUrl
         }&aircraftmodelid=${this.aircraftModelsIdUrl}`;
     } else if (this.aircraftManfacturerIdsUrl !== '') {
       this.searchParams = `aircrafttypeid=${this.aircraftManfacturerIdsUrl}`;
@@ -1158,8 +1179,7 @@ export class CreatePublicationComponent implements OnInit {
     this.searchATAParams = '';
     // checks where multi select is empty or not and calls the service
     if (this.ataChapterIdUrl !== '' && this.ataSubchapterIdUrl !== '' && this.selectedPartNumber !== '') {
-      this.searchATAParams = `ATAChapterId=${
-        this.ataChapterIdUrl
+      this.searchATAParams = `ATAChapterId=${this.ataChapterIdUrl
         }&ATASubChapterID=${this.ataSubchapterIdUrl}&partNumber=${this.selectedPartNumber}`;
     }
     else if (this.ataChapterIdUrl !== '') {
@@ -1668,11 +1688,19 @@ export class CreatePublicationComponent implements OnInit {
   async getGlocationsList(event) {
     // if(event.query.length < 2)
     // return false;
-    await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
+    let locationId = this.sourcePublication.locationId ? this.sourcePublication.locationId : 0;
+    this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query ? event.query : '', true, 20, [locationId].join(), this.masterCompanyId).subscribe(res => {
+
+      // await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
       this.gLocationsList = res;
     });
   }
 
+
+
+  changeOfStatus(status) {
+    this.disableSave = false;
+  }
 
   getFilesByPublicationId() {
 
@@ -1695,9 +1723,15 @@ export class CreatePublicationComponent implements OnInit {
   //Get Published By Modules List
 
   getPublishedByModulesList() {
-    this.publicationService.getPublishedByModuleList().subscribe(res => {
+    let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
+    this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
+
+      // await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
       this.publishedByModulesList = res;
     });
+    // this.publicationService.getPublishedByModuleList().subscribe(res => {
+    //   this.publishedByModulesList = res;
+    // });
   }
   getPublishedByReferencesList(event, id) {
     let tableName = "";
@@ -1712,7 +1746,10 @@ export class CreatePublicationComponent implements OnInit {
       tableColumnId = "ManufacturerId";
       tableColumnName = "Name";
     }
-    this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
+    let publishedBy = this.sourcePublication.publishedByRefId ? this.sourcePublication.publishedByRefId : 0;
+    // this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH)
+
+    this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query ? event.query : '', true, 20, [publishedBy].join(), this.masterCompanyId).subscribe(res => {
       this.publishedByReferences = res;
     });
   }
@@ -1747,6 +1784,6 @@ export class CreatePublicationComponent implements OnInit {
 
   }
 
-  clearValue() {}
+  clearValue() { }
 }
 // updatePublicationGeneralInfo

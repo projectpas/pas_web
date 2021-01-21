@@ -614,22 +614,31 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
         console.log(event);
         this.shipViaId = event;
     }
-    // IsAddShipVia:boolean = false;
-    // ShipViaEditID:number;
-	// onEditShipVia(value,id) {
-	// 	//this.IsAddShipVia = false;
-	// 	//this.ShipViaEditID = id;
-	// 	if(value == 'Add') {
-    //     //this.ShipViabutton = true;
-    //     this.ShipViaEditID = 0;
-	// 	}	
-	// 	else {
-    //         this.ShipViaEditID = this.shipViaId;
-	// 		//this.ShipViabutton = false;
-	// 		//this.isEditModeShipVia = true;	
-	// 	}
-	// 	//this.getValueforShipVia();
-	// 	this.IsAddShipVia = true;
-
-	// }
+    IsAddShipVia:boolean = false;
+    ShipViaEditID:number;
+    shipviaindex;
+    isEditModeShipVia:boolean=false;
+	onEditShipVia(value,id,index) {
+        this.shipviaindex = index;
+		if(value == 'Add') {
+        //this.ShipViabutton = true;
+        this.ShipViaEditID = 0;
+		}	
+		else {
+            this.ShipViaEditID = id;
+			//this.ShipViabutton = false;
+			this.isEditModeShipVia = true;	
+		}
+		this.IsAddShipVia = true;
+    }
+    
+    RefreshAfterAddShipVia(ShippingViaId){
+        this.commonService.getShipVia().subscribe(response => {
+            this.isSpinnerVisible = false;
+            this.setShipViaList(response);
+            this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+            this.IsAddShipVia = false;
+            this.isEnableUpdateButton = false;
+        }, error => this.onDataLoadError(error));
+    }
 }

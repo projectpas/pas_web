@@ -347,7 +347,12 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             });
     }
 
-    berDetermination(): any {
+    berDetermination(value,from): any {
+        
+        if(from=='html'){
+            this.sourceWorkFlow.fixedAmount=value  
+        }
+
         if (this.sourceWorkFlow.fixedAmount) {
             this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
         }
@@ -396,6 +401,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         if (this.sourceWorkFlow.berThresholdAmount > 0) {
             this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
         }
+        this.calculateTotalWorkFlowCost(false)
     }
 
     loadWorkFlow() {
@@ -1160,26 +1166,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.displaySelectedAction(selAction);
         }
     }
-    // setCalculationData(){
-    // //     this.EstMaterialCost= this.MaterialCost0;
-    // // this.EstTotalExpertiseCost=0
-    // // this.EstTotalCharges=0
-    // // this.EstTotalOthers=0
-    // // this.TotalEst=0
-    // // this.PercentBERThreshold=0
 
-    // this.calculateTotalWorkFlowCost(true);
-    // }
-    onChangeOtherCost() {
-        if (this.UpdateMode) {
-            this.disableUpdateButton = false;
-        }
-
-        const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
-        const val = ((otherCost / 100) * this.sourceWorkFlow.percentageOfCharges) + otherCost;
-        this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
-        this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : null;
-    }
     onMaterialCostChange(percentValue, from) {
 
         if (from == 'html') {
@@ -1244,7 +1231,43 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             this.EstTotalOthers = '0.00';
         }
     }
+    //input
+    onChangeOtherCost() {
+        if (this.UpdateMode) {
+            this.disableUpdateButton = false;
+        }
+
+        const otherCost = parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, ''));
+        const val = ((otherCost / 100) * this.sourceWorkFlow.percentageOfCharges) + otherCost;
+        this.EstTotalOthers = formatNumberAsGlobalSettingsModule(val, 2);
+        this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : null;
+        this.setTotalCharges();
+    }
+    onTotalChange(percentValue, from) {
+        this.TotalEst = '0.00';
+        if (this.Total) {
+            const Total = parseFloat(this.Total.toString().replace(/\,/g, ''));
+            const val = ((Total / 100) * percentValue) + Total;
+            this.TotalEst = formatNumberAsGlobalSettingsModule(val, 2);
+        } else {
+            this.TotalEst = '0.00';
+        }
+    }
+ 
     setTotalCharges() {
+        const EstMaterialCost = parseFloat(this.EstMaterialCost.toString().replace(/\,/g, ''));
+        const EstTotalExpertiseCost = parseFloat(this.EstTotalExpertiseCost.toString().replace(/\,/g, ''));
+        const EstTotalCharges = parseFloat(this.EstTotalCharges.toString().replace(/\,/g, ''));
+        const EstTotalOthers = parseFloat(this.EstTotalOthers.toString().replace(/\,/g, ''));
+        const total = EstMaterialCost + EstTotalExpertiseCost + EstTotalCharges + EstTotalOthers;
+        this.TotalEst = formatNumberAsGlobalSettingsModule(total, 2);
+const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
+const maxValue = Math.max(0, total, berThAmt);
+const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
+let percentageofBerThreshold: any = (minValue) / (maxValue / 100);
+this.PercentBERThreshold = parseFloat(percentageofBerThreshold).toFixed(2);
+this.percentBERTh = (this.PercentBERThreshold  ? formatNumberAsGlobalSettingsModule(this.PercentBERThreshold, 2) : '0.00') + '%';
+
     }
     percentBERTh:any;
     calculateTotalWorkFlowCost(isDisplayErrorMesage: boolean): any {
@@ -1267,24 +1290,26 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         this.TotalCharges = this.TotalCharges ? formatNumberAsGlobalSettingsModule(this.TotalCharges, 2) : '0.00';
         this.TotalExpertiseCost = this.TotalExpertiseCost ? formatNumberAsGlobalSettingsModule(this.TotalExpertiseCost, 2) : '0.00';
         this.sourceWorkFlow.otherCost = this.sourceWorkFlow.otherCost ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.otherCost, 2) : '0.00';
-        if (this.isOnload == true) {
-            this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
-            this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise, 'onload');
-            this.onChargesChange(this.sourceWorkFlow.percentageOfCharges, 'onload');
-            this.onOtherChange(this.sourceWorkFlow.percentageOfOthers, 'onload');
-            this.onTotalChange(this.sourceWorkFlow.percentageOfTotal, 'onload');
-
-            const totlapercent = (this.sourceWorkFlow.percentageOfMaterial + this.sourceWorkFlow.percentageOfExpertise + this.sourceWorkFlow.percentageOfCharges + this.sourceWorkFlow.percentageOfOthers) / 4
-            this.sourceWorkFlow.percentageOfTotal = totlapercent;
-            this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
-        }
+      
         const materialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
         const totalCharges = parseFloat(this.TotalCharges.toString().replace(/\,/g, ''));
         const totalExpertiseCost = parseFloat(this.TotalExpertiseCost.toString().replace(/\,/g, ''));
         const otherCost = this.sourceWorkFlow.otherCost ? parseFloat(this.sourceWorkFlow.otherCost.toString().replace(/\,/g, '')) : 0.00;
         const total = materialCost + totalCharges + totalExpertiseCost + otherCost;
         this.Total = formatNumberAsGlobalSettingsModule(total, 2);
-        this.TotalEst = this.Total
+        // this.TotalEst = this.Total;
+        if (this.isOnload == true) {
+            const totlapercent = (this.sourceWorkFlow.percentageOfMaterial + this.sourceWorkFlow.percentageOfExpertise + this.sourceWorkFlow.percentageOfCharges + this.sourceWorkFlow.percentageOfOthers) / 4
+            this.sourceWorkFlow.percentageOfTotal = totlapercent;
+            this.sourceWorkFlow.totPer = (totlapercent > 0 ? formatNumberAsGlobalSettingsModule(totlapercent, 2) : '0.00') + '%';
+            this.onMaterialCostChange(this.sourceWorkFlow.percentageOfMaterial, 'onload');
+            this.onExpertiseCostChange(this.sourceWorkFlow.percentageOfExpertise, 'onload');
+            this.onChargesChange(this.sourceWorkFlow.percentageOfCharges, 'onload');
+            this.onOtherChange(this.sourceWorkFlow.percentageOfOthers, 'onload');
+            this.onTotalChange(this.sourceWorkFlow.percentageOfTotal, 'onload');
+
+            
+        }
         const berThAmt = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''));
         const maxValue = Math.max(0, total, berThAmt);
         const minValue = Math.min(total, berThAmt) !== -Infinity ? Math.min(total, berThAmt) : 0;
@@ -1304,17 +1329,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
             return true;
         }
     }
-    onTotalChange(percentValue, from) {
-        this.TotalEst = '0.00';
-        if (this.Total) {
-            percentValue = percentValue == -1 || percentValue == "-1" ? 0 : percentValue;
-            const Total = parseFloat(this.Total.toString().replace(/\,/g, ''));
-            const val = ((Total / 100) * percentValue) + this.Total;
-            this.TotalEst = formatNumberAsGlobalSettingsModule(val, 2);
-        } else {
-            this.TotalEst = '0.00';
-        }
-    }
+
 
     onPercentOfNew(myValue, percentValue = 0) {
         this.sourceWorkFlow.costOfNew = this.sourceWorkFlow.costOfNew ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.costOfNew, 2) : null;
@@ -1326,7 +1341,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         } else {
             this.sourceWorkFlow.percentOfNew = 0;
         }
-        this.berDetermination();
+        this.berDetermination(0,'onload'); 
     }
 
     onPercentOfReplcaement(myValue, percentValue = 0) {
@@ -1340,7 +1355,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
         } else {
             this.sourceWorkFlow.percentOfReplacement = 0;
         }
-        this.berDetermination();
+        this.berDetermination(0,'onload'); 
     }
 
     getWorkFlowMaterial() {
@@ -2146,7 +2161,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     addWorkFlow(isHeaderUpdate: boolean): void {
         this.isheadUpdate = isHeaderUpdate;
         this.sourceWorkFlow.workflowId = undefined;
-// debugger;
+
 this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
 // this.finalThrsh = parseFloat(this.sourceWorkFlow.berThresholdAmount.toString().replace(/\,/g, ''))
         if (!this.validateWorkFlowHeader()) {
