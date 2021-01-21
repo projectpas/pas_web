@@ -13,7 +13,7 @@
                 <th> Source </th>
                 <th> Aircraft </th>
                 <th> Model </th>
-                <th style="min-width: 120px;"> Dash Number </th>
+                <th style="min-width: 180px;"> Dash Number </th>
                 <th> Location </th>
                 <th> Verified By </th>
                 <th> Verified Date </th>
@@ -28,7 +28,7 @@
                     <div style="display: inline-flex;">
                         <select class="form-control wf-pub-id full-width" 
                             [(ngModel)]="publ.publicationId"
-                            (change)="onPublicationChange($event, publ); getAircraftByPublicationId($event.target.value, i)"
+                            (change)="onPublicationChange($event, publ,i); getAircraftByPublicationId($event.target.value, i)"
                             required>
                             <option [value]="0">--Select--</option>
                             <option *ngFor="let dropdown of publicationDropdown" [value]="dropdown.publicationRecordId">
@@ -107,7 +107,7 @@
                     </select>
                 </td>
                 <td>
-                    <a (click)="downloadFileUpload(publ)" class="btn nobg btn-cstm" style="color: #2e2ed8;">
+                    <a  class="btn nobg btn-cstm" style="color: #2e2ed8;">
                         <span class="blue-href" *ngFor="let x of publ.attachmentDetails"
                             (click)="downloadFileUpload(x)">{{x.fileName}},</span>
                     </a>
