@@ -345,14 +345,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         SP_FSP_CurrencyId: null,
         SP_FSP_FXRatePerc: 0,
         SP_FSP_FlatPriceAmount: null,
-        SP_FSP_LastFlatPriceDate: new Date(),
+        SP_FSP_LastFlatPriceDate: null,//new Date(),
         SP_CalSPByPP_MarkUpPercOnListPrice: null,
         SP_CalSPByPP_MarkUpAmount: null,
-        SP_CalSPByPP_LastMarkUpDate: new Date(),
+        SP_CalSPByPP_LastMarkUpDate: null,// new Date(),
         SP_CalSPByPP_BaseSalePrice: null,
         SP_CalSPByPP_SaleDiscPerc: null,
         SP_CalSPByPP_SaleDiscAmount: null,
-        SP_CalSPByPP_LastSalesDiscDate: new Date(),
+        SP_CalSPByPP_LastSalesDiscDate: null,// new Date(),
         SP_CalSPByPP_UnitSalePrice: null,
         isEditable: false,
         isNewItem: true
@@ -4071,35 +4071,36 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if(field.SalePriceSelectId == 1) {
             field.SP_CalSPByPP_MarkUpPercOnListPrice = '0.00';
             field.SP_CalSPByPP_MarkUpAmount = '0.00';
-            field.SP_CalSPByPP_LastMarkUpDate = new Date();
+            field.SP_CalSPByPP_LastMarkUpDate = '';// new Date();
             field.SP_CalSPByPP_BaseSalePrice = '0.00';
             field.SP_CalSPByPP_SaleDiscPerc = '0.00';
             field.SP_CalSPByPP_SaleDiscAmount = '0.00';
-            field.SP_CalSPByPP_LastSalesDiscDate = new Date();
+            field.SP_CalSPByPP_LastSalesDiscDate = ''; //new Date();
             field.SP_CalSPByPP_UnitSalePrice = '0.00';
+            field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
         } 
         else if(field.SalePriceSelectId == 2) {
             field.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
-            field.SP_FSP_CurrencyId = null;
+            field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
             field.SP_FSP_FXRatePerc = 1;
             field.SP_FSP_FlatPriceAmount = '0.00';
-            field.SP_FSP_LastFlatPriceDate = new Date();
+            field.SP_FSP_LastFlatPriceDate = '' //new Date();
             this.getPercentValueSPUsingPP(field);
         } 
         else {
             field.SP_CalSPByPP_MarkUpPercOnListPrice = '0.00';
             field.SP_CalSPByPP_MarkUpAmount = '0.00';
-            field.SP_CalSPByPP_LastMarkUpDate = new Date();
+            field.SP_CalSPByPP_LastMarkUpDate = ''; //new Date();
             field.SP_CalSPByPP_BaseSalePrice = '0.00';
             field.SP_CalSPByPP_SaleDiscPerc = '0.00';
             field.SP_CalSPByPP_SaleDiscAmount = '0.00';
-            field.SP_CalSPByPP_LastSalesDiscDate = new Date();
+            field.SP_CalSPByPP_LastSalesDiscDate = '' ;//new Date();
             field.SP_CalSPByPP_UnitSalePrice = '0.00';
             field.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
-            field.SP_FSP_CurrencyId = null;
+            field.SP_FSP_CurrencyId = this.sourceItemMaster.purchaseCurrencyId;
             field.SP_FSP_FXRatePerc = 1;
             field.SP_FSP_FlatPriceAmount = '0.00';
-            field.SP_FSP_LastFlatPriceDate = new Date();
+            field.SP_FSP_LastFlatPriceDate = '';// new Date();
         }
     }
 
@@ -5033,6 +5034,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     addFieldValue(): void {
         this.newFields.PP_UOMId = this.sourceItemMaster.purchaseUnitOfMeasureId;
         this.newFields.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
+        this.newFields.PP_CurrencyId = this.sourceItemMaster.purchaseCurrencyId;
+        this.newFields.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
         this.newFields.isEditable = true;
         this.newFields.isNewItem = true;
         this.newFields.PP_FXRatePerc = 1;
