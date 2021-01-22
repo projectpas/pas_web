@@ -1034,15 +1034,16 @@ export class PolistComponent implements OnInit {
 	exportCSV(dt) {
         this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
-		//let PagingData = { ...dt, filters: listSearchFilterObjectCreation(dt.filters), status: status, "rows":dt.totalRecords }
-		let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"employeeId":this.employeeId,"masterCompanyId" :this.currentUserMasterCompanyId,"status":this.currentStatusPO,"isDeleted":isdelete},"globalFilter":""}
-		let filters = Object.keys(dt.filters);
+		//let PagingData = { ...dt, filters: listSearchFilterObjectCreation(dt.filters), status: status, "rows":dt.totalRecords }		
+        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"employeeId":this.employeeId,"masterCompanyId" :this.currentUserMasterCompanyId,"status":this.currentStatusPO,"isDeleted":isdelete},"globalFilter":""}
+        let filters = Object.keys(dt.filters);
 		filters.forEach(x=>{
 			PagingData.filters[x] = dt.filters[x].value;
         });
         
         this.purchaseOrderService.getPOList(PagingData).subscribe(res => {
-            const vList  = res['results'].map(x => {
+            // const vList  = res['results'].map(x => {
+            dt._value = res['results'].map(x => {
                 return {
                     ...x,
                     openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',
@@ -1050,12 +1051,14 @@ export class PolistComponent implements OnInit {
                     createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                     updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 }
-            });      
-              
-            dt._value = vList;
+            });             
             dt.exportCSV();
-            dt.value = vList;
-            this.isSpinnerVisible = false;           
+			dt.value = this.data;
+        	this.isSpinnerVisible = false;              
+            // dt._value = vList;
+            // dt.exportCSV();
+            // dt.value = vList;
+            // this.isSpinnerVisible = false;           
         }, err => {
             this.isSpinnerVisible = false;  
         });

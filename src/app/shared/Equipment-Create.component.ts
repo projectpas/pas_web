@@ -76,7 +76,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
         }
-        this.ptnumberlistdata();
+        this.ptnumberlistdata('');
     }
 
     ngOnChanges(): void {
@@ -123,7 +123,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 event = "";
                 this.alertService.showMessage("Workflow", "Asset Id is already in use in Tool List", MessageSeverity.error);
             }
-            else {
+            else { 
                 for (let i = 0; i < this.itemclaColl.length; i++) {
                     if (event == this.itemclaColl[i][0].name) {
                         equipment.assetId = this.itemclaColl[i][0].assetId;
@@ -137,7 +137,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
         }
     }
-
+  
     filterpartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.ptnumberlistdata(event.query);
@@ -178,6 +178,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 }
             }
         }
+        this.ptnumberlistdata(event.query);
     }
     
     private ptnumberlistdata(strvalue = '') {
