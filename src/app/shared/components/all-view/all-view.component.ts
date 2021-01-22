@@ -143,8 +143,8 @@ export class AllViewComponent implements OnInit {
     let PovendorId = this.vendorId;     
     this.vendorIdByParams = this.PovendorId;
     this.isPoViewMode = true;
-    this.vendorId = PovendorId;
-    this.capvendorId = PovendorId;
+    this.vendorId = this.PovendorId;
+    this.capvendorId = this.PovendorId;    
     if (this.OrderTypes == 'Purchase Order') {
       this.loadingIndicator = true;
       this.getPOViewById(OrderId);
@@ -272,24 +272,7 @@ export class AllViewComponent implements OnInit {
       })
     }
   }
-
-  WarningsList: any;
-  WarningListId: any;
-  getWarningsList(): void {
-    this.commonService.smartDropDownList('VendorWarningList', 'VendorWarningListId ', 'Name').subscribe(res => {
-      res.forEach(element => {
-        if (element.label == 'Create Purchase Order') {
-          this.WarningListId = element.value;
-          return;
-        }
-      });
-    }, err => {
-      this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.errorMessageHandler(errorLog);
-    });
-  }
-
+  
   getPurchaseOrderSplit(partList) {
     if (partList.purchaseOrderSplitParts) {
       return partList.purchaseOrderSplitParts.map(y => {
@@ -314,9 +297,7 @@ export class AllViewComponent implements OnInit {
           this.getApproversByTask(poId)
         }
       }, err => {
-        this.isSpinnerVisible = false;
-        const errorLog = err;
-        this.errorMessageHandler(errorLog);
+        this.isSpinnerVisible = false;        
       });
     }
     else {
@@ -345,6 +326,7 @@ export class AllViewComponent implements OnInit {
     }
 
   }
+
   getroApproversByTask(roId) {
     this.rointernalApproversList = [];
     this.isSpinnerVisible = true;
@@ -458,15 +440,7 @@ export class AllViewComponent implements OnInit {
   dismissModel() {
     this.activeModal.close();
   }
-
-  errorMessageHandler(log) {
-    this.alertService.showMessage(
-      'Error',
-      log.error,
-      MessageSeverity.error
-    );
-  }
-
+ 
   formatePrice(value) {
     if (value) {
       return formatNumberAsGlobalSettingsModule(value, 2);

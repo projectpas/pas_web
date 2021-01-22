@@ -20,18 +20,19 @@
                                 {{ summaryColumn.header }}
                             </ng-container>
                         </th>
-                        <th colspan="14"></th>
+                        <th colspan="15"></th>
                         <th style="position: sticky !important; min-width: 100px">Actions</th>
                     </tr>
-                    <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
-                        <tbody>
-                            <tr ngClass="'row-bg1'" pReorderableRowHandle>
-                                <td *ngFor="let summaryColumn of summaryColumns" style="width:auto"
-                                    pReorderableRowHandle>
-                                    <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
-                                        {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
-                                    </span>
-                                    <span *ngIf="summaryColumn.field != 'hidePart'
+                    <ng-container *ngIf="summaryParts.length > 0">
+                        <ng-container *ngFor="let summaryPart of summaryParts;let rowIndex=index;">
+                            <tbody>
+                                <tr ngClass="'row-bg1'" pReorderableRowHandle>
+                                    <td *ngFor="let summaryColumn of summaryColumns" style="width:auto;background-color: #EAF2C5 !important;"
+                                        pReorderableRowHandle>
+                                        <span class="float-right" *ngIf="summaryColumn.field == 'fixRate'">
+                                            {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe : '1.5'}}
+                                        </span>
+                                        <span *ngIf="summaryColumn.field != 'hidePart'
                                             && summaryColumn.field != 'quantityRequested'
                                             && summaryColumn.field != 'quantityToBeQuoted'
                                             && summaryColumn.field != 'quantityAlreadyQuoted'
@@ -46,14 +47,14 @@
                                             && summaryColumn.field != 'unitCostExtended'
                                             && summaryColumn.field != 'marginAmountExtended'
                                             && summaryColumn.field != 'marginPercentageExtended'">
-                                        {{summaryPart[summaryColumn.field]}}
-                                    </span>
-                                    <span class="float-right" *ngIf="summaryColumn.field == 'quantityRequested'
+                                            {{summaryPart[summaryColumn.field]}}
+                                        </span>
+                                        <span class="float-right" *ngIf="summaryColumn.field == 'quantityRequested'
                                             || summaryColumn.field == 'quantityToBeQuoted'
                                             || summaryColumn.field == 'quantityAlreadyQuoted'">
-                                        {{summaryPart[summaryColumn.field] | globalNmberFormat}}
-                                    </span>
-                                    <span class="float-right" *ngIf="summaryColumn.field == 'grossSalePrice'
+                                            {{summaryPart[summaryColumn.field] | globalNmberFormat}}
+                                        </span>
+                                        <span class="float-right" *ngIf="summaryColumn.field == 'grossSalePrice'
                                             || summaryColumn.field == 'salesDiscountExtended'
                                             || summaryColumn.field == 'netSalesPriceExtended'
                                             || summaryColumn.field == 'misc'
@@ -63,276 +64,279 @@
                                             || summaryColumn.field == 'unitCostExtended'
                                             || summaryColumn.field == 'marginAmountExtended'
                                             || summaryColumn.field == 'marginPercentageExtended'">
-                                        {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
-                                    </span>
-                                </td>
-                                <td colspan="14"></td>
-                                <td class="center">
-                                    <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
-                                        matTooltip="View Stock Line" matTooltipPosition="above"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    <a [class.disabled]="salesQuote.isApproved || isViewMode"
-                                        [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                        class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
-                                        matTooltip="Add/Edit PN" matTooltipPosition="above"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                        <i class="fa fa-pencil"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr class="child-header splitship-head child-header-back">
-                                <th>PN</th>
-                                <th>PN Description</th>
-                                <th>Stk Line Num</th>
-                                <th>Ser Num</th>
-                                <th>Cond</th>
-                                <th>Priority<span class="clr-red">*</span></th>
-                                <th>Quote Date</th>
-                                <th>Qty Available<span class="clr-red">*</span></th>
-                                <th>Qty Quoted<span class="clr-red">*</span></th>
-                                <th>Qty Prev Quoted</th>
-                                <th>Cust Request Date<span class="clr-red">*</span></th>
-                                <th>Cust Promised Date<span class="clr-red">*</span></th>
-                                <th>Est.Ship Date<span class="clr-red">*</span></th>
-                                <th>Status</th>
-                                <th>Unit Cost</th>
-                                <th>MarkUp %</th>
-                                <th>MarkUp Amt/Unit</th>
-                                <th>Gross Price/Unit</th>
-                                <th>Disc. %</th>
-                                <th>Disc. Amt/Unit</th>
-                                <th>MarkUp Amt</th>
-                                <th style="min-width: 92px !important;">Gross Sales Amt</th>
-                                <th style="min-width: 60px !important;">Disc. Amt</th>
-                                <th style="min-width: 85px !important;">Net Sales Amt</th>
-                                <th style="min-width: 220px !important;">Tax Type & Rate</th>
-                                <th style="min-width: 55px !important;">Tax Amt</th>
-                                <th style="min-width: 45px !important;">Total</th>
-                                <th style="min-width: 85px !important;">Extended Cost</th>
-                                <th style="min-width: 92px !important;">Product Margin</th>
-                                <th style="min-width: 110px !important;">Product Margin (%)</th>
-                                <th style="min-width: 60px !important;">Stk Type</th>
-                                <th style="min-width: 92px !important;">Alt/Equiv</th>
-                                <th style="min-width: 80px !important;">Cntrl Num</th>
-                                <th style="min-width: 92px !important;">Cntrl ID Num</th>
-                                <th style="min-width: 120px">Notes</th>
-                                <th style="min-width: 120px; position: sticky !important">Actions</th>
-                            </tr>
-                            <tr class="child-data splitship-child child-data-back"
-                                *ngFor="let part of summaryPart.childParts; let stockIndex = index"
-                                [hidden]="part.isDeleted">
-                                <!-- <td></td> -->
-                                <!-- <td class="center"><i class="fa fa-trash parts-list-delete-msg"
-                                        matTooltip="Delete Split Shipment" matTooltipPosition="above"
-                                        (click)="deleteSplitShipment(summaryPart,row_no,row_index)"
-                                        *ngIf="!summaryPart.isApproved"></i></td> -->
-                                <td>
-                                    {{ part.partNumber }}
-                                </td>
-                                <td>
-                                    {{ part.description }}
-                                </td>
-                                <td>
-                                    {{ part.stockLineNumber }}
-                                </td>
-                                <td>
-                                    {{ part.serialNumber }}
-                                </td>
-                                <td>
-                                    {{ part.conditionDescription }}
-                                </td>
-                                <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                    <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
-                                        #priorityId="ngModel" (change)="onEditPartDetails()">
-                                        <option *ngFor="let p of priorities" [ngValue]="p.priorityId">
-                                            {{ p.description }}
-                                        </option>
-                                    </select>
-                                </td>
-                                <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
-                                    {{ part.priorityName }}
-                                </td>
-                                <td>
-                                    {{ salesQuote.openDate | date: "MM/dd/yyyy"}}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.qtyAvailable | globalNmberFormat}}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.quantityToBeQuoted | globalNmberFormat}}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.quantityAlreadyQuoted | globalNmberFormat}}
-                                </td>
-                                <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
-                                    {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
-                                </td>
-                                <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
-                                        class="pas-clder" [showIcon]="true" appendTo="body" name="customerRequestDate"
-                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                        [(ngModel)]="part.customerRequestDate"
-                                        (ngModelChange)="onCustomerDateChange(stockIndex, rowIndex)"
-                                        #customerRequestDate="ngModel" [minDate]="salesQuote.openDate" required>
-                                    </p-calendar>
-                                    <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
-                                        class="alert alert-danger alert-danger-cstm">
-                                        <div *ngIf="customerRequestDate.errors.required">
-                                            <small>Customer Request Date is required </small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
-                                    {{  part.promisedDate | date: "MM/dd/yyyy"}}
-                                </td>
-                                <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
-                                        class="pas-clder" [showIcon]="true" appendTo="body" name="promisedDate"
-                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                        [(ngModel)]="part.promisedDate" (ngModelChange)="onEditPartDetails()"
-                                        #promisedDate="ngModel" [minDate]="salesQuote.openDate" required>
-                                    </p-calendar>
-                                    <div *ngIf="promisedDate.invalid && (promisedDate.dirty || promisedDate.touched)"
-                                        class="alert alert-danger alert-danger-cstm">
-                                        <div *ngIf="promisedDate.errors.required">
-                                            <small>Promised Date is required </small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
-                                    {{  part.estimatedShipDate | date: "MM/dd/yyyy" }}
-                                </td>
-                                <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                    <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
-                                        class="pas-clder" [showIcon]="true" appendTo="body" name="estimatedShipDate"
-                                        [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                        [(ngModel)]="part.estimatedShipDate" (ngModelChange)="onEditPartDetails()"
-                                        #estimatedShipDate="ngModel" [minDate]="salesQuote.openDate" required>
-                                    </p-calendar>
-                                    <div *ngIf="estimatedShipDate.invalid && (estimatedShipDate.dirty || estimatedShipDate.touched)"
-                                        class="alert alert-danger alert-danger-cstm">
-                                        <div *ngIf="estimatedShipDate.errors.required">
-                                            <small>Estimated Ship Date is required </small>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td *ngIf="isViewMode == false" class="text-left">
-                                    {{ salesQuote.statusName }}
-                                </td>
-                                <td *ngIf="isViewMode == true">
-                                    {{ salesQuote.status }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.unitCostPerUnit  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.markUpPercentage  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.markupPerUnit  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.salesDiscount  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.markupExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.salesDiscountExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.netSalesPriceExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.taxType }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.taxAmount  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.totalSales  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.unitCostExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.marginAmountExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td class="text-right">
-                                    {{ part.marginPercentageExtended  | twoDecimalGlobalNumberFormatPipe }}
-                                </td>
-                                <td>
-                                    {{ part.pmaStatus }}
-                                </td>
-                                <td>
-                                    {{ part.altOrEqType }}
-                                </td>
-                                <td>
-                                    {{ part.controlNumber }}
-                                </td>
-                                <td>
-                                    {{ part.idNumber }}
-                                </td>
-                                <td style="width:120px"
-                                    *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
-                                    <div class="form-group notes-popup-cstm mat_emo"
-                                        style="width: 120px; margin-bottom: 0;">
-                                        <div [innerHTML]="part.notes" class="text_editor_box"></div>
-                                        <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
-                                            data-toggle="modal" data-target="#textarea-popupNotes" matTooltip="Notes"
-                                            matTooltipPosition="above"
-                                            (click)="onAddTextAreaInfo(part,stockIndex, rowIndex)"></i>
-                                    </div>
-                                </td>
-                                <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
-                                    <div [innerHTML]="part.notes" class="text_editor_box"></div>
-                                </td>
-                                <td class="zui-sticky-col" style="width:107px !important" *ngIf="isViewMode == false">
-                                    <a class="btn nobg" data-toggle="tooltip"
-                                        style="margin-left: 2px; padding-left: 2px; padding-right: 2px"
-                                        (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
-                                        <i class="fa fa-eye"></i>
-                                    </a>
-                                    <span *ngIf="!isEditDisabled(salesQuote, part)">
-                                        <a [class.disabled]="isEditDisabled(salesQuote, part)"
-                                            [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
-                                            class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit Price"
-                                            matTooltipPosition="above"
+                                            {{summaryPart[summaryColumn.field] | twoDecimalGlobalNumberFormatPipe}}
+                                        </span>
+                                    </td>
+                                    <td colspan="15" style="background-color: #EAF2C5 !important;"></td>
+                                    <td class="center">
+                                        <a class="btn nobg" (click)="viewPartNumber(summaryPart,rowIndex)"
+                                            matTooltip="View Stock Line" matTooltipPosition="above"
+                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a [class.disabled]="salesQuote.isApproved || isViewMode"
+                                            [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
+                                            class="btn nobg" (click)="addPartNumber(summaryPart,rowIndex)"
+                                            matTooltip="Add/Edit PN" matTooltipPosition="above"
                                             style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
                                             <i class="fa fa-pencil"></i>
                                         </a>
-                                    </span>
-                                    <span>
-                                        <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
-                                            [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
-                                            class="btn nobg" (click)="openPartDelete(deleteContent,part)"
-                                            matTooltip="Delete" matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
-                                            <i class="fa fa-trash"></i>
+                                    </td>
+                                </tr>
+                                <tr class="child-header splitship-head child-header-back">
+                                    <th style="background-color: #fff !important;"></th>
+                                    <th>PN</th>
+                                    <th>PN Description</th>
+                                    <th>Stk Line Num</th>
+                                    <th>Ser Num</th>
+                                    <th>Cond</th>
+                                    <th>Priority<span class="clr-red">*</span></th>
+                                    <th>Quote Date</th>
+                                    <th>Qty Available<span class="clr-red">*</span></th>
+                                    <th>Qty Quoted<span class="clr-red">*</span></th>
+                                    <th>Qty Prev Quoted</th>
+                                    <th>Cust Request Date<span class="clr-red">*</span></th>
+                                    <th>Cust Promised Date<span class="clr-red">*</span></th>
+                                    <th>Est.Ship Date<span class="clr-red">*</span></th>
+                                    <th>Status</th>
+                                    <th>Unit Cost</th>
+                                    <th>MarkUp %</th>
+                                    <th>MarkUp Amt/Unit</th>
+                                    <th>Gross Price/Unit</th>
+                                    <th>Disc. %</th>
+                                    <th>Disc. Amt/Unit</th>
+                                    <th>MarkUp Amt</th>
+                                    <th style="min-width: 92px !important;">Gross Sales Amt</th>
+                                    <th style="min-width: 60px !important;">Disc. Amt</th>
+                                    <th style="min-width: 85px !important;">Net Sales Amt</th>
+                                    <th style="min-width: 220px !important;">Tax Type & Rate</th>
+                                    <th style="min-width: 55px !important;">Tax Amt</th>
+                                    <th style="min-width: 45px !important;">Total</th>
+                                    <th style="min-width: 85px !important;">Extended Cost</th>
+                                    <th style="min-width: 92px !important;">Product Margin</th>
+                                    <th style="min-width: 110px !important;">Product Margin (%)</th>
+                                    <th style="min-width: 60px !important;">Stk Type</th>
+                                    <th style="min-width: 92px !important;">Alt/Equiv</th>
+                                    <th style="min-width: 80px !important;">Cntrl Num</th>
+                                    <th style="min-width: 92px !important;">Cntrl ID Num</th>
+                                    <th style="min-width: 120px">Notes</th>
+                                    <th style="min-width: 120px; position: sticky !important">Actions</th>
+                                </tr>
+                                <tr class="child-data splitship-child child-data-back"
+                                    *ngFor="let part of summaryPart.childParts; let stockIndex = index"
+                                    [hidden]="part.isDeleted">
+                                    <td></td>
+                                    <td>
+                                        {{ part.partNumber }}
+                                    </td>
+                                    <td>
+                                        {{ part.description }}
+                                    </td>
+                                    <td>
+                                        {{ part.stockLineNumber }}
+                                    </td>
+                                    <td>
+                                        {{ part.serialNumber }}
+                                    </td>
+                                    <td>
+                                        {{ part.conditionDescription }}
+                                    </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <select name="priorityId" [(ngModel)]="part.priorityId" required id="priorityId"
+                                            #priorityId="ngModel" (change)="onEditPartDetails()">
+                                            <option *ngFor="let p of priorities" [ngValue]="p.priorityId">
+                                                {{ p.description }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                        {{ part.priorityName }}
+                                    </td>
+                                    <td>
+                                        {{ salesQuote.openDate | date: "MM/dd/yyyy"}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.qtyAvailable | globalNmberFormat}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.quantityToBeQuoted | globalNmberFormat}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.quantityAlreadyQuoted | globalNmberFormat}}
+                                    </td>
+                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                        {{  part.customerRequestDate | date: "MM/dd/yyyy" }}
+                                    </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body"
+                                            name="customerRequestDate" [yearNavigator]="true" [monthNavigator]="true"
+                                            yearRange="1900:2100" [(ngModel)]="part.customerRequestDate"
+                                            (ngModelChange)="onCustomerDateChange(stockIndex, rowIndex)"
+                                            #customerRequestDate="ngModel" [minDate]="salesQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="customerRequestDate.invalid && (customerRequestDate.dirty || customerRequestDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="customerRequestDate.errors.required">
+                                                <small>Customer Request Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                        {{  part.promisedDate | date: "MM/dd/yyyy"}}
+                                    </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body" name="promisedDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="part.promisedDate" (ngModelChange)="onEditPartDetails()"
+                                            #promisedDate="ngModel" [minDate]="salesQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="promisedDate.invalid && (promisedDate.dirty || promisedDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="promisedDate.errors.required">
+                                                <small>Promised Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td *ngIf="isViewMode == true || isEditDisabled(salesQuote, part)">
+                                        {{  part.estimatedShipDate | date: "MM/dd/yyyy" }}
+                                    </td>
+                                    <td *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <p-calendar [ngClass]="inputValidCheckHeader ? 'p-clder-validate' : ''"
+                                            class="pas-clder" [showIcon]="true" appendTo="body" name="estimatedShipDate"
+                                            [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                            [(ngModel)]="part.estimatedShipDate" (ngModelChange)="onEditPartDetails()"
+                                            #estimatedShipDate="ngModel" [minDate]="salesQuote.openDate" required>
+                                        </p-calendar>
+                                        <div *ngIf="estimatedShipDate.invalid && (estimatedShipDate.dirty || estimatedShipDate.touched)"
+                                            class="alert alert-danger alert-danger-cstm">
+                                            <div *ngIf="estimatedShipDate.errors.required">
+                                                <small>Estimated Ship Date is required </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td *ngIf="isViewMode == false" class="text-left">
+                                        {{ salesQuote.statusName }}
+                                    </td>
+                                    <td *ngIf="isViewMode == true">
+                                        {{ salesQuote.status }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.unitCostPerUnit  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.markUpPercentage  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.markupPerUnit  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.grossSalePricePerUnit  | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.salesDiscount  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.salesDiscountPerUnit  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.markupExtended  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.grossSalePrice | twoDecimalGlobalNumberFormatPipe}}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.salesDiscountExtended  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.netSalesPriceExtended  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.taxType }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.taxAmount  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.totalSales  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.unitCostExtended  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.marginAmountExtended  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ part.marginPercentageExtended  | twoDecimalGlobalNumberFormatPipe }}
+                                    </td>
+                                    <td>
+                                        {{ part.pmaStatus }}
+                                    </td>
+                                    <td>
+                                        {{ part.altOrEqType }}
+                                    </td>
+                                    <td>
+                                        {{ part.controlNumber }}
+                                    </td>
+                                    <td>
+                                        {{ part.idNumber }}
+                                    </td>
+                                    <td style="width:120px"
+                                        *ngIf="isViewMode == false && !isEditDisabled(salesQuote, part)">
+                                        <div class="form-group notes-popup-cstm mat_emo"
+                                            style="width: 120px; margin-bottom: 0;">
+                                            <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                                            <i class="fa fa-pencil fa-lg pull-right nobg parts-memo-icon"
+                                                data-toggle="modal" data-target="#textarea-popupNotes"
+                                                matTooltip="Notes" matTooltipPosition="above"
+                                                (click)="onAddTextAreaInfo(part,stockIndex, rowIndex)"></i>
+                                        </div>
+                                    </td>
+                                    <td *ngIf=" isViewMode==true || isEditDisabled(salesQuote, part)">
+                                        <div [innerHTML]="part.notes" class="text_editor_box"></div>
+                                    </td>
+                                    <td class="zui-sticky-col" style="width:107px !important"
+                                        *ngIf="isViewMode == false">
+                                        <a class="btn nobg" data-toggle="tooltip"
+                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px"
+                                            (click)="viewStockSelectedRow(part)" matTooltip="View This StkLine">
+                                            <i class="fa fa-eye"></i>
                                         </a>
-                                    </span>
-                                    <span data-toggle="modal" data-target="#soqPartHistory">
-                                        <a [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}"
-                                            class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(part)"
-                                            matTooltip="History" matTooltipPosition="above"
-                                            style="margin-left: 2px; padding-left: 2px; padding-right: 2px"><i
-                                                class="fa fa-history"></i></a>
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr *ngIf="selectedParts.length == 0">
-                                <td [attr.colspan]="40" class="no-records-cstm no-records-msg">
+                                        <span *ngIf="!isEditDisabled(salesQuote, part)">
+                                            <a [class.disabled]="isEditDisabled(salesQuote, part)"
+                                                [ngClass]="{'btn_disabled': isEditDisabled(salesQuote, part)}"
+                                                class="btn nobg" (click)="openPartToEdit(part)" matTooltip="Edit Price"
+                                                matTooltipPosition="above"
+                                                style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                                <i class="fa fa-pencil"></i>
+                                            </a>
+                                        </span>
+                                        <span>
+                                            <a [class.disabled]="isDeleteDisabled(salesQuote, part)"
+                                                [ngClass]="{'btn_disabled': isDeleteDisabled(salesQuote, part)}"
+                                                class="btn nobg" (click)="openPartDelete(deleteContent,part)"
+                                                matTooltip="Delete" matTooltipPosition="above"
+                                                style="margin-left: 2px; padding-left: 2px; padding-right: 2px">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </span>
+                                        <span data-toggle="modal" data-target="#soqPartHistory">
+                                            <a [ngClass]="{'btn_disabled': !part.salesOrderQuotePartId}"
+                                                class="btn nobg btn-hist-cstm" (click)="getAuditHistoryById(part)"
+                                                matTooltip="History" matTooltipPosition="above"
+                                                style="margin-left: 2px; padding-left: 2px; padding-right: 2px"><i
+                                                    class="fa fa-history"></i></a>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </ng-container>
+                    </ng-container>
+                    <ng-container *ngIf="summaryParts.length == 0">
+                        <tbody>
+                            <tr>
+                                <td colspan="37" style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
                                     No records found
                                 </td>
                             </tr>

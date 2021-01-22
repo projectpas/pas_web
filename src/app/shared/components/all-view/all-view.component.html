@@ -128,7 +128,7 @@
               <p><span class="label"><b>Vendor Code<span _ngcontent-c22="" class="clr-red">*</span>: </b></span><span
                   class="value">{{roHeaderAdd.vendorCode ? roHeaderAdd.vendorCode : '-'}}</span></p>
               <p><span class="label"><b>Vendor Contact <span _ngcontent-c22="" class="clr-red">*</span>:
-                  </b></span><span class="value">{{roHeaderAdd.vendorContact ? roHeaderAdd.vendorContact : '-'}}</span>
+                  </b></span><span class="value">{{roHeaderAdd.contactName ? roHeaderAdd.contactName : '-'}}</span>
               </p>
               <p><span class="label"><b>Contact Phone: </b></span><span
                   class="value">{{roHeaderAdd.workPhone ? roHeaderAdd.workPhone : '-' }}</span></p>
@@ -566,7 +566,7 @@
               <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.billToState ? poHeaderAdd.billToState : '-'}}</span></p>
               <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.billToPostalCode ? poHeaderAdd.billToPostalCode : '-'}}</span></p>
               <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.billToCountry ? poHeaderAdd.billToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{poHeaderAdd.billToContact ? poHeaderAdd.billToContact : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{poHeaderAdd.billToContactName ? poHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
                 <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.billToMemo"></p>
@@ -665,7 +665,7 @@
                       <div [innerHTML]="partList?.memo" ></div>
                     </td>
                   </tr>
-                  <tr class="child-header splitship-head child-header-back"  *ngIf="partList.repairOrderSplitParts.length > 0">
+                  <tr class="child-header splitship-head child-header-back"  *ngIf="partList.repairOrderSplitParts">
                     <th></th>													
                     <th>PN</th>
                     <th>PN Description</th>
@@ -909,12 +909,12 @@
         </p-tabPanel>
        
         <p-tabPanel header="Vendor Capes">
-           <app-vendor-capes *ngIf="capvendorId > 0"     
+           <app-vendor-capes *ngIf="capvendorId > 0 && showVendorCaptab"     
             [vendorId]= "capvendorId"            
             [isViewMode]="isViewMode">
           </app-vendor-capes>
-        </p-tabPanel>     
-
+        </p-tabPanel>   
+        
         <p-tabPanel header="Address">
           <div class="table-responsive default-bg clear">
             <div class="col-sm-4">
@@ -954,7 +954,7 @@
               <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.billToState ? roHeaderAdd.billToState : '-'}}</span></p>
               <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.billToPostalCode ? roHeaderAdd.billToPostalCode : '-'}}</span></p>
               <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.billToCountry ? roHeaderAdd.billToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.billToContact ? roHeaderAdd.billToContact : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
               <p><span class="label"><b>Memo: </b></span><span class="value">
                 <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
                 <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>

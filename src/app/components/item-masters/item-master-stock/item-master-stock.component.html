@@ -572,8 +572,28 @@
                                             <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="allConsumeUnitOfMeasureinfo" filter="true" [(ngModel)]="sourceItemMaster.consumeUnitOfMeasureId" name="consumeUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
                                         </div>
                                         <!--/Consume UOM-->
+                                        <!--Purchase Currency-->
+                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                            <label class="control-label">
+                                                Purchase Currency <strong class="clr-red">*</strong>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="purchaseCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.purchaseCurrencyId" name="purchaseCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                        </div>
+                                        <!--/Purchase Currency-->
                                         <div class="clear"></div>
-
+                                        <!--Purchase Currency--> 
+                                        <div class="inline-block display-flex inline-adjust spacing-label" style="margin-top: 4px;">
+                                            <label class="control-label">
+                                                Sales Currency <strong class="clr-red">*</strong>
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <p-dropdown class="p-dropdown-100"  (ngModelChange)="getmemo()" [options]="salesCurrencyInfo" filter="true" [(ngModel)]="sourceItemMaster.salesCurrencyId" name="salesCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                        </div>
+                                        <!--/Purchase Currancy-->
+                                        <div class="clear"></div>
                                     </div>
                                 </div>
                                 <div class="col-md-4" >
@@ -1700,7 +1720,7 @@
                                             </td>
                                             <!-- FX Rate -->
                                             <td>
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe : '1.5'" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
+                                                <input type="text" style="width: 80px;" class="input-field-value text-right" [disabled]="field.isEditable == false" pInputText pKeyFilter="money" maxlength="15" required name="PP_FXRatePerc{{i}}" [ngModel]="field.PP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.PP_FXRatePerc=$event"  />
 
                                             </td>
                                             <!-- Vendor List Price -->
@@ -1713,7 +1733,7 @@
                                             </td>
                                             <!-- Purchase Disc % -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
+                                                <p-dropdown class="p-dropdown-50px" [options]="itemQuantitys" filter="true" [(ngModel)]="field.PP_PurchaseDiscPerc" name="PP_PurchaseDiscPerc{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" (onChange)="getPercentValuePP(field)" appendTo="body" [disabled]="field.isEditable == false"></p-dropdown>
                                             </td>
                                             <!-- Purchase Disc Amount -->
                                             <td>
@@ -1727,23 +1747,24 @@
                                             <td>
                                                 <input type="text" class="input-field-value text-right" style="width: 80px;" pInputText pKeyFilter="int" maxlength="15" name="PP_UnitPurchasePrice{{i}}" [ngModel]="field.PP_UnitPurchasePrice" disabled />
                                             </td>
+                                            <!-- Sale Price -->
                                             <td>
                                                 <p-dropdown class="p-dropdown-100px" [options]="allPurchaseAndSaleMasterList" [(ngModel)]="field.SalePriceSelectId" name="SalePriceSelectId{{i}}" placeholder="-- Select --" [showClear]="true" (onChange)="onChangeSalePriceSelectId(field)" appendTo="body" [disabled]="field.isEditable == false" required></p-dropdown>
                                             </td>
                                             <!-- UOM -->
                                             <td>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseInfoListActiveandInactive" filter="true" [(ngModel)]="field.SP_FSP_UOMId" name="SP_FSP_UOMId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" *ngIf="field.isNewItem == false" required></p-dropdown>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="field.SP_FSP_UOMId" name="SP_FSP_UOMId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" *ngIf="field.isNewItem == true" required></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseInfoListActiveandInactive" filter="true" [(ngModel)]="field.SP_FSP_UOMId" name="SP_FSP_UOMId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == false" required></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="field.SP_FSP_UOMId" name="SP_FSP_UOMId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == true" required></p-dropdown>
                                             </td>
                                             <!-- Currency -->
                                             <td> 
-                                                <p-dropdown class="p-dropdown-100px" [options]="allCurrencyInfoActiveandInactive" filter="true" [(ngModel)]="field.SP_FSP_CurrencyId" name="SP_FSP_CurrencyId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" *ngIf="field.isNewItem == false" required></p-dropdown>
-                                                <p-dropdown class="p-dropdown-100px" [options]="allCurrencyInfo" filter="true" [(ngModel)]="field.SP_FSP_CurrencyId" name="SP_FSP_CurrencyId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" *ngIf="field.isNewItem == true" required></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="allCurrencyInfoActiveandInactive" filter="true" [(ngModel)]="field.SP_FSP_CurrencyId" name="SP_FSP_CurrencyId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == false" required></p-dropdown>
+                                                <p-dropdown class="p-dropdown-100px" [options]="allCurrencyInfo" filter="true" [(ngModel)]="field.SP_FSP_CurrencyId" name="SP_FSP_CurrencyId{{i}}" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" appendTo="body" [disabled]="field.isEditable == false" *ngIf="field.isNewItem == true" required></p-dropdown>
                                             </td>
                                             <!-- FX Rate -->
                                             <td>
 
-                                                <input type="text" style="width: 80px;" class="input-field-value text-right" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5'" [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
+                                                <input type="text" style="width: 80px;" class="input-field-value text-right" pInputText pKeyFilter="money" [disabled]="field.isEditable == false || field.SalePriceSelectId != 1" maxlength="15" name="SP_FSP_FXRatePerc{{i}}" required [ngModel]="field.SP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe " [ngModelOptions]="{updateOn:'blur'}" (ngModelChange)="field.SP_FSP_FXRatePerc=$event"  />
                                             </td>
                                             <!-- Flat Price Amount -->
                                             <td>

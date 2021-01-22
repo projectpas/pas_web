@@ -348,62 +348,70 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     }
 
     berDetermination(value,from): any {
-        
+        console.log("values",value);
         if(from=='html'){
-            this.sourceWorkFlow.fixedAmount=value  
+            this.sourceWorkFlow.fixedAmount=value;
+        setTimeout(() => {
+            this.validateCOstflow()
+        }, 1000);
+        }else{
+            this.validateCOstflow()
         }
 
-        if (this.sourceWorkFlow.fixedAmount) {
-            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
-        }
-        // check on is percentOfNew enable
-        if (this.sourceWorkFlow.percentOfNew1) {
-            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
-        }
-        // check on is .percentOfReplacement enable
-        if (this.sourceWorkFlow.percentOfReplacement) {
-            this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
-        }
-
-        // 1 and 2 check box 
-        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew) {
-            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
-        }
-
-        // 2 and 3  check box 
-        if (this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
-            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
-        }
-        // 1 and 3  check box 
-        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
-            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
-        }
-
-        //1 and 2 and 3 check box
-        if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
-            const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
-            const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
-            const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
-            this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
-        }
-        //1 and 2 and 3 check box all uncheck 
-        if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
-            this.sourceWorkFlow.berThresholdAmount = 0.00;
-        }
-
-        this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
-        if (this.sourceWorkFlow.berThresholdAmount > 0) {
-            this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
-        }
-        this.calculateTotalWorkFlowCost(false)
+    
+   
+    }
+validateCOstflow(){
+    if (this.sourceWorkFlow.fixedAmount) {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
+    }
+    // check on is percentOfNew enable
+    if (this.sourceWorkFlow.percentOfNew1) {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
+    }
+    // check on is .percentOfReplacement enable
+    if (this.sourceWorkFlow.percentOfReplacement) {
+        this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfReplacement;
     }
 
+    // 1 and 2 check box 
+    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew) {
+        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew));
+    }
+
+    // 2 and 3  check box 
+    if (this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
+        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+    }
+    // 1 and 3  check box 
+    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfReplacement) {
+        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfReplacement));
+    }
+
+    //1 and 2 and 3 check box
+    if (this.sourceWorkFlow.fixedAmount && this.sourceWorkFlow.percentOfNew && this.sourceWorkFlow.percentOfReplacement) {
+        const fixedAmount = this.sourceWorkFlow.fixedAmount.toString().replace(/\,/g, '');
+        const percentOfNew = this.sourceWorkFlow.percentOfNew.toString().replace(/\,/g, '');
+        const percentOfReplacement = this.sourceWorkFlow.percentOfReplacement.toString().replace(/\,/g, '');
+        this.sourceWorkFlow.berThresholdAmount = Math.min(parseFloat(fixedAmount), parseFloat(percentOfNew), parseFloat(percentOfReplacement));
+    }
+    //1 and 2 and 3 check box all uncheck 
+    if (!this.sourceWorkFlow.fixedAmount && !this.sourceWorkFlow.percentOfNew && !this.sourceWorkFlow.percentOfReplacement) {
+        this.sourceWorkFlow.berThresholdAmount = 0.00;
+    }
+
+    this.sourceWorkFlow.fixedAmount = this.sourceWorkFlow.fixedAmount ? formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.fixedAmount, 2) : null;
+    if (this.sourceWorkFlow.berThresholdAmount > 0) {
+        this.sourceWorkFlow.berThresholdAmount = formatNumberAsGlobalSettingsModule(this.sourceWorkFlow.berThresholdAmount, 2);
+    }
+    this.calculateTotalWorkFlowCost(false)
+}
     loadWorkFlow() {
         if (this._workflowService.enableUpdateMode == true && !this.UpdateMode) {
             let workFlowId: any = this._workflowService.currentWorkFlowId;

@@ -12,11 +12,13 @@ import { CommonService } from '../../../services/common.service';
 import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { Subject } from 'rxjs/Subject';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-common-documents',
     templateUrl: './common-documents.component.html',
     styleUrls: ['./common-documents.component.scss'],
+    providers: [DatePipe]
 })
 /** common component*/
 export class CommonDocumentsComponent implements OnInit {
@@ -91,7 +93,7 @@ export class CommonDocumentsComponent implements OnInit {
     enableUpdate: boolean = false;
     hideUpoladThing:boolean=false;
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
-        private dialog: MatDialog, private configurations: ConfigurationService) {
+        private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
 
     ngOnInit() {
@@ -175,6 +177,13 @@ export class CommonDocumentsComponent implements OnInit {
         }
         if (this.isEditButton == true) {
             this.disableSave = false;
+        }
+        if (this.isEditButton == false) {
+            if ((this.selectedFileAttachment && this.selectedFileAttachment.length > 0)) {  //&& this.documentInformation.documentTypeId > 0
+                this.disableSave = false;
+            } else {
+                this.disableSave = true;
+            }
         }
     }
 
@@ -295,17 +304,17 @@ export class CommonDocumentsComponent implements OnInit {
 
     dateFilterForTable(date, field) {
         if (date !== '' && moment(date).format('MMMM DD YYYY')) {
-            this.commondocumentsDestructuredData = this.commondocumentsDestructuredDataOriginal;
-            const data = [...this.commondocumentsDestructuredData.filter(x => {
+            this.documentCollection = this.documentCollectionOriginal;
+            const data = [...this.documentCollection.filter(x => {
                 if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
                     return x;
                 } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
                     return x;
                 }
             })]
-            this.commondocumentsDestructuredData = data;
+            this.documentCollection = data;
         } else {
-            this.commondocumentsDestructuredData = this.commondocumentsDestructuredDataOriginal;
+            this.documentCollection = this.documentCollectionOriginal;
         }
     }
 
@@ -520,7 +529,7 @@ export class CommonDocumentsComponent implements OnInit {
 
         }
     }
-
+    documentCollectionOriginal:any=[];
     getList() {
         this.isSpinnerVisible = true;
         this.attachmoduleList.forEach(element => {
@@ -571,6 +580,7 @@ export class CommonDocumentsComponent implements OnInit {
                     });
                 }
             }
+            this.documentCollectionOriginal = this.documentCollection;
             this.isSpinnerVisible = false;
         }, err => {
             this.isSpinnerVisible = false;
@@ -585,7 +595,16 @@ export class CommonDocumentsComponent implements OnInit {
         $('#docView').modal("hide");
     }
 
-    exportCSV(data) {
+    exportCSV(documents) {
+        documents._value = documents._value.map(x => {
+            return {
+                ...x,
+                docMemo: x.docMemo.replace(/<[^>]*>/g, ''),
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+        documents.exportCSV();
     }
 
     fileUpload(event) {
@@ -643,6 +662,10 @@ export class CommonDocumentsComponent implements OnInit {
     newDocumentDetails: any = {};
     
     saveDocumentInformation() {
+        if(this.documentInformation.documentTypeId == 0){
+            this.alertService.showMessage("Error", `Please select document type.`, MessageSeverity.error);
+            return false;
+        }
         this.newDocumentDetails = {};
         this.documentInformation;
         if (this.selectedFileAttachment != [] && !this.isEditButton) {

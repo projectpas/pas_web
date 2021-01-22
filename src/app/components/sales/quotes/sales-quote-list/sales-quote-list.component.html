@@ -47,26 +47,40 @@
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
               (click)="dt.exportCSV({selectionOnly:true})"></button>
-            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <!-- <div class="pull-left radio-buttons-align">
               <label class="radio-cstm wauto">
                 <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
                   (click)="changeOfStatus('','soqview')">
                 <span class="checkmark"></span>SOQ View
               </label>
             </div>
-            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+            <div class="pull-left radio-buttons-align">
               <label class="radio-cstm wauto">
                 <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
                   (click)="changeOfStatus('','pnview')">
                 <span class="checkmark"></span>PN View
               </label>
-            </div>
+            </div> -->
           </div>
-          <div class="pull-right" style="padding-left:0px;">
-            <div class="">
-              <div class="col" style="float: right; padding: 3px 0 0;">
+          <div class="pull-right buttons-div-align">
+            <div class="col">
+              <div class="col buttons-top-padding">
                 <div class="form-group">
-                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;" *ngFor="let status of statusList">
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="viewType" class="form-control" value="soqview" [(ngModel)]="viewType"
+                        (click)="changeOfStatus('','soqview')">
+                      <span class="checkmark"></span>SOQ View
+                    </label>
+                  </div>
+                  <div class="pull-left radio-buttons-align">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="viewType" class="form-control" value="pnview" [(ngModel)]="viewType"
+                        (click)="changeOfStatus('','pnview')">
+                      <span class="checkmark"></span>PN View
+                    </label>
+                  </div>
+                  <div class="pull-left radio-buttons-align" *ngFor="let status of statusList">
                     <label class="radio-cstm wauto">
                       <input type="radio" name="currentStatus" class="form-control" value="{{status.value}}"
                         [(ngModel)]="currentStatus"
@@ -74,7 +88,7 @@
                       <span class="checkmark"></span>{{status.label}}
                     </label>
                   </div>
-                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                  <div class="pull-left radio-buttons-align">
                     <label class="radio-cstm wauto">
                       <input type="radio" name="currentStatusSoq" class="form-control" value="0"
                         [(ngModel)]="currentStatus" checked="{{currentStatus == 0}}"
@@ -82,8 +96,8 @@
                       <span class="checkmark"></span>All
                     </label>
                   </div>
-                  <div class="checkbox-cstm pull-right" style="margin-left: 0;">
-                    <label style="width: auto !important;margin-top: 3px;">
+                  <div class="checkbox-cstm pull-left checkbox-align">
+                    <label class="checkbox-label-align">
                       <!--  -->
                       <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
                         (click)="getDeleteListByStatus($event.target.checked)" />
@@ -99,50 +113,48 @@
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" [ngStyle]="{'width': col.width}" />
+          <col *ngFor="let col of columns" class="table-column-width" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
             {{ col.header }}
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th style="width:130px;position:sticky !important">
+          <th class="table-actions-column">
             Actions
           </th>
         </tr>
         <tr>
-          <th [ngStyle]="{'width': col.width}" *ngFor="let col of columns" [ngSwitch]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
             <ng-container *ngIf="col.field == 'status'">
               <input *ngIf="col.field !== 'quoteDate' 
               && col.field !== 'createdDate'
               && col.field !== 'updatedDate'" #filterStatusInput
-                [disabled]="col.field == 'status' &&  currentStatus !='0'" style="width:100%;" pInputText type="text"
+                [disabled]="col.field == 'status' &&  currentStatus !='0'" class="table-header-input-width" pInputText type="text"
                 (input)="dt.filter($event.target.value, col.field, 'contains')">
             </ng-container>
             <ng-container *ngIf="col.field != 'status'">
               <input *ngIf="col.field !== 'quoteDate' 
               && col.field !== 'createdDate'
               && col.field !== 'updatedDate'" [disabled]="col.field == 'status' &&  currentStatus !='0'"
-                style="width:100%;" pInputText type="text"
+              class="table-header-input-width" pInputText type="text"
                 (input)="dt.filter($event.target.value, col.field, 'contains')">
             </ng-container>
-            <input type="date" *ngIf="col.field == 'quoteDate'" name="quoteDate" style="width:100%;"
+            <input type="date" *ngIf="col.field == 'quoteDate'" class="table-header-input-width" name="quoteDate"
               (change)="dt.filter($event.target.value, col.field, 'contains')">
-            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width:100%;"
+            <input type="date" *ngIf="col.field == 'createdDate'" class="table-header-input-width" name="createdDate"
               (change)="dt.filter($event.target.value, col.field, 'contains')">
-            <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width:100%;"
+            <input type="date" *ngIf="col.field == 'updatedDate'" class="table-header-input-width" name="updatedDate"
               (change)="dt.filter($event.target.value, col.field, 'contains')">
-
-
           </th>
-          <th style="width:100px;position:sticky !important"></th>
+          <th class="table-actions-column"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex" let-expanded="expanded" let-columns="columns">
         <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" pReorderableRowHandle>
-          <td *ngFor="let col of columns" style="text-overflow: ellipsis;"
+          <td *ngFor="let col of columns" class="table-column-width"
             [matTooltip]="mouseOverData(col.field,  rowData)" matTooltipPosition="above"
             [matTooltipDisabled]="rowData['partNumberType'] != 'Multiple'"
             [ngStyle]="{'color': getColorCodeForMultiple(rowData)}">
@@ -210,11 +222,11 @@
       </ng-template>
       <ng-template pTemplate="summary" id="footer">
         <label id="footer" class="footer">Total:</label>
-        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+        <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
         &nbsp;&nbsp;
         <label id="footer" class="footer1">Pages Count:</label>
 
-        <input style="width: 5%;" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
+        <input class="footer-input-width" [ngModel]="totalPages" [disabled]="true" pInputText type="text" />
       </ng-template>
     </p-table>
   </div>

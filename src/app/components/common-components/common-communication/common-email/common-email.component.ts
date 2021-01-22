@@ -10,6 +10,7 @@ import { CommonService } from '../../../../services/common.service';
 import { AuthService } from '../../../../services/auth.service';
 import { emailPattern } from '../../../../validations/validation-pattern';
 import { DatePipe } from '@angular/common';
+import * as moment from 'moment';
 @Component({
     selector: 'app-common-email',
     templateUrl: './common-email.component.html',
@@ -497,6 +498,7 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
+    dataOriginal:any=[];
     getAllEmail() {
         this.data = [];
         this.isSpinnerVisible = true;
@@ -514,7 +516,8 @@ export class EmailCommonComponent implements OnInit, OnChanges {
                                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                             }
                         });
-                    }                    
+                    }            
+                    this.dataOriginal = this.data;
                 }, err => {
                     this.errorMessageHandler();
                 }
@@ -592,4 +595,18 @@ export class EmailCommonComponent implements OnInit, OnChanges {
     }
 
     downloadFile(x) {}
+
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.data = this.dataOriginal;
+            const data = [...this.data.filter(x => {
+                if (moment(x.contactDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'contactDate') {
+                    return x;
+                }
+            })]
+            this.data = data;
+        } else {
+            this.data = this.dataOriginal;
+        }
+    }
 }
