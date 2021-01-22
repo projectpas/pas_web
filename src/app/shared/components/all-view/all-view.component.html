@@ -358,6 +358,54 @@
             </div>
           </div>
         </p-tabPanel>
+        <p-tabPanel header="Address">
+          <div class="table-responsive default-bg clear">
+            <div class="col-sm-4">
+              <h5 class="po-head">Ship To</h5>
+              <p><span class="label"><b>User Type: </b></span><span class="value">{{poHeaderAdd.shipToUserType ? poHeaderAdd.shipToUserType : '-'}}</span></p>
+              <p><span class="label"><b>{{poHeaderAdd.shipToUserType }} Name:  </b></span><span class="value">{{poHeaderAdd.shipToUser ? poHeaderAdd.shipToUser : '-'}}</span></p>
+              <p><span class="label"><b>Site Name: </b></span><span class="value">{{poHeaderAdd.shipToSiteName ? poHeaderAdd.shipToSiteName : '-'}}</span></p>
+              <p><span class="label"><b>Address: </b></span><span class="value">{{poHeaderAdd.shipToAddress1 ? poHeaderAdd.shipToAddress1 : '-'}}</span></p>
+              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</span></p>
+              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.shipToAddress3 ? poHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
+              <p><span class="label"><b>City: </b></span><span class="value">{{poHeaderAdd.shipToCity ? poHeaderAdd.shipToCity : '-'}}</span></p>
+              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.shipToState ? poHeaderAdd.shipToState : '-'}}</span></p>
+              <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.shipToPostalCode ? poHeaderAdd.shipToPostalCode : '-'}}</span></p>
+              <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.shipToCountry ? poHeaderAdd.shipToCountry : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{poHeaderAdd.shipToContact ? poHeaderAdd.shipToContact : '-'}}</span></p>
+              <p><span class="label"><b>Memo: </b></span><span class="value">
+                <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
+                <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.shipToMemo"></p>
+
+              </span></p>
+              <p><span class="label"><b>Ship Via: </b></span><span class="value">{{poHeaderAdd.shipVia ? poHeaderAdd.shipVia : '-'}}</span></p>
+              <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{poHeaderAdd.shippingCost ? poHeaderAdd.shippingCost : '-'}}</span></p>
+              <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{poHeaderAdd.handlingCost ? poHeaderAdd.handlingCost : '-'}}</span></p>
+              <p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{poHeaderAdd.shippingAccountNo ? poHeaderAdd.shippingAccountNo : '-'}}</span></p>
+              <!-- <p><span class="label"><b>Shipping Id (AWB): </b></span><span class="value">{{poHeaderAdd.shippingId ? poHeaderAdd.shippingId : '-'}}</span></p>
+              <p><span class="label"><b>URL: </b></span><span class="value">{{poHeaderAdd.shippingURL ? poHeaderAdd.shippingURL : '-'}}</span></p> -->
+            </div>
+            <div class="col-sm-4">
+              <h5 class="po-head">Bill To</h5>
+              <p><span class="label"><b>User Type: </b></span><span class="value">{{poHeaderAdd.billToUserType ? poHeaderAdd.billToUserType : '-'}}</span></p>
+              <p><span class="label"><b>{{poHeaderAdd.billToUserType }} Name: </b></span><span class="value">{{poHeaderAdd.billToUser ? poHeaderAdd.billToUser : '-'}}</span></p>
+              <p><span class="label"><b>Site Name: </b></span><span class="value">{{poHeaderAdd.billToSiteName ? poHeaderAdd.billToSiteName : '-'}}</span></p>
+              <p><span class="label"><b>Address: </b></span><span class="value">{{poHeaderAdd.billToAddress1 ? poHeaderAdd.billToAddress1 : '-'}}</span></p>
+              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</span></p>
+              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.billToAddress3 ? poHeaderAdd.billToAddress3 : '-'}}</span></p> -->
+              <p><span class="label"><b>City: </b></span><span class="value">{{poHeaderAdd.billToCity ? poHeaderAdd.billToCity : '-'}}</span></p>
+              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.billToState ? poHeaderAdd.billToState : '-'}}</span></p>
+              <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.billToPostalCode ? poHeaderAdd.billToPostalCode : '-'}}</span></p>
+              <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.billToCountry ? poHeaderAdd.billToCountry : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{poHeaderAdd.billToContactName ? poHeaderAdd.billToContactName : '-'}}</span></p>
+              <p><span class="label"><b>Memo: </b></span><span class="value">
+                <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
+                <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.billToMemo"></p>
+
+              </span></p>
+            </div>
+          </div>
+        </p-tabPanel>
 
         <p-tabPanel header="Internal Approvers">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
@@ -527,54 +575,7 @@
           </app-vendor-capes>
         </p-tabPanel>     
 
-        <p-tabPanel header="Address">
-          <div class="table-responsive default-bg clear">
-            <div class="col-sm-4">
-              <h5 class="po-head">Ship To</h5>
-              <p><span class="label"><b>User Type: </b></span><span class="value">{{poHeaderAdd.shipToUserType ? poHeaderAdd.shipToUserType : '-'}}</span></p>
-              <p><span class="label"><b>{{poHeaderAdd.shipToUserType }} Name:  </b></span><span class="value">{{poHeaderAdd.shipToUser ? poHeaderAdd.shipToUser : '-'}}</span></p>
-              <p><span class="label"><b>Site Name: </b></span><span class="value">{{poHeaderAdd.shipToSiteName ? poHeaderAdd.shipToSiteName : '-'}}</span></p>
-              <p><span class="label"><b>Address: </b></span><span class="value">{{poHeaderAdd.shipToAddress1 ? poHeaderAdd.shipToAddress1 : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</span></p>
-              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.shipToAddress3 ? poHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
-              <p><span class="label"><b>City: </b></span><span class="value">{{poHeaderAdd.shipToCity ? poHeaderAdd.shipToCity : '-'}}</span></p>
-              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.shipToState ? poHeaderAdd.shipToState : '-'}}</span></p>
-              <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.shipToPostalCode ? poHeaderAdd.shipToPostalCode : '-'}}</span></p>
-              <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.shipToCountry ? poHeaderAdd.shipToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{poHeaderAdd.shipToContact ? poHeaderAdd.shipToContact : '-'}}</span></p>
-              <p><span class="label"><b>Memo: </b></span><span class="value">
-                <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.shipToMemo"></p>
-
-              </span></p>
-              <p><span class="label"><b>Ship Via: </b></span><span class="value">{{poHeaderAdd.shipVia ? poHeaderAdd.shipVia : '-'}}</span></p>
-              <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{poHeaderAdd.shippingCost ? poHeaderAdd.shippingCost : '-'}}</span></p>
-              <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{poHeaderAdd.handlingCost ? poHeaderAdd.handlingCost : '-'}}</span></p>
-              <p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{poHeaderAdd.shippingAccountNo ? poHeaderAdd.shippingAccountNo : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Shipping Id (AWB): </b></span><span class="value">{{poHeaderAdd.shippingId ? poHeaderAdd.shippingId : '-'}}</span></p>
-              <p><span class="label"><b>URL: </b></span><span class="value">{{poHeaderAdd.shippingURL ? poHeaderAdd.shippingURL : '-'}}</span></p> -->
-            </div>
-            <div class="col-sm-4">
-              <h5 class="po-head">Bill To</h5>
-              <p><span class="label"><b>User Type: </b></span><span class="value">{{poHeaderAdd.billToUserType ? poHeaderAdd.billToUserType : '-'}}</span></p>
-              <p><span class="label"><b>{{poHeaderAdd.billToUserType }} Name: </b></span><span class="value">{{poHeaderAdd.billToUser ? poHeaderAdd.billToUser : '-'}}</span></p>
-              <p><span class="label"><b>Site Name: </b></span><span class="value">{{poHeaderAdd.billToSiteName ? poHeaderAdd.billToSiteName : '-'}}</span></p>
-              <p><span class="label"><b>Address: </b></span><span class="value">{{poHeaderAdd.billToAddress1 ? poHeaderAdd.billToAddress1 : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</span></p>
-              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.billToAddress3 ? poHeaderAdd.billToAddress3 : '-'}}</span></p> -->
-              <p><span class="label"><b>City: </b></span><span class="value">{{poHeaderAdd.billToCity ? poHeaderAdd.billToCity : '-'}}</span></p>
-              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{poHeaderAdd.billToState ? poHeaderAdd.billToState : '-'}}</span></p>
-              <p><span class="label"><b>Postal: </b></span><span class="value">{{poHeaderAdd.billToPostalCode ? poHeaderAdd.billToPostalCode : '-'}}</span></p>
-              <p><span class="label"><b>Country: </b></span><span class="value">{{poHeaderAdd.billToCountry ? poHeaderAdd.billToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{poHeaderAdd.billToContactName ? poHeaderAdd.billToContactName : '-'}}</span></p>
-              <p><span class="label"><b>Memo: </b></span><span class="value">
-                <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="poHeaderAdd.billToMemo"></p>
-
-              </span></p>
-            </div>
-          </div>
-        </p-tabPanel>
+       
 
         <p-tabPanel header="Documents">
           <app-common-documents [isViewMode]="true" [moduleName]="moduleName" [offLineUpload]="true" [referenceId]="selectedPurchaseOrderId">      
@@ -747,6 +748,55 @@
           </div>
         </p-tabPanel>
 
+        <p-tabPanel header="Address">
+          <div class="table-responsive default-bg clear">
+            <div class="col-sm-4">
+              <h5 class="po-head">Ship To</h5>
+              <p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.shipToUserType ? roHeaderAdd.shipToUserType : '-'}}</span></p>
+              <p><span class="label"><b>{{roHeaderAdd.shipToUserType }} Name:  </b></span><span class="value">{{roHeaderAdd.shipToUser ? roHeaderAdd.shipToUser : '-'}}</span></p>
+              <p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.shipToSiteName ? roHeaderAdd.shipToSiteName : '-'}}</span></p>
+              <p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.shipToAddress1 ? roHeaderAdd.shipToAddress1 : '-'}}</span></p>
+              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</span></p>
+              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.shipToAddress3 ? poHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
+              <p><span class="label"><b>City: </b></span><span class="value">{{roHeaderAdd.shipToCity ? roHeaderAdd.shipToCity : '-'}}</span></p>
+              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.shipToState ? roHeaderAdd.shipToState : '-'}}</span></p>
+              <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.shipToPostalCode ? roHeaderAdd.shipToPostalCode : '-'}}</span></p>
+              <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.shipToCountry ? roHeaderAdd.shipToCountry : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
+              <p><span class="label"><b>Memo: </b></span><span class="value">
+                <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
+                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.shipToMemo"></p>
+
+              </span></p>
+              <p><span class="label"><b>Ship Via: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
+              <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{roHeaderAdd.shippingCost ? roHeaderAdd.shippingCost : '-'}}</span></p>
+              <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{roHeaderAdd.handlingCost ? roHeaderAdd.handlingCost : '-'}}</span></p>
+              <p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{roHeaderAdd.shippingAccountNo ? roHeaderAdd.shippingAccountNo : '-'}}</span></p>
+              <!-- <p><span class="label"><b>Shipping Id (AWB): </b></span><span class="value">{{poHeaderAdd.shippingId ? poHeaderAdd.shippingId : '-'}}</span></p>
+              <p><span class="label"><b>URL: </b></span><span class="value">{{poHeaderAdd.shippingURL ? poHeaderAdd.shippingURL : '-'}}</span></p> -->
+            </div>
+            <div class="col-sm-4">
+              <h5 class="po-head">Bill To</h5>
+              <p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.billToUserType ? roHeaderAdd.billToUserType : '-'}}</span></p>
+              <p><span class="label"><b>{{roHeaderAdd.billToUserType }} Name: </b></span><span class="value">{{roHeaderAdd.billToUser ? roHeaderAdd.billToUser : '-'}}</span></p>
+              <p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.billToSiteName ? roHeaderAdd.billToSiteName : '-'}}</span></p>
+              <p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.billToAddress1 ? roHeaderAdd.billToAddress1 : '-'}}</span></p>
+              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</span></p>
+              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.billToAddress3 ? poHeaderAdd.billToAddress3 : '-'}}</span></p> -->
+              <p><span class="label"><b>City: </b></span><span class="value">{{roHeaderAdd.billToCity ? roHeaderAdd.billToCity : '-'}}</span></p>
+              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.billToState ? roHeaderAdd.billToState : '-'}}</span></p>
+              <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.billToPostalCode ? roHeaderAdd.billToPostalCode : '-'}}</span></p>
+              <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.billToCountry ? roHeaderAdd.billToCountry : '-'}}</span></p>
+              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
+              <p><span class="label"><b>Memo: </b></span><span class="value">
+                <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
+                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>
+
+              </span></p>
+            </div>
+          </div>
+        </p-tabPanel>
+
         <p-tabPanel header="Internal Approvers">
           <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead">
@@ -915,54 +965,7 @@
           </app-vendor-capes>
         </p-tabPanel>   
         
-        <p-tabPanel header="Address">
-          <div class="table-responsive default-bg clear">
-            <div class="col-sm-4">
-              <h5 class="po-head">Ship To</h5>
-              <p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.shipToUserType ? roHeaderAdd.shipToUserType : '-'}}</span></p>
-              <p><span class="label"><b>{{roHeaderAdd.shipToUserType }} Name:  </b></span><span class="value">{{roHeaderAdd.shipToUser ? roHeaderAdd.shipToUser : '-'}}</span></p>
-              <p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.shipToSiteName ? roHeaderAdd.shipToSiteName : '-'}}</span></p>
-              <p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.shipToAddress1 ? roHeaderAdd.shipToAddress1 : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.shipToAddress2 ? poHeaderAdd.shipToAddress2 : '-'}}</span></p>
-              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.shipToAddress3 ? poHeaderAdd.shipToAddress3 : '-'}}</span></p> -->
-              <p><span class="label"><b>City: </b></span><span class="value">{{roHeaderAdd.shipToCity ? roHeaderAdd.shipToCity : '-'}}</span></p>
-              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.shipToState ? roHeaderAdd.shipToState : '-'}}</span></p>
-              <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.shipToPostalCode ? roHeaderAdd.shipToPostalCode : '-'}}</span></p>
-              <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.shipToCountry ? roHeaderAdd.shipToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.shipToContact ? roHeaderAdd.shipToContact : '-'}}</span></p>
-              <p><span class="label"><b>Memo: </b></span><span class="value">
-                <!-- {{poHeaderAdd.shipToMemo ? poHeaderAdd.shipToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.shipToMemo"></p>
-
-              </span></p>
-              <p><span class="label"><b>Ship Via: </b></span><span class="value">{{roHeaderAdd.shipVia ? roHeaderAdd.shipVia : '-'}}</span></p>
-              <p><span class="label"><b>Shipping Cost: </b></span><span class="value">{{roHeaderAdd.shippingCost ? roHeaderAdd.shippingCost : '-'}}</span></p>
-              <p><span class="label"><b>Handling Cost: </b></span><span class="value">{{roHeaderAdd.handlingCost ? roHeaderAdd.handlingCost : '-'}}</span></p>
-              <p><span class="label"><b>Shipping Acct Num: </b></span><span class="value">{{roHeaderAdd.shippingAccountNo ? roHeaderAdd.shippingAccountNo : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Shipping Id (AWB): </b></span><span class="value">{{poHeaderAdd.shippingId ? poHeaderAdd.shippingId : '-'}}</span></p>
-              <p><span class="label"><b>URL: </b></span><span class="value">{{poHeaderAdd.shippingURL ? poHeaderAdd.shippingURL : '-'}}</span></p> -->
-            </div>
-            <div class="col-sm-4">
-              <h5 class="po-head">Bill To</h5>
-              <p><span class="label"><b>User Type: </b></span><span class="value">{{roHeaderAdd.billToUserType ? roHeaderAdd.billToUserType : '-'}}</span></p>
-              <p><span class="label"><b>{{roHeaderAdd.billToUserType }} Name: </b></span><span class="value">{{roHeaderAdd.billToUser ? roHeaderAdd.billToUser : '-'}}</span></p>
-              <p><span class="label"><b>Site Name: </b></span><span class="value">{{roHeaderAdd.billToSiteName ? roHeaderAdd.billToSiteName : '-'}}</span></p>
-              <p><span class="label"><b>Address: </b></span><span class="value">{{roHeaderAdd.billToAddress1 ? roHeaderAdd.billToAddress1 : '-'}}</span></p>
-              <!-- <p><span class="label"><b>Address2: </b></span><span class="value">{{poHeaderAdd.billToAddress2 ? poHeaderAdd.billToAddress2 : '-'}}</span></p>
-              <p><span class="label"><b>Address3: </b></span><span class="value">{{poHeaderAdd.billToAddress3 ? poHeaderAdd.billToAddress3 : '-'}}</span></p> -->
-              <p><span class="label"><b>City: </b></span><span class="value">{{roHeaderAdd.billToCity ? roHeaderAdd.billToCity : '-'}}</span></p>
-              <p><span class="label"><b>Primary State/Province: </b></span><span class="value">{{roHeaderAdd.billToState ? roHeaderAdd.billToState : '-'}}</span></p>
-              <p><span class="label"><b>Postal: </b></span><span class="value">{{roHeaderAdd.billToPostalCode ? roHeaderAdd.billToPostalCode : '-'}}</span></p>
-              <p><span class="label"><b>Country: </b></span><span class="value">{{roHeaderAdd.billToCountry ? roHeaderAdd.billToCountry : '-'}}</span></p>
-              <p><span class="label"><b>Contact Name: </b></span><span class="value">{{roHeaderAdd.billToContactName ? roHeaderAdd.billToContactName : '-'}}</span></p>
-              <p><span class="label"><b>Memo: </b></span><span class="value">
-                <!-- {{poHeaderAdd.billToMemo ? poHeaderAdd.billToMemo : '-'}} -->
-                <p class="p-0 m-0 p_textEditor" [innerHTML]="roHeaderAdd.billToMemo"></p>
-
-              </span></p>
-            </div>
-          </div>
-        </p-tabPanel>
+      
 
         <p-tabPanel header="Documents">
           <app-common-documents [isViewMode]="true" [moduleName]="romoduleName" [offLineUpload]="true" [referenceId]="selectedRepairOrderId">      
