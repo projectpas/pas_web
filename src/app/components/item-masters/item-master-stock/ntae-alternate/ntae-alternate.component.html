@@ -1,13 +1,13 @@
-﻿<div class="card" style="padding: 10px;">
-    <div class="card-header bg-primary new-card-header" >
+﻿<div class="card new-card">
+    <div class="card-header header" >
         <div class="row">
           <div class="col" *ngIf="!isViewItemMaster">
-            <h4 class="new-card-heading"> {{selectedTab}}</h4>
+            <h4 class="header-name"> {{selectedTab}}</h4>
           </div>
           <div>
             <button
             type="button" 
-            class="btn-sm new-btn-primary"  matTooltip="Add {{selectedTab}}" (click)="getalterqquparts()" matTooltipPosition="above" data-toggle="modal" data-target="#alternateModalPopup"
+            class="btn-sm header-button"  matTooltip="Add {{selectedTab}}" (click)="getalterqquparts()" matTooltipPosition="above" data-toggle="modal" data-target="#alternateModalPopup"
             >
             Add {{selectedTab}}
             </button>
@@ -19,8 +19,8 @@
         </div>
         <hr />
          <div class="col-md-4">
-            <div class="checkbox-cstm" style="margin-left: 0; padding-top: 10px; text-align: right;">
-                <label style="width: 115px;">
+            <div class="checkbox-cstm pull-right checkbox-align">
+                <label class="checkbox-label-align">
                   <input type="checkbox" [(ngModel)]="showDeletedList" name="showDeleted" (change)="getNtaeData($event.target.checked)" />
                   <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                 Show Deleted List 
@@ -28,31 +28,31 @@
             </div>
         </div> 
     </div>
-    <p-table #ntaeDataTable class="rpo-table-cstm  ptable-th-bg " [value]="ntaeData" [rows]="ntaeDataTableTablePageSize"
+    <p-table #ntaeDataTable class="rpo-table-cstm rro-table-cstm " [value]="ntaeData" [rows]="ntaeDataTableTablePageSize"
         [columns]="ntaeTableColumns" [scrollable]="true" [style]="{width:'100%'}" [paginator]="true">
 
         <ng-template pTemplate="header" let-columns>
             <tr>
-                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                <th *ngFor="let col of columns" class="table-column-width" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                         {{col.header}}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
-                <th *ngIf="selectedTab == 'Equivalency'">Document</th>
+                <th class="table-column-width" *ngIf="selectedTab == 'Equivalency'">Document</th>
                 <th >Action</th>
             </tr>
             <tr>
-                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input style="width:100%;" pInputText type="text"
                         (input)="ntaeDataTable.filter($event.target.value, col.field, col.filterMatchMode)">
 
                 </th>
-                <th *ngIf="selectedTab == 'Equivalency'"></th>
-                <th ></th>
+                <th class="table-column-width" *ngIf="selectedTab == 'Equivalency'"></th>
+                <th class="table-actions-column"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
             <tr>
-                <td *ngFor="let col of columns" ResizableColumn pReorderableColumn>
+                <td class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
                     <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                         {{rowData[col.field]}}
                     </ng-container>
@@ -60,12 +60,12 @@
                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
                     </ng-container>
                 </td>
-                <td *ngIf="selectedTab == 'Equivalency'">
+                <td class="table-column-width" *ngIf="selectedTab == 'Equivalency'">
                     <a *ngFor="let fileItem of rowData?.attachmentDetails" class="filelink"
                         (click)="downloadFileUpload(fileItem?.ad)" target="_blank"
                         download>{{fileItem?.ad.fileName}}</a>
                 </td>
-                <td>
+                <td class="action-icons-cstm table-column-width">
                     <div *ngIf="!rowData.isDeleted">
                         <span *ngIf="!isEnableItemMasterView && !isViewItemMaster" data-toggle="modal" data-target="#alternateModalPopup">
                             <a class="btn nobg" 
@@ -91,18 +91,18 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="ntaeData?.length == 0">
             <tr>
-                <td [attr.colspan]="6" class="no-records-cstm">
+                <td [attr.colspan]="6" class="no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [ngModelOptions]="{standalone: true}" [(ngModel)]="ntaeDataTable._totalRecords"
+            <input class="footer-input-width" [ngModelOptions]="{standalone: true}" [(ngModel)]="ntaeDataTable._totalRecords"
                 [disabled]="true" pInputText type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+            <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                 [ngModel]="getPageCount(ntaeDataTable._totalRecords, ntaeDataTableTablePageSize)" [disabled]="true"
                 pInputText type="text" />
         </ng-template>
@@ -193,10 +193,10 @@
                                         [value]="alternateData?.attachmentDetails" [rows]="3">
                                         <ng-template pTemplate="header">
                                             <tr>
-                                                <th>
+                                                <th class="table-column-width">
                                                     File Name
                                                 </th>
-                                                <th>
+                                                <th class="table-column-width">
                                                     Download
                                                 </th>
                                             </tr>
@@ -204,11 +204,11 @@
                                         <ng-template pTemplate="body" let-part let-rowData let-columns="columns"
                                             let-i="rowIndex">
                                             <tr>
-                                                <td>
+                                                <td class="table-column-width">
     
                                                     {{ part?.ad?.fileName}}
                                                 </td>
-                                                <td>
+                                                <td class="table-column-width">
                                                     <a (click)="downloadFileUpload(part?.ad)" matTooltip="Download"
                                                         matTooltipPosition="above" class="btn nobg btn-cstm"><span><i
                                                                 class="fa fa-download"></i></span></a>
@@ -222,7 +222,7 @@
                                             *ngIf="alternateData.attachmentDetails.length == 0">
                                             <tr>
                                                 <td [attr.colspan]="2"
-                                                    style="color: red; font-weight: bold; text-align: center">
+                                                class="no-records-cstm no-records-msg">
                                                     No records found
                                                 </td>
                                             </tr>
@@ -251,8 +251,9 @@
     </div>
     <div class="modal-body">
         <app-pn-header [partData]="partData"></app-pn-header>
-        <div class="table-responsive rro-table-cstm mt-2">
-            <table class="table table-bordered" *ngIf="nhaTlaHistory.length> 0 else noDatavailable">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
+            <table class="table table-bordered header-table-width" *ngIf="nhaTlaHistory.length> 0 else noDatavailable">
                 <thead>
                     <tr>
 
@@ -321,10 +322,11 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
             <ng-template #noDatavailable>
                 <div class="text-center">
                     <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                    <h4 style="color: #ff5663;">No History Found </h4>
+                    <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
 
             </ng-template>
