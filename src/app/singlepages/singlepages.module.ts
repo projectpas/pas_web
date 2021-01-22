@@ -164,6 +164,7 @@ import { TeardownReasonComponent } from "../components/teardown-reason/teardown-
 import { DocumentTypeComponent } from '../components/document-type/document-type.component';
 
 import { EmployeeTrainingTypeComponent } from "../components/employee-training-type/employee-training-type.component";
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 // import { CommonDocumentsComponent } from "../components/common-components/common-documents/common-documents.component";
 
 
@@ -188,7 +189,8 @@ import { EmployeeTrainingTypeComponent } from "../components/employee-training-t
         EditorModule,
         InputSwitchModule,
         CheckboxModule, BreadcrumbModule, TreeTableModule, CheckboxModule, TreeModule, DialogModule,
-        AuditModule, PaginatorModule
+        AuditModule, PaginatorModule,
+        CommonDocumentsModule
     ],
     declarations: [
         CreatePublicationComponent,
@@ -272,8 +274,8 @@ import { EmployeeTrainingTypeComponent } from "../components/employee-training-t
         VendorProcess1099Component,
         CapsReportComponent,
         CapabilityTypeComponent,
-        EmployeeTrainingTypeComponent//,
-        //CommonDocumentsComponent
+        EmployeeTrainingTypeComponent,
+        // CommonDocumentsComponent
     ],
     providers: [
         PercentService,
