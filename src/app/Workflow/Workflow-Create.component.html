@@ -350,8 +350,7 @@
                                                 <label class="w80">Amount: </label>
                                                 <input class="w70 amount form-control text-right" type="text"
                                                     name="fixedAmount" [(ngModel)]="sourceWorkFlow.fixedAmount"
-                                                    pInputText pKeyFilter="money" [ngModelOptions]="{updateOn:'blur'}"
-                                                    matTooltip="Fixed Amount" matTooltipPosition="above"
+                                                    
                                                     (input)="berDetermination($event.target.value,'html')">
                                             </div>
                                         </div>
