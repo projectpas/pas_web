@@ -441,6 +441,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 }
             }
         }
+        this.getPartnumbers(event.query);
     }
 
     onPartSelect(event, material, index) {

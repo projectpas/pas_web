@@ -162,10 +162,8 @@
                         col.field !== 'expirationDate' &&
                         col.field !== 'verifiedBy'&&
                         col.field !== 'verifiedDate'&&
-                        col.field !== 'createdBy'&&
                         col.field !== 'createdDate'&&
-                        col.field!=='modifyBy'&&
-                        col.field!=='modifiedDate'
+                        col.field!=='updatedDate'
                       " style="width: 100%;" pInputText type="text" (input)="
                         dt.filter($event.target.value, col.field, 'contains')
                       " [ngModel]="inputValue" />
@@ -188,27 +186,42 @@
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
 
-                    <input type="date" *ngIf="col.field == 'verifiedDate'" name="verifiedDate" style="width: 100%;"
-                      (change)="
-                        dt.filter($event.target.value, col.field, 'contains')
-                      " [ngModel]="inputValue" />
-
-
-                    <input type="date" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
+                    <!-- <input type="text" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
+
+                    <input type="text" *ngIf="col.field == 'updatedBy'" name="updatedBy" style="width: 100%;" (change)="
+                      dt.filter($event.target.value, col.field, 'contains')
+                    " [ngModel]="inputValue" /> -->
+
+                    <!-- <input type="date" *ngIf="col.field == 'verifiedDate'" name="verifiedDate" style="width: 100%;"
+                      (change)="
+                        dt.filter($event.target.value, col.field, 'contains')
+                      " [ngModel]="inputValue" /> -->
+
+
+                    <!-- <input type="date" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
+                      dt.filter($event.target.value, col.field, 'contains')
+                    " [ngModel]="inputValue" /> -->
 
                     <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width: 100%;"
                       (change)="
                     dt.filter($event.target.value, col.field, 'contains')
                   " [ngModel]="inputValue" />
-                    <input type="date" *ngIf="col.field == 'modifyBy'" name="modifyBy" style="width: 100%;" (change)="
+                    <!-- <input type="date" *ngIf="col.field == 'modifyBy'" name="modifyBy" style="width: 100%;" (change)="
                   dt.filter($event.target.value, col.field, 'contains')
-                " [ngModel]="inputValue" />
-                    <input type="date" *ngIf="col.field == 'modifyDate'" name="modifyDate" style="width: 100%;"
+                " [ngModel]="inputValue" /> -->
+                    <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width: 100%;"
                       (change)="
                 dt.filter($event.target.value, col.field, 'contains')
               " [ngModel]="inputValue" />
+                    <!-- 
+                    <input type="date" class="hidePlaceHolder table-header-input-width"
+                      *ngIf="col.field == 'createdDate'" name="createdDate"
+                      (change)="dt.filter($event.target.value, col.field, 'contains')">
+                    <input type="date" class="hidePlaceHolder table-header-input-width"
+                      *ngIf="col.field == 'updatedDate'" name="updatedDate"
+                      (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
                   </th>
                   <!-- <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
                                             <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
@@ -231,6 +244,10 @@
                     : rowData[col.field] && col.field == 'expirationDate'
                     ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                     : rowData[col.field] && col.field == 'verifiedDate'
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                    : rowData[col.field] && col.field == 'updatedDate'
+                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+                    : rowData[col.field] && col.field =='createdDate'
                     ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
                     : rowData[col.field]
                     }}
@@ -347,8 +364,8 @@
       <h4 class="modal-title">Documents of {{ selectedRow['name'] }}</h4>
     </div>
     <div class="modal-body viewform">
-      <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfDocumentStatus($event)"
-        [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId" [isViewMode]="true" [offLineUpload]="true">
+      <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId" [isViewMode]="true"
+        [offLineUpload]="true">
       </app-common-documents>
 
       <!-- <app-customer-documents [customerDataFromExternalComponents]="selectedRow"></app-customer-documents> -->
@@ -638,16 +655,16 @@
                                   generalInfo.publishby
                                   }}</span>
                               </p>
-                              <p *ngIf="
+                              <!-- <p *ngIf="
                                 generalInfo.publishby == 'Vendor' ||
-                                generalInfo.publishby == ' Manufacturer'
+                                generalInfo.publishby == 'Manufacturer'
                               ">
                                 <span class="label"><b>Published Reference Name: </b></span><span class="value">{{
                                   generalInfo.publishedByRefName
                                   ? generalInfo.publishedByRefName
                                   : '-'
                                   }}</span>
-                              </p>
+                              </p> -->
                               <p *ngIf="generalInfo.publishby == 'Others'">
                                 <span class="label"><b>Published Others: </b></span><span class="value">{{
                                   generalInfo.publishedByOthers
@@ -1315,7 +1332,7 @@
     </div>
   </div>
 </div>
-<div class="preloader" *ngIf="isSpinnerVisible">
+<div class="preloader modal-header-index" *ngIf="isSpinnerVisible">
   <div class="loading">
     <div class="lds-roller">
       <div></div>

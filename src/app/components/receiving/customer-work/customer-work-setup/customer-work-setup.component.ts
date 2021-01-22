@@ -890,7 +890,6 @@ export class CustomerWorkSetupComponent implements OnInit {
         } else {
             this.receivingForm.tagType = "";
         }
-        console.log("receiving form",this.receivingForm)
         const receivingForm = {
             ...this.receivingForm,
             customerId: getValueFromObjectByKey('customerId', this.receivingForm.customerId),
@@ -916,7 +915,6 @@ export class CustomerWorkSetupComponent implements OnInit {
             timeLife: { ...this.sourceTimeLife, timeLifeCyclesId: this.timeLifeCyclesId, updatedDate: new Date() }
 
         }
-        console.log("receiving form receivingForm",receivingForm)
         const { customerCode, customerPhone, partDescription, manufacturer, revisePartId, ...receivingInfo } = receivingForm;
         this.isSpinnerVisible = true;
         if (!this.isEditMode) {

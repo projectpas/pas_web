@@ -512,10 +512,11 @@
                         </div>
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom: 8px;">
-                                <label>Obtain From <span class="text-danger">*</span> </label>
+                                <label>Obtain From </label>
+                                <!-- <label>Obtain From <span class="text-danger">*</span> </label> -->
                                 <select [(ngModel)]="receivingForm.obtainFromTypeId" (ngModelChange)="getActive()"
                                     name="obtainFromTypeId"
-                                    (change)="onSelectObrainFrom(receivingForm.obtainFromTypeId)" required>
+                                    (change)="onSelectObrainFrom(receivingForm.obtainFromTypeId)" >
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
                                         {{item.moduleName}}</option>
@@ -525,11 +526,11 @@
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 1">
                                     <div class="col-sm-12">
                                         <label>
-                                            Customer <span class="text-danger">*</span>
+                                            Customer 
                                         </label>
+                                        <!-- [required]="receivingForm.obtainFromTypeId == 1" -->
                                         <p-autoComplete field="name" class="pautocomp-cstm"
-                                            (ngModelChange)="getActive()"
-                                            [required]="receivingForm.obtainFromTypeId == 1"
+                                            (ngModelChange)="getActive()"                                            
                                             (keyup)="getCustomers($event.target.value, 2)"
                                             [(ngModel)]="receivingForm.obtainFrom" name="obtainFromCustomer"
                                             [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
@@ -540,11 +541,11 @@
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 2">
                                     <div class="col-sm-12">
                                         <label>
-                                            Vendor <span class="text-danger">*</span>
+                                            Vendor 
                                         </label>
+                                        <!-- [required]="receivingForm.obtainFromTypeId == 2" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                            (ngModelChange)="getActive()"
-                                            [required]="receivingForm.obtainFromTypeId == 2"
+                                            (ngModelChange)="getActive()"                                           
                                             [(ngModel)]="receivingForm.obtainFrom" name="obtainFromVendor"
                                             [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
                                             [size]="30" [minLength]="1" [dropdown]="true"
@@ -554,31 +555,32 @@
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 9">
                                     <div class="col-sm-12">
-                                        <label>Company <span class="text-danger">*</span> </label>
+                                        <label>Company </label>
+                                        <!-- [required]="receivingForm.obtainFromTypeId == 9" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.obtainFrom"
                                             name="obtainFromCompany" [suggestions]="companyList"
                                             (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
                                             [dropdown]="true" errorMessage="Records not found"
-                                            [required]="receivingForm.obtainFromTypeId == 9" [forceSelection]="true">
+                                             [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.obtainFromTypeId == 4">
                                     <div class="col-sm-12">
-                                        <label>Other <span class="text-danger">*</span></label>
+                                        <label>Other </label>
+                                        <!-- [required]="receivingForm.obtainFromTypeId == 4" -->
                                         <input class="form-control" type="text" name="obtainFromOther"
-                                            (ngModelChange)="getActive()"
-                                            [required]="receivingForm.obtainFromTypeId == 4"
+                                            (ngModelChange)="getActive()"                                            
                                             [(ngModel)]="receivingForm.obtainFrom">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group" style="margin-bottom: 8px !important;">
-                                <label>Owner <span class="text-danger">*</span></label>
+                                <label>Owner </label>
                                 <select [(ngModel)]="receivingForm.ownerTypeId" name="ownerType"
                                     (ngModelChange)="getActive()" (change)="onSelectOwner(receivingForm.ownerTypeId)"
-                                    required>
+                                    >
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
                                         {{item.moduleName}}</option>
@@ -588,10 +590,10 @@
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 1">
                                     <div class="col-sm-12">
                                         <label>
-                                            Customer <span class="text-danger">*</span>
+                                            Customer 
                                         </label>
                                         <p-autoComplete field="name" class="pautocomp-cstm"
-                                            [required]="receivingForm.ownerTypeId == 1" (ngModelChange)="getActive()"
+                                            (ngModelChange)="getActive()"
                                             [(ngModel)]="receivingForm.owner" name="ownerCustomer"
                                             (keyup)="getCustomers($event.target.value, 2)" [suggestions]="customersList"
                                             (completeMethod)="filterCustomerNames($event)" [size]="30" [minLength]="1"
@@ -602,10 +604,11 @@
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 2">
                                     <div class="col-sm-12">
                                         <label>
-                                            Vendor <span class="text-danger">*</span>
+                                            Vendor 
                                         </label>
+                                        <!-- [required]="receivingForm.ownerTypeId == 2" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                            (ngModelChange)="getActive()" [required]="receivingForm.ownerTypeId == 2"
+                                            (ngModelChange)="getActive()" 
                                             [(ngModel)]="receivingForm.owner" name="ownerVendor"
                                             [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
                                             [size]="30" [minLength]="1" [dropdown]="true"
@@ -615,30 +618,32 @@
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 9">
                                     <div class="col-sm-12">
-                                        <label>Company <span class="text-danger">*</span> </label>
+                                        <label>Company </label>
+                                        <!-- [required]="receivingForm.ownerTypeId == 9"  -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.owner"
                                             name="ownerCompany" [suggestions]="companyList"
                                             (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
                                             [dropdown]="true" errorMessage="Records not found"
-                                            [required]="receivingForm.ownerTypeId == 9" [forceSelection]="true">
+                                            [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.ownerTypeId == 4">
                                     <div class="col-sm-12">
-                                        <label>Other <span class="text-danger">*</span> </label>
+                                        <label>Other </label>
+                                        <!-- [required]="receivingForm.ownerTypeId == 4" -->
                                         <input class="form-control" type="text" name="ownerOther"
-                                            (ngModelChange)="getActive()" [required]="receivingForm.ownerTypeId == 4"
+                                            (ngModelChange)="getActive()" 
                                             [(ngModel)]="receivingForm.owner">
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>Traceble To <span class="text-danger">*</span></label>
+                                <label>Traceble To </label>
                                 <select [(ngModel)]="receivingForm.traceableToTypeId" name="traceableToType"
                                     (ngModelChange)="getActive()"
-                                    (change)="onSelectTraceableTo(receivingForm.traceableToTypeId)" required>
+                                    (change)="onSelectTraceableTo(receivingForm.traceableToTypeId)" >
                                     <option value="0">-- Select --</option>
                                     <option *ngFor="let item of moduleListDropdown" [ngValue]="item.moduleId">
                                         {{item.moduleName}}</option>
@@ -648,11 +653,11 @@
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 1">
                                     <div class="col-sm-12">
                                         <label>
-                                            Add Customer <span class="text-danger">*</span>
+                                            Add Customer 
                                         </label>
+                                        <!-- [required]="receivingForm.traceableToTypeId == 1" -->
                                         <p-autoComplete field="name" class="pautocomp-cstm"
-                                            (ngModelChange)="getActive()"
-                                            [required]="receivingForm.traceableToTypeId == 1"
+                                            (ngModelChange)="getActive()"                                            
                                             (keyup)="getCustomers($event.target.value, 2)"
                                             [(ngModel)]="receivingForm.traceableTo" name="traceableToCustomer"
                                             [suggestions]="customersList" (completeMethod)="filterCustomerNames($event)"
@@ -663,11 +668,11 @@
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 2">
                                     <div class="col-sm-12">
                                         <label>
-                                            Add Vendor <span class="text-danger">*</span>
+                                            Add Vendor 
                                         </label>
+                                        <!-- [required]="receivingForm.traceableToTypeId == 2" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
-                                            (ngModelChange)="getActive()"
-                                            [required]="receivingForm.traceableToTypeId == 2"
+                                            (ngModelChange)="getActive()"                                            
                                             [(ngModel)]="receivingForm.traceableTo" name="traceableToVendor"
                                             [suggestions]="vendorsList" (completeMethod)="filterVendorNames($event)"
                                             [size]="30" [minLength]="1" [dropdown]="true"
@@ -677,22 +682,22 @@
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 9">
                                     <div class="col-sm-12">
-                                        <label> Add Company <span class="text-danger">*</span></label>
+                                        <label> Add Company </label>
+                                        <!-- [required]="receivingForm.traceableToTypeId == 9" -->
                                         <p-autoComplete field="label" class="pautocomp-cstm"
                                             (ngModelChange)="getActive()" [(ngModel)]="receivingForm.traceableTo"
                                             name="traceableToCompany" [suggestions]="companyList"
                                             (completeMethod)="filterCompanyNames($event)" [size]="30" [minLength]="1"
-                                            [dropdown]="true" errorMessage="Records not found" [forceSelection]="true"
-                                            [required]="receivingForm.traceableToTypeId == 9">
+                                            [dropdown]="true" errorMessage="Records not found" [forceSelection]="true">
                                         </p-autoComplete>
                                     </div>
                                 </div>
                                 <div class="form-row" *ngIf="receivingForm.traceableToTypeId == 4">
                                     <div class="col-sm-12">
-                                        <label> Add Other <span class="text-danger">*</span></label>
+                                        <label> Add Other </label>
+                                        <!-- [required]="receivingForm.traceableToTypeId == 4" -->
                                         <input class="form-control" type="text" name="traceableToOther"
                                             (ngModelChange)="getActive()"
-                                            [required]="receivingForm.traceableToTypeId == 4"
                                             [(ngModel)]="receivingForm.traceableTo">
                                     </div>
                                 </div>

@@ -348,7 +348,6 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
     }
 
     berDetermination(value,from): any {
-        console.log("values",value);
         if(from=='html'){
             this.sourceWorkFlow.fixedAmount=value;
         setTimeout(() => {
@@ -412,6 +411,7 @@ validateCOstflow(){
     }
     this.calculateTotalWorkFlowCost(false)
 }
+masterItemMasterId:any;
     loadWorkFlow() {
         if (this._workflowService.enableUpdateMode == true && !this.UpdateMode) {
             let workFlowId: any = this._workflowService.currentWorkFlowId;
@@ -424,6 +424,7 @@ validateCOstflow(){
                         partName: workFlow[0].partNumber
                     }
                 }
+                this.masterItemMasterId=workFlow[0].itemMasterId,
                 this.sourceWorkFlow.percentageOfMaterial = this.sourceWorkFlow.percentageOfMaterial > 0 ? this.sourceWorkFlow.percentageOfMaterial : -1;
                 this.sourceWorkFlow.percentageOfExpertise = this.sourceWorkFlow.percentageOfExpertise > 0 ? this.sourceWorkFlow.percentageOfExpertise : -1;
                 this.sourceWorkFlow.percentageOfCharges = this.sourceWorkFlow.percentageOfCharges > 0 ? this.sourceWorkFlow.percentageOfCharges : -1;
