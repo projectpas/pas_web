@@ -119,7 +119,7 @@
                         <div class="md-step-circle"><span>8</span></div>
                         <div class="md-step-title">Export Info</div>
                         <div class="md-step-bar-left"></div>
-                        <div class="md-step-bar-right"></div>
+                        <!-- <div class="md-step-bar-right"></div> -->
                     </div>
 
                     <div class="pheading">
@@ -1896,7 +1896,7 @@
             <!-- End of exchange and loans tab-->
             <div [ngClass]="{hideTab : currentTab !== 'ExportInfo'}">
                 <div style="padding: 5px;">
-                    <div class="card new-card" >                       
+                    <div class="card new-card">                       
                         <div class="card-header header" >
                             <div class="row">
                               <div class="col">
@@ -1906,7 +1906,7 @@
                         </div>
                         <form #exportInformatiom="ngForm">
                             <div class="form-row col-row">
-                                <div class="col-md-2" style="max-width: 10%;">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label for="eccn" class="control-label">
                                             ECCN <span style="color: red;">*</span>
@@ -1937,15 +1937,19 @@
                                         </p-autoComplete>
                                         <label class="control-label">Value </label>
                                         <input type="text" class="input-field-value text-right" pInputText pKeyFilter="money" maxlength="15" [(ngModel)]="exportInfo.exportValue" (change)="onChangeExportVal()" name="exportValue" id="exportValue" title="Export Value" (keyup)="btnChange()" />
+                                       
                                         <label class="control-label">Currency </label>
-                                        <p-dropdown class="p-dropdown-100" [options]="allCurrencyInfo" 
-                                        filter="true" [(ngModel)]="exportInfo.exportCurrencyId" name="exportCurrencyId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true"></p-dropdown>
+                                       <p-dropdown class="p-dropdown-100" [options]="allCurrencyInfo" 
+                                        filter="true" [(ngModel)]="exportInfo.exportCurrencyId"
+                                         name="exportCurrencyId" [resetFilterOnHide]="true"
+                                          placeholder="-- Select --" [showClear]="true"></p-dropdown>
+                                          
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <div class="form-row m-t-10">
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 <label>Weight</label>
                                                 <input type="number" class="input-field-value" pKeyFilter="num" pInputText maxlength="10" [(ngModel)]="exportInfo.exportWeight" name="exportWeight" id="exportWeight" title="Export Weight" (keyup)="btnChange()" />
                                             </div>
@@ -1964,7 +1968,7 @@
                                             </div>
                                         </div>
                                         <div class="form-row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-5">
                                                 <label class="control-label">Size (L,W,H) </label>
                                                 <span class="display-flex inline-block">
                                                     <input type="number" name="exportLength" class="input-field-value" pInputText pKeyFilter="num" maxlength="10" (keyup)="btnChange()" [(ngModel)]="exportInfo.exportSizeLength" />&nbsp;
@@ -3499,8 +3503,9 @@
 
             <div class="modal-body">
                 <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
-                <div class="table-responsive mt-2">
-                    <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width">
                         <thead>
                             <tr>
                                 <th>Aircraft</th>
@@ -3555,6 +3560,7 @@
                             <td style="background-color: #fff !important;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                         </tr>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -3583,8 +3589,9 @@
             </div>
             <div class="modal-body" *ngIf="ataChapterAuditHistory">
                 <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
-                <div class="table-responsive mt-2">
-                    <table class="table table-bordered"
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width"
                            *ngIf="ataChapterAuditHistory.length > 0; else noDatavailable">
                         <thead>
                             <tr>
@@ -3641,9 +3648,10 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <h4 style="color: #ff5663;">No History Found</h4>
+                            <h4 class="no-history-found-msg">No History Found</h4>
                         </div>
                     </ng-template>
                 </div>
@@ -3831,8 +3839,9 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th> Name</th>
@@ -3889,6 +3898,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
@@ -3915,8 +3925,9 @@
     <div class="modal-body">
         <app-pn-header [partData]="sourceItemMaster"></app-pn-header>
 
-        <div class="table-responsive pandsHistoryTable mt-2">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th colspan="10">Unit Purchase Price</th>
@@ -4147,6 +4158,7 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

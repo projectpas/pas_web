@@ -333,24 +333,25 @@
             </div>
             <div class="modal-body">
                 <app-pn-header [partData]="partData"></app-pn-header>
-                <div class="table-responsive pandsHistoryTable mt-2">
-                    <table style="overflow-y: scroll;" class="table table-bordered" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
-                                <th style="width: 100px;" >Caps Type</th>
-                                <th style="width: 100px;">PN</th>
-                                <th style="width: 100px;">PN Description</th>
-                                <th style="width: 400px;" colspan="4">Management Structure</th>
-                                <th style="width: 100px;">Added Date</th>
-                                <th style="width: 100px;">Is Verified</th>
-                                <th style="width: 100px;">Verified By</th>
-                                <th style="width: 100px;">Verified Date</th>
-                                <th style="width: 100px;">Memo</th>
-                                <th style="width: 100px;">Created By</th>
-                                <th style="width: 100px;">Created Date</th>
-                                <th style="width: 100px;">Updated By</th>
-                                <th style="width: 100px;">Updated Date</th>
-                                <th style="width: 100px;">Is Deleted</th>
+                                <th >Caps Type</th>
+                                <th >PN</th>
+                                <th >PN Description</th>
+                                <th  colspan="4">Management Structure</th>
+                                <th >Added Date</th>
+                                <th>Is Verified</th>
+                                <th >Verified By</th>
+                                <th >Verified Date</th>
+                                <th >Memo</th>
+                                <th >Created By</th>
+                                <th >Created Date</th>
+                                <th >Updated By</th>
+                                <th>Updated Date</th>
+                                <th>Is Deleted</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="capabilityauditHisory.length> 0">
@@ -377,10 +378,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
 
                     </ng-template>
