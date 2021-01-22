@@ -76,7 +76,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
         }
-        this.ptnumberlistdata();
+        this.ptnumberlistdata('');
     }
 
     ngOnChanges(): void {
@@ -123,7 +123,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 event = "";
                 this.alertService.showMessage("Workflow", "Asset Id is already in use in Tool List", MessageSeverity.error);
             }
-            else {
+            else { 
                 for (let i = 0; i < this.itemclaColl.length; i++) {
                     if (event == this.itemclaColl[i][0].name) {
                         equipment.assetId = this.itemclaColl[i][0].assetId;
@@ -138,7 +138,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         }
     }
 
-    filterpartItems(event) {
+    filterpartItems(event) { 
         this.partCollection = [];
         this.itemclaColl = [];
         if (this.allPartnumbersInfo) {
@@ -172,9 +172,10 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 }
             }
         }
+        this.ptnumberlistdata(event.query);
     }
     
-    private ptnumberlistdata() {
+    private ptnumberlistdata(value) {
         this.isSpinnerVisible = true;
         let equipmentIds = [];
         if (this.UpdateMode) {
@@ -182,7 +183,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 return equipmentIds.push(acc.assetTypeId);
             }, 0)
         }
-        this.commonService.autoCompleteSmartDropDownAssetList('', true, 20, equipmentIds)
+        this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds)
             .subscribe(results => {
                 this.isSpinnerVisible = false;
                 this.allPartnumbersInfo = results;

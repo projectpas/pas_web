@@ -627,7 +627,7 @@
                                     <div id="tab_Exclusions"
                                         *ngIf="workFlow != undefined && workFlow.exclusions != undefined"
                                         class="tab-pane fade pan">
-                                        <grd-exclusions [UpdateMode]="UpdateMode" [workFlow]='workFlow'
+                                        <grd-exclusions [UpdateMode]="UpdateMode" [workFlow]='workFlow' [masterItemMasterId]="masterItemMasterId"
                                             isWorkFlow="true"></grd-exclusions>
                                     </div>
                                     <div id="tab_Expertise"
