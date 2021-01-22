@@ -2192,22 +2192,32 @@ export class PurchaseSetupComponent implements OnInit {
 		if(event.index == 1 ) {
 			this.showAddresstab = true;
 		}
-		if(event.index == 2 ) {
+		if(event.index == 2 && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 		}
-		if(event.index == 3 ) {
+		if(event.index == 3  && this.posettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.poId);
 			this.getApprovalProcessListById(this.poId);
 			this.enableApproverSaveBtn = false;
 		}
-		if(event.index == 4) {
+		if(event.index == 4 && this.posettingModel.IsEnforceApproval) {
 			this.showVendorCaptab = true;
 			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
 		}
-		if(event.index == 5) {
+		if(event.index == 5 && this.posettingModel.IsEnforceApproval) {
 			this.showDocumenttab = true;
 		}
-		if(event.index == 6) {
+		if(event.index == 6 && this.posettingModel.IsEnforceApproval) {
+			this.showComunicationtab = true;
+		}	
+		if(event.index == 2 && !this.posettingModel.IsEnforceApproval) {
+			this.showVendorCaptab = true;
+			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
+		}
+		if(event.index == 3 && !this.posettingModel.IsEnforceApproval) {
+			this.showDocumenttab = true;
+		}
+		if(event.index == 4 && !this.posettingModel.IsEnforceApproval) {
 			this.showComunicationtab = true;
 		}	
 		
