@@ -1,13 +1,13 @@
 ﻿<div class="card new-card">
-    <div class="card-header bg-primary new-card-header" *ngIf="!isEnableItemMasterView">
+    <div class="card-header header" *ngIf="!isEnableItemMasterView">
 		<div class="row">
 		  <div class="col">
-			<h4 class="new-card-heading">Capabilities Info</h4>
+			<h4 class="header-name">Capabilities Info</h4>
 		  </div>
 		  <div>
 			<button
 			type="button" (click)="onAddCapes()"
-			class="btn-sm new-btn-primary" data-toggle="modal" data-target="#capes1">
+			class="btn-sm header-button" data-toggle="modal" data-target="#capes1">
 			Add New Capability
 			</button>
 		  </div>
@@ -27,15 +27,13 @@
                     [options]="cols"
                     optionLabel="header"
                     [(ngModel)]="selectedColumns"
-                    [style]="{ minWidth: '200px' }"
-                    style="float: left;"
+                    class="multiselect-field"
                     (onChange)="columnsChanges()"
                   ></p-multiSelect>
                 </div>
                 <div class="col">
-                  <div
-                    style="width: auto !important; float: right;"
-                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                    <div					
+                    class="global-search-field inner-addon right-addon inline-block"
                   >
                     <i class="fa fa-search"></i>
                     <input
@@ -53,7 +51,7 @@
                 <div class="col">
                   <button
                     type="button"
-                    class="btn btn-primary new-table-button"
+                    class="btn btn-primary exports-button"
                     matTooltip="Download Data"
                     matTooltipPosition="above"
                     pButton
@@ -66,7 +64,7 @@
                   ></button>
                   <button
                     type="button"
-                    class="btn btn-primary new-table-button"
+                    class="btn btn-primary exports-button"
                     matTooltip="Download Selected Data"
                     matTooltipPosition="above"
                     pButton
@@ -106,43 +104,43 @@
 
         <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
-                <col *ngFor="let col of columns" style="width:130px">
+                <col *ngFor="let col of columns" class="table-column-width">
             </colgroup>
         </ng-template>
 
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <ng-container *ngFor="let col of columns">
-                    <th class="text-center"
+                    <th class="table-column-width"
                         *ngIf="col.field!='level1' && col.field!='level2' && col.field!='level3' && col.field!='level4'"
                         pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th class="text-center" *ngIf="col.field=='level1'" colspan="4" pResizableColumn pReorderableColumn
+                    <th class="table-column-width" *ngIf="col.field=='level1'" colspan="4" pResizableColumn pReorderableColumn
                         [pSortableColumn]="col.field">
                         Management Structure
                     </th>
                 </ng-container>
-                <th style="width: 120px; position:sticky">Actions</th>
+                <th class="table-actions-column">Actions</th>
             </tr>
             <tr>
-                <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <ng-container *ngIf="col.field!='isVerified'">
-                        <input style="width:100%;" pInputText type="text"
+                        <input class="table-header-input-width" pInputText type="text"
                             (input)="capabilityListTable.filter($event.target.value, col.field, 'contains')">
                     </ng-container>
                     <ng-container *ngIf="col.field =='isVerified'">
                     </ng-container>
                 </th>
-                <th style="width: 120px; position:sticky"></th>
+                <th class="table-actions-column"></th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" pReorderableRowHandle>
 
-                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                     
                     <ng-container *ngIf="col.field!='isVerified' && col.field !='memo' && col.field!='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
@@ -168,7 +166,7 @@
                         <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
                     </ng-container>
                 </td>
-                <td style="width:120px">
+                <td class="action-icons-cstm table-column-width">
                     <ng-container *ngIf="!rowData.isDeleted">
                     <span> <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewCap" (click)="onViewCapes(rowData)"
                          matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a> </span>
@@ -200,18 +198,18 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="allItemMasterCapsList?.length == 0">
             <tr>
-                <td [attr.colspan]="11" class="no-records-cstm">
+                <td [attr.colspan]="11" class="no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>
         </ng-template>
         <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+            <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                 [(ngModel)]="capabilityListTable._totalRecords" [disabled]="true" pInputText type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
-            <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+            <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                 [ngModel]="getPageCount(capabilityListTable._totalRecords, itemMasterCapesPageSize)" [disabled]="true"
                 pInputText type="text" />
         </ng-template>
@@ -335,24 +333,25 @@
             </div>
             <div class="modal-body">
                 <app-pn-header [partData]="partData"></app-pn-header>
-                <div class="table-responsive pandsHistoryTable mt-2">
-                    <table style="overflow-y: scroll;" class="table table-bordered" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
                         <thead>
                             <tr>
-                                <th style="width: 100px;" >Caps Type</th>
-                                <th style="width: 100px;">PN</th>
-                                <th style="width: 100px;">PN Description</th>
-                                <th style="width: 400px;" colspan="4">Management Structure</th>
-                                <th style="width: 100px;">Added Date</th>
-                                <th style="width: 100px;">Is Verified</th>
-                                <th style="width: 100px;">Verified By</th>
-                                <th style="width: 100px;">Verified Date</th>
-                                <th style="width: 100px;">Memo</th>
-                                <th style="width: 100px;">Created By</th>
-                                <th style="width: 100px;">Created Date</th>
-                                <th style="width: 100px;">Updated By</th>
-                                <th style="width: 100px;">Updated Date</th>
-                                <th style="width: 100px;">Is Deleted</th>
+                                <th >Caps Type</th>
+                                <th >PN</th>
+                                <th >PN Description</th>
+                                <th  colspan="4">Management Structure</th>
+                                <th >Added Date</th>
+                                <th>Is Verified</th>
+                                <th >Verified By</th>
+                                <th >Verified Date</th>
+                                <th >Memo</th>
+                                <th >Created By</th>
+                                <th >Created Date</th>
+                                <th >Updated By</th>
+                                <th>Updated Date</th>
+                                <th>Is Deleted</th>
                             </tr>
                         </thead>
                         <tbody *ngIf="capabilityauditHisory.length> 0">
@@ -379,10 +378,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                            <h4 style="color: #ff5663;">No History Found </h4>
+                            <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
+                            <h4 class="no-history-found-msg">No History Found </h4>
                         </div>
 
                     </ng-template>
@@ -402,7 +402,7 @@
           <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
         </div>
         <div class="modal-body">
-          <table class="table table-bordered table-fixed workflow-table-material">
+          <!-- <table class="table table-bordered table-fixed workflow-table-material">
             <thead>
               <th style="color: #fff;">{{textAreaLabel}}</th>
             </thead>
@@ -415,12 +415,14 @@
                 </td>
               </tr>
             </tbody>
-          </table>
-          <div style="float:right">
-            <button type="button" class="btn btn-primary"
-             data-dismiss="modal"
-              style="padding: 6px 12px !important;margin-top: 10px;" (click)="onSaveTextAreaInfo()">Save</button>
-            <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;"
+          </table> -->
+          <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
+          [style]="{'height':'320px'}" name="textAreaInfo" 
+          required></p-editor>
+          <div class="editor-buttons">
+            <button type="button" class="btn btn-primary editor-buttons-margin"
+             data-dismiss="modal" (click)="onSaveTextAreaInfo()">Save</button>
+            <button type="button" class="btn btn-danger editor-buttons-margin"
               data-dismiss="modal">Close</button>
           </div>
         </div>

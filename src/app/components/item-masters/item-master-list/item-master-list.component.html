@@ -1,22 +1,22 @@
 ﻿<div class="x_panel">
     <div class="x_content">
         <div class="card new-card">
-            <div class="card-header bg-primary new-card-header">
+            <div class="card-header header">
                 <div class="row">
                   <div class="col">
-                    <h4 class="new-card-heading">Item Master List</h4>
+                    <h4 class="header-name">Item Master List</h4>
                   </div>
                   <div>
                     <button
                       type="button" *ngIf="stockTable"
-                      class="btn-sm new-btn-primary"
+                      class="btn-sm header-button"
                       (click)="navigateTogeneralInfostock()"
                     >
                       Add Item Master Stock
                     </button>
                     <button
                       type="button" *ngIf="nonStockTable"
-                      class="btn-sm new-btn-primary"
+                      class="btn-sm header-button"
                       (click)="navigateTogeneralInfononstock()"
                     >
                       Add Item Master Non-Stock
@@ -24,7 +24,7 @@
                   </div>
                 </div>
             </div>
-            <div class="card-body new-card-body">
+            <div class="card-body header-body">
                 <div class="right_col" role="main" *ngIf="stockTable">
                     <p-table #dt class="rpo-table-cstm rro-table-cstm"
                              [value]="allStockInfo"
@@ -50,15 +50,13 @@
                                     [options]="cols"
                                     optionLabel="header"
                                     [(ngModel)]="stockTableColumns"
-                                    [style]="{ minWidth: '200px' }"
-                                    style="float: left;"
+                                    class="multiselect-field"
                                   ></p-multiSelect>
                                   
                                 </div>
                                 <div class="col">
-                                  <div
-                                    style="width: auto !important; float: right;"
-                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                                    <div					
+                                    class="global-search-field inner-addon right-addon inline-block"
                                   >
                                     <i class="fa fa-search"></i>
                                     <input
@@ -77,7 +75,7 @@
                                 <div>
                                     <button
                                     type="button"
-                                    class="btn btn-primary new-table-button"
+                                    class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
                                     matTooltipPosition="above"
                                     pButton
@@ -90,7 +88,7 @@
                                   ></button> 
                                   <button
                                     type="button"
-                                    class="btn btn-primary new-table-button"
+                                    class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
                                     matTooltipPosition="above"
                                     pButton
@@ -111,7 +109,7 @@
                                                 <span class="checkmark"></span>Stock
                                             </label>
                                         </div>
-                                        <div class="pull-left" style="margin-top: 6px; margin-right: 15px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="item-category" class="form-control" value="Non-stock"
                                                        (click)="onRadioChange(1)" [checked]="radioButtonValue == 'Non-stock'">
@@ -119,26 +117,26 @@
                                             </label>
                                         </div>
                                         <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
-                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
                                                 <span class="checkmark"></span>Active
                                             </label>
                                         </div>
-                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="inactive" (click)="geListByStatus('inactive')" [(ngModel)]="currentstatus">
                                                 <span class="checkmark"></span>In-Active
                                             </label>
                                         </div>
-                                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="all" (click)="geListByStatus('all')" [(ngModel)]="currentstatus">
                                                 <span class="checkmark"></span>All
                                             </label>
                                         </div>
-                                        <div class="checkbox-cstm" style="margin-left: 0;">
-                                            <label style="width: auto !important;margin-top: 3px;">
+                                        <div class="checkbox-cstm pull-left checkbox-align">
+                                            <label class="checkbox-label-align">
                                             <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" 
                                              (click)="getDeleteListByStatus($event.target.checked)"
                                                 />
@@ -152,24 +150,24 @@
                               </div>
                               <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" style="width:130px">
+                                    <col *ngFor="let col of columns" class="table-column-width">
                                 </colgroup>
                             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th style="width:auto" *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                    <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                         [pSortableColumn]="col.field">
                         {{col.header}}
                         <p-sortIcon [field]="col.field"></p-sortIcon>
                     </th>
-                    <th style="width:150px;position:sticky" *ngIf="selectedColumns.length > 0">
+                    <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
                         Actions
                     </th>
                 </tr>
                 <tr>
-                    <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                       <input
-                        style="width: 100%;"
+                      class="table-header-input-width"
                         pInputText
                         type="text"
                         *ngIf="col.field !== 'startDate'"
@@ -181,17 +179,17 @@
                         type="date"
                         *ngIf="col.field == 'startDate'"
                         name="StartDate"
-                        style="width: 100%;"
+                        class="table-header-input-width"
                         (change)="dt.filter($event.target.value, col.field, 'contains')"
                       />
                     </th>
-                    <th style="width: 130px;"></th>
+                    <th class="table-actions-column"></th>
                   </tr>
             </ng-template>
             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                 <tr [pSelectableRowDblClick]="rowData" [pSelectableRow]="rowData" pReorderableRowHandle
                     (dblclick)="viewSelectedRow(rowData)" data-toggle="modal" data-target="#view">
-                    <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
+                    <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column"
                         pReorderableRowHandle>
                         {{
               col.field == 'createdDate'
@@ -201,7 +199,7 @@
                 : rowData[col.field]
                         }}
                     </td>
-                    <td class="action-icons-cstm" style="width:150px" *ngIf="selectedColumns.length > 0">
+                    <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0">
                         <div *ngIf="currentDeletedstatus==false">
                             <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active"
                                 matTooltipPosition="above" onLabel="on" offLabel="off"
@@ -312,34 +310,34 @@
 
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" style="width:160px">
+                                <col *ngFor="let col of columns" class="table-column-width">
                             </colgroup>
                         </ng-template>
 
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                     [pSortableColumn]="col.field">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
                                 </th>
-                                <th style="width:130px; text-align: center;">Actions</th>
+                                <th class="table-actions-column">Actions</th>
                             </tr>
                             <tr>
-                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input *ngIf="col.header != 'PN' && col.header != 'PN Description'" style="width:100%;" pInputText type="text"
+                                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input *ngIf="col.header != 'PN' && col.header != 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')">
-                                    <input *ngIf="col.header == 'PN' || col.header == 'PN Description'" style="width:100%;" pInputText type="text"
+                                    <input *ngIf="col.header == 'PN' || col.header == 'PN Description'" class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, 'contains')" [disabled]="isOpenAdvancedSearch">
 
                                 </th>
-                                <th style="width:130px"></th>
+                                <th class="table-actions-column"></th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-rowData let-car let-columns="columns">
                             <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openViewOnDbl(rowData)">
-                                <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+                                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                     <ng-container *ngIf="col.field !='isSerialized' && col.field!='isTimeLife' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                         {{rowData[col.field]}}
                                     </ng-container>
@@ -351,7 +349,7 @@
                                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
                                     </ng-container>
                                 </td>
-                                <td class="action-icons-cstm" style="width:130px;">
+                                <td class="action-icons-cstm table-column-width">
                                     <div>
                                         <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']" [disabled]="currentDeletedstatus"></p-inputSwitch>
                                         <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChangeforstock(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -373,18 +371,18 @@
                                      let-columns
                                      *ngIf="allStockInfo.length == 0">
                             <tr>
-                                <td [attr.colspan]="7" class="no-records-cstm">
+                                <td [attr.colspan]="7" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="totalRecords" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="totalRecords" [disabled]="true" pInputText
                                    type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
-                            <input style="width: 5%;" [(ngModel)]="totalPages" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="totalPages" [disabled]="true" pInputText
                                    type="text" />
                         </ng-template>
                     </p-table>
@@ -405,14 +403,12 @@
                                     [options]="cols1"
                                     optionLabel="header"
                                     [(ngModel)]="nonStockTableColumns"
-                                    [style]="{ minWidth: '200px' }"
-                                    style="float: left;"
+                                    class="multiselect-field"
                                   ></p-multiSelect>
                                 </div>
                                 <div class="col">
-                                  <div
-                                    style="width: auto !important; float: right;"
-                                    class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                                    <div					
+                                    class="global-search-field inner-addon right-addon inline-block"
                                   >
                                     <i class="fa fa-search"></i>
                                     <input
@@ -431,7 +427,7 @@
                                 <div>
                                     <button
                                     type="button"
-                                    class="btn btn-primary new-table-button"
+                                    class="btn btn-primary exports-button"
                                     matTooltip="Download Data"
                                     matTooltipPosition="above"
                                     pButton
@@ -442,7 +438,7 @@
                                   ></button>
                                   <button
                                     type="button"
-                                    class="btn btn-primary new-table-button"
+                                    class="btn btn-primary exports-button"
                                     matTooltip="Download Selected Data"
                                     matTooltipPosition="above"
                                     pButton
@@ -464,7 +460,7 @@
                                                     <span class="checkmark"></span>Stock
                                                 </label>
                                             </div>
-                                            <div class="pull-left" style="margin-top: 6px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="item-category" class="form-control" value="non-stock"
                                                            (click)="onRadioChange(1)" [checked]="radioButtonValue == 'Non-stock'">
@@ -472,26 +468,26 @@
                                                 </label>
                                             </div>
                                             <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
                                                     <span class="checkmark"></span>Active
                                                 </label>
                                             </div>
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="EmpStatus" class="form-control" value="inactive" (click)="geListByStatus('inactive')" [(ngModel)]="currentstatus">
                                                     <span class="checkmark"></span>In-Active
                                                 </label>
                                             </div>
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="EmpStatus" class="form-control" value="all" (click)="geListByStatus('all')" [(ngModel)]="currentstatus">
                                                     <span class="checkmark"></span>All
                                                 </label>
                                             </div>
-                                            <div class="checkbox-cstm" style="margin-left: 0;">
-                                                <label style="width: auto !important;margin-top: 3px;">
+                                            <div class="checkbox-cstm pull-left checkbox-align">
+                                                <label class="checkbox-label-align">
                                                 <!--  -->
                                                 <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  
                                                 (click)="getDeleteListByStatus($event.target.checked)"/>
@@ -573,30 +569,30 @@
                         </ng-template>
                         <ng-template pTemplate="colgroup" let-columns>
                             <colgroup>
-                                <col *ngFor="let col of columns" style="width:160px">
+                                <col *ngFor="let col of columns" class="table-column-width">
                             </colgroup>
                         </ng-template>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
 
-                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                     [pSortableColumn]="col.field">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
                                 </th>
 
-                                <th style="width:130px; text-align: center;">Actions</th>
+                                <th class="table-actions-column">Actions</th>
 
                             </tr>
 
                             <tr>
-                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input style="width:100%;" *ngIf="col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
+                                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input class="table-header-input-width" *ngIf="col.header != 'PN' && col.header != 'Description' && col.header != 'List Price'" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
-                                    <input style="width:100%;" *ngIf="col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
+                                    <input class="table-header-input-width" *ngIf="col.header == 'PN' || col.header == 'Description' || col.header == 'List Price'" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)" [disabled]="isOpenAdvancedSearch">
                                 </th>
-                                <th style="width:130px"></th>
+                                <th class="table-actions-column"></th>
                             </tr>
                         </ng-template>
 
@@ -605,18 +601,18 @@
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                 (dblclick)="openViewforNonstock(view1,rowData)">
                                 <ng-container *ngFor="let col of columns">
-                                    <td *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
+                                    <td class="table-column-width" *ngIf="col.field != 'unitCost' && col.field != 'listPrice' && col.field != 'createdDate' && col.field != 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         {{rowData[col.field]}}
                                     </td>
-                                    <td *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
+                                    <td class="table-column-width" *ngIf="col.field == 'unitCost' || col.field == 'listPrice'" class="ui-resizable-column" pReorderableRowHandle>
                                         <p class="m-0 p-0 text-right">{{rowData[col.field]}}</p>
                                     </td>                                        
-                                    <td *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
+                                    <td class="table-column-width" *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'" class="ui-resizable-column" pReorderableRowHandle>
                                         <p class="m-0 p-0 text-left">{{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}</p>
                                     </td>    
                                 </ng-container>
                                 
-                                <td class="action-icons-cstm" style="width:130px">
+                                <td class="action-icons-cstm table-column-width">
                                     <div *ngIf="currentDeletedstatus==false">
                                         <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" matTooltipPosition="above"
                                                        onLabel="on" offLabel="off"
@@ -677,18 +673,18 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" let-columns *ngIf="allNonstockInfo.length == 0">
                             <tr>
-                                <td [attr.colspan]="7" class="no-records-cstm">
+                                <td [attr.colspan]="7" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="totalRecordsNonStock" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="totalRecordsNonStock" [disabled]="true" pInputText
                                    type="text" />
                             &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
-                            <input style="width: 5%;" [(ngModel)]="totalPagesNonStock" [disabled]="true" pInputText
+                            <input class="footer-input-width" [(ngModel)]="totalPagesNonStock" [disabled]="true" pInputText
                                    type="text" />
                         </ng-template>
                     </p-table>
@@ -831,8 +827,9 @@
 
                             <div style="text-align: right">
                                 <p-multiSelect [options]="cols2" [(ngModel)]="selectedColumns2" optionLabel="header"
-                                               selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
-                                               defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                               selectedItemsLabel="{0} columns selected"
+                                               class="multiselect-field"
+                                               defaultLabel="Choose Columns"></p-multiSelect>
 
 
                                 <div class="inner-addon right-addon w200 inline-block">
@@ -867,31 +864,31 @@
                         <ng-template pTemplate="header" let-columns>
                             <tr>
 
-                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                     [pSortableColumn]="col.field">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
                                 </th>
 
-                                <th></th>
+                                <th class="table-actions-column"></th>
 
                             </tr>
 
                             <tr>
-                                <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                                    <input style="width:100%;" pInputText type="text"
+                                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <input  class="table-header-input-width" pInputText type="text"
                                            (input)="dt.filter($event.target.value, col.field, col.filterMatchMode)">
 
                                 </th>
-                                <th></th>
+                                <th class="table-actions-column"></th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-car>
                             <tr [pSelectableRow]="rowData" pReorderableRowHandle (dblclick)="openEdited(rowData)">
-                                <td>{{car.partNumber}}</td>
-                                <td>{{car.partDescription}}</td>
-                                <td>
+                                <td class="table-column-width">{{car.partNumber}}</td>
+                                <td class="table-column-width">{{car.partDescription}}</td>
+                                <td class="table-column-width">
                                     <div *ngIf="car.certificationRequired==true">
                                         Yes
                                     </div>
@@ -899,9 +896,9 @@
                                         No
                                     </div>
                                 </td>
-                                <td>{{car.equipmentValidationType?.description}}</td>
-                                <td>{{car.manufacturer?.name}}</td>
-                                <td>
+                                <td class="table-column-width">{{car.equipmentValidationType?.description}}</td>
+                                <td class="table-column-width">{{car.manufacturer?.name}}</td>
+                                <td class="table-column-width">
                                     <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on"
                                                    offLabel="off" (onChange)="handleChangeforstock(rowData,$event)"
                                                    [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -1037,7 +1034,7 @@
             <div class="modal-body">
                 <div class="text-center">
                     <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                    <h4 style="color: #ff5663;">No History Found </h4>
+                    <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
             </div>
 
@@ -1061,7 +1058,7 @@
             <div class="modal-body">
                 <div class="text-center">
                     <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                    <h4 style="color: #ff5663;">No History Found </h4>
+                    <h4 class="no-history-found-msg">>No History Found </h4>
                 </div>
             </div>
 
