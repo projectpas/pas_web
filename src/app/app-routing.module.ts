@@ -4,7 +4,7 @@
 // ===============================
 
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, PreloadAllModules } from '@angular/router';
 import { LoginComponent } from "./components/login/login.component";
 import { HomeComponent } from "./components/home/home.component";
 import { ProductsComponent } from "./components/products/products.component";
@@ -98,7 +98,9 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
             { path: "app-supervisor", component: SupervisorComponent, data: { title: "Supervisor" } },
             { path: "home", redirectTo: "/", pathMatch: "full" },
             { path: "**", component: NotFoundComponent, data: { title: "Page Not Found" } },
-        ])
+        ], {
+            preloadingStrategy: PreloadAllModules
+        })
     ],
     exports: [
         RouterModule

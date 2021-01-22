@@ -88,10 +88,10 @@
 					  appendTo='body' [baseZIndex]="9999"
 					  name="company{{row_no}}"
 					  #companyId="ngModel"
-					  [options]="legalEntityList"
+					  [options]="  getDynamicVariableData('legalEntityList',row_no)"
 					  class="p-dropdown-custom-sm"
 					  (onChange)="selectedLegalEntity($event.value, row_no)"
-					  [(ngModel)]="rowData.companyId"
+					  [(ngModel)]="rowData.companyId" 
 					  filter="true" [resetFilterOnHide]="true"
 					  [required]="true">
 					</p-dropdown>
@@ -152,7 +152,7 @@
 						name="isverified{{row_no}}"
 						binary="false"						
 						[(ngModel)]="rowData.isVerified"
-						(onChange)="resetVerified(rowData, $event)"					
+						(onChange)="resetVerified(rowData, $event,row_no)"					
 					  ></p-checkbox>
 					</td>
 					<td style="width: 130px;">
@@ -169,13 +169,14 @@
 					  ></p-dropdown>
 					</td>
 					<td style="width: 110px;">
+						<!-- [required]="rowData.isVerified==true" -->
 					  <p-calendar
 					  	class="pcal-item-capes"
 						[(ngModel)]="rowData.verifiedDate"
 						[yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-						[disabled]="!rowData.isVerified"
+						[disabled]="rowData.isVerified"
 						appendTo='body' [baseZIndex]="9999"
-						[required]="rowData.isVerified"
+					
 						name="verifiedDate{{row_no}}"
 						[showIcon]="true"
 					  ></p-calendar>

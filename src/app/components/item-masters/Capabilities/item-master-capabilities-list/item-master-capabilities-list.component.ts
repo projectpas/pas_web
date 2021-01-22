@@ -221,6 +221,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             { field: 'level2'},
             { field: 'level3'},
             { field: 'level4'},
+            { field: 'addedDate', header: 'Added Date' },
             { field: 'isVerified', header: 'Verified' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
@@ -238,6 +239,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
             { field: 'level2', header: 'Level 02' },
             { field: 'level3', header: 'Level 03' },
             { field: 'level4', header: 'Level 04' },
+            { field: 'addedDate', header: 'Added Date' },
             { field: 'isVerified', header: 'Verified' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
@@ -568,8 +570,16 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     }
 
     resetVerified(rowData, value) {
-            rowData.verifiedById = null;
-            rowData.verifiedDate = new Date();
+            if (value === false) {
+                rowData.verifiedById = null;
+                rowData.verifiedDate = null;
+            }
+             if(value == true){
+                rowData.verifiedDate = new Date();
+                const employee=this.authService.currentEmployee;
+                rowData.verifiedById = employee.value;
+            }
+
     }
 
     openPopUpWithData(content, row) //this is for Edit Data get
@@ -1008,7 +1018,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
 
     async getAllEmployeesByManagmentStructureID() {
 		if(this.arrayEmplsit.length == 0) {			
-		this.arrayEmplsit.push(0); }	
+		this.arrayEmplsit.push(0,this.authService.currentEmployee.value); }	
         await this.commonservice.autoCompleteDropdownsCertifyEmployeeByMS('',true, 200,this.arrayEmplsit.join(), this.currentUserManagementStructureId).subscribe(res => {
             this.employeeList = res;            
         }, error => error => this.saveFailedHelper(error))
@@ -1184,7 +1194,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
             }),
                 error => {
-                    console.log("ERROR:" + error);
                 }
         }
         else {
@@ -1296,9 +1305,12 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 ...x,
                 isVerified: x.isVerified == 1 ? 'check' : 'unchecked',
                 memo: x.memo.replace(/<[^>]*>/g, ''),
+                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+
+                
             }
         });
         dt.exportCSV();

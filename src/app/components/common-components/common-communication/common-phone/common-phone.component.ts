@@ -8,7 +8,7 @@ import { CommonService } from '../../../../services/common.service';
 import { CommunicationService } from '../../../../shared/services/communication.service';
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from '@angular/common';
-
+import * as moment from 'moment';
 @Component({
     selector: 'app-common-phone',
     templateUrl: './common-phone.component.html',
@@ -255,6 +255,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
+    dataOriginal:any=[];
     getAllPhoneList() {
         this.data = [];
         this.isSpinnerVisible = true;
@@ -271,6 +272,7 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
                                 updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy hh:mm a') : '',
                             }
                         });
+                        this.dataOriginal = this.data;
                     }
                     else
                         this.data = [];
@@ -485,5 +487,21 @@ export class PhoneCommonComponent implements OnInit, OnChanges {
     }
     errorMessageHandler() {
         this.isSpinnerVisible = false;
+    }
+
+    dateFilterForTable(date, field) {
+        if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+            this.data = this.dataOriginal;
+            const data = [...this.data.filter(x => {
+                if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                    return x;
+                } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                    return x;
+                }
+            })]
+            this.data = data;
+        } else {
+            this.data = this.dataOriginal;
+        }
     }
 }

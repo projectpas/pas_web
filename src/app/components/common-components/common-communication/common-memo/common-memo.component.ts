@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common';
 
 export class MemoCommonComponent implements OnInit, OnChanges {
     @Input() workOrderId: any;
+    disableSaveMemo: boolean = true;
     @Input() isView: boolean = false;
     @Input() savedWorkOrderData: any = [];
     @Input() selectedPartNumber: any = {};
@@ -89,6 +90,9 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     dismissModel() {
         this.activeModal.close();
     }
+    enableSaveMemo() {
+        this.disableSaveMemo = false;
+    }
     loadData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;;
@@ -110,6 +114,8 @@ export class MemoCommonComponent implements OnInit, OnChanges {
 		$("#memodownloadConfirmation").modal("hide");
 	}
     addMemo() {
+        this.enableSaveMemo();
+        this.disableSaveMemo = true;
         this.isEdit = false;
         this.addList = [];
         this.addList.push({ memoId: '', description: '' })
@@ -117,6 +123,9 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     edit(rowData, index) {
         this.isEdit = true;
         this.addList = [rowData];
+
+        this.enableSaveMemo();
+        this.disableSaveMemo = true;
     }
     deleteMemo(rowData) {
         this.communicationService.deleteCommonMemoList(rowData.memoId,this.userName)
@@ -244,6 +253,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
     }
     deletedStatusInfo: boolean = false;
     partNo: any;
+    dataOriginal:any=[];
     getAllMemoList() {
         this.data = [];
         // if(this.workOrderId ==undefined){
@@ -266,6 +276,7 @@ export class MemoCommonComponent implements OnInit, OnChanges {
                             return currentValue
                         })
                         this.data = (this.newdata) ? this.newdata.reverse() : [];
+                        this.dataOriginal = (this.newdata) ? this.newdata.reverse() : [];
                     } else {
                         this.data = [];
                     }
@@ -306,14 +317,30 @@ export class MemoCommonComponent implements OnInit, OnChanges {
 
 
 
-    dateFilterForTable(date, field) {
-        if(date){
-              date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
+//     dateFilterForTable(date, field) {
+//         if(date){
+//               date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+//         if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
    
-        }else{
+//         }else{
 
- }     
-          }
-        }
+//  }     
+//           }
+//         }
+
+dateFilterForTable(date, field) {
+    if (date !== '' && moment(date).format('MMMM DD YYYY')) {
+        this.data = this.dataOriginal;
+        const data = [...this.data.filter(x => {
+            if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
+                return x;
+            } else if (moment(x.updatedDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'updatedDate') {
+                return x;
+            }
+        })]
+        this.data = data;
+    } else {
+        this.data = this.dataOriginal;
+    }
+}
 }

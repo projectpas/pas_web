@@ -579,4 +579,35 @@ dismissModelAlettRestore() {
     openFreight(content) {
         this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
     }
+
+    IsAddShipVia:boolean = false;
+    ShipViaEditID:number;
+    shipviaindex;
+    isEditModeShipVia:boolean=false;
+	onEditShipVia(value,id,index) {
+        this.shipviaindex = index;
+		if(value == 'Add') {
+        //this.ShipViabutton = true;
+        this.ShipViaEditID = 0;
+		}	
+		else {
+            this.ShipViaEditID = id;
+			//this.ShipViabutton = false;
+			this.isEditModeShipVia = true;	
+		}
+		this.IsAddShipVia = true;
+    }
+    
+    RefreshAfterAddShipVia(ShippingViaId){
+        if(ShippingViaId != undefined || ShippingViaId > 0){
+            this.commonService.getShipVia().subscribe(response => {
+                this.isSpinnerVisible = false;
+                this.setShipViaList(response);
+                this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
+                this.IsAddShipVia = false;
+                this.isEnableUpdateButton = false;
+            }, error => this.isSpinnerVisible = false);
+        }
+        $('#AddShipVia').modal('hide');
+    }
 }

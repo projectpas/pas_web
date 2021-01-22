@@ -101,10 +101,20 @@
                     </th>
                 </tr>
                 <tr>
-                    <th class="table-column-width" *ngFor="let col of headers" [ngSwitch]="col.field">
+                    <!-- <th class="table-column-width" *ngFor="let col of headers" [ngSwitch]="col.field">
                         <input pInputText type="text" class="incorn_border table-header-input-width" (input)="
                             dt.filter($event.target.value, col.field, 'contains')
                         " />
+                    </th> -->
+                    <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                        <input class="incorn_border table-header-input-width"
+                            *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text"
+                            (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
+                            name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
+                            name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
                     </th>
                     <th class="table-actions-column"></th>
                 </tr>

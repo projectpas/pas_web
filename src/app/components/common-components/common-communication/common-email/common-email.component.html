@@ -96,10 +96,17 @@
                 </th>
             </tr>
             <tr>
-                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                <!-- <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                     <input class="table-header-input-width" pInputText type="text" class="incorn_border" (input)="
-                            dt.filter($event.target.value, col.field, 'contains')
-                        " />
+                            dt.filter($event.target.value, col.field, 'contains')" />
+                </th> -->
+                <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <input class="incorn_border table-header-input-width"
+                        *ngIf="col.field != 'contactDate'" pInputText type="text"
+                        (input)="dt.filter($event.target.value, col.field, 'contains')">
+
+                        <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'contactDate'"
+                        name="contactDate" (change)="dateFilterForTable($event.target.value, col.field)" />
                 </th>
                 <th class="table-actions-column" ></th>
             </tr>

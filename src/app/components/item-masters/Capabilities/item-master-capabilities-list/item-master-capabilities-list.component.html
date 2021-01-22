@@ -221,7 +221,7 @@
 
 
 <div id="capes1" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl">
+    <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" (click)="closeCapes()">&times;</button>
@@ -343,6 +343,7 @@
                                 <th style="width: 100px;">PN</th>
                                 <th style="width: 100px;">PN Description</th>
                                 <th style="width: 400px;" colspan="4">Management Structure</th>
+                                <th style="width: 100px;">Added Date</th>
                                 <th style="width: 100px;">Is Verified</th>
                                 <th style="width: 100px;">Verified By</th>
                                 <th style="width: 100px;">Verified Date</th>
@@ -363,6 +364,7 @@
                                 <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level2', audit.level2) ? 'black' : 'red' }">{{audit.level2}}</td>
                                 <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level3', audit.level3) ? 'black' : 'red' }">{{audit.level3}}</td>
                                 <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'level4', audit.level4) ? 'black' : 'red' }">{{audit.level4}}</td>
+                                <td><p style="width: 100px;">{{audit.addedDate | date: 'MM-dd-yyyy, h:mm a'}}</p></td>
                                 <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'isVerified', audit.isVerified) ? 'black' : 'red' }">{{audit.isVerified == true? 'Yes': 'No'}}</td>
                                 <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedBy', audit.verifiedBy) ? 'black' : 'red' }">{{audit.verifiedBy}}</td>
                                 <td style="width: 100px;" [ngStyle]="{color: getColorCodeForHistory(i, 'verifiedDate', audit.verifiedDate) ? 'black' : 'red' }"><p style="width: 80px;">{{audit.verifiedDate | date: 'MM-dd-yyyy'}}</p></td>
@@ -448,7 +450,7 @@
 	</div>
 </div>
 <div id="editCap" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" style="min-width: 1400px !important;">
+    <div class="modal-dialog" style="min-width: 95% !important;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" (click)="dismissModel()">&times;</button>
@@ -532,18 +534,20 @@
                                         <td style="width: 130px;">
                                             <p-dropdown class="p-dropdown-custom-sm" [options]="employeeList"
                                                 placeholder="Select"                                                 
-                                                [disabled]="!selectedItemMasterCapData.isVerified"                                                
+                                                [disabled]="selectedItemMasterCapData.isVerified==true"                                     
                                                 [required]="selectedItemMasterCapData.isVerified"
-                                                required="{{selectedItemMasterCapData.isVerified}}" name="verifiedById"
+                                                name="verifiedById"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedById"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
                                         <td style="width: 130px;">
+                                         
+
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedDate"
-                                                [disabled]="!selectedItemMasterCapData.isVerified"
-                                                [required]="selectedItemMasterCapData.isVerified" name="verifiedDate"
+                                                [disabled]="selectedItemMasterCapData.isVerified==true"
+                                                 name="verifiedDate"
                                                 [showIcon]="true" (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-calendar>
                                         </td> 
                                         <td style="width: 200px;">

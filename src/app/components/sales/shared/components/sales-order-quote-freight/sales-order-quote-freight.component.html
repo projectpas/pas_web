@@ -330,6 +330,17 @@
                         (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId"
                         required appendTo='body' [baseZIndex]="9999">
                       </p-dropdown>
+                      <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
+                        matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
+                        data-target="#AddShipVia" (click)="onEditShipVia('Add',f.shipViaId,i)"></a></span>
+                      <span style="margin-left:0px;cursor:pointer;"
+                        ><a class="btn nobg"
+                          *ngIf="f.shipViaId > 0" 
+                          matTooltip="Edit Ship Via" matTooltipPosition="above"
+                           data-toggle="modal" data-target="#AddShipVia" 
+                           (click)="onEditShipVia('Edit',f.shipViaId,i)"
+                          ><i class="fa fa-pencil"></i></a>
+                      </span>
                     </td>
                     <td>
                       <input type="number" name="weight{{ i }}" (ngModelChange)="enableUpdate()" #weight="ngModel"
@@ -396,7 +407,7 @@
                     <h4 class="modal-title">Edit {{"Memo"}}</h4>
                   </div>
                   <div class="modal-body">
-                    <!-- <table class="table table-bordered table-fixed workflow-table-material">
+                    <table class="table table-bordered table-fixed workflow-table-material">
                       <thead>
                         <th style="color: #fff;">{{"Memo"}}</th>
                       </thead>
@@ -410,10 +421,10 @@
                           </td>
                         </tr>
                       </tbody>
-                    </table> -->
-                    <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
-                    required>
-                  </p-editor>
+                    </table>
+                    <!-- <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo"
+                    required> 
+                  </p-editor>-->
                     <div class="editor-buttons">
                       <button type="button" class="btn btn-primary editor-buttons-margin"
                         (click)="onSaveTextAreaInfo(textAreaInfo);">
@@ -599,3 +610,25 @@
     <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
   </div>
 </ng-template>
+<div class="modal fade" *ngIf="IsAddShipVia" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog partsList-modal">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Add Ship Via </h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-row">
+                  <app-ship-via-create [ShipViaEditID]="ShipViaEditID" (on-shipvia-save)="RefreshAfterAddShipVia($event)"></app-ship-via-create>
+                  <!-- <app-ship-via-create (on-shipvia-save)="refresh(false)"></app-ship-via-create> -->
+              </div>
+          </div>
+          <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" style="display: none;" [disabled]="!addShipViaForm.valid " (click)="saveShipToShipViaDetailsToPO()">Save to this PO</button>
+                     
+              <button type="button" class="btn btn-primary editor-buttons-margin" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+          </div>
+      </div>
+  </div>
+</div> 
