@@ -2333,6 +2333,11 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                 }
             });
         }
+        if (souceData.equipments && souceData.equipments.length != 0) {
+            souceData.equipments.forEach(element => {
+                element.partNumber=element.partNumber.name
+            });
+        }
         delete    souceData.customerName
         this.actionService.getNewWorkFlow(souceData).subscribe(
             result => {

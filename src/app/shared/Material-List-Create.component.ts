@@ -381,10 +381,11 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     getConditionsList() {
         this.isSpinnerVisible = true;
         let conditionIds = [];
+        conditionIds.push(0)
         if (this.UpdateMode) {
-            conditionIds = this.workFlow.materialList.reduce((acc, x) => {
-                return conditionIds.push(acc.conditionCodeId);
-            }, 0)
+            this.workFlow.materialList.forEach(acc => {
+                 conditionIds.push(acc.conditionCodeId);
+            })
         }
         this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 20, conditionIds)
             .subscribe(res => {
