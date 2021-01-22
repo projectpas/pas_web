@@ -279,16 +279,19 @@ export class SalesOrderPartNumberComponent {
     }
     this.openPartNumber(true);
   }
+
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
   }
+
   partsAction(type) {
     this.selectedPartActionType = type;
     let contentPart = this.popupContentforPartAction;
     this.partActionModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
   }
+  
   onPartRowSelect(event) {
     this.selectedPartDataForAction = event.data;
   }
