@@ -371,6 +371,9 @@ export class RoSetupComponent implements OnInit {
 	referenceId:any=0;
 	moduleName:any="RepairOrder";
 	home: any;
+	itemMasterId : number;
+	partName : string;
+	adddefaultpart : boolean = true;
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,
@@ -395,10 +398,12 @@ export class RoSetupComponent implements OnInit {
 		this.vendorService.ShowPtab = false;
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-ro-setup';
-		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);		
+		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+		this.partName = (localStorage.getItem('partNumber'));		
 	}
 
-	ngOnInit() {
+	ngOnInit() {		
 		this.companyModuleId = AppModuleEnum.Company;
         this.sourcePoApproval.shipToUserTypeId = AppModuleEnum.Company;
         this.sourcePoApproval.billToUserTypeId = AppModuleEnum.Company;
@@ -483,6 +488,14 @@ export class RoSetupComponent implements OnInit {
 						},2200);
 					}
 				});
+				setTimeout(() => {
+					if (this.itemMasterId > 0 && this.adddefaultpart) {
+						this.isSpinnerVisible = true;
+						this.addPartNumbers(this.itemMasterId,this.partName)
+						this.adddefaultpart = false;
+						this.isSpinnerVisible = false;		
+					}
+				},3000);
                
 		}
 		else {
@@ -1573,8 +1586,7 @@ export class RoSetupComponent implements OnInit {
 		this.partListData = [];
 		this.newPartsList = [this.newObjectForParent];
 		if(data) {				
-			data[0].map((x, pindex) => {
-				console.log(x)
+			data[0].map((x, pindex) => {				
 				this.newPartsList = {
 					...x,							
 					partNumberId: {value: x.itemMasterId, label: x.partNumber},						
@@ -2067,7 +2079,7 @@ export class RoSetupComponent implements OnInit {
 		this.totalDiscAmount = 0;
 		this.partListData.map(x => {			
 			x.tempDiscAmt = x.discountAmount ? parseFloat(x.discountAmount.toString().replace(/\,/g,'')) : 0;
-			this.totalDiscAmount += x.tempDiscAmt;
+			this.totalDiscAmount = parseFloat(this.totalDiscAmount) +  parseFloat(x.tempDiscAmt);
 			this.totalDiscAmount = this.totalDiscAmount ? formatNumberAsGlobalSettingsModule(this.totalDiscAmount, 2) : '0.00';
 		})
 	}
@@ -2538,7 +2550,7 @@ export class RoSetupComponent implements OnInit {
 					//this.route.navigate[('/vendorsmodule/vendorpages/app-ro-setup/edit/'+this.roId)];
 					if(this.roId) {
 						this.isEditModeHeader = true;
-						this.isEditMode = true;
+						//this.isEditMode = true;
 					}
 					this.isSpinnerVisible = false;				
 				}, err => {
@@ -2771,8 +2783,7 @@ export class RoSetupComponent implements OnInit {
 				createdBy: this.userName,
 				updatedBy: this.userName,	
 				employeeID: this.employeeId ? this.employeeId : 0,						
-			}		
-			console.log(this.parentObject)	
+			}					
 			if (!this.isEditMode) {			
 				this.parentObjectArray.push({
 					...this.parentObject,
@@ -4419,6 +4430,89 @@ WarnRescticModel() {
 		},err => {});
 	}
 
+	addPartNumbers(partNumberId,partName) {
+		this.inputValidCheck = false;			
+		//if (this.vendorService.isEditMode == false) {
+			let newParentObject = new CreatePOPartsList();
+			newParentObject = {
+				...newParentObject, 
+				needByDate: this.headerInfo.needByDate, 
+				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+				conditionId: this.defaultCondtionId,
+				discountPercent: 0,
+				partNumberId: {value: partNumberId, label: partName},
+			}
+			this.partListData.push(newParentObject); 			
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (!this.partListData[i].ifSplitShip) {
+					this.partListData[i].childList = [];
+				}
+			}
+
+			if (this.headerInfo.companyId > 0) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].maincompanylist = this.maincompanylist;
+						this.partListData[i].parentCompanyId = this.headerInfo.companyId;
+						this.partListData[i].managementStructureId = this.headerInfo.companyId;
+						this.partListData[i].parentBulist = this.bulist;
+						this.partListData[i].parentDivisionlist = this.divisionlist;
+						this.partListData[i].parentDepartmentlist = this.departmentList;;
+						this.partListData[i].parentbuId = 0;
+						this.partListData[i].parentDivisionId = 0;
+						this.partListData[i].parentDeptId = 0;
+					} 
+				}
+			}
+			if (this.headerInfo.buId) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].parentBulist = this.bulist;
+						this.partListData[i].parentbuId = this.headerInfo.buId;
+						this.partListData[i].managementStructureId = this.headerInfo.buId;					
+						this.partListData[i].parentDivisionId = 0;
+						this.partListData[i].parentDeptId = 0;
+					}
+				}
+			}
+			if (this.headerInfo.divisionId) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].parentDivisionlist = this.divisionlist;
+						this.partListData[i].parentDivisionId = this.headerInfo.divisionId;
+						this.partListData[i].managementStructureId = this.headerInfo.divisionId;						
+						this.partListData[i].parentDeptId = 0;
+					}
+				}
+			}
+			if (this.headerInfo.departmentId) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].parentDepartmentlist = this.departmentList;
+						this.partListData[i].parentDeptId = this.headerInfo.departmentId;	
+						this.partListData[i].managementStructureId = this.headerInfo.departmentId;				
+					}
+				}
+			}
+
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (i == this.partListData.length - 1) { 
+					this.partListData[i].conditionId = this.defaultCondtionId;
+					this.getFunctionalReportCurrencyById(this.partListData[i]);
+				}
+			}
+			this.getPNDetailsById(newParentObject,null)
+			
+		//}
+		//this.getRemainingAllQty();
+	}
+
+	ngOnDestroy() {		
+		if (this.isEditMode) {
+			localStorage.removeItem("itemMasterId");
+			localStorage.removeItem("partNumber");
+		}
+	}
 	
 	
 }
