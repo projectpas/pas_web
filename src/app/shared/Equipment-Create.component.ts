@@ -137,8 +137,14 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
         }
     }
+  
+    filterpartItems(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.ptnumberlistdata(event.query);
+        }
+    }
 
-    filterpartItems(event) { 
+    filterpartItemsOld(event) {
         this.partCollection = [];
         this.itemclaColl = [];
         if (this.allPartnumbersInfo) {
@@ -175,7 +181,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         this.ptnumberlistdata(event.query);
     }
     
-    private ptnumberlistdata(value) {
+    private ptnumberlistdata(strvalue = '') {
         this.isSpinnerVisible = true;
         let equipmentIds = [];
         if (this.UpdateMode) {
@@ -183,7 +189,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 return equipmentIds.push(acc.assetTypeId);
             }, 0)
         }
-        this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds)
+        this.commonService.autoCompleteSmartDropDownAssetList(strvalue, true, 20, equipmentIds)
             .subscribe(results => {
                 this.isSpinnerVisible = false;
                 this.allPartnumbersInfo = results;
