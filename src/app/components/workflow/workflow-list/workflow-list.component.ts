@@ -514,6 +514,13 @@ export class WorkflowListComponent implements OnInit {
 
         for (let material of this.sourceWorkFlow.materialList) {
             this.MaterialCost += material.extendedCost != undefined ? material.extendedCost : 0.00;
+            const percentValue = parseFloat(this.sourceWorkFlow.percentageOfMaterial.toString().replace(/\,/g, ''));
+            if(percentValue > 0)
+            {
+                const MaterialCost = parseFloat(this.MaterialCost.toString().replace(/\,/g, ''));
+                const val = ((MaterialCost / 100) * percentValue) + MaterialCost;
+                this.MaterialCost = formatNumberAsGlobalSettingsModule(val, 2);
+            }
         }
 
         for (let expertise of this.sourceWorkFlow.expertise) {

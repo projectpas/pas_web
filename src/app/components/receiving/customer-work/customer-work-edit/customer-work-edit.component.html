@@ -18,30 +18,18 @@
                 <div class="tab-content form-bg"> 
                     <div class="tab-pane active" id="home">
                 <form  #addcustomerworkForm="ngForm"   class="form-horizontal">
-
                     <div class="card">
                         <div class="form-row col-row col-row1">
                                 <div class="col-sm-4 blocks3">
                                     <div class="form-group col-sm-12">
-
                                         <label class="control-label col-sm-4">Employee Name<strong class="clr-red">*</strong></label>
                                         <div class="col-sm-7 add-icon-inline-right">
-                                            <!--<div class="inner-addon right-addon inline-block">-->
-
                                                 <p-autoComplete  class="pautocomp-cstm" [(ngModel)]="sourcereceving.firstName" name="firstName" (onSelect)="empnameId($event)" [suggestions]="firstCollection" (completeMethod)="filterfirstName($event)" [size]="30" required
                                                                 [minLength]="1" [dropdown]="true" >
                                                     <ng-template let-firstName pTemplate="item">
                                                         <div class="ui-helper-clearfix">{{firstName}}</div>
                                                     </ng-template>
                                                 </p-autoComplete>
-                                                <!--<a matTooltip="Create Employee" style="position: absolute;right: -20px;top: 0;"
-                                                   class=""
-                                                   [routerLink]="[
-      '/employeesmodule/employeepages/app-employee-general-information'
-    ]">
-                                                    <i class="fa fa-plus-circle fa-lg"></i>
-                                                </a>-->
-                                            <!--</div>-->
                                             </div>
                                         </div>
                                     </div>
@@ -52,7 +40,6 @@
                                 <div class="card">
                                     <div class="form-row col-row col-row1 padding-10">
                                 <div class="col-sm-4 blocks3">
-
                                     <div class="form-group col-sm-12">
                                         <label class="control-label col-sm-4">Customer Name<strong class="clr-red">*</strong></label>
                                         <div class="col-sm-7 add-icon-inline-right">
@@ -63,15 +50,6 @@
                                                     <div class="ui-helper-clearfix">{{name}}</div>
                                                 </ng-template>
                                             </p-autoComplete>
-                                            <!--<a matTooltip="Create Customer" style="position: absolute;right: -20px;top: 0;"
-                                     class=""
-                                     [routerLink]="[
-      '/customersmodule/customerpages/app-customer-create'
-    ]">
-                                      <i class="fa fa-plus-circle fa-lg"></i>
-                                  </a>-->
-                                            <!--<div *ngIf="disableSaveCusName" class="clr-red">Entry Already Exists</div>-->
-
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-12">
@@ -83,16 +61,7 @@
                                                                 field="customerCode"
                                                                 (completeMethod)="filterCodes($event)" [size]="30" #customerCode="ngModel"
                                                                 [minLength]="1" [dropdown]="true" required>
-
                                                 </p-autoComplete>
-                                                <!--<a matTooltip="Create Customer" style="position: absolute;right: -20px;top: 0;"
-                                     class=""
-                                     [routerLink]="[
-      '/customersmodule/customerpages/app-customer-create'
-    ]">
-                                      <i class="fa fa-plus-circle fa-lg"></i>
-                                  </a>-->
-                                                <!--<input sstyle="font-size: 1px" class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.customerCode" readonly>-->
                                             </div>
                                         </div>
                                     <div class="form-group col-sm-12">
@@ -101,13 +70,10 @@
                                             <input sstyle="font-size: 1px" class="form-control" type="text" name="receivingCustomerNumber" [(ngModel)]="sourcereceving.receivingCustomerNumber" readonly>
                                         </div>
                                     </div>
-
                                     <div class="form-group col-sm-12">
                                         <label class="control-label col-sm-4">Ref<strong class="clr-red">*</strong></label>
                                         <div class="col-sm-7">
                                             <div class="inner-addon right-addon inline-block">
-                                                <!--<i class="fa fa-search"></i>-->
-                                                <!--<input sstyle="font-size: 1px" type="text" class="form-control" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.customerReference">-->
                                                 <p-autoComplete class="pautocomp-cstm" [(ngModel)]="sourcereceving.customerReference"  name="customerReference" [suggestions]="customerReferenceNames" (completeMethod)="filterReferenceNames($event)" [size]="30"
                                                                 [minLength]="1" [dropdown]="true" required>
                                                     <ng-template let-name pTemplate="item">
@@ -136,22 +102,12 @@
                                     <div class="form-group col-sm-12 input-icon1">
                                         <label class="control-label col-sm-4">PN<strong class="clr-red">*</strong> </label>
                                         <div class="col-sm-7 add-icon-inline-right">
-                                            <!--<div class="inner-addon right-addon inline-block">-->
-
                                                 <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px" name="partNumber" [(ngModel)]="sourcereceving.partNumber" (onSelect)="partnmId($event)"  [suggestions]="partCollection" (completeMethod)="filterpartItems($event)" [size]="30"
                                                                 [minLength]="1" [dropdown]="true" required>
                                                     <ng-template let-partName pTemplate="part">
                                                         <div class="ui-helper-clearfix">{{partName}}</div>
                                                     </ng-template>
                                                 </p-autoComplete>
-                                                <!--<a matTooltip="Create Item master" style="position: absolute;right: -20px;top: 0;"
-                                                   class=""
-                                                   [routerLink]="[
-      '/itemmastersmodule/itemmasterpages/app-item-master-stock'
-    ]">
-                                                    <i class="fa fa-plus-circle fa-lg"></i>
-                                                </a>-->
-                                            <!--</div>-->
                                             </div>
                                             </div>
                                             <div class="form-group col-sm-12">
@@ -169,22 +125,12 @@
                                             <div class="form-group col-sm-12">
                                                 <label class="control-label col-sm-4">Revised PN </label>
                                                 <div class="col-sm-7 add-icon-inline-right">
-                                                    <!--<div class="inner-addon right-addon inline-block">-->
-
                                                         <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px" [(ngModel)]="sourcereceving.changePartNumber" [ngModelOptions]="{standalone: true}" [suggestions]="partCollection" (completeMethod)="filterpartItems($event)" [size]="30"
                                                                         [minLength]="1" [dropdown]="true">
                                                             <ng-template let-partName1 pTemplate="part">
                                                                 <div class="ui-helper-clearfix">{{partName1}}</div>
                                                             </ng-template>
                                                         </p-autoComplete>
-                                                        <!--<a matTooltip="Create Item master" style="position: absolute;right: -20px;top: 0;"
-                                                           class=""
-                                                           [routerLink]="[
-      '/itemmastersmodule/itemmasterpages/app-item-master-stock'
-    ]">
-                                                            <i class="fa fa-plus-circle fa-lg"></i>
-                                                        </a>-->
-                                                    <!--</div>-->
                                                     </div>
                                                     </div>
                                                     <div class="form-group col-sm-12">
@@ -211,7 +157,6 @@
                                                                 <label class="control-label col-sm-4">Tag Date</label>
                                                                 <div class="col-sm-7">
                                                                     <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.tagDate"></p-calendar>
-                                                                    <!--<input class="form-control datepicker hasDatepicker" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.tagDate">-->
                                                                 </div>
                                                             </div>
                                                             <div class="form-group col-sm-12">
@@ -231,8 +176,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4 blocks3">
-
-
                                                     <div class="clear"></div>
                                                     <div class="form-group col-sm-12">
                                                         <label class="control-label col-sm-4" *ngIf="showNormalQuantity||showRestrictQuantity||showFreeQuantity">QTY</label>
@@ -240,8 +183,6 @@
                                                             <input class="form-control qty-input" *ngIf="showNormalQuantity" type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.quantity">
                                                             <input class="form-control qty-input" *ngIf="showRestrictQuantity" type="number" min="0" max="1" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.quantity">
                                                             <input class="form-control qty-input" *ngIf="showFreeQuantity" type="number" min="0" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.quantity">
-
-                                                            <!--<input class="form-control" type="number" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.quantity">-->
                                                         </div>
                                                     </div>
                                                     <div class="form-group col-sm-12">
@@ -255,7 +196,6 @@
                                                     <div class="form-group col-sm-12">
                                                         <label class="control-label col-sm-4">Site <strong class="clr-red">*</strong></label>
                                                         <div class="col-sm-7">
-
                                                             <select required style="border-radius:5px;" [(ngModel)]="sourcereceving.siteId" name="siteId"  (change)="siteValueChange($event.target.value)">
                                                                 <option>--Select</option>
                                                                 <option *ngFor="let site of allSites" [ngValue]="site.siteId">{{site.name}}</option><!--(onchange)="siteValueChange(site.siteName)"-->
@@ -267,11 +207,8 @@
                                                          ]">
                                                                 <i class="fa fa-plus-circle fa-lg"></i>
                                                             </a>
-
                                                         </div>
                                                     </div>
-
-
                                                     <div class="form-group col-sm-12">
                                                         <label class="control-label col-sm-4">Warehouse <strong class="clr-red">*</strong></label>
                                                         <div class="col-sm-7">
@@ -310,24 +247,13 @@
                                                     </div>
                                                     <div class="form-group col-sm-12">
                                                         <label class="control-label col-sm-4">Owner</label>
-
                                                         <div class="col-sm-7 add-icon-inline-right">
-                                                            <!--<div class="inner-addon right-addon inline-block add-icon-inline-right">-->
-
                                                                 <p-autoComplete class="pautocomp-cstm" sstyle="font-size: 1px" [(ngModel)]="sourcereceving.owner" [ngModelOptions]="{standalone: true}" [suggestions]="customerNames" (completeMethod)="filterNames($event)" [size]="30"
                                                                                 [minLength]="1" [dropdown]="true">
                                                                     <ng-template let-name pTemplate="item">
                                                                         <div class="ui-helper-clearfix">{{name}}</div>
                                                                     </ng-template>
                                                                 </p-autoComplete>
-                                                                <!--<a matTooltip="Create Customer" style="position: absolute;right: -20px;top: 0;"
-                                                                   class=""
-                                                                   [routerLink]="[
-      '/customersmodule/customerpages/app-customer-create'
-    ]">
-                                                                    <i class="fa fa-plus-circle fa-lg"></i>
-                                                                </a>-->
-                                                            <!--</div>-->
                                                             </div>
                                                         </div>
                                                             <div class="form-group col-sm-12">
@@ -380,9 +306,6 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4 blocks3">
-
-
-
                                                             <div class="form-group col-sm-12">
                                                                 <label class="control-label col-sm-4">Obtain From</label>
                                                                 <div class="col-sm-7">
@@ -397,7 +320,6 @@
                                                                 <div class="form-group col-sm-12">
                                                                     <label class="control-label col-sm-4"></label>
                                                                     <div class="inner-addon col-sm-7" *ngIf="sourcereceving.obtainFromType == 1">
-
                                                                         <select style="border-radius:5px;" [(ngModel)]="sourcereceving.obtainFromCustomerId" [ngModelOptions]="{standalone: true}">
                                                                             <option *ngFor="let customer of allCustomer" [ngValue]="customer.name">{{customer.name}}</option>
                                                                         </select>
@@ -405,7 +327,6 @@
                                                                 </div>
                                                                 <div class="form-group col-sm-12">
                                                                     <label class="control-label col-sm-4"></label>
-
                                                                     <div class="col-sm-7" *ngIf="sourcereceving.obtainFromType == 2">
                                                                         <input class="form-control" type="text" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.obtainFromOther">
                                                                     </div>
@@ -421,7 +342,6 @@
                                                                 </div>
                                                                 <div class="form-group col-sm-12">
                                                                     <label class="control-label col-sm-4"></label>
-
                                                                     <div class="inner-addon col-sm-7 " *ngIf="sourcereceving.obtainFromType == 4">
                                                                         <select style="border-radius:5px;" [(ngModel)]="sourcereceving.obtainFromCompanyId" [ngModelOptions]="{standalone: true}">
                                                                             <option *ngFor="let ataName of maincompanylist" [ngValue]="ataName.managementStructureId">{{ataName.code}}</option>
@@ -454,7 +374,6 @@
                                                                     <label class="control-label col-sm-4">Exp Date</label>
                                                                     <div class="col-sm-7">
                                                                         <input class="" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.isExpirationDate" id="expdate-input">
-
                                                                         <div *ngIf="sourcereceving.isExpirationDate">
                                                                             <p-calendar [showIcon]="true" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.expirationDate"></p-calendar>
                                                                         </div>
@@ -467,7 +386,6 @@
                                                                     </div>
                                                                 </div>
                                                                 <div *ngIf="this.sourcereceving.isTimeLife" class="timelife-block">
-
                                                                     <div class="form-group col-sm-12">
                                                                         <label class="control-label col-sm-4">Date</label>
                                                                         <div class="col-sm-7">
@@ -482,7 +400,6 @@
                                                                     </div>
                                                                     <div class="clear"></div>
                                                                 </div>
-
                                                                 <div class="form-group col-sm-12">
                                                                     <div class="col-sm-3">
                                                                     </div>
@@ -503,7 +420,6 @@
                                                                                             <small> Company Name is required </small>
                                                                                         </div>
                                                                                     </div>
-
                                                                                 </div>
                                                                                 <div class="form-group">
                                                                                     <select style="border-radius:5px;" [(ngModel)]="sourcereceving.buId" name="primaryBU" (change)="getDivisionlist(sourcereceving.buId)" class="form-control">
@@ -526,12 +442,9 @@
                                                                             </div>
                                                                         </div>
                                                                     </div>
-
                                                                 </div>
                                                             </div>
                                                     </div>
-
-                             
                                         <div class="clear"></div>
                                         <div class="table-responsive form-group col-sm-12" *ngIf="this.sourcereceving.isTimeLife">
                                             <table class="table table-bordered table-striped">
@@ -552,14 +465,12 @@
                                                         <td class="clr2 text-center"><input type="number" class="w60 form-control" placeholder="hours" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceTimeLife.cyclesRemaining"></td>
                                                         <td class="clr2 text-center"><input type="number" class="w60 form-control" placeholder="hours" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceTimeLife.timeRemaining"></td>
                                                         <td></td>
-                                                       
                                                     </tr>
                                                     <tr>
                                                         <td>Since New</td>
                                                         <td class="clr2 text-center"><input type="number" class="w60 form-control" placeholder="hours" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceTimeLife.cyclesSinceNew"></td>
                                                         <td class="clr2 text-center"><input type="number" class="w60 form-control" placeholder="hours" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceTimeLife.timeSinceNew"></td>
                                                         <td class="clr2 text-center"><input type="number" class="w60 form-control" placeholder="hours" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourceTimeLife.lastSinceNew"></td>
-                                                        
                                                     </tr>
                                                     <tr>
                                                         <td>Since Ovh</td>
@@ -583,22 +494,6 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                       
-
-
-
-                                    <!--<div class="form-group col-sm-12">
-                                        <label class="control-label col-sm-4">Manufacturer</label>
-                                        <div class="inner-addon right-addon autosuggesions-add inline-block">
-                                            <i class="fa fa-search"></i>
-                                            <input type="text" class="form-control names ui-autocomplete-input" [ngModelOptions]="{standalone: true}" [(ngModel)]="sourcereceving.manufacturer">
-                                        </div>
-                                        <a routerLink="/app-manufacturer" target="_blank" class="add-icon"><i class="fa fa-plus"></i></a>
-                                    </div>-->
-
-
-
-                                
                                 </div>
                                 <div class="clear"></div>
                                
@@ -609,20 +504,11 @@
                                         <button class="btn btn-primary submit-btn" type="submit" (click)="editItemAndCloseModel(content)" [disabled]="!addcustomerworkForm.valid">Save</button>
                                     </div>
                                 </div>
-
-                               
-                            
-
-                   
                 </form>
             </div>
             </div>
               </div>
-
-
         </div>
-    
-
 </div>
 
 <ng-template #contentEdit let-c="close" let-d="dismiss" style="width:auto">
@@ -637,17 +523,14 @@
         <form #userForm="ngForm" class="form-horizontal" (ngSubmit)="editItemExpertiesCloseModel()">
             <div class="form-group">
                 <label for="name" class="control-label">Employee Expertise<span class="clr-red">*</span></label>
-
                 <p-autoComplete [(ngModel)]="employeeName" [ngModelOptions]="{standalone: true}" [suggestions]="localCollection" (completeMethod)="filterEmployeeNames($event)" [size]="30"
                                 [minLength]="1" [dropdown]="true">
                     <ng-template let-employeeName pTemplate="item">
                         <div class="ui-helper-clearfix">{{employeeName}}</div>
                     </ng-template>
                 </p-autoComplete>
-
                 <div class="clear"></div>
             </div>
-
             <div class="form-group">
                 <div class="col-sm-6">
                     <label class="form-check-label" for="isActive">
@@ -656,10 +539,7 @@
                 </div>
                 <div class="clear"></div>
             </div>
-
-
             <div class="modal-footer">
-
                 <button class="btn btn-success" [disabled]="!userForm.valid">Submit</button>
                 <button type="button" class="btn btn-danger" (click)="dismissModel()">Close</button>
             </div>
@@ -674,8 +554,6 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-
-    
     <div class="modal-footer">
         <button type="button" class="btn btn-success" (click)="CreateWorkOrderModel()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="GotoList()">No</button>
