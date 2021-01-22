@@ -843,7 +843,7 @@
           <app-address-component *ngIf="showAddresstab" [addressType]="addressType" [id]="id">
           </app-address-component>
         </p-tabPanel>
-        <p-tabPanel header="Internal Approvers">
+        <p-tabPanel *ngIf="rosettingModel.IsEnforceApproval" header="Internal Approvers">
             <div class="approver-tab-cstm">
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align" >
                     <div class="tableFixHead">
@@ -888,7 +888,7 @@
             </div>
         </p-tabPanel>
         <!-- <p-tabPanel [hidden]="!rosettingModel.IsEnforceApproval" class="pas-tabpanel-po" header="Approver Process"> -->
-        <p-tabPanel class="pas-tabpanel-po" header="Approver Process">
+        <p-tabPanel *ngIf="rosettingModel.IsEnforceApproval" class="pas-tabpanel-po" header="Approver Process">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
             <div class="tableFixHead"> 
                 <table class="table table-bordered header-table-width">

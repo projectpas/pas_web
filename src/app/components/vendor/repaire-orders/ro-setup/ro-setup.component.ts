@@ -2289,19 +2289,29 @@ export class RoSetupComponent implements OnInit {
 		if(event.index == 2 ) {
 			this.getApproversListById(this.roId);
 		}
-		if(event.index == 3 ) {
+		if(event.index == 3  && this.rosettingModel.IsEnforceApproval) {
 			this.getApproversListById(this.roId);
 			this.getApprovalProcessListById(this.roId);
 			this.enableApproverSaveBtn = false;
 		}
-		if(event.index == 4) {
+		if(event.index == 4 && this.rosettingModel.IsEnforceApproval) {
 			this.showVendorCaptab = true;
 			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
 		}
-		if(event.index == 5) {
+		if(event.index == 5 && this.rosettingModel.IsEnforceApproval) {
 			this.showDocumenttab = true;
 		}
-		if(event.index == 6) {
+		if(event.index == 6 && this.rosettingModel.IsEnforceApproval) {
+			this.showComunicationtab = true;
+		}	
+		if(event.index == 2 && !this.rosettingModel.IsEnforceApproval) {
+			this.showVendorCaptab = true;
+			const id = editValueAssignByCondition('vendorId', this.headerInfo.vendorId);			
+		}
+		if(event.index == 3 && !this.rosettingModel.IsEnforceApproval) {
+			this.showDocumenttab = true;
+		}
+		if(event.index == 4 && !this.rosettingModel.IsEnforceApproval) {
 			this.showComunicationtab = true;
 		}	
 		
