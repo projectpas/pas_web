@@ -5,14 +5,11 @@
                 <div class="row">
                     <div class="col">
                         <h4 class="header-name">{{id ? 'Edit' : 'Create'}} Sales Order Quote
-                   
-                    
                         <button class="btn-sm header-button header-button-alignment" (click)="expandHeader()">
                             {{toggle_po_header ? 'Collapse' : 'Expand'}}
                         </button>
                     </h4>
                     </div>
-                    
                     <div>
                         <button type="button" class="btn-sm header-button pull-right" matTooltipPosition="above"
                             matTooltip=" SO Quote List" [routerLink]="['/salesmodule/salespages/sales-quote-list']">
@@ -22,7 +19,6 @@
                 </div>
             </div>
             <div class="card-body" *ngIf="!toggle_po_header">
-               
                     <div class="form-row body-alignment">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -70,7 +66,6 @@
                             </div>
                         </div>
                     </div>
-                
             </div>
             <div class="form-controls">
                 <form #newSalesQuoteForm="ngForm" class="form-horizontal">
