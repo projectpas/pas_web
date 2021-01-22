@@ -345,14 +345,14 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         SP_FSP_CurrencyId: null,
         SP_FSP_FXRatePerc: 0,
         SP_FSP_FlatPriceAmount: null,
-        SP_FSP_LastFlatPriceDate: new Date(),
+        SP_FSP_LastFlatPriceDate: null,//new Date(),
         SP_CalSPByPP_MarkUpPercOnListPrice: null,
         SP_CalSPByPP_MarkUpAmount: null,
-        SP_CalSPByPP_LastMarkUpDate: new Date(),
+        SP_CalSPByPP_LastMarkUpDate: null,// new Date(),
         SP_CalSPByPP_BaseSalePrice: null,
         SP_CalSPByPP_SaleDiscPerc: null,
         SP_CalSPByPP_SaleDiscAmount: null,
-        SP_CalSPByPP_LastSalesDiscDate: new Date(),
+        SP_CalSPByPP_LastSalesDiscDate: null,// new Date(),
         SP_CalSPByPP_UnitSalePrice: null,
         isEditable: false,
         isNewItem: true
@@ -533,6 +533,9 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     arrayItemMasterlist:any[] = [];
     allPartnumbersList: any = [];
     arrayManufacturelist:any[] = [];
+    purchaseCurrencyInfo: any = [];
+    salesCurrencyInfo: any = [];
+    arrayCurrancylist:any[] = [];
 
     constructor(private fb: FormBuilder, public priorityService: PriorityService, public countryservice: CustomerService, private Dashnumservice: DashNumberService, private atasubchapter1service: AtaSubChapter1Service, private atamain: AtaMainService, private aircraftManufacturerService: AircraftManufacturerService, private aircraftModelService: AircraftModelService, private Publicationservice: PublicationService, public integrationService: IntegrationService, private formBuilder: FormBuilder, public workFlowtService1: LegalEntityService, private changeDetectorRef: ChangeDetectorRef, private router: Router,
         private authService: AuthService, public unitService: UnitOfMeasureService, private modalService: NgbModal, private glAccountService: GlAccountService, public vendorser: VendorService,
@@ -936,6 +939,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             stockUnitOfMeasureId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.stockUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
             consumeUnitOfMeasureId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.consumeUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
+            salesCurrencyId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.salesCurrencyId, this.salesCurrencyInfo, 'Currency', 'CurrencyId', 'Code'),
+            purchaseCurrencyId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.purchaseCurrencyId, this.purchaseCurrencyInfo, 'Currency', 'CurrencyId', 'Code'),
             glAccountId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.glAccountId, this.allGlInfo, 'GLAccount', 'GLAccountId', 'AccountCode'),
             priorityId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.priorityId, this.allPriorityInfo, 'Priority', 'priorityId', 'description'),
             siteId: this.getInactiveObjectOnEdit('value', this.sourceItemMaster.siteId, this.allSites, 'Site', 'SiteId', 'Name'),
@@ -1145,6 +1150,16 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
             ...field,
             conditionName: getValueFromArrayOfObjectById('label', 'value', field.ConditionId, this.conditionList)
         };
+    }
+
+    CurrencyData(strText = '') {
+        if(this.arrayCurrancylist.length == 0) {			
+            this.arrayCurrancylist.push(0); }
+          this.commonService.autoSuggestionSmartDropDownList('Currency', 'CurrencyId', 'Code', strText, false, 200, this.arrayCurrancylist.join()).subscribe(res => {
+            this.allCurrencyInfo = res;
+            this.purchaseCurrencyInfo = this.allCurrencyInfo;
+            this.salesCurrencyInfo = this.allCurrencyInfo;
+          }, error => this.saveFailedHelper(error));
     }
 
     restorePurchaseSaleRowRecord(value) {
@@ -1654,21 +1669,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
-    private CurrencyData() {
-        this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
 
-        this.commonService.smartDropDownList('Currency', 'CurrencyId', 'Code').subscribe(
-            results => this.oncurrencySuccessful(results),
-            error => this.onDataLoadFailed(error)
-        );
-    }
-    private oncurrencySuccessful(getList: Currency[]) {
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
-        this.allCurrencyInfo = getList;
 
-    }
 
     private priorityData() {
         this.commonService.smartDropDownWithStatusList('Priority', 'priorityId', 'description', '', 1, 0).subscribe(res => {
@@ -4069,35 +4071,36 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
         if(field.SalePriceSelectId == 1) {
             field.SP_CalSPByPP_MarkUpPercOnListPrice = '0.00';
             field.SP_CalSPByPP_MarkUpAmount = '0.00';
-            field.SP_CalSPByPP_LastMarkUpDate = new Date();
+            field.SP_CalSPByPP_LastMarkUpDate = '';// new Date();
             field.SP_CalSPByPP_BaseSalePrice = '0.00';
             field.SP_CalSPByPP_SaleDiscPerc = '0.00';
             field.SP_CalSPByPP_SaleDiscAmount = '0.00';
-            field.SP_CalSPByPP_LastSalesDiscDate = new Date();
+            field.SP_CalSPByPP_LastSalesDiscDate = ''; //new Date();
             field.SP_CalSPByPP_UnitSalePrice = '0.00';
+            field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
         } 
         else if(field.SalePriceSelectId == 2) {
             field.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
-            field.SP_FSP_CurrencyId = null;
+            field.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
             field.SP_FSP_FXRatePerc = 1;
             field.SP_FSP_FlatPriceAmount = '0.00';
-            field.SP_FSP_LastFlatPriceDate = new Date();
+            field.SP_FSP_LastFlatPriceDate = '' //new Date();
             this.getPercentValueSPUsingPP(field);
         } 
         else {
             field.SP_CalSPByPP_MarkUpPercOnListPrice = '0.00';
             field.SP_CalSPByPP_MarkUpAmount = '0.00';
-            field.SP_CalSPByPP_LastMarkUpDate = new Date();
+            field.SP_CalSPByPP_LastMarkUpDate = ''; //new Date();
             field.SP_CalSPByPP_BaseSalePrice = '0.00';
             field.SP_CalSPByPP_SaleDiscPerc = '0.00';
             field.SP_CalSPByPP_SaleDiscAmount = '0.00';
-            field.SP_CalSPByPP_LastSalesDiscDate = new Date();
+            field.SP_CalSPByPP_LastSalesDiscDate = '' ;//new Date();
             field.SP_CalSPByPP_UnitSalePrice = '0.00';
             field.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
-            field.SP_FSP_CurrencyId = null;
+            field.SP_FSP_CurrencyId = this.sourceItemMaster.purchaseCurrencyId;
             field.SP_FSP_FXRatePerc = 1;
             field.SP_FSP_FlatPriceAmount = '0.00';
-            field.SP_FSP_LastFlatPriceDate = new Date();
+            field.SP_FSP_LastFlatPriceDate = '';// new Date();
         }
     }
 
@@ -5031,6 +5034,8 @@ export class ItemMasterStockComponent implements OnInit, AfterViewInit {
     addFieldValue(): void {
         this.newFields.PP_UOMId = this.sourceItemMaster.purchaseUnitOfMeasureId;
         this.newFields.SP_FSP_UOMId = this.sourceItemMaster.consumeUnitOfMeasureId;
+        this.newFields.PP_CurrencyId = this.sourceItemMaster.purchaseCurrencyId;
+        this.newFields.SP_FSP_CurrencyId = this.sourceItemMaster.salesCurrencyId;
         this.newFields.isEditable = true;
         this.newFields.isNewItem = true;
         this.newFields.PP_FXRatePerc = 1;

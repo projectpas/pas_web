@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy, OnInit, OnDestroy,ChangeDetectorRef } from "@angular/core";
 import { ItemMasterSearchQuery } from "../../../../quotes/models/item-master-search-query";
 import { ItemSearchType } from "../../../../quotes/models/item-search-type";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -62,7 +62,8 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
     private salesQuoteService: SalesQuoteService,
     private router: Router,
     private alertService: AlertService,
-    public conditionService: ConditionService) {
+    public conditionService: ConditionService,
+    private changeDetector: ChangeDetectorRef) {
     this.partDetails = [];
     this.query = new ItemMasterSearchQuery();
     this.partDetail = {
@@ -281,6 +282,7 @@ export class PartNumberFilterComponent implements OnInit, OnDestroy {
             this.partDetailsList = [];
             this.partDetails = [];
           }
+          this.changeDetector.detectChanges();
       }
     )
   }

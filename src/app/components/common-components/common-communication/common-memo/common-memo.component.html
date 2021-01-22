@@ -133,6 +133,8 @@
                             name="createdDate" (change)="dateFilterForTable($event.target.value, col.field)" />
                         <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
                             name="updatedDate" (change)="dateFilterForTable($event.target.value,col.field)" />
+                        <!-- <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"
+                            (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
                     </th>
 
 
@@ -371,10 +373,11 @@
                     </table> -->
                     <div  class="material-tr" *ngFor="let material of addList; let i = index" id="row_{{i}}">
                     <p-editor [(ngModel)]="material.description" [style]="{'height':'320px'}"
-                    name="description" required></p-editor>
+                    name="description"   (ngModelChange)="enableSaveMemo()" required></p-editor>
                     </div>
                     <div class="editor-buttons">
-                        <button class="btn btn-primary editor-buttons-margin" (click)="saveMemo()">
+                        <button class="btn btn-primary editor-buttons-margin" 
+                        [disabled]="disableSaveMemo" (click)="saveMemo()">
                             Save
                         </button>
                         <button type="button" class="btn btn-danger editor-buttons-margin" data-dismiss="modal">Close</button>

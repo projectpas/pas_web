@@ -1,13 +1,13 @@
 <div class="form-group">
-    <div class="row" *ngIf="!isView" style="padding:8px 0px">
-        <div class="card-header bg-primary" style="width: 100%; padding: 0.1rem 1.25rem 0.1rem 1.25rem;">
+    <div class="row" *ngIf="!isView">
+        <div class="card-header header">
             <div class="row">
                 <div class="col">
-                    <h4 class="new-card-heading" style="font-size: 16px; line-height: 2;">  Freight</h4>
+                    <h4 class="header-name">  Freight</h4>
                 </div>
                 <div>
                     <button type="button"
-                            class="btn-sm new-btn-primary" data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
+                            class="btn-sm header-button" data-target="#addNewFreight" data-toggle="modal" (click)="createNew()">
                         Add Freight
                     </button>
                 </div>

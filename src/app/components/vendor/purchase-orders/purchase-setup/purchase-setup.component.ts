@@ -368,6 +368,9 @@ export class PurchaseSetupComponent implements OnInit {
 	moduleId:any=0;
 	referenceId:any=0;
 	moduleName:any="PurchaseOrder";
+	itemMasterId : number;
+	partName : string;
+	adddefaultpart : boolean = true;
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,
@@ -393,10 +396,12 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.ShowPtab = false;
 		this.vendorService.alertObj.next(this.vendorService.ShowPtab);
 		this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
-		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);		
+		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+		this.partName = (localStorage.getItem('partNumber'));
 	}
 
-	ngOnInit() {
+	ngOnInit() {		
 		this.companyModuleId = AppModuleEnum.Company;
         this.sourcePoApproval.shipToUserTypeId = AppModuleEnum.Company;
         this.sourcePoApproval.billToUserTypeId = AppModuleEnum.Company;
@@ -472,16 +477,24 @@ export class PurchaseSetupComponent implements OnInit {
 						this.isEditModeHeader = true;
 						this.toggle_po_header = false;
 						this.isSpinnerVisible = true;			
-						setTimeout(() => {	
-							this.isSpinnerVisible = true;			
+						setTimeout(() => {
+							this.isSpinnerVisible = true;
 							this.getVendorPOHeaderById(this.poId);
 							this.getPurchaseOrderAllPartsById(this.poId);
 							this.enableHeaderSaveBtn = false;
-							this.isSpinnerVisible = false;
-						},2200);
+							this.isSpinnerVisible = false;							
+						}, 2200);
 					}
 				});
-               
+
+				setTimeout(() => {
+					if (this.itemMasterId > 0 && this.adddefaultpart) {
+						this.isSpinnerVisible = true;
+						this.addPartNumbers(this.itemMasterId,this.partName)
+						this.adddefaultpart=false;
+						this.isSpinnerVisible = false;		
+					}
+				},3000);
 		}
 		else {
 				if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
@@ -2455,7 +2468,7 @@ export class PurchaseSetupComponent implements OnInit {
 					this.route.navigate(['/vendorsmodule/vendorpages/app-purchase-setup/edit/'+this.poId]);
 					if(this.poId) {
 						this.isEditModeHeader = true;
-						this.isEditMode = true;
+						//this.isEditMode = true;
 					}
 					this.isSpinnerVisible = false;				
 				}, err => {
@@ -4294,5 +4307,91 @@ WarnRescticModel() {
 		}
 	}
 	
+	addPartNumbers(partNumberId,partName) {
+		this.inputValidCheck = false;			
+		//if (this.vendorService.isEditMode == false) {
+			
+			let newParentObject = new CreatePOPartsList();
+			newParentObject = {
+				...newParentObject, 
+				needByDate: this.headerInfo.needByDate, 
+				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
+				conditionId: this.defaultCondtionId,
+				discountPercent: 0,
+			    partNumberId: {value: partNumberId, label: partName},
+
+			}
+			this.partListData.push(newParentObject); 			
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (!this.partListData[i].ifSplitShip) {
+					this.partListData[i].childList = [];
+				}
+			}
+
+			if (this.headerInfo.companyId > 0) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].maincompanylist = this.maincompanylist;
+						this.partListData[i].parentCompanyId = this.headerInfo.companyId;
+						this.partListData[i].managementStructureId = this.headerInfo.companyId;
+						this.partListData[i].parentBulist = this.bulist;
+						this.partListData[i].parentDivisionlist = this.divisionlist;
+						this.partListData[i].parentDepartmentlist = this.departmentList;;
+						this.partListData[i].parentbuId = 0;
+						this.partListData[i].parentDivisionId = 0;
+						this.partListData[i].parentDeptId = 0;
+					} 
+				}
+			}
+			if (this.headerInfo.buId) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].parentBulist = this.bulist;
+						this.partListData[i].parentbuId = this.headerInfo.buId;
+						this.partListData[i].managementStructureId = this.headerInfo.buId;					
+						this.partListData[i].parentDivisionId = 0;
+						this.partListData[i].parentDeptId = 0;
+					}
+				}
+			}
+			if (this.headerInfo.divisionId) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].parentDivisionlist = this.divisionlist;
+						this.partListData[i].parentDivisionId = this.headerInfo.divisionId;
+						this.partListData[i].managementStructureId = this.headerInfo.divisionId;						
+						this.partListData[i].parentDeptId = 0;
+					}
+				}
+			}
+			if (this.headerInfo.departmentId) {
+				for (let i = 0; i < this.partListData.length; i++) {
+					if (i == this.partListData.length - 1) {
+						this.partListData[i].parentDepartmentlist = this.departmentList;
+						this.partListData[i].parentDeptId = this.headerInfo.departmentId;	
+						this.partListData[i].managementStructureId = this.headerInfo.departmentId;				
+					}
+				}
+			}
+
+			for (let i = 0; i < this.partListData.length; i++) {
+				if (i == this.partListData.length - 1) { 
+					this.partListData[i].conditionId = this.defaultCondtionId;
+					this.getFunctionalReportCurrencyById(this.partListData[i]);
+				}
+			}
+			this.getPNDetailsById(newParentObject,null)
+			
+		//}
+		//this.getRemainingAllQty();
+	}
 	
+	ngOnDestroy() {		
+		if (this.isEditMode) {
+
+			localStorage.removeItem("itemMasterId");
+			localStorage.removeItem("partNumber");
+		}
+
+	  }
 }

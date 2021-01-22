@@ -54,7 +54,6 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 this.workFlow.equipments = [];
                 const data = {
                     ...this.editData,
-
                     assetRecordId: this.editData.assetId,
                     description: this.editData.assetDescription,
                     assetTypeId: this.editData.assetTypeId,
@@ -62,7 +61,6 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                     assetTypeName: this.editData.assetTypeName,
                     partNumber: this.editData.assetId,
                     assetId: this.editData.assetId,
-                    // partNumber: this.editData.name,
                     assetDescription: this.editData.description,
                 }
                 this.workFlow.equipments.push(data);
@@ -107,18 +105,14 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.vendorUnitPrice = "";
         newRow.workflowChargeTypeId = "";
         newRow.partNumber = "";
-
         newRow.isDelete = false;
         this.workFlow.equipments.push(newRow);
     }
-
-
 
     onPartSelect(event, equipment) {
         if (this.itemclaColl) {
             var anyEquipment = this.workFlow.equipments.filter(equipment =>
                 equipment.taskId == this.workFlow.taskId && equipment.partNumber == event);
-
             if (anyEquipment.length > 1) {
                 equipment.assetId = "";
                 equipment.partNumber = "";
@@ -127,7 +121,6 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 equipment.assetName = "";
                 equipment.assetTypeName = "";
                 event = "";
-
                 this.alertService.showMessage("Workflow", "Asset Id is already in use in Tool List", MessageSeverity.error);
             }
             else {
@@ -138,7 +131,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                         equipment.assetDescription = this.itemclaColl[i][0].description;
                         equipment.assetTypeId = this.itemclaColl[i][0].assetTypeId;
                         equipment.assetName = this.itemclaColl[i][0].name,
-                            equipment.assetTypeName = this.itemclaColl[i][0].assetTypeName
+                        equipment.assetTypeName = this.itemclaColl[i][0].assetTypeName
                     }
                 };
             }

@@ -101,7 +101,7 @@ onAddShipMemo() {
 onSaveTextAreaInfo() {
   this.addShipViaFormForFreight.Memo = this.tempAddshipViaMemo;
   this.ShipViabutton = true;
-  $('#ship-via-memo').modal('hide');
+  $('#ship-via-add-memo').modal('hide');
 }
 
 // saveShipVia() {
@@ -245,7 +245,7 @@ shipAddChange(){
   closeMemoModel()
   {
     this.isEditModeShipVia = false;
-      $('#ship-via-memo').modal('hide');
+      $('#ship-via-add-memo').modal('hide');
   }
   closeModel(){
     this.Event.emit();
