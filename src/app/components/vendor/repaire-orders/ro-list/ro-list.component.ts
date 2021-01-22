@@ -417,19 +417,23 @@ export class RoListComponent implements OnInit {
           PagingData.filters[x] = tt.filters[x].value;
         });
         this.repairOrderService.getROList(PagingData).subscribe(res => {               
-            const vList = res[0]['results'].map(x => {
+            // const vList = res[0]['results'].map(x => {
+            tt._value = res[0]['results'].map(x => {
                 return {
                   ...x,                                    
                     openDate: x.openDate ?  this.datePipe.transform(x.openDate, 'MMM-dd-yyyy'): '',
                     closedDate: x.closedDate ?  this.datePipe.transform(x.closedDate, 'MMM-dd-yyyy'): '',
                     createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                     updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',                
-                }
+                   }
                 });
-                tt._value = vList;
                 tt.exportCSV();
-                tt.value = vList;
-                this.isSpinnerVisible = false;                
+                tt.value = this.data;
+                this.isSpinnerVisible = false; 
+                // tt._value = vList;
+                // tt.exportCSV();
+                // tt.value = vList;
+                // this.isSpinnerVisible = false;                
             }, err => {  this.isSpinnerVisible = false;});
     } 
 
