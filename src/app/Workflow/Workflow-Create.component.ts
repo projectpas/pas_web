@@ -15,7 +15,7 @@ declare var $: any;
 import { ChargesCreateComponent } from "../shared/Charges-Create.component";
 import { Percent } from "../models/Percent.model";
 import { AuthService } from "../services/auth.service";
-import { formatNumberAsGlobalSettingsModule } from "../generic/autocomplete";
+import { formatNumberAsGlobalSettingsModule, editValueAssignByCondition } from "../generic/autocomplete";
 import { CommonService } from "../services/common.service";
 import { MenuItem } from 'primeng/api';
 
@@ -2423,11 +2423,15 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
                             equipment.createdBy = this.userName;
                             equipment.createdDate = new Date();
+                            equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
+								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
                         } else {
                             equipment.workflowEquipmentListId = equipment.workflowEquipmentListId > 0 ? equipment.workflowEquipmentListId : 0;
                             equipment.masterCompanyId = this.currentUserMasterCompanyId;
                             equipment.updatedBy = this.userName;
                             equipment.updatedDate = new Date();
+                            equipment.partNumber =  equipment.partNumber && equipment.partNumber.assetId
+								 && equipment.partNumber != null && equipment.partNumber.assetId != undefined  ? equipment.partNumber.assetId : '';
                         }
                         this.sourceWorkFlow.equipments.push(equipment);
                     }

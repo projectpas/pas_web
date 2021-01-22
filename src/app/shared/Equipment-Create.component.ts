@@ -8,6 +8,8 @@ import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
 import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
+import {  getObjectById } from '../generic/autocomplete';
+
 @Component({
     selector: 'grd-equipment',
     templateUrl: './Equipment-Create.component.html',
@@ -41,6 +43,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
     modal: NgbModalRef;
+    equipmentIds: any[] = [];
+  
+
     constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
         private actionService: ActionService, private vendorService: VendorService, private modalService: NgbModal,
         private assetService: AssetService, private alertService: AlertService) {
@@ -71,6 +76,14 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
         } else {
             this.row = this.workFlow.equipments[0];
+            for(var i = 0; i < this.workFlow.equipments.length; i++)
+            {
+                this.equipmentIds.push(this.workFlow.equipments[i].assetTypeId); 
+                this.workFlow.equipments[i].partNumber = {value : this.workFlow.equipments[i].assetId, label: this.workFlow.equipments[i].partNumber} 
+            }
+
+            this.ptnumberlistdata('');
+
             if (this.row == undefined) {
                 this.row = {};
             }
@@ -125,28 +138,28 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
             else { 
                 for (let i = 0; i < this.itemclaColl.length; i++) {
-                    if (event == this.itemclaColl[i][0].name) {
+                    if (event.name == this.itemclaColl[i][0].name) {
                         equipment.assetId = this.itemclaColl[i][0].assetId;
-                        equipment.partNumber = this.itemclaColl[i][0].name;
+                        //equipment.partNumber = this.itemclaColl[i][0].name;
                         equipment.assetDescription = this.itemclaColl[i][0].description;
                         equipment.assetTypeId = this.itemclaColl[i][0].assetTypeId;
                         equipment.assetName = this.itemclaColl[i][0].name,
-                        equipment.assetTypeName = this.itemclaColl[i][0].assetTypeName
+                        equipment.assetTypeName = this.itemclaColl[i][0].assetTypeName,
+                        equipment.partNumber  = getObjectById('value', this.itemclaColl[i][0].assetRecordId, this.allPartnumbersInfo)
                     }
                 };
             }
         }
     }
-  
+
     filterpartItems(event) {
         if (event.query !== undefined && event.query !== null) {
             this.ptnumberlistdata(event.query);
         }
     }
 
-    filterpartItemsOld(event) {
-        this.partCollection = [];
-        this.itemclaColl = [];
+    assignTools()
+    {
         if (this.allPartnumbersInfo) {
             if (this.allPartnumbersInfo.length > 0) {
                 this.itemclaColl.push([{
@@ -157,11 +170,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                     "description": "",
                     "assetName": "",
                 }]);
-
                 for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
                     let assetId = this.allPartnumbersInfo[i].name;
                     if (assetId) {
-                        if (assetId.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
                             this.itemclaColl.push([{
                                 "assetRecordId": this.allPartnumbersInfo[i].assetRecordId,
                                 "assetId": this.allPartnumbersInfo[i].value,
@@ -172,30 +183,56 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                                 "class": this.allPartnumbersInfo[i].assetAttributeTypeName,
                             }]);
 
-                            this.partCollection.push(assetId);
-                        }
+                            this.partCollection.push(assetId);        
                     }
                 }
-            }
+            }         
         }
-        this.ptnumberlistdata(event.query);
     }
-    
+  
     private ptnumberlistdata(strvalue = '') {
         this.isSpinnerVisible = true;
-        let equipmentIds = [];
-        if (this.UpdateMode) {
-            equipmentIds = this.workFlow.equipments.reduce((acc, x) => {
-                return equipmentIds.push(acc.assetTypeId);
-            }, 0)
-        }
-        this.commonService.autoCompleteSmartDropDownAssetList(strvalue, true, 20, equipmentIds)
+        if(this.equipmentIds.length == 0) {			
+            this.equipmentIds.push(0); }
+        this.commonService.autoCompleteSmartDropDownAssetList(strvalue, true, 20, this.equipmentIds.join())
             .subscribe(results => {
                 this.isSpinnerVisible = false;
                 this.allPartnumbersInfo = results;
+                this.partCollection = this.allPartnumbersInfo;
+
+                if (this.allPartnumbersInfo) {
+                    if (this.allPartnumbersInfo.length > 0) {
+                        this.itemclaColl = [];
+                        this.itemclaColl.push([{
+                            "assetRecordId": "",
+                            "assetId": "Select",
+                            "assetTypeId": "",
+                            "assetTypeName": "",
+                            "description": "",
+                            "assetName": "",
+                            "name": "",
+                        }]);
+                        for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
+                            let assetId = this.allPartnumbersInfo[i].name;
+                            if (assetId) {
+                                    this.itemclaColl.push([{
+                                        "assetRecordId": this.allPartnumbersInfo[i].assetRecordId,
+                                        "assetId": this.allPartnumbersInfo[i].value,
+                                        "assetTypeId": this.allPartnumbersInfo[i].tangibleClassId,
+                                        "assetTypeName": this.allPartnumbersInfo[i].assetAttributeTypeName,
+                                        "description": this.allPartnumbersInfo[i].description,
+                                        "name": this.allPartnumbersInfo[i].name,
+                                        "class": this.allPartnumbersInfo[i].assetAttributeTypeName,
+                                    }]);
+                            }
+                        }
+                    }         
+                }
+
+                
             }, error => {
                 this.isSpinnerVisible = false;
-            });
+        });
     }
 
     saveEquipmentWorkOrder() {
@@ -218,29 +255,6 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         return result;
     }
 
-    onDataLoadFailed(log) {
-        const errorLog = log;
-        var msg = '';
-        if (errorLog.message) {
-            if (errorLog.error && errorLog.error.errors.length > 0) {
-                for (let i = 0; i < errorLog.error.errors.length; i++) {
-                    msg = msg + errorLog.error.errors[i].message + '<br/>'
-                }
-            }
-            this.alertService.showMessage(
-                errorLog.error.message,
-                msg,
-                MessageSeverity.error
-            );
-        }
-        else {
-            this.alertService.showMessage(
-                'Error',
-                log.error,
-                MessageSeverity.error
-            );
-        }
-    }
     dismissModel() {
         this.modal.close();
     }

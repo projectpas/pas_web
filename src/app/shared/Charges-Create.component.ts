@@ -37,6 +37,8 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     currentPage: number = 1;
     itemsPerPage: number = 10;
     roNumList: any[] = [];
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
 
     constructor(private modalService: NgbModal,private vendorservice: VendorService, 
          private alertService: AlertService, 
@@ -51,7 +53,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                 this.workFlow.charges = [];
                 const data = {
                     ...this.editData,
-
                     vendorId: this.editData.vendorId,
                     vendorName: this.editData.vendorName, vendor: {
                         vendorId: this.editData.vendorId,
@@ -137,7 +138,6 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     }
 
     reCalculate() {
-
         this.calculateQtySummation();
         this.calculateExtendedCostSummation();
         this.calculateExtendedPriceSummation();
@@ -402,8 +402,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
     dismissModel() {
         this.modal.close();
     }
-    deletedRowIndex:any;
-    deleteRowRecord:any={};
+
     openDelete(content, row,index) {
         this.deletedRowIndex=index;
         this.chargesTypes.forEach(element => {
