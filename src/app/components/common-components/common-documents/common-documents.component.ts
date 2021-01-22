@@ -178,6 +178,13 @@ export class CommonDocumentsComponent implements OnInit {
         if (this.isEditButton == true) {
             this.disableSave = false;
         }
+        if (this.isEditButton == false) {
+            if ((this.selectedFileAttachment && this.selectedFileAttachment.length > 0)) {  //&& this.documentInformation.documentTypeId > 0
+                this.disableSave = false;
+            } else {
+                this.disableSave = true;
+            }
+        }
     }
 
     disabledMemo: boolean = false;
@@ -655,6 +662,10 @@ export class CommonDocumentsComponent implements OnInit {
     newDocumentDetails: any = {};
     
     saveDocumentInformation() {
+        if(this.documentInformation.documentTypeId == 0){
+            this.alertService.showMessage("Error", `Please select document type.`, MessageSeverity.error);
+            return false;
+        }
         this.newDocumentDetails = {};
         this.documentInformation;
         if (this.selectedFileAttachment != [] && !this.isEditButton) {
