@@ -665,7 +665,7 @@
                       <div [innerHTML]="partList?.memo" ></div>
                     </td>
                   </tr>
-                  <tr class="child-header splitship-head child-header-back"  *ngIf="partList.repairOrderSplitParts">
+                  <tr class="child-header splitship-head child-header-back"  *ngIf="partList.repairOrderSplitParts.length > 0">
                     <th></th>													
                     <th>PN</th>
                     <th>PN Description</th>
@@ -732,7 +732,7 @@
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
                   <td>&nbsp;</td>
-   <td>&nbsp;</td>
+    <td>&nbsp;</td>
    
                   
                 </tr>
