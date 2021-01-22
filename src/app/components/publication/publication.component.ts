@@ -105,6 +105,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     cols: any[];
     auditCols: any[];
     selectedRow: any;
+    publicationRecordId: any;
     selectedColumns: any[];
     publicationName: string;
     filteredBrands: any[];
@@ -195,7 +196,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     advanceSearchReq: any = {};
     status: string = 'active';
     documentsContent: any;
-    moduleName: any = 'Publications';
+    moduleName: any = 'Publication';
 
     constructor(private breadCrumb: SingleScreenBreadcrumbService,
         private configurations: ConfigurationService,
@@ -223,6 +224,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
+            { field: 'createdBy', header: 'CreatedBy' },
+            { field: 'createdDate', header: 'Created Date' },
+            { field: 'updatedBy', header: 'UpdatedBy' },
+            { field: 'updatedDate', header: 'Updated Date' },
         ];
 
         this.auditCols = [
@@ -277,8 +282,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 this.isSpinnerVisible = false;
             }, err => {
                 this.isSpinnerVisible = false;
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
+                // const errorLog = err;
+                // this.errorMessageHandler(errorLog);
             });
 
     }
@@ -528,7 +533,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         //     console.log('When user closes');
         // }, () => { console.log('Backdrop click') })
 
-        this.isSpinnerVisible = true;
+        // this.isSpinnerVisible = true;
         //get general info
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {
             this.isSpinnerVisible = false;
@@ -632,6 +637,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                 nextReviewDate: x.nextReviewDate ? this.datePipe.transform(x.nextReviewDate, 'MMM-dd-yyyy hh:mm a') : '',
                 expirationDate: x.expirationDate ? this.datePipe.transform(x.expirationDate, 'MMM-dd-yyyy hh:mm a') : '',
                 verifiedDate: x.verifiedDate ? this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
             }
         });
         dt.exportCSV();
@@ -641,6 +648,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     openDocumentsList(content, rowData) {
         this.selectedRow = rowData;
+        this.publicationRecordId = rowData.publicationRecordId;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false });
     }
     // openHelpText(content) {
@@ -804,14 +812,18 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     private employeedata() {
         this.alertService.startLoadingMessage();
-        this.loadingIndicator = true;
+        this.isSpinnerVisible = true;
 
         this.employeeService.getEmployeeList().subscribe(
             results => {
                 // console.log(results),
+                this.isSpinnerVisible = false;
                 this.onempDataLoadSuccessful(results[0])
             },
-            error => this.onDataLoadFailed(error)
+            error => {
+                this.onDataLoadFailed(error)
+                this.isSpinnerVisible = false;
+            }
         );
     }
 
@@ -1121,7 +1133,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             this.isSpinnerVisible = false;
             this.auditHistory = res;
         }, error => {
-            this.isSpinnerVisible = true;
+            this.isSpinnerVisible = false;
         })
     }
     getColorCodeForHistory(i, field, value) {

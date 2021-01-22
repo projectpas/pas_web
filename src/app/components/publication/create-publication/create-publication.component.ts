@@ -101,6 +101,7 @@ export class CreatePublicationComponent implements OnInit {
   publicationRecordId: any;
   employeeList: any = [];
   ataList = [];
+  isSpinnerVisible = false;
   headersforPNMapping = [
     { field: 'partNumber', header: 'PN' },
     { field: 'partDescription', header: 'PN Description' },
@@ -134,7 +135,7 @@ export class CreatePublicationComponent implements OnInit {
   publicationTypes: any[] = [];
   pnMappingPageSize: number = 10;
   aircraftPageSize: number = 10;
-  moduleName: any = 'Publications';
+  moduleName: any = 'Publication';
   // dropdown
 
   // publicationTypes = [
@@ -292,9 +293,11 @@ export class CreatePublicationComponent implements OnInit {
       this.getPublicationDataonEdit();
 
       //get PN mapping edit mode
+      this.isSpinnerVisible = true;
       this.publicationService
         .getPublicationPNMapping(this.publicationRecordId)
         .subscribe(res => {
+          this.isSpinnerVisible = false;
           this.pnMappingList = res.map(x => {
             return {
               ...x,
@@ -304,6 +307,9 @@ export class CreatePublicationComponent implements OnInit {
               manufacturer: x.manufacturerName
             };
           });
+        }, error => {
+
+          this.isSpinnerVisible = true;
         });
 
       //get aircraft info edit mode
@@ -332,25 +338,40 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   getPublicationTypes() {
+
+    this.isSpinnerVisible = true;
     let publicationTypeId = this.sourcePublication.publicationTypeId ? this.sourcePublication.publicationTypeId : 0;
     // this.commonService.smartDropDownList('PublicationType', 'PublicationTypeId', 'Name')
     this.commonService.autoSuggestionSmartDropDownList("PublicationType", "PublicationTypeId", "Name", '', true, 0, [publicationTypeId].join(), this.masterCompanyId)
       .subscribe(res => {
+
+        this.isSpinnerVisible = false;
         this.publicationTypes = res;
-      });
+      }), error => {
+
+        this.isSpinnerVisible = false;
+      };
   }
 
   async getAllIntegrations() {
     if (this.arrayIntegrationlist.length == 0) {
       this.arrayIntegrationlist.push(0);
     }
+
+    this.isSpinnerVisible = false;
     await this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 0, this.arrayIntegrationlist.join(), this.masterCompanyId).subscribe(res => {
+
+      this.isSpinnerVisible = false;
       this.publicationTypes = res.map(x => {
         return {
           label: x.label, value: x.value
         }
       })
-    }, error => this.saveFailedHelper(error));
+    }, error => {
+
+      this.isSpinnerVisible = false;
+      this.saveFailedHelper(error)
+    });
   }
 
   PNMappingPageIndexChange(event) {
@@ -365,8 +386,11 @@ export class CreatePublicationComponent implements OnInit {
 
 
   async getPublicationDataonEdit() {
+
+    this.isSpinnerVisible = true;
     await this.publicationService.getAllbyIdPublications(this.publicationRecordId).subscribe(res => {
 
+      this.isSpinnerVisible = false;
       const responseData = res;
       //this.sourcePublication = res[0];
       const tempsourcepub =  //responseData[0]
@@ -413,6 +437,8 @@ export class CreatePublicationComponent implements OnInit {
 
 
 
+    }, error => {
+      this.isSpinnerVisible = false;
     })
   }
   openAircraftView(rowData, content) {
@@ -491,11 +517,18 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   async getAllEmployeeList() {
+
+    this.isSpinnerVisible = true;
     let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
     // this.commonService.getAllSalesEmployeeListByJobTitle("Employee", "EmployeeId", "FirstName", '', true, 200, [verifiedBy].join(), this.masterCompanyId)
     this.commonService.autoCompleteDropdownsEmployeeByMS('', true, 20, [verifiedBy].join(), this.currentUserManagementStructureId, this.masterCompanyId)
       .subscribe(res => {
         this.employeeList = res;
+
+        this.isSpinnerVisible = false;
+      }, error => {
+
+        this.isSpinnerVisible = false;
       });
     // this.commonService.smartDropDownList('Employee', 'employeeId', 'firstName').subscribe(res => {
     //   this.employeeList = res;
@@ -685,6 +718,8 @@ export class CreatePublicationComponent implements OnInit {
 
       {
         this.sourcePublication.PublicationId = this.sourcePublication.PublicationId;
+
+        this.isSpinnerVisible = true;
         this.publicationService
           .newAction(this.formData
             //   {
@@ -696,6 +731,7 @@ export class CreatePublicationComponent implements OnInit {
 
           )
           .subscribe(res => {
+            this.isSpinnerVisible = false;
             this.isEnableNext = true;
             this.uploadDocs.next(true);
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
@@ -704,7 +740,10 @@ export class CreatePublicationComponent implements OnInit {
               // this.changeOfTab('PnMap'),
               role => this.saveSuccessHelper(role),
               error => this.saveFailedHelper(error);
-          }, error => this.saveFailedHelper(error));
+          }, error => {
+            this.isSpinnerVisible = false;
+            this.saveFailedHelper(error)
+          });
       }
     }
     //  else {
@@ -741,9 +780,11 @@ export class CreatePublicationComponent implements OnInit {
 
   updatePublicationGeneralInfo() {
     this.formData.append('publicationRecordId', this.publicationRecordId);
+    this.isSpinnerVisible = true;
     this.publicationService
       .updateAction(this.formData)
       .subscribe(res => {
+        this.isSpinnerVisible = false;
         this.isEnableNext = true;
         // const { publicationRecordId } = res;
         // this.publicationRecordId = publicationRecordId;
@@ -752,7 +793,10 @@ export class CreatePublicationComponent implements OnInit {
         this.formData = new FormData(),
           this.alertService.showMessage("Success", `Publication Updated Successfully`, MessageSeverity.success),
           role => this.saveSuccessHelper(role),
-          error => this.saveFailedHelper(error);
+          error => {
+            this.isSpinnerVisible = false;
+            this.saveFailedHelper(error)
+          };
       });
   }
 
@@ -774,15 +818,18 @@ export class CreatePublicationComponent implements OnInit {
 
   // get PartNumbers
   async getPartNumberList() {
+    this.isSpinnerVisible = false;
     await this.itemMasterService.getPrtnumberslistList().subscribe(list => {
       const responseData = list[0];
-
+      this.isSpinnerVisible = false;
       this.partNumberList = responseData.map(x => {
         return {
           label: x.partNumber,
           value: x
         };
       });
+    }, error => {
+      this.isSpinnerVisible = false;
     });
   }
 
@@ -820,12 +867,16 @@ export class CreatePublicationComponent implements OnInit {
     this.selectedPartNumbers = [];
     if (mapData && mapData.length > 0) {
       // PNMapping Save
+      this.isSpinnerVisible = true;
       this.publicationService.postMappedPartNumbers(mapData).subscribe(res => {
         this.isDisabledSteps = true;
+        this.isSpinnerVisible = false;
         this.publicationService
           .getPublicationPNMapping(this.publicationRecordId)
           .subscribe(res => {
 
+
+            this.isSpinnerVisible = false;
             this.pnMappingList = res.map(x => {
               return {
                 ...x,
@@ -834,10 +885,15 @@ export class CreatePublicationComponent implements OnInit {
                 itemClassification: x.itemClassification,
                 manufacturer: x.manufacturerName
               };
+            }, error => {
+
+              this.isSpinnerVisible = false;
             });
             this.alertService.showMessage("Success", `PN Mapping Done Successfully`, MessageSeverity.success);
             this.getAircraftInformationByPublicationId();
             this.getAtaChapterByPublicationId();
+          }, error => {
+            this.isSpinnerVisible = false;
           });
 
 
@@ -897,14 +953,20 @@ export class CreatePublicationComponent implements OnInit {
   }
   // get all Aircraft Models
   getAllAircraftModels() {
+    this.isSpinnerVisible = true;
     this.aircraftModelService.getAll().subscribe(models => {
       const responseValue = models[0];
+
+      this.isSpinnerVisible = false;
       this.aircraftModelList = responseValue.map(models => {
         return {
           label: models.modelName,
           value: models.aircraftModelId
         };
       });
+    }, error => {
+
+      this.isSpinnerVisible = false;
     });
   }
 
@@ -924,7 +986,9 @@ export class CreatePublicationComponent implements OnInit {
 
   // get all dashnumber
   getAllDashNumbers() {
+    this.isSpinnerVisible = false;
     this.Dashnumservice.getAll().subscribe(dashnumbers => {
+      this.isSpinnerVisible = false;
       const responseData = dashnumbers[0];
       this.dashNumberList = responseData.map(dashnumbers => {
         return {
@@ -932,15 +996,22 @@ export class CreatePublicationComponent implements OnInit {
           value: dashnumbers.dashNumberId
         };
       });
+    }, error => {
+
+      this.isSpinnerVisible = false;
     });
   }
 
   // get aircraft information by publication id
 
   getAircraftInformationByPublicationId() {
+
+    this.isSpinnerVisible = true;
     this.publicationService
       .getAircraftMappedByPublicationId(this.publicationRecordId)
       .subscribe(res => {
+
+        this.isSpinnerVisible = false;
         this.pnAircraftData = [];
         this.aircraftList = res.map(x => {
           this.pnAircraftData.push({
@@ -954,6 +1025,9 @@ export class CreatePublicationComponent implements OnInit {
             //memo: x.memo
           };
         });
+      }, error => {
+
+        this.isSpinnerVisible = false;
       });
   }
 
