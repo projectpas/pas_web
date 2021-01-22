@@ -94,6 +94,8 @@ export class PurchaseOrderPart {
     memo: string;
     poPartSplitUserTypeId: number;
     poPartSplitUserId: number;
+    poPartSplitUser:string;
+    poPartSplitUserTypeName:string;
     poPartSplitAddress1: string;
     poPartSplitAddress2: string;
     poPartSplitAddress3: string;

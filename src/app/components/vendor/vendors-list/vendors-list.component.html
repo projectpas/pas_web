@@ -227,7 +227,8 @@
 
           <td class="action-icons-cstm" style="width: 200px;">
             <div *ngIf="currentDeletedstatus == false">
-              <ng-container *ngIf="!isCreatePO && !isCreateRO">
+              <!-- <ng-container *ngIf="!isCreatePO && !isCreateRO"> -->
+              <ng-container>
                 <p-inputSwitch
                   [(ngModel)]="rowData['isActive']"
                   name="isActive{{ rowIndex }}"
@@ -247,7 +248,7 @@
                   ><i class="fa fa-eye"></i
                 ></a>
               </span>
-              <span *ngIf="!isCreatePO && !isCreateRO"
+              <span 
                 ><a
                   class="btn nobg btn-edit-cstm"
                   (click)="openEdit(rowData)"
@@ -274,7 +275,7 @@
                   ><i class="fa fa-users"></i
                 ></a>
               </span> -->
-              <span *ngIf="!isCreatePO && !isCreateRO"
+              <span 
                 ><a
                   class="btn nobg btn-delete-cstm"
                   (click)="openDelete(content1, rowData);"
@@ -295,7 +296,7 @@
                 data-toggle="modal"
                 data-target="#purchaseOrderList"
                 *ngIf="
-                  (isVendorList && isCreatePO) || (!isCreatePO && !isCreateRO)
+                  (isVendorList && isCreatePO || isCreateRO) || (!isCreatePO && !isCreateRO)
                 "
               >
                 <a
@@ -309,7 +310,7 @@
                 data-toggle="modal"
                 data-target="#repairOrderList"
                 *ngIf="
-                  (isVendorList && isCreateRO) || (!isCreatePO && !isCreateRO)
+                  (isVendorList && isCreateRO || isCreatePO) || (!isCreatePO && !isCreateRO)
                 "
               >
                 <a
@@ -319,7 +320,7 @@
                   matTooltipPosition="above"
                   ><i class="fa fa-list"></i></a
               ></span>
-              <span *ngIf="isCreatePO"
+              <!-- <span *ngIf="isCreatePO"
                 ><a
                   class="btn nobg btn-pluspo-cstm"
                   (click)="gotoCreatePO(rowData)"
@@ -327,8 +328,8 @@
                   matTooltipPosition="above"
                   ><i class="fa fa-plus"></i
                 ></a>
-              </span>
-              <span *ngIf="isCreateRO"
+              </span> -->
+              <!-- <span *ngIf="isCreateRO"
                 ><a
                   class="btn nobg btn-plusro-cstm"
                   (click)="gotoCreateRO(rowData)"
@@ -336,7 +337,7 @@
                   matTooltipPosition="above"
                   ><i class="fa fa-plus" style="color: #259e08;"></i
                 ></a>
-              </span>
+              </span> -->
             </div>
             <div *ngIf="currentDeletedstatus == true">
               <p-inputSwitch
