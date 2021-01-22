@@ -37,9 +37,12 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
 
     getExpertiseData() {
         let expertiseIds = [];
-        expertiseIds = this.workFlow.expertise.reduce((acc, x) => {
-            return expertiseIds.push(acc.expertiseTypeId);
-        }, 0)
+       this.workFlow.expertise.forEach(acc => {
+          expertiseIds.push(acc.expertiseTypeId);
+        })
+        // if(expertiseIds&& expertiseIds.length ==0){
+            expertiseIds.push(0)
+        // }
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('EmployeeExpertise', 'EmployeeExpertiseId', 'Description', '', true, 100, expertiseIds)
             .subscribe(res => {

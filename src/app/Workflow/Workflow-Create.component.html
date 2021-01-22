@@ -22,7 +22,7 @@
         <div class="card-body" *ngIf="toggle_wf_header">
             <div>
                 <div class="form-row">
-                    <div class="col-md-6 wf-h-col">
+                    <div class="col-md-7 wf-h-col">
                         <div class="form-row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -309,14 +309,14 @@
 
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">
                                 <div class="form-row">
                                     <div class="col-md-4">
                                         <h5>BER Determination</h5>
                                     </div>
-                                    <div class="col-md-8" style="padding-right: 20px;">
+                                    <div class="col-md-8" style="padding-right: 65px;">
                                         <h5 class="float-right"> BER Thresold :
                                             <span
                                                 style="color: red  ;">{{sourceWorkFlow.berThresholdAmount ? sourceWorkFlow.berThresholdAmount : '0.00'}}</span>
@@ -627,7 +627,7 @@
                                     <div id="tab_Exclusions"
                                         *ngIf="workFlow != undefined && workFlow.exclusions != undefined"
                                         class="tab-pane fade pan">
-                                        <grd-exclusions [UpdateMode]="UpdateMode" [workFlow]='workFlow'
+                                        <grd-exclusions [UpdateMode]="UpdateMode" [workFlow]='workFlow' [masterItemMasterId]="masterItemMasterId"
                                             isWorkFlow="true"></grd-exclusions>
                                     </div>
                                     <div id="tab_Expertise"

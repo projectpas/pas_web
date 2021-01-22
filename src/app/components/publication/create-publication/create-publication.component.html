@@ -452,12 +452,12 @@
                         </div> -->
 
                     </div>
-                    <div class="form-row col-row">
+                    <div class="form-row col-row" *ngIf="publicationRecordId">
                         <!-- <div class="col-md-6"> -->
                         <div class="col-md-12">
-                            <app-common-documents [moduleName]="moduleName" (parentTrigger)="changeOfStatus($event)"
-                                [uploadDocsToser]="uploadDocs" [referenceId]="publicationRecordId" [isViewMode]="false"
-                                [offLineUpload]="true"></app-common-documents>
+                            <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId"
+                                [isViewMode]="false" [offLineUpload]="true">
+                            </app-common-documents>
                         </div>
                         <!-- </div> -->
                     </div>
@@ -1595,6 +1595,20 @@
                 <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="changeRevisionNum('No');">No
                     & Save</button>
             </div>
+        </div>
+    </div>
+</div>
+<div class="preloader modal-header-index" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
     </div>
 </div>
