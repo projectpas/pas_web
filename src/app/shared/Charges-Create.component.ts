@@ -88,13 +88,13 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
                     }
                 })
             }
-
         }
         this.isSpinnerVisible = true;
         let chargesIds = [];
+        chargesIds.push(0);
         if (this.UpdateMode) {
-            chargesIds = this.workFlow.charges.reduce((acc, x) => {
-                return chargesIds.push(acc.chargeId);
+             this.workFlow.charges.forEach(acc => {
+              chargesIds.push(acc.workflowChargeTypeId);
             }, 0)
         }
         this.commonService.autoSuggestionSmartDropDownList('Charge', 'ChargeId', 'ChargeType', '', true, 20, chargesIds)
