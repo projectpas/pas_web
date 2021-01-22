@@ -242,7 +242,7 @@ export class AllViewComponent implements OnInit {
   getROPartsViewById(roId) {
     this.roPartsList = [];
     this.repairOrderService.getROPartsViewById(roId).subscribe(res => {
-      if (res) {
+      if (res) {        
         res.map(x => {
           const partList = {
             ...x,
@@ -255,15 +255,15 @@ export class AllViewComponent implements OnInit {
             repairOrderSplitParts: this.getRepairOrderSplit(x)
           }
           //this.getManagementStructureCodesParent(partList);
-          this.roPartsList.push(partList);          
+          this.roPartsList.push(partList);                
         });
       }
     }, err => { });
   }
 
-  getRepairOrderSplit(partList) {
-    if (partList.repairOrderSplitParts) {
-      return partList.repairOrderSplitParts.map(y => {
+  getRepairOrderSplit(partList) {   
+    if (partList.roPartSplits) {
+      return partList.roPartSplits.map(y => {
         const splitpart = {
           ...y,
         }

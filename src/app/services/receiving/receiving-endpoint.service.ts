@@ -96,7 +96,7 @@ export class ReceivingEndpointService extends EndpointFactory {
         let url = `${this.receivingPurchaseOrderDataGet}/${receivingId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getReceivingPODataById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataById(receivingId));
             });
     }
 
