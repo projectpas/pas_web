@@ -88,7 +88,7 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="workflowid">Entry Date</label>
-                                <p-calendar [showIcon]="true" [disabled]="true" name="gEntryDate"
+                                <p-calendar [showIcon]="true" [disabled]="true" name="gEntryDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.entryDate"></p-calendar>
                             </div>
                             <div class="form-group">
@@ -196,18 +196,18 @@
                             </div>
                             <div class="form-group">
                                 <label>Revision Date</label>
-                                <p-calendar [showIcon]="true" name="revisionDate"
+                                <p-calendar [showIcon]="true" name="revisionDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Next Review Date</label>
-                                <p-calendar [showIcon]="true" name="nextReviewDate"
+                                <p-calendar [showIcon]="true" name="nextReviewDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.nextReviewDate"
                                     [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <div class="form-group">
                                 <label>Expiration Date</label>
-                                <p-calendar [showIcon]="true" name="expirationDate"
+                                <p-calendar [showIcon]="true" name="expirationDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.expirationDate"
                                     [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
@@ -254,7 +254,7 @@
                             </div> -->
                             <div class="form-group">
                                 <label>Verified Date <span class="clr-red">*</span></label>
-                                <p-calendar [showIcon]="true" name="gVerifiedDate" required
+                                <p-calendar [showIcon]="true" name="gVerifiedDate" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.verifiedDate"></p-calendar>
                             </div>
                             <div class="form-group">
