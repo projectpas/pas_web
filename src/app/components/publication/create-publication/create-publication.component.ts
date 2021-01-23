@@ -1859,5 +1859,27 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   clearValue() { }
+
+
+  restorerecord: any = {};
+  restore(content, rowData) {
+    this.restorerecord = rowData;
+    this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+    this.modal.result.then(() => {
+    }, () => {
+      // console.log('Backdrop click')
+    })
+  }
+  restoreRecord() {
+    this.isSpinnerVisible = true;
+    this.publicationService.restoreItemMasterMapping(this.restorerecord.publicationItemMasterMappingId).subscribe(res => {
+      this.modal.close();
+      this.isSpinnerVisible = false;
+      // this.getDeleteListByStatus(true)
+      this.alertService.showMessage("Success", `Successfully restored`, MessageSeverity.success);
+    }, error => {
+      this.isSpinnerVisible = false;
+    })
+  }
 }
 // updatePublicationGeneralInfo
