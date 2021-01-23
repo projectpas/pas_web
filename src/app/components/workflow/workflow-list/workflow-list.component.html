@@ -548,13 +548,13 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label style="width: 130px;">Total Workflow Cost: </label>
-                                                        {{Total}}
+                                                        {{Total !=0 ? Total : '0.00'}}
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label style="width: 130px;">% of BER Threshold: </label>
-                                                        {{PercentBERThreshold}}
+                                                        {{PercentBERThreshold ? PercentBERThreshold : '0.00'}}
                                                     </div>
                                                 </div>
                                             </div>

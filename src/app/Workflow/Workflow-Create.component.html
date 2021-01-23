@@ -501,33 +501,9 @@
     <div class="x_content workflow-page">
         <div class="card-layout">
             <div>
-                <div class="pheading">
-                </div>
-
-                <div class="cdetails-top" style="display: none;">
-                    <span class="cdetails-top-close"><i class="fa fa-times"></i></span>
-                    <div class="col-sm-12">
-                        <label>Company</label>
-                        <span>Silverxis</span>
-                    </div>
-                    <div class="col-sm-12">
-                        <label>BU</label>
-                        <span>Adso</span>
-                    </div>
-                    <div class="col-sm-12">
-                        <label>Division</label>
-                        <span>Development</span>
-                    </div>
-                    <div class="col-sm-12">
-                        <label>Dept</label>
-                        <span>Java</span>
-                    </div>
-                </div>
-
                 <div class="clear"></div>
                 <br />
-                <hr>
-                <div class="card">
+                <div class="card" *ngIf="sourceWorkFlow.workflowId">
                     <div class="card-body">
                         <div class="form-group col-sm-6">
                             <div class="col-sm-1" style="margin-right: 85px;">
@@ -565,7 +541,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>                
                 </div>
                 <div *ngIf="!workFlowList">
                     <p style="min-height: 200px;"></p>
@@ -774,7 +750,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="text-align:start;">
-                    <h4 class="modal-title" style="text-align: left;">Do you want to increase the Workflow Version?</h4>
+                    <h4 class="modal-title" style="text-align: left;">Do you want to create a new version?</h4>
                     <button type="button" class="close" data-dismiss="modal">
                         &times;
                     </button>

@@ -140,10 +140,11 @@ export class PublicationCreateComponent implements OnInit, OnChanges {
 
     loadPublicationTypes() {
         let publicationTypeIds = [];
+        publicationTypeIds.push(0);
         if (this.UpdateMode) {
-            publicationTypeIds = this.workFlow.publication.reduce((acc, x) => {
-                return publicationTypeIds.push(acc.publicationTypeId);
-            }, 0)
+             this.workFlow.publication.forEach(acc => {
+                 publicationTypeIds.push(acc.publicationTypeId);
+            })
         }
         this.isSpinnerVisible = true;
         this.commonService.autoSuggestionSmartDropDownList('PublicationType', 'PublicationTypeId', 'Name', '', true, 20, publicationTypeIds)

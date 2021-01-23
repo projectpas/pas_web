@@ -76,6 +76,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
         }
+        this.workFlow.equipments.forEach(ev=>{
+            ev.partNumber={name:ev.assetName,assetId:ev.assetId}
+        })
         this.ptnumberlistdata('');
     }
 
@@ -108,14 +111,21 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.isDelete = false;
         this.workFlow.equipments.push(newRow);
     }
-
-    onPartSelect(event, equipment) {
-        if (this.itemclaColl) {
-            var anyEquipment = this.workFlow.equipments.filter(equipment =>
-                equipment.taskId == this.workFlow.taskId && equipment.partNumber == event);
+    clearautoCompleteInput(currentRecord) {
+        currentRecord.partNumber = undefined;
+    }
+    onPartSelect(event, equipment,index) {
+            this.workFlow.equipments[index].assetId = event.assetId;
+            this.workFlow.equipments[index].partNumber = event;
+            this.workFlow.equipments[index].assetDescription = event.description;
+            this.workFlow.equipments[index].assetTypeId = event.assetTypeId;
+            this.workFlow.equipments[index].assetName = event.name,
+            this.workFlow.equipments[index].assetTypeName = event.assetTypeName
+            var anyEquipment = this.workFlow.equipments.filter(ev =>
+                ev.taskId == this.workFlow.taskId && ev.assetId == event.assetId);
             if (anyEquipment.length > 1) {
                 equipment.assetId = "";
-                equipment.partNumber = "";
+                equipment.partNumber = undefined; 
                 equipment.assetDescription = "";
                 equipment.assetTypeId = "";
                 equipment.assetName = "";
@@ -123,76 +133,42 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
                 event = "";
                 this.alertService.showMessage("Workflow", "Asset Id is already in use in Tool List", MessageSeverity.error);
             }
-            else { 
-                for (let i = 0; i < this.itemclaColl.length; i++) {
-                    if (event == this.itemclaColl[i][0].name) {
-                        equipment.assetId = this.itemclaColl[i][0].assetId;
-                        equipment.partNumber = this.itemclaColl[i][0].name;
-                        equipment.assetDescription = this.itemclaColl[i][0].description;
-                        equipment.assetTypeId = this.itemclaColl[i][0].assetTypeId;
-                        equipment.assetName = this.itemclaColl[i][0].name,
-                        equipment.assetTypeName = this.itemclaColl[i][0].assetTypeName
-                    }
-                };
-            }
+
+                     
+
+    }
+    partCollectionList:any=[];
+    filterpartItems(event) { 
+		if (event.query !== undefined && event.query !== null) {
+            this.ptnumberlistdata(event.query)
+        }else{
+            this.ptnumberlistdata('');
         }
     }
   
-    filterpartItems(event) {
-        if (event.query !== undefined && event.query !== null) {
-            this.ptnumberlistdata(event.query);
-        }
-    }
-
-    filterpartItemsOld(event) {
-        this.partCollection = [];
-        this.itemclaColl = [];
-        if (this.allPartnumbersInfo) {
-            if (this.allPartnumbersInfo.length > 0) {
-                this.itemclaColl.push([{
-                    "assetRecordId": "",
-                    "assetId": "Select",
-                    "assetTypeId": "",
-                    "assetTypeName": "",
-                    "description": "",
-                    "assetName": "",
-                }]);
-
-                for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-                    let assetId = this.allPartnumbersInfo[i].name;
-                    if (assetId) {
-                        if (assetId.toLowerCase().indexOf(event.query.toLowerCase()) == 0) {
-                            this.itemclaColl.push([{
-                                "assetRecordId": this.allPartnumbersInfo[i].assetRecordId,
-                                "assetId": this.allPartnumbersInfo[i].value,
-                                "assetTypeId": this.allPartnumbersInfo[i].tangibleClassId,
-                                "assetTypeName": this.allPartnumbersInfo[i].assetAttributeTypeName,
-                                "description": this.allPartnumbersInfo[i].description,
-                                "name": this.allPartnumbersInfo[i].name,
-                                "class": this.allPartnumbersInfo[i].assetAttributeTypeName,
-                            }]);
-
-                            this.partCollection.push(assetId);
-                        }
-                    }
-                }
-            }
-        }
-        this.ptnumberlistdata(event.query);
-    }
-    
-    private ptnumberlistdata(strvalue = '') {
+    private ptnumberlistdata(value) {
         this.isSpinnerVisible = true;
         let equipmentIds = [];
+        equipmentIds.push(0);
         if (this.UpdateMode) {
-            equipmentIds = this.workFlow.equipments.reduce((acc, x) => {
-                return equipmentIds.push(acc.assetTypeId);
-            }, 0)
+           this.workFlow.equipments.forEach(acc => {
+                equipmentIds.push(acc.assetTypeId);
+            })
         }
-        this.commonService.autoCompleteSmartDropDownAssetList(strvalue, true, 20, equipmentIds)
+        this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds)
             .subscribe(results => {
                 this.isSpinnerVisible = false;
-                this.allPartnumbersInfo = results;
+                this.allPartnumbersInfo = results.map(x => {
+                    return {
+                               "assetRecordId": x.assetRecordId,
+                                "assetId": x.value,
+                                "assetTypeId": x.tangibleClassId,
+                                "assetTypeName": x.assetAttributeTypeName,
+                                "description": x.description,
+                                "name": x.name,
+                                "class": x.assetAttributeTypeName,
+                    }
+                }); 
             }, error => {
                 this.isSpinnerVisible = false;
             });

@@ -363,7 +363,7 @@ export class WorkflowCreateTestComponent implements OnInit, OnDestroy {
 validateCOstflow(){
     if (this.sourceWorkFlow.fixedAmount) {
         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.fixedAmount;
-    }
+   }
     // check on is percentOfNew enable
     if (this.sourceWorkFlow.percentOfNew1) {
         this.sourceWorkFlow.berThresholdAmount = this.sourceWorkFlow.percentOfNew;
@@ -923,25 +923,6 @@ masterItemMasterId:any;
         }
     }
 
-    private setCalculatedBERThreshold(workflow: any) {
-        this.sourceWorkFlow.isFixedAmount = workflow.isFixedAmount;
-        this.sourceWorkFlow.isPercentageofNew = workflow.isPercentageofNew;
-        this.sourceWorkFlow.isPercentageOfReplacement = workflow.isPercentageOfReplacement;
-        this.sourceWorkFlow.fixedAmount = workflow.fixedAmount;
-        this.sourceWorkFlow.costOfNew = workflow.costOfNew;
-        this.sourceWorkFlow.percentageOfNew = workflow.percentageOfNew;
-        this.sourceWorkFlow.costOfReplacement = workflow.costOfReplacement;
-        this.sourceWorkFlow.percentageOfReplacement = workflow.percentageOfReplacement;
-    }
-
-    private resetBERThreshold() {
-        this.isFixed = false;
-        this.ispercent = false;
-        this.percentreplcae = false;
-        this.sourceWorkFlow.isFixedAmount = false;
-        this.sourceWorkFlow.isPercentageofNew = false;
-        this.sourceWorkFlow.isPercentageOfReplacement = false;
-    }
 
     isFixedcheck(event) {
 
@@ -2331,6 +2312,11 @@ this.finalCost = parseFloat(this.TotalEst.toString().replace(/\,/g, ''));
                       
                     }
                 }
+            });
+        }
+        if (souceData.equipments && souceData.equipments.length != 0) {
+            souceData.equipments.forEach(element => {
+                element.partNumber=element.partNumber.name
             });
         }
         delete    souceData.customerName
