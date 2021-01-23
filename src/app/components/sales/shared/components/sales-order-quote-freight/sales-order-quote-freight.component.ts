@@ -366,6 +366,10 @@ dismissModelAlettRestore() {
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
 
+        for (let x of auditHistory) {
+            x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
+            x.amount = this.formateCurrency(Number(x.amount.toString().replace(/\,/g, '')));
+        }
 
         this.freightAudiHistory = auditHistory;
 

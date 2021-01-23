@@ -166,7 +166,7 @@ export class ActionEndpoint extends EndpointFactory {
             'masterCompanyId': workflowData.masterCompanyId,
             'createdBy': workflowData.createdBy,
             'updatedBy': workflowData.updatedBy,
-
+'revisedPartNumber':workflowData.revisedPartNumber,
             'workflowDescription': workflowData.workflowDescription,
             'itemMasterId': workflowData.itemMasterId,
             'partNumber': workflowData.partNumber,

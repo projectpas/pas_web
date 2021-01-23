@@ -89,6 +89,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
         }
+        this.workFlow.equipments.forEach(ev=>{
+            ev.partNumber={name:ev.assetName,assetId:ev.assetId}
+        })
         this.ptnumberlistdata('');
     }
 
@@ -121,14 +124,21 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         newRow.isDelete = false;
         this.workFlow.equipments.push(newRow);
     }
-
-    onPartSelect(event, equipment) {
-        if (this.itemclaColl) {
-            var anyEquipment = this.workFlow.equipments.filter(equipment =>
-                equipment.taskId == this.workFlow.taskId && equipment.partNumber == event);
+    clearautoCompleteInput(currentRecord) {
+        currentRecord.partNumber = undefined;
+    }
+    onPartSelect(event, equipment,index) {
+            this.workFlow.equipments[index].assetId = event.assetId;
+            this.workFlow.equipments[index].partNumber = event;
+            this.workFlow.equipments[index].assetDescription = event.description;
+            this.workFlow.equipments[index].assetTypeId = event.assetTypeId;
+            this.workFlow.equipments[index].assetName = event.name,
+            this.workFlow.equipments[index].assetTypeName = event.assetTypeName
+            var anyEquipment = this.workFlow.equipments.filter(ev =>
+                ev.taskId == this.workFlow.taskId && ev.assetId == event.assetId);
             if (anyEquipment.length > 1) {
                 equipment.assetId = "";
-                equipment.partNumber = "";
+                equipment.partNumber = undefined; 
                 equipment.assetDescription = "";
                 equipment.assetTypeId = "";
                 equipment.assetName = "";

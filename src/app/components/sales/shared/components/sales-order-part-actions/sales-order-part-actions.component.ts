@@ -21,16 +21,16 @@ import { Column } from "primeng/components/common/shared";
   templateUrl: "./sales-order-part-actions.component.html",
   styleUrls: ["./sales-order-part-actions.component.scss"]
 })
-export class SalesOrderPartActionsComponent implements OnInit {  
+export class SalesOrderPartActionsComponent implements OnInit {
   @Input() display: boolean;
   @Input() customer: any;
-  @Input () selectedPartDataForAction: PartDetail;
+  @Input() selectedPartDataForAction: PartDetail;
   @Input() selectedPartActionType: any;
-  @Input() salesQuote:ISalesQuote;
-  @Input () salesOrderId; 
+  @Input() salesQuote: ISalesQuote;
+  @Input() salesOrderId;
   @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() select: EventEmitter<any> = new EventEmitter<any>();
-    @Output() onPartReserve: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onPartReserve: EventEmitter<any> = new EventEmitter<any>();
   @Input() selectedParts: any = [];
   @Input() employeesList: any = [];
   searchType: ItemSearchType;
@@ -42,10 +42,10 @@ export class SalesOrderPartActionsComponent implements OnInit {
   columns: { field: string; header: string; width: string; }[];
   selectAllParts: Boolean = false;
   disableSubmitButtonForAction: boolean = true;
+  isSpinnerVisible: boolean = true;
 
-  constructor(private itemMasterService: ItemMasterService,private salesOrderService: SalesOrderService,     private commonService: CommonService,  private authService: AuthService,
-    private alertService: AlertService   ) {
-    console.log("add...");
+  constructor(private itemMasterService: ItemMasterService, private salesOrderService: SalesOrderService, private commonService: CommonService, private authService: AuthService,
+    private alertService: AlertService) {
     this.searchType = ItemSearchType.ItemMaster;
   }
 
@@ -79,10 +79,11 @@ export class SalesOrderPartActionsComponent implements OnInit {
     ];
   }
 
-  	get userName(): string {
-		return this.authService.currentUser ? this.authService.currentUser.userName : "";
-	}
-  getParts (){
+  get userName(): string {
+    return this.authService.currentUser ? this.authService.currentUser.userName : "";
+  }
+
+  getParts() {
     switch (this.selectedPartActionType) {
       case 'Reserve':
         this.getReserverdParts();
@@ -99,191 +100,190 @@ export class SalesOrderPartActionsComponent implements OnInit {
       case 'UnIssue':
         this.getUnissuedParts();
         break;
-    
     }
-    
-    }
+  }
 
-    onChange(event, part) {
-        let checked: boolean = event.srcElement.checked;
-        this.onPartReserve.emit({ checked: checked, part: part });
-    }
+  onChange(event, part) {
+    let checked: boolean = event.srcElement.checked;
+    this.onPartReserve.emit({ checked: checked, part: part });
+  }
 
-  getIssuedParts(){
+  getIssuedParts() {
     this.salesOrderService
-      .getIssuedParts (this.salesOrderId)
+      .getIssuedParts(this.salesOrderId)
       .subscribe(data => {
         this.parts = data[0];
-        for(let i=0; i< this.parts.length; i++){
+        for (let i = 0; i < this.parts.length; i++) {
           this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i]['isSelected'] = false;
-          // if(this.parts[i].qtyToIssued ){
-            if(this.parts[i].qtyToIssued == 0){
-              this.parts[i].qtyToIssued = null
-            }
-          // }
+          if (this.parts[i].qtyToIssued == 0) {
+            this.parts[i].qtyToIssued = null
+          }
         }
-       for(let i = 0; i< this.columns.length; i++){
-         if(this.columns[i].field == 'qtyToReserveAndIssue'){
-           this.columns.splice(i, 1);
-         }
-         if(this.columns[i].field == 'qtyToUnReserve'){
-          this.columns.splice(i, 1);
-        }
-        if(this.columns[i].header == 'Qty To UnIssue'){
-          this.columns.splice(i, 1);
-        }
-       }
-       
-        
-      });
-    
-    }
 
-  getReserverdParts(){
-  this.salesOrderService
-    .getReservedParts (this.salesOrderId)
-    .subscribe(data => {
-      this.parts = data[0];
-      for(let i=0; i< this.parts.length; i++){
-        this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-        this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-        this.parts[i]['isSelected'] = false;
-        // if(this.parts[i].qtyToReserve){
-          if(this.parts[i].qtyToReserve == 0){
+        for (let i = 0; i < this.columns.length; i++) {
+          if (this.columns[i].field == 'qtyToReserveAndIssue') {
+            this.columns.splice(i, 1);
+          }
+          if (this.columns[i].field == 'qtyToUnReserve') {
+            this.columns.splice(i, 1);
+          }
+          if (this.columns[i].header == 'Qty To UnIssue') {
+            this.columns.splice(i, 1);
+          }
+        }
+      });
+  }
+
+  getReserverdParts() {
+    this.isSpinnerVisible = true;
+    this.salesOrderService
+      .getReservedParts(this.salesOrderId)
+      .subscribe(data => {
+        this.isSpinnerVisible = false;
+        this.parts = data[0];
+        for (let i = 0; i < this.parts.length; i++) {
+          this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i]['isSelected'] = false;
+          if (this.parts[i].qtyToReserve == 0) {
             this.parts[i].qtyToReserve = null
           }
-        // }
-      }
-      for(let i = 0; i< this.columns.length; i++){
-        if(this.columns[i].field == 'qtyToReserveAndIssue'){
-          this.columns.splice(i, 1);
         }
-        if(this.columns[i].field == 'qtyToUnReserve'){
-         this.columns.splice(i, 1);
-       }
-       if(this.columns[i].header == 'Qty To UnIssue'){
-         this.columns.splice(i, 1);
-       }
-      }
-    });
-  
+
+        for (let i = 0; i < this.columns.length; i++) {
+          if (this.columns[i].field == 'qtyToReserveAndIssue') {
+            this.columns.splice(i, 1);
+          }
+          if (this.columns[i].field == 'qtyToUnReserve') {
+            this.columns.splice(i, 1);
+          }
+          if (this.columns[i].header == 'Qty To UnIssue') {
+            this.columns.splice(i, 1);
+          }
+        }
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
   }
-  getReservedAndIssuedParts(){
+
+  getReservedAndIssuedParts() {
     this.salesOrderService
-      .getReservedAndIssuedParts (this.salesOrderId)
+      .getReservedAndIssuedParts(this.salesOrderId)
       .subscribe(data => {
         this.parts = data[0];
-        for(let i=0; i< this.parts.length; i++){
+        for (let i = 0; i < this.parts.length; i++) {
           this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-          this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);          
+          this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i]['isSelected'] = false;
-          if(this.parts[i].qtyToReserveAndIssue){
-            if(this.parts[i].qtyToReserveAndIssue == 0){
+          if (this.parts[i].qtyToReserveAndIssue) {
+            if (this.parts[i].qtyToReserveAndIssue == 0) {
               this.parts[i].qtyToReserveAndIssue = null
             }
           }
         }
-        for(let i = 0; i< this.columns.length; i++){
-          if(this.columns[i].field == 'qtyToUnReserve'){
-           this.columns.splice(i, 1);
-         }
-         if(this.columns[i].header == 'Qty To UnIssue'){
-           this.columns.splice(i, 1);
-         }
+        for (let i = 0; i < this.columns.length; i++) {
+          if (this.columns[i].field == 'qtyToUnReserve') {
+            this.columns.splice(i, 1);
+          }
+          if (this.columns[i].header == 'Qty To UnIssue') {
+            this.columns.splice(i, 1);
+          }
         }
       });
-    
-    }
-    
-    getUnreservedParts(){
-      this.salesOrderService
-        .getUnreservedParts (this.salesOrderId)
-        .subscribe(data => {
-          this.parts = data[0];
-          for(let i=0; i< this.parts.length; i++){
-            this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-            this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-            this.parts[i]['isSelected'] = false;
-            if(this.parts[i].qtyToUnReserve){
-              if(this.parts[i].qtyToUnReserve == 0){
-                this.parts[i].qtyToUnReserve = null
-              }
-            }
-          }
-          for(let i = 0; i< this.columns.length; i++){
-            if(this.columns[i].field == 'qtyToReserveAndIssue'){
-              this.columns.splice(i, 1);
-            }
-            
-           if(this.columns[i].header == 'Qty To UnIssue'){
-             this.columns.splice(i, 1);
-           }
-          }
-        });
-      
-      }
-      getUnissuedParts(){
-        this.salesOrderService
-          .getReservedParts (this.salesOrderId)
-          .subscribe(data => {
-            this.parts = data[0];
-            for(let i=0; i< this.parts.length; i++){
-              this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-              this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
-              this.parts[i]['isSelected'] = false;
-              if(this.parts[i].qtyToUnIssued){
-                if(this.parts[i].qtyToUnIssued == 0){
-                  this.parts[i].qtyToUnIssued = null
-                }
-              }
-            }
-            for(let i = 0; i< this.columns.length; i++){
-              if(this.columns[i].field == 'qtyToReserveAndIssue'){
-                this.columns.splice(i, 1);
-              }
-              if(this.columns[i].field == 'qtyToUnReserve'){
-               this.columns.splice(i, 1);
-             }
-             
-            }
-          });
-        
-        }
-        onChangeOfSelectAllQuotes(event) {
-          for (let i = 0; i < this.parts.length; i++) {
-            if (event == true) {
-                this.parts[i]['isSelected'] = true;
-                this.disableSubmitButtonForAction = false;
-    
-            } else {
-                this.parts[i]['isSelected'] = false;
-                this.disableSubmitButtonForAction = true;
-      
+  }
+
+  getUnreservedParts() {
+    this.isSpinnerVisible = true;
+    this.salesOrderService
+      .getUnreservedParts(this.salesOrderId)
+      .subscribe(data => {
+        this.isSpinnerVisible = false;
+        this.parts = data[0];
+        for (let i = 0; i < this.parts.length; i++) {
+          this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i]['isSelected'] = false;
+          if (this.parts[i].qtyToUnReserve) {
+            if (this.parts[i].qtyToUnReserve == 0) {
+              this.parts[i].qtyToUnReserve = null;
             }
           }
         }
-        onChangeOfPartSelection(event){
-          let selectedPartsLength = 0;
-          for (let i = 0; i < this.parts.length; i++) {        
-            if (event == true) {
-                selectedPartsLength = selectedPartsLength+1;
-            } 
-            else {
-              if(selectedPartsLength != 0){
-                selectedPartsLength = selectedPartsLength-1;
-              }          
-            }
+        for (let i = 0; i < this.columns.length; i++) {
+          if (this.columns[i].field == 'qtyToReserveAndIssue') {
+            this.columns.splice(i, 1);
           }
-          if(selectedPartsLength == 0){
-            this.disableSubmitButtonForAction = true;
-          } else {
-            this.disableSubmitButtonForAction = false;
+
+          if (this.columns[i].header == 'Qty To UnIssue') {
+            this.columns.splice(i, 1);
+          }
+        }
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
+  }
+
+  getUnissuedParts() {
+    this.salesOrderService
+      .getReservedParts(this.salesOrderId)
+      .subscribe(data => {
+        this.parts = data[0];
+        for (let i = 0; i < this.parts.length; i++) {
+          this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
+          this.parts[i]['isSelected'] = false;
+          if (this.parts[i].qtyToUnIssued) {
+            if (this.parts[i].qtyToUnIssued == 0) {
+              this.parts[i].qtyToUnIssued = null
+            }
           }
         }
 
-  
+        for (let i = 0; i < this.columns.length; i++) {
+          if (this.columns[i].field == 'qtyToReserveAndIssue') {
+            this.columns.splice(i, 1);
+          }
+          if (this.columns[i].field == 'qtyToUnReserve') {
+            this.columns.splice(i, 1);
+          }
+        }
+      });
+  }
+
+  onChangeOfSelectAllQuotes(event) {
+    for (let i = 0; i < this.parts.length; i++) {
+      if (event == true) {
+        this.parts[i]['isSelected'] = true;
+        this.disableSubmitButtonForAction = false;
+      } else {
+        this.parts[i]['isSelected'] = false;
+        this.disableSubmitButtonForAction = true;
+      }
+    }
+  }
+
+  onChangeOfPartSelection(event) {
+    let selectedPartsLength = 0;
+    for (let i = 0; i < this.parts.length; i++) {
+      if (event == true) {
+        selectedPartsLength = selectedPartsLength + 1;
+      }
+      else {
+        if (selectedPartsLength != 0) {
+          selectedPartsLength = selectedPartsLength - 1;
+        }
+      }
+    }
+
+    if (selectedPartsLength == 0) {
+      this.disableSubmitButtonForAction = true;
+    } else {
+      this.disableSubmitButtonForAction = false;
+    }
+  }
+
   show(value: boolean): void {
     this.display = value;
   }
@@ -291,57 +291,49 @@ export class SalesOrderPartActionsComponent implements OnInit {
   onClose() {
     this.close.emit(true);
   }
-  filterReservedBy(event){
-      // this.firstCollection = this.employeesList;
-  
-      const employeeListData = [
-        ...this.employeesList.filter(x => {
-          if (x.name.toLowerCase().includes(event.query.toLowerCase())) {
-            return x.name;
-          }
-  
-        })
-      ];
-      this.employeesList = employeeListData;
 
-  
+  filterReservedBy(event) {
+    // this.firstCollection = this.employeesList;
+    const employeeListData = [
+      ...this.employeesList.filter(x => {
+        if (x.name.toLowerCase().includes(event.query.toLowerCase())) {
+          return x.name;
+        }
+      })
+    ];
+    this.employeesList = employeeListData;
   }
 
-  savereserveissuesparts(parts){
+  savereserveissuesparts(parts) {
     let tempParts = [];
-        parts.filter(x => {
-          x.createdBy = this.userName;
-          x.updatedBy = this.userName;
-          x.reservedById = x.reservedById.employeeId;
-          x.issuedById = x.issuedById.employeeId;
-          if(x.isSelected == true){
-            tempParts.push(x)
-          }
-        })
+    parts.filter(x => {
+      x.createdBy = this.userName;
+      x.updatedBy = this.userName;
+      x.reservedById = x.reservedById.value;
+      x.issuedById = x.issuedById.value;
+      if (x.isSelected == true) {
+        tempParts.push(x)
+      }
+    });
 
-        
-        this.salesOrderService
-          .savereserveissuesparts(parts)
-          .subscribe(data => {
-            this.alertService.stopLoadingMessage();
-            this.alertService.showMessage(
-              "Success",
-              `Part updated.`,
-              MessageSeverity.success
-            );
-            // this.partActionModalClose.emit(true)
-              this.onClose()
-          },
-            error => this.saveFailedHelper(error));
-  
-    }
-    
-    private saveFailedHelper(error: any) {
-      this.alertService.stopLoadingMessage();
-      // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
-      this.alertService.showStickyMessage(error, null, MessageSeverity.error);
-    }
+    this.salesOrderService
+      .savereserveissuesparts(parts)
+      .subscribe(data => {
+        this.alertService.stopLoadingMessage();
+        this.alertService.showMessage(
+          "Success",
+          `Part updated.`,
+          MessageSeverity.success
+        );
+        // this.partActionModalClose.emit(true)
+        this.onClose()
+      },
+        error => this.saveFailedHelper(error));
+  }
 
-    
-  
+  private saveFailedHelper(error: any) {
+    this.alertService.stopLoadingMessage();
+    // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
+    this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+  }
 }
