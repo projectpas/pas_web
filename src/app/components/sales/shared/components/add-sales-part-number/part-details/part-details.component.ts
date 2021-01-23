@@ -250,11 +250,12 @@ export class PartDetailsComponent implements OnChanges {
         const errorLog = error;
         this.onDataLoadFailed(errorLog)
       });
+
     this.salesQuoteService.getSearchPartObject()
       .subscribe(data => {
         this.query = data;
       });
-
+    this.query.partSearchParamters.conditionId = part.conditionId;
     // this.isSpinnerVisible = true;
     this.query.partSearchParamters.partId = part.partId;
     this.service.searchstocklinefromsoqpop(this.query)

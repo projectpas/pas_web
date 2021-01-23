@@ -365,7 +365,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   releasestocklinereservedparts(salesOrderId: number): Observable<any> {
     const URL = `${this.getrelesereservepartUrl}?salesorderid=${salesOrderId}`;
     return this.http
-      .get<any>(URL, this.getRequestHeaders())
+      .post<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.releasestocklinereservedparts(salesOrderId));
       });
@@ -378,7 +378,8 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getholdstocklinereservedparts(salesOrderId, salesOrderPartId, stockLineId, quantityRequested));
       });
   }
-  savereserveissuesparts(parts: PartAction): Observable<PartAction> {
+
+  savereserveissuesparts(parts: PartAction): any {
     let url: string = `${this.savereserveissuespartsurl}`;
     return this.http
       .post(url, parts, this.getRequestHeaders())
@@ -386,6 +387,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.savereserveissuesparts(parts));
       });
   }
+  
   getview(salesOrderId: number): Observable<any> {
     const URL = `${this.getSalesOrderViewDetails}/${salesOrderId}`;
     return this.http

@@ -4,18 +4,13 @@ import { ItemSearchType } from "../../../quotes/models/item-search-type";
 import { PartDetail } from "../../models/part-detail";
 import { IPartJson } from "../../models/ipart-json";
 import { ISalesQuote } from "../../../../../models/sales/ISalesQuote.model";
-import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import { SalesOrderService } from "../../../../../services/salesorder.service";
-import { SalesOrder } from "../../../../../models/sales/SalesOrder.model";
-import { ISalesOrder } from "../../../../../models/sales/ISalesOrder.model";
 import { PartAction } from "../../models/part-action";
 import { CommonService } from "../../../../../services/common.service";
-import { DBkeys } from "../../../../../services/db-Keys";
 import { AlertService, MessageSeverity } from "../../../../../services/alert.service";
 import { AuthService } from "../../../../../services/auth.service";
-import { Column } from "primeng/components/common/shared";
-declare var $ : any;
+declare var $: any;
 
 @Component({
     selector: "add-reserve-unreserve-part-number",
@@ -30,7 +25,6 @@ export class SalesReserveUnreserveComponent implements OnInit {
     @Input() salesQuote: ISalesQuote;
     @Input() salesOrderId;
     @Input() selectedPart: IPartJson;
-
     @Output() close: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Output() select: EventEmitter<any> = new EventEmitter<any>();
     @Output() onPartReserve: EventEmitter<any> = new EventEmitter<any>();
@@ -46,9 +40,10 @@ export class SalesReserveUnreserveComponent implements OnInit {
     columns: { field: string; header: string; width: string; }[];
     selectAllParts: Boolean = false;
     disableSubmitButtonForAction: boolean = true;
+    isSpinnerVisible: boolean = true;
+
     constructor(private itemMasterService: ItemMasterService, private salesOrderService: SalesOrderService, private commonService: CommonService, private authService: AuthService,
         private alertService: AlertService) {
-        console.log("add...");
         this.searchType = ItemSearchType.ItemMaster;
     }
 
@@ -56,13 +51,10 @@ export class SalesReserveUnreserveComponent implements OnInit {
         this.getParts();
         this.salesOrder = this.salesQuote;
         this.initColumns();
-        console.log(this.selectedPartDataForAction);
     }
 
-       initColumns() {
+    initColumns() {
         if (this.selectedPartActionType != "Unreserve") {
-
-
             this.columns = [
                 { field: "partNumber", header: "PN", width: "100px" },
                 { field: "partDescription", header: "PN Description   ", width: "200px" },
@@ -73,17 +65,12 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "quantity", header: "Qty Required ", width: "100px" },
                 { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
                 { field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
-
-
                 { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
-
                 { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
                 { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
                 { field: "quantityOnOrder", header: "Qty On Order", width: "100px" },
-
                 { field: "reservedDate", header: "Reserved Date", width: "150px" },
-                { field: "reservedById", header: "Reserved By", width: "150px" },
-
+                { field: "reservedById", header: "Reserved By", width: "150px" }
             ];
         }
         else {
@@ -97,16 +84,12 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 { field: "quantity", header: "Qty Required ", width: "100px" },
                 { field: "quantityReserved", header: "Qty Reserved", width: "100px" },
                 { field: "qtyToReserve", header: "Qty To Reserve", width: "100px" },
-
-
                 { field: "qtyToUnReserve", header: "Qty To UnReserve", width: "100px" },
-
                 { field: "quantityOnHand", header: "Qty On Hand", width: "100px" },
                 { field: "quantityAvailable", header: "Qty Available   ", width: "100px" },
                 { field: "quantityOnOrder", header: "Qty On Order", width: "100px" },
                 { field: "reservedDate", header: "UnReserved Date", width: "150px" },
-                { field: "reservedById", header: "UnReserved By", width: "150px" },
-
+                { field: "reservedById", header: "UnReserved By", width: "150px" }
             ];
         }
     }
@@ -114,19 +97,16 @@ export class SalesReserveUnreserveComponent implements OnInit {
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
+
     getParts() {
         switch (this.selectedPartActionType) {
             case 'Reserve':
                 this.getReserverdParts();
                 break;
-       
             case 'Unreserve':
                 this.getUnreservedParts();
                 break;
-         
-
         }
-
     }
 
     onChange(event, part) {
@@ -134,13 +114,13 @@ export class SalesReserveUnreserveComponent implements OnInit {
         this.onPartReserve.emit({ checked: checked, part: part });
     }
 
-   
-
     getReserverdParts() {
         this.startTimer();
+        this.isSpinnerVisible = true;
         this.salesOrderService.getReservestockpartlists
             (this.part.salesOrderId, this.part.itemMasterId)
             .subscribe(data => {
+                this.isSpinnerVisible = false;
                 this.parts = data[0];
                 for (let i = 0; i < this.parts.length; i++) {
                     console.log(this.parts[i].oemDer);
@@ -150,22 +130,22 @@ export class SalesReserveUnreserveComponent implements OnInit {
                     this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
                     this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
                     this.parts[i]['isSelected'] = false;
-                    // if(this.parts[i].qtyToReserve){
+
                     if (this.parts[i].qtyToReserve == 0) {
                         this.parts[i].qtyToReserve = null
                     }
-                    // }
                 }
-               
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-
     }
-   
 
     getUnreservedParts() {
+        this.isSpinnerVisible = true;
         this.salesOrderService.getunreservedstockpartslist
             (this.part.salesOrderId, this.part.itemMasterId)
             .subscribe(data => {
+                this.isSpinnerVisible = false;
                 this.parts = data[0];
                 for (let i = 0; i < this.parts.length; i++) {
                     console.log(this.parts[i].oemDer);
@@ -180,11 +160,11 @@ export class SalesReserveUnreserveComponent implements OnInit {
                         }
                     }
                 }
-             
+            }, error => {
+                this.isSpinnerVisible = false;
             });
-
     }
-   
+
     onChangeOfSelectAllQuotes(event) {
         for (let i = 0; i < this.parts.length; i++) {
             if (event == true) {
@@ -198,11 +178,21 @@ export class SalesReserveUnreserveComponent implements OnInit {
             }
         }
     }
+
     onChangeOfPartSelection(event) {
-        this.salesOrderService.getholdstocklinereservedparts(this.part.salesOrderId, this.part.salesOrderPartId,this.part.stockLineId,this.part.quantityRequested)
-           .subscribe(data => {
-                this.parts = data[0];
-            });
+        this.isSpinnerVisible = true;
+        this.salesOrderService.getholdstocklinereservedparts(this.part.salesOrderId, this.part.salesOrderPartId, this.part.stockLineId, this.part.quantityRequested)
+        .subscribe(data => {
+            this.isSpinnerVisible = false;
+            //this.parts = data[0];
+            this.alertService.showMessage(
+                "Success",
+                data,
+                MessageSeverity.success
+              );
+        },error => {
+            this.isSpinnerVisible = false;
+        });
 
         let selectedPartsLength = 0;
         for (let i = 0; i < this.parts.length; i++) {
@@ -215,6 +205,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 }
             }
         }
+
         if (selectedPartsLength == 0) {
             this.disableSubmitButtonForAction = true;
         } else {
@@ -222,12 +213,11 @@ export class SalesReserveUnreserveComponent implements OnInit {
         }
     }
 
-
     show(value: boolean): void {
         this.display = value;
     }
 
-    onClose() { 
+    onClose() {
         event.preventDefault();
         this.close.emit(true);
         clearInterval(this.interval);
@@ -235,27 +225,21 @@ export class SalesReserveUnreserveComponent implements OnInit {
         this.seconds = '00';
         this.releaseStock();
     }
-  
-releaseStock(){
-    
-    this.salesOrderService.releasestocklinereservedparts(this.part.salesOrderId).subscribe((res: any[]) => {
 
-    });
-}
+    releaseStock() {
+        this.salesOrderService.releasestocklinereservedparts(this.part.salesOrderId).subscribe((res: any[]) => {
+        });
+    }
+
     filterReservedBy(event) {
-        // this.firstCollection = this.employeesList;
-
         const employeeListData = [
             ...this.employeesList.filter(x => {
-                if (x.name.toLowerCase().includes(event.query.toLowerCase())) {
-                    return x.name;
+                if (x.label.toLowerCase().includes(event.query.toLowerCase())) {
+                    return x.label;
                 }
-
             })
         ];
         this.employeesList = employeeListData;
-
-
     }
 
     savereserveissuesparts(parts) {
@@ -263,13 +247,12 @@ releaseStock(){
         parts.filter(x => {
             x.createdBy = this.userName;
             x.updatedBy = this.userName;
-          
-            if (x.reservedById!=null)
-                x.reservedById = x.reservedById.employeeId;
+
+            if (x.reservedById != null)
+                x.reservedById = x.reservedById.value;
 
             if (x.isSelected == true) {
-                tempParts.push(x)
-                
+                tempParts.push(x);
             }
         })
         parts = [];
@@ -285,16 +268,7 @@ releaseStock(){
                     MessageSeverity.success
                 );
                 // this.partActionModalClose.emit(true)
-               
-            },
-                error => this.saveFailedHelper(error));
-
-    }
-
-    private saveFailedHelper(error: any) {
-        this.alertService.stopLoadingMessage();
-        // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+            });
     }
 
     interval: any;
@@ -311,6 +285,7 @@ releaseStock(){
             this.seconds = parseInt(timer[1], 10);
             --this.seconds;
             this.minutes = (this.seconds < 0) ? --this.minutes : this.minutes;
+
             if (this.minutes < 0) {
                 // this.minutes='00';
                 // this.seconds='00';
@@ -319,6 +294,7 @@ releaseStock(){
                 // this.closeMaterial(); 
                 // $('#reserve').modal("hide");
             }
+
             this.seconds = (this.seconds < 0) ? 59 : this.seconds;
             this.seconds = (this.seconds < 10) ? '0' + this.seconds : this.seconds;
             //   this.minutes = (this.minutes < 10) ?  this.minutes : this.minutes;
@@ -334,7 +310,6 @@ releaseStock(){
             // timer2== "1:01";
         }, 1000);
     }
-
 
     counter: { min: number, sec: number }
 
@@ -358,5 +333,4 @@ releaseStock(){
             }
         }, 1200)
     }
-  
 }
