@@ -555,6 +555,11 @@ export class SalesOrderChargesComponent implements OnChanges, OnInit {
     }
     private onAuditInterShipViaHistoryLoadSuccessful(auditHistory, content) {
         this.alertService.stopLoadingMessage();
+        for (let x of auditHistory) {
+            x.unitCost = this.formateCurrency(Number(x.unitCost.toString().replace(/\,/g, '')));
+            x.billingAmount = this.formateCurrency(Number(x.billingAmount.toString().replace(/\,/g, '')));
+            x.extendedCost = this.formateCurrency(Number(x.extendedCost.toString().replace(/\,/g, '')));
+        }
         this.chargesAudiHistory = auditHistory;
         this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false, windowClass: 'assetMange' });
 

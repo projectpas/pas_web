@@ -522,5 +522,10 @@ export class SalesOrderService {
     return this.salesOrderEndPointSevice.approverslistbyTaskId(taskId, id);
   }
 
+  deleteMultiplePart(salesOrderPartIds: any) {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.deleteMultiplePart(salesOrderPartIds)
+    );
+  }
   //ed --nitin
 }

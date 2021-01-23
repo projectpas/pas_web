@@ -52,6 +52,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getCloseEndPointUrl = environment.baseUrl + "/api/salesorder/close";
   private readonly getCancelEndPointUrl = environment.baseUrl + "/api/salesorder/cancel";
   private readonly getCopyEndPointUrl = environment.baseUrl + "/api/salesorder/copy";
+  private readonly saleOrderDeleteMultiplePart: string = environment.baseUrl + "/api/salesorder/deletemultiplepart";
   //*Start savesarvice end point creation implementation --nitin
 
   private readonly _addDocumentDetails: string = environment.baseUrl + "/api/SalesOrder/SalesOrderDocumentUpload";
@@ -574,6 +575,18 @@ export class SalesOrderEndpointService extends EndpointFactory {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
       .catch(error => {
         return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+      });
+  }
+
+  deleteMultiplePart(salesOrderPartIds: any) {
+    return this.http
+      .post(
+        this.saleOrderDeleteMultiplePart,
+        JSON.stringify(salesOrderPartIds),
+        this.getRequestHeaders()
+      )
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deleteMultiplePart(salesOrderPartIds));
       });
   }
   //end nitin

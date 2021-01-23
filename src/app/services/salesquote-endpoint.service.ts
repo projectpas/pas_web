@@ -46,6 +46,7 @@ export class SalesQuoteEndpointService extends EndpointFactory {
   private readonly getEmailQuoteEndointUrl: string = environment.baseUrl + "/api/salesquote/soqsendmail"
   private readonly getConvertfromquoteEndPoint: string = environment.baseUrl + "/api/salesorder/convertfromquote"
   private readonly saleQuoteDeletePart: string = environment.baseUrl + "/api/salesquote/deletepart";
+  private readonly saleQuoteDeleteMultiplePart: string = environment.baseUrl + "/api/salesquote/deletemultiplepart";
 
   //*Start savesarvice end point creation implementation --nitin
   private readonly _addSalesOrderQuoteFileUpload: string = environment.baseUrl + "/api/salesquote/SalesQuoteGeneralDocumentUpload";
@@ -452,6 +453,18 @@ export class SalesQuoteEndpointService extends EndpointFactory {
     return this.http.get<any>(`${this.configurations.baseUrl}/api/approvalrule/approverslistbyTaskId?approvalTaskId=${taskId}&id=${id}`)
       .catch(error => {
         return this.handleErrorCommon(error, () => this.approverslistbyTaskId(taskId, id));
+      });
+  }
+
+  deleteMultiplePart(salesOrderQuotePartIds: any) {
+    return this.http
+      .post(
+        this.saleQuoteDeleteMultiplePart,
+        JSON.stringify(salesOrderQuotePartIds),
+        this.getRequestHeaders()
+      )
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.deleteMultiplePart(salesOrderQuotePartIds));
       });
   }
 }

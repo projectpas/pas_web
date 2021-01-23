@@ -881,4 +881,46 @@ export class SalesPartNumberComponent {
     this.modal = this.modalService.open(StocklineViewComponent, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
+
+  deletedata:number[] = [];
+  deleteAllPartModal: NgbModalRef;
+  openmultiplepartDelete(summarypart, index,deletepartcontent) {
+    this.selectedSummaryRow = summarypart;
+    this.deletedata = [];
+    for(let i=0;i<summarypart.childParts.length;i++)
+    {
+      this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderQuotePartId);
+    }
+    this.deleteAllPartModal = this.modalService.open(deletepartcontent, { size: "sm", backdrop: 'static', keyboard: false });
+  }
+  deleteMultiplePart(): void {
+    if (this.deletedata.length > 0) {
+      let data = { "salesOrderQuotePartIds": this.deletedata }
+      this.salesQuoteService.deleteMultiplePart(data).subscribe(response => {
+        for(let i=0;i< this.selectedSummaryRow.childParts.length;i++){
+          this.removePartNamber(this.selectedSummaryRow.childParts[i]);
+        }
+        this.deleteAllPartModal.close();
+        this.alertService.showMessage(
+          "Success",
+          `Part removed successfully.`,
+          MessageSeverity.success
+        );
+      }, error => {
+        this.isSpinnerVisible = false;
+      });
+    } else {
+      this.removePartNamber(this.part);
+      this.deleteAllPartModal.close();
+      this.alertService.showMessage(
+        "Success",
+        `Part removed successfully.`,
+        MessageSeverity.success
+      );
+    }
+  }
+
+  onCloseParMultipletDelete() {
+    this.deleteAllPartModal.close();
+  }
 }

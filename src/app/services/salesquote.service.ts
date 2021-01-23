@@ -610,4 +610,10 @@ export class SalesQuoteService {
   approverslistbyTaskId(taskId, id) {
     return this.salesQuoteEndPointSevice.approverslistbyTaskId(taskId, id);
   }
+
+  deleteMultiplePart(salesOrderQuotePartIds: any) {
+    return Observable.forkJoin(
+      this.salesQuoteEndPointSevice.deleteMultiplePart(salesOrderQuotePartIds)
+    );
+  }
 }
