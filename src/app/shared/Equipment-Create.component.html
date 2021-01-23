@@ -15,19 +15,19 @@
       </tr>
       <tr *ngFor="let eqp of workFlow.equipments; let i = index">
         <td>
-          <p-autoComplete class="p-autoComplete-ctsm"
-              [(ngModel)]="eqp.partNumber"
-              name="assetnameId{{i}}"
-              id="assetId{{i}}"
-              title=" Asset"
-              field="label"
-              appendTo='body'
-              [forceSelection]="true"
-              [suggestions]="partCollection"
-              (onSelect)="onPartSelect($event, eqp)"
-              (completeMethod)="filterpartItems($event)" [size]="30" [minLength]="1"
-              [dropdown]="true" required>
-           </p-autoComplete>
+          <!-- <p-autoComplete (onSelect)="onPartSelect($event, eqp)" [suggestions]="partCollection"
+            (completeMethod)="filterpartItems($event)" [size]="30" [(ngModel)]="eqp.partNumber" [minLength]="1"
+            [dropdown]="true" class="workflow-measurement-select" [forceSelection]="true"
+            [ngModelOptions]="{standalone: true}">
+            <ng-template let-assetId pTemplate="asset">
+              <div class="ui-helper-clearfix">{{ assetId  }}</div>
+            </ng-template>
+          </p-autoComplete> --> 
+          <p-autoComplete   class="p-autoComplete-ctsm" field="name" name="AName{{i}}" [dropdown]="true"  [forceSelection]="true"
+          errorMessage="Records not found"  emptyMessage="No Records Found"  (completeMethod)="filterpartItems($event)"
+           [size]="30" [minLength]="1" (onSelect)="onPartSelect($event, eqp,i)" [suggestions]="allPartnumbersInfo"
+           [(ngModel)]="eqp.partNumber" (onClear)="clearautoCompleteInput(eqp)"  #prellRevInsp="ngModel" >
+      </p-autoComplete>
         </td>
         <td>
           {{ eqp.assetName }}

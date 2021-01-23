@@ -7,9 +7,7 @@ import { AssetService } from "../services/asset/Assetservice";
 import { MessageSeverity, AlertService } from "../services/alert.service";
 import { WorkOrderService } from "../services/work-order/work-order.service";
 import { CommonService } from "../services/common.service";
-import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { getObjectById } from '../generic/autocomplete';
-
+import { NgbModalRef, NgbModal } from '@ng-bootstrap/ng-bootstrap'; 
 @Component({
     selector: 'grd-equipment',
     templateUrl: './Equipment-Create.component.html',
@@ -27,7 +25,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     @Output() saveEquipmentListForWO = new EventEmitter();
     @Output() closeEvent = new EventEmitter();
     @Output() updateEquipmentListForWO = new EventEmitter();
-    @Output() notify: EventEmitter<IWorkFlow> = new EventEmitter<IWorkFlow>();
+    @Output() notify: EventEmitter<IWorkFlow> =  new EventEmitter<IWorkFlow>();
 
     allUomdata: any[] = [];
     itemClassInfo: any[] = [];
@@ -43,10 +41,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     itemsPerPage: number = 10;
     isSpinnerVisible = false;
     modal: NgbModalRef;
-    equipmentIds: any[] = [];
-
-
-    constructor(private commonService: CommonService, private workOrderService: WorkOrderService,
+    constructor(private commonService: CommonService, private workOrderService: WorkOrderService, 
         private actionService: ActionService, private vendorService: VendorService, private modalService: NgbModal,
         private assetService: AssetService, private alertService: AlertService) {
     }
@@ -76,20 +71,13 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             }
         } else {
             this.row = this.workFlow.equipments[0];
-            for (var i = 0; i < this.workFlow.equipments.length; i++) {
-                this.equipmentIds.push(this.workFlow.equipments[i].assetTypeId);
-                this.workFlow.equipments[i].partNumber = { value: this.workFlow.equipments[i].assetId, label: this.workFlow.equipments[i].partNumber }
-            }
-
-            this.ptnumberlistdata('');
-
             if (this.row == undefined) {
                 this.row = {};
             }
             this.row.taskId = this.workFlow.taskId;
         }
-        this.workFlow.equipments.forEach(ev => {
-            ev.partNumber = { name: ev.assetName, assetId: ev.assetId }
+        this.workFlow.equipments.forEach(ev=>{
+            ev.partNumber={name:ev.assetName,assetId:ev.assetId}
         })
         this.ptnumberlistdata('');
     }
@@ -126,119 +114,61 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
     clearautoCompleteInput(currentRecord) {
         currentRecord.partNumber = undefined;
     }
-    onPartSelect(event, equipment, index) {
-        this.workFlow.equipments[index].assetId = event.assetId;
-        this.workFlow.equipments[index].partNumber = event;
-        this.workFlow.equipments[index].assetDescription = event.description;
-        this.workFlow.equipments[index].assetTypeId = event.assetTypeId;
-        this.workFlow.equipments[index].assetName = event.name,
+    onPartSelect(event, equipment,index) {
+            this.workFlow.equipments[index].assetId = event.assetId;
+            this.workFlow.equipments[index].partNumber = event;
+            this.workFlow.equipments[index].assetDescription = event.description;
+            this.workFlow.equipments[index].assetTypeId = event.assetTypeId;
+            this.workFlow.equipments[index].assetName = event.name,
             this.workFlow.equipments[index].assetTypeName = event.assetTypeName
-        var anyEquipment = this.workFlow.equipments.filter(ev =>
-            ev.taskId == this.workFlow.taskId && ev.assetId == event.assetId);
-        if (anyEquipment.length > 1) {
-            equipment.assetId = "";
-            equipment.partNumber = undefined;
-            equipment.assetDescription = "";
-            equipment.assetTypeId = "";
-            equipment.assetName = "";
-            equipment.assetTypeName = "";
-            event = "";
-            this.alertService.showMessage("Workflow", "Asset Id is already in use in Tool List", MessageSeverity.error);
-        }
-        else {
-            for (let i = 0; i < this.itemclaColl.length; i++) {
-                if (event.name == this.itemclaColl[i][0].name) {
-                    equipment.assetId = this.itemclaColl[i][0].assetId;
-                    //equipment.partNumber = this.itemclaColl[i][0].name;
-                    equipment.assetDescription = this.itemclaColl[i][0].description;
-                    equipment.assetTypeId = this.itemclaColl[i][0].assetTypeId;
-                    equipment.assetName = this.itemclaColl[i][0].name,
-                        equipment.assetTypeName = this.itemclaColl[i][0].assetTypeName,
-                        equipment.partNumber = getObjectById('value', this.itemclaColl[i][0].assetRecordId, this.allPartnumbersInfo)
-                }
-            };
-        }
-    }
-
-
-    filterpartItems(event) {
-        if (event.query !== undefined && event.query !== null) {
-            this.ptnumberlistdata(event.query);
-        }
-    }
-
-    assignTools() {
-        if (this.allPartnumbersInfo) {
-            if (this.allPartnumbersInfo.length > 0) {
-                this.itemclaColl.push([{
-                    "assetRecordId": "",
-                    "assetId": "Select",
-                    "assetTypeId": "",
-                    "assetTypeName": "",
-                    "description": "",
-                    "assetName": "",
-                }]);
-                for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-                    let assetId = this.allPartnumbersInfo[i].name;
-                    if (assetId) {
-                        this.itemclaColl.push([{
-                            "assetRecordId": this.allPartnumbersInfo[i].assetRecordId,
-                            "assetId": this.allPartnumbersInfo[i].value,
-                            "assetTypeId": this.allPartnumbersInfo[i].tangibleClassId,
-                            "assetTypeName": this.allPartnumbersInfo[i].assetAttributeTypeName,
-                            "description": this.allPartnumbersInfo[i].description,
-                            "name": this.allPartnumbersInfo[i].name,
-                            "class": this.allPartnumbersInfo[i].assetAttributeTypeName,
-                        }]);
-
-                        this.partCollection.push(assetId);
-                    }
-                }
+            var anyEquipment = this.workFlow.equipments.filter(ev =>
+                ev.taskId == this.workFlow.taskId && ev.assetId == event.assetId);
+            if (anyEquipment.length > 1) {
+                equipment.assetId = "";
+                equipment.partNumber = undefined; 
+                equipment.assetDescription = "";
+                equipment.assetTypeId = "";
+                equipment.assetName = "";
+                equipment.assetTypeName = "";
+                event = "";
+                this.alertService.showMessage("Workflow", "Asset Id is already in use in Tool List", MessageSeverity.error);
             }
+
+                     
+
+    }
+    partCollectionList:any=[];
+    filterpartItems(event) { 
+		if (event.query !== undefined && event.query !== null) {
+            this.ptnumberlistdata(event.query)
+        }else{
+            this.ptnumberlistdata('');
         }
     }
-
-    private ptnumberlistdata(strvalue = '') {
+  
+    private ptnumberlistdata(value) {
         this.isSpinnerVisible = true;
-        if (this.equipmentIds.length == 0) {
-            this.equipmentIds.push(0);
+        let equipmentIds = [];
+        equipmentIds.push(0);
+        if (this.UpdateMode) {
+           this.workFlow.equipments.forEach(acc => {
+                equipmentIds.push(acc.assetTypeId);
+            })
         }
-        this.commonService.autoCompleteSmartDropDownAssetList(strvalue, true, 20, this.equipmentIds.join())
+        this.commonService.autoCompleteSmartDropDownAssetList(value, true, 20, equipmentIds)
             .subscribe(results => {
                 this.isSpinnerVisible = false;
-                this.allPartnumbersInfo = results;
-                this.partCollection = this.allPartnumbersInfo;
-
-                if (this.allPartnumbersInfo) {
-                    if (this.allPartnumbersInfo.length > 0) {
-                        this.itemclaColl = [];
-                        this.itemclaColl.push([{
-                            "assetRecordId": "",
-                            "assetId": "Select",
-                            "assetTypeId": "",
-                            "assetTypeName": "",
-                            "description": "",
-                            "assetName": "",
-                            "name": "",
-                        }]);
-                        for (let i = 0; i < this.allPartnumbersInfo.length; i++) {
-                            let assetId = this.allPartnumbersInfo[i].name;
-                            if (assetId) {
-                                this.itemclaColl.push([{
-                                    "assetRecordId": this.allPartnumbersInfo[i].assetRecordId,
-                                    "assetId": this.allPartnumbersInfo[i].value,
-                                    "assetTypeId": this.allPartnumbersInfo[i].tangibleClassId,
-                                    "assetTypeName": this.allPartnumbersInfo[i].assetAttributeTypeName,
-                                    "description": this.allPartnumbersInfo[i].description,
-                                    "name": this.allPartnumbersInfo[i].name,
-                                    "class": this.allPartnumbersInfo[i].assetAttributeTypeName,
-                                }]);
-                            }
-                        }
+                this.allPartnumbersInfo = results.map(x => {
+                    return {
+                               "assetRecordId": x.assetRecordId,
+                                "assetId": x.value,
+                                "assetTypeId": x.tangibleClassId,
+                                "assetTypeName": x.assetAttributeTypeName,
+                                "description": x.description,
+                                "name": x.name,
+                                "class": x.assetAttributeTypeName,
                     }
-                }
-
-
+                }); 
             }, error => {
                 this.isSpinnerVisible = false;
             });
@@ -264,14 +194,37 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         return result;
     }
 
+    onDataLoadFailed(log) {
+        const errorLog = log;
+        var msg = '';
+        if (errorLog.message) {
+            if (errorLog.error && errorLog.error.errors.length > 0) {
+                for (let i = 0; i < errorLog.error.errors.length; i++) {
+                    msg = msg + errorLog.error.errors[i].message + '<br/>'
+                }
+            }
+            this.alertService.showMessage(
+                errorLog.error.message,
+                msg,
+                MessageSeverity.error
+            );
+        }
+        else {
+            this.alertService.showMessage(
+                'Error',
+                log.error,
+                MessageSeverity.error
+            );
+        }
+    }
     dismissModel() {
         this.modal.close();
     }
-    deletedRowIndex: any;
-    deleteRowRecord: any = {};
-    openDelete(content, row, index) {
-        this.deletedRowIndex = index;
-        this.deleteRowRecord = row;
+    deletedRowIndex:any;
+    deleteRowRecord:any={};
+    openDelete(content, row,index) {
+        this.deletedRowIndex=index;
+      this.deleteRowRecord = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -284,5 +237,9 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         }
         this.dismissModel();
     }
-
+  
 }
+
+
+
+
