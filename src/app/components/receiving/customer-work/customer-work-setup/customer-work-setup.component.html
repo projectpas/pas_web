@@ -57,7 +57,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Employee Name <span class="text-danger">*</span></label>
-                                <p-autoComplete field="label" class="pautocomp-cstm"
+                                <p-autoComplete field="label" class="pautocomp-cstm" disabled
                                     [(ngModel)]="receivingForm.employeeId" name="employeeId"
                                     (ngModelChange)="getActive()" [suggestions]="allEmployeeList"
                                     (completeMethod)="filterEmployees($event)" [size]="30" [minLength]="1"
@@ -520,6 +520,48 @@
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.tagType" name="tagType">
                                 </p-multiSelect>
                             </div>
+                            <div class="form-group">
+                                <label>MFG Trace</label>
+                                <input class="form-control" type="text" name="MFGTrace" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.mfgTrace">
+                            </div>
+                            <div class="form-group">
+                                <label>MFG Lot</label>
+                                <input class="form-control" type="text" name="MFGLotNo" (ngModelChange)="getActive()"
+                                    [(ngModel)]="receivingForm.mfgLotNo">
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm " style="margin-top: 20px;">
+                                    <label>
+                                        <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate"
+                                            (ngModelChange)="getActive()">
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        MFG Date <span class="text-danger" *ngIf="receivingForm.isMFGDate">*</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="receivingForm.isMFGDate">
+                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100" (ngModelChange)="getActive()"
+                                    [required]="receivingForm.isMFGDate" [maxDate]="currentDate"
+                                    name="manufacturingDate" [(ngModel)]="receivingForm.mfgDate"></p-calendar>
+                            </div>
+                            <div class="form-group">
+                                <div class="checkbox-cstm m-t-10">
+                                    <label>
+                                        <input type="checkbox" name="isExpDate" [(ngModel)]="receivingForm.isExpDate"
+                                            (ngModelChange)="getActive()">
+                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                        Exp Date <span class="text-danger" *ngIf="receivingForm.isExpDate">*</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="receivingForm.isExpDate">
+                                <p-calendar class="workflow-clder" [showIcon]="true" (ngModelChange)="getActive()"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [required]="receivingForm.isExpDate" [minDate]="currentDate" name="expDate"
+                                    [(ngModel)]="receivingForm.expDate"></p-calendar>
+                            </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group" style="margin-bottom: 8px;">
@@ -713,48 +755,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>MFG Trace</label>
-                                <input class="form-control" type="text" name="MFGTrace" (ngModelChange)="getActive()"
-                                    [(ngModel)]="receivingForm.mfgTrace">
-                            </div>
-                            <div class="form-group">
-                                <label>MFG Lot</label>
-                                <input class="form-control" type="text" name="MFGLotNo" (ngModelChange)="getActive()"
-                                    [(ngModel)]="receivingForm.mfgLotNo">
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox-cstm " style="margin-top: 20px;">
-                                    <label>
-                                        <input type="checkbox" name="isMFGDate" [(ngModel)]="receivingForm.isMFGDate"
-                                            (ngModelChange)="getActive()">
-                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        MFG Date <span class="text-danger" *ngIf="receivingForm.isMFGDate">*</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group" *ngIf="receivingForm.isMFGDate">
-                                <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100" (ngModelChange)="getActive()"
-                                    [required]="receivingForm.isMFGDate" [maxDate]="currentDate"
-                                    name="manufacturingDate" [(ngModel)]="receivingForm.mfgDate"></p-calendar>
-                            </div>
-                            <div class="form-group">
-                                <div class="checkbox-cstm m-t-10">
-                                    <label>
-                                        <input type="checkbox" name="isExpDate" [(ngModel)]="receivingForm.isExpDate"
-                                            (ngModelChange)="getActive()">
-                                        <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                        Exp Date <span class="text-danger" *ngIf="receivingForm.isExpDate">*</span>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="form-group" *ngIf="receivingForm.isExpDate">
-                                <p-calendar class="workflow-clder" [showIcon]="true" (ngModelChange)="getActive()"
-                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [required]="receivingForm.isExpDate" [minDate]="currentDate" name="expDate"
-                                    [(ngModel)]="receivingForm.expDate"></p-calendar>
-                            </div>
+                            
                         </div>
                         <div class="col-md-4 main_facture">
                             <div class="card" style="margin-top: 8px;margin-bottom: 8px;">
