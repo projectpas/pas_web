@@ -212,6 +212,13 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     memoIndex;
     moduleName: any = '';
     modal: NgbModalRef;
+    itemMasterRowData: any = {};
+    showItemmasterView: any = false;
+    deleteRowRecord:any={};
+    deletedRowIndex:any;
+    currentForm:any;
+    disableEditor: any = true;
+
     constructor(private actionService: ActionService,
         private commonService: CommonService,
         private authService: AuthService,
@@ -246,9 +253,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
             this.row.taskId = this.workFlow.taskId;
             this.workFlow.materialList.map((x, index) => {
-                // if (x['mandatoryOrSupplemental'] == this.workFlow.materialList[index].mandatoryOrSupplemental) {
-                //     this.workFlow.materialList[index]['mandatorySupplementalId'] = x['mandatorySupplementalId'];
-                // }
                 this.getPNDetails(x);
             })
         }
@@ -279,33 +283,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return this.authService.currentUser ? this.authService.currentUser.masterCompanyId : null;
     }
 
-    // getMaterailMandatoriesOld() {
-    //     let mandatorySupplementalIds = [];
-    //     if (!this.isWorkOrder || !this.isQuote) {
-    //         mandatorySupplementalIds = this.workFlow.materialList.reduce((acc, x) => {
-    //             return mandatorySupplementalIds.push(acc.mandatorySupplementalId);
-    //         }, 0)
-    //     }
-    //     this.isSpinnerVisible = true;
-    //     this.commonService.smartDropDownList('MaterialMandatories', 'Id', 'Name')
-    //         .subscribe(
-    //             mandatory => {
-    //                 this.isSpinnerVisible = false;
-    //                 this.materialMandatory = mandatory.map(x => {
-    //                     return {
-    //                         id: x.value,
-    //                         name: x.label
-    //                     }
-    //                 });
-    //                 this.defaultMaterialMandatory = 'Mandatory';
-    //                 if ((this.workFlow.workflowId == undefined || this.workFlow.workflowId == '0') && this.workFlow.materialList[0] != undefined) {
-    //                     this.workFlow.materialList[0].mandatorySupplementalId = 1;
-    //                 }
-    //             }, error => {
-    //                 this.isSpinnerVisible = false;
-    //             });
-    // }
-
+    
     getMaterailMandatories() {
         let materialMandatoriesIds = [];
         if (!this.isWorkOrder || !this.isQuote) {
@@ -542,7 +520,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
                 return exclusionsIds.push(acc.itemMasterId);
             }, 0)
         } 
-        // this.commonService.getPartnumList(value).subscribe(res => {
             this.commonService.autoCompleteSmartDropDownItemMasterList(value, true, 20, exclusionsIds?exclusionsIds :0)
             .subscribe(res => {
             this.isSpinnerVisible = false;
@@ -675,9 +652,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.workFlow.materialList.push(newRow);
     }
 
-
-
-
     calculateExtendedCost(material): void {
         material.unitCost = material.unitCost ? formatNumberAsGlobalSettingsModule(material.unitCost, 2) : '';
         material.quantity = material.quantity ? material.quantity.toString().replace(/\,/g, '') : 0;
@@ -732,7 +706,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     validateQuantity(event, material): void {
-
         if (!material.quantity) {
             material.quantity = '0';
         }
@@ -868,8 +841,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         return this[variable + index];
     }
 
-    itemMasterRowData: any = {};
-    showItemmasterView: any = false;
     openView(row) { 
         console.log("row",row);
         this.itemMasterRowData = row;
@@ -877,6 +848,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         this.itemMasterId = row.itemMasterId;
         $('#itemMasterView').modal('show');
     }
+
     getntlafieds(ntaeData) {
         for (let i = 0; i < ntaeData.length; i++) {
             this.filterManufacturerData.push({
@@ -980,21 +952,19 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     onViewAircraft(rowData) { }
     getAircraftAuditHistory(rowData) { }
     onViewAircraftonDbl(rowData) { }
-
-    disableEditor: any = true;
+    
     editorgetmemo(ev) {
         this.disableEditor = false;
     }
+
     dismissModel() {
         this.modal.close();
     }
-    deleteRowRecord:any={};
-    deletedRowIndex:any;
-    currentForm:any;
+    
     openDelete(content, row,index,form: NgForm) {
         this.currentForm=form;
         this.deletedRowIndex=index;
-      this.deleteRowRecord = row;
+        this.deleteRowRecord = row;
         this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
@@ -1006,10 +976,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             this.workFlow.materialList = cloneDeep(temp);
         }
         else {
+            this.workFlow.materialList[this.deletedRowIndex].isDeleted = true;
             this.workFlow.materialList[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
         this.dismissModel();
     }
-
 } 
