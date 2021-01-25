@@ -293,13 +293,14 @@
         </div>
         <div [ngClass]="{ hideTab: currentTab !== 'Documents' }">
           <div *ngIf="savedGeneralInformationData || editGeneralInformationData">
-            <app-customer-documents
+            <!-- <app-customer-documents
               [editMode]="editMode"
               [editGeneralInformationData]="editGeneralInformationData"
               [savedGeneralInformationData]="savedGeneralInformationData"
               (tab)="changeOfTab($event)"
               [selectedCustomerTab]="currentTab"
-            ></app-customer-documents>
+            ></app-customer-documents> -->
+            <app-common-documents [generalInformtionData]="savedGeneralInformationData ? savedGeneralInformationData : editGeneralInformationData" (tab)="changeOfTab($event)" [moduleName]="moduleName" [referenceId]="referenceId" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
           </div>
         </div>
       </div>

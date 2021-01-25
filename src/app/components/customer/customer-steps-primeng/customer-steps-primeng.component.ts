@@ -14,6 +14,8 @@ import { CommonService } from '../../../services/common.service';
 	styleUrls: ['./customer-steps-primeng.component.scss']
 })
 export class CustomerStepsPrimengComponent {
+	moduleName:any="Customer";
+	referenceId:any;
 	activeMenuItem: number = 1;
 	currentTab: string = 'General';
 	savedGeneralInformationData: any;
@@ -111,6 +113,8 @@ export class CustomerStepsPrimengComponent {
 			this.currentTab = 'Warnings';
 			this.activeMenuItem = 9;
 		} else if (value === 'Documents') {
+			this.referenceId=this.customerId; 
+			this.referenceId=this.referenceId? this.referenceId :this.editGeneralInformationData.customerId;
 			this.currentTab = 'Documents';
 			this.activeMenuItem = 10;
 		}
