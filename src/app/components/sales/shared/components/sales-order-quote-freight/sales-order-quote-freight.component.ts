@@ -584,7 +584,7 @@ dismissModelAlettRestore() {
         this.modal = this.modalService.open(content, { size: 'xl', backdrop: 'static', keyboard: false });
     }
 
-    IsAddShipVia:boolean = false;
+    IsAddShipVia1:boolean = false;
     ShipViaEditID:number;
     shipviaindex;
     isEditModeShipVia:boolean=false;
@@ -599,7 +599,7 @@ dismissModelAlettRestore() {
 			//this.ShipViabutton = false;
 			this.isEditModeShipVia = true;	
 		}
-		this.IsAddShipVia = true;
+		this.IsAddShipVia1 = true;
     }
     
     RefreshAfterAddShipVia(ShippingViaId){
@@ -608,10 +608,10 @@ dismissModelAlettRestore() {
                 this.isSpinnerVisible = false;
                 this.setShipViaList(response);
                 this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
-                this.IsAddShipVia = false;
                 this.isEnableUpdateButton = false;
             }, error => this.isSpinnerVisible = false);
         }
+        this.IsAddShipVia1 = false;
         $('#AddShipVia').modal('hide');
     }
 }

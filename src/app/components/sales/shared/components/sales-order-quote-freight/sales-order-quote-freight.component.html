@@ -289,10 +289,10 @@
           </span>
         </div>
         <div class="tab-content">
-          <!-- <div class="table-responsive table-overflow" style="height: 340px;"> -->
+          <div class="table-responsive table-overflow" style="height: 340px;">
             <form #frieghtsCreateForm="ngForm">
-              <div style="overflow:auto" class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex" style="min-height: 130px !important;">
-                <div class="tableFixHead">
+              <!-- <div style="overflow:auto" class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align parts-zindex" style="min-height: 130px !important;">
+                <div class="tableFixHead"> -->
                     <table class="table table-bordered">
                 <thead>
                   <tr>
@@ -395,8 +395,8 @@
                   </tr>
                 </tbody>
               </table>
-              </div>
-              </div>
+              <!-- </div>
+              </div> -->
             </form>
             <div class="modal fade" id="textarea-popupFreight" role="dialog" data-backdrop="static"
               data-keyboard="false">
@@ -438,7 +438,7 @@
                 </div>
               </div>
             </div>
-          <!-- </div> -->
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -610,7 +610,7 @@
     <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
   </div>
 </ng-template>
-<div class="modal fade" *ngIf="IsAddShipVia" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" *ngIf="IsAddShipVia1" id="AddShipVia" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog partsList-modal">
       <div class="modal-content">
           <div class="modal-header">
