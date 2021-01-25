@@ -233,7 +233,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
             this.workFlow.equipments.splice(this.deletedRowIndex, 1);
         }
         else {
-            this.workFlow.equipments[this.deletedRowIndex].isDelete = true;
+            this.workFlow.equipments[this.deletedRowIndex].isDeleted = true;
         }
         this.dismissModel();
     }
