@@ -679,6 +679,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                     this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSalesperson+Report&rs:Command=Render');
                   },
                 },
+                {
+                  label: 'SO Turn Around Time (TAT)', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fSales+Order+-+Turn+Around+Time+(TAT)&rs:Command=Render');
+                  }
+                }
               ],
             },
           ],
@@ -790,6 +795,11 @@ export class AppComponent implements OnInit, AfterViewInit {
                 {
                   label: 'Tech Productivity', command: (event?: any) => {
                     this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fTech+Productivity&rs:Command=Render');
+                  }
+                },
+                {
+                  label: 'Turn Around Time (TAT)', command: (event?: any) => {
+                    this.navigateToURL(environment.reportUrl+'/ReportServer01/Pages/ReportViewer.aspx?%2fReport+Project1%2fWork+Order+-Turn+Around+Time+(TAT)&rs:Command=Render');
                   }
                 }
               ],
