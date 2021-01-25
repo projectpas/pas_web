@@ -171,19 +171,18 @@
                             [offLineUpload]="false">
                           </app-common-documents>
                       </div> -->
-                      
                       <div class="form-group tax-certificate" *ngIf="savedGeneralInformationData.isTaxExempt">
-                        <label>Attach Certificate</label>
+                        <!-- <label>Attach Certificate</label>
                         <a class="plusicon-cstm" style="margin-left: 10px;" href="#" data-toggle="modal"
                           data-target="#addDocumentDetailsNew" (ngModelChange)="enableSave()" (click)="addDocumentDetails()">
                           <i class="fa fa-plus-circle fa-lg" matTooltip="Create Documents"
                             matTooltipPosition="above"></i>
-                        </a>
+                        </a> -->
                         <div class="table-responsive table-overflow">
-                          <h6 class="panel-title" style="margin-top: 10px;">
+                          <!-- <h6 class="panel-title" style="margin-top: 10px;">
                             Attachment Details:
-                          </h6>
-                          <p-table #doc class="rpo-table-cstm" [columns]="taxExemptTableColumns"
+                          </h6> -->
+                          <!-- <p-table style="display: none;" #doc class="rpo-table-cstm" [columns]="taxExemptTableColumns"
                             [value]="allCustomerFinanceDocumentsList" [paginator]="true" [resizableColumns]="true"
                             [first]="0" [reorderableColumns]="true" (onPage)="pageIndexChangeForDoc($event)" name="doc"
                             [rows]="pageSizeDoc" [rowsPerPageOptions]="[5, 10, 15, 20]">
@@ -308,7 +307,8 @@
                                   getPageCount(doc._totalRecords, pageSizeDoc)
                                 " name="page count" disabled pInputText type="text" />
                             </ng-template>
-                          </p-table>
+                          </p-table> -->
+                          <app-common-documents [generalInformtionData]="savedGeneralInformationData ? savedGeneralInformationData : editGeneralInformationData"  [moduleName]="moduleName" [referenceId]="id" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
                         </div>
                       </div>
                     </div>

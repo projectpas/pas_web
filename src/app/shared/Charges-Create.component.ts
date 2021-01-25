@@ -420,6 +420,7 @@ export class ChargesCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.charges[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.charges[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
         this.dismissModel();

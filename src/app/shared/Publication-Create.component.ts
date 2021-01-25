@@ -669,6 +669,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
         }
         else {
             this.workFlow.publication[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.publication[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
     }

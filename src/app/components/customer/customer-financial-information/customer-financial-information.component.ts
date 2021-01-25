@@ -204,7 +204,8 @@ export class CustomerFinancialInformationComponent implements OnInit {
   editModeFinance: boolean = false;
   isCountdisable: boolean = false;
   disableTaxSave: boolean = true;
-
+	moduleName:any="CustomerFinance";
+	referenceId:any;
   constructor(
     public taxtypeser: TaxTypeService,
     public creditTermsService: CreditTermsService,
