@@ -1510,6 +1510,7 @@ export class SalesOrderCreateComponent implements OnInit {
       this.isSpinnerVisible = false;
       this.allEmployeeList = res;
       this.firstCollection = res;
+      this.employeesList = res;
       // this.salesQuote.employeeName = getObjectById(
       //   "value",
       //   this.employeeId ? this.employeeId : this.salesQuote.employeeId,
