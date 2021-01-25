@@ -486,17 +486,28 @@
                     <div class="form-row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>
-                                    Certify By
-                                </label>
-                                <input class="form-control" type="text" name="certifiedBy" (ngModelChange)="getActive()"
-                                    [(ngModel)]="receivingForm.certifiedBy">
-                            </div>
-                            <div class="form-group">
                                 <label>Parts Cert Num</label>
                                 <input class="form-control" type="text" name="partCertificationNumber"
                                     (ngModelChange)="getActive()" [(ngModel)]="receivingForm.partCertificationNumber">
                             </div>
+                            <div class="form-group">
+                                <label>
+                                    Inspected By
+                                </label>
+                                <p-dropdown class="p-dropdown-100" [showClear]="true"
+                                    [options]="certifiedEmployeeList"
+                                    placeholder="Select" filter="true"                                                
+                                    name="certifiedById" [resetFilterOnHide]="true"
+                                    [(ngModel)]="receivingForm.certifiedById"
+                                    (ngModelChange)="getActive()">             
+                                </p-dropdown>
+                            </div>     
+                            <div class="form-group">
+                                <label> Inspected Date</label>
+                                <p-calendar class="workflow-clder" [showIcon]="true" name="certifiedDate"
+                                    (ngModelChange)="getActive()" [yearNavigator]="true" [monthNavigator]="true"
+                                    yearRange="1900:2100" [(ngModel)]="receivingForm.certifiedDate"></p-calendar>
+                            </div>                       
                             <div class="form-group">
                                 <label>Tag Date</label>
                                 <p-calendar class="workflow-clder" [showIcon]="true" name="tagDate"
