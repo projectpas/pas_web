@@ -15,6 +15,9 @@ export class PublicationEndpointService extends EndpointFactory {
 
   private readonly _publicationUrlNew: string = this.configurations.baseUrl +
     '/api/Publication/publicationpost';
+
+  private readonly _publicationRestoreUrlNew: string = this.configurations.baseUrl +
+    '/api/Publication/restorepublication';
   private readonly _actionsUrlAuditHistory: string = this.configurations.baseUrl +
     '/api/Publication/auditHistoryById';
   private readonly getPublicationAuditById: string = '/api/Publication/audits';
@@ -43,6 +46,8 @@ export class PublicationEndpointService extends EndpointFactory {
     '/api/Publication/getItemATAMappedByPublicationIdMultiATAIDSubChapterID';
   private readonly _deleteItemMasterMappingByID: string = this.configurations.baseUrl +
     '/api/Publication/deletePublicationItemMasterMapping';
+  private readonly _restoreItemMasterMappingByID: string = this.configurations.baseUrl +
+    '/api/Publication/restorePublicationItemMasterMapping';
   private readonly _deletepublicationtagtypeEndPoint: string = this.configurations.baseUrl +
     '/api/Publication/deletepublicationtagtype';
   private readonly _getATAMappingByMultiChapterID: string = this.configurations.baseUrl +
@@ -174,6 +179,18 @@ export class PublicationEndpointService extends EndpointFactory {
       .catch(error => {
         return this.handleErrorCommon(error, () =>
           this.getDeleteActionEndpoint(actionId)
+        );
+      });
+  }
+
+  getRestoreActionEndpoint<T>(actionId: number): Observable<T> {
+    let endpointUrl = `${this._publicationRestoreUrlNew}/${actionId}`;
+
+    return this.http
+      .delete<T>(endpointUrl, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () =>
+          this.getRestoreActionEndpoint(actionId)
         );
       });
   }
@@ -492,6 +509,22 @@ export class PublicationEndpointService extends EndpointFactory {
       });
   }
 
+
+
+  restoreitemMasterMappedEndpoint<T>(PublicationItemMasterMappingId: any): Observable<T> {
+    return this.http
+      .post<T>(
+        `${this._restoreItemMasterMappingByID}/${PublicationItemMasterMappingId}`,
+        //JSON.stringify(userObject),
+        {},
+        this.getRequestHeaders()
+      )
+      .catch(error => {
+        return this.handleErrorCommon(error, () =>
+          this.restoreitemMasterMappedEndpoint(PublicationItemMasterMappingId)
+        );
+      });
+  }
   deletepublicationtagtypeEndPoint<T>(tagTypeId: any): Observable<T> {
     return this.http
       .delete<T>(
