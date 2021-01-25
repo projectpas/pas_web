@@ -28,13 +28,13 @@
       <div class="col-md-12 col-sm-12 col-12">
         <div class="col-4 column">
           <div class="form-group">
-            <p-checkbox name="showAlternates" binary="true" label="Show Alternates">
+            <p-checkbox name="showAlternates" binary="true" label="Show Alternates" (onChange)="showAlternateParts($event)">
             </p-checkbox>
           </div>
         </div>
         <div class="col-4 column">
           <div class="form-group">
-            <p-checkbox name="showEqualience" binary="true" label="Show Equalience">
+            <p-checkbox name="showEqualience" binary="true" label="Show Equalience" (onChange)="showEqualientParts($event)">
             </p-checkbox>
           </div>
         </div>
