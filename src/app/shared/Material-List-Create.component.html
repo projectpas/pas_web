@@ -70,14 +70,6 @@
             </p-dropdown>
           </td>
           <td>
-            <!-- <select class="form-control wf-pub-id full-width" id="ddlMandatoryOrSupplemental"
-              [(ngModel)]="material.mandatoryOrSupplementalId" style="margin:auto;" name="mandi_{{ i }}"
-              (change)="onSelectMaterialManditory(material)">
-              <option value="" selected>--Select--</option>
-              <option *ngFor="let mandatory of materialMandatory" value="{{ mandatory.id }}">
-                {{ mandatory.name }} mandatorySupplementalId
-              </option> 
-            </select> --> 
             <select class="form-control wf-pub-id full-width"   
             [(ngModel)]="material.materialMandatoriesId" (change)="onSelectMaterialManditory(material)" style="margin:auto;" name="mandi_{{ i }}">
               <option value="0">--select--</option>
@@ -176,21 +168,7 @@
           <h4 class="modal-title">Edit Memo</h4> 
         </div>
         <div class="modal-body">
-          <!-- <table class="table table-bordered table-fixed">
-            <thead>
-                <th style="color: #fff;">Memo</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
-                    </td>
-                </tr>
-            </tbody> 
-        </table> -->
         <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="editorgetmemo($event)" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor>
- 
-          <!-- <p-editor [(ngModel)]="textAreaInfo" [style]="{'height':'320px'}" name="textAreaInfo" required></p-editor> -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary editor-buttons-margin" [disabled]="disableEditor" (click)="onSaveTextAreaInfo(textAreaInfo)">Save</button>

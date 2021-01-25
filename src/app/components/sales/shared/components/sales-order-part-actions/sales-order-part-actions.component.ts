@@ -147,9 +147,9 @@ export class SalesOrderPartActionsComponent implements OnInit {
           this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i]['isSelected'] = false;
-          if (this.parts[i].qtyToReserve == 0) {
-            this.parts[i].qtyToReserve = null
-          }
+          // if (this.parts[i].qtyToReserve == 0) {
+          //   this.parts[i].qtyToReserve = null
+          // }
         }
 
         for (let i = 0; i < this.columns.length; i++) {
@@ -309,8 +309,8 @@ export class SalesOrderPartActionsComponent implements OnInit {
     parts.filter(x => {
       x.createdBy = this.userName;
       x.updatedBy = this.userName;
-      x.reservedById = x.reservedById.value;
-      x.issuedById = x.issuedById.value;
+      // x.reservedById = x.reservedById.value;
+      // x.issuedById = x.issuedById.value;
       if (x.isSelected == true) {
         tempParts.push(x)
       }

@@ -30,9 +30,9 @@
     </div>
   </div>
   <div class="clearfix"></div>
-  <div class="card-body header-body" style="overflow:auto">
+  <div class="card-body header-body">
   <p-table [columns]="cols" [value]="salesOrderFreightList" [lazy]="false" [paginator]="true" [rows]="10"
-    class="rpo-table-cstm sales-analysis-header ptable-f10" [paginator]="true">
+    class="rpo-table-cstm rro-table-cstm" [paginator]="true">
     <!--freightss-->
     <ng-template pTemplate="header" let-columns>
       <tr>
@@ -144,7 +144,7 @@
           </select>
         </td>
         <td class="table-column-width" class="content-to-end">{{freight.weight}}</td>
-        <td>{{freight.uom}}</td>
+        <td class="table-column-width">{{freight.uom}}</td>
         <td class="table-column-width" class="content-to-end">{{freight.length}}</td>
         <td class="table-column-width" class="content-to-end">{{freight.height}}</td>
         <td class="table-column-width" class="content-to-end">{{freight.width}}</td>
@@ -328,7 +328,7 @@
                     <td>
                       <p-dropdown placeholder="Select" name="shipVia{{ i }}" #shipVia="ngModel" [options]="shipViaList"
                         (ngModelChange)="enableUpdate()" class="p-dropdown-custom-md" [(ngModel)]="f.shipViaId"
-                        required>
+                        required appendTo='body' [baseZIndex]="9999">
                       </p-dropdown>
                       <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" 
                         matTooltip="Add Ship Via" matTooltipPosition="above" data-toggle="modal" 
@@ -349,7 +349,7 @@
                     <td>
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()"
                         (input)="onFilterUom($event.target.value)" name="unitOfMeasureId{{ i }}"
-                        [options]="unitOfMeasureList" class="p-dropdown-custom-md" [(ngModel)]="f.uomId" filter="true">
+                        [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md" [(ngModel)]="f.uomId" filter="true">
                       </p-dropdown>
                     </td>
                     <td><input type="number" (ngModelChange)="enableUpdate()" name="length{{ i }}"
@@ -361,12 +361,12 @@
                     <td>
                       <p-dropdown placeholder="Select" (ngModelChange)="enableUpdate()" filter="true"
                         (input)="onFilterUom($event.target.value)" name="dimensionUOMId{{ i }}"
-                        [options]="unitOfMeasureList" class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
+                        [options]="unitOfMeasureList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md" [(ngModel)]="f.dimensionUOMId">
                       </p-dropdown>
                     </td>
                     <td>
                       <p-dropdown placeholder="Select " (ngModelChange)="enableUpdate()" name="currencyId{{ i }}"
-                        [options]="currencyList" class="p-dropdown-custom-md" [(ngModel)]="f.currencyId" filter="true"
+                        [options]="currencyList" appendTo='body' [baseZIndex]="9999" class="p-dropdown-custom-md" [(ngModel)]="f.currencyId" filter="true"
                         (input)="onFilterCurrency($event.target.value)">
                       </p-dropdown>
                     </td>

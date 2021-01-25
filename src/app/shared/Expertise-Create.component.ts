@@ -223,6 +223,7 @@ export class ExpertiseCreateComponent implements OnInit, OnChanges {
             this.workFlow.expertise.splice(this.deletedRowIndex, 1);
         }
         else {
+            this.workFlow.expertise[this.deletedRowIndex].isDeleted = true;
             this.workFlow.expertise[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
