@@ -32,6 +32,7 @@ import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
 import { RepairOrderService } from '../../../../services/repair-order.service';
 import { StocklineService } from '../../../../services/stockline.service';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-ro-setup',
@@ -374,8 +375,11 @@ export class RoSetupComponent implements OnInit {
 	itemMasterId : number;
 	partName : string;
 	adddefaultpart : boolean = true;
+	modal: NgbModalRef;
+	alertText:string
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
+		private modalService: NgbModal,
 		public currencyService: CurrencyService,
 		public unitofmeasureService: UnitOfMeasureService,
 		public conditionService: ConditionService,
@@ -2594,19 +2598,28 @@ export class RoSetupComponent implements OnInit {
 		}
 	}
 
-	dismissModel() {
-		this.saveRepairOrderPartsList(true); 
+	dismissModel(status) {
+		//this.saveRepairOrderPartsList(true); 
+		this.displayWarningModal = status;
+		this.modal.close();	
     }
-	saveRepairOrderPartsList(contwithoutVendorPrice = false) {
+	saveRepairOrderPartsList(content) {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
 		for (let i = 0; i < this.partListData.length; i++) {
 			this.alertService.resetStickyMessage();			
+			// if(this.partListData[i].quantityOrdered == 0) {	
+			// 	this.isSpinnerVisible = false;	
+			// 	errmessage = errmessage + '<br />' + "Please Enter Qty."
+			// }
 			if(this.partListData[i].quantityOrdered == 0) {	
-				this.isSpinnerVisible = false;	
-				errmessage = errmessage + '<br />' + "Please Enter Qty."
-			}
+				this.isSpinnerVisible = false;
+				this.displayWarningModal = false;
+				this.alertText="Please Enter Qty."
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
+				return;
+		    }
 			if(this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
 				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
@@ -2693,9 +2706,14 @@ export class RoSetupComponent implements OnInit {
 				return;
 		    }
 
-			if(this.partListData[i].vendorListPrice == 0 && contwithoutVendorPrice == false) {	
-				this.isSpinnerVisible = false;
-				this.displayWarningModal = true;										
+			if(this.partListData[i].vendorListPrice == 0 && this.displayWarningModal == false) {	
+				// this.isSpinnerVisible = false;
+				// this.displayWarningModal = true;										
+				// return;
+				this.isSpinnerVisible = false;	
+				this.displayWarningModal = true;		    				
+				this.alertText="Vendor Price is not populated  - Continue Y/N"
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 				return;
 		    }
 			let childDataList = [];
