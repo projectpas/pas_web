@@ -10,7 +10,7 @@
                                 {{ vendorCodeandName?.vendorName }}
                             </span>
                         </p>
-                    </div>
+                    </div> 
                     <div class="col-md-4">
                         <p class="fs12">
                             <label class="control-label labels-font-header" style="width: auto;">Vendor Code: </label>
@@ -20,8 +20,11 @@
                         </p>
                     </div>
                 </div>
-              
-                    <div class="card new-card" style="padding: 10px;">
+                <!-- *ngIf="savedGeneralInformationData || editGeneralInformationData" -->
+                <div >
+                    <app-common-documents [generalInformtionData]="savedGeneralInformationData ? savedGeneralInformationData : editGeneralInformationData" (tab)="changeOfTab($event)" [moduleName]="moduleName" [referenceId]="vendorId" [isViewMode]="false" [offLineUpload]="false"></app-common-documents>
+                  </div> 
+                    <!-- <div class="card new-card" style="padding: 10px;">
                         <div class="card-header bg-primary new-card-header">
                             <div class="row">
                                 <div class="col">
@@ -41,7 +44,6 @@
                         <div class="clear"></div>
                         <hr />
                         <div class="card-body new-card-body">
-                            <!-- class="rpo-table-cstm" -->
                             <p-table #documents                                     
                                      class="ptable-custom lastcol-fix"
                                      [value]="documentsDestructuredData"
@@ -270,13 +272,13 @@
                                 Previous
                             </button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
     </div>
 </div>
 
-<div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
+<!-- <div class="modal fade" id="downloadConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
 	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -335,7 +337,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- <tr *ngFor="let audit of documentauditHisory"> -->
                     <tr *ngFor="let audit of documentauditHisory; let i = index;">
                         <td
                             [ngStyle]="{'color':  getColorCodeForHistory(i, 'docName', audit.docName)  ? 'black' : 'red'  }">
@@ -708,4 +709,4 @@
     <div class="loading">
         <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
     </div>
-  </div>
+  </div> -->
