@@ -68,6 +68,7 @@ export class StockLineSetupComponent implements OnInit {
 	allShelfs: any;
 	allBins: any;
 	allSites: Site[];
+	allPurchaseUnitOfMeasureinfo: any[] = [];
 	customerNames: any[];
 	vendorNames: any[];
 	companyNames: any[];
@@ -194,7 +195,8 @@ export class StockLineSetupComponent implements OnInit {
 		
 		this.getLegalEntity();
 		this.loadConditionData();
-		this.loadSiteData();		
+		this.loadSiteData();
+		this.Purchaseunitofmeasure();		
 		this.loadTagTypes();	
 		this.loadModuleTypes();	
 		this.loadModulesNamesForObtainOwnerTraceable();
@@ -337,6 +339,12 @@ export class StockLineSetupComponent implements OnInit {
 	private loadSiteData() {
 		this.commonService.smartDropDownList('Site', 'SiteId', 'Name').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.allSites = res;
+        })
+	}
+
+	private Purchaseunitofmeasure() {
+		this.commonService.smartDropDownList('UnitOfMeasure', 'unitOfMeasureId', 'shortname').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
+            this.allPurchaseUnitOfMeasureinfo = res;
         })
 	}
 
@@ -643,6 +651,7 @@ export class StockLineSetupComponent implements OnInit {
 					unitSalesPrice: res.unitSalesPrice ? formatNumberAsGlobalSettingsModule(res.unitSalesPrice, 2) : '0.00',
 					coreUnitCost: res.coreUnitCost ? formatNumberAsGlobalSettingsModule(res.coreUnitCost, 2) : '0.00',
 					lotCost: res.lotCost ? formatNumberAsGlobalSettingsModule(res.lotCost, 2) : '0.00',
+					purchaseUnitOfMeasureId: this.getInactiveObjectOnEdit('value', res.purchaseUnitOfMeasureId, this.allPurchaseUnitOfMeasureinfo, 'UnitOfMeasure', 'unitOfMeasureId', 'shortname'),
 					conditionId: this.getInactiveObjectOnEdit('value', res.conditionId, this.allConditionInfo, 'Condition', 'ConditionId', 'Description'),
 					manufacturerId: this.getInactiveObjectOnEdit('value', res.manufacturerId, this.allManufacturerInfo, 'Manufacturer', 'ManufacturerId', 'Name'),
 					acquistionTypeId: this.getInactiveObjectOnEdit('value', res.acquistionTypeId, this.assetAcquisitionTypeList, 'AssetAcquisitionType', 'AssetAcquisitionTypeId', 'Name'),
@@ -725,6 +734,9 @@ export class StockLineSetupComponent implements OnInit {
             if(tableName == 'Condition') {
                 this.allConditionInfo = [...originalData, obj];
 			}
+			else if(tableName == 'UnitOfMeasure') {
+                this.allPurchaseUnitOfMeasureinfo = [...originalData, obj];
+			} 
 			else if(tableName == 'Manufacturer') {
                 this.allManufacturerInfo = [...originalData, obj];
 			}
@@ -1350,6 +1362,7 @@ export class StockLineSetupComponent implements OnInit {
 		}
 		this.saveStockLineForm = {
 			...this.stockLineForm,
+			purchaseUnitOfMeasureId: this.stockLineForm.purchaseUnitOfMeasureId > 0 ? this.stockLineForm.purchaseUnitOfMeasureId : null,
 			isOemPNId: getValueFromObjectByKey('itemMasterId', this.stockLineForm.isOemPNId),	
 			isPMA: this.stockLineForm.oem == 'true' ? 'false' : 'true',          
 			certifiedDate: this.datePipe.transform(this.stockLineForm.certifiedDate, "MM/dd/yyyy"),

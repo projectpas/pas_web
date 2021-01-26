@@ -30,7 +30,7 @@
                                         <label>
                                             <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Is Customer Stock
+                                            Customer Stock - Rotable 
                                         </label>
                                     </div>
                                 </div>
@@ -57,7 +57,7 @@
                                 <div class="form-group" style="margin-top: 10px;">
                                     <div>
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="oemPma" class="form-control" value="true" (change)="onCheckOem();"  [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()">
+                                            <input type="radio" name="oemPma" class="form-control" value="true" (change)="onCheckOem();"  [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()" disabled>
                                             <span class="checkmark"></span> OEM
                                         </label>
                                     </div> 
@@ -66,7 +66,7 @@
                                 <div class="form-group" style="margin-top: 10px;">
                                     <div>
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="oemPma" class="form-control" value="false" (change)="onCheckPMA();" [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()">
+                                            <input type="radio" name="oemPma" class="form-control" value="false" (change)="onCheckPMA();" [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()" disabled>
                                             <span class="checkmark"></span> PMA
                                         </label>
                                     </div>
@@ -95,7 +95,7 @@
                                 <div class="form-group">
                                     <div class="checkbox-cstm" style="margin-top: 10px;">
                                         <label>
-                                            <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER" (ngModelChange)="enableSave()">
+                                            <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER" (ngModelChange)="enableSave()" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                             DER
                                         </label>
@@ -486,12 +486,18 @@
                                     </div>   
                                 </div>
                                 <div class="form-group">
+                                    <label>UOM <strong class="clr-red">*</strong></label>
+                                    <p-dropdown class="p-dropdown-100"  (ngModelChange)="enableSave()" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="stockLineForm.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                </div>
+                                <div class="form-group">
                                     <label>Qty Reserved</label>
-                                    <input class="form-control  text-right" type="text" pKeyFilter="pint" name="QuantityReserved" (change)="resetQtyIssued(); onChangeQtyReserved()" [(ngModel)]="stockLineForm.quantityReserved" [disabled]="stockLineForm.quantityOnHand == null" (ngModelChange)="enableSave()">
+                                    <input class="form-control  text-right" type="text"  name="QuantityReserved" (change)="resetQtyIssued(); onChangeQtyReserved()" [(ngModel)]="stockLineForm.quantityReserved"  (ngModelChange)="enableSave()" disabled>
+                                    <!--pKeyFilter="pint" [disabled]="stockLineForm.quantityOnHand == null" -->
                                 </div>
                                 <div class="form-group">
                                     <label>Qty Issued</label>
-                                    <input class="form-control text-right" type="text" pKeyFilter="pint" name="QuantityIssued" (change)="calcQtyReservedByQtyIssued()" [(ngModel)]="stockLineForm.quantityIssued" [disabled]="stockLineForm.quantityOnHand == null" (ngModelChange)="enableSave()">
+                                    <input class="form-control text-right" type="text"  name="QuantityIssued" (change)="calcQtyReservedByQtyIssued()" [(ngModel)]="stockLineForm.quantityIssued" (ngModelChange)="enableSave()" disabled> 
+                                    <!-- pKeyFilter="pint" [disabled]="stockLineForm.quantityOnHand == null" -->
                                 </div>
                                 <div class="form-group">
                                     <label>Qty Avail</label>
