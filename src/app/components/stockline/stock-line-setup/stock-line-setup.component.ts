@@ -1858,7 +1858,22 @@ export class StockLineSetupComponent implements OnInit {
 	selectedOEM(value) {
 
         this.tempOEMpartNumberId = value.value;
-    }
+	}
+	
+	onChangeMfgDate(value)
+	{
+		if(value)
+		{
+			const todayDate = new Date();
+			const mfgdate = new Date(value);
+			const diffTime = Math.abs(mfgdate.getTime() - todayDate.getTime());
+			const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+			console.log(diffTime + " milliseconds");
+			console.log(diffDays + " days");
+
+			this.stockLineForm.manufacturingDays = diffDays;
+		}
+	}
 	
 	errorMessageHandler(log) {
 		const errorLog = log;

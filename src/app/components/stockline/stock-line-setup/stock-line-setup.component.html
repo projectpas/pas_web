@@ -160,16 +160,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label>Expiration Date</label>
-                                    <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" name="expirationDate" [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate" (ngModelChange)="enableSave()"></p-calendar>
-                                </div>
-                                <div class="form-group">
                                     <label>Days Since Received</label>
                                     <input class="form-control text-right" type="text" name="daysReceived" [(ngModel)]="stockLineForm.daysReceived" (ngModelChange)="enableSave()" disabled>
                                 </div> 
                                 <div class="form-group">
+                                    <label>Mfg. Expiration Date</label>
+                                    <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" name="expirationDate" [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate" #expirationDate="ngModel" (onSelect)="onChangeMfgDate(stockLineForm.expirationDate);"  (ngModelChange)="enableSave()"></p-calendar>
+                                </div>
+                                <div class="form-group">
                                     <label>Days Since Mfg</label>
-                                    <input class="form-control text-right" type="text" name="manufacturingDays" [(ngModel)]="stockLineForm.manufacturingDays" (ngModelChange)="enableSave()" disabled>
+                                    <input class="form-control text-right" type="text" name="manufacturingDays" [(ngModel)]="stockLineForm.manufacturingDays" (ngModelChange)="enableSave()">
                                 </div>
                                 <div class="form-group">
                                     <label>Days Since Tagged</label>
