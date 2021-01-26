@@ -336,4 +336,35 @@ export class SalesOrderPartActionsComponent implements OnInit {
     // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
     this.alertService.showStickyMessage(error, null, MessageSeverity.error);
   }
+
+  showAlternateParts(event) {
+    let altParts: PartAction[] = [];
+
+    this.parts.forEach((item, index) => {
+      if (item !== undefined) {
+        if (item.soReservedAltParts && item.soReservedAltParts.length > 0) {
+          item.soReservedAltParts.forEach((altPart, i) => {
+            altParts.push(altPart);
+          });
+        }
+      }
+    });
+
+    if (event == true) {
+      this.parts = [ ...this.parts, ...altParts]
+    } else {
+    }
+  }
+
+  showEqualientParts(event) {
+    for (let i = 0; i < this.parts.length; i++) {
+      if (event == true) {
+        this.parts[i]['isSelected'] = true;
+        this.disableSubmitButtonForAction = false;
+      } else {
+        this.parts[i]['isSelected'] = false;
+        this.disableSubmitButtonForAction = true;
+      }
+    }
+  }
 }
