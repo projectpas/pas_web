@@ -640,10 +640,10 @@ export class SalesOrderFreightComponent implements OnInit, OnChanges {
                 this.isSpinnerVisible = false;
                 this.setShipViaList(response);
                 this.freightForm[this.shipviaindex].shipViaId = ShippingViaId;
-                this.IsAddShipVia = false;
                 this.isEnableUpdateButton = false;
             }, error => this.onDataLoadError(error));
         }
+        this.IsAddShipVia = false;
         $('#AddShipVia').modal('hide');
     }
 }
