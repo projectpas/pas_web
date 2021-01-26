@@ -72,9 +72,9 @@
                     </select>
                 </td>
 
-                <td>
+                <td> 
                     <select class="form-control wf-pub-id full-width" id="ddlModel" [(ngModel)]="publ.model"
-                        (change)="getDashNumberByModelandAircraftIds(publ, i)">
+                        (change)="getDashNumberByModelandAircraftIds(publ, i,'html')">
                         <option value="0">--select--</option>
                         <option *ngFor="let model of getDynamicVariableData('aircraftModelListByPubId',i)"
                             value="{{model.aircraftModelId}}">
