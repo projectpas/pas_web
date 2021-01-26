@@ -38,7 +38,7 @@ import { VendorStepsPrimeNgComponent } from '../vendor-steps-prime-ng/vendor-ste
 import { emailPattern, urlPattern, phonePattern, namePattern } from '../../../validations/validation-pattern';
 declare const google: any;
 declare var $ : any;
-
+import { Subject } from 'rxjs'
 
 import * as moment from 'moment';
 @Component({
@@ -244,7 +244,10 @@ export class VendorGeneralInformationComponent implements OnInit {
     disableSaveForEditDocument:boolean=true;
     disableSaveForEditDocumentAudit:boolean=true;
     arrayIntegrationlist:any[] = [];
-
+    CertifiedModuleName:any="VendorCertified";
+    AuditModuleName:any="VendorAudit";
+    referenceId:any; 
+    uploadDocs: Subject<boolean> = new Subject();
     constructor(public vendorclassificationService: VendorClassificationService,
         private http: HttpClient,
         private changeDetectorRef: ChangeDetectorRef,
@@ -896,9 +899,11 @@ export class VendorGeneralInformationComponent implements OnInit {
                         this.localCollection = data;
                         this.vendorId = data.vendorId;
                         this.sourceVendor.vendorId =  data.vendorId;
-                        if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
-                                this.onUploadDocumentListNew(data.vendorId);
-                        }
+                        localStorage.setItem('vendorId', this.vendorId);
+                        // if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
+                                // this.onUploadDocumentListNew(data.vendorId);
+                        // }
+                        this.uploadDocs.next(true);
                         if (this.sourceVendor.isVendorAlsoCustomer == true) {
                             this.vendorService.isVendorAlsoCustomer = this.sourceVendor.isVendorAlsoCustomer;
                             this.vendorService.localCollectiontoCustomer = this.sourceVendor;
@@ -941,9 +946,10 @@ export class VendorGeneralInformationComponent implements OnInit {
                         this.allowNextView=true;
                         this.localCollection = data;
                         this.selectedParentId = data.vendorParentId
-                        if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
-                            this.onUploadDocumentListNew(data.vendorId);
-                        }
+                        // if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
+                            // this.onUploadDocumentListNew(data.vendorId);
+                        // }
+                        this.uploadDocs.next(true);
                         this.savesuccessCompleted(this.sourceVendor, goNxt);
                         this.disableSaveForEdit = true;
                         this.isSpinnerVisible = false;
@@ -1792,6 +1798,11 @@ export class VendorGeneralInformationComponent implements OnInit {
     }
     closeVendorAuditModal(){
         this.modalVendorAudit.close()
+    }
+    changeOfStatus(status){
+        this.disableSaveForEdit=false;
+
+        // this.disableSaveForEdit = true;
     }
 }
 

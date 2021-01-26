@@ -30,7 +30,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="material-tr" [hidden]="material.isDelete"
+        <tr class="material-tr" [hidden]="material.isDeleted"
           *ngFor="let material of workFlow.materialList; let i = index" id="row_{{i}}">
           <td *ngIf="!isWorkFlow">
             <select class="form-control custom-select wf-pub-id" [(ngModel)]="material.taskId" name="task_{{ i }}"
@@ -152,9 +152,10 @@
           <td>&nbsp;</td>
           <td class="text-right"><b>{{ workFlow.materialExtendedCostSummation }}</b></td>
           <td *ngIf="!isQuote"></td>
-          <td *ngIf="!isQuote" class="text-right"><b>
+          <td>&nbsp;</td>
+          <!-- <td *ngIf="!isQuote" class="text-right"><b>
               {{ workFlow.materialExtendedPriceSummation }}</b>
-          </td>
+          </td> -->
           <td>&nbsp;</td>
         </tr>
       </tfoot>

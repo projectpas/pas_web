@@ -113,6 +113,7 @@ import { CommonModulesModule } from "../common-modules/common-modules.module";
 import { CommonCommunicationModule } from "../components/common-components/common-communication/common-communiation.module";
 import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 import { SOApprovalRuleComponent } from "../components/sales/order/shared/components/so-approval-rule/so-approval-rule.component";
+import { SalesOrderPickTicketsComponent } from "../components/sales/order/sales-order-pick-tickets/sales-order-pick-tickets.component";
 //import { AddressComponentComponent } from "../components/address-component/address-component.component";
 // import { AddressComponentComponent } from "../components/address-component/address-component.component";
 
@@ -209,7 +210,8 @@ import { SOApprovalRuleComponent } from "../components/sales/order/shared/compon
     SalesQuoteAnalysisComponent,
     SalesOrderAnalysisComponent,
     SOQApprovalRuleComponent,
-    SOApprovalRuleComponent
+    SOApprovalRuleComponent,
+    SalesOrderPickTicketsComponent
     //AddressComponentComponent
   ],
   providers: [CommonService, CustomerService, SalesQuoteService, SalesQuoteEndpointService, ItemMasterService, SalesOrderService, SalesOrderEndpointService, DatePipe],

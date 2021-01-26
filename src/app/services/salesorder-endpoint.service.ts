@@ -32,6 +32,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getrelesereservepartUrl: string = environment.baseUrl + "/api/salesorder/releasestocklinereservedparts"
   private readonly getSalesOrderViewDetails: string = environment.baseUrl + "/api/SalesOrder/getview";
   private readonly getSalesOrdePickTicketDetails: string = environment.baseUrl + "/api/SalesOrder/getsalesorderpickticket";
+  private readonly getPickTicketListUrl: string = environment.baseUrl + "/api/SalesOrder/getpickticketlist";
 
   // private readonly searchSalesOrder: string = "/api/salesorder/search";
   private readonly searchSalesOrder: string = environment.baseUrl + "/api/salesorder/salesordersearch";
@@ -397,8 +398,18 @@ export class SalesOrderEndpointService extends EndpointFactory {
         return this.handleErrorCommon(error, () => this.getview(salesOrderId));
       });
   }
+
   getPickTicket(salesOrderId: number): Observable<any> {
     const URL = `${this.getSalesOrdePickTicketDetails}/${salesOrderId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getview(salesOrderId));
+      });
+  }
+
+  getPickTicketList(salesOrderId: number): Observable<any> {
+    const URL = `${this.getPickTicketListUrl}/${salesOrderId}`;
     return this.http
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {

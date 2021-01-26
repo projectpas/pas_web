@@ -13,6 +13,7 @@ import { AlertService, MessageSeverity } from '../../../services/alert.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { Subject } from 'rxjs/Subject';
 import { DatePipe } from '@angular/common';
+import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByValue, getObjectById, formatNumberAsGlobalSettingsModule, getValueFromObjectByKey } from '../../../generic/autocomplete';
 
 @Component({
     selector: 'app-common-documents',
@@ -42,7 +43,7 @@ export class CommonDocumentsComponent implements OnInit {
         docMemo: '',
         docDescription: '',
         attachmentDetailId: 0,
-        attachmentId: 0,
+        attachmentId: 0, 
     }
     @ViewChild('documents',{static:false}) Table;
     customerDocumentsData: any = [];
@@ -92,6 +93,7 @@ export class CommonDocumentsComponent implements OnInit {
     isPopup: boolean = false;
     enableUpdate: boolean = false;
     hideUpoladThing:boolean=false;
+    DocumentTypebutton: boolean = false;
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
         private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
@@ -106,6 +108,7 @@ export class CommonDocumentsComponent implements OnInit {
 
  if(this.uploadDocsToser !=undefined){
     this.id = this.referenceId;
+    console.log("id",this.referenceId)
                 this.uploadDocsToser.subscribe(v => { 
                  
                     this.hideUpoladThing=true;
@@ -120,13 +123,13 @@ export class CommonDocumentsComponent implements OnInit {
     generalName: any;
 
     ngOnChanges(changes: SimpleChanges) {
-      
+    console.log("changes",changes)
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
-                    
-                    this.generalCode = this.generalInformtionData.companyCode;
-                    this.generalName = this.generalInformtionData.name;
+               
+                    this.generalCode =this.generalInformtionData ? this.generalInformtionData.companyCode : '';
+                    this.generalName = this.generalInformtionData ? this.generalInformtionData.name : '';
                     this.isViewMode = this.isViewMode ? this.isViewMode : false;
                 }
             }
@@ -134,6 +137,7 @@ export class CommonDocumentsComponent implements OnInit {
          
             if (property == 'uploadDocsToser') {
                 this.hideUpoladThing=true;
+                console.log("referenceid",this.referenceId)
         //   setTimeout(() => {
         //     this.onUploadDocumentListToServer();
         //   }, 1200);
@@ -473,7 +477,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.moduleId = element.value;
             }
         });
-        
+        if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit'){
+            this.referenceId=this.referenceId ? this.referenceId :localStorage.getItem('vendorId');
+        }
         const vdata = {
             referenceId: this.referenceId,
             masterCompanyId: this.currentUserMasterCompanyId,
@@ -494,6 +500,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
+                    if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit'){
+                        localStorage.removeItem('vendorId');
+                    }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
                     if(this.uploadDocsToser){
@@ -754,22 +763,189 @@ export class CommonDocumentsComponent implements OnInit {
     triggerUpdatebutton(){
 this.parentTrigger.emit(true)
     }
+
     commondocumentsList: any = []
 
     documentType:any=[];
     getDocumentTypeList() {
-        // this.commonService.getDocumentType().subscribe(res => {
-        //   this.documentType = res;
-        //   console.log("res",res);
-        // },err => {
-        //   this.isSpinnerVisible = false;	
-        // });
-
-        this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name')
-            .subscribe(
-                (res)=>{
-                    this.documentType = res;
-                }
-            )
+        this.commonService.getDocumentType().subscribe(res => {
+          this.documentType = res;
+          console.log("res",res);
+        },err => {
+          this.isSpinnerVisible = false;	
+        });
+        // this.commonService.smartDropDownList('DocumentType', 'DocumentTypeId', 'Name')
+        //     .subscribe(
+        //         (res)=>{
+        //             this.documentType = res;
+        //         }
+        //     )
+    }
+    
+    lstfilterDocumentType = [];
+    filterDocumentType(event) {
+        this.lstfilterDocumentType = this.documentType;
+        if (event.query !== undefined && event.query !== null) {
+          const shippingSite = [...this.documentType.filter(x => {
+            return x.name.toLowerCase().includes(event.query.toLowerCase())
+          })]
+          this.lstfilterDocumentType = shippingSite;	
+        }
       }
+
+      lstfilterDocumentTypeRevNum = [];
+      filterDocumentTypeRevnum(event) {
+          this.lstfilterDocumentTypeRevNum = this.documentType;
+          if (event.query !== undefined && event.query !== null) {
+            const revnum = [...this.documentType.filter(x => {
+              return x.revNum.toString().indexOf(event.query === 0)
+            })]
+            this.lstfilterDocumentTypeRevNum = revnum;	
+          }
+        }
+
+    //   onDocumentTypeSelect(event)
+    //   {
+    //       console.log(event);
+    //   }
+
+    new = {
+        documentTypeId:0,
+        name: "",
+        description: "",
+        masterCompanyId: this.currentUserMasterCompanyId,
+        isActive: true,
+        memo: "",
+        revNum:0
+    }
+    addNew = { ...this.new };
+
+    saveDocumenttype() {
+        const data = {
+          ...this.addNew,
+          IsActive : true,
+          CreatedBy:this.userName,
+          UpdatedBy:this.userName,			
+         }
+         const  documentTypeData = {
+           ...data,
+           name: editValueAssignByCondition('name', data.name),									 
+         }
+      
+         if(this.addNew.documentTypeId == 0){
+            this.commonService.SaveDocumentType(documentTypeData).subscribe(response => {
+              this.alertService.showMessage(
+                'Success',
+                `Saved Document Type Sucessfully`,
+                MessageSeverity.success
+              );
+              this.getDocumentTypeList()
+              setTimeout(() => {
+                this.getSelectedDocumentType(response.documentTypeId);
+              }, 1000);
+            },err => {
+              this.isSpinnerVisible = false;		
+            })
+          }else{
+            this.commonService.SaveDocumentType(documentTypeData).subscribe(response => {
+              this.alertService.showMessage(
+                'Success',
+                `Updated Document Type Sucessfully`,
+                MessageSeverity.success
+              );
+            },err => {
+              this.isSpinnerVisible = false;		
+            })
+          }
+        $('#createDocumentType').modal('hide');
+      }
+
+      onClickDocumentType(value, data?){	
+        this.resetDocumentTypeForm();
+        if (value === 'Add') {
+            this.isDocumenttypeAlreadyExists = false;
+            this.isDocumentrevnumAlreadyExists = false;
+        }
+        if (value === 'Edit') {		
+            if(this.documentType && this.documentType.length!=0){
+            for(let i=0; i < this.documentType.length; i++ ) {
+                    if(this.documentType[i].documentTypeId == this.documentInformation.documentTypeId ) {
+                        // this.addressFormForShipping.isPrimary = this.shipToAddressList[i].isPrimary;								
+                         this.addNew.documentTypeId = this.documentType[i].documentTypeId;	
+                        // this.editSiteName = this.shipToAddressList[i].siteName;
+                         this.addNew.name = getObjectByValue('name',this.documentType[i].name, this.documentType); 
+                         this.addNew.description = this.documentType[i].description;							
+                         this.addNew.revNum = getObjectByValue('revNum',this.documentType[i].revNum, this.documentType); 
+                        return;
+                    } 
+                }		
+        
+                }
+            }
+    }
+    isDocumenttypeAlreadyExists:boolean=false;
+    checkDocumentTypeExist(value) {
+        this.isDocumenttypeAlreadyExists = false;
+        this.DocumentTypebutton = true;
+        if (value != undefined && value != null) {
+          if(this.documentType && this.documentType.length !=0){
+          for (let i = 0; i < this.documentType.length; i++) {
+            if ((this.addNew.name == this.documentType[i].name 
+              || value.toLowerCase() == this.documentType[i].name.toLowerCase())
+              &&  this.addNew.name !=  '') {
+              this.isDocumenttypeAlreadyExists = true;
+              this.DocumentTypebutton = false;
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    isDocumentrevnumAlreadyExists:boolean=false;
+    checkDocumentRevnumExist(value) {
+        this.isDocumentrevnumAlreadyExists = false;
+        this.DocumentTypebutton = true;
+        if (value != undefined && value != null) {
+          if(this.documentType && this.documentType.length !=0){
+          for (let i = 0; i < this.documentType.length; i++) {
+            if ((this.addNew.revNum == this.documentType[i].revNum 
+              || value == this.documentType[i].revNum)
+              //&&  this.addNew.revNum !=  ''
+              ) {
+              this.isDocumentrevnumAlreadyExists = true;
+              this.DocumentTypebutton = false;
+              return;
+            }
+          }
+        }
+      }
+    }
+
+    resetDocumentTypeForm() {
+        this.addNew = { ...this.new };
+        //this.isEditModeShipVia = false;
+    }
+
+    getSelectedDocumentType(documentTypeId){
+        if(this.documentType && this.documentType.length!=0){
+            for(let i=0; i < this.documentType.length; i++ ) {
+                    if(this.documentType[i].documentTypeId == documentTypeId) {
+                         this.documentInformation.documentTypeId = this.documentType[i].documentTypeId;
+                        return;
+                    } 
+                }
+            }
+    }
+
+    tempAddDocumentTypeMemo: any = {};
+    onAddDocumentTypeMemo() {
+        this.tempAddDocumentTypeMemo = this.addNew.memo;
+    }
+
+    onSaveTextAreaInfo() {
+        this.addNew.memo = this.tempAddDocumentTypeMemo;
+        this.DocumentTypebutton = true;
+        $('#documenttype-add-memo').modal('hide');
+    }
 }
