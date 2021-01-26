@@ -41,4 +41,5 @@ export class PartAction {
     equPartMasterPartId: number;
     partStatusId: number;
     soReservedAltParts: PartAction[];
+    soReservedEquParts: PartAction[];
 }
