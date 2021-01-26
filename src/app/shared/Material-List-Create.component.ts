@@ -984,10 +984,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.materialList[this.deletedRowIndex].isDeleted = true;
-<<<<<<< HEAD
-=======
-            this.workFlow.materialList[this.deletedRowIndex].isDelete = true;
->>>>>>> main
         }
         this.reCalculate();
         this.dismissModel();
