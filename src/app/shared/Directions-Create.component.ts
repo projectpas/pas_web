@@ -95,6 +95,7 @@ export class DirectionsCreateComponent implements OnInit, OnChanges {
             this.workFlow.directions.splice(this.deletedRowIndex, 1);
         }
         else {
+            this.workFlow.directions[this.deletedRowIndex].isDeleted = true;
             this.workFlow.directions[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();

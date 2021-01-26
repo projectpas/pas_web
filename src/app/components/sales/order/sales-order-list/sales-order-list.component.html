@@ -50,27 +50,30 @@
                         <!-- data-toggle="modal"
                             data-target="#downloadConfirmation"
                             (click)="selectedOnly = true; targetData = dt;" -->
-
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-cstm wauto">
+                                    <input type="radio" name="viewType" class="form-control" value="pnview"
+                                        [(ngModel)]="viewType" (click)="changeOfStatus('','pnview')">
+                                    <span class="checkmark"></span>PN View
+                                </label>
+                            </div>
+                            <div class="pull-left radio-buttons-align">
+                                <label class="radio-cstm wauto">
+                                    <input type="radio" name="viewType" class="form-control" value="soview"
+                                        [(ngModel)]="viewType" (click)="changeOfStatus('','soview')">
+                                    <span class="checkmark"></span>SOQ View
+                                </label>
+                            </div>
                     </div>
+                   
                     <div class="pull-right buttons-div-align">
                         <div class="col">
-                            <div class="col buttons-top-padding">
-                                <div class="form-group">
-                                    <div class="pull-left radio-buttons-align">
-                                        <label class="radio-cstm wauto">
-                                            <input type="radio" name="viewType" class="form-control" value="soview"
-                                                [(ngModel)]="viewType" (click)="changeOfStatus('','soview')">
-                                            <span class="checkmark"></span>SO View
-                                        </label>
-                                    </div>
-                                    <div class="pull-left radio-buttons-align">
-                                        <label class="radio-cstm wauto">
-                                            <input type="radio" name="viewType" class="form-control" value="pnview"
-                                                [(ngModel)]="viewType" (click)="changeOfStatus('','pnview')">
-                                            <span class="checkmark"></span>PN View
-                                        </label>
-                                    </div>
-                                    <div class="pull-left radio-buttons-align" *ngFor="let status of statusList">
+                          <div class="col buttons-top-padding">
+                            <div class="form-group">
+                                
+        
+                                    <div class="pull-left radio-buttons-align"
+                                        *ngFor="let status of statusList">
                                         <label class="radio-cstm wauto">
                                             <input type="radio" name="currentStatus" class="form-control"
                                                 value="{{status.value}}" [(ngModel)]="currentStatus"
