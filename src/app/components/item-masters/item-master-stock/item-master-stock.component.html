@@ -675,7 +675,7 @@
                                 <div class="col-md-4" style="margin-right: 0px;" >
                                   <div class="form-group">
                                     <span class="label">Memo </span>
-                                    <div class="col-sm-11">
+                                    <div class="col-sm-11" style="margin-left:-4px !important">
                                        
                                     <div class="memo-popup-cstm mat_emo">
                                             <div [innerHTML]="sourceItemMaster.memo"
@@ -1805,18 +1805,19 @@
                                                 <input type="text" style="width: 80px;" class="input-field-value text-right" pInputText pKeyFilter="money" name="SP_CalSPByPP_UnitSalePrice{{i}}" [(ngModel)]="field.SP_CalSPByPP_UnitSalePrice" disabled />
                                             </td>
                                             <!-- Action -->
-                                            <td class="purSaleLastCol"><p style="width:80px">
-                                                <ng-container *ngIf="!field.isDeleted">
+                                            <td style="text-align:center" class="purSaleLastCol">
+                                                <ng-container class="action-icons-cstm table-column-width" *ngIf="!field.isDeleted">
                                                     <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="editPandSales(i)" matTooltip="Edit" matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
                                                     <span data-toggle="modal" data-target="#purchaseSaleDelete"><a class="btn nobg" (click)="deletePurchaseSaleRow(i, field)" matTooltip="Delete" matTooltipPosition="above">
                                                         <i class="fa fa-trash"></i></a></span>
                                                     <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                                 </ng-container>
-                                                <ng-container *ngIf="field.isDeleted">
-                                                    <span data-toggle="modal" data-target="#purchaseSaleRestore"><a class="btn nobg" (click)="restorePurchaseSaleRow(field);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
+                                                <ng-container class="action-icons-cstm table-column-width" *ngIf="field.isDeleted">
+                                                    <span data-toggle="modal" data-target="#purchaseSaleRestore">
+                                                        <a class="btn nobg" (click)="restorePurchaseSaleRow(field);" matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                                                     <span *ngIf="field.isNewItem == false"><a class="btn nobg" (click)="openHistoryOfPurchaseAndSales(contentPurchaseAndSalesHist, field)" matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                                                 </ng-container>
-                                            </p>
+                                           
                                             </td>
 
                                         </tr>
