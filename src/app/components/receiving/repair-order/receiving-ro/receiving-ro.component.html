@@ -42,21 +42,21 @@
                                 <div class="form-group">
                                     <label>RO Num</label>
                                     <input class="form-control" type="text" name="repairOrderNumber"
-                                        [(ngModel)]="repairOrderHeaderData.repairOrderNumber" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.repairOrderNumber" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Vendor Name</label>
                                     <input class="form-control" type="text" name="vendorName"
-                                        [(ngModel)]="repairOrderHeaderData.vendorName" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.vendorName" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Requisitioner</label>
                                     <input class="form-control" type="text" name="requisitioner"
-                                        [(ngModel)]="repairOrderHeaderData.requisitioner" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.requisitioner" disabled required>
                                 </div>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                                 <div class="form-group">
                                     <label>Open Date</label>
                                     <p-calendar class="pas-clder" [showIcon]="true" name="openDate"
-                                        [(ngModel)]="repairOrderHeaderData.openDate" [disabled]="true"></p-calendar>
+                                        [(ngModel)]="repairOrderHeaderData.openDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Closed/Cancelled Date</label>
@@ -81,24 +81,24 @@
                                 <div class="form-group">
                                     <label>Need By</label>
                                     <p-calendar class="pas-clder" [showIcon]="true" name="needByDate"
-                                        [(ngModel)]="repairOrderHeaderData.needByDate" [disabled]="true"></p-calendar>
+                                        [(ngModel)]="repairOrderHeaderData.needByDate" [disabled]="true" required></p-calendar>
                                 </div>
                                 <div class="form-group">
                                     <label>Priority</label>
                                     <input class="form-control" type="text" name="priority"
-                                        [(ngModel)]="repairOrderHeaderData.priority" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.priority" disabled required>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Vendor Code</label>
                                     <input class="form-control" type="text" name="vendorCode"
-                                        [(ngModel)]="repairOrderHeaderData.vendorCode" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.vendorCode" disabled required>
                                 </div>
                                 <div class="form-group">
                                     <label>Vendor Contact</label>
                                     <input class="form-control" type="text" name="contactName"
-                                        [(ngModel)]="repairOrderHeaderData.contactName" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.contactName" disabled required>
                                 </div>
                                 <div class="form-group">
                                     <label>Contact Phone</label>
@@ -145,11 +145,11 @@
                             <div class="col-md-4">
                                 <div class="form-group memo-popup-cstm">
                                     <label>Notes
-                                        <span class="editor-span"><a class="btn nobg" data-toggle="modal"
+                                        <!-- <span class="editor-span"><a class="btn nobg" data-toggle="modal"
                                                 data-target="#add-notes" (click)="onAddNotes()"
                                                 matTooltipPosition="above" matTooltip="Notes"><i
                                                     class="fa fa-pencil"></i></a>
-                                        </span>
+                                        </span> -->
                                     </label>                                   
                                     <span>
                                         <div [innerHTML]="repairOrderHeaderData.notes"
@@ -163,10 +163,10 @@
                             <div class="col-md-4">                               
                                 <div class="form-group memo-popup-cstm">
                                     <label>Memo                                       
-                                        <span class="editor-span"><a class="btn nobg" data-toggle="modal"
+                                        <!-- <span class="editor-span"><a class="btn nobg" data-toggle="modal"
                                                 data-target="#cpo-memo" matTooltipPosition="above" matTooltip="Add Memo"
                                                 disabled="true" (click)="onAddMemo()"><i class="fa fa-pencil"></i></a>
-                                        </span>
+                                        </span> -->
                                     </label>                                  
                                     <span>
                                         <div [innerHTML]="repairOrderHeaderData.roMemo"
@@ -186,7 +186,7 @@
                             <div class="card-body structure-card-body">
                                 <div class="form-group structure-body-input">                                 
                                     <input class="form-control" type="text" name="companyName"
-                                        [(ngModel)]="repairOrderHeaderData.level1" disabled>
+                                        [(ngModel)]="repairOrderHeaderData.level1" disabled required>
                                 </div>
                                 <div class="form-group structure-body-input">                                  
                                     <input class="form-control" type="text" name="BUName"
@@ -942,11 +942,11 @@
 
                                                         <div class="form-group">
                                                             <label>MFG <span class="clr-red"></span></label>
-                                                            <select class="form-control" disabled
+                                                            <select class="form-control" 
                                                                 [(ngModel)]="part.stocklineListObj[part.currentSLIndex].manufacturerId">
                                                                 <option [value]="0">Select</option>
                                                                 <option [value]="manufacturer.Key"
-                                                                    *ngFor="let manufacturer of ManufacturerList">
+                                                                    *ngFor="let manufacturer of manufacturerList">
                                                                     {{manufacturer.Value}}</option>
                                                             </select>
                                                         </div>
