@@ -117,8 +117,10 @@ export class SalesReserveUnreserveComponent implements OnInit {
     getReserverdParts() {
         this.startTimer();
         this.isSpinnerVisible = true;
-        this.salesOrderService.getReservestockpartlists
-            (this.part.salesOrderId, this.part.itemMasterId)
+        // this.salesOrderService.getReservestockpartlists
+        //     (this.part.salesOrderId, this.part.itemMasterId)
+        this.salesOrderService.getReservestockpartlistsBySOId
+            (this.salesOrderId)
             .subscribe(data => {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
@@ -142,8 +144,10 @@ export class SalesReserveUnreserveComponent implements OnInit {
 
     getUnreservedParts() {
         this.isSpinnerVisible = true;
-        this.salesOrderService.getunreservedstockpartslist
-            (this.part.salesOrderId, this.part.itemMasterId)
+        // this.salesOrderService.getunreservedstockpartslist
+        //     (this.part.salesOrderId, this.part.itemMasterId)
+        this.salesOrderService.getunreservedstockpartslistBySOId
+            (this.salesOrderId)
             .subscribe(data => {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
@@ -180,19 +184,19 @@ export class SalesReserveUnreserveComponent implements OnInit {
     }
 
     onChangeOfPartSelection(event) {
-        this.isSpinnerVisible = true;
-        this.salesOrderService.getholdstocklinereservedparts(this.part.salesOrderId, this.part.salesOrderPartId, this.part.stockLineId, this.part.quantityRequested)
-        .subscribe(data => {
-            this.isSpinnerVisible = false;
-            //this.parts = data[0];
-            this.alertService.showMessage(
-                "Success",
-                data,
-                MessageSeverity.success
-              );
-        },error => {
-            this.isSpinnerVisible = false;
-        });
+        // this.isSpinnerVisible = true;
+        // this.salesOrderService.getholdstocklinereservedparts(this.part.salesOrderId, this.part.salesOrderPartId, this.part.stockLineId, this.part.quantityRequested)
+        // .subscribe(data => {
+        //     this.isSpinnerVisible = false;
+        //     //this.parts = data[0];
+        //     this.alertService.showMessage(
+        //         "Success",
+        //         data,
+        //         MessageSeverity.success
+        //       );
+        // },error => {
+        //     this.isSpinnerVisible = false;
+        // });
 
         let selectedPartsLength = 0;
         for (let i = 0; i < this.parts.length; i++) {
@@ -223,7 +227,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
         clearInterval(this.interval);
         this.minutes = '00';
         this.seconds = '00';
-        this.releaseStock();
+        //this.releaseStock();
     }
 
     releaseStock() {

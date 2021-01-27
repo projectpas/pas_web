@@ -18,7 +18,7 @@ import { ISalesOrderView } from "../../../../../../models/sales/ISalesOrderView"
 import { AuthService } from "../../../../../../services/auth.service";
 import { CommonService } from "../../../../../../services/common.service";
 import { ISalesOrderPart } from "../../../../../../models/sales/ISalesOrderPart";
-declare var $ : any;
+declare var $: any;
 import { SummaryPart } from "../../../../../../models/sales/SummaryPart";
 @Component({
   selector: "app-sales-order-part-number",
@@ -46,12 +46,12 @@ export class SalesOrderPartNumberComponent {
   selectedSummaryRow: SummaryPart;
   isStockLineViewMode = false;
   selectedSummaryRowIndex = null;
-  @ViewChild("addPart",{static:false}) addPart: ElementRef;
+  @ViewChild("addPart", { static: false }) addPart: ElementRef;
   @Input() salesOrderId: any;
   @Input() defaultSettingPriority;
-  @ViewChild("popupContentforPartAction",{static:false}) popupContentforPartAction: ElementRef;
-  @ViewChild("salesMargin",{static:false}) salesMargin: ElementRef;
-  @ViewChild("salesReserve",{static:false}) salesReserve: ElementRef;
+  //@ViewChild("popupContentforPartAction",{static:false}) popupContentforPartAction: ElementRef;
+  @ViewChild("salesMargin", { static: false }) salesMargin: ElementRef;
+  @ViewChild("salesReserve", { static: false }) salesReserve: ElementRef;
   @Input() customer: any;
   @Input() totalFreights = 0;
   @Input() totalCharges = 0;
@@ -66,7 +66,7 @@ export class SalesOrderPartNumberComponent {
   isEdit: boolean = false;
   selectedPartActionType: any;
   @Input() salesOrderView: ISalesOrderView;
-  @ViewChild("updatePNDetailsModal",{static:false})
+  @ViewChild("updatePNDetailsModal", { static: false })
   public updatePNDetailsModal: ElementRef;
   modal: NgbModalRef;
   @Output() myEvent = new EventEmitter();
@@ -239,6 +239,20 @@ export class SalesOrderPartNumberComponent {
   onCloseReserve(event) {
     this.show = false;
     this.salesReserveModal.close();
+    this.refreshParts();
+  }
+
+  refreshParts() {
+    this.salesOrderService.GetSalesOrderPartsViewById(this.salesOrderId).subscribe(res => {
+      for (let i = 0; i < this.summaryParts.length; i++) {
+        for (let j = 0; j < res.parts.length; j++) {
+          if (this.summaryParts[i].childParts[0].salesOrderPartId == res.parts[j].salesOrderPartId) { 
+            this.summaryParts[i].childParts[0].qtyAvailable = res.parts[j].qtyAvailable;
+            this.summaryParts[i].childParts[0].qtyReserved = res.parts[j].qtyReserved;
+          }
+        }
+      }
+    })
   }
 
   onCloseMargin(event) {
@@ -288,10 +302,11 @@ export class SalesOrderPartNumberComponent {
 
   partsAction(type) {
     this.selectedPartActionType = type;
-    let contentPart = this.popupContentforPartAction;
-    this.partActionModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
+    let contentPart = this.salesReserve; //this.popupContentforPartAction;
+    //this.partActionModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
+    this.salesReserveModal = this.modalService.open(contentPart, { size: "lg", backdrop: 'static', keyboard: false });
   }
-  
+
   onPartRowSelect(event) {
     this.selectedPartDataForAction = event.data;
   }
@@ -817,13 +832,12 @@ export class SalesOrderPartNumberComponent {
     //   this.saveButton = false;
     // }
   }
-  deletedata:number[] = [];
+  deletedata: number[] = [];
   deleteAllPartModal: NgbModalRef;
-  openmultiplepartDelete(summarypart, index,deletepartcontent) {
+  openmultiplepartDelete(summarypart, index, deletepartcontent) {
     this.selectedSummaryRow = summarypart;
     this.deletedata = [];
-    for(let i=0;i<summarypart.childParts.length;i++)
-    {
+    for (let i = 0; i < summarypart.childParts.length; i++) {
       this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderPartId);
     }
     this.deleteAllPartModal = this.modalService.open(deletepartcontent, { size: "sm", backdrop: 'static', keyboard: false });
@@ -832,7 +846,7 @@ export class SalesOrderPartNumberComponent {
     if (this.deletedata.length > 0) {
       let data = { "salesOrderPartIds": this.deletedata }
       this.salesOrderService.deleteMultiplePart(data).subscribe(response => {
-        for(let i=0;i< this.selectedSummaryRow.childParts.length;i++){
+        for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
           this.removePartNamber(this.selectedSummaryRow.childParts[i]);
         }
         this.deleteAllPartModal.close();
