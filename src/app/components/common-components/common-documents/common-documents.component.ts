@@ -43,7 +43,7 @@ export class CommonDocumentsComponent implements OnInit {
         docMemo: '',
         docDescription: '',
         attachmentDetailId: 0,
-        attachmentId: 0,
+        attachmentId: 0, 
     }
     @ViewChild('documents',{static:false}) Table;
     customerDocumentsData: any = [];
@@ -108,6 +108,7 @@ export class CommonDocumentsComponent implements OnInit {
 
  if(this.uploadDocsToser !=undefined){
     this.id = this.referenceId;
+    console.log("id",this.referenceId)
                 this.uploadDocsToser.subscribe(v => { 
                  
                     this.hideUpoladThing=true;
@@ -122,13 +123,13 @@ export class CommonDocumentsComponent implements OnInit {
     generalName: any;
 
     ngOnChanges(changes: SimpleChanges) {
-      
+    console.log("changes",changes)
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
-                    
-                    this.generalCode = this.generalInformtionData.companyCode;
-                    this.generalName = this.generalInformtionData.name;
+               
+                    this.generalCode =this.generalInformtionData ? this.generalInformtionData.companyCode : '';
+                    this.generalName = this.generalInformtionData ? this.generalInformtionData.name : '';
                     this.isViewMode = this.isViewMode ? this.isViewMode : false;
                 }
             }
@@ -136,6 +137,7 @@ export class CommonDocumentsComponent implements OnInit {
          
             if (property == 'uploadDocsToser') {
                 this.hideUpoladThing=true;
+                console.log("referenceid",this.referenceId)
         //   setTimeout(() => {
         //     this.onUploadDocumentListToServer();
         //   }, 1200);
@@ -475,7 +477,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.moduleId = element.value;
             }
         });
-        
+        if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit'){
+            this.referenceId=this.referenceId ? this.referenceId :localStorage.getItem('vendorId');
+        }
         const vdata = {
             referenceId: this.referenceId,
             masterCompanyId: this.currentUserMasterCompanyId,
@@ -496,6 +500,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
+                    if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit'){
+                        localStorage.removeItem('vendorId');
+                    }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
                     if(this.uploadDocsToser){
@@ -756,6 +763,7 @@ export class CommonDocumentsComponent implements OnInit {
     triggerUpdatebutton(){
 this.parentTrigger.emit(true)
     }
+
     commondocumentsList: any = []
 
     documentType:any=[];

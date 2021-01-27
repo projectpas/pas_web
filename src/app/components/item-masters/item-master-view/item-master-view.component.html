@@ -13,7 +13,7 @@
                     All
                 </button>    
             </div>
-            <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+            <div class="col-sm-6 view-active-button">
                 <button type="button" name="isActive" [ngClass]="viewItemMaster.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
                     <span class="value">{{viewItemMaster.isActive ? 'Active' : 'In-Active'}}</span>
                  </button> 
@@ -25,7 +25,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a class="header-name" data-toggle="collapse" href="#step1" aria-expanded="false"
+                    <a data-toggle="collapse" href="#step1" aria-expanded="false"
                        aria-controls="receive" class="collapsed">
                         General Info
                     </a>
@@ -476,7 +476,7 @@
                                     <ng-template pTemplate="emptymessage" let-columns
                                                  *ngIf="allDocumentsList.length == 0">
                                         <tr>
-                                            <td [attr.colspan]="7" class="no-records-cstm no-records-msg">
+                                            <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
                                                 No records found
                                             </td>
                                         </tr>
@@ -486,13 +486,13 @@
                             </div>
 
                             <div class="form-row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">NTE</label>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">  
                                             <table class="table table-bordered header-table-width" >
-                                                    <thead style="text-align:center;   background-color:   #4298ff !important;">
+                                                    <thead>
                                                         <tr>
                                                             <th>Overhaul</th>
                                                             <th>Repair</th>
@@ -551,13 +551,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">Turn Around Time</label>
                                         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                                             <div class="tableFixHead">  
                                             <table class="table table-bordered header-table-width" >
-                                                    <thead style="text-align:center;   background-color:   #4298ff !important;">
+                                                    <thead >
                                                         <tr>
                                                             <th>Overhaul</th>
                                                             <th>Repair</th>
@@ -880,7 +880,8 @@
                             <div class="col" style="height: 35px !important;">
                                 <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
                                     <label style="width: 120px;">
-                                      <input type="checkbox" name="currentDeleteStatus" (change)="getPSListOnDeleteStatus($event.target.checked)" />
+                                      <input type="checkbox" name="currentDeleteStatus" 
+                                      (change)="getPSListOnDeleteStatus($event.target.checked)" />
                                       <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         <p style="font-weight: bold;"> Show Deleted List </p>  
                                     </label>
@@ -938,58 +939,58 @@
                                 <tbody>
 
                                     <tr *ngFor="let field of purchaseSalesInfo">
-                                        <td><p style="width: 100px;"> {{field.conditionName ? field.conditionName : '-'}}</p></td>
-                                        <td><p style="width: 100px;"> {{field.pP_UOMName ? field.pP_UOMName : '-'}}</p></td>
-                                        <td> <p style="width: 100px;"> {{field.pP_CurrencyName ? field.pP_CurrencyName : '-'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> {{field.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td><p> {{field.conditionName ? field.conditionName : '-'}}</p></td>
+                                        <td><p > {{field.pP_UOMName ? field.pP_UOMName : '-'}}</p></td>
+                                        <td> <p> {{field.pP_CurrencyName ? field.pP_CurrencyName : '-'}}</p></td>
+                                        <td class="text-right"> <p> {{field.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p></td>
+                                        <td class="text-right"> <p> 
                                             {{field.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td> <p> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td> <p > {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p> 
                                             {{field.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.salePriceSelectName ? field.salePriceSelectName : '-'}}</p></td>
-                                        <td> <p style="width: 100px;"> {{field.sP_FSP_UOMName ? field.sP_FSP_UOMName : '-'}}</p></td>
-                                        <td> <p style="width: 100px;"> 
+                                        <td> <p> {{field.salePriceSelectName ? field.salePriceSelectName : '-'}}</p></td>
+                                        <td> <p > {{field.sP_FSP_UOMName ? field.sP_FSP_UOMName : '-'}}</p></td>
+                                        <td> <p > 
                                             {{field.sP_FSP_CurrencyName ? field.sP_FSP_CurrencyName : '-'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_FSP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td> <p > {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> 
+                                        <td> <p > 
                                             {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM-dd-yyyy'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> 
+                                        <td> <p> 
                                             {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td>
@@ -1532,11 +1533,11 @@
                                     {{audit.ataSubChapterCode}}
                                 </td>
                                 <td>{{ audit.createdBy }}</td>
-                                <td><p style="width: 120px;">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p>{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
 
                                 <td>{{ audit.updatedBy }}</td>
-                                <td><p style="width: 120px;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                                <td style="background-color: #fff;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td><p>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1590,35 +1591,35 @@
                         <th colspan="5"></th>
                     </tr>
                     <tr>
-                        <th style="width: 100px;">Cond *</th>
-                        <th style="width: 100px;">UOM *</th>
-                        <th style="width: 100px;">Currency *</th>
-                        <th style="width: 100px;">FX Rate *</th>
-                        <th style="width: 100px;">Vendor List Price</th>
-                        <th style="width: 100px;">Last List Price Date</th>
-                        <th style="width: 100px;">Purchase Disc %</th>
-                        <th style="width: 100px;">Purchase Disc Amount</th>
-                        <th style="width: 100px;">Last Purchase Disc Date</th>
-                        <th style="width: 100px;">Unit Purchase Price</th>
-                        <th style="width: 100px;" class="bg4">Sale Price *</th>
-                        <th style="width: 100px;" class="bg2">UOM *</th>
-                        <th style="width: 100px;" class="bg2">Currency *</th>
-                        <th style="width: 100px;" class="bg2">FX Rate *</th>
-                        <th style="width: 100px;" class="bg2">Flat Price Amount</th>
-                        <th style="width: 100px;" class="bg2">Last Flat Price Date</th>
-                        <th style="width: 100px;" class="bg3">Mark % on List Price</th>
-                        <th style="width: 100px;" class="bg3">Mark Up Amount</th>
-                        <th style="width: 100px;" class="bg3">Last Mark Up Date</th>
-                        <th style="width: 100px;" class="bg3">Base Sale Price</th>
-                        <th style="width: 100px;" class="bg3">Sale Disc %</th>
-                        <th style="width: 100px;" class="bg3">Sale Disc Amount</th>
-                        <th style="width: 100px;" class="bg3">Last Sales Disc Date</th>
-                        <th style="width: 100px;" class="bg3">Unit Sale Price</th>                        
-                        <th style="width: 100px;">Updated By</th>
-                        <th style="width: 100px;">Updated Date</th>
-                        <th style="width: 100px;">Created By</th>
-                        <th style="width: 100px;">Created Date</th>
-                        <th style="width: 100px;">Is Deleted</th>
+                        <th>Cond *</th>
+                        <th >UOM *</th>
+                        <th >Currency *</th>
+                        <th >FX Rate *</th>
+                        <th >Vendor List Price</th>
+                        <th >Last List Price Date</th>
+                        <th >Purchase Disc %</th>
+                        <th >Purchase Disc Amount</th>
+                        <th >Last Purchase Disc Date</th>
+                        <th >Unit Purchase Price</th>
+                        <th  class="bg4">Sale Price *</th>
+                        <th  class="bg2">UOM *</th>
+                        <th  class="bg2">Currency *</th>
+                        <th  class="bg2">FX Rate *</th>
+                        <th  class="bg2">Flat Price Amount</th>
+                        <th  class="bg2">Last Flat Price Date</th>
+                        <th  class="bg3">Mark % on List Price</th>
+                        <th  class="bg3">Mark Up Amount</th>
+                        <th  class="bg3">Last Mark Up Date</th>
+                        <th  class="bg3">Base Sale Price</th>
+                        <th  class="bg3">Sale Disc %</th>
+                        <th  class="bg3">Sale Disc Amount</th>
+                        <th  class="bg3">Last Sales Disc Date</th>
+                        <th  class="bg3">Unit Sale Price</th>                        
+                        <th >Updated By</th>
+                        <th >Updated Date</th>
+                        <th >Created By</th>
+                        <th >Created Date</th>
+                        <th >Is Deleted</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1629,7 +1630,7 @@
                   ? 'black'
                   : 'red'
               }">
-                           <p style="width: 100px;"> {{ audit.conditionName }}</p>
+                           <p > {{ audit.conditionName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(
@@ -1640,49 +1641,49 @@
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;"> {{ audit.pP_UOMName }}</p>
+              <p > {{ audit.pP_UOMName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(i, 'pP_CurrencyName', audit.pP_CurrencyName)
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;">  {{ audit.pP_CurrencyName }}</p>
+              <p >  {{ audit.pP_CurrencyName }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(i, 'pP_FXRatePerc', audit.pP_FXRatePerc)
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;">  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+              <p >  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_VendorListPrice', audit.pP_VendorListPrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_LastListPriceDate', audit.pP_LastListPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscAmount', audit.pP_PurchaseDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         
                         <td [ngStyle]="{width: '100px',
@@ -1690,118 +1691,118 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'salePriceSelectName', audit.salePriceSelectName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.salePriceSelectName }}</p>
+                          <p >  {{ audit.salePriceSelectName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_UOMName', audit.sP_FSP_UOMName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_UOMName }}</p>
+                          <p >     {{ audit.sP_FSP_UOMName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_CurrencyName', audit.sP_FSP_CurrencyName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_CurrencyName }}</p>
+                          <p >     {{ audit.sP_FSP_CurrencyName }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FXRatePerc', audit.sP_FSP_FXRatePerc)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+                          <p >     {{ audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FlatPriceAmount', audit.sP_FSP_FlatPriceAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >     {{ audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_LastFlatPriceDate', audit.sP_FSP_LastFlatPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpAmount', audit.sP_CalSPByPP_MarkUpAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastMarkUpDate', audit.sP_CalSPByPP_LastMarkUpDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscPercValue', audit.sP_CalSPByPP_SaleDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >      {{ audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'SP_CalSPByPP_SaleDiscAmount', audit.SP_CalSPByPP_SaleDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastSalesDiscDate', audit.sP_CalSPByPP_LastSalesDiscDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                          <p >   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
-                        <td><p style="width: 100px;"> {{ audit.updatedBy }}</p></td>
-                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p style="width: 100px;"> {{ audit.createdBy }}</p></td>
-                        <td><p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        <td><p > {{ audit.updatedBy }}</p></td>
+                        <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > {{ audit.createdBy }}</p></td>
+                        <td><p > {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>
             </table>

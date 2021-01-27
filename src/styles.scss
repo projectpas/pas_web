@@ -8178,7 +8178,8 @@ hr {
 
 #accordion .panel-title a {
   display: block;
-  padding: 10px;
+  // padding: 10px;
+  padding: 0.35rem 1.25rem 0.15rem 1.25rem;
 }
 
 .cdetails-top {
@@ -11004,7 +11005,7 @@ a.ui-button:active,
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
-  opacity: 0.35;
+  // opacity: 0.35;
   filter: Alpha(Opacity=35);
   /* support: IE8 */
   background-image: none;

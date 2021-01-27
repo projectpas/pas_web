@@ -910,7 +910,8 @@
 <ng-template #isCertifiedAttachmentsModal let-c="close" let-d="dismiss" data-backdrop="static">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeIsCertifiedModal()">&times;</button>
-      <h4 class="modal-title">Certified Attachments  <a class="plusicon-cstm ml-1"
+      <h4 class="modal-title">Certified Attachments 
+           <!-- <a class="plusicon-cstm ml-1"
         href="#"
         data-toggle="modal"
         data-target="#addDocumentDetailsNew"
@@ -918,11 +919,14 @@
         (click)="addDocumentDetails()">
          <i class="fa fa-plus-circle fa-lg"
             matTooltip="Create Documents" matTooltipPosition="above"></i>
-     </a></h4>
+     </a> -->
+    </h4>
     </div>
   <div class="modal-body">
-    <div  style="width: 97%">
-        <div>
+    <div  style="width: 97%"> 
+        <app-common-documents [moduleName]="CertifiedModuleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="vendorId"
+        [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
+        <div style="display: none;">
             <p-table #table4 class="rpo-table-cstm lastcol-fix"
                      [columns]="selectedColumnsCertified"
                      [value]="sourceViewforDocumentList"
@@ -1054,15 +1058,14 @@
     </div>
 </div>
 <div class="modal-footer">
-
   <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeIsCertifiedModal()">Close</button>
-  
 </div>
 </ng-template>
 <ng-template #vendorAuditAttachmentsModal let-c="close" let-d="dismiss">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" (click)="closeVendorAuditModal()">&times;</button>
-      <h4 class="modal-title">Vendor Audit Attachments<a class="plusicon-cstm ml-1"
+      <h4 class="modal-title">Vendor Audit Attachments
+          <!-- <a class="plusicon-cstm ml-1"
         href="#"
         data-toggle="modal"
         data-target="#addDocumentDetailsAudit"
@@ -1070,11 +1073,14 @@
         (click)="addDocumentDetails()">
          <i class="fa fa-plus-circle fa-lg"
             matTooltip="Create Documents" matTooltipPosition="above"></i>
-     </a></h4>
+     </a> -->
+    </h4>
     </div>
   <div class="modal-body">
-    <div *ngIf="sourceVendor.vendorAudit" style="width: 97%">       
-        <div>
+    <div *ngIf="sourceVendor.vendorAudit" style="width: 97%"> 
+        <app-common-documents [moduleName]="AuditModuleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="vendorId"
+        [isViewMode]="false" [offLineUpload]="true"></app-common-documents>      
+        <div style="display: none;">
             <p-table #table5 class="rpo-table-cstm lastcol-fix"
                      [columns]="selectedColumnsAudit"
                      [value]="sourceViewforDocumentListAudit"

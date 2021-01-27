@@ -51,6 +51,7 @@ import { SalesOrderPartNumberComponent } from "../shared/components/sales-order-
 import { SalesOrderBillingComponent } from "../shared/components/sales-order-billing/sales-order-billing.component";
 import { SalesOrderAnalysisComponent } from "../sales-order-analysis/sales-order-analysis.component";
 import { SalesOrderShippingComponent } from "../shared/components/sales-order-shipping/sales-order-shipping.component";
+import { SalesOrderPickTicketsComponent } from "../sales-order-pick-tickets/sales-order-pick-tickets.component";
 
 @Component({
   selector: "app-sales-order-create",
@@ -135,6 +136,7 @@ export class SalesOrderCreateComponent implements OnInit {
   @ViewChild(SalesOrderBillingComponent, { static: false }) public salesOrderBillingComponent: SalesOrderBillingComponent;
   @ViewChild(SalesOrderShippingComponent, { static: false }) public salesOrderShippingComponent: SalesOrderShippingComponent;
   @ViewChild(SalesOrderAnalysisComponent, { static: false }) public salesOrderAnalysisComponent: SalesOrderAnalysisComponent;
+  @ViewChild(SalesOrderPickTicketsComponent, { static: false }) public salesOrderPickTicketsComponent: SalesOrderPickTicketsComponent;
   employeesList: any = [];
   customerWarning: any = {};
   status: IStatus[] = [];
@@ -1325,6 +1327,9 @@ export class SalesOrderCreateComponent implements OnInit {
     }
     if (event.index == 9) {
       this.salesOrderAnalysisComponent.refresh(this.id);
+    }
+    if (event.index == 11) {
+      this.salesOrderPickTicketsComponent.refresh(this.id);
     }
   }
 

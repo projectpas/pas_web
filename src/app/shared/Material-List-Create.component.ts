@@ -381,7 +381,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             }
         })
     }
-
     reCalculate() { 
         this.calculateExtendedCostSummation();
         this.calculateQtySummation();
@@ -630,7 +629,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
         newRow.quantity = "";
         newRow.unitCost = "0.00";
         newRow.unitOfMeasureId = this.defaultUOMId;
-        newRow.isDelete = false;
+        newRow.isDeleted = false;
         newRow.extendedPrice = '';
         newRow.updatedBy = this.userName;
         newRow.createdBy = this.userName;
@@ -666,18 +665,25 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     // sum of extended cost
     calculateExtendedCostSummation() {
-        this.workFlow.materialExtendedCostSummation = this.workFlow.materialList.reduce((acc, x) => {
-            return acc + parseFloat(x.extendedCost == undefined || x.extendedCost === '' ? 0 : x.extendedCost.toString().replace(/\,/g, ''))
-        }, 0);
 
-        this.workFlow.totalMaterialCostValue = this.workFlow.materialExtendedCostSummation ? formatNumberAsGlobalSettingsModule(this.workFlow.materialExtendedCostSummation, 2) : null;
-        this.workFlow.materialExtendedCostSummation = this.workFlow.totalMaterialCostValue
+        var total = 0;
+   
+    this.workFlow.materialList.map((element,i) => {
+        if(element.isDeleted==false){
+            total = total + parseFloat(element.extendedCost == undefined || element.extendedCost === '' ? 0 : element.extendedCost.toString().replace(/\,/g, ''))
+
+        } 
+   });
+        this.workFlow.totalMaterialCostValue = total  ? formatNumberAsGlobalSettingsModule(total, 2) : '0.00';
+        this.workFlow.materialExtendedCostSummation = this.workFlow.totalMaterialCostValue;
     }
 
     calculateExtendedPrice(material): void {
+
         material.price = material.price ? formatNumberAsGlobalSettingsModule(material.price, 2) : '';
         if (material.quantity != "" && material.price != "") {
             material.extendedPrice = formatNumberAsGlobalSettingsModule((material.quantity * parseFloat(material.price.toString().replace(/\,/g, ''))), 2);
+   
         }
         else {
             material.extendedPrice = "";
@@ -687,6 +693,7 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
 
     // sum of extended cost
     calculateExtendedPriceSummation() {
+
         this.workFlow.materialExtendedPriceSummation = this.workFlow.materialList.reduce((acc, x) => {
             return acc + parseFloat(x.extendedPrice == undefined || x.extendedPrice === '' ? 0 : x.extendedPrice.toString().replace(/\,/g, ''))
         }, 0);
@@ -842,7 +849,6 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
     }
 
     openView(row) { 
-        console.log("row",row);
         this.itemMasterRowData = row;
         this.showItemmasterView = true;
         this.itemMasterId = row.itemMasterId;
@@ -974,10 +980,10 @@ export class MaterialListCreateComponent implements OnInit, OnChanges {
             let temp = cloneDeep(this.workFlow.materialList);
             this.currentForm.resetForm();
             this.workFlow.materialList = cloneDeep(temp);
+           
         }
         else {
             this.workFlow.materialList[this.deletedRowIndex].isDeleted = true;
-            this.workFlow.materialList[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
         this.dismissModel();
