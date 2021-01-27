@@ -165,6 +165,7 @@ export class RoListComponent implements OnInit {
                 { label: 'Repair Order List' },
             ];
         } else {
+            this.currentStatus="Fulfilling";
             this.breadcrumbs = [
                 { label: 'Receiving' },
                 { label: 'Repair Order' },
