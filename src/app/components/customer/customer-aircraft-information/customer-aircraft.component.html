@@ -23,21 +23,21 @@
 
 <br />
 <div class="card new-card" style="width: calc(100% - 12px); margin: 6px; padding: 10px;">
-  <div class="card-header bg-primary new-card-header" >
+  <div class="card-header header" >
     <div class="row">
       <div class="col">
-        <h4 class="new-card-heading"> Inventory</h4>
+        <h4 class="header-name"> Inventory</h4>
       </div>
       <div>
         <a *ngIf="isViewMode == false" href="javascript:void(0)">
-          <button type="button" class="btn-sm new-btn-primary"  matTooltip="Add Inventory" matTooltipPosition="above" (click)="openAddInventoryPopup(addInventory);">
+          <button type="button" class="btn-sm header-button"  matTooltip="Add Inventory" matTooltipPosition="above" (click)="openAddInventoryPopup(addInventory);">
             Add Inventory
           </button>
         </a>              
       </div>
     </div>
   </div>  
-  <div class="card-body new-card-body">
+  <div class="card-body header-body">
   <p-table #dt class="rpo-table-cstm lastcol-fix" 
   [value]="aircraftListDataValues" 
   [rows]="pageSize" 
@@ -55,19 +55,20 @@
       <div class="row">
         <div class="col">
         <p-multiSelect [options]="colsaircraftLD" [(ngModel)]="selectedColumns" [ngModelOptions]="{ standalone: true }"
-          optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
-          defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+          optionLabel="header" selectedItemsLabel="{0} columns selected"
+         
+          defaultLabel="Choose Columns" 
+          class="multiselect-field"></p-multiSelect>
         </div>
         <div class="col">
-          <div
-            style="width: auto !important; float: right;"
-            class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-          >
+          <div					
+						class="global-search-field inner-addon right-addon inline-block"
+					  >
           <i class="fa fa-search"></i>
           <input type="text" pInputText size="50"
            class="form-control"
             (input)="dt.filterGlobal($event.target.value,'contains')" placeholder="Filter"
-            style="height: 28px !important;"
+           
              [value]="dt.filters['contains'] ? dt.filters['contains'].value : ''" 
              />
             </div>
@@ -75,26 +76,27 @@
         </div>
         <div class="row">
           <div class="col">
-            <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left" label="Export All Data"
+            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left" label="Export All Data"
               matTooltip="Download  Data" matTooltipPosition="above"  data-toggle="modal" 
               (click)="selectedOnly = false; targetData = dt;"
-               data-target="#downloadPopup"
-              style="padding: 5px 10px !important; width: 115px !important;"></button>
-            <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+               data-target="#downloadPopup"></button>
+            <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
               label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
-              (click)="dt.exportCSV({ selectionOnly: true })" style="padding: 5px 10px !important;"></button>
-            <button class="btn btn-primary new-table-button " style="padding: 5px 10px !important; height: 26px !important; width: 130px !important;"
+              (click)="dt.exportCSV({ selectionOnly: true })"
+              ></button>
+            <button class="btn btn-primary exports-button "
               *ngIf="showAdvancedSearchCard == false" type="button" (click)="enableDisableAdvancedSearch(true)">
               Advanced Search <i class="fa fa-caret-down"></i>
             </button>
-            <button class="btn btn-primary new-table-button" style="padding: 5px 10px !important; height: 26px !important; width: 130px !important;"
+            <button class="btn btn-primary exports-button" 
+            
               *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
               Advanced Search <i class="fa fa-caret-up"></i>
             </button>
           </div>
           <div class="col-md-4">
-            <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
-                <label style="width: 120px;">
+            <div class="checkbox-cstm pull-right checkbox-align">
+              <label class="checkbox-label-align">
                   <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="aircraftDeletedList" (change)="getDeleteListByStatus($event.target.checked)" />
                   <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
                     <p style="font-weight: bold;"> Show Deleted List </p>  
@@ -151,28 +153,28 @@
 
     <ng-template pTemplate="colgroup" let-columns>
       <colgroup>
-        <col *ngFor="let col of columns" style="width:130px" />
+        <col *ngFor="let col of columns" class="table-column-width" />
       </colgroup>
     </ng-template>
 
     <ng-template pTemplate="header" let-columns>
       <tr>
-        <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+        <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
           {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
         </th>       
-        <th style="width: 90px;">Actions</th>
+        <th class="table-actions-column">Actions</th>
       </tr>
       <tr>
-        <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-          <input style="width:100%;" pInputText type="text"
+        <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+          <input class="table-header-input-width" pInputText type="text"
             (input)="dt.filter($event.target.value, col.field, 'contains')" />
         </th>
-        <th style="width:90px; position:sticky"></th>
+        <th class="table-actions-column"></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
       <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewAircraftdbldisplay(rowData)">
-        <td *ngFor="let col of columns" pResizableColumn pReorderableColumn>
+        <td class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
           <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
             {{rowData[col.field] == 'Unknown' ? '' : rowData[col.field] }}
           </ng-container>
@@ -180,7 +182,7 @@
               {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
           </ng-container> 
         </td>
-        <td style="width:90px; text-align: center;" *ngIf="selectedColumns.length > 0 && isViewMode == false">
+        <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">
           <div *ngIf="currentDeletedstatus==false">
             <span data-toggle="modal" data-target="#viewAircraft">
               <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openAircraftView(rowData)"
@@ -210,7 +212,7 @@
                   <span ><a class="btn nobg" (click)="restore(restoreId,rowData);dt.reset()" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
           </div>          
         </td>
-        <td style="width:90px; text-align: center;" *ngIf="selectedColumns.length > 0 && isViewMode == true">
+        <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == true">
           <span data-toggle="modal" data-target="#viewAircraft">
             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openAircraftView(rowData)"
               matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
@@ -224,17 +226,17 @@
 
     <ng-template pTemplate="emptymessage" let-columns *ngIf="aircraftListDataValues?.length == 0">
       <tr>
-        <td [attr.colspan]="12" class="no-records-cstm">
+        <td [attr.colspan]="12" class="no-records-cstm no-records-msg">
           No records found
         </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="summary" id="footer">
       <label id="footer" class="footer">Total:</label>
-      <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+      <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
       &nbsp;&nbsp;
       <label id="footer" class="footer1">Pages Count:</label>
-      <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
+      <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
         type="text" />
     </ng-template>
   </p-table>

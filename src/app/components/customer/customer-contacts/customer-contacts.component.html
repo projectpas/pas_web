@@ -23,14 +23,15 @@
       </div>
       <div class="card new-card" style="padding: 10px;">
         <div>
-          <div class="card-header bg-primary new-card-header" >
+          <div class="card-header header" >
             <div class="row">
               <div class="col">
-                <h4 class="new-card-heading"> Contacts</h4>
+                <h4 class="header-name"> Contacts</h4>
               </div>
               <div>
                 <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addContactDetails">
-                  <button type="button" class="btn-sm new-btn-primary"  matTooltip="Add Contact" matTooltipPosition="above" (click)="onAddContactInfo();">
+                  <button type="button" class="btn-sm header-button" 
+                   matTooltip="Add Contact" matTooltipPosition="above" (click)="onAddContactInfo();">
                     Add Contact
                   </button>
                 </a>              
@@ -41,7 +42,7 @@
           <hr />
         </div>   
         <!-- class="rpo-table-cstm rro-table-cstm" -->
-        <div class="card-body new-card-body">
+        <div class="card-body header-body">
         <p-table #contact 
         class="rpo-table-cstm lastcol-fix" 
         [value]="customerContacts" 
@@ -63,37 +64,36 @@
               <p-multiSelect [options]="customerContactsColumns" 
               [(ngModel)]="selectedColumns" name="customerContactsm1"
                 optionLabel="header" selectedItemsLabel="{0} columns selected"
-                 [style]="{ minWidth: '200px' }"
-                defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                class="multiselect-field"
+                defaultLabel="Choose Columns"></p-multiSelect>
               </div>
               <div class="col">
-                <div
-                  style="width: auto !important; float: right;"
-                  class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                >
+                <div					
+						class="global-search-field inner-addon right-addon inline-block"
+					  >
                 <i class="fa fa-search"></i>
                 <input type="text" pInputText size="50" [(ngModel)]="resetinputmodel" (onClear)="clearValue()"
                   class="form-control"
                   (input)="contact.filterGlobal($event.target.value, 'contains')" placeholder="Filter"
-                  style="height: 28px !important;" />
+                   />
                 </div>
               </div>
             </div>
             <div class="row">
               <div class="col">
               <button type="button"
-               class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+               class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export  Data" matTooltip="Download  Data" matTooltipPosition="above"               
                 data-toggle="modal" 
                 (click)="selectedOnly = false; targetData = contact;"
-                 data-target="#downloadConfirmation" style="padding: 5px 10px !important; width: 115px !important;"></button>
-              <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+                 data-target="#downloadConfirmation"></button>
+              <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
-                (click)="contact.exportCSV({ selectionOnly: true })" style="padding: 5px 10px !important;"></button>
+                (click)="contact.exportCSV({ selectionOnly: true })"></button>
               <div class="excel-upload  excel-upload-cstm">
-                <button name="download" id="download" type="button" class="btn btn-primary new-table-button"
+                <button name="download" id="download" type="button" class="btn btn-primary exports-button"
                   matTooltip="Download Sample File" matTooltipPosition="above" (click)="sampleExcelDownloadForContact()"
-                  style="padding: 5px 10px !important; width: 130px !important;">
+                  >
                   Sample File Download
                 </button>
                 <input type="file" name="upload3[]" id="upload3" (change)="customContactExcelUpload($event)"
@@ -106,25 +106,22 @@
                 &nbsp; &nbsp;
               </div>
               </div>
-              <div class="col">
-                <div class="">
-                  <div
-                    class="col"
-                    style="width: 370px; float: right; padding-top: 3px;"
-                  >
+              <div class="pull-right buttons-div-align">
+                <div class="col">
+                <div class="col buttons-top-padding">
                     <div class="form-group">
                      
-                      <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                      <div class="pull-left radio-buttons-align">
                         <p-radioButton class="custom_set" name="contactstatus" value="Active"  label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                         </div>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                        <div class="pull-left radio-buttons-align">
                           <p-radioButton class="custom_set" name="contactstatus" value="InActive" label="In-Active" [(ngModel)]="currentstatus"  (click)="geListByStatus('InActive')"></p-radioButton>
                         </div>
-                        <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                        <div class="pull-left radio-buttons-align">
                           <p-radioButton class="custom_set" name="contactstatus" value="ALL" label="All" [(ngModel)]="currentstatus"  (click)="geListByStatus('ALL')"></p-radioButton>
                         </div> 
-                            <div class="checkbox-cstm" style="margin-left: 0;">
-                              <label style="width: auto !important;margin-top: 3px;">
+                        <div class="checkbox-cstm pull-left checkbox-align">
+                          <label class="checkbox-label-align">
                                 <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"
                                   />
                                 <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -141,8 +138,8 @@
             <div class="row">
               <div class="col-sm-8"></div>
               <div class="col-sm-4">
-                <div class="checkbox-cstm" style="margin-right: 10px; text-align: right !important;">
-                  <label style="width: auto !important;margin-top: 4px;">
+                <div class="checkbox-cstm pull-right checkbox-align">
+                  <label class="checkbox-label-align">
                     <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"/>
                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                       Show Deleted List 
@@ -154,37 +151,37 @@
 
           <ng-template pTemplate="colgroup" let-columns>
             <colgroup>
-              <col *ngFor="let col of columns" style="width:130px"
+              <col *ngFor="let col of columns" class="table-column-width"
                 [ngClass]="{ update_withFlag: col.field == 'isDefaultContact' }" />
             </colgroup>
           </ng-template>
 
           <ng-template pTemplate="header" let-columns>
             <tr>
-              <th style="width: 40px;">Flag</th>
-              <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field"
+              <th class="table-column-width">Flag</th>
+              <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field"
                 [hidden]="col.field == 'isDefaultContact'">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
               </th>
-              <th style="width: 140px;">Actions</th>
+              <th class="table-actions-column">Actions</th>
             </tr>
             <tr>
-              <th></th>
-              <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isDefaultContact'"
+              <th class="table-column-width"></th>
+              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isDefaultContact'"
                 [ngSwitch]="col.field">
-                <input style="width:100%;" pInputText type="text" (input)="
+                <input class="table-header-input-width" pInputText type="text" (input)="
                   contact.filter($event.target.value, col.field, 'contains')
                   " />
               </th>
-              <th style="width:140px;position:sticky"></th>
+              <th class="table-actions-column"></th>
             </tr>
           </ng-template>
 
           <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
             <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData"
               (dblclick)="viewSelectedRowdbl(viewdbl, rowData)">
-              <td>
+              <td class="table-column-width">
                 <span class="flag">
                   <i *ngIf="rowData.isDefaultContact == true" [ngStyle]="{
                       color: rowData.isDefaultContact == true ? 'green' : 'none'
@@ -192,7 +189,7 @@
                 </span>
               </td>
 
-              <td *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isDefaultContact'"
+              <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isDefaultContact'"
                 pReorderableRowHandle>
                 <ng-container *ngIf="col.field != 'workPhone' && col.field != 'tag' && col.field != 'lastName' && col.field != 'contactTitle'">
                   {{
@@ -216,7 +213,7 @@
                   {{rowData.contactTitle == 'NA' ? ' ' : rowData.contactTitle}} 
                 </ng-container>
               </td>
-              <td style="width:140px" *ngIf="selectedColumns.length > 0 && isViewMode == false">
+              <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == false">
                   <div *ngIf="currentDeletedstatus==false">
                       <p-inputSwitch matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}" matTooltipPosition="above"
                                      onLabel="on" [disabled]="rowData.isDefaultContact == true" offLabel="off" (onChange)="handleChange(rowData)" [(ngModel)]="rowData['isActive']">
@@ -270,7 +267,7 @@
                         <span ><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
                         </div>
               </td>
-              <td style="width:140px" *ngIf="selectedColumns.length > 0 && isViewMode == true">
+              <td class="action-icons-cstm table-column-width" *ngIf="selectedColumns.length > 0 && isViewMode == true">
                 <span data-toggle="modal" data-target="#view">
                   <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="viewSelectedRow(rowData)"
                     matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
@@ -289,18 +286,18 @@
           </ng-template>
           <ng-template pTemplate="emptymessage" let-columns *ngIf="customerContacts.length == 0">
             <tr>
-              <td colspan="15" style="color: red; font-weight: bold; text-align: center">
+              <td colspan="15" class="no-records-cstm no-records-msg">
                 No records found
               </td>
             </tr>
           </ng-template>
           <ng-template pTemplate="summary" id="footer">
             <label id="footer" class="footer">Total:</label>
-            <input style="width: 5%;" [(ngModel)]="contact._totalRecords" [disabled]="true" pInputText type="text" />
+            <input class="footer-input-width" [(ngModel)]="contact._totalRecords" [disabled]="true" pInputText type="text" />
             &nbsp;&nbsp;
             <label id="footer" class="footer1">Pages Count:</label>
 
-            <input style="width: 5%;" [ngModel]="getPageCount(contact._totalRecords, pageSize)" [disabled]="true"
+            <input class="footer-input-width" [ngModel]="getPageCount(contact._totalRecords, pageSize)" [disabled]="true"
               pInputText type="text" />
           </ng-template>
         </p-table>
