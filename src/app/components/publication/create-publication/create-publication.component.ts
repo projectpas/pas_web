@@ -33,7 +33,6 @@ import { Subject } from 'rxjs';
 
 declare var $: any;
 
-
 @Component({
   selector: 'app-create-publication',
   templateUrl: './create-publication.component.html',
@@ -83,10 +82,8 @@ export class CreatePublicationComponent implements OnInit {
     tagTypeId: null
   }
 
-
   public sourcePublication: any = {
     ...this.publicationGeneralInformation
-
   };
 
   generalInformationDetails: any = {};
@@ -137,27 +134,16 @@ export class CreatePublicationComponent implements OnInit {
   pnMappingPageSize: number = 10;
   aircraftPageSize: number = 10;
   moduleName: any = 'Publication';
-  // dropdown
-
-  // publicationTypes = [
-  //   { label: 'Select Publication Type', value: null },
-  //   { label: 'CMM', value: '2' },
-  //   { label: 'AD', value: '3' },
-  //   { label: 'SB', value: '4' }
-  // ];
 
   // table columns for ata
 
   atacols = [
-    //PartNumber,PartDescription,ItemGroup, ManufacturerName
     { field: 'partNumber', header: 'PN Number' },
     { field: 'partDescription', header: 'PN Description' },
     { field: 'manufacturerName', header: 'Manufacturer' },
     { field: 'itemGroup', header: 'Item Group' },
     { field: 'ataChapter', header: 'ATA Chapter' },
-    //{ field: 'ataChapterCode', header: 'ATA Chapter Code' },
     { field: 'ataSubChapter', header: 'ATA SubChapter' },
-    //{ field: 'ataSubChapterCode', header: 'ATA SubChapter Code' }
   ];
   selectedatacols = this.atacols;
   status = [
@@ -1853,40 +1839,21 @@ export class CreatePublicationComponent implements OnInit {
     this.nextOrPreviousTab = nextOrPrevious;
     let content = this.tabRedirectConfirmationModal;
     this.modal = this.modalService.open(content, { size: "sm" });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
-
-
   }
   dismissModel() {
     this.modal.close();
   }
   redirectToTab() {
     this.dismissModel();
-    // if(this.employeeService.isEditMode == true){
     this.changeOfTab('PnMap');
-    // }else{
-
-    // this.gotoNext();
-    // }
-
   }
 
   clearValue() { }
-
 
   restorerecord: any = {};
   restore(content, rowData) {
     this.restorerecord = rowData;
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-    this.modal.result.then(() => {
-    }, () => {
-      // console.log('Backdrop click')
-    })
   }
   restoreRecord() {
     this.isSpinnerVisible = true;
