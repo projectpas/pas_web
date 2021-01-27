@@ -1185,7 +1185,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     deleteCapability(content, capabilityId, capabilityType) {
         this.selectedForDeleteCapabilityId = capabilityId;
         this.selectedForDeleteContent = content;
-        this.selectedCapabilityType = capabilityType;
+        if(capabilityType != '' && capabilityType != undefined)
+        {
+            this.selectedCapabilityType = capabilityType;
+        }
         if (this.isDeleteCapabilityPopupOpened == true) {
             this.itemMasterService.deleteCapabilityById(capabilityId, "admin").subscribe(res => {
                 this.dismissModel()

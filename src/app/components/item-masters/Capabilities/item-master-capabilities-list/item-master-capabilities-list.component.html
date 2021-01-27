@@ -142,11 +142,13 @@
 
                 <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                     
-                    <ng-container *ngIf="col.field!='isVerified' && col.field !='memo' && col.field!='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
+                    <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field] && col.field == 'verifiedDate'
+                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
+                                        : rowData[col.field] && col.field == 'addedDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field]
                                     }}
@@ -243,7 +245,7 @@
                 <h4 class="modal-title">Details of Capability Type: <strong>{{ selectedItemMasterCapData.capabilityType }}</strong> for PN: <strong>{{selectedItemMasterCapData.partNo}}</strong></h4>
             </div>
             <div class="modal-body">
-                <app-pn-header [partData]="partData"></app-pn-header>
+                <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
                 <div class="form-row mt-2">
                     <div class="col-sm-4">
                         <p>
@@ -332,7 +334,7 @@
                 <h4 class="modal-title">History of Capability</h4>
             </div>
             <div class="modal-body">
-                <app-pn-header [partData]="partData"></app-pn-header>
+                <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
                 <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
 					<div class="tableFixHead">  
 					<table class="table table-bordered header-table-width" *ngIf="capabilityauditHisory.length> 0 else noDatavailable">
@@ -460,7 +462,7 @@
             </div>
             <form #capesForm="ngForm">
                 <div class="modal-body">
-                    <app-pn-header [partData]="partData"></app-pn-header>
+                    <app-pn-header [partData]="partData" *ngIf="itemMasterId != undefined"></app-pn-header>
                     <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
                         <div class="tableFixHead">  
                         <table class="table table-bordered header-table-width" >
