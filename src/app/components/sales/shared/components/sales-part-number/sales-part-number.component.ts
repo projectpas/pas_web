@@ -889,7 +889,9 @@ export class SalesPartNumberComponent {
     this.deletedata = [];
     for(let i=0;i<summarypart.childParts.length;i++)
     {
-      this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderQuotePartId);
+      if(this.selectedSummaryRow.childParts[i].salesOrderQuotePartId){
+        this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderQuotePartId);
+      }
     }
     this.deleteAllPartModal = this.modalService.open(deletepartcontent, { size: "sm", backdrop: 'static', keyboard: false });
   }
@@ -910,7 +912,10 @@ export class SalesPartNumberComponent {
         this.isSpinnerVisible = false;
       });
     } else {
-      this.removePartNamber(this.part);
+      for(let i=0;i< this.selectedSummaryRow.childParts.length;i++){
+        this.removePartNamber(this.selectedSummaryRow.childParts[i]);
+      }
+      //this.removePartNamber(this.part);
       this.deleteAllPartModal.close();
       this.alertService.showMessage(
         "Success",

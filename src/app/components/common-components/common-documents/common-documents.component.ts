@@ -948,4 +948,8 @@ this.parentTrigger.emit(true)
         this.DocumentTypebutton = true;
         $('#documenttype-add-memo').modal('hide');
     }
+
+    closeMemoModelpopup(){
+      $('#documenttype-add-memo').modal('hide');
+    }
 }

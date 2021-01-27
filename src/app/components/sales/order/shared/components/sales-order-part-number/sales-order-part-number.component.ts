@@ -824,7 +824,9 @@ export class SalesOrderPartNumberComponent {
     this.deletedata = [];
     for(let i=0;i<summarypart.childParts.length;i++)
     {
-      this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderPartId);
+      if(this.selectedSummaryRow.childParts[i].salesOrderPartId){
+        this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderPartId);
+      }
     }
     this.deleteAllPartModal = this.modalService.open(deletepartcontent, { size: "sm", backdrop: 'static', keyboard: false });
   }
@@ -845,7 +847,10 @@ export class SalesOrderPartNumberComponent {
         this.isSpinnerVisible = false;
       });
     } else {
-      this.removePartNamber(this.part);
+      for(let i=0;i< this.selectedSummaryRow.childParts.length;i++){
+        this.removePartNamber(this.selectedSummaryRow.childParts[i]);
+      }
+      //this.removePartNamber(this.part);
       this.deleteAllPartModal.close();
       this.alertService.showMessage(
         "Success",
@@ -858,4 +863,20 @@ export class SalesOrderPartNumberComponent {
   onCloseParMultipletDelete() {
     this.deleteAllPartModal.close();
   }
+
+  createPO(rowData){
+      localStorage.setItem("itemMasterId",rowData.itemMasterId);
+      localStorage.setItem("partNumber",rowData.partNumber);   
+      localStorage.setItem("salesOrderId",rowData.salesOrderId);
+      //const { vendorId } = rowData;
+      this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);
+  }
+
+  createRO(rowData) {
+    localStorage.setItem("itemMasterId",rowData.itemMasterId);
+    localStorage.setItem("partNumber",rowData.partNumber);  
+    localStorage.setItem("salesOrderId",rowData.salesOrderId);
+    //const { vendorId } = rowData;
+    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
+}
 }
