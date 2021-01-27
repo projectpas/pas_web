@@ -1320,16 +1320,16 @@ export class SalesOrderCreateComponent implements OnInit {
       }
     }
     if (event.index == 6) {
-      this.salesOrderShippingComponent.refresh(this.selectedParts);
+      this.salesOrderPickTicketsComponent.refresh(this.id);
     }
     if (event.index == 7) {
+      this.salesOrderShippingComponent.refresh(this.selectedParts);
+    }
+    if (event.index == 8) {
       this.salesOrderBillingComponent.refresh(this.selectedParts);
     }
-    if (event.index == 9) {
+    if (event.index == 10) {
       this.salesOrderAnalysisComponent.refresh(this.id);
-    }
-    if (event.index == 11) {
-      this.salesOrderPickTicketsComponent.refresh(this.id);
     }
   }
 
