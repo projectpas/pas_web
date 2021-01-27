@@ -105,6 +105,8 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     isDeleteCapabilityPopupOpened: boolean = false;
     selectedForDeleteCapabilityId: any;
     selectedForDeleteContent: any;
+    restorerecord: any = {}
+    capabilityId: any;
     showCapes: boolean = false;
     isEnableCapesList: boolean = true;
     globalSearchData: any = {};
@@ -1195,13 +1197,29 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 this.isDeleteCapabilityPopupOpened = false;
                 this.selectedCapabilityType = "";
                 this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-            }),
-                error => {
-                }
+            })
         }
         else {
             this.isDeleteCapabilityPopupOpened = true
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        }
+    }
+
+    restore(restorePopupId, rowData) {
+        this.restorerecord = rowData;
+        this.selectedCapabilityType = rowData.capabilityType;
+        this.capabilityId = rowData.itemMasterCapesId;
+        this.modal = this.modalService.open(restorePopupId, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    restoreCapability() {
+        if(this.capabilityId > 0)
+        {
+            this.itemMasterService.restoreCapabilityById(this.capabilityId, "admin").subscribe(res => {
+                this.dismissModel()
+                this.selectedCapabilityType = "";
+                this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
+            })
         }
     }
 
