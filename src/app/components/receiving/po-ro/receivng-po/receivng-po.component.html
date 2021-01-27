@@ -1,31 +1,20 @@
 ﻿<form id="" class="ro-grid-form createPO-form" name="">
-
 <div class="x_content" *ngIf="purchaseOrderData">
-
     <div class="card new-card">
         <div class="card-header header">
             <div class="row">
                 <div class="col">
                     <h4 class="header-name"> Receiving/Purchase Order
-
                         <button class="btn-sm header-button header-button-alignment" (click)="receiving_po_header=!receiving_po_header" style="margin-left: 20px;">
                             {{receiving_po_header ? 'Collapse' : 'Expand'}}
                         </button>
                     </h4>
                 </div>
-            <!-- <nav aria-label="breadcrumb">
-                <ol class="breadcrumb rpo-bcrumb" style="background-color: transparent;">
-                    <li class="breadcrumb-item active" aria-current="page">Receiving/Purchase Order</li>
-                </ol>
-               
-            </nav> -->
-          
-
             <button
             type="button"
             class="btn-sm header-button pull-right"
             [routerLink]="['/vendorsmodule/vendorpages/app-polist']">
-            PO List
+            Receiving PO List
            </button>
 
          </div>
