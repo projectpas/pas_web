@@ -1,10 +1,4 @@
-﻿<!-- <div [@fadeInOut] class="page-content"> -->
-<!-- <div class="right_col" role="main" style="min-height: 629px;"> -->
-<!-- <div class="x_panel"> -->
-<!-- <div class="x_content"> -->
-<!-- <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb> -->
-
-<div class="card new-card">
+﻿<div class="card new-card">
   <div class="card-header header">
     <div class="row">
       <div class="col">
@@ -18,23 +12,6 @@
       </div>
     </div>
   </div>
-
-  <!-- <div class="card-header bg-primary new-card-header">
-    <div class="row">
-      <div class="col">
-        <h4 class="new-card-heading">Publications Listing
-        </h4>
-      </div>
-      <div>
-        <button type="button" class="btn-sm new-btn-primary" matTooltip="Add Publication" matTooltipPosition="above"
-          [routerLink]="[
-                    '/singlepages/singlepages/app-create-publication'
-                  ]">
-          Add Publication
-        </button>
-      </div>
-    </div>
-  </div> -->
   <div class="card-body new-card-body">
     <p-table #dt class="rpo-table-cstm rro-table-cstm pub-ptable-cstm croes" [first]="0" [rows]="pagesize"
       [value]="allpublicationInfo" [metaKeySelection]="true" [paginator]="true" [pageLinks]="3"
@@ -60,17 +37,6 @@
           </div>
         </div>
         <div class="row">
-          <!-- <div class="col">
-                    <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
-                      matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
-                      data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
-                      data-target="#downloadPublication"></button>
- 
-                    <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
-                      matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
-                      (click)="dt.exportCSV({ selectionOnly: true })"></button>
-
-                  </div> -->
           <div class="col">
             <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
               matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
@@ -118,25 +84,6 @@
                         (click)="getVenListByStatus('ALL')" [(ngModel)]="currentstatus" />
                       <span class="checkmark"></span>All</label>
                   </div>
-                  <!-- <div class="checkbox-cstm" style="margin-left: 0;">
-                            <label
-                              style="width: auto !important; margin-top: 3px;"
-                            >
-                              <input
-                                type="checkbox"
-                                [(ngModel)]="currentDeletedstatus"
-                                name="cparent"
-                                id="cparent"
-                                (click)="
-                                  getDeleteListByStatus($event.target.checked)
-                                "
-                              />
-                              <span class="cr"
-                                ><i class="cr-icon pi pi-check"></i
-                              ></span>
-                              Show Deleted List
-                            </label>
-                          </div> -->
                   <div class="checkbox-cstm" style="margin-left: 0;">
                     <label style="width: auto !important; margin-top: 3px;">
                       <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
@@ -199,44 +146,14 @@
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
 
-            <!-- <input type="text" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    " [ngModel]="inputValue" />
-
-                    <input type="text" *ngIf="col.field == 'updatedBy'" name="updatedBy" style="width: 100%;" (change)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    " [ngModel]="inputValue" /> -->
-
-            <!-- <input type="date" *ngIf="col.field == 'verifiedDate'" name="verifiedDate" style="width: 100%;"
-                      (change)="
-                        dt.filter($event.target.value, col.field, 'contains')
-                      " [ngModel]="inputValue" /> -->
-
-
-            <!-- <input type="date" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
-                      dt.filter($event.target.value, col.field, 'contains')
-                    " [ngModel]="inputValue" /> -->
 
             <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width: 100%;" (change)="
                     dt.filter($event.target.value, col.field, 'contains')
                   " [ngModel]="inputValue" />
-            <!-- <input type="date" *ngIf="col.field == 'modifyBy'" name="modifyBy" style="width: 100%;" (change)="
-                  dt.filter($event.target.value, col.field, 'contains')
-                " [ngModel]="inputValue" /> -->
             <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width: 100%;" (change)="
                 dt.filter($event.target.value, col.field, 'contains')
               " [ngModel]="inputValue" />
-            <!-- 
-                    <input type="date" class="hidePlaceHolder table-header-input-width"
-                      *ngIf="col.field == 'createdDate'" name="createdDate"
-                      (change)="dt.filter($event.target.value, col.field, 'contains')">
-                    <input type="date" class="hidePlaceHolder table-header-input-width"
-                      *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                      (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
           </th>
-          <!-- <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
-                                            <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
-                                        </th> -->
           <th style="width: 140px; position: sticky;"></th>
         </tr>
       </ng-template>
@@ -278,12 +195,6 @@
               <span><a class="btn nobg" (click)="openDocumentsList(documentsContent, rowData)" matTooltip="Documents"
                   matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
               </span>
-              <!-- <span>
-                        <a class="btn btn-info boxed-float-btn nobg"
-                          (click)="openDocumentsList(documentsContent, rowData)" data-toggle="tooltip"
-                          data-toggle="modal" matTooltip="View Document" matTooltipPosition="above"><i
-                            class="fa fa-file-text"></i></a>
-                      </span> -->
 
               <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
                     class="fa fa-pencil"> </i></a>
@@ -338,10 +249,6 @@
     </p-table>
   </div>
 </div>
-<!-- </div> -->
-<!-- </div> -->
-<!-- </div> -->
-<!-- </div> -->
 
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
@@ -392,7 +299,6 @@
 
 <div id="publicationHistory" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-xl">
-    <!-- Modal content-->
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">
@@ -412,9 +318,7 @@
               </tr>
             </thead>
             <tbody class="audithistory-cstm">
-              <!--*ngIf="auditHistory.length> 0"-->
               <tr *ngFor="let audit of auditHistory; let i = index">
-                <!-- auditHistory[i>0 ? i-1 : i] -->
                 <td [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
@@ -493,40 +397,6 @@
                   }">
                   {{ audit.publishedBy }}
                 </td>
-                <!-- <td [ngStyle]="{
-                    color: getColorCodeForHistory(
-                      i,
-                      'revisionDate',
-                      audit.revisionDate
-                    )
-                      ? 'black'
-                      : 'red'
-                  }">
-                  {{ audit.revisionDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td> -->
-
-                <!-- <td [ngStyle]="{
-                    color: getColorCodeForHistory(
-                      i,
-                      'nextReviewDate',
-                      audit.nextReviewDate
-                    )
-                      ? 'black'
-                      : 'red'
-                  }">
-                  {{ audit.nextReviewDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td> -->
-                <!-- <td [ngStyle]="{
-                    color: getColorCodeForHistory(
-                      i,
-                      'expirationDate',
-                      audit.expirationDate
-                    )
-                      ? 'black'
-                      : 'red'
-                  }">
-                  {{ audit.expirationDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td> -->
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'location', audit.location)
                       ? 'black'

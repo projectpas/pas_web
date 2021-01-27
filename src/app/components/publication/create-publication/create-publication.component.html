@@ -3,11 +3,6 @@
         <div class="row">
             <div class="col">
                 <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Publication
-
-                    <!-- <button *ngIf="isEditMode" class="btn-sm header-button header-button-alignment"
-                        (click)="toggle_po_header=!toggle_po_header">
-                        {{toggle_po_header ? 'Collapse' : 'Expand'}}
-                    </button> -->
                 </h4>
 
             </div>
@@ -20,20 +15,6 @@
             </div>
         </div>
     </div>
-    <!-- <div class="card-header bg-primary">
-        <div class="row">
-            <div class="col">
-                <h4 class="new-card-heading">
-                    {{isEditMode ? 'Edit' : 'Create' }} Publication</h4>
-            </div>
-            <div>
-                <button type="button" class="btn-sm new-btn-primary"
-                    [routerLink]="['/singlepages/singlepages/app-publication']">
-                    Publication List
-                </button>
-            </div>
-        </div>
-    </div> -->
     <div class="card-body new-card-body">
         <div>
             <div class="md-stepper-horizontal orange new-stepper-align">
@@ -80,11 +61,6 @@
                 <span class="span-header-red"> {{this.sourcePublication.publicationId }} </span>
             </p>
         </div>
-        <!-- <div class="col-md-4">
-          <p class="fs12">
-            <label class="control-label labels-font-header" style="width: auto; ">Publication Description:  </label>
-            <span class="span-header-red"> {{this.sourcePublication.description }} </span> </p>
-        </div>   -->
         <div class="col-md-4">
             <p class="fs12">
                 <label class="control-label labels-font-header" style="width: auto; ">Publication Type :</label>
@@ -100,9 +76,6 @@
     </div>
     <div class="card" style="padding: 10px; margin-top: 10px;">
         <div [ngClass]="{hideTab : currentTab !== 'General'}">
-            <!-- <div class="card-header_old header-text_old ">
-              General Info
-            </div> -->
             <div class="card-body_old">
                 <form #generalInfoForm="ngForm">
                     <div class="form-row col-row">
@@ -130,14 +103,8 @@
                             <div class="form-group">
                                 <label for="Publicationtype">
                                     Publication Type<span class="clr-red">*</span>
-                                    <!-- <a data-dismiss="modal"    matTooltip="Add Publication Type"
-                                    matTooltipPosition="above"
-                                    [routerLink]="[
-                                      '/singlepages/singlepages/app-publication-type'
-                                    ]"
-                                    ><i class="fa fa-plus-circle fa-lg"></i></a> -->
+
                                 </label>
-                                <!-- <p-dropdown name="gPubType" class="pub-type-select" #pubType="ngModel" placeholder="Select Publication Type"  [options]="publicationTypes" [(ngModel)]="sourcePublication.publicationTypeId" required></p-dropdown> -->
                                 <select name="gPubType" [(ngModel)]="sourcePublication.publicationTypeId" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let type of publicationTypes" [ngValue]="type.value">
@@ -164,12 +131,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="Publishedby">Published By <span class="clr-red">*</span></label>
-                                <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gPublishBy" [(ngModel)]="sourcePublication.publishby"  /> -->
-                                <!-- <select name="publishedById" [(ngModel)]="sourcePublication.publishedById" >
-                                  <option *ngFor="let employee of employeeList" [ngValue]="employee.value">
-                                    {{ employee.label }}
-                                  </option>
-                                </select> -->
+
                                 <select class="mb-2" name="publishedById" [(ngModel)]="sourcePublication.publishedById"
                                     (change)="changePublishedById()" required>
                                     <option value="null"> -- Select --</option>
@@ -189,20 +151,6 @@
                                             required="{{sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3}}">
                                         </p-autoComplete>
                                     </div>
-                                    <!-- <div class="col-sm-1">
-                                      <a data-dismiss="modal" *ngIf="sourcePublication.publishedById == 2"   matTooltip="Add Publication Type"
-                                      matTooltipPosition="above"
-                                      [routerLink]="[
-                                        '/vendorsmodule/vendorpages/app-vendor-general-information'
-                                      ]"
-                                      ><i class="fa fa-plus-circle fa-lg"></i></a>
-                                      <a data-dismiss="modal" *ngIf="sourcePublication.publishedById == 3"   matTooltip="Add Publication Type"
-                                      matTooltipPosition="above"
-                                      [routerLink]="[
-                                        '/singlepages/singlepages/app-manufacturer'
-                                      ]"
-                                      ><i class="fa fa-plus-circle fa-lg"></i></a>
-                                    </div> -->
                                 </div>
 
 
@@ -222,9 +170,6 @@
                                     [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                     [showIcon]="true" id="openDate" #revisionDate="ngModel" required>
                                 </p-calendar>
-                                <!-- <p-calendar [showIcon]="true" name="revisionDate" [yearNavigator]="true"
-                                    [monthNavigator]="true" yearRange="1900:2100"
-                                    [(ngModel)]="sourcePublication.revisionDate"></p-calendar> -->
                             </div>
                             <div class="form-group">
                                 <label>Next Review Date</label>
@@ -233,28 +178,6 @@
                                     [(ngModel)]="sourcePublication.nextReviewDate"
                                     [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
-                            <!-- [disabled]="true"     -->
-                            <!-- <div class="form-group">
-                                <label>Employee</label>
-                                <p-dropdown [options]="employeeList" name="gEmployee" class="pub-type-select" [(ngModel)]="sourcePublication.employeeId" #pubID="ngModel"></p-dropdown>
-                              </div> -->
-                            <!-- <div class="form-group" style="margin-top: 15px; margin-bottom: 8px;">
-                                <div class="checkbox-cstm">
-                                  <label>
-                                    <input
-                                      type="checkbox"
-                                      name="verifiedStatus"
-                                      [(ngModel)]="sourcePublication.verifiedStatus"
-                                      [checked]="sourcePublication.verifiedStatus == true"
-                                    />
-                                    <span class="cr"
-                                      ><i class="cr-icon pi pi-check"></i
-                                    ></span>
-                                    Status
-                                  </label>
-                              </div>
-                            </div> -->
-
                         </div>
 
                         <div class="col-md-3">
@@ -267,10 +190,7 @@
                                     [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <div class="form-group">
-                                <!-- <span class="clr-red" *ngIf="sourcePublication.verifiedStatus == true">*</span> -->
                                 <label>Verified By <span class="clr-red">*</span></label>
-                                <!-- <p-dropdown [options]="employeeList" name="verifiedBy" class="pub-type-select" [(ngModel)]="sourcePublication.verifiedBy" #pubID="ngModel" [required]="sourcePublication.status == true"></p-dropdown> -->
-                                <!-- [required]="sourcePublication.verifiedStatus == true" -->
                                 <select name="discountId" [(ngModel)]="sourcePublication.verifiedBy" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let employee of employeeList" [ngValue]="employee.value">
@@ -278,10 +198,6 @@
                                     </option>
                                 </select>
                             </div>
-                            <!-- <div class="form-group">
-                              <label>Verified By</label>
-                              <input pInputText type="text" name="gVerifiedby" [(ngModel)]="sourcePublication.verifiedBy" />
-                            </div> -->
                             <div class="form-group">
                                 <label>Verified Date <span class="clr-red">*</span></label>
                                 <p-calendar [showIcon]="true" name="gVerifiedDate" required [yearNavigator]="true"
@@ -297,200 +213,17 @@
                                     (completeMethod)="getGlocationsList($event)" [size]="30" [minLength]="1"
                                     [dropdown]="true" required>
                                 </p-autoComplete>
-                                <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gLocation" [(ngModel)]="sourcePublication.location"  /> -->
 
                             </div>
-                            <!-- <div style="width: auto; float: left;">
-                                <div class="form-group">
-                                    <div class="checkbox-cstm">
-                                        <label style="width: 50px !important; margin-top: 3px;">
-
-                                            <input type="checkbox" [(ngModel)]="sourcePublication.isActive"
-                                                name="isActive" id="active" />
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Active
-                                        </label>
-                                    </div>
-
-                                    <div class="checkbox-cstm" style="margin-left: 0;">
-                                        <label style="width: auto !important; margin-top: 3px;">
-
-                                            <input type="checkbox" [(ngModel)]="sourcePublication.inactive"
-                                                name="inactive" id="inactive" />
-                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            In-Active
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> -->
 
                         </div>
-                        <!-- 
-                        <div class="col-md-6">
-                            <div class="card" style="padding: 10px">
-                                <div class="form-row">
-                                    <div class="col-md-4">
-
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <span>File Upload </span>
-                                            <button (click)="addDocumentDetails()" class="plusicon-cstm"
-                                                data-toggle="modal" data-target="#addDocumentDetailsNew" style="background: #ffffff;
-                                            border: 1px solid #fff;">
-                                                <i class="fa fa-plus-circle fa-lg" matTooltip="Create Documents"
-                                                    matTooltipPosition="above"
-                                                    [ngClass]="{ grayColor: !sourcePublication.tagTypeId }"></i>
-                                            </button>
-
-                                        </div>
-                                        <div class="form-group">
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div>
-                                    <h6 class="panel-title" style="padding-left: 10px; margin-top: 20px;">Attachment
-                                        Details</h6>
-                                    <p-table #table4 class="rpo-table-cstm" [columns]="selectedColumnsDoc"
-                                        [value]="sourceViewforDocumentList" [paginator]="true" [rows]="3"
-                                        [rowsPerPageOptions]="[5, 10, 15, 20]">
-                                        <ng-template pTemplate="header" let-columns>
-                                            <tr>
-                                                <th *ngFor="let col of columns" style="width: 100px;">
-                                                    {{ col.header }}
-                                                </th>
-                                                <th style="width: 100px;">Action</th>
-                                            </tr>
-
-                                        </ng-template>
-                                        <ng-template pTemplate="header" let-columns>
-                                            <tr>
-                                                <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
-                                                    [pSortableColumn]="col.field">
-                                                    {{ col.header }}
-                                                    <p-sortIcon [field]="col.field">
-                                                    </p-sortIcon>
-                                                </th>
-                                                <th>Actions</th>
-
-                                            </tr>
-                                            <tr>
-                                                <th style="width:120px" *ngFor="let col of columns"
-                                                    [ngSwitch]="col.field">
-                                                    <input type="text"
-                                                        (input)="table4.filter($event.target.value, col.field,'contains') "
-                                                        *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'"
-                                                        style="width:100%;" pInputText>
-                                                    <input type="date" class="hidePlaceHolder"
-                                                        *ngIf="col.field == 'createdDate'" name="createdDate"
-                                                        style="width:100%;"
-                                                        (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                                    <input type="date" class="hidePlaceHolder"
-                                                        *ngIf="col.field == 'updatedDate'" name="updatedDate"
-                                                        style="width:100%;"
-                                                        (change)="dateFilterForTableNew($event.target.value, col.field )">
-                                                </th>
-                                                <th style="width:140px;position:sticky"></th>
-
-                                            </tr>
-                                        </ng-template>
-
-                                        <ng-template pTemplate="body" let-rowData let-columns="columns"
-                                            let-rowIndex="rowIndex">
-                                            <tr [pSelectableRow]="rowData">
-                                                <ng-container *ngFor="let col of columns">
-                                                    <td *ngIf="col.field != 'fileName'" class="ui-resizable-column"
-                                                        pReorderableRowHandle>
-                                                        {{
-                                                        col.field == 'createdDate'
-                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                                        : rowData[col.field] && col.field == 'updatedDate'
-                                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                                        : rowData[col.field]
-                                                        }}
-                                                    </td>
-                                                    <td *ngIf="col.field == 'fileName'">
-                                                        <a class="filelink" *ngIf="rowData.isFileFromServer == true"
-                                                            (click)="downloadFileUpload(rowData.link)">
-                                                            {{ rowData[col.field] }}
-                                                        </a>
-                                                        <a *ngIf="rowData.isFileFromServer == false"
-                                                            [href]="rowData.link" download="{{rowData.fileName}}"
-                                                            matTooltip="Download" matTooltipPosition="above"
-                                                            class="filelink">
-                                                            {{ rowData[col.field] }}
-
-                                                        </a>
-                                                    </td>
-                                                </ng-container>
-
-                                                <td style="width: 70px;">
-                                                    <span data-toggle="modal" data-target="#addDocumentDetailsNew">
-                                                        <a class="btn nobg"
-                                                            (click)="editCustomerDocument(rowData,rowIndex)"
-                                                            matTooltip="Edit" matTooltipPosition="above"><i
-                                                                class="fa fa-pencil"></i></a>
-                                                    </span>
-
-                                                    <a class="btn btn-danger nobg"
-                                                        (click)="deleteAttachmentRow(rowData, rowIndex,deleteContent)"
-                                                        matTooltip="Delete" matTooltipPosition="above"
-                                                        data-target="#delete" data-toggle="modal">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-
-                                                    <button [disabled]="!rowData.isFileFromServer"
-                                                        class="btn-edit set_proper_align set_position" mat-icon-button
-                                                        (click)="openHistory(contentAuditHist,rowData)"
-                                                        matTooltip="History" matTooltipPosition="above">
-                                                        <i class="fa fa-history"
-                                                            [ngClass]="{ grayColor: !rowData.isFileFromServer }"></i>
-                                                    </button>
-
-                                                </td>
-                                            </tr>
-
-                                        </ng-template>
-                                        <ng-template pTemplate="emptymessage" let-columns
-                                            *ngIf="sourceViewforDocumentList.length == 0">
-                                            <tr>
-                                                <td [attr.colspan]="10"
-                                                    style="color: red; font-weight: bold; text-align: center">
-                                                    No records found
-                                                </td>
-
-                                            </tr>
-                                        </ng-template>
-
-                                        <ng-template pTemplate="summary" id="footer">
-                                            <label id="footer" class="footer">Total:</label>
-                                            <input style="width: 5%;" [(ngModel)]="totalRecordNew" name="no'of records"
-                                                disabled pInputText type="text" />
-
-                                            &nbsp;&nbsp;
-                                            <label id="footer" class="footer1">Pages Count:</label>
-
-                                            <input style="width: 5%;" [ngModel]="totalPagesNew" name="page count"
-                                                disabled pInputText type="text" />
-                                        </ng-template>
-
-                                    </p-table>
-
-                                </div>
-                            </div>
-                        </div> -->
-
                     </div>
                     <div class="form-row col-row" *ngIf="publicationRecordId">
-                        <!-- <div class="col-md-6"> -->
                         <div class="col-md-12">
                             <app-common-documents [moduleName]="moduleName" [referenceId]="publicationRecordId"
                                 [isViewMode]="false" [offLineUpload]="true">
                             </app-common-documents>
                         </div>
-                        <!-- </div> -->
                     </div>
 
                     <div class="pull-right">
@@ -619,7 +352,6 @@
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <!-- <th>Sl.No</th> -->
                                     <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{ col.header }}
@@ -638,7 +370,6 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
-                                    <!-- <td>{{ rowIndex + 1 }}</td> -->
                                     <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
@@ -660,10 +391,6 @@
                                                     matTooltipPosition="above">
                                                     <i class="fa fa-history"></i></a></span>
                                         </div>
-                                        <!-- <span><a class="btn nobg" (click)="restore(restoreId, rowData)"
-                                                matTooltip="Restore Record" matTooltipPosition="above"><i
-                                                    class="fa fa-undo" aria-hidden="true"></i></a>
-                                        </span> -->
                                     </td>
                                 </tr>
                             </ng-template>
@@ -704,7 +431,6 @@
         </div>
 
 
-        <!-- Aircraft Information  -->
 
         <div [ngClass]="{hideTab : currentTab !== 'Aircraft'}">
             <div class="col-md-12 ">
@@ -829,7 +555,6 @@
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <!-- <th>ID</th> -->
                                     <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{ col.header }}
@@ -848,7 +573,6 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
-                                    <!-- <td>{{ rowIndex + 1 }}</td> -->
                                     <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
@@ -907,7 +631,6 @@
             <div>
                 <div class="col-md-12" *ngIf="showAdvancedSearchCardAta == true">
                     <div class="shadow-Box">
-                        <!-- <h4>Search ATA Chapters</h4> -->
                         <div class="col-md-1">
                             <h4 class="f-s-14" style="margin-top: 22px;">Search:</h4>
                         </div>
@@ -1005,7 +728,6 @@
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <!-- <th>ID</th> -->
                                     <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{ col.header }}
@@ -1024,7 +746,6 @@
                             </ng-template>
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
-                                    <!-- <td>{{ rowIndex + 1 }}</td> -->
                                     <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
                                         {{ rowData[col.field] }}
                                     </td>
@@ -1061,13 +782,6 @@
                     <button class="btn btn-primary pull-right button-save-cstm" type="button" (click)="addNewRecord()">
                         Add New
                     </button>
-                    <!--  <button
-                      class="btn btn-primary pull-right button-save-cstm"
-                      type="button"
-                      (click)="saveTab('Atachapter')"
-                      >
-                      Save
-                    </button> -->
                     <button class="btn btn-primary pull-right button-save-cstm" type="submit"
                         (click)="changeOfTab('Aircraft')">
                         Previous
@@ -1078,7 +792,6 @@
         </div>
     </div>
 </div>
-<!-- Add DashNumber Popup -->
 <div class="modal fade" id="downloadPublicationConfirmation" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
@@ -1152,7 +865,6 @@
 
 <div id="addDashNumber" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -1345,9 +1057,6 @@
             <div class="clear"></div>
         </div>
 
-        <!-- <strong>PN Mapping:
-            <span class="new-label">{{selectedRowforDelete.partNumber}}</span>
-        </strong> -->
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
@@ -1388,13 +1097,6 @@
                                 <textarea class="form-control" name="description" (ngModelChange)="enableSave()"
                                     [(ngModel)]="documentInformation.docDescription"></textarea>
                             </div>
-                            <!-- <div class="form-group">
-                                <label>Memo </label>
-                                <textarea class="form-control"
-                                          name="memo"
-                                          (ngModelChange)="enableSave()" 
-                                          [(ngModel)]="documentInformation.docMemo"></textarea>
-                            </div> -->
                             <div class="form-group">
                                 <span class="label">Memo </span>
                                 <div class="col-sm-11">
@@ -1484,7 +1186,6 @@
     </div>
 </div>
 
-<!-- memo code starts here -->
 <div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;" role="dialog" data-backdrop="static"
     data-keyboard="false">
     <div class="modal-dialog modal-sm">
@@ -1525,7 +1226,6 @@
         </div>
     </div>
 </div>
-<!-- memo code ends here -->
 
 <ng-template #contentAuditHist let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
     <div class="modal-header">
@@ -1583,7 +1283,6 @@
                   ? 'black'
                   : 'red'
               }" [innerHTML]="audit.docMemo">
-                            <!-- {{ audit.docMemo }} -->
                         </td>
                         <td [ngStyle]="{
                 color: getColorCodeForHistory(i, 'fileName', audit.fileName)
