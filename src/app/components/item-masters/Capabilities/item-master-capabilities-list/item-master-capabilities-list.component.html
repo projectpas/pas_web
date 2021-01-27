@@ -2,7 +2,7 @@
     <div class="card-header header" *ngIf="!isEnableItemMasterView">
 		<div class="row">
 		  <div class="col">
-			<h4 class="header-name">Capabilities Info</h4>
+			<h4 class="header-name">Capabilities List</h4>
 		  </div>
 		  <div>
 			<button
@@ -198,7 +198,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="allItemMasterCapsList?.length == 0">
             <tr>
-                <td [attr.colspan]="11" class="no-records-cstm no-records-msg">
+                <td [attr.colspan]="18" class="no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>
