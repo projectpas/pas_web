@@ -1,5 +1,26 @@
 ﻿<div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="card-header header">
+        <div class="row">
+            <div class="col">
+                <h4 class="header-name">{{isEditMode ? 'Edit' : 'Create'}} Publication
+
+                    <!-- <button *ngIf="isEditMode" class="btn-sm header-button header-button-alignment"
+                        (click)="toggle_po_header=!toggle_po_header">
+                        {{toggle_po_header ? 'Collapse' : 'Expand'}}
+                    </button> -->
+                </h4>
+
+            </div>
+
+            <div>
+                <button type="button" class="btn-sm header-button pull-right"
+                    [routerLink]="['/singlepages/singlepages/app-publication']">
+                    Publication List
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="card-header bg-primary">
         <div class="row">
             <div class="col">
                 <h4 class="new-card-heading">
@@ -12,7 +33,7 @@
                 </button>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="card-body new-card-body">
         <div>
             <div class="md-stepper-horizontal orange new-stepper-align">
@@ -88,7 +109,8 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="workflowid">Entry Date</label>
-                                <p-calendar [showIcon]="true" [disabled]="true" name="gEntryDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                <p-calendar [showIcon]="true" [disabled]="true" name="gEntryDate" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.entryDate"></p-calendar>
                             </div>
                             <div class="form-group">
@@ -130,16 +152,16 @@
                                 <input class="form-control" #pubID="ngModel" type="text" [maxLength]="55" name="gAsd"
                                     [(ngModel)]="sourcePublication.asd" />
                             </div>
+                        </div>
+
+                        <div class="col-md-3">
+
 
                             <div class="form-group">
                                 <label for="sequence">Sequence</label>
                                 <input type="number" name="gSequence" class="form-control" [maxLength]="15"
                                     #pubID="ngModel" [(ngModel)]="sourcePublication.sequence" />
                             </div>
-                        </div>
-
-                        <div class="col-md-3">
-
                             <div class="form-group">
                                 <label for="Publishedby">Published By <span class="clr-red">*</span></label>
                                 <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gPublishBy" [(ngModel)]="sourcePublication.publishby"  /> -->
@@ -196,19 +218,19 @@
                             </div>
                             <div class="form-group">
                                 <label>Revision Date</label>
-                                <p-calendar [showIcon]="true" name="revisionDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [(ngModel)]="sourcePublication.revisionDate"></p-calendar>
+                                <p-calendar name="openDate" [(ngModel)]="sourcePublication.revisionDate"
+                                    [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                    [showIcon]="true" id="openDate" #revisionDate="ngModel" required>
+                                </p-calendar>
+                                <!-- <p-calendar [showIcon]="true" name="revisionDate" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100"
+                                    [(ngModel)]="sourcePublication.revisionDate"></p-calendar> -->
                             </div>
                             <div class="form-group">
                                 <label>Next Review Date</label>
-                                <p-calendar [showIcon]="true" name="nextReviewDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                <p-calendar [showIcon]="true" name="nextReviewDate" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.nextReviewDate"
-                                    [minDate]="sourcePublication.revisionDate"></p-calendar>
-                            </div>
-                            <div class="form-group">
-                                <label>Expiration Date</label>
-                                <p-calendar [showIcon]="true" name="expirationDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
-                                    [(ngModel)]="sourcePublication.expirationDate"
                                     [minDate]="sourcePublication.revisionDate"></p-calendar>
                             </div>
                             <!-- [disabled]="true"     -->
@@ -236,6 +258,14 @@
                         </div>
 
                         <div class="col-md-3">
+
+                            <div class="form-group">
+                                <label>Expiration Date</label>
+                                <p-calendar [showIcon]="true" name="expirationDate" [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100"
+                                    [(ngModel)]="sourcePublication.expirationDate"
+                                    [minDate]="sourcePublication.revisionDate"></p-calendar>
+                            </div>
                             <div class="form-group">
                                 <!-- <span class="clr-red" *ngIf="sourcePublication.verifiedStatus == true">*</span> -->
                                 <label>Verified By <span class="clr-red">*</span></label>
@@ -254,7 +284,8 @@
                             </div> -->
                             <div class="form-group">
                                 <label>Verified Date <span class="clr-red">*</span></label>
-                                <p-calendar [showIcon]="true" name="gVerifiedDate" required [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
+                                <p-calendar [showIcon]="true" name="gVerifiedDate" required [yearNavigator]="true"
+                                    [monthNavigator]="true" yearRange="1900:2100"
                                     [(ngModel)]="sourcePublication.verifiedDate"></p-calendar>
                             </div>
                             <div class="form-group">
@@ -269,11 +300,11 @@
                                 <!-- <input class="form-control" #pubID="ngModel" [maxLength]="55" type="text" name="gLocation" [(ngModel)]="sourcePublication.location"  /> -->
 
                             </div>
-                            <div style="width: auto; float: left;">
+                            <!-- <div style="width: auto; float: left;">
                                 <div class="form-group">
                                     <div class="checkbox-cstm">
                                         <label style="width: 50px !important; margin-top: 3px;">
-                                            <!--  -->
+
                                             <input type="checkbox" [(ngModel)]="sourcePublication.isActive"
                                                 name="isActive" id="active" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -283,7 +314,7 @@
 
                                     <div class="checkbox-cstm" style="margin-left: 0;">
                                         <label style="width: auto !important; margin-top: 3px;">
-                                            <!--  -->
+
                                             <input type="checkbox" [(ngModel)]="sourcePublication.inactive"
                                                 name="inactive" id="inactive" />
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -291,7 +322,7 @@
                                         </label>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                         </div>
                         <!-- 
@@ -569,6 +600,16 @@
                                             (click)="pnMappingTable.exportCSV({ selectionOnly: true })"
                                             style="padding: 5px 10px !important;"></button>
                                     </div>
+                                    <!-- <div> -->
+                                    <div class="checkbox-cstm" style="margin-right: 20px;">
+                                        <label style="width: auto !important; margin-top: 3px;">
+                                            <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent"
+                                                id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
+                                            <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                            Show Deleted List
+                                        </label>
+                                    </div>
+                                    <!-- </div> -->
                                 </div>
                             </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
@@ -602,18 +643,27 @@
                                         {{ rowData[col.field] }}
                                     </td>
                                     <td>
-                                        <span>
-                                            <a class="btn btn-danger nobg" (click)="onDeletePNMappingRow(rowData)"
-                                                matTooltip="Delete" matTooltipPosition="above" data-target="#delete"
-                                                data-toggle="modal">
-                                                <i class="fa fa-trash"></i>
-                                            </a>
-                                        </span>
 
-                                        <span><a class="btn nobg" (click)="restore(restoreId, rowData)"
+                                        <div *ngIf="currentDeletedstatus == false">
+
+                                            <span>
+                                                <a class="btn btn-danger nobg" (click)="onDeletePNMappingRow(rowData)"
+                                                    matTooltip="Delete" matTooltipPosition="above" data-target="#delete"
+                                                    data-toggle="modal">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div *ngIf="currentDeletedstatus == true">
+                                            <span data-toggle="modal"><a class="btn nobg"
+                                                    (click)="restore(restoreId, rowData)" matTooltip="History"
+                                                    matTooltipPosition="above">
+                                                    <i class="fa fa-history"></i></a></span>
+                                        </div>
+                                        <!-- <span><a class="btn nobg" (click)="restore(restoreId, rowData)"
                                                 matTooltip="Restore Record" matTooltipPosition="above"><i
                                                     class="fa fa-undo" aria-hidden="true"></i></a>
-                                        </span>
+                                        </span> -->
                                     </td>
                                 </tr>
                             </ng-template>

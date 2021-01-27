@@ -24,6 +24,7 @@ declare var $: any;
 import { DatePipe } from '@angular/common';
 import { ConfigurationService } from '../../services/configuration.service';
 import { CommonService } from '../../services/common.service';
+import { MenuItem } from 'primeng/api';
 // import { truncate } from 'fs';
 
 @Component({
@@ -130,6 +131,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     locationInput: string = "";
     lazyLoadEventDataInput: any;
     inputValue: any;
+
+    breadcrumbs: MenuItem[];
+    home: any;
     headersforPNMapping = [
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },
@@ -208,8 +212,11 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     }
     ngOnInit(): void {
-        this.employeedata();
-
+        // this.employeedata();
+        this.breadcrumbs = [
+            { label: 'Publications' },
+            { label: 'Publications List' },
+        ];
         this.cols = [
             { field: 'partNos', header: 'PN' },
             { field: 'pnDescription', header: 'PN Description' },
@@ -240,7 +247,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'publishedBy', header: 'Published By' },
             // { field: 'revisionDate', header: 'Revision Date' },
             // { field: 'nextReviewDate', header: 'Next Review Date' },
-            { field: 'expirationDate', header: 'Expiration Date' },
+            // { field: 'expirationDate', header: 'Expiration Date' },
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
@@ -248,8 +255,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-publication';
         this.breadCrumb.bredcrumbObj.next(this.breadCrumb.currentUrl);
         this.selectedColumns = this.cols;
-        this.getAllAircraftManufacturer();
-        this.getAllATAChapter();
+        // this.getAllAircraftManufacturer();
+        // this.getAllATAChapter();
 
 
     }
@@ -394,7 +401,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
 
     private loadMasterCompanies() {
-        this.alertService.startLoadingMessage();
+        // this.alertService.startLoadingMessage();
         // this.loadingIndicator = true;
         this.isSpinnerVisible = true;
         this.masterComapnyService.getMasterCompanies().subscribe(
@@ -423,8 +430,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     private onDataLoadSuccessful(allWorkFlows) {
         // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        // this.alertService.stopLoadingMessage();
+        // this.loadingIndicator = false;
         this.dataSource.data = allWorkFlows;
         this.allpublicationInfo = allWorkFlows.map(x => {
             return {
@@ -437,16 +444,16 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     private onDataMasterCompaniesLoadSuccessful(allComapnies: MasterCompany[]) {
         // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        // this.alertService.stopLoadingMessage();
+        // this.loadingIndicator = false;
         this.allComapnies = allComapnies;
 
     }
 
     private onDataLoadFailed(error: any) {
         // alert(error);
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        // this.alertService.stopLoadingMessage();
+        // this.loadingIndicator = false;
 
     }
 
@@ -660,7 +667,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     openEdit(row) {
         this.isSpinnerVisible = true;
         const { publicationRecordId } = row;
-        this.router.navigateByUrl(`/singlepages/singlepages/app-create-publication/edit/${publicationRecordId}`);
+        this.router.navigateByUrl(`/singlepages/singlepages/app-publication/edit/${publicationRecordId}`);
         // // this.router.navigateByUrl(`/singlepages/singlepages/app-publication/app-create-publication/edit/${publicationRecordId}`);
         // this.disableSave = false;
         // this.isEditMode = true;
@@ -795,8 +802,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     private saveFailedHelper(error: any) {
         this.isSpinnerVisible = false;
         this.isSaving = false;
-        this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
+        // this.alertService.stopLoadingMessage();
+        // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
         this.alertService.showStickyMessage(error, null, MessageSeverity.error);
     }
 
@@ -811,7 +818,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     }
 
     private employeedata() {
-        this.alertService.startLoadingMessage();
+        // this.alertService.startLoadingMessage();
         this.isSpinnerVisible = true;
 
         this.employeeService.getEmployeeList().subscribe(
@@ -829,8 +836,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
 
     private onempDataLoadSuccessful(getEmployeeCerficationList: any[]) {
         // alert('success');
-        this.alertService.stopLoadingMessage();
-        this.loadingIndicator = false;
+        // this.alertService.stopLoadingMessage();
+        // this.loadingIndicator = false;
         //this.dataSource.data = getEmployeeCerficationList;
         this.allEmployeeinfo = getEmployeeCerficationList;
     }
