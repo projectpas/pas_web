@@ -102,6 +102,7 @@ export class CreatePublicationComponent implements OnInit {
   employeeList: any = [];
   ataList = [];
   isSpinnerVisible = false;
+  currentDeletedstatus = false;
   headersforPNMapping = [
     { field: 'partNumber', header: 'PN' },
     { field: 'partDescription', header: 'PN Description' },
@@ -293,34 +294,47 @@ export class CreatePublicationComponent implements OnInit {
       this.getPublicationDataonEdit();
 
       //get PN mapping edit mode
-      this.isSpinnerVisible = true;
-      this.publicationService
-        .getPublicationPNMapping(this.publicationRecordId)
-        .subscribe(res => {
-          this.isSpinnerVisible = false;
-          this.pnMappingList = res.map(x => {
-            return {
-              ...x,
-              partNumber: x.partNumber,
-              partDescription: x.partDescription,
-              itemClassification: x.itemClassification,
-              manufacturer: x.manufacturerName
-            };
-          });
-        }, error => {
 
-          this.isSpinnerVisible = true;
-        });
 
       //get aircraft info edit mode
       this.getAircraftInformationByPublicationId();
 
       //get atachapter edit mode
+      this.getPnMapping();
       this.getAtaChapterByPublicationId();
       this.getFilesByPublicationId();
       this.toGetDocumentsListNew(this.publicationRecordId);
     }
 
+  }
+
+  getPnMapping() {
+    this.isSpinnerVisible = true;
+    this.publicationService
+      .getPublicationPNMapping(this.publicationRecordId)
+      .subscribe(res => {
+        this.isSpinnerVisible = false;
+        this.pnMappingList = res.map(x => {
+          return {
+            ...x,
+            partNumber: x.partNumber,
+            partDescription: x.partDescription,
+            itemClassification: x.itemClassification,
+            manufacturer: x.manufacturerName
+          };
+
+        });
+        // this.pnMappingList = this.pnMappingList.filter(x => x.isActive == true);
+        // this.pnMappingList = [];
+        // this.pnMappingList = response.filter(x => {
+        //   if (x.isActive == true) {
+        //     this.pnMappingList.push(x);
+        //   }
+        // });
+      }, error => {
+
+        this.isSpinnerVisible = true;
+      });
   }
 
   get userName(): string {
@@ -736,6 +750,7 @@ export class CreatePublicationComponent implements OnInit {
             this.uploadDocs.next(true);
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
+            this.isEditMode = true;
             this.publicationRecordId = publicationRecordId,
               // this.changeOfTab('PnMap'),
               role => this.saveSuccessHelper(role),
@@ -871,35 +886,37 @@ export class CreatePublicationComponent implements OnInit {
       this.publicationService.postMappedPartNumbers(mapData).subscribe(res => {
         this.isDisabledSteps = true;
         this.isSpinnerVisible = false;
-        this.publicationService
-          .getPublicationPNMapping(this.publicationRecordId)
-          .subscribe(res => {
+        this.getPnMapping();
+        // this.publicationService
+        //   .getPublicationPNMapping(this.publicationRecordId)
+        //   .subscribe(res => {
 
 
-            this.isSpinnerVisible = false;
-            this.pnMappingList = res.map(x => {
-              return {
-                ...x,
-                partNumber: x.partNumber,
-                partDescription: x.partDescription,
-                itemClassification: x.itemClassification,
-                manufacturer: x.manufacturerName
-              };
-            }, error => {
+        //     this.isSpinnerVisible = false;
+        //     this.pnMappingList = res.map(x => {
+        //       return {
+        //         ...x,
+        //         partNumber: x.partNumber,
+        //         partDescription: x.partDescription,
+        //         itemClassification: x.itemClassification,
+        //         manufacturer: x.manufacturerName
+        //       };
+        //     }, error => {
 
-              this.isSpinnerVisible = false;
-            });
-            this.alertService.showMessage("Success", `PN Mapping Done Successfully`, MessageSeverity.success);
-            this.getAircraftInformationByPublicationId();
-            this.getAtaChapterByPublicationId();
-          }, error => {
-            this.isSpinnerVisible = false;
-          });
+        //       this.isSpinnerVisible = false;
+        //     });
+        //     this.alertService.showMessage("Success", `PN Mapping Done Successfully`, MessageSeverity.success);
+        //     this.getAircraftInformationByPublicationId();
+        //     this.getAtaChapterByPublicationId();
+        //   }, error => {
+        //     this.isSpinnerVisible = false;
+        //   });
 
 
         // get aircraft mapped data by publication id
       }, error => {
         this.saveFailedHelper(error)
+        this.isSpinnerVisible = false;
       });
     }
   }
@@ -1292,21 +1309,22 @@ export class CreatePublicationComponent implements OnInit {
   deleteConformation(value) {
     if (value === 'Yes') {
       this.publicationService.deleteItemMasterMapping(this.selectedRowforDelete.publicationItemMasterMappingId).subscribe(() => {
-        this.publicationService
-          .getPublicationPNMapping(this.publicationRecordId)
-          .subscribe(res => {
-            this.pnMappingList = res.map(x => {
-              return {
-                ...x,
-                partNumber: x.partNumber,
-                partNumberDescription: x.partNumberDescription,
-                itemClassification: x.itemClassification,
-                manufacturer: x.manufacturer
-              };
-            });
-            this.getAtaChapterByPublicationId();
-            this.getAircraftInformationByPublicationId();
-          });
+        // this.publicationService
+        //   .getPublicationPNMapping(this.publicationRecordId)
+        //   .subscribe(res => {
+        //     this.pnMappingList = res.map(x => {
+        //       return {
+        //         ...x,
+        //         partNumber: x.partNumber,
+        //         partNumberDescription: x.partNumberDescription,
+        //         itemClassification: x.itemClassification,
+        //         manufacturer: x.manufacturer
+        //       };
+        //     });
+        //     this.getAtaChapterByPublicationId();
+        //     this.getAircraftInformationByPublicationId();
+        //   });
+        this.getPnMapping();
         this.alertService.showMessage(
           'Success',
           `Deleted PN Mapping Successfully`,
@@ -1880,6 +1898,37 @@ export class CreatePublicationComponent implements OnInit {
     }, error => {
       this.isSpinnerVisible = false;
     })
+  }
+  getDeleteListByStatus() {
+    this.isSpinnerVisible = true;
+    this.publicationService
+      .getPublicationPNMapping(this.publicationRecordId)
+      .subscribe(res => {
+        this.isSpinnerVisible = false;
+        this.pnMappingList = res.map(x => {
+          // if (x.isDeleted) {
+          return {
+            ...x,
+            partNumber: x.partNumber,
+            partDescription: x.partDescription,
+            itemClassification: x.itemClassification,
+            manufacturer: x.manufacturerName
+          };
+          // } else {
+          //   return;
+          // }
+        });
+        // this.pnMappingList = [];
+        // this.pnMappingList = response.filter(x => {
+        //   if (x.isDeleted == true) {
+        //     this.pnMappingList.push(x);
+        //   }
+        // });
+      }, error => {
+
+        this.isSpinnerVisible = true;
+      });
+
   }
 }
 // updatePublicationGeneralInfo

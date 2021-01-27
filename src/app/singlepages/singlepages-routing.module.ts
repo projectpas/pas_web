@@ -445,9 +445,9 @@ const singlePagesRoutes: Routes = [
                 data: { title: "create publication" }
             },
             {
-                path: "app-create-publication/edit/:id",
+                path: "app-publication/edit/:id",
                 component: CreatePublicationComponent,
-                data: { title: "create publication" }
+                data: { title: "Edit publication" }
             },
             {
                 path: "app-vendor-process1099",
