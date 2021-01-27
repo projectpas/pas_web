@@ -73,7 +73,8 @@ export class SalesQuoteAnalysisComponent implements OnInit {
   breadcrumbs: MenuItem[];
   home: any;
   salesOrderQuoteId: any;
-
+  isApproverlist: any;
+  
   constructor(
     private salesQuoteService: SalesQuoteService,
     private alertService: AlertService,

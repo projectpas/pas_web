@@ -142,6 +142,8 @@ export class RoListComponent implements OnInit {
         }
 	];
     approvalProcessList: any = [];  
+    currentStatusPO: any;
+    filterSearchText: any;
 
     constructor(private _route: Router,
         private authService: AuthService,

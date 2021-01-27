@@ -371,6 +371,8 @@ export class PurchaseSetupComponent implements OnInit {
 	itemMasterId : number;
 	partName : string;
 	adddefaultpart : boolean = true;
+	home: any;
+	
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
 		public currencyService: CurrencyService,

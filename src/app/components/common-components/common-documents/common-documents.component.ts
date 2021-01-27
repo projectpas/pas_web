@@ -948,4 +948,6 @@ this.parentTrigger.emit(true)
         this.DocumentTypebutton = true;
         $('#documenttype-add-memo').modal('hide');
     }
+
+    resetAddressShipViaForm() {}
 }

@@ -538,7 +538,7 @@
 
                                 <app-sales-customer-approvals *ngIf="isEdit == true" [salesQuoteView]="salesQuoteView"
                                     [isViewMode]="false" [customerContactList]="customerContactList"
-                                    [marginSummary]="marginSummary" (quoteApprovedCheck)="verifySalesQuoteConversion()"
+                                    [marginSummary]="marginSummary" (quoteApprovedCheck)="verifySalesQuoteConversion(salesQuoteView.verificationResult)"
                                     (on-quote-parts-approved-event)="onPartsApprovedEvent($event)">
                                 </app-sales-customer-approvals>
 
@@ -781,7 +781,7 @@
 
             <div class="form-group popup_checkbox_considerations" style="margin-top: 5px;">
                 <p-checkbox name="selectAllForConversion"
-                    (onChange)="onActionSelectAllforconvversion(selectAllForConversion)"
+                    (onChange)="onActionSelectAllforconvversion()"
                     [(ngModel)]="selectAllForConversion" binary="true" label="Select all">
                 </p-checkbox>
             </div>

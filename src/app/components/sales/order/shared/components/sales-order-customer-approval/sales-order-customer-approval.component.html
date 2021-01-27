@@ -76,7 +76,7 @@
                 </td>
                 <td *ngIf="field.field == 'internalStatusId' && !getApprovalActionInternalStatus(approver)">
                   <label *ngIf="field.field != 'internalStatusId'"
-                    [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                    [ngClass]="columns.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                   <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2"
@@ -89,7 +89,7 @@
                 </td>
                 <td *ngIf="field.field == 'internalStatusId' && getApprovalActionInternalStatus(approver)">
                   <label *ngIf="field.field != 'internalStatusId'"
-                    [ngClass]="fields.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
+                    [ngClass]="columns.includes(field.field)?'text-align-right':''">{{approver[field.field]}}</label>
                   <select style="width:150px;" [(ngModel)]="approver['internalStatusId']"
                     [ngModelOptions]="{standalone: true}"
                     [disabled]="!approver.selected || approver['approvalActionId'] != 2"

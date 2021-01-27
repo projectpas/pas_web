@@ -72,6 +72,7 @@ export class SalesOrderListComponent implements OnInit {
   @ViewChild("filterStatusInput", { static: false }) public filterText: ElementRef;
   clearStatusText: boolean = false;
   selectedSalesOrderToDelete: any;
+  salesOrderId: any;
 
   constructor(
     private salesService: SalesOrderService,
@@ -305,6 +306,7 @@ export class SalesOrderListComponent implements OnInit {
 
   viewSelectedRow(content, row) {
     this.isSpinnerVisible = true;
+    this.salesOrderId = row.salesOrderId;
     this.salesService.getview(row.salesOrderId).subscribe(res => {
       this.salesOrderView = res[0];
       this.modal = this.modalService.open(content, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });

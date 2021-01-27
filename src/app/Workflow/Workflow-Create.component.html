@@ -332,7 +332,7 @@
                                                 <label>
                                                     <input type="checkbox" [checked]="sourceWorkFlow.isFixedAmount"
                                                         name="ber-type" class="trigger2" data-rel="ber-fixed"
-                                                        (click)="isFixedcheck('fixed');isFixedUnchecked($event);berDetermination();"
+                                                        (click)="isFixedcheck('fixed');isFixedUnchecked($event);berDetermination($event.target.value,'html');"
                                                         value="1">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     Fixed Amount
@@ -362,7 +362,7 @@
                                                 <label style="margin-top:5px;">
                                                     <input type="checkbox" [checked]="sourceWorkFlow.isPercentageOfNew"
                                                         name="ber-type" class="trigger2" data-rel="ber-new"
-                                                        (click)="isFixedcheck('percentage');isPercentageUnchecked($event); berDetermination();"
+                                                        (click)="isFixedcheck('percentage');isPercentageUnchecked($event); berDetermination($event.target.value,'html');"
                                                         value="2">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     % of Cost of New
@@ -407,7 +407,7 @@
                                                     <input type="checkbox"
                                                         [checked]="sourceWorkFlow.isPercentageOfReplacement"
                                                         name="ber-type" class="trigger2" data-rel="ber-replace"
-                                                        (click)="isFixedcheck('percentreplace');isPercentreplcaeUnchecked($event); berDetermination();"
+                                                        (click)="isFixedcheck('percentreplace');isPercentreplcaeUnchecked($event); berDetermination($event.target.value,'html');"
                                                         value="3">
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                     % of Replacement Cost
