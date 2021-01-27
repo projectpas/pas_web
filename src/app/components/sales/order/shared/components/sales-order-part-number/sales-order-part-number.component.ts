@@ -858,4 +858,20 @@ export class SalesOrderPartNumberComponent {
   onCloseParMultipletDelete() {
     this.deleteAllPartModal.close();
   }
+
+  createPO(rowData){
+      localStorage.setItem("itemMasterId",rowData.itemMasterId);
+      localStorage.setItem("partNumber",rowData.partNumber);   
+      localStorage.setItem("salesOrderId",rowData.salesOrderId);
+      //const { vendorId } = rowData;
+      this.router.navigateByUrl(`vendorsmodule/vendorpages/app-purchase-setup/vendor/`);
+  }
+
+  createRO(rowData) {
+    localStorage.setItem("itemMasterId",rowData.itemMasterId);
+    localStorage.setItem("partNumber",rowData.partNumber);  
+    localStorage.setItem("salesOrderId",rowData.salesOrderId);
+    //const { vendorId } = rowData;
+    this.router.navigateByUrl(`vendorsmodule/vendorpages/app-ro-setup/vendor/`);
+}
 }
