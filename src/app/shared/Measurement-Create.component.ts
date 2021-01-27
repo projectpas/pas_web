@@ -224,6 +224,7 @@ export class MeasurementCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.measurements[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.measurements[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
     }

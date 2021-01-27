@@ -472,6 +472,7 @@ export class ExclusionsCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.exclusions[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.exclusions[this.deletedRowIndex].isDelete = true;
         }
         this.reCalculate();
         this.modal.close();

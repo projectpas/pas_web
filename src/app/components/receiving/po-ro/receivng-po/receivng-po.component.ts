@@ -43,6 +43,9 @@ import { LocalStoreManager } from '../../../../services/local-store-manager.serv
 import { DBkeys } from '../../../../services/db-Keys';
 import { AuthService } from '../../../../services/auth.service';
 import { DatePipe } from '@angular/common';
+import { PurchaseOrderService } from '../../../../services/purchase-order.service';
+
+
 @Component({
     selector: 'app-receivng-po',
     templateUrl: './receivng-po.component.html',
@@ -174,6 +177,7 @@ export class ReceivngPoComponent implements OnInit {
     /** po-approval ctor */
     arrayLegalEntitylsit:any[] = [];
     constructor(public binservice: BinService,
+        private purchaseOrderService: PurchaseOrderService,
         public manufacturerService: ManufacturerService,
         public legalEntityService: LegalEntityService,
         public receivingService: ReceivingService,
@@ -285,37 +289,36 @@ export class ReceivngPoComponent implements OnInit {
 	// }
 
     getReceivingPOHeaderById(id) {
-        this.receivingService.getReceivingPOHeaderById(id).subscribe(
+        //this.receivingService.getReceivingPOHeaderById(id).subscribe(
+        this.purchaseOrderService.getPOViewById(id).subscribe(
             res => {
                 this.poDataHeader = res;  
                 this.poDataHeader.purchaseOrderNumber = this.poDataHeader.purchaseOrderNumber;         
                 this.poDataHeader.openDate = this.poDataHeader.openDate ? new Date(this.poDataHeader.openDate) : '';
                 this.poDataHeader.closedDate = this.poDataHeader.closedDate ? new Date(this.poDataHeader.closedDate) : '';
                 this.poDataHeader.dateApproved = this.poDataHeader.dateApproved ? new Date(this.poDataHeader.dateApproved) : '';
-                this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';
-                this.getManagementStructureCodes(this.poDataHeader.managementStructureId);
-
+                this.poDataHeader.needByDate = this.poDataHeader.needByDate ? new Date(this.poDataHeader.needByDate) : '';                
             },
             error => { }
         );
     }
 
-    getManagementStructureCodes(id) {
-        this.commonService.getManagementStructureCodes(id).subscribe(res => {       
-			if (res.Level1) {
-				this.headerManagementStructure.level1 = res.Level1;
-            }
-            if (res.Level2) {
-				this.headerManagementStructure.level2 = res.Level2;
-            }
-            if (res.Level3) {
-				this.headerManagementStructure.level3 = res.Level3;
-            }
-            if (res.Level4) {
-				this.headerManagementStructure.level4 = res.Level4;
-			}
-		})
-    }
+    // getManagementStructureCodes(id) {
+    //     this.commonService.getManagementStructureCodes(id).subscribe(res => {       
+	// 		if (res.Level1) {
+	// 			this.headerManagementStructure.level1 = res.Level1;
+    //         }
+    //         if (res.Level2) {
+	// 			this.headerManagementStructure.level2 = res.Level2;
+    //         }
+    //         if (res.Level3) {
+	// 			this.headerManagementStructure.level3 = res.Level3;
+    //         }
+    //         if (res.Level4) {
+	// 			this.headerManagementStructure.level4 = res.Level4;
+	// 		}
+	// 	})
+    // }
 
     private getItemMasterById(type: string, part: PurchaseOrderPart) {
         this.itemmaster.getItemMasterByItemMasterId(part.itemMaster.itemMasterId).subscribe(
@@ -580,7 +583,7 @@ export class ReceivngPoComponent implements OnInit {
                         part.statusText = this.getStatusById(part.status);
                         part.managementStructureName = parentPart.managementStructureName;
                     }
-                    this.getManagementStructureCodesForPart(part);
+                    //this.getManagementStructureCodesForPart(part);
                 }
                 this.purchaseOrderData.dateRequested = new Date(); //new Date(this.purchaseOrderData.dateRequested);
                 this.purchaseOrderData.dateApprovied = new Date(this.purchaseOrderData.dateApprovied);
@@ -615,10 +618,10 @@ export class ReceivngPoComponent implements OnInit {
 	}
 
     onAddMemo() {
-		this.headerMemo = this.poDataHeader.memo;
+		this.headerMemo = this.poDataHeader.poMemo;
 	}
 	onSaveMemo() {
-		this.poDataHeader.memo = this.headerMemo;
+		this.poDataHeader.poMemo = this.headerMemo;
 	}
     getManagementStructureCodesForPart(part) {
         part.managementStructureName = [];

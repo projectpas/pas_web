@@ -165,6 +165,7 @@ export class StockLineListComponent implements OnInit {
         { field: 'manufacturer', header: 'Manufacturer' },
         { field: 'revisedPN', header: 'Revised PN' },
         { field: 'itemGroup', header: 'Item Group' },
+        { field: 'unitOfMeasure', header: 'UOM' },
         { field: 'quantityOnHand', header: 'Qty On Hand' },
         { field: 'quantityAvailable', header: 'Qty Avail' },
         { field: 'serialNumber', header: 'Serial Num' },

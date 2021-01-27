@@ -13,7 +13,7 @@
                     All
                 </button>    
             </div>
-            <div class="col-sm-6" style="text-align-last: end; padding-right: 2%;">
+            <div class="col-sm-6 view-active-button">
                 <button type="button" name="isActive" [ngClass]="viewItemMaster.isActive ? 'btn btn-success' : 'btn btn-danger'" disabled>
                     <span class="value">{{viewItemMaster.isActive ? 'Active' : 'In-Active'}}</span>
                  </button> 
@@ -388,20 +388,20 @@
 
                             <div class="col-sm-12">
 
-                                <p-table #table3 class="rpo-table-cstm  ptable-th-bg  rro-table-cstm"
+                                <p-table #table3 class="rpo-table-cstm rro-table-cstm"
                                          [paginator]="allDocumentsList.length > 0"
                                          [value]="allDocumentsList" [rows]="5" [pageLinks]="3"
                                          [rowsPerPageOptions]="[10,20,50,100]" [columns]="documentTableColumns" [scrollable]="true" scrollHeight="500px"
                                          (onPage)="pageIndexChange($event)">
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns" style="width:130px" />
-                                            <col style="width: 120px; position:sticky" />
+                                            <col *ngFor="let col of columns" class="table-column-width" />
+                                            <col class="table-column-width" />
                                         </colgroup>
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 <div>
                                                     {{ col.header }}
@@ -409,27 +409,27 @@
                                                     </p-sortIcon>
                                                 </div>
                                             </th>
-                                            <th style="width: 120px; position:sticky">Actions</th>
+                                            <th class="table-actions-column">Actions</th>
 
                                         </tr>
                                         <tr>
-                                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                                                 <input type="text" (input)="table3.filter($event.target.value, col.field,'contains') "
-                                                       *ngIf="col.field !='download' && col.field !='delete' && col.field != 'createdDate' && col.field != 'updatedDate'"
+                                                class="table-header-input-width" *ngIf="col.field !='download' && col.field !='delete' && col.field != 'createdDate' && col.field != 'updatedDate'"
                                                        pInputText>
-                                                <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                                <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'"
                                                        name="createdDate"
                                                        (change)="dateFilterForTable($event.target.value, col.field )">
-                                                <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"
+                                                <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'"
                                                        name="updatedDate"
                                                        (change)="dateFilterForTable($event.target.value, col.field )">
                                             </th>
-                                            <th style="width:120px;position:sticky"></th>
+                                            <th class="table-actions-column"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
                                         <tr *ngIf="allDocumentsList.length > 0">
-                                            <td *ngFor="let col of columns">
+                                            <td class="table-column-width" *ngFor="let col of columns">
                                                     <div *ngIf="col.field !='download' && col.field !='docMemo'" >
                                                         <span>
                                                             {{
@@ -447,7 +447,7 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td style="width: 120px; position:sticky">
+                                                <td class="action-icons-cstm table-column-width">
                                                     <a (click)="downloadFileUpload(rowData)" matTooltip="Download"
                                                        matTooltipPosition="above" class="btn nobg btn-cstm">
                                                         <span>
@@ -464,19 +464,19 @@
                                     </ng-template>
                                     <ng-template pTemplate="summary" id="footer">
                                         <label id="footer" class="footer">Total:</label>
-                                        <input style="width: 5%;" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
+                                        <input class="footer-input-width" [(ngModel)]="table3._totalRecords" name="no'of records" disabled
                                                pInputText type="text" />
 
                                         &nbsp;&nbsp;
                                         <label id="footer" class="footer1">Pages Count:</label>
 
-                                        <input style="width: 5%;" [ngModel]="getPageCount(table3._totalRecords, pageSize)"
+                                        <input class="footer-input-width" [ngModel]="getPageCount(table3._totalRecords, pageSize)"
                                                name="page count" disabled pInputText type="text" />
                                     </ng-template>
                                     <ng-template pTemplate="emptymessage" let-columns
                                                  *ngIf="allDocumentsList.length == 0">
                                         <tr>
-                                            <td [attr.colspan]="7" style="color: red; font-weight: bold; text-align: center;">
+                                            <td [attr.colspan]="10" class="no-records-cstm no-records-msg">
                                                 No records found
                                             </td>
                                         </tr>
@@ -486,13 +486,13 @@
                             </div>
 
                             <div class="form-row">
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">NTE</label>
-                                        <div>
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered table-custom table-bgm">
-                                                    <thead style="text-align:center;   background-color:   #4298ff !important;">
+                                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                            <div class="tableFixHead">  
+                                            <table class="table table-bordered header-table-width" >
+                                                    <thead>
                                                         <tr>
                                                             <th>Overhaul</th>
                                                             <th>Repair</th>
@@ -551,13 +551,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">Turn Around Time</label>
-                                        <div>
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered table-custom table-bgm">
-                                                    <thead style="text-align:center;   background-color:   #4298ff !important;">
+                                        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                            <div class="tableFixHead">  
+                                            <table class="table table-bordered header-table-width" >
+                                                    <thead >
                                                         <tr>
                                                             <th>Overhaul</th>
                                                             <th>Repair</th>
@@ -638,7 +638,7 @@
                          style="overflow: hidden;padding-bottom: 60px !important;">
                          
                         <p-table #aircraft [value]="aircraftListDataValues"
-                                 class="rpo-table-cstm  ptable-th-bg "
+                                 class="rpo-table-cstm rro-table-cstm"
                                  [rows]="pageSize"
                                  [columns]="colsaircraftLD"
                                  [scrollable]="true" [style]="{width:'100%'}"
@@ -659,32 +659,32 @@
                                 </ng-template>
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" style="width:130px" />
+                                    <col *ngFor="let col of columns" class="table-column-width" />
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                                    <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{col.header}}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th style="width:70px;position:sticky">Action</th>
+                                    <th class="table-actions-column">Actions</th>
                                 </tr>
                                 <tr>
-                                    <th style="width:auto" *ngFor="let col of columns"
+                                    <th class="table-column-width" *ngFor="let col of columns"
                                         [ngSwitch]="col.field">
-                                        <input style="width:100%;" pInputText type="text"
+                                        <input class="table-header-input-width" pInputText type="text"
                                                (input)="aircraft.filter($event.target.value, col.field, 'contains')" />
                                     </th>
-                                    <th style="width:70px;position:sticky"></th>
+                                    <th class="table-actions-column"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-i="rowIndex" let-rowData
                                          let-columns="columns">
                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData"
                                     pReorderableRowHandle (dblclick)="onViewAircraftonDbl(rowData)">
-                                    <td *ngFor="let col of columns" ResizableColumn pReorderableColumn>
+                                    <td  class="table-column-width" *ngFor="let col of columns" ResizableColumn pReorderableColumn>
                                         <div *ngIf="col.field !='createdDate' && col.field !='updatedDate'" >
                                             {{rowData[col.field]}}
                                         </div>
@@ -694,7 +694,7 @@
                                             </span>
                                         </div>                                       
                                     </td>
-                                    <td style="width:70px; text-align: center;"
+                                    <td class="action-icons-cstm table-column-width"
                                         *ngIf="colsaircraftLD.length > 0">
                                         <span>
                                             <a class="btn btn-info boxed-float-btn nobg"
@@ -716,19 +716,19 @@
                             <ng-template pTemplate="emptymessage" let-columns
                                          *ngIf="aircraftListDataValues?.length == 0">
                                 <tr>
-                                    <td [attr.colspan]="6" class="no-records-cstm">
+                                    <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total:</label>
-                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                                        [(ngModel)]="aircraft._totalRecords" [disabled]="true" pInputText
                                        type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
-                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                                        [ngModel]="getPageCount(aircraft._totalRecords, pageSize)"
                                        [disabled]="true" pInputText type="text" />
                             </ng-template>
@@ -752,7 +752,7 @@
                 <div class="panel-body">
                     <div class="modal-content p-1"
                          style="overflow: hidden;padding-bottom: 60px !important;">
-                        <p-table #ataDataTable class="rpo-table-cstm  ptable-th-bg "
+                        <p-table #ataDataTable class="rpo-table-cstm rro-table-cstm "
                                  [value]="ataMappedList" [rows]="ataPageSize" [columns]="atasub"
                                  [scrollable]="true" [style]="{width:'100%'}" [paginator]="true"
                                  [rowsPerPageOptions]="[10, 20, 50, 100]" (onPage)="ataChapterPageIndexChange($event)">
@@ -771,31 +771,31 @@
 
                             <ng-template pTemplate="colgroup" let-columns>
                                 <colgroup>
-                                    <col *ngFor="let col of columns" style="width:130px" />
+                                    <col *ngFor="let col of columns" class="table-column-width" />
                                 </colgroup>
                             </ng-template>
                             <ng-template pTemplate="header" let-columns>
                                 <tr>
-                                    <th *ngFor="let col of atasub" pResizableColumn pReorderableColumn
+                                    <th class="table-column-width" *ngFor="let col of atasub" pResizableColumn pReorderableColumn
                                         [pSortableColumn]="col.field">
                                         {{col.header}}
                                         <p-sortIcon [field]="col.field"></p-sortIcon>
                                     </th>
-                                    <th style="width:70px;position:sticky">Action</th>
+                                    <th class="table-actions-column">Actions</th>
                                 </tr>
                                 <tr>
-                                    <th style="width:auto" *ngFor="let col of columns"
+                                    <th class="table-column-width" *ngFor="let col of columns"
                                         [ngSwitch]="col.field">
-                                        <input style="width:100%;" pInputText type="text"
+                                        <input  class="table-header-input-width" pInputText type="text"
                                                (input)="ataDataTable.filter($event.target.value, col.field, 'contains')" />
                                     </th>
-                                    <th></th>
+                                    <th class="table-actions-column"></th>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="body" let-i="rowIndex" let-rowData
                                          let-columns="columns">
                                 <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="onViewATAonDbl(rowData)"> 
-                                    <td *ngFor="let col of atasub" ResizableColumn pReorderableColumn>
+                                    <td class="table-column-width" *ngFor="let col of atasub" ResizableColumn pReorderableColumn>
                                         <div *ngIf="col.field !='createdDate' && col.field !='updatedDate'" >
                                             {{rowData[col.field]}}
                                         </div>
@@ -806,7 +806,7 @@
                                         </div>
                                     </td>
 
-                                    <td style="width:70px; text-align: center;"
+                                    <td class="action-icons-cstm table-column-width"
                                         *ngIf="colsaircraftLD.length > 0">
                                         <span>
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="modal" data-target="#viewATA"
@@ -825,19 +825,19 @@
                             <ng-template pTemplate="emptymessage" let-columns
                                          *ngIf="ataMappedList?.length == 0">
                                 <tr>
-                                    <td [attr.colspan]="6" class="no-records-cstm">
+                                    <td [attr.colspan]="6" class="no-records-cstm no-records-msg">
                                         No records found
                                     </td>
                                 </tr>
                             </ng-template>
                             <ng-template pTemplate="summary" id="footer">
                                 <label id="footer" class="footer">Total:</label>
-                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                                        [(ngModel)]="ataDataTable._totalRecords" [disabled]="true"
                                        pInputText type="text" />
                                 &nbsp;&nbsp;
                                 <label id="footer" class="footer1">Pages Count:</label>
-                                <input style="width: 5%;" [ngModelOptions]="{standalone: true}"
+                                <input class="footer-input-width" [ngModelOptions]="{standalone: true}"
                                        [ngModel]="getPageCount(ataDataTable._totalRecords, ataPageSize)"
                                        [disabled]="true" pInputText type="text" />
                             </ng-template>
@@ -880,14 +880,16 @@
                             <div class="col" style="height: 35px !important;">
                                 <div class="checkbox-cstm" style="margin-left: 0; text-align: right;">
                                     <label style="width: 120px;">
-                                      <input type="checkbox" name="currentDeleteStatus" (change)="getPSListOnDeleteStatus($event.target.checked)" />
+                                      <input type="checkbox" name="currentDeleteStatus" 
+                                      (change)="getPSListOnDeleteStatus($event.target.checked)" />
                                       <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
                                         <p style="font-weight: bold;"> Show Deleted List </p>  
                                     </label>
                                 </div>
                             </div>
-                            <table class="table table-bordered table-striped table-sorting mpn-list-table fixed-column-table column-r1-fixed"
-                                   id="mpn-list-table">
+                            <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                                <div class="tableFixHead">  
+                                <table class="table table-bordered header-table-width"  id="mpn-list-table">
                                 <thead>
                                     <tr>
                                         <th colspan="10">Unit Purchase Price</th>
@@ -937,58 +939,58 @@
                                 <tbody>
 
                                     <tr *ngFor="let field of purchaseSalesInfo">
-                                        <td><p style="width: 100px;"> {{field.conditionName ? field.conditionName : '-'}}</p></td>
-                                        <td><p style="width: 100px;"> {{field.pP_UOMName ? field.pP_UOMName : '-'}}</p></td>
-                                        <td> <p style="width: 100px;"> {{field.pP_CurrencyName ? field.pP_CurrencyName : '-'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> {{field.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td><p> {{field.conditionName ? field.conditionName : '-'}}</p></td>
+                                        <td><p > {{field.pP_UOMName ? field.pP_UOMName : '-'}}</p></td>
+                                        <td> <p> {{field.pP_CurrencyName ? field.pP_CurrencyName : '-'}}</p></td>
+                                        <td class="text-right"> <p> {{field.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p></td>
+                                        <td class="text-right"> <p> 
                                             {{field.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td> <p> {{field.pP_LastListPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td> <p > {{field.pP_LastPurchaseDiscDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p> 
                                             {{field.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.salePriceSelectName ? field.salePriceSelectName : '-'}}</p></td>
-                                        <td> <p style="width: 100px;"> {{field.sP_FSP_UOMName ? field.sP_FSP_UOMName : '-'}}</p></td>
-                                        <td> <p style="width: 100px;"> 
+                                        <td> <p> {{field.salePriceSelectName ? field.salePriceSelectName : '-'}}</p></td>
+                                        <td> <p > {{field.sP_FSP_UOMName ? field.sP_FSP_UOMName : '-'}}</p></td>
+                                        <td> <p > 
                                             {{field.sP_FSP_CurrencyName ? field.sP_FSP_CurrencyName : '-'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_FSP_FXRatePerc  | twoDecimalGlobalNumberFormatPipe : '1.5'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td> <p > {{field.sP_FSP_LastFlatPriceDate | date:'MM-dd-yyyy'}}</p></td>
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> 
+                                        <td> <p > 
                                             {{field.sP_CalSPByPP_LastMarkUpDate | date:'MM-dd-yyyy'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p > 
                                             {{field.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
-                                        <td> <p style="width: 100px;"> 
+                                        <td> <p> 
                                             {{field.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy'}}</p>
                                         </td>
-                                        <td class="text-right"> <p style="width: 100px;"> 
+                                        <td class="text-right"> <p> 
                                             {{field.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                                         </td>
                                         <td>
@@ -1000,6 +1002,8 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1304,8 +1308,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" >
                         <thead>
                             <tr>
                                 <th> Name</th>
@@ -1365,6 +1370,7 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1389,8 +1395,9 @@
             </div>
 
             <div class="modal-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered">
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" >
                         <thead>
                             <tr>
                                 <th>Aircraft</th>
@@ -1445,6 +1452,7 @@
                             <td style="background-color: #fff !important;"><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                         </tr>
                     </table>
+                    </div>
                 </div>
             </div>
 
@@ -1474,8 +1482,9 @@
             </div>
             <div class="modal-body" *ngIf="ataChapterAuditHistory">
                 <!-- <app-pn-header [partData]="sourceItemMaster"></app-pn-header> -->
-                <div class="table-responsive mt-2">
-                    <table class="table table-bordered"
+                <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" 
                            *ngIf="ataChapterAuditHistory.length > 0; else noDatavailable">
                         <thead>
                             <tr>
@@ -1524,17 +1533,18 @@
                                     {{audit.ataSubChapterCode}}
                                 </td>
                                 <td>{{ audit.createdBy }}</td>
-                                <td><p style="width: 120px;">{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p>{{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
 
                                 <td>{{ audit.updatedBy }}</td>
-                                <td><p style="width: 120px;">{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                                <td style="background-color: #fff;"><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                                <td><p>{{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                                <td><p> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                             </tr>
                         </tbody>
                     </table>
+                    </div>
                     <ng-template #noDatavailable>
                         <div class="text-center">
-                            <h4 style="color: #ff5663;">No History Found</h4>
+                            <h4 class="no-history-found-msg">No History Found</h4>
                         </div>
                     </ng-template>
                 </div>
@@ -1563,8 +1573,9 @@
         </button>
     </div>
     <div class="modal-body">
-        <div class="table-responsive pandsHistoryTable">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
+            <table class="table table-bordered header-table-width" >
                 <thead>
                     <tr>
                         <th colspan="10">Unit Purchase Price</th>
@@ -1580,35 +1591,35 @@
                         <th colspan="5"></th>
                     </tr>
                     <tr>
-                        <th style="width: 100px;">Cond *</th>
-                        <th style="width: 100px;">UOM *</th>
-                        <th style="width: 100px;">Currency *</th>
-                        <th style="width: 100px;">FX Rate *</th>
-                        <th style="width: 100px;">Vendor List Price</th>
-                        <th style="width: 100px;">Last List Price Date</th>
-                        <th style="width: 100px;">Purchase Disc %</th>
-                        <th style="width: 100px;">Purchase Disc Amount</th>
-                        <th style="width: 100px;">Last Purchase Disc Date</th>
-                        <th style="width: 100px;">Unit Purchase Price</th>
-                        <th style="width: 100px;" class="bg4">Sale Price *</th>
-                        <th style="width: 100px;" class="bg2">UOM *</th>
-                        <th style="width: 100px;" class="bg2">Currency *</th>
-                        <th style="width: 100px;" class="bg2">FX Rate *</th>
-                        <th style="width: 100px;" class="bg2">Flat Price Amount</th>
-                        <th style="width: 100px;" class="bg2">Last Flat Price Date</th>
-                        <th style="width: 100px;" class="bg3">Mark % on List Price</th>
-                        <th style="width: 100px;" class="bg3">Mark Up Amount</th>
-                        <th style="width: 100px;" class="bg3">Last Mark Up Date</th>
-                        <th style="width: 100px;" class="bg3">Base Sale Price</th>
-                        <th style="width: 100px;" class="bg3">Sale Disc %</th>
-                        <th style="width: 100px;" class="bg3">Sale Disc Amount</th>
-                        <th style="width: 100px;" class="bg3">Last Sales Disc Date</th>
-                        <th style="width: 100px;" class="bg3">Unit Sale Price</th>                        
-                        <th style="width: 100px;">Updated By</th>
-                        <th style="width: 100px;">Updated Date</th>
-                        <th style="width: 100px;">Created By</th>
-                        <th style="width: 100px;">Created Date</th>
-                        <th style="width: 100px;">Is Deleted</th>
+                        <th>Cond *</th>
+                        <th >UOM *</th>
+                        <th >Currency *</th>
+                        <th >FX Rate *</th>
+                        <th >Vendor List Price</th>
+                        <th >Last List Price Date</th>
+                        <th >Purchase Disc %</th>
+                        <th >Purchase Disc Amount</th>
+                        <th >Last Purchase Disc Date</th>
+                        <th >Unit Purchase Price</th>
+                        <th  class="bg4">Sale Price *</th>
+                        <th  class="bg2">UOM *</th>
+                        <th  class="bg2">Currency *</th>
+                        <th  class="bg2">FX Rate *</th>
+                        <th  class="bg2">Flat Price Amount</th>
+                        <th  class="bg2">Last Flat Price Date</th>
+                        <th  class="bg3">Mark % on List Price</th>
+                        <th  class="bg3">Mark Up Amount</th>
+                        <th  class="bg3">Last Mark Up Date</th>
+                        <th  class="bg3">Base Sale Price</th>
+                        <th  class="bg3">Sale Disc %</th>
+                        <th  class="bg3">Sale Disc Amount</th>
+                        <th  class="bg3">Last Sales Disc Date</th>
+                        <th  class="bg3">Unit Sale Price</th>                        
+                        <th >Updated By</th>
+                        <th >Updated Date</th>
+                        <th >Created By</th>
+                        <th >Created Date</th>
+                        <th >Is Deleted</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1619,7 +1630,7 @@
                   ? 'black'
                   : 'red'
               }">
-                           <p style="width: 100px;"> {{ audit.conditionName }}</p>
+                           <p > {{ audit.conditionName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(
@@ -1630,49 +1641,49 @@
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;"> {{ audit.pP_UOMName }}</p>
+              <p > {{ audit.pP_UOMName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(i, 'pP_CurrencyName', audit.pP_CurrencyName)
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;">  {{ audit.pP_CurrencyName }}</p>
+              <p >  {{ audit.pP_CurrencyName }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                 color: getColorCodeForHistoryForPandS(i, 'pP_FXRatePerc', audit.pP_FXRatePerc)
                   ? 'black'
                   : 'red'
               }">
-              <p style="width: 100px;">  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+              <p >  {{ audit.pP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_VendorListPrice', audit.pP_VendorListPrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >    {{ audit.pP_VendorListPrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_LastListPriceDate', audit.pP_LastListPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >    {{ audit.pP_LastListPriceDate  | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscPercValue', audit.pP_PurchaseDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >     {{ audit.pP_PurchaseDiscPercValue | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_PurchaseDiscAmount', audit.pP_PurchaseDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >   {{ audit.pP_PurchaseDiscAmount | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         
                         <td [ngStyle]="{width: '100px',
@@ -1680,121 +1691,122 @@
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >  {{ audit.pP_LastPurchaseDiscDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'pP_UnitPurchasePrice', audit.pP_UnitPurchasePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >  {{ audit.pP_UnitPurchasePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'salePriceSelectName', audit.salePriceSelectName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">  {{ audit.salePriceSelectName }}</p>
+                          <p >  {{ audit.salePriceSelectName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_UOMName', audit.sP_FSP_UOMName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_UOMName }}</p>
+                          <p >     {{ audit.sP_FSP_UOMName }}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_CurrencyName', audit.sP_FSP_CurrencyName)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_CurrencyName }}</p>
+                          <p >     {{ audit.sP_FSP_CurrencyName }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FXRatePerc', audit.sP_FSP_FXRatePerc)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
+                          <p >     {{ audit.sP_FSP_FXRatePerc | twoDecimalGlobalNumberFormatPipe : '1.5' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_FlatPriceAmount', audit.sP_FSP_FlatPriceAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">     {{ audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >     {{ audit.sP_FSP_FlatPriceAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_FSP_LastFlatPriceDate', audit.sP_FSP_LastFlatPriceDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >      {{ audit.sP_FSP_LastFlatPriceDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpPercOnListPriceValue', audit.sP_CalSPByPP_MarkUpPercOnListPriceValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_MarkUpPercOnListPriceValue | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_MarkUpAmount', audit.sP_CalSPByPP_MarkUpAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_MarkUpAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastMarkUpDate', audit.sP_CalSPByPP_LastMarkUpDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_LastMarkUpDate | date: 'MM-dd-yyyy, h:mm a'}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_BaseSalePrice', audit.sP_CalSPByPP_BaseSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >      {{ audit.sP_CalSPByPP_BaseSalePrice | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_SaleDiscPercValue', audit.sP_CalSPByPP_SaleDiscPercValue)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >      {{ audit.sP_CalSPByPP_SaleDiscPercValue | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'SP_CalSPByPP_SaleDiscAmount', audit.SP_CalSPByPP_SaleDiscAmount)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
+                          <p >       {{ audit.sP_CalSPByPP_SaleDiscAmount | twoDecimalGlobalNumberFormatPipe}}</p>
                         </td>
                         <td [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_LastSalesDiscDate', audit.sP_CalSPByPP_LastSalesDiscDate)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
+                          <p >   {{ audit.sP_CalSPByPP_LastSalesDiscDate | date: 'MM-dd-yyyy, h:mm a' }}</p>
                         </td>
                         <td class="text-right" [ngStyle]="{width: '100px',
                             color: getColorCodeForHistoryForPandS(i, 'sP_CalSPByPP_UnitSalePrice', audit.sP_CalSPByPP_UnitSalePrice)
                               ? 'black'
                               : 'red'
                           }">
-                          <p style="width: 100px;">      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
+                          <p >      {{ audit.sP_CalSPByPP_UnitSalePrice | twoDecimalGlobalNumberFormatPipe }}</p>
                         </td>
-                        <td><p style="width: 100px;"> {{ audit.updatedBy }}</p></td>
-                        <td><p style="width: 120px;"> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p style="width: 100px;"> {{ audit.createdBy }}</p></td>
-                        <td><p style="width: 120px;"> {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
-                        <td><p style="width: 100px;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
+                        <td><p > {{ audit.updatedBy }}</p></td>
+                        <td><p> {{ audit.updatedDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > {{ audit.createdBy }}</p></td>
+                        <td><p > {{ audit.createdDate | date: 'MM-dd-yyyy, h:mm a' }}</p></td>
+                        <td><p > <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">

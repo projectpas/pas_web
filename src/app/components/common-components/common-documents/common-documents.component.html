@@ -478,7 +478,7 @@
             <p><span class="label"><b>Created By: </b></span><span class="value">{{sourceViewforDocument.createdBy}}</span></p>
             <p><span class="label"><b>Updated Date: </b></span><span class="value">{{sourceViewforDocument.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</span></p>
             <p><span class="label"><b>Updated By: </b></span><span class="value">{{sourceViewforDocument.updatedBy}}</span></p>
-            <div class="mt-3">
+            <div class="mt-3"> 
               <h6 class="panel-title">Attachment Details:</h6>
               <p-table
                 #dt
@@ -617,6 +617,17 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Document Type <span class="clr-red">*</span></label>
+                  <span style="margin-left:3px;cursor:pointer;"><a class="fa fa-plus-circle fa-lg" matTooltip="Add Document Type" matTooltipPosition="above" data-toggle="modal" data-target="#createDocumentType" (click)="onClickDocumentType('Add')"></a></span>
+                  <!-- <span style="margin-left:0px;cursor:pointer;">
+                              <a
+                                class="btn nobg"
+                                *ngIf="documentInformation.documentTypeId > 0"
+                                matTooltip="Edit Site Name" matTooltipPosition="above"
+                                 data-toggle="modal" data-target="#createDocumentType" 
+                                 (click)="onClickDocumentType('Edit','')"
+                                ><i class="fa fa-pencil" ></i
+                              ></a>
+                              </span> -->
                   <!-- <select [ngClass]='select-validate-cstm' class="form-control" name="documentTypeId" [(ngModel)]="documentInformation.documentTypeId" #documentTypeId="ngModel" (change)="doctype(documentTypeId);" required>
                     <option value="0">-- Select --</option>
                     <ng-container *ngFor="let item of documentType">
@@ -629,13 +640,28 @@
                                                     (ngModelChange)="enableSave()" required>
                                                     <option value='0'>--Select</option>
                                                     <option *ngFor="let item of documentType"
-                                                        [ngValue]="item.value">
-                                                        {{item.label}}
+                                                        [ngValue]="item.documentTypeId">
+                                                        {{item.name}}
                                                     </option>
                                                 </select>
+                                                <!-- <p-autoComplete field="name" [ngClass]="p-acomp-validate" class="pautocomp-cstm"
+                                                                 (onClear)="clearInputShipTo()"
+                                                                 (onSelect)="onDocumentTypeSelect($event)"
+                                                                 [(ngModel)]="documentInformation.name" 
+                                                                 name="documentTypeId"
+                                                                 [suggestions]="lstfilterDocumentType"
+                                                                 (completeMethod)="filterDocumentType($event, documentInformation.documentTypeId)"
+                                                                 [size]="30"
+                                                                 title="Document Type"
+                                                                 [minLength]="1"
+                                                                 [dropdown]="true"
+                                                                 errorMessage="Records not found"
+                                                                 [forceSelection]="true"
+                                                                 #documentTypeId="ngModel" required>
+                                                 </p-autoComplete> -->
                 </div>
                 <div class="form-group">
-                  <label>Name <span class="clr-red">*</span></label>
+                  <label>Document Name <span class="clr-red">*</span></label>
                   <input
                     class="form-control"
                     type="text"
@@ -1030,3 +1056,110 @@
       </div>
     </div>
   </div>
+
+<div class="modal fade" id="createDocumentType" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog partsList-modal">
+      <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" (click)="resetAddressShipViaForm()">&times;</button>
+              <h4 class="modal-title">Add Document Type</h4>
+          </div>
+          <div class="modal-body">
+              <div class="form-row">
+                  <form #addDocumenttypeForm="ngForm" class="form-horizontal">
+                      <div class="form-group col-md-12">
+                        <div class="col-md-6"><label>Document Name <span class="clr-red">*</span> :</label></div>
+                        <p-autoComplete                 
+                        class="autocomp-customer-cstm col-md-6" 
+                        name="name"
+                        [(ngModel)]="addNew.name" 
+                        [suggestions]="lstfilterDocumentType"                     
+                        emptyMessage="No Match Found" 
+                        field="name" 
+                        (onKeyUp)="checkDocumentTypeExist($event.target.value)"
+                        (onChange)="checkDocumentTypeExist($event.target.value)"
+                        (onBlur)="checkDocumentTypeExist($event.target.value)"
+                        (completeMethod)="filterDocumentType($event);" 
+                        [size]="30" [minLength]="1" [dropdown]="true" required>
+                        </p-autoComplete>
+                        <div *ngIf="isDocumenttypeAlreadyExists" class="clr-red">
+                              Document Type Already Exists
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <div class="col-md-6"><label class="col-md-6">Rev Num <span class="clr-red">*</span> :</label></div>
+                        <p-autoComplete                 
+                        class="autocomp-customer-cstm col-md-6" 
+                        name="revNum"
+                        [(ngModel)]="addNew.revNum" 
+                        [suggestions]="lstfilterDocumentTypeRevNum"                     
+                        emptyMessage="No Match Found" 
+                        field="revNum" 
+                        (onKeyUp)="checkDocumentRevnumExist($event.target.value)"
+                        (onChange)="checkDocumentRevnumExist($event.target.value)"
+                        (onBlur)="checkDocumentRevnumExist($event.target.value)"
+                        (completeMethod)="filterDocumentTypeRevnum($event);" 
+                        [size]="30" [minLength]="1" [dropdown]="true" required>
+                        </p-autoComplete>
+                        <div *ngIf="isDocumentrevnumAlreadyExists" class="clr-red">
+                          Rev Num Already Exists
+                        </div>
+                      </div>
+                      <div class="form-group col-md-12">
+                        <div class="col-md-6"><label class="col-md-6">Description <span class="clr-red">*</span> :</label></div>
+                        <input type="text" class="form-control col-md-6" name="description" [(ngModel)]="addNew.description" required>
+                      </div>
+
+                    
+                      <div class="form-group col-md-12">                               
+                        <div class="col-md-6"><label class="col-md-6" style="vertical-align: top;">Memo:</label></div>
+                        <div  class="col-md-6">
+                        <div class="form-group memo-popup-cstm" > 
+                                <div [innerHTML]="addNew.memo" class="form-control"
+                                [matTooltip]="parsedText(addNew.memo)"
+                               class="text_editor_box" style="width:100%;padding:0px !important;line-height:1.6">
+                            </div>
+                                        <i class="fa fa-pencil btn nobg pull-right"  style="margin-top:-25px;margin-right:-29px" 
+                                        data-toggle="modal"
+                                        data-target="#documenttype-add-memo" matTooltip="Memo"
+                                        matTooltipPosition="above"
+                                        (click)="onAddDocumentTypeMemo()"></i>
+                                </div>  
+                        </div>      
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <div class="modal-footer">
+              <!-- <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="!(addShipViaForm.valid && ShipViabutton)" (click)="saveShipViaForShipTo(); resetAddressShipViaForm();">{{ isEditModeShipVia ? 'Update' : 'Save' }}</button>                          
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button> -->
+              <button type="button" class="btn btn-primary" [disabled]="!(addDocumenttypeForm.valid && DocumentTypebutton)" (click)="saveDocumenttype();" data-dismiss="modal">Save</button>
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <!-- (click)="resetAddressShippingForm(); -->
+          </div>
+      </div>
+  </div>
+</div> 
+
+<div class="modal fade" id="documenttype-add-memo" style="z-index: 10000;" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add Memo</h4>
+      </div>
+      <div class="modal-body">
+        <p-editor [(ngModel)]="tempAddDocumentTypeMemo" 
+        [style]="{'height':'320px'}" name="tempAddDocumentTypeMemo" 
+        required></p-editor>
+        <div class="editor-buttons">
+          <button type="button" class="btn btn-primary editor-buttons-margin"						 
+           (click)="onSaveTextAreaInfo()">Save</button>
+          <button type="button" class="btn btn-danger editor-buttons-margin"
+           (click)="closeMemoModel()"
+            >Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

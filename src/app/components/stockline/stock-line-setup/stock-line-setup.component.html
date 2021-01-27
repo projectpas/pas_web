@@ -30,7 +30,7 @@
                                         <label>
                                             <input type="checkbox" name="isCustomerStock" [(ngModel)]="stockLineForm.isCustomerStock" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                                            Is Customer Stock
+                                            Customer Stock - Rotable 
                                         </label>
                                     </div>
                                 </div>
@@ -57,16 +57,16 @@
                                 <div class="form-group" style="margin-top: 10px;">
                                     <div>
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="oemPma" class="form-control" value="true" (change)="onCheckOem();"  [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()">
+                                            <input type="radio" name="oemPma" class="form-control" value="true" (change)="onCheckOem();"  [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()" disabled>
                                             <span class="checkmark"></span> OEM
                                         </label>
-                                    </div>
+                                    </div> 
                                 </div>
 
                                 <div class="form-group" style="margin-top: 10px;">
                                     <div>
                                         <label class="radio-cstm wauto">
-                                            <input type="radio" name="oemPma" class="form-control" value="false" (change)="onCheckPMA();" [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()">
+                                            <input type="radio" name="oemPma" class="form-control" value="false" (change)="onCheckPMA();" [(ngModel)]="stockLineForm.oem" (ngModelChange)="enableSave()" disabled>
                                             <span class="checkmark"></span> PMA
                                         </label>
                                     </div>
@@ -95,7 +95,7 @@
                                 <div class="form-group">
                                     <div class="checkbox-cstm" style="margin-top: 10px;">
                                         <label>
-                                            <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER" (ngModelChange)="enableSave()">
+                                            <input type="checkbox" name="isDER" [(ngModel)]="stockLineForm.isDER" (ngModelChange)="enableSave()" disabled>
                                             <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                             DER
                                         </label>
@@ -143,11 +143,12 @@
                                     <input class="form-control" type="text" name="idNumber" [(ngModel)]="stockLineForm.idNumber" (ngModelChange)="enableSave()" disabled>
                                 </div>
                                 <div class="form-group">
-                                    <label matTooltip="National Stock Number" matTooltipPosition="right">NSN</label>
+                                    <label> National Stock Number (NSN)</label>
                                     <input class="form-control" type="text" name="nationalStockNumber" [(ngModel)]="stockLineForm.nationalStockNumber" (ngModelChange)="enableSave()">
                                 </div>
                                 <div class="form-group">
-                                    <label matTooltip="Engine Serial Number" matTooltipPosition="right">ESN</label>
+                                    <label>Engine Serial Number (ESN)
+                                    </label>
                                     <input class="form-control" type="text" name="engineSerialNumber" [(ngModel)]="stockLineForm.engineSerialNumber" (ngModelChange)="enableSave()">
                                 </div>
                             </div>
@@ -163,8 +164,12 @@
                                     <input class="form-control text-right" type="text" name="daysReceived" [(ngModel)]="stockLineForm.daysReceived" (ngModelChange)="enableSave()" disabled>
                                 </div> 
                                 <div class="form-group">
+                                    <label>Mfg. Expiration Date</label>
+                                    <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" name="expirationDate" [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate" #expirationDate="ngModel" (onSelect)="onChangeMfgDate(stockLineForm.expirationDate);"  (ngModelChange)="enableSave()"></p-calendar>
+                                </div>
+                                <div class="form-group">
                                     <label>Days Since Mfg</label>
-                                    <input class="form-control text-right" type="text" name="manufacturingDays" [(ngModel)]="stockLineForm.manufacturingDays" (ngModelChange)="enableSave()" disabled>
+                                    <input class="form-control text-right" type="text" name="manufacturingDays" [(ngModel)]="stockLineForm.manufacturingDays" (ngModelChange)="enableSave()">
                                 </div>
                                 <div class="form-group">
                                     <label>Days Since Tagged</label>
@@ -264,15 +269,8 @@
                                     <label>Entry Date</label>
                                     <p-calendar class="workflow-clder" [showIcon]="true" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" name="entryDate" [maxDate]="minDateValue" [(ngModel)]="stockLineForm.entryDate" (ngModelChange)="enableSave()"></p-calendar>
                                 </div>
-                                <div class="form-group">
-                                    <label>Expiration Date</label>
-                                    <p-calendar class="workflow-clder" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" name="expirationDate" [minDate]="minDateValue" [(ngModel)]="stockLineForm.expirationDate" (ngModelChange)="enableSave()"></p-calendar>
-                                </div>
-                                <div class="form-group">
-                                    <label>Vendor</label>
-                                    <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="stockLineForm.vendorId" name="vendorId" [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()" [disabled]="disableVendor">
-                                    </p-autoComplete>
-                                </div>
+                               
+                               
                                 <div class="form-group">
                                     <label>PO Num</label>
                                     <select [(ngModel)]="stockLineForm.purchaseOrderId" name="purchaseOrderId" (change)="onChangePONum(stockLineForm.purchaseOrderId)" (ngModelChange)="enableSave()">
@@ -286,6 +284,11 @@
                                         <option value="0">-- Select --</option>
                                         <option *ngFor="let manufacturer of allRolistInfo" [ngValue]="manufacturer.repairOrderId">{{manufacturer.repairOrderNumber}}
                                     </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Vendor</label>
+                                    <p-autoComplete field="label" class="pautocomp-cstm" [(ngModel)]="stockLineForm.vendorId" name="vendorId" [suggestions]="vendorNames" (completeMethod)="filterVendorNames($event)" [size]="30" [minLength]="1" [dropdown]="true" errorMessage="Records not found" [forceSelection]="true" (ngModelChange)="enableSave()" [disabled]="disableVendor">
+                                    </p-autoComplete>
                                 </div>
                                 <div class="form-group">
                                     <label>Requestor</label>
@@ -483,12 +486,18 @@
                                     </div>   
                                 </div>
                                 <div class="form-group">
+                                    <label>UOM <strong class="clr-red">*</strong></label>
+                                    <p-dropdown class="p-dropdown-100"  (ngModelChange)="enableSave()" [options]="allPurchaseUnitOfMeasureinfo" filter="true" [(ngModel)]="stockLineForm.purchaseUnitOfMeasureId" name="purchaseUnitOfMeasureId" [resetFilterOnHide]="true" placeholder="-- Select --" [showClear]="true" required></p-dropdown>
+                                </div>
+                                <div class="form-group">
                                     <label>Qty Reserved</label>
-                                    <input class="form-control  text-right" type="text" pKeyFilter="pint" name="QuantityReserved" (change)="resetQtyIssued(); onChangeQtyReserved()" [(ngModel)]="stockLineForm.quantityReserved" [disabled]="stockLineForm.quantityOnHand == null" (ngModelChange)="enableSave()">
+                                    <input class="form-control  text-right" type="text"  name="QuantityReserved" (change)="resetQtyIssued(); onChangeQtyReserved()" [(ngModel)]="stockLineForm.quantityReserved"  (ngModelChange)="enableSave()" disabled>
+                                    <!--pKeyFilter="pint" [disabled]="stockLineForm.quantityOnHand == null" -->
                                 </div>
                                 <div class="form-group">
                                     <label>Qty Issued</label>
-                                    <input class="form-control text-right" type="text" pKeyFilter="pint" name="QuantityIssued" (change)="calcQtyReservedByQtyIssued()" [(ngModel)]="stockLineForm.quantityIssued" [disabled]="stockLineForm.quantityOnHand == null" (ngModelChange)="enableSave()">
+                                    <input class="form-control text-right" type="text"  name="QuantityIssued" (change)="calcQtyReservedByQtyIssued()" [(ngModel)]="stockLineForm.quantityIssued" (ngModelChange)="enableSave()" disabled> 
+                                    <!-- pKeyFilter="pint" [disabled]="stockLineForm.quantityOnHand == null" -->
                                 </div>
                                 <div class="form-group">
                                     <label>Qty Avail</label>

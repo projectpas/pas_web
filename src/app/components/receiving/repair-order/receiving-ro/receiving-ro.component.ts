@@ -33,15 +33,15 @@ import { Shelf } from '../../../../models/shelf.model';
 import { error } from '@angular/compiler/src/util';
 import { Customer } from '../../../../models/customer.model';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
-
 import { ShippingService } from '../../../../services/shipping/shipping-service';
-
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
 import { AuthService } from '../../../../services/auth.service';
 import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
+import { RepairOrderService } from '../../../../services/repair-order.service';
+
 
 @Component({
     selector: 'app-receiving-ro',
@@ -200,7 +200,8 @@ export class ReceivingRoComponent implements OnInit {
         private commonService: CommonService,
         private localStorage: LocalStoreManager,
         private authService: AuthService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private repairOrderService: RepairOrderService,
     ) {
         this.getAllSite();
         this.getCustomers();
@@ -219,19 +220,18 @@ export class ReceivingRoComponent implements OnInit {
         this.getLegalEntity();
         this.loadModulesNamesForObtainOwnerTraceable();
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
-        this.receivingService.getReceivingROHeaderById(this.repairOrderId).subscribe(res => {
-            console.log(res);
+        //this.receivingService.getReceivingROHeaderById(this.repairOrderId).subscribe(res => {
+        this.repairOrderService.getROViewById(this.repairOrderId).subscribe(res => {            
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
-            this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);
-                
+           // this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);                
         });
 
         this.receivingService.getReceivingROPartById(this.repairOrderId).subscribe(res => {
-            console.log(res);
+            //console.log(res);
             this.loadRepairOrderData(res);
         })
 
@@ -396,22 +396,45 @@ export class ReceivingRoComponent implements OnInit {
     //     });
     // }
 
-    private getStatus() {
-        this.roStatus = [];
-        this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description').subscribe(response => {
-			this.roStatus = response;
-			this.roStatus = this.roStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-		});
-        // this.roStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
-        // this.roStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
-        // this.roStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
-        // this.roStatus.push(<DropDownData>{ Key: '4', Value: 'Closed' });
+    // private getStatus() {
+    //     this.roStatus = [];
+    //     this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description').subscribe(response => {
+	// 		this.roStatus = response;
+	// 		this.roStatus = this.roStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+	// 	});
+    //     // this.roStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
+    //     // this.roStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
+    //     // this.roStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
+    //     // this.roStatus.push(<DropDownData>{ Key: '4', Value: 'Closed' });
 
-        // this.roUserType = [];
-        // this.roUserType.push(<DropDownData>{ Key: '1', Value: 'Customer' });
-        // this.roUserType.push(<DropDownData>{ Key: '2', Value: 'Vendor' });
-        // this.roUserType.push(<DropDownData>{ Key: '3', Value: 'Company' });
-    }
+    //     // this.roUserType = [];
+    //     // this.roUserType.push(<DropDownData>{ Key: '1', Value: 'Customer' });
+    //     // this.roUserType.push(<DropDownData>{ Key: '2', Value: 'Vendor' });
+    //     // this.roUserType.push(<DropDownData>{ Key: '3', Value: 'Company' });
+    // }
+
+    arrayPostatuslist:any[] = [];
+    private getStatus() {
+		if (this.arrayPostatuslist.length == 0) {
+            this.arrayPostatuslist.push(0); }
+			this.commonService.autoSuggestionSmartDropDownList('ROStatus','ROStatusId','Description','',
+								  true, 0,this.arrayPostatuslist.join(),this.currentUserMasterCompanyId)
+				.subscribe(res => {
+				this.roStatus = res;
+				this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));	                
+                res.forEach(x => {
+					if (x.label.toUpperCase() == "OPEN") {
+						//this.headerInfo.statusId = x.value;
+						//this.poOpenstatusID = x.value;
+					}
+					else if (x.label.toUpperCase()  == "FULFILLING") {
+						//this.poFulfillingstatusID = x.value;
+					}
+				}); }
+			,err => {
+				this.isSpinnerVisible = false;	}
+			); 		
+	}
 
     private getStatusById(statusId: string) {
         if (statusId == null)
@@ -529,8 +552,8 @@ export class ReceivingRoComponent implements OnInit {
                                 error => this.onDataLoadFailed(error)
                             );
                         }
-                        part.userTypeName = part.roPartSplitUserTypeId ? this.getUserTypeById(part.roPartSplitUserTypeId.toLocaleString()) : '';
-                        part.statusText = this.getStatusById(part.status);
+                        part.userTypeName = part.roPartSplitUserTypeName;//part.roPartSplitUserTypeId ? this.getUserTypeById(part.roPartSplitUserTypeId.toLocaleString()) : '';
+                        part.statusText = part.status; //this.getStatusById(part.status);
                         part.managementStructureName = parentPart.managementStructureName;
                     }
                     this.getManagementStructureCodesForPart(part);
@@ -644,10 +667,10 @@ export class ReceivingRoComponent implements OnInit {
 	}
 
     onAddMemo() {
-		this.headerMemo = this.repairOrderHeaderData.memo;
+		this.headerMemo = this.repairOrderHeaderData.roMemo;
 	}
 	onSaveMemo() {
-		this.repairOrderHeaderData.memo = this.headerMemo;
+		this.repairOrderHeaderData.roMemo = this.headerMemo;
 	}
     private managementStructureSuccess(managementStructureId: number, managementStructure: ManagementStructure[]) {
 
@@ -1410,19 +1433,39 @@ export class ReceivingRoComponent implements OnInit {
         }        
     }
 
-    getCustomers(): void {
-        //stockLine.CustomerList = [];
-        this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(
-            results => {
-                for (let customer of results) {
-                    var dropdown = new DropDownData();
-                    dropdown.Key = customer.value.toLocaleString();
-                    dropdown.Value = customer.label;
-                    this.CustomerList.push(dropdown);
-                }
-            },
-            error => this.onDataLoadFailed(error)
-        );
+    // getCustomers(): void {
+    //     //stockLine.CustomerList = [];
+    //     this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(
+    //         results => {
+    //             for (let customer of results) {
+    //                 var dropdown = new DropDownData();
+    //                 dropdown.Key = customer.value.toLocaleString();
+    //                 dropdown.Value = customer.label;
+    //                 this.CustomerList.push(dropdown);
+    //             }
+    //         },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+    arrayCustlist:any[] = [];
+    getCustomers(strText = '') {
+		if(this.arrayCustlist.length == 0) {			
+			this.arrayCustlist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name',strText,true,20,this.arrayCustlist.join(),this.currentUserMasterCompanyId).subscribe(response => {         
+            //this.CustomerList = response;
+            for (let customer of response) {
+                var dropdown = new DropDownData();
+                dropdown.Key = customer.value.toLocaleString();
+                dropdown.Value = customer.label
+                this.CustomerList.push(dropdown);
+            }           
+            // this.allCustomers = response;
+			// this.customerNames = response;
+			// this.splitcustomersList = response;
+		},err => {
+			this.isSpinnerVisible = false;				
+		});
     }
 
     getVendors(): void {
@@ -1438,32 +1481,66 @@ export class ReceivingRoComponent implements OnInit {
         );
     }
 
-    getCompanyList() {
-        this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
-            for (let company of companies) {
+    // getCompanyList() {
+    //     this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
+    //         for (let company of companies) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = company.value.toLocaleString();
+    //             dropdown.Value = company.label;
+    //             this.CompanyList.push(dropdown);
+    //         }
+	// 	},
+    //     error => this.onDataLoadFailed(error)
+    //     );        
+    // }
+
+    arrayComplist:any[] = [];
+    getCompanyList(strText = '') {
+		if(this.arrayComplist.length == 0) {			
+			this.arrayComplist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name',strText,true,20,this.arrayComplist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
+            //this.CustomerList = response;
+            for (let company of response) {
                 var dropdown = new DropDownData();
                 dropdown.Key = company.value.toLocaleString();
-                dropdown.Value = company.label;
+                dropdown.Value = company.label
                 this.CompanyList.push(dropdown);
-            }
-		},
-        error => this.onDataLoadFailed(error)
-        );        
+            }                   
+		},err => {
+			this.isSpinnerVisible = false;				
+		});
     }
 
-    getManufacturers() {
-        this.ManufacturerList = [];
-        this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').subscribe(
-            results => {
-                for (let manufacturer of results) {
-                    var dropdown = new DropDownData();
-                    dropdown.Key = manufacturer.value.toLocaleString();
-                    dropdown.Value = manufacturer.label;
-                    this.ManufacturerList.push(dropdown);
-                }
-            },
-            error => this.onDataLoadFailed(error)
-        );
+    // getManufacturers() {
+    //     this.ManufacturerList = [];
+    //     this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').subscribe(
+    //         results => {
+    //             for (let manufacturer of results) {
+    //                 var dropdown = new DropDownData();
+    //                 dropdown.Key = manufacturer.value.toLocaleString();
+    //                 dropdown.Value = manufacturer.label;
+    //                 this.ManufacturerList.push(dropdown);
+    //             }
+    //         },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+    arraymanufacturerlist:any[] = [];
+    getManufacturers(strText = '') {
+		if(this.arraymanufacturerlist.length == 0) {			
+			this.arraymanufacturerlist.push(0); }
+		this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'ManufacturerId', 'Name',strText,true,20,this.arraymanufacturerlist.join(),this.currentUserMasterCompanyId).subscribe(response => {           
+            //this.CustomerList = response;
+            for (let company of response) {
+                var dropdown = new DropDownData();
+                dropdown.Key = company.value.toLocaleString();
+                dropdown.Value = company.label
+                this.ManufacturerList.push(dropdown);
+            }                    
+		},err => {
+			this.isSpinnerVisible = false;				
+		});
     }
 
     onSerialNumberNotProvided(stockLine: StockLine) {
@@ -1769,19 +1846,51 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.traceableTo = stockLine.traceableToObject.Key;
     }
 
-    getConditionList(): void {
-        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(
-            results => {
-                for (let condition of results) {
+    // getConditionList(): void {
+    //     this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(
+    //         results => {
+    //             for (let condition of results) {
+    //                 var dropdown = new DropDownData();
+    //                 dropdown.Key = condition.value.toLocaleString();
+    //                 dropdown.Value = condition.label;
+    //                 this.ConditionList.push(dropdown);
+    //             }
+    //         }, //sending WareHouse
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+    arrayConditionlist:any[] = [];
+    getConditionList() {
+		if (this.arrayConditionlist.length == 0) {
+            this.arrayConditionlist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('Condition','ConditionId','Description','',true, 0,this.arrayConditionlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                //this.ConditionList = res;
+                for (let company of res) {
                     var dropdown = new DropDownData();
-                    dropdown.Key = condition.value.toLocaleString();
-                    dropdown.Value = condition.label;
+                    dropdown.Key = company.value.toLocaleString();
+                    dropdown.Value = company.label
                     this.ConditionList.push(dropdown);
-                }
-            }, //sending WareHouse
-            error => this.onDataLoadFailed(error)
-        );
-    }
+                }          
+				// this.ConditionList.map(x => {
+				// 	if(x.label == 'New') {
+				// 		this.defaultCondtionId = x.value;
+				// 		this.newObjectForParent.conditionId = x.value;
+				// 	}
+				// });
+				// if(this.stocklineReferenceData != null && this.stocklineReferenceData != undefined) {
+				// 	for(let i = 0; i< this.allconditioninfo.length; i++){
+				// 		if(this.allconditioninfo[i].value == this.stocklineReferenceData.conditionId){
+				// 			this.newObjectForParent.conditionId = this.allconditioninfo[i].value;
+				// 			this.newObjectForParent.itemMasterId = this.stocklineReferenceData.itemMasterId;
+				// 			this.getPriceDetailsByCondId(this.newObjectForParent);
+				// 		}
+				// 	}
+				// }       
+            },
+            err => {
+                this.isSpinnerVisible = false;	}); 
+	}
 
     getAllGLAccount(): void {
         this.commonService.getGlAccountList().subscribe(glAccountData => {

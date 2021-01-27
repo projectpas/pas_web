@@ -254,6 +254,11 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getPickTicket(salesOrderId)
     );
   }
+  getPickTicketList(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getPickTicketList(salesOrderId)
+    );
+  }
   getCustomerApprovalList(salesOrderId: number): Observable<ISalesOrderCustomerApproval[][]> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getCustomerApprovalList(salesOrderId)

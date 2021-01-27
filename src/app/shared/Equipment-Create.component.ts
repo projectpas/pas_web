@@ -234,6 +234,7 @@ export class EquipmentCreateComponent implements OnInit, OnChanges {
         }
         else {
             this.workFlow.equipments[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.equipments[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
     }

@@ -296,7 +296,7 @@ this.setAircraftArray=[];
         });
     }
 
-    getDashNumberByModelandAircraftIds(x, index) {
+    getDashNumberByModelandAircraftIds(x, index,from) {
         this.setDashNumberArray=[];
         this.isSpinnerVisible = true;
        if(x && x.workflowPublicationDashNumbers && x.workflowPublicationDashNumbers.length !=0){
@@ -316,9 +316,12 @@ x.workflowPublicationDashNumbers.forEach(element => {
                     dashNumber: x.dashNumber,
                    
                 }
-            }, error => {
-                this.isSpinnerVisible = false;
             });
+           if(from=='html'){
+            this.workFlow.publication[index].workflowPublicationDashNumbers=null;
+           }
+        }, error => {
+            this.isSpinnerVisible = false;
         })
     }
 
@@ -378,7 +381,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
             if (x.publicationId) {
                 this.getAircraftByPublicationId(x, index);
                 this.getModelByAircraftId(x, index);
-                this.getDashNumberByModelandAircraftIds(x ,index);
+                this.getDashNumberByModelandAircraftIds(x ,index,'onload');
             }
             return {
                 ...x
@@ -669,6 +672,7 @@ x.workflowPublicationDashNumbers.forEach(element => {
         }
         else {
             this.workFlow.publication[this.deletedRowIndex].isDeleted = true;
+            this.workFlow.publication[this.deletedRowIndex].isDelete = true;
         }
         this.dismissModel();
     }
