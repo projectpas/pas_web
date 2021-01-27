@@ -43,6 +43,9 @@ export class SalesOrderPartActionsComponent implements OnInit {
   selectAllParts: Boolean = false;
   disableSubmitButtonForAction: boolean = true;
   isSpinnerVisible: boolean = true;
+  onlyParts: PartAction[] = [];
+  altParts: PartAction[] = [];
+  euqParts: PartAction[] = [];
 
   constructor(private itemMasterService: ItemMasterService, private salesOrderService: SalesOrderService, private commonService: CommonService, private authService: AuthService,
     private alertService: AlertService) {
@@ -143,6 +146,7 @@ export class SalesOrderPartActionsComponent implements OnInit {
       .subscribe(data => {
         this.isSpinnerVisible = false;
         this.parts = data[0];
+        this.onlyParts = data[0];
         for (let i = 0; i < this.parts.length; i++) {
           this.parts[i].reservedDate = this.parts[i].reservedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
           this.parts[i].issuedDate = this.parts[i].issuedDate == null ? new Date() : new Date(this.parts[i].reservedDate);
@@ -163,6 +167,22 @@ export class SalesOrderPartActionsComponent implements OnInit {
             this.columns.splice(i, 1);
           }
         }
+
+        this.parts.forEach((item, index) => {
+          if (item !== undefined) {
+            if (item.soReservedAltParts && item.soReservedAltParts.length > 0) {
+              item.soReservedAltParts.forEach((altPart, i) => {
+                this.altParts.push(altPart);
+              });
+            }
+
+            if (item.soReservedEquParts && item.soReservedEquParts.length > 0) {
+              item.soReservedEquParts.forEach((EquPart, i) => {
+                this.euqParts.push(EquPart);
+              });
+            }
+          }
+        });
       }, error => {
         this.isSpinnerVisible = false;
       });
@@ -335,5 +355,21 @@ export class SalesOrderPartActionsComponent implements OnInit {
     this.alertService.stopLoadingMessage();
     // this.alertService.showStickyMessage("Save Error", "The below errors occured whilst saving your changes:", MessageSeverity.error, error);
     this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+  }
+
+  showAlternateParts(event) {
+    if (event == true) {
+      this.parts = [ ...this.onlyParts, ...this.altParts]
+    } else {
+      this.parts = [ ...this.onlyParts];
+    }
+  }
+
+  showEqualientParts(event) {
+    if (event == true) {
+      this.parts = [ ...this.onlyParts, ...this.euqParts]
+    } else {
+      this.parts = [ ...this.onlyParts];
+    }
   }
 }

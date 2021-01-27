@@ -30,19 +30,23 @@
     </div>
     <p-table #ntaeDataTable class="rpo-table-cstm rro-table-cstm " [value]="ntaeData" [rows]="ntaeDataTableTablePageSize"
         [columns]="ntaeTableColumns" [scrollable]="true" [style]="{width:'100%'}" [paginator]="true">
-
+        <ng-template pTemplate="colgroup" let-columns>
+            <colgroup>
+                <col *ngFor="let col of columns" class="table-column-width">
+            </colgroup>
+        </ng-template>
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns" class="table-column-width" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                         {{col.header}}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                 </th>
-                <th class="table-column-width" *ngIf="selectedTab == 'Equivalency'">Document</th>
-                <th >Action</th>
+                <th class="table-actions-column" *ngIf="selectedTab == 'Equivalency'">Document</th>
+                <th class="table-actions-column">Actions</th>
             </tr>
             <tr>
                 <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input style="width:100%;" pInputText type="text"
+                    <input class="table-header-input-width" pInputText type="text"
                         (input)="ntaeDataTable.filter($event.target.value, col.field, col.filterMatchMode)">
 
                 </th>
@@ -91,7 +95,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage" let-columns *ngIf="ntaeData?.length == 0">
             <tr>
-                <td [attr.colspan]="6" class="no-records-cstm no-records-msg">
+                <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
                     No records found
                 </td>
             </tr>
@@ -325,7 +329,7 @@
             </div>
             <ng-template #noDatavailable>
                 <div class="text-center">
-                    <img src="../../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <img src="../../../../assets/images/binoculars.png" class="no-history-found-image">
                     <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
 

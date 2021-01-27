@@ -823,6 +823,12 @@ getDocumentType() {
   });
 }
 
+SaveDocumentType(object) {
+  return this.http.post<any>(`${this.baseUrl}/api/Common/savedocumenttype`, JSON.stringify(object), this.getRequestHeaders()).catch(error => {
+    return this.handleErrorCommon(error, () => this.SaveDocumentType(object));
+  });
+}
+
 // getAllEditID(purchaseOrderId) {
 //     return this.purchaseOrderEndpoint.getAllEditID(purchaseOrderId);
 // }

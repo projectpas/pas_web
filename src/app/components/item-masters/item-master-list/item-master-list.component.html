@@ -71,8 +71,8 @@
                                 </div>
                               </div>
 
-                              <div style="display: flow-root;">
-                                <div>
+                              <div class="row">
+                                <div class="col">
                                     <button
                                     type="button"
                                     class="btn btn-primary exports-button"
@@ -97,12 +97,15 @@
                                     label="Export Selected Data"
                                     (click)="dt.exportCSV({selectionOnly:true})"
                                   ></button>
-                                  <button class="btn-primary adv-search-btn" (click)="toggleShowOpenAdvancedSearch(dt)">
+                                  <button class="btn btn-primary exports-button" (click)="toggleShowOpenAdvancedSearch(dt)">
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
                                   </button>
-                                <div style="width: 650px; float: right; padding: 3px 0 0;">
+                                
+                                  <div class="pull-right buttons-div-align">
+                                    <div class="col">
+                                      <div class="col buttons-top-padding">
                                       <div class="form-group">
-                                        <div class="pull-left" style="margin: 6px 15px 0 20px;">
+                                        <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="item-category" class="form-control" value="Stock"
                                                        checked="checked" (click)="onRadioChange(0)">
@@ -116,7 +119,7 @@
                                                 <span class="checkmark"></span>Non-Stock
                                             </label>
                                         </div>
-                                        <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                                        <label class="radiobtn-label item-master-status">Status:</label>
                                         <div class="pull-left radio-buttons-align">
                                             <label class="radio-cstm wauto">
                                                 <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
@@ -144,6 +147,8 @@
                                             Show  Deleted List 
                                             </label>
                                         </div>
+                                      </div>
+                                      </div>
                                       </div>
                                     </div>
                                     </div>
@@ -242,7 +247,7 @@
                                 <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
                                     <div class="col-md-12 ">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                            <h4 class="f-s-14 item-master-search">Search :</h4>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
@@ -451,9 +456,11 @@
                                     Advanced Search <i [ngClass]="isOpenAdvancedSearch ? 'fa fa-caret-down' : 'fa fa-caret-up'"></i>
                                   </button>
 
-                                <div style="width: 650px; float: right; padding: 3px 0 0;"> <!--class="col"-->
+                                  <div class="pull-right buttons-div-align">
+                                    <div class="col">
+                                      <div class="col buttons-top-padding"><!--class="col"-->
                                       <div class="form-group">
-                                            <div class="pull-left" style="margin: 6px 15px 0 20px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="item-category" class="form-control" value="Stock"
                                                            checked="checked" (click)="onRadioChange(0)">
@@ -467,7 +474,7 @@
                                                     <span class="checkmark"></span>Non-Stock
                                                 </label>
                                             </div>
-                                            <label class="radiobtn-label" style="margin-left: 50px;">Status:</label>
+                                            <label class="radiobtn-label item-master-status">Status:</label>
                                             <div class="pull-left radio-buttons-align">
                                                 <label class="radio-cstm wauto">
                                                     <input type="radio" name="EmpStatus" class="form-control" value="active" (click)="geListByStatus('active')" [(ngModel)]="currentstatus">
@@ -498,13 +505,15 @@
                                       </div>
                                     </div>
                                     </div>
+                                    </div>
+                                    </div>
                               </div>
 
                               <div class="row adv-row">
                                 <div class="col-md-12" *ngIf="isOpenAdvancedSearch">
                                     <div class="col-md-12 ">
                                         <div class="col-md-1 col-md-1-cstm">
-                                            <h4 class="f-s-14" style="margin-top: 26px;">Search :</h4>
+                                            <h4 class="f-s-14 item-master-search">Search :</h4>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="form-group">
@@ -1033,7 +1042,7 @@
 
             <div class="modal-body">
                 <div class="text-center">
-                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
                     <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
             </div>
@@ -1057,7 +1066,7 @@
 
             <div class="modal-body">
                 <div class="text-center">
-                    <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
+                    <img src="../../../assets/images/binoculars.png" class="no-history-found-image">
                     <h4 class="no-history-found-msg">>No History Found </h4>
                 </div>
             </div>
