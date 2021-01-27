@@ -1,50 +1,66 @@
-﻿<div [@fadeInOut] class="page-content">
-  <div class="right_col" role="main" style="min-height: 629px;">
-    <div class="x_panel">
-      <div class="x_content">
-        <div class="card">
-          <div class="card-header bg-primary new-card-header">
-            <div class="row">
-              <div class="col">
-                <h4 class="new-card-heading">Publications Listing
-                </h4>
-              </div>
-              <div>
-                <button type="button" class="btn-sm new-btn-primary" matTooltip="Add Publication"
-                  matTooltipPosition="above" [routerLink]="[
+﻿<!-- <div [@fadeInOut] class="page-content"> -->
+<!-- <div class="right_col" role="main" style="min-height: 629px;"> -->
+<!-- <div class="x_panel"> -->
+<!-- <div class="x_content"> -->
+<!-- <p-breadcrumb [model]="breadcrumbs" [home]="home"></p-breadcrumb> -->
+
+<div class="card new-card">
+  <div class="card-header header">
+    <div class="row">
+      <div class="col">
+        <h4 class="header-name">Publications Listing</h4>
+      </div>
+      <div>
+        <button type="button" class="btn-sm header-button"
+          [routerLink]="['/singlepages/singlepages/app-create-publication']">
+          Add Publication
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="card-header bg-primary new-card-header">
+    <div class="row">
+      <div class="col">
+        <h4 class="new-card-heading">Publications Listing
+        </h4>
+      </div>
+      <div>
+        <button type="button" class="btn-sm new-btn-primary" matTooltip="Add Publication" matTooltipPosition="above"
+          [routerLink]="[
                     '/singlepages/singlepages/app-create-publication'
                   ]">
-                  Add Publication
-                </button>
-              </div>
-            </div>
+          Add Publication
+        </button>
+      </div>
+    </div>
+  </div> -->
+  <div class="card-body new-card-body">
+    <p-table #dt class="rpo-table-cstm rro-table-cstm pub-ptable-cstm croes" [first]="0" [rows]="pagesize"
+      [value]="allpublicationInfo" [metaKeySelection]="true" [paginator]="true" [pageLinks]="3"
+      [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
+      [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords"
+      (onLazyLoad)="publicationPagination($event)" [lazy]="true" [scrollable]="true" scrollHeight="450px"
+      (onPage)="pageIndexChange($event)">
+      <ng-template pTemplate="caption">
+        <div class="row">
+          <div class="col">
+            <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
+              selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns"
+              style="float: left;"></p-multiSelect>
           </div>
-          <div class="card-body new-card-body">
-            <p-table #dt class="rpo-table-cstm rro-table-cstm pub-ptable-cstm croes" [first]="0" [rows]="pagesize"
-              [value]="allpublicationInfo" [metaKeySelection]="true" [paginator]="true" [pageLinks]="3"
-              [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns" selectionMode="multiple"
-              [resizableColumns]="true" [reorderableColumns]="true" [totalRecords]="totalRecords"
-              (onLazyLoad)="publicationPagination($event)" [lazy]="true" [scrollable]="true" scrollHeight="450px"
-              (onPage)="pageIndexChange($event)">
-              <ng-template pTemplate="caption">
-                <div class="row">
-                  <div class="col">
-                    <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns" optionLabel="header"
-                      selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
-                      defaultLabel="Choose Columns" style="float: left;"></p-multiSelect>
-                  </div>
-                  <div class="col">
-                    <div style="width: auto !important; float: right;"
-                      class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
-                      <i class="fa fa-search"></i>
-                      <input type="text" pInputText size="50" class="form-control" (input)="
+          <div class="col">
+            <div style="width: auto !important; float: right;"
+              class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+              <i class="fa fa-search"></i>
+              <input type="text" pInputText size="50" class="form-control" (input)="
                           dt.filterGlobal($event.target.value, 'contains')
                         " placeholder="Filter" />
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <!-- <div class="col">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <!-- <div class="col">
                     <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
                       matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Data"
                       data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
@@ -55,55 +71,54 @@
                       (click)="dt.exportCSV({ selectionOnly: true })"></button>
 
                   </div> -->
-                  <div class="col">
-                    <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
-                      matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
-                      data-toggle="modal" (click)="selectedOnly = false; targetData = dt;"
-                      data-target="#downloadConfirmation">
-                    </button>
-                    <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
-                      matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
-                      (click)="dt.exportCSV({selectionOnly:true})">
-                    </button>
+          <div class="col">
+            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export All Data"
+              data-toggle="modal" (click)="selectedOnly = false; targetData = dt;" data-target="#downloadConfirmation">
+            </button>
+            <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+              matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
+              (click)="dt.exportCSV({selectionOnly:true})">
+            </button>
+          </div>
+          <div class="col-md-6">
+            <div class="">
+              <div class="col" style="float: right; padding-top: 3px;">
+                <div class="form-group atv_cv">
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="viewType" class="form-control" value="mpn" [(ngModel)]="viewType"
+                        (click)="changeOfStatus('', 'mpn')" />
+                      <span class="checkmark"></span>PN View
+                    </label>
                   </div>
-                  <div class="col-md-6">
-                    <div class="">
-                      <div class="col" style="float: right; padding-top: 3px;">
-                        <div class="form-group atv_cv">
-                          <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                              <input type="radio" name="viewType" class="form-control" value="mpn"
-                                [(ngModel)]="viewType" (click)="changeOfStatus('', 'mpn')" />
-                              <span class="checkmark"></span>PN View
-                            </label>
-                          </div>
-                          <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                              <input type="radio" name="viewType" class="form-control" value="publication"
-                                [(ngModel)]="viewType" (click)="changeOfStatus('', 'publication')" />
-                              <span class="checkmark"></span>Publication View
-                            </label>
-                          </div>
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="viewType" class="form-control" value="publication"
+                        [(ngModel)]="viewType" (click)="changeOfStatus('', 'publication')" />
+                      <span class="checkmark"></span>Publication View
+                    </label>
+                  </div>
 
-                          <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                              <input type="radio" name="vendorStatus" class="form-control" value="Active"
-                                (click)="getVenListByStatus('Active')" checked [(ngModel)]="currentstatus" />
-                              <span class="checkmark"></span>Active</label>
-                          </div>
-                          <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
-                            <label class="radio-cstm wauto">
-                              <input type="radio" name="vendorStatus" class="form-control" value="Inactive"
-                                (click)="getVenListByStatus('InActive')" [(ngModel)]="currentstatus" />
-                              <span class="checkmark"></span>In-Active</label>
-                          </div>
-                          <div class="pull-left" style="margin-top: 4px; margin-right: 0px;">
-                            <label class="radio-cstm wauto">
-                              <input type="radio" name="vendorStatus" class="form-control" value="ALL"
-                                (click)="getVenListByStatus('ALL')" [(ngModel)]="currentstatus" />
-                              <span class="checkmark"></span>All</label>
-                          </div>
-                          <!-- <div class="checkbox-cstm" style="margin-left: 0;">
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="vendorStatus" class="form-control" value="Active"
+                        (click)="getVenListByStatus('Active')" checked [(ngModel)]="currentstatus" />
+                      <span class="checkmark"></span>Active</label>
+                  </div>
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="vendorStatus" class="form-control" value="Inactive"
+                        (click)="getVenListByStatus('InActive')" [(ngModel)]="currentstatus" />
+                      <span class="checkmark"></span>In-Active</label>
+                  </div>
+                  <div class="pull-left" style="margin-top: 4px; margin-right: 0px;">
+                    <label class="radio-cstm wauto">
+                      <input type="radio" name="vendorStatus" class="form-control" value="ALL"
+                        (click)="getVenListByStatus('ALL')" [(ngModel)]="currentstatus" />
+                      <span class="checkmark"></span>All</label>
+                  </div>
+                  <!-- <div class="checkbox-cstm" style="margin-left: 0;">
                             <label
                               style="width: auto !important; margin-top: 3px;"
                             >
@@ -122,41 +137,41 @@
                               Show Deleted List
                             </label>
                           </div> -->
-                          <div class="checkbox-cstm" style="margin-left: 0;">
-                            <label style="width: auto !important; margin-top: 3px;">
-                              <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
-                                (click)="getDeleteListByStatus($event.target.checked)" />
-                              <span class="cr"><i class="cr-icon pi pi-check"></i></span>
-                              Show Deleted List
-                            </label>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <div class="checkbox-cstm" style="margin-left: 0;">
+                    <label style="width: auto !important; margin-top: 3px;">
+                      <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
+                        (click)="getDeleteListByStatus($event.target.checked)" />
+                      <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                      Show Deleted List
+                    </label>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              </ng-template>
+      </ng-template>
 
-              <ng-template pTemplate="colgroup" let-columns>
-                <colgroup>
-                  <col *ngFor="let col of columns" style="width: 120px;" />
-                </colgroup>
-              </ng-template>
+      <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+          <col *ngFor="let col of columns" style="width: 120px;" />
+        </colgroup>
+      </ng-template>
 
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
-                    {{ col.header }}
-                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                  </th>
-                  <th style="width: 140px; position: sticky;" *ngIf="selectedColumns.length > 0">
-                    Actions
-                  </th>
-                </tr>
-                <tr>
-                  <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <input *ngIf="
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+            {{ col.header }}
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          </th>
+          <th style="width: 140px; position: sticky;" *ngIf="selectedColumns.length > 0">
+            Actions
+          </th>
+        </tr>
+        <tr>
+          <th *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input *ngIf="
                         col.field !== 'revisionDate' &&
                         col.field !== 'nextReviewDate' &&
                         col.field !== 'expirationDate' &&
@@ -168,25 +183,23 @@
                         dt.filter($event.target.value, col.field, 'contains')
                       " [ngModel]="inputValue" />
 
-                    <input type="date" *ngIf="col.field == 'revisionDate'" name="revisionDate" style="width: 100%;"
-                      (change)="
+            <input type="date" *ngIf="col.field == 'revisionDate'" name="revisionDate" style="width: 100%;" (change)="
                         dt.filter($event.target.value, col.field, 'contains')
                       " [ngModel]="inputValue" />
-                    <input type="date" *ngIf="col.field == 'nextReviewDate'" name="nextReviewDate" style="width: 100%;"
-                      (change)="
+            <input type="date" *ngIf="col.field == 'nextReviewDate'" name="nextReviewDate" style="width: 100%;"
+              (change)="
                         dt.filter($event.target.value, col.field, 'contains')
                       " [ngModel]="inputValue" />
-                    <input type="date" *ngIf="col.field == 'expirationDate'" name="expirationDate" style="width: 100%;"
-                      (change)="
+            <input type="date" *ngIf="col.field == 'expirationDate'" name="expirationDate" style="width: 100%;"
+              (change)="
                         dt.filter($event.target.value, col.field, 'contains')
                       " [ngModel]="inputValue" />
 
-                    <input type="text" *ngIf="col.field == 'verifiedBy'" name="verifiedBy" style="width: 100%;"
-                      (change)="
+            <input type="text" *ngIf="col.field == 'verifiedBy'" name="verifiedBy" style="width: 100%;" (change)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
 
-                    <!-- <input type="text" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
+            <!-- <input type="text" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" />
 
@@ -194,143 +207,141 @@
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" /> -->
 
-                    <!-- <input type="date" *ngIf="col.field == 'verifiedDate'" name="verifiedDate" style="width: 100%;"
+            <!-- <input type="date" *ngIf="col.field == 'verifiedDate'" name="verifiedDate" style="width: 100%;"
                       (change)="
                         dt.filter($event.target.value, col.field, 'contains')
                       " [ngModel]="inputValue" /> -->
 
 
-                    <!-- <input type="date" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
+            <!-- <input type="date" *ngIf="col.field == 'createdBy'" name="createdBy" style="width: 100%;" (change)="
                       dt.filter($event.target.value, col.field, 'contains')
                     " [ngModel]="inputValue" /> -->
 
-                    <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width: 100%;"
-                      (change)="
+            <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width: 100%;" (change)="
                     dt.filter($event.target.value, col.field, 'contains')
                   " [ngModel]="inputValue" />
-                    <!-- <input type="date" *ngIf="col.field == 'modifyBy'" name="modifyBy" style="width: 100%;" (change)="
+            <!-- <input type="date" *ngIf="col.field == 'modifyBy'" name="modifyBy" style="width: 100%;" (change)="
                   dt.filter($event.target.value, col.field, 'contains')
                 " [ngModel]="inputValue" /> -->
-                    <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width: 100%;"
-                      (change)="
+            <input type="date" *ngIf="col.field == 'updatedDate'" name="updatedDate" style="width: 100%;" (change)="
                 dt.filter($event.target.value, col.field, 'contains')
               " [ngModel]="inputValue" />
-                    <!-- 
+            <!-- 
                     <input type="date" class="hidePlaceHolder table-header-input-width"
                       *ngIf="col.field == 'createdDate'" name="createdDate"
                       (change)="dt.filter($event.target.value, col.field, 'contains')">
                     <input type="date" class="hidePlaceHolder table-header-input-width"
                       *ngIf="col.field == 'updatedDate'" name="updatedDate"
                       (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
-                  </th>
-                  <!-- <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
+          </th>
+          <!-- <th style="width:120px" *ngFor="let col of columns" [ngSwitch]="col.field">
                                             <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value, col.field,'contains')">
                                         </th> -->
-                  <th style="width: 140px; position: sticky;"></th>
-                </tr>
-              </ng-template>
+          <th style="width: 140px; position: sticky;"></th>
+        </tr>
+      </ng-template>
 
-              <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
-                <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [pSelectableRowDblClick]="rowData"
-                  pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
-                  <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                    {{
-                    col.field == 'revisionDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                    : rowData[col.field] && col.field == 'nextReviewDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                    : rowData[col.field] && col.field == 'nextReviewDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                    : rowData[col.field] && col.field == 'expirationDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
-                    : rowData[col.field] && col.field == 'verifiedDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                    : rowData[col.field] && col.field == 'updatedDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                    : rowData[col.field] && col.field =='createdDate'
-                    ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
-                    : rowData[col.field]
-                    }}
-                  </td>
+      <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
+        <tr [pSelectableRow]="rowData" [pSelectableRowIndex]="rowIndex" [pSelectableRowDblClick]="rowData"
+          pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
+          <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
+            {{
+            col.field == 'revisionDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            : rowData[col.field] && col.field == 'nextReviewDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            : rowData[col.field] && col.field == 'nextReviewDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            : rowData[col.field] && col.field == 'expirationDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            : rowData[col.field] && col.field == 'verifiedDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+            : rowData[col.field] && col.field == 'updatedDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+            : rowData[col.field] && col.field =='createdDate'
+            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+            : rowData[col.field]
+            }}
+          </td>
 
-                  <td style="width: 140px; position: sticky;" *ngIf="selectedColumns.length > 0">
-                    <div *ngIf="currentDeletedstatus == false">
-                      <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
+          <td style="width: 140px; position: sticky;" *ngIf="selectedColumns.length > 0">
+            <div *ngIf="currentDeletedstatus == false">
+              <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData,$event)"></p-inputSwitch>
-                      <span>
-                        <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" data-target="#view"
-                          data-toggle="modal" (click)="openView(rowData)" matTooltip="View"
-                          matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-                      </span>
+              <span>
+                <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" data-target="#view"
+                  data-toggle="modal" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                    class="fa fa-eye"></i></a>
+              </span>
 
-                      <span><a class="btn nobg" (click)="openDocumentsList(documentsContent, rowData)"
-                          matTooltip="Documents" matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
-                      </span>
-                      <!-- <span>
+              <span><a class="btn nobg" (click)="openDocumentsList(documentsContent, rowData)" matTooltip="Documents"
+                  matTooltipPosition="above"><i class="fa fa fa-file-pdf-o"></i></a>
+              </span>
+              <!-- <span>
                         <a class="btn btn-info boxed-float-btn nobg"
                           (click)="openDocumentsList(documentsContent, rowData)" data-toggle="tooltip"
                           data-toggle="modal" matTooltip="View Document" matTooltipPosition="above"><i
                             class="fa fa-file-text"></i></a>
                       </span> -->
 
-                      <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit"
-                          matTooltipPosition="above"><i class="fa fa-pencil"> </i></a>
-                      </span>
-                      <span>
-                        <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
-                          matTooltipPosition="above">
-                          <i class="fa fa-trash"></i></a>
-                      </span>
-                      <span data-target="#publicationHistory" data-toggle="modal"><a class="btn nobg"
-                          (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
-                          <i class="fa fa-history"></i></a></span>
-                    </div>
-                    <div *ngIf="currentDeletedstatus == true">
-                      <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
-                        matTooltip="{{
+              <span><a class="btn nobg" (click)="openEdit(rowData)" matTooltip="Edit" matTooltipPosition="above"><i
+                    class="fa fa-pencil"> </i></a>
+              </span>
+              <span>
+                <a class="btn nobg" (click)="openDelete(content, rowData)" matTooltip="Delete"
+                  matTooltipPosition="above">
+                  <i class="fa fa-trash"></i></a>
+              </span>
+              <span data-target="#publicationHistory" data-toggle="modal"><a class="btn nobg"
+                  (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
+                  <i class="fa fa-history"></i></a></span>
+            </div>
+            <div *ngIf="currentDeletedstatus == true">
+              <p-inputSwitch [(ngModel)]="rowData['isActive']" name="isActive{{ rowIndex }}" [disabled]="true"
+                matTooltip="{{
                           rowData['isActive'] ? 'Active' : 'In Active'
                         }}" matTooltipPosition="above" (onChange)="handleChange(rowData, $event)"></p-inputSwitch>
-                      <span>
-                        <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" data-target="#view"
-                          data-toggle="modal" (click)="openView(rowData)" matTooltip="View"
-                          matTooltipPosition="above"><i class="fa fa-eye"></i></a>
-                      </span>
-                      <span><a class="btn nobg" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
-                          matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
+              <span>
+                <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" data-target="#view"
+                  data-toggle="modal" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i
+                    class="fa fa-eye"></i></a>
+              </span>
+              <span><a class="btn nobg" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
+                  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
+              </span>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
 
-              <ng-template #auditContent let-c="close" let-d="dismiss">
-                <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
-                  <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="emptymessage" let-columns *ngIf="allpublicationInfo.length == 0">
-                <tr>
-                  <td [attr.colspan]="14" style="color: red; font-weight: bold; text-align: center;">
-                    No records found
-                  </td>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="summary" id="footer">
-                <label id="footer" class="footer1">Total:</label>
-                <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
-                &nbsp;&nbsp;
-                <label id="footer" class="footer1">Pages Count:</label>
-                <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
-                  pInputText type="text" />
-              </ng-template>
-            </p-table>
-          </div>
+      <ng-template #auditContent let-c="close" let-d="dismiss">
+        <div *ngIf="AuditDetails != undefined && AuditDetails.length > 0">
+          <app-audit [Data]="AuditDetails" [Modal]="modal"></app-audit>
         </div>
-      </div>
-    </div>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns *ngIf="allpublicationInfo.length == 0">
+        <tr>
+          <td [attr.colspan]="14" style="color: red; font-weight: bold; text-align: center;">
+            No records found
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary" id="footer">
+        <label id="footer" class="footer1">Total:</label>
+        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+        &nbsp;&nbsp;
+        <label id="footer" class="footer1">Pages Count:</label>
+        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
+          type="text" />
+      </ng-template>
+    </p-table>
   </div>
 </div>
+<!-- </div> -->
+<!-- </div> -->
+<!-- </div> -->
+<!-- </div> -->
 
 <ng-template #content let-c="close" let-d="dismiss" data-backdrop="static">
   <div class="modal-header">
@@ -405,6 +416,39 @@
               <tr *ngFor="let audit of auditHistory; let i = index">
                 <!-- auditHistory[i>0 ? i-1 : i] -->
                 <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'partNos',
+                    audit.partNos
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  {{ audit.partNos }}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'pnDescription',
+                    audit.pnDescription
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  {{ audit.pnDescription }}
+                </td>
+                <td [ngStyle]="{
+                  color: getColorCodeForHistory(
+                    i,
+                    'revisionNum',
+                    audit.revisionNum
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
+                  {{ audit.revisionNum }}
+                </td>
+                <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publicationId',
@@ -416,16 +460,17 @@
                   {{ audit.publicationId }}
                 </td>
                 <td [ngStyle]="{
-                    color: getColorCodeForHistory(
-                      i,
-                      'description',
-                      audit.description
-                    )
-                      ? 'black'
-                      : 'red'
-                  }">
+                  color: getColorCodeForHistory(
+                    i,
+                    'description',
+                    audit.description
+                  )
+                    ? 'black'
+                    : 'red'
+                }">
                   {{ audit.description }}
                 </td>
+
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
@@ -440,15 +485,15 @@
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
-                      'publishby',
-                      audit.publishby
+                      'publishedBy',
+                      audit.publishedBy
                     )
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.publishby }}
+                  {{ audit.publishedBy }}
                 </td>
-                <td [ngStyle]="{
+                <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'revisionDate',
@@ -458,19 +503,9 @@
                       : 'red'
                   }">
                   {{ audit.revisionDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td>
-                <td [ngStyle]="{
-                    color: getColorCodeForHistory(
-                      i,
-                      'revisionNum',
-                      audit.revisionNum
-                    )
-                      ? 'black'
-                      : 'red'
-                  }">
-                  {{ audit.revisionNum }}
-                </td>
-                <td [ngStyle]="{
+                </td> -->
+
+                <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'nextReviewDate',
@@ -480,8 +515,8 @@
                       : 'red'
                   }">
                   {{ audit.nextReviewDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td>
-                <td [ngStyle]="{
+                </td> -->
+                <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'expirationDate',
@@ -491,7 +526,7 @@
                       : 'red'
                   }">
                   {{ audit.expirationDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td>
+                </td> -->
                 <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'location', audit.location)
                       ? 'black'
