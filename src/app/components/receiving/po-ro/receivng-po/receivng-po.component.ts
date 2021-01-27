@@ -105,6 +105,15 @@ export class ReceivngPoComponent implements OnInit {
     headerNotes: any;
     /** po-approval ctor */
     arrayLegalEntitylsit: any[] = [];
+    arraySitelist: any[] = [];
+    arrayVendlsit:any[] = [];
+    arrayComplist: any[] = [];
+    arrayCustlist: any[] = [];
+    arraymanufacturerlist: any[] = [];
+    arrayConditionlist: any[] = [];
+    arrayglaccountlist: any[] = [];
+    arrayshipvialist: any[] = [];
+    arraytagtypelist: any[] = [];
     constructor(public binservice: BinService,
         private purchaseOrderService: PurchaseOrderService,
         public manufacturerService: ManufacturerService,
@@ -266,16 +275,32 @@ export class ReceivngPoComponent implements OnInit {
         )
     }
 
-    private getShippingVia(): void {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(results => {
-            this.ShippingViaList = [];
-            for (let shippingVia of results) {
-                var dropdown = new DropDownData();
-                dropdown.Key = shippingVia.value.toLocaleString();
-                dropdown.Value = shippingVia.label;
-                this.ShippingViaList.push(dropdown);
-            }
-        });
+    // private getShippingVia(): void {
+    //     this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(results => {
+    //         this.ShippingViaList = [];
+    //         for (let shippingVia of results) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = shippingVia.value.toLocaleString();
+    //             dropdown.Value = shippingVia.label;
+    //             this.ShippingViaList.push(dropdown);
+    //         }
+    //     });
+    // }
+
+    getShippingVia(strText = '') {
+        if (this.arrayshipvialist.length == 0) {
+            this.arrayshipvialist.push(0);
+        }       
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
+            true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+        const data= res.map(x => {
+                    return {
+                        Key:x.value,
+                        Value: x.label
+                    }
+                });
+        this.ShippingViaList = data;             
+        })   
     }
 
     arrayPostatuslist: any[] = [];
@@ -877,8 +902,7 @@ export class ReceivngPoComponent implements OnInit {
             stock.divisionId = res.Level3 !== undefined ? res.Level3.toString() : 0;
             stock.departmentId = res.Level4 !== undefined ? res.Level4.toString() : 0;
             return stock.companyId;
-        })
-        console.log(stock);
+        })        
     }
 
     // async getLegalEntity(stockLine) {
@@ -1254,17 +1278,25 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
-    getAllSite(): void {
-        this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
-            this.sites = res;
-        })
-        // this.siteService.getSiteList().subscribe(
-        //     results => {
-        //         this.sites = results[0];
-        //     },
-        //     error => this.onDataLoadFailed(error)
-        // );
-    }
+    // getAllSite(): void {
+    //     this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
+    //         this.sites = res;
+    //     })
+    //     // this.siteService.getSiteList().subscribe(
+    //     //     results => {
+    //     //         this.sites = results[0];
+    //     //     },
+    //     //     error => this.onDataLoadFailed(error)
+    //     // );
+    // }
+    
+    private getAllSite() {
+		if (this.arraySitelist.length == 0) {
+            this.arraySitelist.push(0); }
+            this.commonService.autoSuggestionSmartDropDownList('Site','SiteId','Name','',true, 0,this.arraySitelist.join(),this.currentUserMasterCompanyId).subscribe(res => {
+                this.sites = res;                
+            });				
+	}
 
     getStockLineSite(stockLine: StockLineDraft): void {
         stockLine.SiteList = [];
@@ -1299,7 +1331,7 @@ export class ReceivngPoComponent implements OnInit {
             this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', stockLine.siteId).subscribe(
                 results => {
 
-                    console.log(results);
+                    
                     for (let wareHouse of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = wareHouse.value.toLocaleString();
@@ -1323,7 +1355,7 @@ export class ReceivngPoComponent implements OnInit {
         if (stockLine.warehouseId) {
             this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', stockLine.warehouseId).subscribe(
                 results => {
-                    console.log(results);
+                    
                     for (let loc of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = loc.value.toLocaleString();
@@ -1344,7 +1376,7 @@ export class ReceivngPoComponent implements OnInit {
         if (stockLine.locationId) {
             this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', stockLine.locationId).subscribe(
                 results => {
-                    console.log(results);
+                    
                     for (let shelf of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = shelf.value.toLocaleString();
@@ -1392,7 +1424,7 @@ export class ReceivngPoComponent implements OnInit {
     //     );
     // }
 
-    arrayCustlist: any[] = [];
+    
     getCustomers(strText = '') {
         if (this.arrayCustlist.length == 0) {
             this.arrayCustlist.push(0);
@@ -1414,30 +1446,41 @@ export class ReceivngPoComponent implements OnInit {
     }
 
 
-    getVendors(): void {
-        //stockLine.VendorList = [];
-        this.commonService.smartDropDownList('Vendor', 'VendorId', 'VendorName').subscribe(vendors => {
-            for (let vendor of vendors) {
-                var dropdown = new DropDownData();
-                dropdown.Key = vendor.value.toLocaleString();
-                dropdown.Value = vendor.label;
-                this.VendorList.push(dropdown);
-            }
-        },
-            error => this.onDataLoadFailed(error)
-        );
-        // this.vendorService.getVendors().subscribe(
-        //     vendors => {
-        //         for (let vendor of vendors[0]) {
-        //             var dropdown = new DropDownData();
-        //             dropdown.Key = vendor.vendorId.toLocaleString();
-        //             dropdown.Value = vendor.vendorName;
-        //             this.VendorList.push(dropdown);
-        //         }
-        //     },
-        //     error => this.onDataLoadFailed(error)
-        // );
+    // getVendors(): void {
+    //     //stockLine.VendorList = [];
+    //     this.commonService.smartDropDownList('Vendor', 'VendorId', 'VendorName').subscribe(vendors => {
+    //         for (let vendor of vendors) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = vendor.value.toLocaleString();
+    //             dropdown.Value = vendor.label;
+    //             this.VendorList.push(dropdown);
+    //         }
+    //         console.log(this.VendorList)
+    //     },
+    //         error => this.onDataLoadFailed(error)
+    //     );       
+    // }
+
+    getVendors(filterVal = '') {
+        if (this.arrayVendlsit.length == 0) {
+            this.arrayVendlsit.push(0); }
+		this.vendorService.getVendorNameCodeListwithFilter(filterVal,20,this.arrayVendlsit.join(),this.currentUserMasterCompanyId).subscribe(res => {			            
+            const data = res.map(x => {
+                return {
+                    Key: x.vendorId,
+                    Value: x.vendorName
+                }
+            });
+            this.VendorList = data;            
+		},err => {
+			this.isSpinnerVisible = false;					
+		});
     }
+    
+    filterVendorNames(event) {		
+		if (event.query !== undefined && event.query !== null) {
+		this.getVendors(event.query); }
+	}	
 
     // getCompanyList() {
     //     this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
@@ -1452,7 +1495,7 @@ export class ReceivngPoComponent implements OnInit {
     //     );        
     // }
 
-    arrayComplist: any[] = [];
+   
     getCompanyList(strText = '') {
         if (this.arrayComplist.length == 0) {
             this.arrayComplist.push(0);
@@ -1485,7 +1528,7 @@ export class ReceivngPoComponent implements OnInit {
     //     );
     // }
 
-    arraymanufacturerlist: any[] = [];
+    
     getManufacturers(strText = '') {
         if (this.arraymanufacturerlist.length == 0) {
             this.arraymanufacturerlist.push(0);
@@ -1498,7 +1541,7 @@ export class ReceivngPoComponent implements OnInit {
                 dropdown.Value = company.label
                 this.ManufacturerList.push(dropdown);
             }
-            console.log(this.ManufacturerList)
+            
         }, err => {
             this.isSpinnerVisible = false;
         });
@@ -1840,7 +1883,7 @@ export class ReceivngPoComponent implements OnInit {
     //     );
     // }
 
-    arrayConditionlist: any[] = [];
+    
     getConditionList() {
         if (this.arrayConditionlist.length == 0) {
             this.arrayConditionlist.push(0);
@@ -1853,7 +1896,7 @@ export class ReceivngPoComponent implements OnInit {
                 dropdown.Value = company.label
                 this.ConditionList.push(dropdown);
             }
-            console.log(this.ConditionList)
+            
             // this.ConditionList.map(x => {
             // 	if(x.label == 'New') {
             // 		this.defaultCondtionId = x.value;
@@ -1875,16 +1918,35 @@ export class ReceivngPoComponent implements OnInit {
             });
     }
 
-    getAllGLAccount(): void {
-        this.commonService.getGlAccountList().subscribe(glAccountData => {
-            for (let glAccount of glAccountData) {
-                var dropdown = new DropDownData();
-                dropdown.Key = glAccount.value.toLocaleString();
-                dropdown.Value = glAccount.label;
-                this.GLAccountList.push(dropdown);
-            }
-        });
+    // getAllGLAccount(): void {
+    //     this.commonService.getGlAccountList().subscribe(glAccountData => {
+    //         for (let glAccount of glAccountData) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = glAccount.value.toLocaleString();
+    //             dropdown.Value = glAccount.label;
+    //             this.GLAccountList.push(dropdown);
+    //         }
+    //         console.log("glaccount")
+    //         console.log(this.GLAccountList)
+    //         console.log("glaccount")
+    //     });
+    // }
+
+    getAllGLAccount(strText = '') {
+        if (this.arrayglaccountlist.length == 0) {
+            this.arrayglaccountlist.push(0);
+        }       
+        this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.arrayglaccountlist.join()).subscribe(res => {
+        const data= res.map(x => {
+                    return {
+                        Key:x.value,
+                        Value: x.label
+                    }
+                });
+        this.GLAccountList = data;          
+        })   
     }
+
 
     toggleSameDetailsForAllParts(part: PurchaseOrderPart): void {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
@@ -2047,17 +2109,31 @@ export class ReceivngPoComponent implements OnInit {
         }
     }
 
-    private getTagType(): void {
-        this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name').subscribe(results => {
-            this.TagTypeList = results;
-            // for (let tagType of results) {
-            //     var dropdown = new DropDownData();
-            //     dropdown.Key = tagType.value.toLocaleString();
-            //     dropdown.Value = tagType.label;
-            //     this.TagTypeList.push(dropdown);
-            // }
-        });
-    }
+    // private getTagType(): void {
+    //     this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name').subscribe(results => {
+    //         this.TagTypeList = results;
+    //         // for (let tagType of results) {
+    //         //     var dropdown = new DropDownData();
+    //         //     dropdown.Key = tagType.value.toLocaleString();
+    //         //     dropdown.Value = tagType.label;
+    //         //     this.TagTypeList.push(dropdown);
+    //         // }
+    //         console.log(this.TagTypeList)   
+    //     });
+    // }
+    
+    
+    getTagType(strText = '') {
+    if (this.arraytagtypelist.length == 0) {
+        this.arraytagtypelist.push(0);
+    }       
+    this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,
+        true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {   
+        this.TagTypeList = res;
+    })   
+  }
+
+    
 
     onChangeTimeLifeMin(str, part, index) {
         // for(let i=0; i < this.purchaseOrderData.purchaseOderPart.length; i++) {
