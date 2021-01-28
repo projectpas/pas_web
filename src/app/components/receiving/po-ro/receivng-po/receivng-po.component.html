@@ -250,11 +250,11 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let part of purchaseOrderData.purchaseOderPart;let row_index=index">
+                            <ng-container *ngFor="let part of purchaseOrderData.purchaseOderPart; let row_index=index">
                                 <!--this row is for the parent part-->
                                 <tr class="parent-data" *ngIf="part.isParent">
                                     <td class="details-control eachcol" style="padding: 4px 6px;">
-                                        <section *ngIf="isSplitShipmentPart(part.itemMasterId)">
+                                        <section *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                (click)="showSplitShipmentParts(part)"></i>
                                         </section>
@@ -317,9 +317,15 @@
                                         </button>
                                     </td>
                                 </tr>
+                               
                                 <tr class="child-header splitship-head child-header-back"
-                                    [hidden]="purchaseOrderData.purchaseOderPart[row_index+1] != undefined && !purchaseOrderData.purchaseOderPart[row_index+1].visible"
-                                    *ngIf="part.isParent && purchaseOrderData.purchaseOderPart[row_index+1] != undefined && (!purchaseOrderData.purchaseOderPart[row_index+1].isParent)">
+                                [hidden]="!part.visible"
+                                *ngIf="!part.isParent">
+                                    <!-- [hidden]="purchaseOrderData.purchaseOderPart[row_index+1] != undefined 
+                                    && !purchaseOrderData.purchaseOderPart[row_index+1].visible"
+                                    *ngIf="part.isParent && purchaseOrderData.purchaseOderPart[row_index+1] != undefined
+                                            && (!purchaseOrderData.purchaseOderPart[row_index+1].isParent)"
+                                    > -->
                                     <th></th>
                                     <th></th>
                                     <th colspan="5">PN</th>
@@ -337,7 +343,8 @@
                                     <th>Receive Quantity</th>
                                     <th> </th>
                                 </tr>
-                                <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
+                                <tr class="child-data splitship-child child-data-back" 
+                                    [hidden]="!part.visible"
                                     *ngIf="!part.isParent">
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>

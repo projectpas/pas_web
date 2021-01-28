@@ -348,6 +348,7 @@ export class ReceivngPoComponent implements OnInit {
 
         return addr;
     }
+    
 
     private loadPurchaseOrderData(purchaseOrder: PurchaseOrder) {
         //if (this.receivingService.selectedPurchaseorderCollection != undefined) {
@@ -369,6 +370,7 @@ export class ReceivngPoComponent implements OnInit {
         //     results => {
         //         this.managementStructureSuccess(this.purchaseOrderData.managementStructureId, results[0]);
         //this.purchaseOrderData.purchaseOderPart.forEach(part => {
+          
         let parentPart: PurchaseOrderPart;
         var allParentParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.isParent == true);
         for (let parent of allParentParts) {
@@ -377,10 +379,9 @@ export class ReceivngPoComponent implements OnInit {
             parent.currentSERIndex = 0;
             parent.isDisabledTLboxes = false;
             parent.quantityRejected = 0;
-            var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
+            var splitParts = this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == parent.purchaseOrderPartRecordId);
 
             if (splitParts.length > 0) {
-
                 parent.hasChildren = true;
                 parent.quantityOrdered = 0;
                 for (let childPart of splitParts) {
@@ -448,6 +449,7 @@ export class ReceivngPoComponent implements OnInit {
         // this.purchaseOrderData.purchaseOderPart = pPart.map((x, index) => {
         //     this.getItemMasterDetails(x, index);
         // });
+        console.log(this.purchaseOrderData);
 
     }
 
@@ -658,17 +660,21 @@ export class ReceivngPoComponent implements OnInit {
     }
 
     public showSplitShipmentParts(purchaseOrderPart: PurchaseOrderPart): void {
-        console.log(this.purchaseOrderData.purchaseOderPart);
-        console.log(purchaseOrderPart);
-
         var selectedParts: any = this.purchaseOrderData.purchaseOderPart.filter(function (part) {
-            return part.itemMasterId == purchaseOrderPart.itemMasterId;
+            return part.purchaseOrderPartRecordId == purchaseOrderPart.purchaseOrderPartRecordId;
         });
+   
         selectedParts.forEach(part => {
             part.toggleIcon = !part.toggleIcon;
             part.visible = !part.visible;
             // part.disableParentSpace = !part.disableParentSpace;
         });
+
+        this.purchaseOrderData.purchaseOderPart.forEach(part => {   
+            if(part.parentId == purchaseOrderPart.purchaseOrderPartRecordId) {        
+            part.visible = !part.visible;
+        }
+        });        
 
         // this.selectedChildParts =  [...selectedParts.filter(x => {
         //     console.log(x.itemMasterId, purchaseOrderPart.itemMasterId);
@@ -705,8 +711,8 @@ export class ReceivngPoComponent implements OnInit {
     //     }
     // }
 
-    public isSplitShipmentPart(itemMasterId: number): boolean {
-        return this.purchaseOrderData.purchaseOderPart.filter(x => x.itemMaster.itemMasterId == itemMasterId && !x.isParent).length > 0;
+    public isSplitShipmentPart(purchaseOrderPartRecordId: number): boolean {
+        return this.purchaseOrderData.purchaseOderPart.filter(x => x.parentId == purchaseOrderPartRecordId).length > 0;
     }
 
     // private getAllPriority() {

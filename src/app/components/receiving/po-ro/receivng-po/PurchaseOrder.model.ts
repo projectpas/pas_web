@@ -77,7 +77,6 @@ export class PurchaseOrderPart {
     quantityActuallyReceived: number;
     quantityRejected: number;
     uomId: number;
-
     quantityOrdered: number;
     quantityBackOrdered: number;
     unitCost: number;
@@ -111,6 +110,7 @@ export class PurchaseOrderPart {
     updatedDate: Date;
     isActive: boolean;
     isParent: boolean;
+    parentId: number;
     itemMaster: any;
     visible: boolean;
     conditionId: number;
