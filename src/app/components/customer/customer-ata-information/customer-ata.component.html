@@ -20,17 +20,17 @@
     </div>
   </div>
 
-  <div class="card new-card" style="margin-top: 0; padding: 10px">
-    <div class="card-header bg-primary new-card-header" >
+  <div class="card new-card">
+    <div class="card-header header" >
       <div class="row">
         <div class="col">
-          <h4 class="new-card-heading"> ATA Chapter View</h4>
+          <h4 class="header-name"> ATA Chapter View</h4>
         </div>
       </div>
     </div>    
-    <div class="clear"></div>
-    <div class="card-body new-card-body">
-    <p-table #dt class="rpo-table-cstm" 
+    <!-- <div class="clear"></div> -->
+    <div class="card-body header-body">
+    <p-table #dt class="rpo-table-cstm rro-table-cstm" 
     [rows]="pageSize" 
     [value]="ataListDataValues" 
     [rowsPerPageOptions]="[10, 20, 50, 100]" 
@@ -47,8 +47,9 @@
         <div class="row">
           <div class="col">
             <p-multiSelect [options]="ataHeaders" [(ngModel)]="selectedColumns" [ngModelOptions]="{ standalone: true }"
-              optionLabel="header" selectedItemsLabel="{0} columns selected" [style]="{ minWidth: '200px' }"
-              defaultLabel="Choose Columns" style="float:left">
+              optionLabel="header" selectedItemsLabel="{0} columns selected" 
+              class="multiselect-field"
+              defaultLabel="Choose Columns">
               <ng-template let-selectedColumns pTemplate="selectedItems">
                 <ng-container>{{ selectedColumns?.length }} Columns Selected
                 </ng-container>
@@ -56,34 +57,34 @@
             </p-multiSelect>
           </div>
         <div class="col">
-          <div
-            style="width: auto !important; float: right;"
-            class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-          >
+          <div					
+						class="global-search-field inner-addon right-addon inline-block"
+					  >
             <i class="fa fa-search"></i>
             <input type="text" pInputText size="50" 
             class="form-control"
               (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder="Filter"
-              style="height: 28px !important;" 
+             
               />
             </div>
           </div>
         </div>
         <div class="row">
             <div class="col">
-              <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+              <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export All Data" matTooltip="Download  Data" matTooltipPosition="above"  data-toggle="modal" 
                 (click)="selectedOnly = false; targetData = dt;"
                  data-target="#downloadExportPopup"
-                style="padding: 5px 10px !important; width: 115px !important;"></button>
-              <button type="button" class="btn btn-primary new-table-button" pButton icon="fa-download" iconPos="left"
+                ></button>
+              <button type="button" class="btn btn-primary exports-button" pButton icon="fa-download" iconPos="left"
                 label="Export Selected Data" matTooltip="Download Selected Data" matTooltipPosition="above"
-                (click)="dt.exportCSV({ selectionOnly: true })" style="padding: 5px 10px !important;"></button>
-              <button class="btn btn-primary new-table-button " style="padding: 5px 10px !important; height: 26px !important; width: 130px !important;"
+                (click)="dt.exportCSV({ selectionOnly: true })" 
+                ></button>
+              <button class="btn btn-primary exports-button "
                 *ngIf="showAdvancedSearchCard == false" type="button" (click)="enableDisableAdvancedSearch(true)">
                 Advanced Search <i class="fa fa-caret-down"></i>
               </button>
-              <button class="btn btn-primary new-table-button" style="padding: 5px 10px !important; height: 26px !important; width: 130px !important;"
+              <button class="btn btn-primary exports-button" 
                 *ngIf="showAdvancedSearchCard == true" type="button" (click)="enableDisableAdvancedSearch(false)">
                 Advanced Search <i class="fa fa-caret-up"></i>
               </button>
@@ -136,27 +137,27 @@
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" style="width:130px" />
+          <col *ngFor="let col of columns" class="table-column-width" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+          <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
             {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th style="width:70px;position:sticky">Action</th>
+          <th class="table-actions-column">Actions</th>
         </tr>
         <tr>
-          <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field">
-            <input style="width:100%;" pInputText type="text"
+          <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+            <input class="table-header-input-width" pInputText type="text"
               (input)="dt.filter($event.target.value, col.field, 'contains')" />
           </th>
-          <th style="width:70px;position:sticky"></th>
+          <th class="table-actions-column"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-i="rowIndex" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData">
-            <td class="uiTable_td_ovrflw_control" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
+            <td class="table-column-width" class="uiTable_td_ovrflw_control" *ngFor="let col of columns" pResizableColumn pReorderableColumn>
                 <ng-container *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'">
                   {{ rowData[col.field] }}  {{col.field == 'firstName' && rowData['lastName'] ? rowData['lastName'] : ''}}
               </ng-container>
@@ -164,7 +165,7 @@
                   {{rowData[col.field] | date: 'MM/dd/yyyy h:mm a'}}
               </ng-container>  
             </td>
-          <td style="width:70px;position:sticky; text-align: center">
+          <td class="action-icons-cstm table-column-width">
             <span data-toggle="modal" data-target="#contentATAChapterHist1"><a class="btn nobg"
                 (click)="getATAAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above"><i
                   class="fa fa-history"></i></a></span>
@@ -173,18 +174,18 @@
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns *ngIf="ataListDataValues?.length == 0">
         <tr>
-          <td [attr.colspan]="8" class="no-records-cstm">
+          <td [attr.colspan]="8" class="no-records-cstm no-records-msg">
             No records found
           </td>
         </tr>
       </ng-template>
       <ng-template pTemplate="summary" id="footer">
         <label id="footer" class="footer">Total:</label>
-        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+        <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
         &nbsp;&nbsp;
         <label id="footer" class="footer1">Pages Count:</label>
 
-        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
+        <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true" pInputText
           type="text" />
       </ng-template>
     </p-table>
@@ -216,7 +217,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -279,8 +280,9 @@
         <h4 class="modal-title">History of ATA Chapter</h4>
       </div>
       <div class="modal-body" *ngIf="auditHistory1">
-        <div class="table-responsive">
-          <table class="table table-bordered" *ngIf="auditHistory1.length > 0; else noDatavailable">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" *ngIf="auditHistory1.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <th>Contact</th>
@@ -382,6 +384,7 @@
             </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
               <h4 style="color: #ff5663;">No History Found</h4>

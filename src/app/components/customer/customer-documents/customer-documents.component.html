@@ -29,16 +29,16 @@
           </div>
         </div>
       </div>
-      <div class="card new-card" style="padding: 10px;">
-        <div class="card-header bg-primary new-card-header" >
+      <div class="card new-card">
+        <div class="card-header header" >
           <div class="row">
             <div class="col">
-              <h4 class="new-card-heading">  Documents List</h4>
+              <h4 class="header-name">  Documents List</h4>
             </div>
             <div>
               <a *ngIf="isViewMode == false" 
                data-toggle="modal" data-target="#addDocumentDetails">
-                <button type="button" class="btn-sm new-btn-primary"
+                <button type="button" class="btn-sm header-button"
                   matTooltip="Add Documents" matTooltipPosition="above" (click)="addDocumentDetails();">
                   Add Documents
                 </button>
@@ -51,7 +51,7 @@
         <div class="card-body new-card-body">
           <p-table
             #documents
-            class="rpo-table-cstm"
+            class="rpo-table-cstm rro-table-cstm"
             [value]="customerdocumentsDestructuredData"            
             [rows]="pageSize"
             [paginator]="true"
@@ -69,7 +69,7 @@
           >
             <ng-template pTemplate="colgroup" let-columns>
               <colgroup>
-                <col *ngFor="let col of columns" style="width:auto" />
+                <col *ngFor="let col of columns" class="table-column-width" />
               </colgroup>
             </ng-template>
 
@@ -82,15 +82,14 @@
                   [ngModelOptions]="{ standalone: true }"
                   optionLabel="header"
                   selectedItemsLabel="{0} columns selected"
-                  [style]="{ minWidth: '200px' }"
+                  class="multiselect-field"
                   defaultLabel="Choose Columns"
-                  style="float:left"
+            
                 ></p-multiSelect>
               </div>
               <div class="col">
-                <div
-                  style="width: auto !important; float: right;"
-                  class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
+                <div					
+                class="global-search-field inner-addon right-addon inline-block"
                 >
                   <i class="fa fa-search"></i>
                   <input
@@ -102,7 +101,6 @@
                       documents.filterGlobal($event.target.value, 'contains')
                     "
                     placeholder=" Filter"
-                    style="height: 28px !important;"
                   />
                 </div>
               </div>
@@ -111,7 +109,7 @@
               <div class="col">
                 <button
                   type="button"
-                  class="btn btn-primary new-table-button"
+                  class="btn btn-primary exports-button"
                   pButton
                   icon="fa-download"
                   matTooltip="Download  Data"
@@ -121,12 +119,10 @@
                   data-toggle="modal" 
                 (click)="selectedOnly = false; targetData = documents;"
                  data-target="#downloadDocuments"
-                 
-                  style="padding: 5px 10px !important;"
                 ></button>
                 <button
                   type="button"
-                  class="btn btn-primary new-table-button"
+                  class="btn btn-primary exports-button"
                   pButton
                   icon="fa-download"
                   matTooltip="Download Selected Data"
@@ -134,12 +130,12 @@
                   iconPos="left"
                   label="Export Selected Data"
                   (click)="documents.exportCSV({ selectionOnly: true })"
-                  style="padding: 5px 10px !important;"
+                
                 ></button>
               </div>
               <div class="col">
-                <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
-                  <label style="width: auto !important;margin-top: 3px;">
+                <div class="checkbox-cstm pull-right checkbox-align">
+                  <label class="checkbox-label-align">
                    <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"/>
                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                      Show Deleted List 
@@ -152,8 +148,8 @@
           <ng-template pTemplate="caption" *ngIf="isViewMode == true">
             <div class="row">
               <div class="col">
-                <div class="checkbox-cstm" style="margin-left: 0; text-align: right !important;">
-                  <label style="width: auto !important;margin-top: 3px;">
+                <div class="checkbox-cstm pull-right checkbox-align">
+                  <label class="checkbox-label-align">
                    <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"  (click)="getDeleteListByStatus($event.target.checked)"/>
                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                      Show Deleted List 
@@ -166,7 +162,7 @@
             <ng-template pTemplate="header" let-columns>
               <tr>
                 <ng-container *ngFor="let col of columns">
-                  <th
+                  <th class="table-column-width"
                     *ngIf="col.field !== 'fileName' && col.field !== 'fileName' "
                     pResizableColumn
                     pReorderableColumn
@@ -174,23 +170,22 @@
                     {{ col.header }}
                     <p-sortIcon [field]="col.field"></p-sortIcon>
                   </th>
-                  <th *ngIf="col.field == 'fileName'">
+                  <th class="table-column-width" *ngIf="col.field == 'fileName'">
                     File Name
                   </th>
                 </ng-container>
-                <th>Actions</th>
+                <th class="table-actions-column">Actions</th>
               </tr>
               <tr>
-                <th
-                  style="width:auto"
+                <th class="table-column-width"
                   *ngFor="let col of columns"
                   [ngSwitch]="col.field"
                 >
-                  <input type="text" (input)="documents.filter($event.target.value,col.field,'contains')" *ngIf=" col.field != 'fileCreatedDate' && col.field != 'fileUpdatedDate'" style="width:100%;" pInputText >
-                  <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'fileCreatedDate'" name="fileCreatedDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )"> 
-                  <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder" *ngIf="col.field == 'fileUpdatedDate'" name="fileUpdatedDate" style="width:120 px !important;" (change)="dateFilterForTable($event.target.value, col.field )">
+                  <input type="text" class="table-header-input-width" (input)="documents.filter($event.target.value,col.field,'contains')" *ngIf=" col.field != 'fileCreatedDate' && col.field != 'fileUpdatedDate'" pInputText >
+                  <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'fileCreatedDate'" name="fileCreatedDate"  (change)="dateFilterForTable($event.target.value, col.field )"> 
+                  <input type="date" data-date-format="MM/DD/YYYY" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'fileUpdatedDate'" name="fileUpdatedDate"  (change)="dateFilterForTable($event.target.value, col.field )">
                 </th>
-                <th></th>
+                <th class="table-actions-column"></th>
               </tr>
             </ng-template>
 
@@ -201,7 +196,7 @@
                 (dblclick)="docviewdblclick(rowData)"
               >
                 <ng-container *ngFor="let col of columns">
-                    <td *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
+                    <td class="table-column-width" *ngIf="col.field != 'fileName' && col.field != 'docMemo'"
                         class="ui-resizable-column"
                         pReorderableRowHandle>
                         {{
@@ -212,17 +207,17 @@
                         : rowData[col.field]
                         }}
                     </td>
-                  <td *ngIf="col.field == 'docMemo'">
+                  <td class="table-column-width" *ngIf="col.field == 'docMemo'">
                       <p class="m-0 p-0 p_textEditor" style="float: left" [innerHTML]="rowData[col.field]"></p>
                   </td>
-                  <td *ngIf="col.field == 'fileName'">
+                  <td class="table-column-width" *ngIf="col.field == 'fileName'">
                     <a class="filelink" (click)="downloadFileUpload(rowData)">
                       {{ rowData[col.field] }}</a
                     >
                   </td>
                 </ng-container>
 
-                <td class="text-center" *ngIf="isViewMode == false">
+                <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == false">
                   <div  *ngIf="currentDeletedstatus==true" >
                       <span>
                         <a 
@@ -269,7 +264,7 @@
                         matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></a></span>
                   </div>
                 </td>
-                <td class="text-center" *ngIf="isViewMode == true">
+                <td class="action-icons-cstm table-column-width" *ngIf="isViewMode == true">
                   <span>
                     <a
                       class="btn btn-info boxed-float-btn nobg"
@@ -297,14 +292,14 @@
                 <td
                   [attr.colspan]="10"
                   *ngIf="isViewMode == false"
-                  style="color: red; font-weight: bold; text-align: center"
+                  class="no-records-cstm no-records-msg"
                 >
                   No records found
                 </td>
                 <td
                   [attr.colspan]="10"
                   *ngIf="isViewMode == true"
-                  style="color: red; font-weight: bold; text-align: center"
+                  class="no-records-cstm no-records-msg"
                 >
                   No records found
                 </td>
@@ -313,7 +308,7 @@
             <ng-template pTemplate="summary" id="footer">
               <label id="footer" class="footer">Total:</label>
               <input
-                style="width: 5%;"
+              class="footer-input-width"
                 [(ngModel)]="documents._totalRecords" name="no'of records"
                 [disabled]="true"
                 pInputText
@@ -324,7 +319,7 @@
               <label id="footer" class="footer1">Pages Count:</label>
 
               <input
-                style="width: 5%;"
+              class="footer-input-width"
                 [ngModel]="getPageCount(documents._totalRecords, pageSize)" name="page count"
                 [disabled]="true"
                 pInputText
@@ -400,7 +395,7 @@
   <div class="modal-footer">
     <button
       type="button"
-      class="btn btn-success"
+      class="btn btn-primary"
       (click)="deleteItemAndCloseModel()">
       Yes
     </button>
@@ -786,7 +781,7 @@
                 <h4 class="modal-title">Edit Memo</h4>
               </div>
               <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                   <thead>
                     <th style="color: #fff;">Memo</th>
                   </thead>
@@ -803,19 +798,24 @@
                       </td>
                     </tr>
                   </tbody>
-                </table>
-                <div style="float: right;">
+                </table> -->
+                <p-editor
+                spellcheck="true"
+                (ngModelChange)="enableSaveMemo()"
+                 [(ngModel)]="memoPopupContent"
+                 [style]="{ height: '320px' }"
+                 name="memoPopupContent"
+               ></p-editor>
+                <div class="editor-buttons">
                   <button
                     type="button"
-                    class="btn btn-primary"
-                    style="padding: 6px 12px !important; margin-top: 10px;"
+                    class="btn btn-primary editor-buttons-margin"
                     (click)="onClickPopupSave()" [disabled]="disableSaveMemo">
                     Save
                   </button>
                   <button
                     type="button"
-                    class="btn btn-danger"
-                    style="padding: 6px 12px !important; margin-top: 10px;"
+                    class="btn btn-danger editor-buttons-margin"
                     (click)="closeMemoModel()" >
                     Close
                   </button>
@@ -867,8 +867,9 @@
     </div> 
   </div>
   <div class="modal-body">
-    <div class="table-responsive">
-      <table class="table table-bordered">
+    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+      <div class="tableFixHead">  
+      <table class="table table-bordered header-table-width">
         <thead>
           <tr>
             <th>Document Name</th>
@@ -954,6 +955,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   </div>
   <div class="modal-footer">
@@ -999,7 +1001,7 @@
     </strong>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
 </div>
 </ng-template>  

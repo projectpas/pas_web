@@ -23,7 +23,7 @@
     </div>
   </div>
 </div>
-<div style="padding-top : 50px;" *ngIf="editMode == true"></div>
+<div *ngIf="editMode == true"></div>
 <div class="right_col" role="main" >
     <div class="x_content">      
       <div class="card-header header" >
@@ -1028,7 +1028,7 @@
         <div class="clear"></div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-success">Submit</button>
+        <button class="btn btn-primary">Submit</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">
           Close
         </button>
@@ -1322,7 +1322,7 @@
         <h4 class="modal-title">Edit Memo</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-bordered table-fixed workflow-table-material">
+        <!-- <table class="table table-bordered table-fixed workflow-table-material">
           <thead>
             <th style="color: #fff;">Memo</th>
           </thead>
@@ -1340,12 +1340,19 @@
               </td>
             </tr>
           </tbody>
-        </table>
-        <div style="float: right;">
+        </table> -->
+        <p-editor
+        spellcheck="true"
+        (ngModelChange)="enableSaveMemo()"
+         [(ngModel)]="memoPopupContent"
+         [style]="{ height: '320px' }"
+         name="memoPopupContent"
+         required
+       ></p-editor>
+        <div class="editor-buttons">
           <button
             type="button"
-            class="btn btn-primary"
-            style="padding: 6px 12px !important; margin-top: 10px;"
+            class="btn btn-primary editor-buttons-margin"
             data-dismiss="modal"
             (click)="onClickPopupSave()"
             [disabled]="disableSaveMemo"
@@ -1354,8 +1361,7 @@
           </button>
           <button
             type="button"
-            class="btn btn-danger"
-            style="padding: 6px 12px !important; margin-top: 10px;"
+            class="btn btn-danger editor-buttons-margin"
             data-dismiss="modal"
           >
             Close
@@ -1386,7 +1392,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteRestirctPMA()">
+    <button type="button" class="btn btn-primary" (click)="deleteRestirctPMA()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1415,7 +1421,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteRestirctDER()">
+    <button type="button" class="btn btn-primary" (click)="deleteRestirctDER()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1444,7 +1450,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRestirctDER()">
+    <button type="button" class="btn btn-primary" (click)="restoreRestirctDER()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1474,7 +1480,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRestirctPMA()">
+    <button type="button" class="btn btn-primary" (click)="restoreRestirctPMA()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1499,7 +1505,7 @@
       <div class="modal-footer">
         <button
           type="button"
-          class="btn btn-success"
+          class="btn btn-primary"
           (click)="isCustomerAlsoaVendor('Yes')"
           data-dismiss="modal"
         >

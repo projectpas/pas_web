@@ -21,8 +21,8 @@
   </div>
 </div>
 
-<br />
-<div class="card new-card" style="width: calc(100% - 12px); margin: 6px; padding: 10px;">
+<!-- <br /> -->
+<div class="card new-card" style="width: calc(100% - 12px); margin: 6px;">
   <div class="card-header header" >
     <div class="row">
       <div class="col">
@@ -96,7 +96,7 @@
           </div>
           <div class="col-md-4">
             <div class="checkbox-cstm pull-right checkbox-align">
-              <label class="checkbox-label-align">
+              <label class="checkbox-label-align" style="width:120px !important">
                   <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="aircraftDeletedList" (change)="getDeleteListByStatus($event.target.checked)" />
                   <span style="margin-top: 5px;" class="cr"><i class="cr-icon pi pi-check"></i></span>
                     <p style="font-weight: bold;"> Show Deleted List </p>  
@@ -579,7 +579,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -619,8 +619,9 @@
       </div>
 
       <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width">
             <thead>
               <tr>
                 <th>Aircraft</th>
@@ -695,6 +696,7 @@
               <td style="background-color: #fff !important;"><p style="width: 50px; text-align: center;"> <input type="checkbox" name="isDeleted" [(ngModel)]="audit.isDeleted" disabled></p></td>
             </tr>
           </table>
+          </div>
         </div>
       </div>
 
@@ -745,7 +747,7 @@
     </strong>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
 </div>
 </ng-template>  
