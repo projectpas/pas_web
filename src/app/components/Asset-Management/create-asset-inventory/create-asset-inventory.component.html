@@ -843,7 +843,7 @@
                         </div>
                       <div class="modal-body">
                         <div  style="width: 97%" *ngIf="maintanancemoduleName"> 
-                            <app-common-documents [moduleName]="maintanancemoduleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
+                            <app-common-documents [moduleName]="maintanancemoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
                             [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
    
                         </div>
@@ -1111,7 +1111,7 @@
                         </div>
                       <div class="modal-body">
                         <div  style="width: 97% " *ngIf="warrantymoduleName"> 
-                            <app-common-documents [moduleName]="warrantymoduleName" (parentTrigger)="changeOfStatus($event)"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
+                            <app-common-documents [moduleName]="warrantymoduleName" (parentTrigger)="changeOfStatus()"  [uploadDocsToser]="uploadDocs" [referenceId]="assetInventoryId"
                             [isViewMode]="false" [offLineUpload]="true"></app-common-documents>
    
                         </div>
