@@ -915,15 +915,19 @@ export class CreateAssetComponent implements OnInit {
     }
     onIsDepreciable() {
         this.currentAsset.isdepreciable = true;
+        this.currentAsset.isNonDepreciable = false;
     }
     onIsNonDepreciable() {
         this.currentAsset.isNonDepreciable = true;
+        this.currentAsset.isdepreciable = false;
     }
     onIsAmortizable() {
         this.currentAsset.isAmortizable = true;
+        this.currentAsset.isNonAmortizable = false;
     }
     onIsNonAmortizable() {
         this.currentAsset.isNonAmortizable = true;
+        this.currentAsset.isAmortizable = false;
     }
     onDepreciable(type) {
         if (type == 'html') {

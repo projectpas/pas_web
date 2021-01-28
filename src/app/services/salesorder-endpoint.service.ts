@@ -28,6 +28,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly salesorder: string = environment.baseUrl + "/api/salesorder";
   private readonly savereserveissuespartsurl: string = environment.baseUrl + "/api/salesorder/savereserveissuesparts"
   private readonly getunreserverstockPartsUrl: string = environment.baseUrl + "/api/salesorder/getunreservedstockpartslist"
+  private readonly getunreserverstockPartsBySOIdUrl: string = environment.baseUrl + "/api/salesorder/getunreservedstockpartslistBySOId"
   private readonly getholdreservepartUrl: string = environment.baseUrl + "/api/salesorder/getholdstocklinereservedparts"
   private readonly getrelesereservepartUrl: string = environment.baseUrl + "/api/salesorder/releasestocklinereservedparts"
   private readonly getSalesOrderViewDetails: string = environment.baseUrl + "/api/SalesOrder/getview";
@@ -43,6 +44,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly getIssuedPartsUrl: string = environment.baseUrl + "/api/salesorder/getissuedparts"
   private readonly getSalesQuoteTotalDetails: string = environment.baseUrl + "/api/salesorder/togetheadermargindetails";
   private readonly getreserverstockPartsUrl: string = environment.baseUrl + "/api/salesorder/getreservedstockpartslist"
+  private readonly getreserverstockPartsBySOIdUrl: string = environment.baseUrl + "/api/salesorder/getreservedstockpartslistBySOId"
   private readonly getReservedAndIssuedPartsUrl: string = environment.baseUrl + "/api/salesorder/getreservedissuesparts"
   private readonly getUnreservedPartsUrl: string = environment.baseUrl + "/api/salesorder/getunreservedparts"
   private readonly getUnissuedPartsUrl: string = environment.baseUrl + "/api/salesorder/getunissuedParts"
@@ -58,6 +60,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   private readonly _addDocumentDetails: string = environment.baseUrl + "/api/SalesOrder/SalesOrderDocumentUpload";
   private readonly _getsalesquoteDocslist: string = environment.baseUrl + "/api/SalesOrder/getSalesOrderDocumentDetailList";
+  private readonly _getSalesOrderPartsViewByIdUrl: string = environment.baseUrl + "/api/SalesOrder/GetSalesOrderPartsViewById";
   private readonly _getsalesquoteDocumentAttachmentslist: string = environment.baseUrl + "/api/FileUpload/getattachmentdetails";
   private readonly _geSaleQuoteDocumentHistory: string = environment.baseUrl + "/api/SalesOrder/getSaleOrderDocumentAudit";
   private readonly _getSaveFreights: string = environment.baseUrl + "/api/SalesOrder/createsalesorderfreight";
@@ -321,6 +324,15 @@ export class SalesOrderEndpointService extends EndpointFactory {
       });
   }
 
+  getReservestockpartlistsBySOId(salesOrderId: number): Observable<PartAction> {
+    const URL = `${this.getreserverstockPartsBySOIdUrl}?salesorderid=${salesOrderId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getReservestockpartlistsBySOId(salesOrderId));
+      });
+  }
+
   getReservedAndIssuedParts(salesOrderId: number): Observable<PartAction> {
     const URL = `${this.getReservedAndIssuedPartsUrl}?salesorderid=${salesOrderId}`;
     return this.http
@@ -362,6 +374,14 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .get<any>(URL, this.getRequestHeaders())
       .catch(error => {
         return this.handleErrorCommon(error, () => this.getunreservedstockpartslist(salesOrderId, itemMasterId));
+      });
+  }
+  getunreservedstockpartslistBySOId(salesOrderId: number): Observable<PartAction> {
+    const URL = `${this.getunreserverstockPartsBySOIdUrl}?salesorderid=${salesOrderId}`;
+    return this.http
+      .get<any>(URL, this.getRequestHeaders())
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.getunreservedstockpartslistBySOId(salesOrderId));
       });
   }
   releasestocklinereservedparts(salesOrderId: number): Observable<any> {
@@ -599,6 +619,10 @@ export class SalesOrderEndpointService extends EndpointFactory {
       .catch(error => {
         return this.handleErrorCommon(error, () => this.deleteMultiplePart(salesOrderPartIds));
       });
+  }
+
+  getSalesOrderPartsViewById(salesOrderId) {
+    return this.http.get<any>(`${this._getSalesOrderPartsViewByIdUrl}/${salesOrderId}`, this.getRequestHeaders())
   }
   //end nitin
 }

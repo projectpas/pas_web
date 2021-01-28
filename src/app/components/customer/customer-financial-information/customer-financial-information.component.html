@@ -23,16 +23,16 @@
           </p>
         </div>
       </div>
-      <div class="card" style="padding: 10px;">
-        <div class="card-header bg-primary new-card-header" >
+      <div class="card new-card">
+        <div class="card-header header" >
           <div class="row">
             <div class="col">
-              <h4 class="new-card-heading"> Financial Information</h4>
+              <h4 class="header-name"> Financial Information</h4>
             </div>            
           </div>
         </div>
         <div class="clear"></div>
-        <hr />
+        <!-- <hr /> -->
         <form #financialInfoForm="ngForm" class="form-horizontal">
           <div class="col-md-12 col-sm-12 col-12">
             <div class="tab-content" style="padding-bottom: 8px;">
@@ -376,16 +376,16 @@
                         name="taxTable">
                         <ng-template pTemplate="header" let-columns>
                           <tr>
-                            <th *ngFor="let col of columns" pResizableColumn pReorderableColumn
+                            <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn
                               [pSortableColumn]="col.field">
                               {{ col.header }}
                               <p-sortIcon [field]="col.field"></p-sortIcon>
                             </th>
-                            <th width="20%">Action</th>
+                            <th class="table-actions-column">Actions</th>
                           </tr>
                           <tr>
-                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                              <input style="width: 100%;" pInputText type="text" (input)="
+                            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                              <input class="table-header-input-width" pInputText type="text" (input)="
                                   taxTable.filter(
                                     $event.target.value,
                                     col.field,
@@ -393,16 +393,16 @@
                                   )
                                 " />
                             </th>
-                            <th></th>
+                            <th class="table-actions-column"></th>
                           </tr>
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                           <tr>
-                            <td *ngFor="let col of columns">
+                            <td class="table-column-width" *ngFor="let col of columns">
                               {{ rowData[col.field] }}
                             </td>
 
-                            <td style="text-align: center;">
+                            <td class="action-icons-cstm table-column-width">
                               <div *ngIf="!currentDeletedstatus">
                                 <span data-toggle="modal" data-target="#editTarget">
                                   <a class="btn nobg" (click)="editTaxtRate(rowData)" matTooltip="Edit" 
@@ -440,20 +440,20 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" *ngIf="totalRecords == 0">
                           <tr>
-                            <td [attr.colspan]="3" class="no-records-cstm">
+                            <td [attr.colspan]="3" class="no-records-cstm no-records-msg">
                                     No records found
                             </td>
                           </tr>
                         </ng-template>
                         <ng-template pTemplate="summary" id="footer">
                           <label id="footer" class="footer">Total: </label>
-                          <input style="width: 5%;" [value]="taxTypeRateMapping.length" name="totalRecords" disabled
+                          <input class="footer-input-width" [value]="taxTypeRateMapping.length" name="totalRecords" disabled
                             pInputText type="text" />
 
                           &nbsp;&nbsp;
                           <label id="footer" class="footer1">Pages Count:</label>
 
-                          <input style="width: 5%;" [ngModel]="
+                          <input class="footer-input-width" [ngModel]="
                               getTaxPageCount(
                                 taxTypeRateMapping.length,
                                 pageSizeTax
@@ -725,7 +725,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -767,7 +767,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="restoreItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1510,7 +1510,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModelNew()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModelNew()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModelNew()">

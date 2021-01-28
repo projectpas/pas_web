@@ -94,7 +94,8 @@
                                         <span>
                                             <a [class.disabled]="salesQuote.isApproved || isViewMode"
                                                 [ngClass]="{'btn_disabled': salesQuote.isApproved || isViewMode}"
-                                                class="btn nobg" (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
+                                                class="btn nobg"
+                                                (click)="openmultiplepartDelete(summaryPart,rowIndex,deletepartcontent)"
                                                 matTooltip="Delete" matTooltipPosition="above">
                                                 <i class="fa fa-trash"></i>
                                             </a>
@@ -375,15 +376,16 @@
                                             </a>
                                         </span>
                                         <span>
+                                            <!-- (click)="initiateCreateWOROPO(part, 'PO')" matTooltip="Create PO" -->
                                             <a class="btn nobg btn-pluspo-cstm"
-                                                (click)="initiateCreateWOROPO(part, 'PO')" matTooltip="Create PO"
+                                                (click)="createPO(part)" matTooltip="Create PO"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-plus"> </i>
                                             </a>
                                         </span>
                                         <span>
                                             <a class="btn nobg btn-plusro-cstm"
-                                                (click)="initiateCreateWOROPO(part, 'RO')" matTooltip="Create RO"
+                                                (click)="createRO(part)" matTooltip="Create RO"
                                                 matTooltipPosition="above">
                                                 <i class="fa fa-plus" style="color: #259e08;"></i>
                                             </a>
@@ -403,7 +405,8 @@
                     <ng-container *ngIf="summaryParts.length == 0">
                         <tbody>
                             <tr>
-                                <td colspan="48" style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
+                                <td colspan="48"
+                                    style="color: red; font-weight: bold; text-align: left; text-transform: uppercase">
                                     No records found
                                 </td>
                             </tr>
@@ -484,19 +487,23 @@
         [selectedSummaryRow]="selectedSummaryRow" (close)="onClose($event)">
     </app-add-sales-part-number>
 </ng-template>
-<ng-template #popupContentforPartAction let-c="close" let-d="dismiss">
-    <app-sales-order-part-actions [display]="show" [salesQuote]="salesQuote"
+<ng-template #salesReserve let-c="close" let-d="dismiss">
+    <!-- <app-sales-order-part-actions [display]="show" [salesQuote]="salesQuote"
         [selectedPartActionType]="selectedPartActionType" [employeesList]="employeesList"
         [selectedPartDataForAction]="selectedPartDataForAction" [salesOrderId]="salesOrderId"
         (select)="openSalesMargin($event)" (close)="onClose($event)" (onPartReserve)="onShowModalReserve($event)">
-    </app-sales-order-part-actions>
+    </app-sales-order-part-actions> -->
+    <add-reserve-unreserve-part-number [salesQuote]="salesQuote" [employeesList]="employeesList"
+        [selectedPartDataForAction]="selectedPartDataForAction" [selectedPartActionType]="selectedPartActionType"
+        [selectedParts]="selectedParts" [part]="part" [salesOrderId]="salesOrderId" (close)="onCloseReserve($event)">
+    </add-reserve-unreserve-part-number>
 </ng-template>
-<ng-template #salesReserve let-c="close" let-d="dismiss" tabindex="-1">
+<!-- <ng-template #salesReserve let-c="close" let-d="dismiss" tabindex="-1">
     <add-reserve-unreserve-part-number [salesQuote]="salesQuote" [employeesList]="employeesList"
         [selectedPartDataForAction]="selectedPartDataForAction" [selectedPartActionType]="selectedPartActionType"
         [selectedParts]="selectedParts" [part]="part" (close)="onCloseReserve($event)">
     </add-reserve-unreserve-part-number>
-</ng-template>
+</ng-template> -->
 <ng-template #salesMargin let-c="close" let-d="dismiss" tabindex="-1">
     <app-sales-margin tabindex="-1" [part]="part" [isEdit]="isEdit" (save)="openSalesMarginSave($event)"
         (close)="onCloseMargin($event)"></app-sales-margin>

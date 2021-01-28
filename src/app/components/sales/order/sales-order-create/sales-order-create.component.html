@@ -574,7 +574,7 @@
                                 <app-sales-order-customer-approval *ngIf="isEdit" [customer-id]="customerId"
                                     [sales-order-id]="id" [status]="status" [customer-contacts]="customerContactList"
                                     [customerContactList]="customerContactList"
-                                    (on-part-approved-event)="onPartsApprovedEvent($event)">
+                                    (on-part-approved-event)="onPartsApprovedEvent()">
                                 </app-sales-order-customer-approval>
                             </p-tabPanel>
                             <p-tabPanel header="Address">
@@ -601,6 +601,9 @@
                                     (refreshData)="getChargesList()" [isView]="false" [isQuote]="false">
                                 </app-sales-order-charges>
                             </p-tabPanel>
+                            <p-tabPanel header="Pick Ticket">
+                                <app-sales-order-pick-tickets></app-sales-order-pick-tickets>
+                            </p-tabPanel>
                             <p-tabPanel header="Shipping">
                                 <app-sales-order-shipping [parts]="selectedParts" [salesOrderId]="id"
                                     [customerDetails]="customerDetails" [salesOrder]="salesQuote"
@@ -626,9 +629,6 @@
                                 <!-- [ContactList]="customerContactList" -->
                                 <app-communication [moduleName]="moduleName" [idForContact]="customerId" [type]="1"
                                     [referenceId]="id"></app-communication>
-                            </p-tabPanel>
-                            <p-tabPanel header="Pick Ticket">
-                                <app-sales-order-pick-tickets></app-sales-order-pick-tickets>
                             </p-tabPanel>
                         </p-tabView>
 

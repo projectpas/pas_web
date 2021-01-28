@@ -81,6 +81,9 @@ export class VendorDocumentsComponent implements OnInit {
 	vendorCodeandName: any;
 	moduleName:any="Vendor";
 	referenceId:any;
+	savedGeneralInformationData: any;
+	editGeneralInformationData: any;
+
 	constructor(public vendorService: VendorService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService,
 		private dialog: MatDialog, private masterComapnyService: MasterComapnyService, private configurations: ConfigurationService, public customerService: CustomerService, private datePipe: DatePipe) {
 			if(window.localStorage.getItem('vendorService')){
@@ -534,5 +537,9 @@ export class VendorDocumentsComponent implements OnInit {
 				this.isSpinnerVisible = false;
 			}, error => this.saveFailedHelper(error));
 		this.modal.close();
+	}
+
+	changeOfTab(event) {
+
 	}
 }

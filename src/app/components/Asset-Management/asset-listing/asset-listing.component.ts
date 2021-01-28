@@ -112,6 +112,7 @@ export class AssetListingComponent implements OnInit {
         { field: 'isSerializedNew', header: 'Serialized', colspan: '1' },
         { field: 'calibrationRequiredNew', header: 'Calibrated', colspan: '1' },
         { field: 'assetClass', header: 'Asset Category', colspan: '1' },
+        { field: 'deprAmort', header: 'Depr/Amort', colspan: '1' },
         // { field: 'companyName', header: 'Level 01', colspan: '1' },
         // { field: 'buName', header: 'Level 02', colspan: '1' },
         // { field: 'deptName', header: 'Level 03', colspan: '1' },
@@ -121,7 +122,7 @@ export class AssetListingComponent implements OnInit {
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
         { field: 'updatedBy', header: 'Updated By' },
-    ];
+    ]; 
     cols1 = [
         { field: 'partNumber', header: 'PN' },
         { field: 'partDescription', header: 'PN Description' },

@@ -372,6 +372,9 @@ export class PurchaseSetupComponent implements OnInit {
 	itemMasterId : number;
 	partName : string;
 	adddefaultpart : boolean = true;
+	salesOrderId:number;
+	home: any;
+	
 	modal: NgbModalRef;
 	alertText:string
 	constructor(private route: Router,
@@ -403,6 +406,7 @@ export class PurchaseSetupComponent implements OnInit {
 		this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
 		this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
 		this.partName = (localStorage.getItem('partNumber'));
+		this.salesOrderId = JSON.parse(localStorage.getItem('salesOrderId'));
 	}
 
 	ngOnInit() {		
@@ -1958,7 +1962,7 @@ export class PurchaseSetupComponent implements OnInit {
 			parentdata.quantityOrdered = '0';
 			parentdata.workOrderId = null;
 			parentdata.repairOrderId = null;
-			parentdata.salesOrderId = null;
+			//parentdata.salesOrderId = null;
 			parentdata.memo = null;
 			//this.getManagementStructureForParentEdit(parentdata,this.employeeId);
 		}
@@ -2359,8 +2363,13 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	loadSalesOrderList(filterVal = '') {
-		if (this.arraySOlist.length == 0) {
-            this.arraySOlist.push(0); }
+		if (this.salesOrderId != undefined && this.salesOrderId != null) {
+			this.arraySOlist.push(this.salesOrderId);
+		}
+		else{
+			if (this.arraySOlist.length == 0) {
+				this.arraySOlist.push(0); }
+		}
 		this.commonService.getSODataFilter(filterVal,20,this.arraySOlist.join(),this.currentUserMasterCompanyId).subscribe(res => {
 			const data = res.map(x => {
 				return {
@@ -4335,7 +4344,6 @@ WarnRescticModel() {
 	addPartNumbers(partNumberId,partName) {
 		this.inputValidCheck = false;			
 		//if (this.vendorService.isEditMode == false) {
-			
 			let newParentObject = new CreatePOPartsList();
 			newParentObject = {
 				...newParentObject, 
@@ -4343,8 +4351,8 @@ WarnRescticModel() {
 				priorityId: this.headerInfo.priorityId ? editValueAssignByCondition('value', this.headerInfo.priorityId) : null,
 				conditionId: this.defaultCondtionId,
 				discountPercent: 0,
-			    partNumberId: {value: partNumberId, label: partName},
-
+				partNumberId: {value: partNumberId, label: partName},
+				salesOrderId: getObjectById('value', this.salesOrderId == null ? 0 : this.salesOrderId, this.allSalesOrderInfo),
 			}
 			this.partListData.push(newParentObject); 			
 			for (let i = 0; i < this.partListData.length; i++) {
@@ -4402,6 +4410,7 @@ WarnRescticModel() {
 			for (let i = 0; i < this.partListData.length; i++) {
 				if (i == this.partListData.length - 1) { 
 					this.partListData[i].conditionId = this.defaultCondtionId;
+					//this.partListData[i].salesOrderId = this.salesOrderId;
 					this.getFunctionalReportCurrencyById(this.partListData[i]);
 				}
 			}
@@ -4416,6 +4425,7 @@ WarnRescticModel() {
 
 			localStorage.removeItem("itemMasterId");
 			localStorage.removeItem("partNumber");
+			localStorage.removeItem("salesOrderId");
 		}
 
 	  }

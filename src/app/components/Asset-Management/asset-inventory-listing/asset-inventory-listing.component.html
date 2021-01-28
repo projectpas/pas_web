@@ -937,7 +937,11 @@
                                 </div>
                         </div>
                         <div class="form-row" *ngIf="currentAsset.assetIsMaintenanceReqd">
-                            <div class="w-100" style="padding-top: 24px;">
+                            <div *ngIf="assetInventoryId" style="width:100%;">
+                                <app-common-documents [moduleName]="maintanancemoduleName"  [referenceId]="assetInventoryId"
+                                [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
+                            </div>
+                            <div class="w-100" style="padding-top: 24px;" style="display: none;">
                                         <div>
                                             <h6 class="panel-title alignb" style="padding-left: 6px;">Attachment Details</h6>
                                           </div>
@@ -1113,7 +1117,11 @@
                                 </div>
                         </div>
                         <div class="form-row" *ngIf="currentAsset.isWarrantyRequired">
-                            <div class="w-100">
+                            <div *ngIf="assetInventoryId" style="width:100%;">
+                                <app-common-documents [moduleName]="warrantymoduleName"  [referenceId]="assetInventoryId"
+                                [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
+                            </div>
+                            <div class="w-100" style="display: none;">
                                         <h6 class="panel-title alignb" style="padding-left: 6px;">Attachment Details</h6>
                                 <div class="checkbox-cstm setDelts">
                                     <label style="width: auto !important;margin-top: 3px;">
@@ -1233,7 +1241,11 @@
                 </div>
 
                 <div class="form-row" *ngIf="currentAsset.isIntangible">
-                    <div class="col-md-12">
+                    <div *ngIf="assetInventoryId" style="width:100%;">
+                        <app-common-documents [moduleName]="intangiblemoduleName"  [referenceId]="assetInventoryId"
+                        [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
+                    </div>
+                    <div class="col-md-12" style="display: none;">
                         <div class="form-row">
                             <div>
                                         <h6 class="panel-title alignb" style="padding-left: 6px;">Attachment Details</h6>

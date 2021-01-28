@@ -105,6 +105,8 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     isDeleteCapabilityPopupOpened: boolean = false;
     selectedForDeleteCapabilityId: any;
     selectedForDeleteContent: any;
+    restorerecord: any = {}
+    capabilityId: any;
     showCapes: boolean = false;
     isEnableCapesList: boolean = true;
     globalSearchData: any = {};
@@ -1185,20 +1187,39 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     deleteCapability(content, capabilityId, capabilityType) {
         this.selectedForDeleteCapabilityId = capabilityId;
         this.selectedForDeleteContent = content;
-        this.selectedCapabilityType = capabilityType;
+        if(capabilityType != '' && capabilityType != undefined)
+        {
+            this.selectedCapabilityType = capabilityType;
+        }
         if (this.isDeleteCapabilityPopupOpened == true) {
             this.itemMasterService.deleteCapabilityById(capabilityId, "admin").subscribe(res => {
                 this.dismissModel()
                 this.isDeleteCapabilityPopupOpened = false;
                 this.selectedCapabilityType = "";
                 this.alertService.showMessage("Success", `Action was deleted successfully`, MessageSeverity.success);
-            }),
-                error => {
-                }
+            })
         }
         else {
             this.isDeleteCapabilityPopupOpened = true
             this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
+        }
+    }
+
+    restore(restorePopupId, rowData) {
+        this.restorerecord = rowData;
+        this.selectedCapabilityType = rowData.capabilityType;
+        this.capabilityId = rowData.itemMasterCapesId;
+        this.modal = this.modalService.open(restorePopupId, { size: 'sm', backdrop: 'static', keyboard: false });
+    }
+
+    restoreCapability() {
+        if(this.capabilityId > 0)
+        {
+            this.itemMasterService.restoreCapabilityById(this.capabilityId, "admin").subscribe(res => {
+                this.dismissModel()
+                this.selectedCapabilityType = "";
+                this.alertService.showMessage("Success", `Action was Restored successfully`, MessageSeverity.success);
+            })
         }
     }
 
@@ -1309,8 +1330,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
-
-                
             }
         });
         dt.exportCSV();

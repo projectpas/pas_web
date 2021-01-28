@@ -268,14 +268,14 @@
               >
                 <tr>
                   <td
-                    [attr.colspan]="10"
+                    [attr.colspan]="11"
                     *ngIf="isViewMode == false"
                     class="no-records-cstm no-records-msg"
                   >
                     No records found
                   </td>
                   <td
-                    [attr.colspan]="10"
+                    [attr.colspan]="11"
                     *ngIf="isViewMode == true"
                     class="no-records-cstm no-records-msg"
                   >
@@ -1156,7 +1156,7 @@
           <button type="button" class="btn btn-primary editor-buttons-margin"						 
            (click)="onSaveTextAreaInfo()">Save</button>
           <button type="button" class="btn btn-danger editor-buttons-margin"
-           (click)="closeMemoModel()"
+           (click)="closeMemoModelpopup()"
             >Close</button>
         </div>
       </div>

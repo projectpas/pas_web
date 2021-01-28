@@ -106,11 +106,9 @@ export class CommonDocumentsComponent implements OnInit {
             this.generalName = this.generalInformtionData.name;
         }
 
- if(this.uploadDocsToser !=undefined){
+ if(this.uploadDocsToser !=undefined || this.uploadDocsToser !=null){
     this.id = this.referenceId;
-    console.log("id",this.referenceId)
                 this.uploadDocsToser.subscribe(v => { 
-                 
                     this.hideUpoladThing=true;
               setTimeout(() => {
                 this.onUploadDocumentListToServer();
@@ -123,7 +121,6 @@ export class CommonDocumentsComponent implements OnInit {
     generalName: any;
 
     ngOnChanges(changes: SimpleChanges) {
-    console.log("changes",changes)
         for (let property in changes) {
             if (property == 'generalInformtionData') {
                 if (changes[property].currentValue != {}) {
@@ -137,7 +134,6 @@ export class CommonDocumentsComponent implements OnInit {
          
             if (property == 'uploadDocsToser') {
                 this.hideUpoladThing=true;
-                console.log("referenceid",this.referenceId)
         //   setTimeout(() => {
         //     this.onUploadDocumentListToServer();
         //   }, 1200);
@@ -477,8 +473,8 @@ export class CommonDocumentsComponent implements OnInit {
                 this.moduleId = element.value;
             }
         });
-        if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit'){
-            this.referenceId=this.referenceId ? this.referenceId :localStorage.getItem('vendorId');
+        if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit' || this.moduleName=='AssetInventoryMaintenanceFile' || this.moduleName=='AssetInventoryWarrantyFile' || this.moduleName=='AssetInventoryIntangibleFile' ){
+            this.referenceId=this.referenceId ? this.referenceId :localStorage.getItem('commonId');
         }
         const vdata = {
             referenceId: this.referenceId,
@@ -500,8 +496,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.commonService.uploadDocumentsCommonEndpointUpdate(this.formData, this.updateCollection).subscribe(() => {
                     this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
                     this.formData = new FormData();
-                    if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit'){
-                        localStorage.removeItem('vendorId');
+                    if(this.moduleName=='VendorCertified' || this.moduleName=='VendorAudit' || this.moduleName=='AssetInventoryMaintenanceFile' || this.moduleName=='AssetInventoryWarrantyFile' || this.moduleName=='AssetInventoryIntangibleFile' ){
+                        localStorage.removeItem('commonId');
+                        this.uploadDocsToser.unsubscribe()
                     }
                     this.isEditButton = false;
                     this.commondocumentsList = [];
@@ -521,7 +518,9 @@ export class CommonDocumentsComponent implements OnInit {
                 this.updateCollection = this.documentCollection;
                 this.formData.append('attachmentdetais', JSON.stringify(docList));
                 this.commonService.uploadDocumentsCommonEndpoint(this.formData, this.updateCollection).subscribe(() => {
-                    this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+                    if(this.moduleName !='VendorCertified' || this.moduleName !='VendorAudit' || this.moduleName !='AssetInventoryMaintenanceFile' || this.moduleName !='AssetInventoryWarrantyFile' || this.moduleName !='AssetInventoryIntangibleFile' ){
+                        this.alertService.showMessage("Success", `Upload Documents Successfully.`, MessageSeverity.success);
+                    }
                     this.formData = new FormData();
                     this.isEditButton = false;
                     this.commondocumentsList = [];
@@ -770,7 +769,6 @@ this.parentTrigger.emit(true)
     getDocumentTypeList() {
         this.commonService.getDocumentType().subscribe(res => {
           this.documentType = res;
-          console.log("res",res);
         },err => {
           this.isSpinnerVisible = false;	
         });
@@ -803,12 +801,6 @@ this.parentTrigger.emit(true)
             this.lstfilterDocumentTypeRevNum = revnum;	
           }
         }
-
-    //   onDocumentTypeSelect(event)
-    //   {
-    //       console.log(event);
-    //   }
-
     new = {
         documentTypeId:0,
         name: "",
@@ -948,4 +940,10 @@ this.parentTrigger.emit(true)
         this.DocumentTypebutton = true;
         $('#documenttype-add-memo').modal('hide');
     }
+
+    closeMemoModelpopup(){
+      $('#documenttype-add-memo').modal('hide');
+    }
+
+    resetAddressShipViaForm() {}
 }

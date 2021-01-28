@@ -33,7 +33,6 @@ import { Subject } from 'rxjs';
 
 declare var $: any;
 
-
 @Component({
   selector: 'app-create-publication',
   templateUrl: './create-publication.component.html',
@@ -83,10 +82,8 @@ export class CreatePublicationComponent implements OnInit {
     tagTypeId: null
   }
 
-
   public sourcePublication: any = {
     ...this.publicationGeneralInformation
-
   };
 
   generalInformationDetails: any = {};
@@ -102,6 +99,7 @@ export class CreatePublicationComponent implements OnInit {
   employeeList: any = [];
   ataList = [];
   isSpinnerVisible = false;
+  currentDeletedstatus = false;
   headersforPNMapping = [
     { field: 'partNumber', header: 'PN' },
     { field: 'partDescription', header: 'PN Description' },
@@ -112,8 +110,6 @@ export class CreatePublicationComponent implements OnInit {
   selectedPNmappingColumns = this.headersforPNMapping;
 
   aircraftManufacturerList: { label: string; value: number }[];
-
-  // search function in aircraftInformation
   selectAircraftManfacturer = [];
   aircraftManfacturerIdsUrl: string = '';
   aircraftModelList: any = [];
@@ -136,27 +132,14 @@ export class CreatePublicationComponent implements OnInit {
   pnMappingPageSize: number = 10;
   aircraftPageSize: number = 10;
   moduleName: any = 'Publication';
-  // dropdown
-
-  // publicationTypes = [
-  //   { label: 'Select Publication Type', value: null },
-  //   { label: 'CMM', value: '2' },
-  //   { label: 'AD', value: '3' },
-  //   { label: 'SB', value: '4' }
-  // ];
-
-  // table columns for ata
 
   atacols = [
-    //PartNumber,PartDescription,ItemGroup, ManufacturerName
     { field: 'partNumber', header: 'PN Number' },
     { field: 'partDescription', header: 'PN Description' },
     { field: 'manufacturerName', header: 'Manufacturer' },
     { field: 'itemGroup', header: 'Item Group' },
     { field: 'ataChapter', header: 'ATA Chapter' },
-    //{ field: 'ataChapterCode', header: 'ATA Chapter Code' },
     { field: 'ataSubChapter', header: 'ATA SubChapter' },
-    //{ field: 'ataSubChapterCode', header: 'ATA SubChapter Code' }
   ];
   selectedatacols = this.atacols;
   status = [
@@ -194,7 +177,53 @@ export class CreatePublicationComponent implements OnInit {
   arrayIntegrationlist: any[] = [];
   disableSave: boolean = true;
 
-  /** Create-publication ctor */
+  aircraftInformationCols: any[] = [
+    { field: 'partNumber', header: 'PN Number' },
+    { field: 'partDescription', header: 'PN Description' },
+    { field: 'manufacturerName', header: 'Manufacturer' },
+    { field: 'itemGroup', header: 'Item Group' },
+    { field: 'aircraft', header: 'Aircraft' },
+    { field: 'model', header: 'Model' },
+    { field: 'dashNumber', header: 'Dash Numbers' },
+  ];
+  selectedaircraftInformationCols = this.aircraftInformationCols;
+  headersforAttachment = [
+    { field: 'tagTypeName', header: 'Tag Type' }
+  ];
+  first: number = 0;
+  index: number;
+  @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
+  totalRecordNew: number = 0;
+  pageSizeNew: number = 3;
+  totalPagesNew: number = 0;
+  sourceViewforDocumentList: any = [];
+  customerDocumentsColumns = [
+    { field: 'tagTypeName', header: 'Tag Type' },
+
+    { field: 'docName', header: 'Name' },
+    { field: 'docDescription', header: 'Description' },
+    { field: 'docMemo', header: 'Memo' },
+    { field: 'fileName', header: 'File Name' },
+    { field: 'fileSize', header: 'File Size' },
+    { field: 'createdBy', header: 'Created By' },
+    { field: 'updatedBy', header: 'Updated By' },
+    { field: 'createdDate', header: 'Created Date' },
+    { field: 'updatedDate', header: 'Updated Date' },
+  ];
+  selectedColumnsDoc = this.customerDocumentsColumns;
+  sourceViewforDocument: any = [];
+  sourceViewforDocumentAudit: any = [];
+  isEditButton: boolean = false;
+  documentInformation = {
+    docName: '',
+    docMemo: '',
+    docDescription: '',
+    attachmentDetailId: 0
+  }
+  allDocumentListOriginal: any = [];
+  selectedRowForDelete: any;
+  rowIndex: number;
+  disabledPartNumber: boolean = false;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -216,66 +245,10 @@ export class CreatePublicationComponent implements OnInit {
     private localStorage: LocalStoreManager,
     private modalService: NgbModal
   ) { }
-  aircraftInformationCols: any[] = [
-    { field: 'partNumber', header: 'PN Number' },
-    { field: 'partDescription', header: 'PN Description' },
-    { field: 'manufacturerName', header: 'Manufacturer' },
-    { field: 'itemGroup', header: 'Item Group' },
-    { field: 'aircraft', header: 'Aircraft' },
-    { field: 'model', header: 'Model' },
-    { field: 'dashNumber', header: 'Dash Numbers' },
-    // { field: 'memo', header: 'Memo' }
-  ];
-  selectedaircraftInformationCols = this.aircraftInformationCols;
-  headersforAttachment = [
-    { field: 'tagTypeName', header: 'Tag Type' }
-    // { field: 'fileName', header: 'File Name' },
-  ];
-  first: number = 0;
-  //added by supriya
-  index: number;
-  @ViewChild('fileUploadInput', { static: false }) fileUploadInput: any;
-  totalRecordNew: number = 0;
-  pageSizeNew: number = 3;
-  totalPagesNew: number = 0;
-  sourceViewforDocumentList: any = [];
-  //sourceViewforDocumentListColumns = [
-  //{ field: 'fileName', header: 'File Name' },
-  //]
-  customerDocumentsColumns = [
-    { field: 'tagTypeName', header: 'Tag Type' },
-
-    { field: 'docName', header: 'Name' },
-    { field: 'docDescription', header: 'Description' },
-    { field: 'docMemo', header: 'Memo' },
-    { field: 'fileName', header: 'File Name' },
-    { field: 'fileSize', header: 'File Size' },
-    { field: 'createdBy', header: 'Created By' },
-    { field: 'updatedBy', header: 'Updated By' },
-    { field: 'createdDate', header: 'Created Date' },
-    { field: 'updatedDate', header: 'Updated Date' },
-  ];
-  selectedColumnsDoc = this.customerDocumentsColumns;
-  //sourceViewforDocumentList: any = [];
-  sourceViewforDocument: any = [];
-  sourceViewforDocumentAudit: any = [];
-  isEditButton: boolean = false;
-  documentInformation = {
-    docName: '',
-    docMemo: '',
-    docDescription: '',
-    attachmentDetailId: 0
-  }
-  allDocumentListOriginal: any = [];
-  selectedRowForDelete: any;
-  rowIndex: number;
-  disabledPartNumber: boolean = false;
 
 
   ngOnInit() {
-    // this.sourcePublication.expirationDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
     this.getGlobalDateFormat();
-    // this.itemMasterId = this._actRoute.snapshot.params['id'];
     this.publicationRecordId = this._actRoute.snapshot.params['id'];
     this.sourcePublication.sequence = 1;
     if (!this.isEditMode) {
@@ -292,35 +265,35 @@ export class CreatePublicationComponent implements OnInit {
       this.isDisabledSteps = true;
       this.getPublicationDataonEdit();
 
-      //get PN mapping edit mode
-      this.isSpinnerVisible = true;
-      this.publicationService
-        .getPublicationPNMapping(this.publicationRecordId)
-        .subscribe(res => {
-          this.isSpinnerVisible = false;
-          this.pnMappingList = res.map(x => {
-            return {
-              ...x,
-              partNumber: x.partNumber,
-              partDescription: x.partDescription,
-              itemClassification: x.itemClassification,
-              manufacturer: x.manufacturerName
-            };
-          });
-        }, error => {
-
-          this.isSpinnerVisible = true;
-        });
-
-      //get aircraft info edit mode
       this.getAircraftInformationByPublicationId();
-
-      //get atachapter edit mode
+      this.getPnMapping();
       this.getAtaChapterByPublicationId();
       this.getFilesByPublicationId();
       this.toGetDocumentsListNew(this.publicationRecordId);
     }
 
+  }
+
+  getPnMapping() {
+    this.isSpinnerVisible = true;
+    this.publicationService
+      .getPublicationPNMapping(this.publicationRecordId)
+      .subscribe(res => {
+        this.isSpinnerVisible = false;
+        this.pnMappingList = res.map(x => {
+          return {
+            ...x,
+            partNumber: x.partNumber,
+            partDescription: x.partDescription,
+            itemClassification: x.itemClassification,
+            manufacturer: x.manufacturerName
+          };
+
+        });
+      }, error => {
+
+        this.isSpinnerVisible = true;
+      });
   }
 
   get userName(): string {
@@ -333,7 +306,6 @@ export class CreatePublicationComponent implements OnInit {
   }
   getGlobalDateFormat() {
     const globalSettings = this.localStorage.getDataObject<any>(DBkeys.GLOBAL_SETTINGS) || {};
-    // this.globalFormatDate =  new Intl.DateTimeFormat(globalSettings.cultureName).format(new Date())
     this.globalFormatDate = moment.localeData(globalSettings.cultureName).longDateFormat('L')
   }
 
@@ -341,7 +313,6 @@ export class CreatePublicationComponent implements OnInit {
 
     this.isSpinnerVisible = true;
     let publicationTypeId = this.sourcePublication.publicationTypeId ? this.sourcePublication.publicationTypeId : 0;
-    // this.commonService.smartDropDownList('PublicationType', 'PublicationTypeId', 'Name')
     this.commonService.autoSuggestionSmartDropDownList("PublicationType", "PublicationTypeId", "Name", '', true, 0, [publicationTypeId].join(), this.masterCompanyId)
       .subscribe(res => {
 
@@ -392,18 +363,10 @@ export class CreatePublicationComponent implements OnInit {
 
       this.isSpinnerVisible = false;
       const responseData = res;
-      //this.sourcePublication = res[0];
-      const tempsourcepub =  //responseData[0]
+      const tempsourcepub =
         responseData.map(x => {
           x.locationId = { label: x.location, value: x.locationId };
           x.publishedByRefId = { label: x.publishedByRefName, value: x.publishedByRefId };
-          //   if (x.revisionDate != null) {
-          //       x.revisionDate= new Date(x.revisionDate);
-          // }  if (x.expirationDate != null) {
-          //       x.expirationDate= new Date(x.expirationDate);
-          // }  if (x.nextReviewDate != null) {
-          //       x.nextReviewDate= new Date(x.nextReviewDate);
-          // }
           return {
             ...x,
             entryDate: new Date(x.entryDate),
@@ -413,29 +376,11 @@ export class CreatePublicationComponent implements OnInit {
             nextReviewDate: new Date(x.nextReviewDate)
           }
         });
-      //this.sourcePublication = tempsourcepub[0];
-      // const tempSourcePublication = tempsourcepub.map(x => {
-      //   return {
-      //     ...x,
-      //     publicationType: getValueFromArrayOfObjectById('label', 'value', x.publicationTypeId.toString(), this.publicationTypes),
-      //   }
-      // });
-
 
       this.sourcePublication = tempsourcepub[0];
       this.arrayIntegrationlist.push(this.sourcePublication.publicationTypeId);
       this.getAllIntegrations();
       this.publicationType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.publicationTypeId, this.publicationTypes);
-
-
-      // this.attachmentList = this.sourcePublication.attachmentDetails || [];
-      // if(this.attachmentList.length > 0){
-      //   for(let i=0; i<this.attachmentList.length; i++){
-      //     this.attachmentList[i]['isFileFromServer'] = true;
-      //   }
-      // }
-
-
 
     }, error => {
       this.isSpinnerVisible = false;
@@ -461,7 +406,6 @@ export class CreatePublicationComponent implements OnInit {
   }
   addNewRecord() {
     this.route.navigate(['/singlepages/singlepages/app-create-publication'])
-    // this.changeOfTab(value)
     this.currentTab = 'General';
     this.activeMenuItem = 1;
     this.formData = new FormData();
@@ -520,7 +464,6 @@ export class CreatePublicationComponent implements OnInit {
 
     this.isSpinnerVisible = true;
     let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
-    // this.commonService.getAllSalesEmployeeListByJobTitle("Employee", "EmployeeId", "FirstName", '', true, 200, [verifiedBy].join(), this.masterCompanyId)
     this.commonService.autoCompleteDropdownsEmployeeByMS('', true, 20, [verifiedBy].join(), this.currentUserManagementStructureId, this.masterCompanyId)
       .subscribe(res => {
         this.employeeList = res;
@@ -530,20 +473,6 @@ export class CreatePublicationComponent implements OnInit {
 
         this.isSpinnerVisible = false;
       });
-    // this.commonService.smartDropDownList('Employee', 'employeeId', 'firstName').subscribe(res => {
-    //   this.employeeList = res;
-    //   // this.employeeList = [{ label: 'Select Employee', value: null }, ...this.employeeList]
-    // })
-    // await this.employeeService.getEmployeeList().subscribe(res => {
-    //   const responseData = res[0];
-    //   this.employeeList = responseData.map(x => {
-    //     return {
-    //       label: x.firstName,
-    //       value: x.employeeId
-    //     };
-    //   });
-    //   this.employeeList = [{ label: 'Select Employee', value: null }, ...this.employeeList]
-    // });
   }
   private saveSuccessHelper(role?: any) {
     this.isSaving = false;
@@ -553,101 +482,13 @@ export class CreatePublicationComponent implements OnInit {
       MessageSeverity.success
     );
 
-    // this.loadData();
   }
   private saveFailedHelper(error: any) {
     this.isSaving = false;
     this.formData = new FormData();
 
-    // this.alertService.stopLoadingMessage();
-    // this.alertService.showStickyMessage(
-    //   'Save Error',
-    //   'The below errors occured whilst saving your changes:',
-    //   MessageSeverity.error,
-    //   error
-    // );
     this.alertService.showStickyMessage('Already exist', error.error, MessageSeverity.error);
   }
-  // onSelect(event) {
-  //   //Execute the actual UPDATES here.
-  //   for (let file of event.files) {
-  //     this.uploadedFiles.push(file);
-  //     //this.fileupload..push(file);
-  //   }
-  //   this.selectedFile = <File>event.target.files[0];
-  // }
-
-  // onUpload(event) {
-  //   for (let file of event.files) {
-  //     this.uploadedFiles.push(file);
-  //   }
-  // }
-
-  // postMethod(event) {
-  //   if (this.sourcePublication.docpath != '') {
-  //     let formData = new FormData();
-  //     formData.append('image', this.selectedFile, event.files.name);
-  //     this.http.post('~/upload', formData).subscribe(val => { });
-  //   }
-  // }
-
-  // uploadProfile(event) {
-  //   const fileSizeinMB = event.target.files[0].size / (1024 * 1000);
-  //   const size = Math.round(fileSizeinMB * 100) / 100;
-  //   if (!this.imageFormats.includes(event.target.files[0].type)) {
-  //     this.fileError = true;
-  //     this.fileErrorMessage = 'Image files only';
-  //     // this.myInputVariable.nativeElement.value = '';
-  //   } else if (size > 2) {
-  //     this.fileError = true;
-  //     this.fileErrorMessage = 'File size cannot be greater than 2 MB.';
-  //   } else {
-  //     this.fileError = false;
-  //     if (event.target.files && event.target.files[0]) {
-  //       this.uploadImage = event.target.files[0];
-  //       const reader: any = new FileReader();
-  //       reader.readAsDataURL(event.target.files[0]);
-  //       // tslint:disable-next-line:no-shadowed-variable
-  //       reader.onload = event => {
-  //         this.image = event.target.result;
-  //       };
-  //     }
-  //   }
-
-  // publicationFileUpload(event){
-  //   for(let file of event.files) {
-  //     this.uploadedFiles.push(file);
-  //   }
-  // }
-  //fileUpload(event) {
-
-  //  if (event.files.length === 0){
-  //    return this.disableFileAttachmentSubmit = true;
-  //  } else {
-  //     this.disableFileAttachmentSubmit = false;
-  //  }
-
-  //  const filesSelectedTemp = [];
-  //  for (let file of event.files){
-  //    filesSelectedTemp.push({
-  //      tagType: getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList),
-  //      link: file.objectURL, 
-  //      fileName: file.name, 
-  //      isFileFromServer: false
-  //    })
-
-  //    this.formData.append(this.sourcePublication.tagTypeId, file);
-
-  //  }
-  //  this.selectedFileAttachment = {
-  //    tagTypeId: this.sourcePublication.tagTypeId,
-  //    tagTypeName: getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList),
-  //    attachmentDetails: filesSelectedTemp
-  //  }
-
-
-  //}
-
 
   get masterCompanyId(): number {
     return this.authService.currentUser
@@ -675,7 +516,6 @@ export class CreatePublicationComponent implements OnInit {
     } else {
       this.formData.append('publishedByRefId', null);
     }
-    // this.formData.append('publishedByRefId', this.data.publishedByRefId.value ? this.data.publishedByRefId.value : null);
     this.formData.append('publishedByOthers', this.data.publishedByOthers);
     this.formData.append('locationId', this.data.locationId.value);
     if (this.data.revisionDate) {
@@ -698,7 +538,6 @@ export class CreatePublicationComponent implements OnInit {
     } else {
       this.formData.append('verifiedDate', null);
     }
-    //this.formData.append('revisionNum', this.data.revisionNum);
     this.formData.append('employeeId', this.data.employeeId);
     this.formData.append('verifiedStatus', this.data.verifiedStatus ? this.data.verifiedStatus : false);
     this.formData.append('verifiedBy', this.data.verifiedBy);
@@ -722,12 +561,6 @@ export class CreatePublicationComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.publicationService
           .newAction(this.formData
-            //   {
-            //   ...this.sourcePublication, CreatedBy: this.userName,
-            //   UpdatedBy: this.userName,
-            //   IsActive: true,
-            //   IsDeleted: false,
-            // }
 
           )
           .subscribe(res => {
@@ -736,8 +569,8 @@ export class CreatePublicationComponent implements OnInit {
             this.uploadDocs.next(true);
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
+            this.isEditMode = true;
             this.publicationRecordId = publicationRecordId,
-              // this.changeOfTab('PnMap'),
               role => this.saveSuccessHelper(role),
               error => this.saveFailedHelper(error);
           }, error => {
@@ -746,14 +579,9 @@ export class CreatePublicationComponent implements OnInit {
           });
       }
     }
-    //  else {
-    //   this.changeOfTab('PnMap');
-    // }
-
     if (this.isEditMode) {
-      // if(!this.sourcePublication.revisionNum) {
       this.updatePublicationGeneralInfo();
-      // }
+
     }
   }
   addFileTagsToPublication() {
@@ -786,10 +614,7 @@ export class CreatePublicationComponent implements OnInit {
       .subscribe(res => {
         this.isSpinnerVisible = false;
         this.isEnableNext = true;
-        // const { publicationRecordId } = res;
-        // this.publicationRecordId = publicationRecordId;
         this.getFilesByPublicationId();
-        // this.changeOfTab('PnMap'),
         this.formData = new FormData(),
           this.alertService.showMessage("Success", `Publication Updated Successfully`, MessageSeverity.success),
           role => this.saveSuccessHelper(role),
@@ -811,12 +636,6 @@ export class CreatePublicationComponent implements OnInit {
       this.updatePublicationGeneralInfo();
     }
   }
-  // private loadCustomerClassifiData() { }
-  // private onDataLoadClassifiSuccessful(
-  //   getCustomerClassificationList: CustomerClassification[]
-  // ) { }
-
-  // get PartNumbers
   async getPartNumberList() {
     this.isSpinnerVisible = false;
     await this.itemMasterService.getPrtnumberslistList().subscribe(list => {
@@ -846,7 +665,6 @@ export class CreatePublicationComponent implements OnInit {
       return {
         PublicationRecordId: this.publicationRecordId,
         PublicationId: this.generalInformationDetails.PublicationId,
-        //PublicationId: this.isEditMode ?  : this.generalInformationDetails.PublicationId,
         PartNumber: obj.partNumber,
         PartNumberDescription: obj.partDescription,
         ItemMasterId: obj.itemMasterId,
@@ -866,40 +684,14 @@ export class CreatePublicationComponent implements OnInit {
     });
     this.selectedPartNumbers = [];
     if (mapData && mapData.length > 0) {
-      // PNMapping Save
       this.isSpinnerVisible = true;
       this.publicationService.postMappedPartNumbers(mapData).subscribe(res => {
         this.isDisabledSteps = true;
         this.isSpinnerVisible = false;
-        this.publicationService
-          .getPublicationPNMapping(this.publicationRecordId)
-          .subscribe(res => {
-
-
-            this.isSpinnerVisible = false;
-            this.pnMappingList = res.map(x => {
-              return {
-                ...x,
-                partNumber: x.partNumber,
-                partDescription: x.partDescription,
-                itemClassification: x.itemClassification,
-                manufacturer: x.manufacturerName
-              };
-            }, error => {
-
-              this.isSpinnerVisible = false;
-            });
-            this.alertService.showMessage("Success", `PN Mapping Done Successfully`, MessageSeverity.success);
-            this.getAircraftInformationByPublicationId();
-            this.getAtaChapterByPublicationId();
-          }, error => {
-            this.isSpinnerVisible = false;
-          });
-
-
-        // get aircraft mapped data by publication id
+        this.getPnMapping();
       }, error => {
         this.saveFailedHelper(error)
+        this.isSpinnerVisible = false;
       });
     }
   }
@@ -936,7 +728,6 @@ export class CreatePublicationComponent implements OnInit {
     }
   }
 
-  // get All
   getAllAircraftManufacturer() {
     this.aircraftManufacturerService
       .getAll()
@@ -951,7 +742,6 @@ export class CreatePublicationComponent implements OnInit {
         });
       });
   }
-  // get all Aircraft Models
   getAllAircraftModels() {
     this.isSpinnerVisible = true;
     this.aircraftModelService.getAll().subscribe(models => {
@@ -970,21 +760,6 @@ export class CreatePublicationComponent implements OnInit {
     });
   }
 
-  //  deleteAttachmentRow(rowdata, index){
-  //    this.attachmentList.splice(index, 1)
-  //    // this.publicationService.deleteItemMasterMapping(this.selectedRowforDelete.publicationItemMasterMappingId).subscribe(() => {
-  //    this.publicationService.deletepublicationtagtype(rowdata.tagTypeMappingId).subscribe(() => {
-  //      this.alertService.showMessage(
-  //        'Success',
-  //        `Deleted Attachment  Successfully`,
-  //        MessageSeverity.success
-  //      );
-  //    })
-
-  //}
-
-
-  // get all dashnumber
   getAllDashNumbers() {
     this.isSpinnerVisible = false;
     this.Dashnumservice.getAll().subscribe(dashnumbers => {
@@ -1001,8 +776,6 @@ export class CreatePublicationComponent implements OnInit {
       this.isSpinnerVisible = false;
     });
   }
-
-  // get aircraft information by publication id
 
   getAircraftInformationByPublicationId() {
 
@@ -1022,7 +795,6 @@ export class CreatePublicationComponent implements OnInit {
             aircraft: x.aircraftType,
             model: x.aircraftModel,
             dashNumber: x.dashNumber,
-            //memo: x.memo
           };
         });
       }, error => {
@@ -1031,16 +803,14 @@ export class CreatePublicationComponent implements OnInit {
       });
   }
 
-  // get AircraftModels By manufacturer Type
   async getAircraftModelByManfacturerType() {
-    // construct url from array
+
     await this.searchByFieldUrlCreateforAircraftInformation();
-    // reset the dropdowns
+
     this.selectedAircraftModel = []
     this.selectedDashNumbers = []
     this.aircraftModelList = []
     this.dashNumberList = []
-    // checks where multi select is empty or not and calls the service
     if (this.aircraftManfacturerIdsUrl !== '') {
       this.aircraftModelService
         .getAircraftModelListByManufactureId(this.aircraftManfacturerIdsUrl)
@@ -1063,12 +833,9 @@ export class CreatePublicationComponent implements OnInit {
 
 
   async getDashNumberByManfacturerandModel() {
-    // construct url from array
     await this.searchByFieldUrlCreateforAircraftInformation();
-    // reset dropdown
     this.selectedDashNumbers = []
     this.dashNumberList = []
-    // checks where multi select is empty or not and calls the service
 
     if (this.aircraftManfacturerIdsUrl !== '' && this.aircraftModelsIdUrl !== '') {
       this.Dashnumservice.getDashNumberByModelTypeId(
@@ -1091,7 +858,6 @@ export class CreatePublicationComponent implements OnInit {
 
     this.searchParams = '';
 
-    // checks where multi select is empty or not and calls the service
     if (
       this.aircraftManfacturerIdsUrl !== '' &&
       this.aircraftModelsIdUrl !== '' &&
@@ -1100,7 +866,6 @@ export class CreatePublicationComponent implements OnInit {
       this.searchParams = `aircrafttypeid=${this.aircraftManfacturerIdsUrl
         }&aircraftmodelid=${this.aircraftModelsIdUrl}&dashNumberId=${this.dashNumberIdUrl}&partNumber=${this.selectedAircraftPartNumber}`;
     }
-    // search only by manfacturer and Model and  publicationId
     else if (
       this.aircraftManfacturerIdsUrl !== '' &&
       this.aircraftModelsIdUrl !== ''
@@ -1110,11 +875,9 @@ export class CreatePublicationComponent implements OnInit {
     } else if (this.aircraftManfacturerIdsUrl !== '') {
       this.searchParams = `aircrafttypeid=${this.aircraftManfacturerIdsUrl}`;
     }
-    // search only by model and publicationId
     else if (this.aircraftModelsIdUrl !== '') {
       this.searchParams = `aircraftmodelid=${this.aircraftModelsIdUrl}`;
     }
-    // search only by dashNumber and publicationId
     else if (this.dashNumberIdUrl !== '') {
       this.searchParams = `&dashNumberId=${this.dashNumberIdUrl}`;
     }
@@ -1135,12 +898,7 @@ export class CreatePublicationComponent implements OnInit {
           };
         })
       });
-    // this.selectAircraftManfacturer = [];
-    // this.selectedAircraftModel = [];
-    // this.selectedDashNumbers = [];
   }
-
-  // get atachapter by publication id
 
   getAtaChapterByPublicationId() {
     this.publicationService
@@ -1156,17 +914,12 @@ export class CreatePublicationComponent implements OnInit {
             ...x,
             ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
             ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
-            //ataChapterCode: x.ataChapterCode,
-            //ataSubChapterCode: x.ataSubChapterCode,
-            //ataSubChapterId: x.ataSubChapterId,
-            //ataChapterId: x.ataChapterId
           };
 
         });
       });
   }
 
-  // ata search by publication id
 
   searchByFieldUrlCreateforATA() {
 
@@ -1198,7 +951,6 @@ export class CreatePublicationComponent implements OnInit {
 
   }
 
-  // get ata chapter for dropdown
   getAllATAChapter() {
     this.ataMainSer.getAtaMainList().subscribe(Atachapter => {
       const response = Atachapter[0];
@@ -1210,7 +962,6 @@ export class CreatePublicationComponent implements OnInit {
       });
     });
   }
-  // get all subchapter for dropdown
   getAllSubChapters() {
     this.atasubchapter1service
       .getAtaSubChapter1List()
@@ -1251,7 +1002,6 @@ export class CreatePublicationComponent implements OnInit {
   async searchATA() {
     await this.searchByFieldUrlCreateforATA();
     this.searchATAParams = '';
-    // checks where multi select is empty or not and calls the service
     if (this.ataChapterIdUrl !== '' && this.ataSubchapterIdUrl !== '' && this.selectedPartNumber !== '') {
       this.searchATAParams = `ATAChapterId=${this.ataChapterIdUrl
         }&ATASubChapterID=${this.ataSubchapterIdUrl}&partNumber=${this.selectedPartNumber}`;
@@ -1276,13 +1026,10 @@ export class CreatePublicationComponent implements OnInit {
             ...x,
             ataChapter: `${x.ataChapterCode} - ${x.ataChapterName}`,
             ataSubChapter: `${x.ataSubChapterCode} - ${x.ataSubChapterDescription}`,
-            //ataSubChapterId: x.ataSubChapterId,
-            //ataChapterId: x.ataChapterId
+
           };
         });
       });
-    // this.selectedATAchapter = [];
-    // this.selectedATASubChapter = [];
   }
 
   onDeletePNMappingRow(rowData) {
@@ -1292,21 +1039,7 @@ export class CreatePublicationComponent implements OnInit {
   deleteConformation(value) {
     if (value === 'Yes') {
       this.publicationService.deleteItemMasterMapping(this.selectedRowforDelete.publicationItemMasterMappingId).subscribe(() => {
-        this.publicationService
-          .getPublicationPNMapping(this.publicationRecordId)
-          .subscribe(res => {
-            this.pnMappingList = res.map(x => {
-              return {
-                ...x,
-                partNumber: x.partNumber,
-                partNumberDescription: x.partNumberDescription,
-                itemClassification: x.itemClassification,
-                manufacturer: x.manufacturer
-              };
-            });
-            this.getAtaChapterByPublicationId();
-            this.getAircraftInformationByPublicationId();
-          });
+        this.getPnMapping();
         this.alertService.showMessage(
           'Success',
           `Deleted PN Mapping Successfully`,
@@ -1322,8 +1055,6 @@ export class CreatePublicationComponent implements OnInit {
     const url = `${this.configurations.baseUrl}/api/FileUpload/downloadattachedfile?filePath=${link}`;
     window.location.assign(url);
   }
-
-  //added supriya
   dismissModelNew() {
 
     this.isEditMode = false;
@@ -1331,7 +1062,6 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   addDocumentDetails() {
-    // this.sourceViewforDocumentList = [];
     this.selectedFileAttachment = [];
     this.index = 0;
     this.disableFileAttachmentSubmit = false;
@@ -1413,14 +1143,11 @@ export class CreatePublicationComponent implements OnInit {
         link: filesSelectedTemp[i].link,
         fileName: filesSelectedTemp[i].fileName,
         fileSize: filesSelectedTemp[i].fileSize,
-        tagType: this.sourcePublication.tagTypeId,//getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList),
-
+        tagType: this.sourcePublication.tagTypeId,
         isFileFromServer: false,
         attachmentDetailId: 0,
 
       })
-
-      // attachmentDetails: filesSelectedTemps
 
     }
 
@@ -1431,7 +1158,6 @@ export class CreatePublicationComponent implements OnInit {
     this.selectedFile = event.target.files[0];
   }
   removeFile(event) {
-    //this.formData.delete(event.file.name)
   }
 
   enableSave() {
@@ -1454,7 +1180,7 @@ export class CreatePublicationComponent implements OnInit {
           updatedBy: this.userName,
           createdDate: Date.now(),
           updatedDate: Date.now(),
-          tagType: this.sourcePublication.tagTypeId,//getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList),
+          tagType: this.sourcePublication.tagTypeId,
           tagTypeName: getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.tagTypeId.toString(), this.fileTagTypesList),
 
           fileSize: ((this.selectedFileAttachment[i].fileSize) / (1024 * 1024)).toFixed(2),
@@ -1514,7 +1240,6 @@ export class CreatePublicationComponent implements OnInit {
     this.memoPopupContent = this.documentInformation.docMemo;
     this.enableSave();
     this.disableSaveMemo = true;
-    //this.memoPopupValue = value;
   }
   enableSaveMemo() {
     this.disableSaveMemo = false;
@@ -1562,7 +1287,6 @@ export class CreatePublicationComponent implements OnInit {
       this.sourceViewforDocument = rowdata;
 
     }
-    //  this.toGetDocumentView(rowdata.attachmentDetailId);
 
   }
   deleteAttachmentRow(rowdata, index, content) {
@@ -1597,41 +1321,26 @@ export class CreatePublicationComponent implements OnInit {
 
 
   onUploadDocumentListNew() {
-    // file upload
     const vdata = {
       referenceId: this.publicationId,
       masterCompanyId: 1,
       createdBy: this.userName,
       updatedBy: this.userName,
       moduleId: 5,
-      //docName: this.sourceViewforDocumentList[0].docName,
     }
     for (var key in vdata) {
       this.formData.append(key, vdata[key]);
     }
     this.formData.append('attachmentdetais', JSON.stringify(this.sourceViewforDocumentList));
-
-
-
-
-    //        if (this.selectedFileAttachment.length > 0) {
-    //            for (var i = 0; i < this.selectedFileAttachment.length; i++) {
-    //                this.formData.append('Name[]', this.selectedFileAttachment[i].docName);
-    //}
-    //  }
-
     this.commonService.uploadDocumentsEndpoint(this.formData).subscribe(res => {
       this.formData = new FormData();
       this.toGetDocumentsListNew(this.publicationId);
     });
-    //./ file upload
   }
 
   toGetDocumentsListNew(id) {
     var moduleId = 5;
     this.publicationService.getFilesBypublicationNew(this.publicationRecordId).subscribe(res => {
-
-      //this.commonService.GetDocumentsListNew(id, moduleId).subscribe(res => {
       this.sourceViewforDocumentList = res || [];
       this.allDocumentListOriginal = res;
 
@@ -1650,7 +1359,6 @@ export class CreatePublicationComponent implements OnInit {
 
     this.commonService.GetAttachment(id).subscribe(res => {
       this.sourceViewforDocument = res || [];
-      // this.allCustomerFinanceDocumentsListOriginal = res;
 
 
     })
@@ -1658,7 +1366,6 @@ export class CreatePublicationComponent implements OnInit {
   dateFilterForTableNew(date, field) {
 
     if (date !== '' && moment(date).format('MMMM DD YYYY')) {
-      // this.sourceViewforDocumentList = this.allDocumentListOriginal;
       const data = [...this.sourceViewforDocumentList.filter(x => {
 
         if (moment(x.createdDate).format('MMMM DD YYYY') === moment(date).format('MMMM DD YYYY') && field === 'createdDate') {
@@ -1687,8 +1394,6 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   openHistory(content, rowData) {
-    //const { customerShippingAddressId } = rowData.customerShippingAddressId;
-    //const { customerShippingId } = rowData.customerShippingId;
     this.alertService.startLoadingMessage();
 
     this.commonService.GetAttachmentPublicationAudit(rowData.attachmentDetailId).subscribe(
@@ -1709,36 +1414,6 @@ export class CreatePublicationComponent implements OnInit {
 
 
 
-
-  // onDeletePNMappingRow(rowData) {
-  //   this.publicationService.deleteItemMasterMapping(rowData.publicationItemMasterMappingId).subscribe(res => {
-  //     this.publicationService
-  //       .getPublicationPNMapping(this.publicationRecordId)
-  //       .subscribe(res => {
-  //         this.pnMappingList = res.map(x => {
-  //           return {
-  //             ...x,
-  //             PartNumber: x.partNumber,
-  //             PartNumberDescription: x.partNumberDescription,
-  //             ItemClassification: x.itemClassification
-  //           };
-  //         });        
-  //       });
-  //   })
-  // }
-
-
-
-  //   getValueFromArrayOfObjectById(field: string, idField: string, id: string, originalData: any) {
-  //     if ((field !== '' || field !== undefined) && (idField !== '' || idField !== undefined) && (id !== '' || id !== undefined) && (originalData !== undefined)) {
-  //         const data = originalData.filter(x => {
-  //             if (x[idField] === id) {
-  //                 return x[field];
-  //             }
-  //         })
-  //         return data;
-  //     }
-  // }
   enableDisableAdvancedSearchAta(val) {
     this.showAdvancedSearchCardAta = val;
     this.selectedATAchapter = [];
@@ -1760,12 +1435,9 @@ export class CreatePublicationComponent implements OnInit {
     });
   }
   async getGlocationsList(event) {
-    // if(event.query.length < 2)
-    // return false;
+
     let locationId = this.sourcePublication.locationId ? this.sourcePublication.locationId : 0;
     this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query ? event.query : '', true, 20, [locationId].join(), this.masterCompanyId).subscribe(res => {
-
-      // await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
       this.gLocationsList = res;
     });
   }
@@ -1794,18 +1466,11 @@ export class CreatePublicationComponent implements OnInit {
     this.sourcePublication['location'] = this.sourcePublication.locationId.label
   }
 
-  //Get Published By Modules List
-
   getPublishedByModulesList() {
     let publishedById = this.sourcePublication.publishedById ? this.sourcePublication.publishedById : 0;
     this.commonService.autoSuggestionSmartDropDownList('Module', 'ModuleId', 'ModuleName', '', true, 0, [publishedById].join(), this.masterCompanyId).subscribe(res => {
-
-      // await this.commonService.autoSuggestionSmartDropDownList('Location', 'LocationId', 'Name', event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH).subscribe(res => {
       this.publishedByModulesList = res;
     });
-    // this.publicationService.getPublishedByModuleList().subscribe(res => {
-    //   this.publishedByModulesList = res;
-    // });
   }
   getPublishedByReferencesList(event, id) {
     let tableName = "";
@@ -1821,8 +1486,6 @@ export class CreatePublicationComponent implements OnInit {
       tableColumnName = "Name";
     }
     let publishedBy = this.sourcePublication.publishedByRefId ? this.sourcePublication.publishedByRefId : 0;
-    // this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query, false, DBkeys.AUTO_COMPLETE_COUNT_LENGTH)
-
     this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query ? event.query : '', true, 20, [publishedBy].join(), this.masterCompanyId).subscribe(res => {
       this.publishedByReferences = res;
     });
@@ -1835,51 +1498,52 @@ export class CreatePublicationComponent implements OnInit {
     this.nextOrPreviousTab = nextOrPrevious;
     let content = this.tabRedirectConfirmationModal;
     this.modal = this.modalService.open(content, { size: "sm" });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
-
-
   }
   dismissModel() {
     this.modal.close();
   }
   redirectToTab() {
     this.dismissModel();
-    // if(this.employeeService.isEditMode == true){
     this.changeOfTab('PnMap');
-    // }else{
-
-    // this.gotoNext();
-    // }
 
   }
 
   clearValue() { }
 
-
   restorerecord: any = {};
   restore(content, rowData) {
     this.restorerecord = rowData;
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-    this.modal.result.then(() => {
-    }, () => {
-      // console.log('Backdrop click')
-    })
   }
   restoreRecord() {
     this.isSpinnerVisible = true;
     this.publicationService.restoreItemMasterMapping(this.restorerecord.publicationItemMasterMappingId).subscribe(res => {
       this.modal.close();
       this.isSpinnerVisible = false;
-      // this.getDeleteListByStatus(true)
       this.alertService.showMessage("Success", `Successfully restored`, MessageSeverity.success);
     }, error => {
       this.isSpinnerVisible = false;
     })
   }
+  getDeleteListByStatus() {
+    this.isSpinnerVisible = true;
+    this.publicationService
+      .getPublicationPNMapping(this.publicationRecordId)
+      .subscribe(res => {
+        this.isSpinnerVisible = false;
+        this.pnMappingList = res.map(x => {
+          return {
+            ...x,
+            partNumber: x.partNumber,
+            partDescription: x.partDescription,
+            itemClassification: x.itemClassification,
+            manufacturer: x.manufacturerName
+          };
+        });
+      }, error => {
+
+        this.isSpinnerVisible = true;
+      });
+
+  }
 }
-// updatePublicationGeneralInfo
