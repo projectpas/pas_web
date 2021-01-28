@@ -2527,9 +2527,10 @@ export class PurchaseSetupComponent implements OnInit {
 	}
 
 	dismissModel(status) {
-		//this.savePurchaseOrderPartsList(true); 
 		this.displayWarningModal = status;
-		this.modal.close();		
+		this.modal.close();	
+		if(status)
+		this.savePurchaseOrderPartsList(''); 			
     }
 	savePurchaseOrderPartsList(content) {
 		this.isSpinnerVisible = true;
@@ -2609,10 +2610,19 @@ export class PurchaseSetupComponent implements OnInit {
 						errmessage = errmessage + '<br />' + "Split Shipment Select Address is required."
 					}					
 
+					// if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
+					// 	this.isSpinnerVisible = false;	
+					// 	errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+					// }
+
 					if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
-						this.isSpinnerVisible = false;	
-						errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+						this.isSpinnerVisible = false;
+						this.displayWarningModal = false;
+						this.alertText = "Split Shipment Qty is required."
+						this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
+						return;
 					}
+
 					if(!this.partListData[i].childList[j].managementStructureId || this.partListData[i].childList[j].managementStructureId == 0) {	
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Management Structure is required."
