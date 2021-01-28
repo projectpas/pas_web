@@ -166,13 +166,13 @@
             col.field == 'revisionDate'
             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
             : rowData[col.field] && col.field == 'nextReviewDate'
-            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'nextReviewDate'
-            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'expirationDate'
-            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'verifiedDate'
-            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
+            ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'updatedDate'
             ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a ')
             : rowData[col.field] && col.field =='createdDate'
@@ -218,6 +218,9 @@
                   data-toggle="modal" (click)="openView(rowData)" matTooltip="View" matTooltipPosition="above"><i
                     class="fa fa-eye"></i></a>
               </span>
+              <span data-target="#publicationHistory" data-toggle="modal"><a class="btn nobg"
+                  (click)="getAuditHistoryById(rowData)" matTooltip="History" matTooltipPosition="above">
+                  <i class="fa fa-history"></i></a></span>
               <span><a class="btn nobg" (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                   matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a>
               </span>

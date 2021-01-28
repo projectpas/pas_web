@@ -251,13 +251,13 @@ export class PublicationEndpointService extends EndpointFactory {
       });
   }
 
-  getPubPNById<T>(PNid: number): Observable<T> {
-    let endpointUrl = `${this._publicationPNMappingData}/${PNid}`;
+  getPubPNById<T>(PNid: number, isDeleted): Observable<T> {
+    let endpointUrl = `${this._publicationPNMappingData}/${PNid}?isDeleted=${isDeleted}`;
 
     return this.http
       .get<T>(endpointUrl, this.getRequestHeaders())
       .catch(error => {
-        return this.handleErrorCommon(error, () => this.getPubPNById(PNid));
+        return this.handleErrorCommon(error, () => this.getPubPNById(PNid, isDeleted));
       });
   }
 

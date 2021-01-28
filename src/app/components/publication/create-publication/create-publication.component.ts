@@ -1528,7 +1528,7 @@ export class CreatePublicationComponent implements OnInit {
   getDeleteListByStatus() {
     this.isSpinnerVisible = true;
     this.publicationService
-      .getPublicationPNMapping(this.publicationRecordId)
+      .getPublicationPNMapping(this.publicationRecordId, !this.currentDeletedstatus)
       .subscribe(res => {
         this.isSpinnerVisible = false;
         this.pnMappingList = res.map(x => {
