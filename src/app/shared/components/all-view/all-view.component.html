@@ -492,7 +492,7 @@
                                   {{ approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                               </td>
                               <td *ngIf="field.field == 'statusId'">
-                                  <label *ngIf="field.field != 'statusId'" [ngClass]="fields.includes(field.field)?'text-right':''">{{approver[field.field]}}</label>
+                                  <label *ngIf="field.field != 'statusId'" [ngClass]="approvalProcessHeader.includes(field.field)?'text-right':''">{{approver[field.field]}}</label>
                                   <select *ngIf="field.field == 'statusId'" (change)="onStatusChange(approver)"
                                           [(ngModel)]="approver['statusId']"
                                       class="status-td" 
@@ -882,7 +882,7 @@
                                   {{ approver[field.field] | date: 'MM/dd/yyyy hh:mm a' }}
                               </td>
                               <td *ngIf="field.field == 'statusId'">
-                                  <label *ngIf="field.field != 'statusId'" [ngClass]="fields.includes(field.field)?'text-right':''">{{approver[field.field]}}</label>
+                                  <label *ngIf="field.field != 'statusId'" [ngClass]="approvalProcessHeader.includes(field.field)?'text-right':''">{{approver[field.field]}}</label>
                                   <select *ngIf="field.field == 'statusId'" (change)="onStatusChange(approver)"
                                           [(ngModel)]="approver['statusId']"
                                       class="status-td" 

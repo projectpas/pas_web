@@ -206,7 +206,7 @@
 				</tr>
 			</ng-template>
 			<ng-template pTemplate="body" let-rowData let-columns="columns">
-				<tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle (dblclick)="viewSelectedRowdbl(rowData)">
+				<tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle >
 					<td class="table-column-width"
 						*ngFor="let col of columns"
 						class="ui-resizable-column"

@@ -124,7 +124,9 @@ export class AllViewComponent implements OnInit {
       field: 'extCost'
     }
   ];
-
+  poApproverStatusList: any;
+  roApproverStatusList: any;
+  
   constructor(private commonService: CommonService,
     private activeModal: NgbActiveModal,
     private alertService: AlertService,
@@ -448,4 +450,7 @@ export class AllViewComponent implements OnInit {
     return '0.00';
   }
 
+  getStatusvalue(status, val) {}
+
+  onStatusChange(approver) {}
 }

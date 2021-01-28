@@ -193,6 +193,13 @@ export class SalesOrderService {
       this.salesOrderEndPointSevice.getReservestockpartlists(salesOrderId, itemMasterId)
     );
   }
+
+  getReservestockpartlistsBySOId(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getReservestockpartlistsBySOId(salesOrderId)
+    );
+  }
+
   getIssuedParts(salesOrderId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getIssuedParts(salesOrderId)
@@ -226,6 +233,11 @@ export class SalesOrderService {
   getunreservedstockpartslist(salesOrderId: number, itemMasterId: number): Observable<any> {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.getunreservedstockpartslist(salesOrderId, itemMasterId)
+    );
+  }
+  getunreservedstockpartslistBySOId(salesOrderId: number): Observable<any> {
+    return Observable.forkJoin(
+      this.salesOrderEndPointSevice.getunreservedstockpartslistBySOId(salesOrderId)
     );
   }
   getholdstocklinereservedparts(salesOrderId: number, salesOrderPartId: number, stockLineId: number, quantityRequested: number): Observable<any> {
@@ -531,6 +543,10 @@ export class SalesOrderService {
     return Observable.forkJoin(
       this.salesOrderEndPointSevice.deleteMultiplePart(salesOrderPartIds)
     );
+  }
+
+  GetSalesOrderPartsViewById(salesOrderId) {
+    return this.salesOrderEndPointSevice.getSalesOrderPartsViewById(salesOrderId)
   }
   //ed --nitin
 }

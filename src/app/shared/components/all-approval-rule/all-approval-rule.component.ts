@@ -116,6 +116,7 @@ export class AllApprovalRuleComponent implements OnInit {
   ]
   selectedColumns = this.headers;
   isEdit: boolean = false;
+  isApproverlist: boolean;
   
   constructor(private poapprovalService: POApprovalService, private datePipe: DatePipe, private modalService: NgbModal, private authService: AuthService, private commonService: CommonService, private alertService: AlertService){       
   }

@@ -952,4 +952,6 @@ this.parentTrigger.emit(true)
     closeMemoModelpopup(){
       $('#documenttype-add-memo').modal('hide');
     }
+
+    resetAddressShipViaForm() {}
 }
