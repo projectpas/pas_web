@@ -33,25 +33,24 @@ import { Shelf } from '../../../../models/shelf.model';
 import { error } from '@angular/compiler/src/util';
 import { Customer } from '../../../../models/customer.model';
 import { GlAccountService } from '../../../../services/glAccount/glAccount.service';
-
 import { ShippingService } from '../../../../services/shipping/shipping-service';
-
 import { CommonService } from '../../../../services/common.service';
 import { LocalStoreManager } from '../../../../services/local-store-manager.service';
 import { DBkeys } from '../../../../services/db-Keys';
 import { AuthService } from '../../../../services/auth.service';
 import { formatNumberAsGlobalSettingsModule, getValueFromArrayOfObjectById } from '../../../../generic/autocomplete';
 import { DatePipe } from '@angular/common';
+import { RepairOrderService } from '../../../../services/repair-order.service';
+
 
 @Component({
     selector: 'app-receiving-ro',
     templateUrl: './receiving-ro.component.html',
     styleUrls: ['./receiving-ro.component.scss'],
-	providers: [DatePipe]
+    providers: [DatePipe]
 })
 
 export class ReceivingRoComponent implements OnInit {
-    // repairOrderData: RepairOrder;
     repairOrderData: RepairOrderPart[] = [];
     repairOrderId: number;
     repairOrderHeaderData: any;
@@ -61,8 +60,6 @@ export class ReceivingRoComponent implements OnInit {
     roBusinessUnitList: DropDownData[];
     roDivisionList: DropDownData[];
     roDepartmentList: DropDownData[];
-    // roCreditTermInfo: DropDownData[];
-    // roPriorityInfo: DropDownData[];
     roStatus: any[] = [];
     roUserType: DropDownData[] = [];
     receiving_ro_header: boolean = true;
@@ -71,42 +68,32 @@ export class ReceivingRoComponent implements OnInit {
     roSelectedDivisionId: number;
     roSelectedDepartmentId: number;
     roPartManagementStructureList: string[];
-
     managementStructureHierarchy: ManagementStructure[][] = [];
     selectedManagementStructure: ManagementStructure[] = [];
     sites: any[];
-
     CustomerList: DropDownData[] = [];
     VendorList: DropDownData[] = [];
     CompanyList: DropDownData[] = [];
-    ManufacturerList: DropDownData[] = [];
+    manufacturerList: DropDownData[] = [];
     ConditionList: DropDownData[] = [];
     GLAccountList: DropDownData[] = [];
-    // ShippingReferenceList: DropDownData[];
     ShippingViaList: DropDownData[];
-    // ShippingAccountList: DropDownData[];
-
     ConditionId: number = 0;
     allPartGLAccountId: number;
     headerMemo: any;
-
     toggleIcon: boolean = false;
     currentSLIndex: number = 0;
     currentTLIndex: number = 0;
     currentSERIndex: number = 0;
     pageTitle: string = "Receive RO";
     isDisabledSNboxes: boolean = false;
-
     obtainfromcustomer: boolean = false;
     obtainfromother: boolean = false;
     obtainfromvendor: boolean = false;
-
     ownercustomer: boolean = false;
     ownerother: boolean = false;
     ownervendor: boolean = false;
-
-    headerNotes:any;
-
+    headerNotes: any;
     traceabletocustomer: boolean = false;
     traceabletoother: boolean = false;
     traceabletovendor: boolean = false;
@@ -114,65 +101,19 @@ export class ReceivingRoComponent implements OnInit {
     TagTypeList: any = [];
     quantityreceivebtn: boolean = false;
     quantityreceive: boolean = false;
-    // allEmployeeList: any = [];
     legalEntityList: any = [];
     isSpinnerVisible: boolean = true;
     moduleListDropdown: any = [];
-    //showGrid: boolean;
-    //userName: any;
-    //collectionofstockLine: any;
-    //allVendorListForStockline: any[];
-    //allCustomersForStockline: any[];
-    //showRestrictQuantity: boolean;
-    //showFreeQuantity: boolean;
-    //showNormalQuantity: boolean;
-    //hasSerialized: boolean;
-    //iValue: number;
-    //showInput: boolean;
-    //PoCollection: any;
-
-    //stockLineItems: StockLine;
-
-    //allPriorityInfo: any[] = [];
-    //VendorCodesColl: any[] = [];
-    //vendorCodes: any[] = [];
-    //allActions: any[] = [];
-    //selectedVendorCode: any;
-    //disableSaveVenderName: boolean;
-    //disableSaveVenName: boolean;
-    //loadingIndicator: boolean;
-    //customerNamecoll: any[] = [];
-    //billToCusData: any[] = [];
-    //shipToContactData: any[] = [];
-    //shipToCusData: any[] = [];
-    //billToContactData: any[] = [];
-    //VendorNamecoll: any[] = [];
-    //customerNames: any[];
-    //vendorNames: any[] = [];
-    //vendorSelectedForBillTo: any[];
-    //vendorContactsForshipTo: any[] = [];
-    //vendorContactsForBillTO: any[] = [];
-    //vendorSelected: any[] = [];
-    //allCustomers: any[];
-
-    //employeeNameCollection: any[] = [];
-    //allEmployeeinfo: any[] = [];
-    //allManagemtninfo: any[] = [];
-    //bulist: any[] = [];
-    //departmentList: any[] = [];
-    //divisionlist: any[] = [];
-    //maincompanylist: any[] = [];
-    //mainPartcompanylist: any[] = [];
-    //partList: any = {};
-    //QuantityReceivedDataForItemMasterId: any[];
-    //partListData: any[] = [];
-    //editChildList: any[] = [];
-    //purchaseOrderPartManagementStructure: any[] = [];
-    //allManufacturerInfo: any[] = [];
-    //allconditioninfo: any[] = [];
-    //allSites: Site[];
-
-    /** po-approval ctor */
+    arraySitelist: any[] = [];
+    arrayCustlist: any[] = [];
+    arrayVendlsit: any[] = [];
+    arrayComplist: any[] = [];
+    arraymanufacturerlist: any[] = [];
+    arrayConditionlist: any[] = [];
+    arrayglaccountlist: any[] = [];
+    arrayshipvialist: any[] = [];
+    arraytagtypelist: any[] = [];
+    arrayLegalEntitylsit: any[] = [];
     constructor(public binservice: BinService,
         public manufacturerService: ManufacturerService,
         public legalEntityService: LegalEntityService,
@@ -200,7 +141,8 @@ export class ReceivingRoComponent implements OnInit {
         private commonService: CommonService,
         private localStorage: LocalStoreManager,
         private authService: AuthService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private repairOrderService: RepairOrderService,
     ) {
         this.getAllSite();
         this.getCustomers();
@@ -209,29 +151,25 @@ export class ReceivingRoComponent implements OnInit {
         this.getManufacturers();
         this.getConditionList();
         this.getAllGLAccount();
-        // this.getShippingReference();
         this.getShippingVia();
-        // this.getShippingAccount();
         this.getTagType();
+        this.getLegalEntity();
+        this.loadModulesNamesForObtainOwnerTraceable();
     }
 
     ngOnInit() {
-        this.getLegalEntity();
-        this.loadModulesNamesForObtainOwnerTraceable();
         this.repairOrderId = this._actRoute.snapshot.queryParams['repairorderid'];
-        this.receivingService.getReceivingROHeaderById(this.repairOrderId).subscribe(res => {
-            console.log(res);
+        this.repairOrderService.getROViewById(this.repairOrderId).subscribe(res => {
             this.repairOrderHeaderData = res;
             this.repairOrderHeaderData.openDate = this.repairOrderHeaderData.openDate ? new Date(this.repairOrderHeaderData.openDate) : '';
             this.repairOrderHeaderData.closedDate = this.repairOrderHeaderData.closedDate ? new Date(this.repairOrderHeaderData.closedDate) : '';
             this.repairOrderHeaderData.dateApproved = this.repairOrderHeaderData.dateApproved ? new Date(this.repairOrderHeaderData.dateApproved) : '';
             this.repairOrderHeaderData.needByDate = this.repairOrderHeaderData.needByDate ? new Date(this.repairOrderHeaderData.needByDate) : '';
-            this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);
-                
+            // this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);                
         });
 
         this.receivingService.getReceivingROPartById(this.repairOrderId).subscribe(res => {
-            console.log(res);
+            //console.log(res);
             this.loadRepairOrderData(res);
         })
 
@@ -256,48 +194,63 @@ export class ReceivingRoComponent implements OnInit {
     }
 
     get currentUserMasterCompanyId(): number {
-		return this.authService.currentUser
-		  ? this.authService.currentUser.masterCompanyId
-		  : null;
+        return this.authService.currentUser
+            ? this.authService.currentUser.masterCompanyId
+            : null;
     }
 
     get userName(): string {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
-    
+
     getLegalEntity() {
         this.commonService.getLegalEntityList().subscribe(res => {
             this.legalEntityList = res;
         })
     }
-    
+
+    // getLegalEntity(strText = '') {
+    //     if (this.arrayLegalEntitylsit.length == 0) {
+    //         this.arrayLegalEntitylsit.push(0);
+    //     }
+    //     this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayLegalEntitylsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
+    //         this.legalEntityList = res;
+    //         // this.legalEntity = res;
+    //         // this.legalEntityList_Forgrid = res;
+    //         // this.legalEntityList_ForShipping = res;
+    //         // this.legalEntityList_ForBilling= res;
+    //     }, err => {
+    //         this.isSpinnerVisible = false;
+    //     });
+    // }
+
     loadModulesNamesForObtainOwnerTraceable() {
-		this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
-			this.moduleListDropdown = res;
-		})
-	}
+        this.commonService.getModuleListForObtainOwnerTraceable().subscribe(res => {
+            this.moduleListDropdown = res;
+        })
+    }
 
     // loadEmployeeData() {
-	// 	this.commonService.smartDropDownList('Employee', 'employeeId', 'firstName').subscribe(res => {
-	// 		this.allEmployeeList = res;
-	// 	})
-	// }
+    // 	this.commonService.smartDropDownList('Employee', 'employeeId', 'firstName').subscribe(res => {
+    // 		this.allEmployeeList = res;
+    // 	})
+    // }
 
     getManagementStructureCodes(id) {
-        this.commonService.getManagementStructureCodes(id).subscribe(res => {       
-			if (res.Level1) {
-				this.headerManagementStructure.level1 = res.Level1;
+        this.commonService.getManagementStructureCodes(id).subscribe(res => {
+            if (res.Level1) {
+                this.headerManagementStructure.level1 = res.Level1;
             }
             if (res.Level2) {
-				this.headerManagementStructure.level2 = res.Level2;
+                this.headerManagementStructure.level2 = res.Level2;
             }
             if (res.Level3) {
-				this.headerManagementStructure.level3 = res.Level3;
+                this.headerManagementStructure.level3 = res.Level3;
             }
             if (res.Level4) {
-				this.headerManagementStructure.level4 = res.Level4;
-			}
-		})
+                this.headerManagementStructure.level4 = res.Level4;
+            }
+        })
     }
 
     private getItemMasterById(type: string, part: RepairOrderPart) {
@@ -371,16 +324,32 @@ export class ReceivingRoComponent implements OnInit {
     //     });
     // }
 
-    private getShippingVia(): void {
-        this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(results => {
-            this.ShippingViaList = [];
-            for (let shippingVia of results) {
-                var dropdown = new DropDownData();
-                dropdown.Key = shippingVia.value.toLocaleString();
-                dropdown.Value = shippingVia.label;
-                this.ShippingViaList.push(dropdown);
-            }
-        });
+    // private getShippingVia(): void {
+    //     this.commonService.smartDropDownList('ShippingVia', 'ShippingViaId', 'Name').subscribe(results => {
+    //         this.ShippingViaList = [];
+    //         for (let shippingVia of results) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = shippingVia.value.toLocaleString();
+    //             dropdown.Value = shippingVia.label;
+    //             this.ShippingViaList.push(dropdown);
+    //         }
+    //     });
+    // }
+
+    getShippingVia(strText = '') {
+        if (this.arrayshipvialist.length == 0) {
+            this.arrayshipvialist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ShippingVia', 'ShippingViaId', 'Name', strText,
+            true, 0, this.arrayshipvialist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+                const data = res.map(x => {
+                    return {
+                        Key: x.value,
+                        Value: x.label
+                    }
+                });
+                this.ShippingViaList = data;
+            })
     }
 
     // private getShippingAccount(): void {
@@ -396,21 +365,47 @@ export class ReceivingRoComponent implements OnInit {
     //     });
     // }
 
-    private getStatus() {
-        this.roStatus = [];
-        this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description').subscribe(response => {
-			this.roStatus = response;
-			this.roStatus = this.roStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-		});
-        // this.roStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
-        // this.roStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
-        // this.roStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
-        // this.roStatus.push(<DropDownData>{ Key: '4', Value: 'Closed' });
+    // private getStatus() {
+    //     this.roStatus = [];
+    //     this.commonService.smartDropDownList('ROStatus', 'ROStatusId', 'Description').subscribe(response => {
+    // 		this.roStatus = response;
+    // 		this.roStatus = this.roStatus.sort((a,b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+    // 	});
+    //     // this.roStatus.push(<DropDownData>{ Key: '1', Value: 'Open' });
+    //     // this.roStatus.push(<DropDownData>{ Key: '2', Value: 'Pending' });
+    //     // this.roStatus.push(<DropDownData>{ Key: '3', Value: 'Fulfilling' });
+    //     // this.roStatus.push(<DropDownData>{ Key: '4', Value: 'Closed' });
 
-        // this.roUserType = [];
-        // this.roUserType.push(<DropDownData>{ Key: '1', Value: 'Customer' });
-        // this.roUserType.push(<DropDownData>{ Key: '2', Value: 'Vendor' });
-        // this.roUserType.push(<DropDownData>{ Key: '3', Value: 'Company' });
+    //     // this.roUserType = [];
+    //     // this.roUserType.push(<DropDownData>{ Key: '1', Value: 'Customer' });
+    //     // this.roUserType.push(<DropDownData>{ Key: '2', Value: 'Vendor' });
+    //     // this.roUserType.push(<DropDownData>{ Key: '3', Value: 'Company' });
+    // }
+
+    arrayPostatuslist: any[] = [];
+    private getStatus() {
+        if (this.arrayPostatuslist.length == 0) {
+            this.arrayPostatuslist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('ROStatus', 'ROStatusId', 'Description', '',
+            true, 0, this.arrayPostatuslist.join(), this.currentUserMasterCompanyId)
+            .subscribe(res => {
+                this.roStatus = res;
+                this.roStatus = this.roStatus.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+                res.forEach(x => {
+                    if (x.label.toUpperCase() == "OPEN") {
+                        //this.headerInfo.statusId = x.value;
+                        //this.poOpenstatusID = x.value;
+                    }
+                    else if (x.label.toUpperCase() == "FULFILLING") {
+                        //this.poFulfillingstatusID = x.value;
+                    }
+                });
+            }
+                , err => {
+                    this.isSpinnerVisible = false;
+                }
+            );
     }
 
     private getStatusById(statusId: string) {
@@ -466,89 +461,89 @@ export class ReceivingRoComponent implements OnInit {
         // this.getManagementStructureCodes(this.repairOrderData.managementStructureId);
         // this.getManagementStructure().subscribe(
         //     results => {
-                // this.managementStructureSuccess(this.repairOrderHeaderData.managementStructureId, results[0]);
-                //this.repairOrderData.repairOderPart.forEach(part => {
-                let parentPart: RepairOrderPart;
-                var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
-                for (let parent of allParentParts) {
-                    parent.currentSLIndex = 0;
-                    parent.currentTLIndex = 0;
-                    parent.currentSERIndex = 0;
-                    parent.isDisabledTLboxes = false;
-                    
-                    var splitParts = this.repairOrderData.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
+        // this.managementStructureSuccess(this.repairOrderHeaderData.managementStructureId, results[0]);
+        //this.repairOrderData.repairOderPart.forEach(part => {
+        let parentPart: RepairOrderPart;
+        var allParentParts = this.repairOrderData.filter(x => x.isParent == true);
+        for (let parent of allParentParts) {
+            parent.currentSLIndex = 0;
+            parent.currentTLIndex = 0;
+            parent.currentSERIndex = 0;
+            parent.isDisabledTLboxes = false;
 
-                    if (splitParts.length > 0) {
-                        
-                        parent.hasChildren = true;
-                        parent.quantityToRepair = 0;
-                        for (let childPart of splitParts) {
-                            parent.quantityRepaired += childPart.quantityRepaired;
-                            childPart.managementStructureId = parent.managementStructureId;
-                            childPart.managementStructureName = parent.managementStructureName;
-                            parent.quantityToRepair += childPart.quantityToRepair;
-                        }
-                    }
-                    else {
-                        parent.hasChildren = false;
-                    }
-                }
+            var splitParts = this.repairOrderData.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
 
-                for (let part of this.repairOrderData) {
-                    part.toggleIcon = false;
-                    part.stocklineListObj = [];
-                    part.timeLifeList = [];
-                    part.currentSLIndex = 0;
-                    part.currentTLIndex = 0;
-                    part.currentSERIndex = 0;
-                    part.isDisabledTLboxes = false;
-                    part.visible = false;
-                    part.showStockLineGrid = false;
-                    part.isSameDetailsForAllParts = false;
-                    let selectedOrgStruct: ManagementStructure[] = [];
-                    //part.conditionId = 0;
-                    part.eCCNAlreadyExist = part.itemMaster.exportECCN != null && part.itemMaster.exportECCN.length > 0;
-                    part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;
-                    part.quantityRejected = "0";
-                    if (part.isParent) {
-                        // this.getManagementStructureHierarchy(part.managementStructureId, null, selectedOrgStruct);
-                        selectedOrgStruct.reverse();
-                        part.managementStructureName = [];
-                        for (let mangStructure of selectedOrgStruct) {
-                            part.managementStructureName.push(mangStructure.code);
-                        }
-                        parentPart = part;
-                    }
-                    else {
-                        part.addressText = this.getAddress(part.roPartSplitAddress);
-                        if (part.roPartSplitUserTypeId == 1) {
-                            this.customerService.getCustomerdata(part.roPartSplitUserId).subscribe(
-                                result => {
-                                    part.userName = result[0][0].name;
-                                },
-                                error => this.onDataLoadFailed(error)
-                            );
-                        }
-                        part.userTypeName = part.roPartSplitUserTypeId ? this.getUserTypeById(part.roPartSplitUserTypeId.toLocaleString()) : '';
-                        part.statusText = this.getStatusById(part.status);
-                        part.managementStructureName = parentPart.managementStructureName;
-                    }
-                    this.getManagementStructureCodesForPart(part);
+            if (splitParts.length > 0) {
+
+                parent.hasChildren = true;
+                parent.quantityToRepair = 0;
+                for (let childPart of splitParts) {
+                    parent.quantityRepaired += childPart.quantityRepaired;
+                    childPart.managementStructureId = parent.managementStructureId;
+                    childPart.managementStructureName = parent.managementStructureName;
+                    parent.quantityToRepair += childPart.quantityToRepair;
                 }
-                this.isSpinnerVisible = false;
-                // this.repairOrderData.dateRequested = new Date(); //new Date(this.repairOrderData.dateRequested);
-                // this.repairOrderData.dateApprovied = new Date(this.repairOrderData.dateApprovied);
-                // this.repairOrderData.needByDate = new Date(); //new Date(this.repairOrderData.needByDate);
+            }
+            else {
+                parent.hasChildren = false;
+            }
+        }
+
+        for (let part of this.repairOrderData) {
+            part.toggleIcon = false;
+            part.stocklineListObj = [];
+            part.timeLifeList = [];
+            part.currentSLIndex = 0;
+            part.currentTLIndex = 0;
+            part.currentSERIndex = 0;
+            part.isDisabledTLboxes = false;
+            part.visible = false;
+            part.showStockLineGrid = false;
+            part.isSameDetailsForAllParts = false;
+            let selectedOrgStruct: ManagementStructure[] = [];
+            //part.conditionId = 0;
+            part.eCCNAlreadyExist = part.itemMaster.exportECCN != null && part.itemMaster.exportECCN.length > 0;
+            part.itarNumberExist = part.itemMaster.itarNumber != null && part.itemMaster.itarNumber.length > 0;
+            part.quantityRejected = "0";
+            if (part.isParent) {
+                // this.getManagementStructureHierarchy(part.managementStructureId, null, selectedOrgStruct);
+                selectedOrgStruct.reverse();
+                part.managementStructureName = [];
+                for (let mangStructure of selectedOrgStruct) {
+                    part.managementStructureName.push(mangStructure.code);
+                }
+                parentPart = part;
+            }
+            else {
+                part.addressText = this.getAddress(part.roPartSplitAddress);
+                if (part.roPartSplitUserTypeId == 1) {
+                    this.customerService.getCustomerdata(part.roPartSplitUserId).subscribe(
+                        result => {
+                            part.userName = result[0][0].name;
+                        },
+                        error => this.onDataLoadFailed(error)
+                    );
+                }
+                part.userTypeName = part.roPartSplitUserTypeName;//part.roPartSplitUserTypeId ? this.getUserTypeById(part.roPartSplitUserTypeId.toLocaleString()) : '';
+                part.statusText = part.status; //this.getStatusById(part.status);
+                part.managementStructureName = parentPart.managementStructureName;
+            }
+            this.getManagementStructureCodesForPart(part);
+        }
+        this.isSpinnerVisible = false;
+        // this.repairOrderData.dateRequested = new Date(); //new Date(this.repairOrderData.dateRequested);
+        // this.repairOrderData.dateApprovied = new Date(this.repairOrderData.dateApprovied);
+        // this.repairOrderData.needByDate = new Date(); //new Date(this.repairOrderData.needByDate);
         //     },
         //     error => this.onDataLoadFailed(error)
         // );
 
 
     }
-    
+
     getManagementStructureCodesForPart(part) {
         part.managementStructureName = [];
-        this.commonService.getManagementStructureCodes(part.managementStructureId).subscribe(res => {       
+        this.commonService.getManagementStructureCodes(part.managementStructureId).subscribe(res => {
             if (res.Level1) {
                 part.managementStructureName.push(res.Level1);
             }
@@ -636,19 +631,19 @@ export class ReceivingRoComponent implements OnInit {
     }
 
     onAddNotes() {
-		this.headerNotes = this.repairOrderHeaderData.notes;
-	}
-	onSaveNotes() {
-		this.repairOrderHeaderData.notes = this.headerNotes;
-		
-	}
+        this.headerNotes = this.repairOrderHeaderData.notes;
+    }
+    onSaveNotes() {
+        this.repairOrderHeaderData.notes = this.headerNotes;
+
+    }
 
     onAddMemo() {
-		this.headerMemo = this.repairOrderHeaderData.memo;
-	}
-	onSaveMemo() {
-		this.repairOrderHeaderData.memo = this.headerMemo;
-	}
+        this.headerMemo = this.repairOrderHeaderData.roMemo;
+    }
+    onSaveMemo() {
+        this.repairOrderHeaderData.roMemo = this.headerMemo;
+    }
     private managementStructureSuccess(managementStructureId: number, managementStructure: ManagementStructure[]) {
 
         this.alertService.stopLoadingMessage();
@@ -743,24 +738,24 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    public showSplitShipmentParts(repairOrderPart : RepairOrderPart): void {
+    public showSplitShipmentParts(repairOrderPart: RepairOrderPart): void {
         var selectedParts = this.repairOrderData.filter(function (part) {
             return part.itemMasterId == repairOrderPart.itemMasterId;
         });
 
         selectedParts.forEach(part => {
-            part.toggleIcon = !part.toggleIcon;  
+            part.toggleIcon = !part.toggleIcon;
             part.visible = !part.visible;
         });
 
         const data = this.repairOrderData;
-        for(var i=0; i< data.length; i++){
-            if(data[i].isParent == false && data[i].visible == true){
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].isParent == false && data[i].visible == true) {
                 this.disableParentSpace = true;
                 break;
-               } else {
+            } else {
                 this.disableParentSpace = false;
-                }
+            }
         }
     }
 
@@ -808,7 +803,7 @@ export class ReceivingRoComponent implements OnInit {
         if (part.quantityActuallyReceived == undefined || part.quantityActuallyReceived == null) {
             this.quantityreceive = true;
         }
-        else { this.quantityreceive = false;}
+        else { this.quantityreceive = false; }
         if (part.showStockLineGrid) {
             this.addStockLine(part, false);
             return;
@@ -892,7 +887,7 @@ export class ReceivingRoComponent implements OnInit {
                 }
             }
         }
-        
+
         this.addStockLine(part, true);
         if (this.quantityreceive == true) {
             this.quantityreceivebtn = true;
@@ -903,7 +898,7 @@ export class ReceivingRoComponent implements OnInit {
 
 
     addStockLine(part, visible?: boolean): void {
-        const stockObj: any = part.stocklineListObj;     
+        const stockObj: any = part.stocklineListObj;
         part.stocklineListObj = stockObj.map(x => {
             return {
                 ...x,
@@ -915,7 +910,7 @@ export class ReceivingRoComponent implements OnInit {
                 repairOrderExtendedCost: formatNumberAsGlobalSettingsModule(x.repairOrderExtendedCost, 2)
             }
         });
-        for(let i=0; i < part.stocklineListObj.length; i++) {
+        for (let i = 0; i < part.stocklineListObj.length; i++) {
             part.stocklineListObj[i].CompanyList = this.legalEntityList;
             this.getManagementStructureOnEdit(part, part.stocklineListObj[i]);
         }
@@ -926,7 +921,7 @@ export class ReceivingRoComponent implements OnInit {
         else {
             part.showStockLineGrid = visible;
         }
-        if (part.quantityActuallyReceived == null || part.quantityActuallyReceived == undefined || part.quantityActuallyReceived.toString() =='') {
+        if (part.quantityActuallyReceived == null || part.quantityActuallyReceived == undefined || part.quantityActuallyReceived.toString() == '') {
             this.quantityreceive = false;
         }
         else {
@@ -935,7 +930,7 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    getManagementStructureOnEdit(part, stock) {        
+    getManagementStructureOnEdit(part, stock) {
         this.commonService.getManagementStructureDetails(part.managementStructureId).subscribe(res => {
             this.selectedLegalEntity(res.Level1, stock);
             this.selectedBusinessUnit(res.Level2, stock);
@@ -951,10 +946,10 @@ export class ReceivingRoComponent implements OnInit {
     }
 
     selectedLegalEntity(legalEntityId, stockLine) {
-		stockLine.BusinessUnitList = [];
+        stockLine.BusinessUnitList = [];
         stockLine.DivisionList = [];
         stockLine.DepartmentList = [];
-		stockLine.businessUnitId = 0;
+        stockLine.businessUnitId = 0;
         stockLine.divisionId = 0;
         stockLine.departmentId = 0;
 
@@ -962,14 +957,14 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.managementStructureEntityId = legalEntityId;
             this.commonService.getBusinessUnitListByLegalEntityId(legalEntityId).subscribe(res => {
                 stockLine.BusinessUnitList = res;
-			});
-		}	
-	}
+            });
+        }
+    }
 
     async selectedBusinessUnit(businessUnitId, stockLine) {
-		stockLine.DivisionList = [];
+        stockLine.DivisionList = [];
         stockLine.DepartmentList = [];
-		stockLine.divisionId = 0;
+        stockLine.divisionId = 0;
         stockLine.departmentId = 0;
 
         if (businessUnitId != 0 && businessUnitId != null && businessUnitId != undefined) {
@@ -980,8 +975,8 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
     async selectedDivision(divisionUnitId, stockLine) {
-		stockLine.DepartmentList = [];
-		stockLine.departmentId = 0;
+        stockLine.DepartmentList = [];
+        stockLine.departmentId = 0;
 
         if (divisionUnitId != 0 && divisionUnitId != null && divisionUnitId != undefined) {
             stockLine.managementStructureEntityId = divisionUnitId;
@@ -994,7 +989,7 @@ export class ReceivingRoComponent implements OnInit {
         if (departmentId != 0 && departmentId != null && departmentId != undefined) {
             stockLine.managementStructureEntityId = departmentId;
         }
-	}
+    }
 
     getSiteDetailsOnEdit(part, stock) {
         const itemMasterDetails = part.itemMaster;
@@ -1063,7 +1058,7 @@ export class ReceivingRoComponent implements OnInit {
             stockLine.owner = this.repairOrderHeaderData.vendorId.toString();
             stockLine.obtainFromObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
             stockLine.ownerObject = this.VendorList.find(x => x.Key == this.repairOrderHeaderData.vendorId.toString());
-            
+
             if (part.itemMaster != undefined) {
                 stockLine.repairOrderUnitCost = part.unitCost;
                 if (!part.itemMaster.isSerialized) {
@@ -1101,7 +1096,7 @@ export class ReceivingRoComponent implements OnInit {
         //     stockLine.repairOrderUnitCost = 0;
         //     stockLine.repairOrderExtendedCost = part.unitCost;
         //     stockLine.currentDate = new Date();
-            
+
         //     if (part.itemMaster != undefined) {
         //         stockLine.repairOrderUnitCost = part.unitCost;
         //         if (!part.itemMaster.isSerialized) {
@@ -1172,7 +1167,7 @@ export class ReceivingRoComponent implements OnInit {
         var count = type == 'stockline' ? part.stocklineListObj.length : part.timeLifeList.length;
         if (index >= 0 && index < count) {
             // if (part.itemMaster.isSerialized) {
-                part.currentSLIndex = index;
+            part.currentSLIndex = index;
             // }
             // part.currentSERIndex = index;
             // part.currentTLIndex = index;
@@ -1290,16 +1285,25 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    getAllSite(): void {
-        this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
+    // getAllSite(): void {
+    //     this.commonService.smartDropDownList('Site', 'SiteId', 'Name').subscribe(res => {
+    //         this.sites = res;
+    //     })
+    //     // this.siteService.getSiteList().subscribe(
+    //     //     results => {
+    //     //         this.sites = results[0];
+    //     //     },
+    //     //     error => this.onDataLoadFailed(error)
+    //     // );
+    // }
+
+    private getAllSite(strText = '') {
+        if (this.arraySitelist.length == 0) {
+            this.arraySitelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', strText, true, 0, this.arraySitelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
             this.sites = res;
-        })
-        // this.siteService.getSiteList().subscribe(
-        //     results => {
-        //         this.sites = results[0];
-        //     },
-        //     error => this.onDataLoadFailed(error)
-        // );
+        });
     }
 
     getStockLineSite(stockLine: StockLine): void {
@@ -1331,10 +1335,10 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.shelfId = 0;
         stockLine.BinList = [];
         stockLine.binId = 0;
-        if(stockLine.siteId) {
+        if (stockLine.siteId) {
             this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', stockLine.siteId).subscribe(
                 results => {
-    
+
                     console.log(results);
                     for (let wareHouse of results) {
                         var dropdown = new DropDownData();
@@ -1345,7 +1349,7 @@ export class ReceivingRoComponent implements OnInit {
                 }, //sending WareHouse
                 error => this.onDataLoadFailed(error)
             );
-        }        
+        }
     }
 
     getStockLineLocation(stockLine: StockLine): void {
@@ -1355,7 +1359,7 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.shelfId = 0;
         stockLine.BinList = [];
         stockLine.binId = 0;
-        if(stockLine.warehouseId) {
+        if (stockLine.warehouseId) {
             this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', stockLine.warehouseId).subscribe(
                 results => {
                     console.log(results);
@@ -1368,7 +1372,7 @@ export class ReceivingRoComponent implements OnInit {
                 },
                 error => this.onDataLoadFailed(error)
             );
-        }        
+        }
     }
 
     getStockLineShelf(stockLine: StockLine): void {
@@ -1376,7 +1380,7 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.shelfId = 0;
         stockLine.BinList = [];
         stockLine.binId = 0;
-        if(stockLine.locationId) {
+        if (stockLine.locationId) {
             this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', stockLine.locationId).subscribe(
                 results => {
                     console.log(results);
@@ -1389,13 +1393,13 @@ export class ReceivingRoComponent implements OnInit {
                 },
                 error => this.onDataLoadFailed(error)
             );
-        }        
+        }
     }
 
     getStockLineBin(stockLine: StockLine): void {
         stockLine.BinList = [];
         stockLine.binId = 0;
-        if(stockLine.shelfId) {
+        if (stockLine.shelfId) {
             this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', stockLine.shelfId).subscribe(
                 results => {
                     for (let bin of results) {
@@ -1407,63 +1411,138 @@ export class ReceivingRoComponent implements OnInit {
                 },
                 error => this.onDataLoadFailed(error)
             );
-        }        
+        }
     }
 
-    getCustomers(): void {
-        //stockLine.CustomerList = [];
-        this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(
-            results => {
-                for (let customer of results) {
-                    var dropdown = new DropDownData();
-                    dropdown.Key = customer.value.toLocaleString();
-                    dropdown.Value = customer.label;
-                    this.CustomerList.push(dropdown);
+    // getCustomers(): void {
+    //     //stockLine.CustomerList = [];
+    //     this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(
+    //         results => {
+    //             for (let customer of results) {
+    //                 var dropdown = new DropDownData();
+    //                 dropdown.Key = customer.value.toLocaleString();
+    //                 dropdown.Value = customer.label;
+    //                 this.CustomerList.push(dropdown);
+    //             }
+    //         },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+
+    getCustomers(strText = '') {
+        if (this.arrayCustlist.length == 0) {
+            this.arrayCustlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Customer', 'CustomerId', 'Name', strText, true, 20, this.arrayCustlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+            const data = response.map(x => {
+                return {
+                    Key: x.value,
+                    Value: x.label
                 }
-            },
-            error => this.onDataLoadFailed(error)
-        );
+            });
+            this.CustomerList = data;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
-    getVendors(): void {
-        this.commonService.smartDropDownList('Vendor', 'VendorId', 'VendorName').subscribe(vendors => {
-            for (let vendor of vendors) {
-                var dropdown = new DropDownData();
-                dropdown.Key = vendor.value.toLocaleString();
-                dropdown.Value = vendor.label;
-                this.VendorList.push(dropdown);
-            }
-		},
-        error => this.onDataLoadFailed(error)
-        );
-    }
+    // getVendors(): void {
+    //     this.commonService.smartDropDownList('Vendor', 'VendorId', 'VendorName').subscribe(vendors => {
+    //         for (let vendor of vendors) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = vendor.value.toLocaleString();
+    //             dropdown.Value = vendor.label;
+    //             this.VendorList.push(dropdown);
+    //         }
+    //     },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
 
-    getCompanyList() {
-        this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
-            for (let company of companies) {
-                var dropdown = new DropDownData();
-                dropdown.Key = company.value.toLocaleString();
-                dropdown.Value = company.label;
-                this.CompanyList.push(dropdown);
-            }
-		},
-        error => this.onDataLoadFailed(error)
-        );        
-    }
-
-    getManufacturers() {
-        this.ManufacturerList = [];
-        this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').subscribe(
-            results => {
-                for (let manufacturer of results) {
-                    var dropdown = new DropDownData();
-                    dropdown.Key = manufacturer.value.toLocaleString();
-                    dropdown.Value = manufacturer.label;
-                    this.ManufacturerList.push(dropdown);
+    getVendors(filterVal = '') {
+        if (this.arrayVendlsit.length == 0) {
+            this.arrayVendlsit.push(0);
+        }
+        this.vendorService.getVendorNameCodeListwithFilter(filterVal, 20, this.arrayVendlsit.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            const data = res.map(x => {
+                return {
+                    Key: x.vendorId,
+                    Value: x.vendorName
                 }
-            },
-            error => this.onDataLoadFailed(error)
-        );
+            });
+            this.VendorList = data;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+
+    filterVendorNames(event) {
+        if (event.query !== undefined && event.query !== null) {
+            this.getVendors(event.query);
+        }
+    }
+
+    // getCompanyList() {
+    //     this.commonService.smartDropDownList('LegalEntity', 'LegalEntityId', 'Name').subscribe(companies => {
+    //         for (let company of companies) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = company.value.toLocaleString();
+    //             dropdown.Value = company.label;
+    //             this.CompanyList.push(dropdown);
+    //         }
+    // 	},
+    //     error => this.onDataLoadFailed(error)
+    //     );        
+    // }
+
+    getCompanyList(strText = '') {
+        if (this.arrayComplist.length == 0) {
+            this.arrayComplist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('LegalEntity', 'LegalEntityId', 'Name', strText, true, 20, this.arrayComplist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+            const data = response.map(x => {
+                return {
+                    Key: x.value,
+                    Value: x.label
+                }
+            });
+            this.CompanyList = data;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
+    }
+
+    // getManufacturers() {
+    //     this.ManufacturerList = [];
+    //     this.commonService.smartDropDownList('Manufacturer', 'ManufacturerId', 'Name').subscribe(
+    //         results => {
+    //             for (let manufacturer of results) {
+    //                 var dropdown = new DropDownData();
+    //                 dropdown.Key = manufacturer.value.toLocaleString();
+    //                 dropdown.Value = manufacturer.label;
+    //                 this.ManufacturerList.push(dropdown);
+    //             }
+    //         },
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+    getManufacturers(strText = '') {
+        if (this.arraymanufacturerlist.length == 0) {
+            this.arraymanufacturerlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Manufacturer', 'ManufacturerId', 'Name', strText, true, 20, this.arraymanufacturerlist.join(), this.currentUserMasterCompanyId).subscribe(response => {
+            const data = response.map(x => {
+                return {
+                    Key: x.value,
+                    Value: x.label
+                }
+            });
+            this.manufacturerList = data;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
     onSerialNumberNotProvided(stockLine: StockLine) {
@@ -1474,35 +1553,35 @@ export class ReceivingRoComponent implements OnInit {
 
     onChangeTimeLife(part: RepairOrderPart) {
         // part.timeLifeList[part.currentTLIndex].detailsNotProvided = part.detailsNotProvided;
-            part.timeLifeList[part.currentTLIndex].timeLifeCyclesId = 0;
-            part.timeLifeList[part.currentTLIndex].repairOrderId = part.repairOrderId;
-            part.timeLifeList[part.currentTLIndex].repairOrderPartRecordId = part.repairOrderPartRecordId;
-            part.timeLifeList[part.currentTLIndex].cyclesRemainingHrs = null;
-            part.timeLifeList[part.currentTLIndex].cyclesRemainingMin = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionHrs = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionMin = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceNewHrs = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceNewMin = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceOVHHrs = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceOVHMin = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceRepairHrs = null;
-            part.timeLifeList[part.currentTLIndex].cyclesSinceRepairMin = null;
-            part.timeLifeList[part.currentTLIndex].timeRemainingHrs = null;
-            part.timeLifeList[part.currentTLIndex].timeRemainingMin = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceInspectionHrs = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceInspectionMin = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceNewHrs = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceNewMin = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceOVHHrs = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceOVHMin = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceRepairHrs = null;
-            part.timeLifeList[part.currentTLIndex].timeSinceRepairMin = null;
-            part.timeLifeList[part.currentTLIndex].lastSinceNewHrs = null;
-            part.timeLifeList[part.currentTLIndex].lastSinceNewMin = null;
-            part.timeLifeList[part.currentTLIndex].lastSinceInspectionHrs = null;
-            part.timeLifeList[part.currentTLIndex].lastSinceInspectionMin = null;
-            part.timeLifeList[part.currentTLIndex].lastSinceOVHHrs = null;
-            part.timeLifeList[part.currentTLIndex].lastSinceOVHMin = null;
+        part.timeLifeList[part.currentTLIndex].timeLifeCyclesId = 0;
+        part.timeLifeList[part.currentTLIndex].repairOrderId = part.repairOrderId;
+        part.timeLifeList[part.currentTLIndex].repairOrderPartRecordId = part.repairOrderPartRecordId;
+        part.timeLifeList[part.currentTLIndex].cyclesRemainingHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesRemainingMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceInspectionMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceNewHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceNewMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceOVHHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceOVHMin = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceRepairHrs = null;
+        part.timeLifeList[part.currentTLIndex].cyclesSinceRepairMin = null;
+        part.timeLifeList[part.currentTLIndex].timeRemainingHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeRemainingMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceInspectionHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceInspectionMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceNewHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceNewMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceOVHHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceOVHMin = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceRepairHrs = null;
+        part.timeLifeList[part.currentTLIndex].timeSinceRepairMin = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceNewHrs = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceNewMin = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceInspectionHrs = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceInspectionMin = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceOVHHrs = null;
+        part.timeLifeList[part.currentTLIndex].lastSinceOVHMin = null;
     }
 
     onSubmitToReceive() {
@@ -1552,11 +1631,11 @@ export class ReceivingRoComponent implements OnInit {
             receiveParts.push(receivePart);
         }
         for (let part of allParts) {
-            for(let sl of part.stocklineListObj) {
+            for (let sl of part.stocklineListObj) {
                 sl.createdBy = this.userName;
                 sl.updatedBy = this.userName;
-                if(sl.tagType && sl.tagType.length > 0) {
-                    for(let i=0; i<sl.tagType.length; i++) {
+                if (sl.tagType && sl.tagType.length > 0) {
+                    for (let i = 0; i < sl.tagType.length; i++) {
                         sl.tagType[i] = getValueFromArrayOfObjectById('label', 'value', sl.tagType[i], this.TagTypeList);
                     }
                     sl.tagType = sl.tagType.join();
@@ -1564,12 +1643,12 @@ export class ReceivingRoComponent implements OnInit {
                     sl.tagType = "";
                 }
             }
-            if(part.isSameDetailsForAllParts) {
+            if (part.isSameDetailsForAllParts) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
-                for(let slObj of part.stocklineListObj) {
+                for (let slObj of part.stocklineListObj) {
                     slObj = stockLineToCopy;
                 }
-            }            
+            }
         }
         return receiveParts;
     }
@@ -1630,7 +1709,7 @@ export class ReceivingRoComponent implements OnInit {
                     item.stocklineListObj[i].repairOrderUnitCost = item.stocklineListObj[i].repairOrderUnitCost == undefined ||
                         item.stocklineListObj[i].repairOrderUnitCost.toString() == '' ? 0 :
                         item.stocklineListObj[i].repairOrderUnitCost;
-                    
+
                     if (item.stocklineListObj[i].companyId == undefined || item.stocklineListObj[i].companyId == 0) {
                         errorMessages.push("Please select Company in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                     }
@@ -1640,7 +1719,7 @@ export class ReceivingRoComponent implements OnInit {
                     }
 
                     if (item.itemMaster.isSerialized == true) {
-                        item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined  ? item.stocklineListObj[i].serialNumber.trim() : '';
+                        item.stocklineListObj[i].serialNumber = item.stocklineListObj[i].serialNumber != undefined ? item.stocklineListObj[i].serialNumber.trim() : '';
                         if (!item.stocklineListObj[i].serialNumberNotProvided && (item.stocklineListObj[i].serialNumber == undefined || item.stocklineListObj[i].serialNumber == '')) {
                             errorMessages.push("Please enter Serial Number in Receiving Qty - " + (i + 1).toString() + ofPartMsg);
                         }
@@ -1741,11 +1820,11 @@ export class ReceivingRoComponent implements OnInit {
     onFilter(event, stockLine, type): void {
         stockLine.filteredRecords = [];
         // var dropdownSource = type == 1 ? this.CustomerList : this.VendorList;
-        if(type == 1) {
+        if (type == 1) {
             var dropdownSource = this.CustomerList;
-        } else if(type == 2) {
+        } else if (type == 2) {
             var dropdownSource = this.VendorList;
-        } else if(type == 9) {
+        } else if (type == 9) {
             var dropdownSource = this.CompanyList;
         }
         if (dropdownSource != undefined && dropdownSource.length > 0) {
@@ -1769,49 +1848,89 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.traceableTo = stockLine.traceableToObject.Key;
     }
 
-    getConditionList(): void {
-        this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(
-            results => {
-                for (let condition of results) {
-                    var dropdown = new DropDownData();
-                    dropdown.Key = condition.value.toLocaleString();
-                    dropdown.Value = condition.label;
-                    this.ConditionList.push(dropdown);
+    // getConditionList(): void {
+    //     this.commonService.smartDropDownList('Condition', 'ConditionId', 'Description').subscribe(
+    //         results => {
+    //             for (let condition of results) {
+    //                 var dropdown = new DropDownData();
+    //                 dropdown.Key = condition.value.toLocaleString();
+    //                 dropdown.Value = condition.label;
+    //                 this.ConditionList.push(dropdown);
+    //             }
+    //         }, //sending WareHouse
+    //         error => this.onDataLoadFailed(error)
+    //     );
+    // }
+
+
+    getConditionList() {
+        if (this.arrayConditionlist.length == 0) {
+            this.arrayConditionlist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', '', true, 0, this.arrayConditionlist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+            //this.ConditionList = res;
+            // for (let company of res) {
+            //     var dropdown = new DropDownData();
+            //     dropdown.Key = company.value.toLocaleString();
+            //     dropdown.Value = company.label
+            //     this.ConditionList.push(dropdown);
+            // } 
+            const data = res.map(x => {
+                return {
+                    Key: x.value,
+                    Value: x.label
                 }
-            }, //sending WareHouse
-            error => this.onDataLoadFailed(error)
-        );
+            });
+            this.ConditionList = data;
+        }, err => {
+            this.isSpinnerVisible = false;
+        });
     }
 
-    getAllGLAccount(): void {
-        this.commonService.getGlAccountList().subscribe(glAccountData => {
-            for (let glAccount of glAccountData) {
-                var dropdown = new DropDownData();
-                dropdown.Key = glAccount.value.toLocaleString();
-                dropdown.Value = glAccount.label;
-                this.GLAccountList.push(dropdown);
-            }
-        });
+    // getAllGLAccount(): void {
+    //     this.commonService.getGlAccountList().subscribe(glAccountData => {
+    //         for (let glAccount of glAccountData) {
+    //             var dropdown = new DropDownData();
+    //             dropdown.Key = glAccount.value.toLocaleString();
+    //             dropdown.Value = glAccount.label;
+    //             this.GLAccountList.push(dropdown);
+    //         }
+    //     });
+    // }
+
+    getAllGLAccount(strText = '') {
+        if (this.arrayglaccountlist.length == 0) {
+            this.arrayglaccountlist.push(0);
+        }
+        this.commonService.getAutoCompleteDropDownsByCodeWithName('GLAccount', 'GLAccountId', 'AccountName', 'AccountCode', strText, 20, this.arrayglaccountlist.join()).subscribe(res => {
+            const data = res.map(x => {
+                return {
+                    Key: x.value,
+                    Value: x.label
+                }
+            });
+            this.GLAccountList = data;
+        })
     }
 
     toggleSameDetailsForAllParts(part: RepairOrderPart): void {
         part.isSameDetailsForAllParts = !part.isSameDetailsForAllParts;
 
-        if(part.isSameDetailsForAllParts) {
+        if (part.isSameDetailsForAllParts) {
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 // var serialNumber = part.stocklineListObj[i].serialNumber;
                 // var serialNumberNotProvided = part.stocklineListObj[i].serialNumberNotProvided;
-    
+
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
                 // part.stocklineListObj[i].serialNumber = serialNumber;
                 // part.stocklineListObj[i].serialNumberNotProvided = serialNumberNotProvided;
             }
-        }        
+        }
     }
 
     isCheckedSameDetailsForAllParts(part: RepairOrderPart) {
-        if(part.isSameDetailsForAllParts) {
+        if (part.isSameDetailsForAllParts) {
             for (var i = part.currentSLIndex; i < part.stocklineListObj.length; i++) {
                 var stockLineToCopy = { ...part.stocklineListObj[part.currentSLIndex] };
                 part.stocklineListObj[i] = stockLineToCopy;
@@ -1923,10 +2042,10 @@ export class ReceivingRoComponent implements OnInit {
             return;
         }
         if (part.itemMaster.isSerialized) {
-            part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost = part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost ;
+            part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost = part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost;
         }
         else {
-            const unitCost = part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost ? parseFloat(part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost.toString().replace(/\,/g,'')) : 0;
+            const unitCost = part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost ? parseFloat(part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost.toString().replace(/\,/g, '')) : 0;
             part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost = unitCost * part.quantityActuallyReceived;
         }
         if (part.stocklineListObj[part.currentSLIndex].repairOrderUnitCost) {
@@ -1935,7 +2054,7 @@ export class ReceivingRoComponent implements OnInit {
         if (part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost) {
             part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost = formatNumberAsGlobalSettingsModule(part.stocklineListObj[part.currentSLIndex].repairOrderExtendedCost, 2);
         }
-        
+
     }
 
     public moveByKey(event, part) {
@@ -1947,22 +2066,32 @@ export class ReceivingRoComponent implements OnInit {
         if (event.ctrlKey && event.keyCode == 38) {
             this.moveStockLinePage('stockline', part.currentSERIndex - 1, part);
         }
-    } 
+    }
 
-    private getTagType(): void {
-        this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name').subscribe(results => {
-            this.TagTypeList = results;
-        });
+    // private getTagType(): void {
+    //     this.commonService.smartDropDownList('TagType', 'TagTypeId', 'Name').subscribe(results => {
+    //         this.TagTypeList = results;
+    //     });
+    // }
+
+    getTagType(strText = '') {
+        if (this.arraytagtypelist.length == 0) {
+            this.arraytagtypelist.push(0);
+        }
+        this.commonService.autoSuggestionSmartDropDownList('TagType', 'TagTypeId', 'Name', strText,
+            true, 0, this.arraytagtypelist.join(), this.currentUserMasterCompanyId).subscribe(res => {
+                this.TagTypeList = res;
+        })
     }
 
     onChangeTimeLifeMin(str, part, index) {
         // for(let i=0; i < this.repairOrderData.length; i++) {
-            // let part = this.repairOrderData[i];
-            let value = part.timeLifeList[index][str];
-            if(value > 59) {
-                part.timeLifeList[index][str] = 0;
-                this.alertService.showMessage(this.pageTitle, 'Minutes can\'t be greater than 59', MessageSeverity.error);
-            }
+        // let part = this.repairOrderData[i];
+        let value = part.timeLifeList[index][str];
+        if (value > 59) {
+            part.timeLifeList[index][str] = 0;
+            this.alertService.showMessage(this.pageTitle, 'Minutes can\'t be greater than 59', MessageSeverity.error);
+        }
         // }
     }
 }
