@@ -899,7 +899,7 @@ export class VendorGeneralInformationComponent implements OnInit {
                         this.localCollection = data;
                         this.vendorId = data.vendorId;
                         this.sourceVendor.vendorId =  data.vendorId;
-                        localStorage.setItem('vendorId', this.vendorId);
+                        localStorage.setItem('commonId', this.vendorId);
                         // if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
                                 // this.onUploadDocumentListNew(data.vendorId);
                         // }
