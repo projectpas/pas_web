@@ -10,6 +10,7 @@ import { PartAction } from "../../models/part-action";
 import { CommonService } from "../../../../../services/common.service";
 import { AlertService, MessageSeverity } from "../../../../../services/alert.service";
 import { AuthService } from "../../../../../services/auth.service";
+import { getObjectById } from "../../../../../generic/autocomplete";
 declare var $: any;
 
 @Component({
@@ -31,6 +32,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
     @Input() selectedParts: any = [];
     @Input() part: PartDetail;
     @Input() employeesList: any = [];
+    employees: any = [];
     searchType: ItemSearchType;
     parts: PartAction[] = [];
     showModalMargin: boolean;
@@ -48,9 +50,14 @@ export class SalesReserveUnreserveComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.employees = this.employeesList;
         this.getParts();
         this.salesOrder = this.salesQuote;
         this.initColumns();
+    }
+
+    get employeeId() {
+        return this.authService.currentUser ? this.authService.currentUser.employeeId : 0;
     }
 
     initColumns() {
@@ -125,7 +132,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
                 for (let i = 0; i < this.parts.length; i++) {
-                    console.log(this.parts[i].oemDer);
+                    
                     if (this.parts[i].oemDer == null)
                         this.parts[i].oemDer = this.parts[i].stockType;
 
@@ -136,6 +143,8 @@ export class SalesReserveUnreserveComponent implements OnInit {
                     if (this.parts[i].qtyToReserve == 0) {
                         this.parts[i].qtyToReserve = null
                     }
+
+                    this.parts[i].reservedById = getObjectById('value', this.employeeId, this.employees);
                 }
             }, error => {
                 this.isSpinnerVisible = false;
@@ -152,7 +161,7 @@ export class SalesReserveUnreserveComponent implements OnInit {
                 this.isSpinnerVisible = false;
                 this.parts = data[0];
                 for (let i = 0; i < this.parts.length; i++) {
-                    console.log(this.parts[i].oemDer);
+                    
                     if (this.parts[i].oemDer == null)
                         this.parts[i].oemDer = this.parts[i].stockType;
 
@@ -163,6 +172,8 @@ export class SalesReserveUnreserveComponent implements OnInit {
                             this.parts[i].qtyToUnReserve = null
                         }
                     }
+
+                    this.parts[i].reservedById = getObjectById('value', this.employeeId, this.employees);
                 }
             }, error => {
                 this.isSpinnerVisible = false;
@@ -237,13 +248,13 @@ export class SalesReserveUnreserveComponent implements OnInit {
 
     filterReservedBy(event) {
         const employeeListData = [
-            ...this.employeesList.filter(x => {
+            ...this.employees.filter(x => {
                 if (x.label.toLowerCase().includes(event.query.toLowerCase())) {
                     return x.label;
                 }
             })
         ];
-        this.employeesList = employeeListData;
+        this.employees = employeeListData;
     }
 
     savereserveissuesparts(parts) {
@@ -260,18 +271,18 @@ export class SalesReserveUnreserveComponent implements OnInit {
             }
         })
         parts = [];
-        parts = tempParts;
+        parts = [...tempParts];
 
+        this.isSpinnerVisible = true;
         this.salesOrderService
             .savereserveissuesparts(parts)
             .subscribe(data => {
-                this.alertService.stopLoadingMessage();
+                this.isSpinnerVisible = false;
                 this.alertService.showMessage(
                     "Success",
                     `Part updated.`,
                     MessageSeverity.success
                 );
-                // this.partActionModalClose.emit(true)
             });
     }
 
