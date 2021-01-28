@@ -27,9 +27,6 @@ import { DatePipe } from '@angular/common';
 /** Asset-listing component*/
 export class AssetInventoryListingComponent implements OnInit {
     @Input() isWorkOrder = false;
-    // @Input() assetsId;
-    // @Input() assetInventoryId;
-    // isWorkOrder = false;
     allDocumentsListColumns: any[] = [
        
         { field: 'docName', header: 'Name' },
@@ -89,7 +86,6 @@ export class AssetInventoryListingComponent implements OnInit {
     GLAccountList: any[] = [];
     allCapesInfo: ItemMasterCapabilitiesModel[] = [];
     allVendorInfo: Vendor[] = [];
-    // historyCols: any[] = [];
     historyData: any[] = [];
     selectedAsset: any;
     allAssetLocationInfo: any[] = [];
@@ -100,8 +96,6 @@ export class AssetInventoryListingComponent implements OnInit {
     pageNumber = 0;
     home: any;
     breadcrumbs: MenuItem[];
-    // comented for asset audit
-    //AuditDetails: SingleScreenAuditDetails[];
     auditHistory: any[] = [];
     lazyLoadEventDataInput: any;
     status: string = 'active';
@@ -124,12 +118,12 @@ export class AssetInventoryListingComponent implements OnInit {
         /*{ field: 'buName', header: 'BU' },
         { field: 'deptName', header: 'Div' },
         { field: 'divName', header: 'Dept' },*/
+        { field: 'assetClass', header: 'Asset Category', colspan: '1' },
+        { field: 'assetType', header: 'Asset Class', colspan: '1' },
         { field: 'companyName', header: 'Level 01', colspan: '1' },
         { field: 'buName', header: 'Level 02', colspan: '1' },
         { field: 'deptName', header: 'Level 03', colspan: '1' },
         { field: 'divName', header: 'Level 04', colspan: '1' },
-        { field: 'assetClass', header: 'Asset Category', colspan: '1' },
-        { field: 'assetType', header: 'Asset Class', colspan: '1' },
         { field: 'createdDate', header: 'Created Date' },
         { field: 'createdBy', header: 'Created By' },
         { field: 'updatedDate', header: 'Updated Date' },
@@ -183,7 +177,9 @@ export class AssetInventoryListingComponent implements OnInit {
     ];
     capesSelectedColumns = this.capesCols;
     isIntangible: any;
-
+    maintanancemoduleName='AssetInventoryMaintenanceFile';
+    warrantymoduleName='AssetInventoryWarrantyFile';
+    intangiblemoduleName='AssetInventoryIntangibleFile';
     constructor(private alertService: AlertService, private authService: AuthService, private datePipe: DatePipe,   private commonService: CommonService,public assetService: AssetService, private _route: Router, private modalService: NgbModal, private commonservice: CommonService, private configurations: ConfigurationService) {
         // this.assetService.isEditMode = false;
         // this.assetService.listCollection = null;
@@ -287,7 +283,7 @@ export class AssetInventoryListingComponent implements OnInit {
     dateFilterForTable(date, field) {
 this.dateObject={}
         date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY')
-  console.log("date",date,field);
+
 if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
     if(field=='createdDate'){
         this.dateObject={'createdDate':date}
@@ -298,7 +294,6 @@ if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
     this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters ,...this.dateObject};
     const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
     this.loadData(PagingData); 
-    console.log("date 111",date);
 }else{
 
     this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
@@ -479,19 +474,12 @@ get userName(): string {
         $('#invView').modal('show');
     }
 
-    // isSpinnerVisibleView:any=false;
     assetInventoryId:any;
     openView(row) {
         
         this.isSpinnerVisibleHistory = true;
         if(row && row.assetInventoryId !=undefined){
         this.assetService.getByInventoryId(row.assetInventoryId).subscribe(res => {
-         
-            // this.openViewData(content,  Object.assign({}, ...res));
-            // this.modal = this.modalService.open(content, { size: 'lg', backdrop: 'static', keyboard: false ,windowClass: 'assetMange'});
-            // this.modal.result.then(() => {
-                
-            // }, () => {  })
            if(res){
             this.currentAsset = {
                 ...res,
@@ -513,13 +501,12 @@ get userName(): string {
                 warrantyEndDate: res.warrantyEndDate ? new Date(res.warrantyEndDate) : null,
             };
            }
-            // this.getManagementStructureCodes(this.currentAsset.managementStructureId);
-            if(this.currentAsset.isTangible==true){
-                this.toGetDocumentsListNew(row.assetInventoryId);
-                this.toGetDocumentsListWarranty(row.assetInventoryId);
-            }else{
-                this.toGetDocumentsListInt(row.assetInventoryId);
-            }
+        //    if(this.currentAsset.isTangible==true){
+        //         this.toGetDocumentsListNew(row.assetInventoryId);
+        //         this.toGetDocumentsListWarranty(row.assetInventoryId);
+        //     }else{
+        //         this.toGetDocumentsListInt(row.assetInventoryId);
+        //     }
           
             
             this.assetInventoryId=row.assetInventoryId
@@ -805,7 +792,6 @@ warrentyDeletedList:boolean=false;
 intangibleDeletedList:boolean=false;
 maitananceeletedList:boolean=false;
 getDeleteListByStatusAttachments(value,type){
-    console.log("check",value);
     
 if(type==1){
   this.maitananceeletedList=value;

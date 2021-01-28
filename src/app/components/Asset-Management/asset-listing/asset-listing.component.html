@@ -159,7 +159,7 @@
 
                                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
                                         pReorderableRowHandle>
-                                         <ng-container *ngIf="col.field !='calibrationRequiredNew' && col.field!='isSerializedNew'">
+                                         <ng-container *ngIf="col.field !='calibrationRequiredNew' && col.field!='isSerializedNew' && col.field!='deprAmort'">
                                             {{
                                                 col.field == 'createdDate'
                                                   ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
@@ -170,6 +170,12 @@
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='calibrationRequiredNew' || col.field =='isSerializedNew'">
                                             <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
+                                                   style="margin: 0px auto; display: block;" />
+                                        </ng-container>
+                                        <ng-container *ngIf="col.field =='deprAmort'">
+                                            <input type="checkbox" *ngIf="rowData['assetClass']=='Tangible'" disabled [checked]="rowData['isDepreciable'] == true"
+                                                   style="margin: 0px auto; display: block;" />
+                                                   <input type="checkbox" disabled *ngIf="rowData['assetClass']=='Intangible'" [checked]="rowData['isAmortizable'] == true"
                                                    style="margin: 0px auto; display: block;" />
                                         </ng-container>
                                     </td> 

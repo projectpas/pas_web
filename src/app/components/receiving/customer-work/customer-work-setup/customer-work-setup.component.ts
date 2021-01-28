@@ -114,7 +114,6 @@ export class CustomerWorkSetupComponent implements OnInit {
     memoPopupContent: any;
     arrayEmplsit:any[] = [];
     certifiedEmployeeList: any = [];
-
     constructor(private commonService: CommonService,
         private datePipe: DatePipe,
         private _actRoute: ActivatedRoute,
@@ -1302,4 +1301,5 @@ export class CustomerWorkSetupComponent implements OnInit {
     changeOfStatus(status){
         this.disableUpdateButton=false;
     }
+
 }

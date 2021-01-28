@@ -47,6 +47,7 @@ import { AssetAdjustmentComponent } from '../components/Asset-Management/Asset-p
 import { EditorModule } from "primeng/editor";
 import { KeyFilterModule } from "primeng/keyfilter";
 import {DropdownModule} from 'primeng/dropdown';
+import { CommonDocumentsModule } from "../components/common-components/common-documents/common-documents.module";
 @NgModule({
     imports: [
         FlexLayoutModule,
@@ -71,7 +72,8 @@ import {DropdownModule} from 'primeng/dropdown';
         AuditModule,
         EditorModule,
         KeyFilterModule,
-        NgbModule
+        NgbModule,
+        CommonDocumentsModule
     ],
     declarations: [
         AssetmanagementComponent,
