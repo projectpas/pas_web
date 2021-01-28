@@ -2003,8 +2003,8 @@
 		        </button>
 	        </div>
 	        <div class="modal-body">              
-                <h5 [ngStyle]="{'color':'red'}">
-                    {{alertText}}
+                <h5 [ngStyle]="{'color':'red'}">                    
+                    <div [innerHTML]="alertText"></div>                    
                 </h5>
             </div>
             <div class="modal-footer">

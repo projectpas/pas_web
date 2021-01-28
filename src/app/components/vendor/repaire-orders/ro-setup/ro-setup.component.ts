@@ -2624,7 +2624,7 @@ export class RoSetupComponent implements OnInit {
 			if(this.partListData[i].quantityOrdered == 0) {	
 				this.isSpinnerVisible = false;
 				this.displayWarningModal = false;
-				this.alertText="Please Enter Qty."
+				this.alertText = "Part No: "+ this.getPartnumber(this.partListData[i].itemMasterId) + '<br/>' +"Please Enter Qty";
 				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
 				return;
 		    }
@@ -2701,7 +2701,7 @@ export class RoSetupComponent implements OnInit {
 					if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
 						this.isSpinnerVisible = false;
 						this.displayWarningModal = false;
-						this.alertText = "Split Shipment Qty is required."
+						this.alertText ='Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId) + '<br/>' + " Split Shipment Qty is required."
 						this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
 						return;
 					}
@@ -2729,9 +2729,9 @@ export class RoSetupComponent implements OnInit {
 				// return;
 				this.isSpinnerVisible = false;	
 				this.displayWarningModal = true;		    				
-				this.alertText="Vendor Price is not populated  - Continue Y/N"
-				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-				return;
+				this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  + '<br />'+"Vendor Price is not populated  - Continue Y/N"
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });	
+				return;			
 		    }
 			let childDataList = [];
 			this.childObjectArray = [];
