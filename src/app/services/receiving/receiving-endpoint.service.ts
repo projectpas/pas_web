@@ -44,7 +44,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.get<T>(this.getAll, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllReceivingData());
+                return this.handleErrorCommon(error, () => this.getAllReceivingData());
             });
     }
 
@@ -52,7 +52,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this.addURL, JSON.stringify(assetObj), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addReceivingData(assetObj));
+                return this.handleErrorCommon(error, () => this.addReceivingData(assetObj));
             });
     }
 
@@ -61,7 +61,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.editReceivingData(assetTypeId));
+                return this.handleErrorCommon(error, () => this.editReceivingData(assetTypeId));
             });
     }
 
@@ -70,7 +70,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(assetObj), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateReceivingData(assetObj));
+                return this.handleErrorCommon(error, () => this.updateReceivingData(assetObj));
             });
     }
 
@@ -79,7 +79,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.deleteReceivingData(assetTypeId));
+                return this.handleErrorCommon(error, () => this.deleteReceivingData(assetTypeId));
             });
     }
     
@@ -88,7 +88,7 @@ export class ReceivingEndpointService extends EndpointFactory {
         let url = `${this.itemMasterDataGet}/${itemid}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getItemMasterDataById(itemid));
+                return this.handleErrorCommon(error, () => this.getItemMasterDataById(itemid));
             });
     }
 
@@ -105,7 +105,7 @@ export class ReceivingEndpointService extends EndpointFactory {
         let url = `${this.receivingPurchaseOrderForEditDataGet}/${receivingId}`;
         return this.http.get<T>(url, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getReceivingPODataForEditById(receivingId));
+                return this.handleErrorCommon(error, () => this.getReceivingPODataForEditById(receivingId));
             });
     }
 
@@ -123,7 +123,7 @@ export class ReceivingEndpointService extends EndpointFactory {
         debugger;
         return this.http.post<T>(this.addStocklineMapperData, JSON.stringify(mapperObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addPartStocklineMapper(mapperObject));
+                return this.handleErrorCommon(error, () => this.addPartStocklineMapper(mapperObject));
             });
     }
 
@@ -166,7 +166,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this.ReceivePartsURL, JSON.parse(JSON.stringify(listObj)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.receiveParts(receiveParts));
+                return this.handleErrorCommon(error, () => this.receiveParts(receiveParts));
             });
 
     }
@@ -235,7 +235,7 @@ export class ReceivingEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this.UpdateStockLinesURL, JSON.parse(JSON.stringify(receiveParts)), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateStockLine(receiveParts));
+                return this.handleErrorCommon(error, () => this.updateStockLine(receiveParts));
             });
     }
 
