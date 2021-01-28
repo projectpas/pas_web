@@ -33,7 +33,6 @@ import { Subject } from 'rxjs';
 
 declare var $: any;
 
-
 @Component({
   selector: 'app-create-publication',
   templateUrl: './create-publication.component.html',
@@ -83,10 +82,8 @@ export class CreatePublicationComponent implements OnInit {
     tagTypeId: null
   }
 
-
   public sourcePublication: any = {
     ...this.publicationGeneralInformation
-
   };
 
   generalInformationDetails: any = {};
@@ -1501,14 +1498,6 @@ export class CreatePublicationComponent implements OnInit {
     this.nextOrPreviousTab = nextOrPrevious;
     let content = this.tabRedirectConfirmationModal;
     this.modal = this.modalService.open(content, { size: "sm" });
-    this.modal.result.then(
-      () => {
-      },
-      () => {
-      }
-    );
-
-
   }
   dismissModel() {
     this.modal.close();
@@ -1521,14 +1510,10 @@ export class CreatePublicationComponent implements OnInit {
 
   clearValue() { }
 
-
   restorerecord: any = {};
   restore(content, rowData) {
     this.restorerecord = rowData;
     this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
-    this.modal.result.then(() => {
-    }, () => {
-    })
   }
   restoreRecord() {
     this.isSpinnerVisible = true;

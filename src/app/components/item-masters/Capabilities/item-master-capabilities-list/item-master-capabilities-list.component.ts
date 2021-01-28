@@ -1330,8 +1330,6 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
                 verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
                 createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
                 updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
-
-                
             }
         });
         dt.exportCSV();
