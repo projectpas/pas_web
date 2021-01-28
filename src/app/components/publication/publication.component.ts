@@ -223,10 +223,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
-            { field: 'createdBy', header: 'CreatedBy' },
             { field: 'createdDate', header: 'Created Date' },
-            { field: 'updatedBy', header: 'UpdatedBy' },
+            { field: 'createdBy', header: 'CreatedBy' },
             { field: 'updatedDate', header: 'Updated Date' },
+            { field: 'updatedBy', header: 'UpdatedBy' },
         ];
 
         this.auditCols = [

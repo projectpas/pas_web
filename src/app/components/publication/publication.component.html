@@ -2,7 +2,7 @@
   <div class="card-header header">
     <div class="row">
       <div class="col">
-        <h4 class="header-name">Publications Listing</h4>
+        <h4 class="header-name">Publications List</h4>
       </div>
       <div>
         <button type="button" class="btn-sm header-button"
@@ -147,6 +147,9 @@
                     " [ngModel]="inputValue" />
 
 
+            <input type="date" *ngIf="col.field == 'verifiedDate'" name="verifiedDate" style="width: 100%;" (change)="
+                    dt.filter($event.target.value, col.field, 'contains')
+                  " [ngModel]="inputValue" />
             <input type="date" *ngIf="col.field == 'createdDate'" name="createdDate" style="width: 100%;" (change)="
                     dt.filter($event.target.value, col.field, 'contains')
                   " [ngModel]="inputValue" />
@@ -310,19 +313,23 @@
         <h4 class="modal-title">History of Publication</h4>
       </div>
       <div class="modal-body" *ngIf="auditHistory">
-        <div class="table-responsive">
-          <table class="table table-bordered pubHistory-table" *ngIf="auditHistory.length > 0; else noDatavailable">
-            <thead>
-              <tr>
-                <th *ngFor="let x of auditCols">{{ x.header }}</th>
-                <th>IsActive</th>
-                <th>Updated By</th>
-                <th>Updated Date</th>
-              </tr>
-            </thead>
-            <tbody class="audithistory-cstm">
-              <tr *ngFor="let audit of auditHistory; let i = index">
-                <td [ngStyle]="{
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+          <div class="table-responsive">
+            <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+              <thead>
+                <tr>
+                  <th *ngFor="let x of auditCols">{{ x.header }}</th>
+                  <th>IsActive</th>
+                  <th>Created Date</th>
+                  <th>Created By</th>
+                  <th>Updated Date</th>
+                  <th>Updated By</th>
+                  <th>Is Deleted</th>
+                </tr>
+              </thead>
+              <tbody class="audithistory-cstm">
+                <tr *ngFor="let audit of auditHistory; let i = index">
+                  <td [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'partNos',
@@ -331,9 +338,9 @@
                     ? 'black'
                     : 'red'
                 }">
-                  {{ audit.partNos }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.partNos }}
+                  </td>
+                  <td [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'pnDescription',
@@ -342,9 +349,9 @@
                     ? 'black'
                     : 'red'
                 }">
-                  {{ audit.pnDescription }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.pnDescription }}
+                  </td>
+                  <td [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'revisionNum',
@@ -353,9 +360,9 @@
                     ? 'black'
                     : 'red'
                 }">
-                  {{ audit.revisionNum }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.revisionNum }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publicationId',
@@ -364,9 +371,9 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.publicationId }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.publicationId }}
+                  </td>
+                  <td [ngStyle]="{
                   color: getColorCodeForHistory(
                     i,
                     'description',
@@ -375,10 +382,10 @@
                     ? 'black'
                     : 'red'
                 }">
-                  {{ audit.description }}
-                </td>
+                    {{ audit.description }}
+                  </td>
 
-                <td [ngStyle]="{
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publicationType',
@@ -387,9 +394,9 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.publicationType }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.publicationType }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'publishedBy',
@@ -398,16 +405,16 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.publishedBy }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.publishedBy }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'location', audit.location)
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.location }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.location }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'verifiedBy',
@@ -416,9 +423,9 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.verifiedBy }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.verifiedBy }}
+                  </td>
+                  <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
                       'verifiedDate',
@@ -427,9 +434,9 @@
                       ? 'black'
                       : 'red'
                   }">
-                  {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
-                </td>
-                <td [ngStyle]="{
+                    {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
+                  </td>
+                  <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
                       ? 'black'
                       : 'red'
@@ -437,16 +444,37 @@
                   {{ audit.isActive }}
                 </td>
                 <td>{{ audit.updatedBy }}</td>
-                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td>
-              </tr>
-            </tbody>
-          </table>
-          <ng-template #noDatavailable>
-            <div class="text-center">
-              <img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;" />
-              <h4 style="color: #ff5663;">No History Found</h4>
-            </div>
-          </ng-template>
+                <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a' }}</td> -->
+                  <td>
+                    <p style="background-color: #fff !important;"> <input type="checkbox" name="isActive"
+                        [(ngModel)]=" audit.isActive" disabled></p>
+                  </td>
+                  <td
+                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdDate', audit.createdDate)  ? 'black' : 'red'  }">
+                    {{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                  <td
+                    [ngStyle]="{'color': getColorCodeForHistory(i, 'createdBy', audit.createdBy)  ? 'black' : 'red'  }">
+                    {{audit.createdBy}}</td>
+                  <td
+                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedDate', audit.updatedDate)  ? 'black' : 'red'  }">
+                    {{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+                  <td
+                    [ngStyle]="{'color': getColorCodeForHistory(i, 'updatedBy', audit.updatedBy)  ? 'black' : 'red'  }">
+                    {{audit.updatedBy}}</td>
+                  <td>
+                    <p style="background-color: #fff !important;"> <input type="checkbox" name="isDeleted"
+                        [(ngModel)]="audit.isDeleted" disabled></p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <ng-template #noDatavailable>
+              <div class="text-center">
+                <img src="../../assets/images/binoculars.png" style="height: 100px; width: 100px;" />
+                <h4 style="color: #ff5663;">No History Found</h4>
+              </div>
+            </ng-template>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -517,7 +545,7 @@
                             <div class="col-sm-4">
                               <p>
                                 <span class="label"><b>Entry Date: </b></span><span class="value">{{
-                                  generalInfo.entryDate | date: 'dd-MM-yyyy'
+                                  generalInfo.entryDate | date: 'MM/dd/yyyy'
                                   }}</span>
                               </p>
                               <p>
@@ -590,7 +618,7 @@
                               </p>
                               <p>
                                 <span class="label"><b>Revision Date: </b></span><span class="value">{{
-                                  generalInfo.revisionDate | date: 'dd-MM-yyyy'
+                                  generalInfo.revisionDate | date: 'MM/dd/yyyy'
                                   }}</span>
                               </p>
                               <p>
@@ -602,14 +630,14 @@
                               </p>
                               <p>
                                 <span class="label"><b>Expiration Date: </b></span><span class="value">{{
-                                  generalInfo.expirationDate | date: 'dd-MM-yyyy'
+                                  generalInfo.expirationDate | date: 'MM/dd/yyyy'
                                   }}</span>
                               </p>
                             </div>
                             <div class="col-sm-4">
                               <p>
                                 <span class="label"><b>Next Review Date: </b></span><span class="value">{{
-                                  generalInfo.nextReviewDate | date: 'dd-MM-yyyy'
+                                  generalInfo.nextReviewDate | date: 'MM/dd/yyyy'
                                   }}</span>
                               </p>
                               <!-- <p><span class="label"><b>Employee: </b></span><span class="value">{{generalInfo.employeeName ? generalInfo.employeeName : '-'}}</span></p> -->
@@ -625,7 +653,7 @@
                               <p>
                                 <span class="label"><b>Verified Date: </b> <span class="clr-red">*</span></span><span
                                   class="value">{{
-                                  generalInfo.verifiedDate | date: 'dd-MM-yyyy'
+                                  generalInfo.verifiedDate | date: 'MM/dd/yyyy'
                                   }}</span>
                               </p>
                             </div>
@@ -1154,13 +1182,13 @@
                               <td>{{ audit.updatedBy }}</td>
                               <td>
                                 {{
-                                audit.updatedDate | date: 'dd-MM-yyyy h:mm a '
+                                audit.updatedDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
                               </td>
                               <td>{{ audit.createdBy }}</td>
                               <td>
                                 {{
-                                audit.createdDate | date: 'dd-MM-yyyy h:mm a '
+                                audit.createdDate | date: 'MM/dd/yyyy h:mm a '
                                 }}
                               </td>
                             </tr>

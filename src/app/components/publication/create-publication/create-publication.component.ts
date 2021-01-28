@@ -224,6 +224,7 @@ export class CreatePublicationComponent implements OnInit {
   selectedRowForDelete: any;
   rowIndex: number;
   disabledPartNumber: boolean = false;
+  disableGeneralInfoSave: boolean = false;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -254,23 +255,24 @@ export class CreatePublicationComponent implements OnInit {
     if (!this.isEditMode) {
       this.sourcePublication.revisionNum = 1;
     }
-    this.getAllEmployeeList();
-    this.getAllIntegrations();
-    this.getFileTagTypesList();
-    this.getPublishedByModulesList();
 
     if (this.publicationRecordId) {
       this.isEnableNext = true;
       this.isEditMode = true;
       this.isDisabledSteps = true;
       this.getPublicationDataonEdit();
-
       this.getAircraftInformationByPublicationId();
       this.getPnMapping();
       this.getAtaChapterByPublicationId();
-      this.getFilesByPublicationId();
+      // this.getFilesByPublicationId();
       this.toGetDocumentsListNew(this.publicationRecordId);
+    } else {
+      this.getAllEmployeeList();
+      this.getAllIntegrations();
+      this.getFileTagTypesList();
+      this.getPublishedByModulesList();
     }
+
 
   }
 
@@ -382,6 +384,11 @@ export class CreatePublicationComponent implements OnInit {
       this.getAllIntegrations();
       this.publicationType = getValueFromArrayOfObjectById('label', 'value', this.sourcePublication.publicationTypeId, this.publicationTypes);
 
+      this.getAllEmployeeList();
+      this.getAllIntegrations();
+      this.getFileTagTypesList();
+      this.getPublishedByModulesList();
+
     }, error => {
       this.isSpinnerVisible = false;
     })
@@ -464,7 +471,7 @@ export class CreatePublicationComponent implements OnInit {
 
     this.isSpinnerVisible = true;
     let verifiedBy = this.sourcePublication.verifiedBy ? this.sourcePublication.verifiedBy : 0;
-    this.commonService.autoCompleteDropdownsEmployeeByMS('', true, 20, [verifiedBy].join(), this.currentUserManagementStructureId, this.masterCompanyId)
+    this.commonService.autoCompleteDropdownsEmployeeByMS('', true, 0, [verifiedBy].join(), this.currentUserManagementStructureId, this.masterCompanyId)
       .subscribe(res => {
         this.employeeList = res;
 
@@ -567,6 +574,7 @@ export class CreatePublicationComponent implements OnInit {
             this.isSpinnerVisible = false;
             this.isEnableNext = true;
             this.uploadDocs.next(true);
+            this.disableGeneralInfoSave = true;
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
             this.isEditMode = true;
@@ -614,7 +622,8 @@ export class CreatePublicationComponent implements OnInit {
       .subscribe(res => {
         this.isSpinnerVisible = false;
         this.isEnableNext = true;
-        this.getFilesByPublicationId();
+        this.disableGeneralInfoSave = true;
+        // this.getFilesByPublicationId();
         this.formData = new FormData(),
           this.alertService.showMessage("Success", `Publication Updated Successfully`, MessageSeverity.success),
           role => this.saveSuccessHelper(role),
@@ -1449,7 +1458,6 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   getFilesByPublicationId() {
-
     this.publicationService.getFilesBypublication(this.publicationRecordId).subscribe(res => {
       this.attachmentList = res || [];
       if (this.attachmentList.length > 0) {
@@ -1518,6 +1526,7 @@ export class CreatePublicationComponent implements OnInit {
   restoreRecord() {
     this.isSpinnerVisible = true;
     this.publicationService.restoreItemMasterMapping(this.restorerecord.publicationItemMasterMappingId).subscribe(res => {
+      this.getDeleteListByStatus();
       this.modal.close();
       this.isSpinnerVisible = false;
       this.alertService.showMessage("Success", `Successfully restored`, MessageSeverity.success);

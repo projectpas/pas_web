@@ -387,7 +387,7 @@
                                         </div>
                                         <div *ngIf="currentDeletedstatus == true">
                                             <span data-toggle="modal"><a class="btn nobg"
-                                                    (click)="restore(restoreId, rowData)" matTooltip="History"
+                                                    (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                                                     matTooltipPosition="above">
                                                     <i class="fa fa-history"></i></a></span>
                                         </div>
@@ -1293,9 +1293,9 @@
                         </td>
 
                         <td>{{ audit.updatedBy }}</td>
-                        <td>{{ audit.updatedDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                        <td>{{ audit.updatedDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                         <td>{{ audit.createdBy }}</td>
-                        <td>{{ audit.createdDate | date: 'dd-MM-yyyy h:mm a ' }}</td>
+                        <td>{{ audit.createdDate | date: 'MM/dd/yyyy h:mm a ' }}</td>
                     </tr>
                 </tbody>
             </table>
