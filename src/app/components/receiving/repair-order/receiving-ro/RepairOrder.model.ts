@@ -75,7 +75,6 @@ export class RepairOrderPart {
     quantityActuallyReceived: number;
     quantityRejected: string;
     uomId: number;
-
     quantityOrdered: number;
     quantityBackOrdered: number;
     unitCost: number;
@@ -85,8 +84,7 @@ export class RepairOrderPart {
     transactionalCurrencyId: number;
     functionalCurrencyId: number;
     foreignExchangeRate: number;
-    workOrderId: number;
-    //repairOrderId: number;
+    workOrderId: number;   
     salesOrderId: number;
     generalLedgerAccounId: number;
     memo: string;
@@ -106,8 +104,9 @@ export class RepairOrderPart {
     updatedBy: string;
     createdDate: Date;
     updatedDate: Date;
-    isActive: boolean;
+    isActive: boolean;    
     isParent: boolean;
+    parentId:number;
     itemMaster: any;
     visible: boolean;
     conditionId: number;
