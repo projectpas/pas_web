@@ -344,7 +344,7 @@ export class CreatePublicationComponent implements OnInit {
     }, error => {
 
       this.isSpinnerVisible = false;
-      this.saveFailedHelper(error)
+      // this.saveFailedHelper(error)
     });
   }
 
@@ -491,12 +491,12 @@ export class CreatePublicationComponent implements OnInit {
     );
 
   }
-  private saveFailedHelper(error: any) {
-    this.isSaving = false;
-    this.formData = new FormData();
+  // private saveFailedHelper(error: any) {
+  //   this.isSaving = false;
+  //   this.formData = new FormData();
 
-    this.alertService.showStickyMessage('Already exist', error.error, MessageSeverity.error);
-  }
+  //   this.alertService.showStickyMessage('Already exist', error.error, MessageSeverity.error);
+  // }
 
   get masterCompanyId(): number {
     return this.authService.currentUser
@@ -554,9 +554,9 @@ export class CreatePublicationComponent implements OnInit {
     this.formData.append('UpdatedBy', this.userName);
     this.formData.append('IsActive', 'true');
     this.formData.append('IsDeleted', 'false');
-    if (!this.isEditMode) {
-      this.formData.append('revisionNum', this.data.revisionNum);
-    }
+    // if (!this.isEditMode) {
+    this.formData.append('revisionNum', this.data.revisionNum);
+    // }
     this.formData.append('attachmentdetais', JSON.stringify(this.sourceViewforDocumentList));
 
 
@@ -580,10 +580,12 @@ export class CreatePublicationComponent implements OnInit {
             this.isEditMode = true;
             this.publicationRecordId = publicationRecordId,
               role => this.saveSuccessHelper(role),
-              error => this.saveFailedHelper(error);
+              error => {
+                this.isSpinnerVisible = false;
+              }
           }, error => {
             this.isSpinnerVisible = false;
-            this.saveFailedHelper(error)
+            // this.saveFailedHelper(error)
           });
       }
     }
@@ -629,7 +631,7 @@ export class CreatePublicationComponent implements OnInit {
           role => this.saveSuccessHelper(role),
           error => {
             this.isSpinnerVisible = false;
-            this.saveFailedHelper(error)
+            // this.saveFailedHelper(error)
           };
       });
   }
@@ -713,14 +715,14 @@ export class CreatePublicationComponent implements OnInit {
     // this.selectedPartNumbers = [];
     if (mapData) {
       this.isSpinnerVisible = true;
-      this.publicationService.postMappedPartNumbers(mapData).subscribe(res => {
+      this.publicationService.postMappedPartNumbers([mapData]).subscribe(res => {
         this.isDisabledSteps = true;
         this.selectedPartNumbers = null;
         this.disabledPartNumber = true;
         this.isSpinnerVisible = false;
         this.getPnMapping();
       }, error => {
-        this.saveFailedHelper(error)
+        // this.saveFailedHelper(error)
         this.isSpinnerVisible = false;
       });
     }
@@ -1424,11 +1426,18 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   openHistory(content, rowData) {
+    this.isSpinnerVisible = true;
     this.alertService.startLoadingMessage();
 
     this.commonService.GetAttachmentPublicationAudit(rowData.attachmentDetailId).subscribe(
-      results => this.onAuditHistoryLoadSuccessful(results, content),
-      error => this.saveFailedHelper(error));
+      results => {
+        this.onAuditHistoryLoadSuccessful(results, content)
+        this.isSpinnerVisible = false
+      },
+      error => {
+        this.isSpinnerVisible = false;
+        // this.saveFailedHelper(error)
+      });
   }
   getColorCodeForHistory(i, field, value) {
     const data = this.sourceViewforDocumentAudit;
