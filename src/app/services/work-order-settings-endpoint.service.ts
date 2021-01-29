@@ -14,9 +14,9 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
     private readonly _workorderUrlAll: string = "/api/workorder/getworkordersettingslist";
 
 
-    private readonly _workorderLiteUrl: string = "/api/workorder/basic";
-    private readonly _workorderPostUrl: string = "/api/workorder/createworkordersettings";
-    private readonly _getAuditById: string = "/api/workorder/audithistorybyid";
+    private readonly _workorderLiteUrl: string =this.configurations.baseUrl+"/api/workorder/basic";
+    private readonly _workorderPostUrl: string = this.configurations.baseUrl+"/api/workorder/createworkordersettings";
+    private readonly _getAuditById: string =this.configurations.baseUrl+ "/api/workorder/audithistorybyid";
 
     private readonly _actionsUrlNewAuditHistory: string = "/api/workorder/workordersettings";
     get workorderUrl() { return this.configurations.baseUrl + this._workorderUrl; }
@@ -31,7 +31,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
         return this.http.get<T>(this.workorderUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getworkorderEndpoint());
+                return this.handleErrorCommon(error, () => this.getworkorderEndpoint());
             });
     }
 
@@ -39,14 +39,14 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
         return this.http.get<T>(this.workorderAllUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllworkorderEndpoint());
+                return this.handleErrorCommon(error, () => this.getAllworkorderEndpoint());
             });
     }
     getworkorderLiteEndpoint<T>(): Observable<T> {
 
         return this.http.get<T>(this._workorderLiteUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getworkorderLiteEndpoint());
+                return this.handleErrorCommon(error, () => this.getworkorderLiteEndpoint());
             });
     }
 
@@ -54,7 +54,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this._workorderPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewActionEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewActionEndpoint(userObject));
             });
     }
 
@@ -63,7 +63,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditActionEndpoint(actionId));
+                return this.handleErrorCommon(error, () => this.getEditActionEndpoint(actionId));
             });
     }
 
@@ -72,7 +72,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
     //    return this.http.post<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
     //        .catch(error => {
-    //            return this.handleError(error, () => this.getUpdateActionEndpoint(roleObject, actionId));
+    //            return this.handleErrorCommon(error, () => this.getUpdateActionEndpoint(roleObject, actionId));
     //        });
     //}
     getUpdateActionEndpoint<T>(userObject: any): Observable<T> {
@@ -80,21 +80,23 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
         return this.http.post<T>(this._workorderPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateActionEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getUpdateActionEndpoint(userObject));
             });
-    }
+    } 
 
     getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
-        let endpointUrl = `${this._workorderPostUrl}/${actionId}`;
+        let endpointUrl = `${this.configurations.baseUrl}/${this._workorderPostUrl}/${actionId}`;
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeleteActionEndpoint(actionId));
+                return this.handleErrorCommon(error, () => this.getDeleteActionEndpoint(actionId));
             });
     }
 
     getworkflowbyidEndpoint(companyid, actionId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workordersettings?masterCompanyId=${companyid}&workOrderTypeId=${actionId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/workordersettings?masterCompanyId=${companyid}&workOrderTypeId=${actionId}`)            .catch(error => {
+            return this.handleErrorCommon(error, () => this.getDeleteActionEndpoint(actionId));
+        });
     }
 
 
@@ -103,7 +105,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
     //return this.http.get<T>(endpointUrl, this.getRequestHeaders())
     //	.catch(error => {
-    //              return this.handleError(error, () => this.getworkflowbyidEndpoint(companyid,actionId));
+    //              return this.handleErrorCommon(error, () => this.getworkflowbyidEndpoint(companyid,actionId));
     //	});
     //  }
 
@@ -112,7 +114,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAuditById(workorderPortalId));
+                return this.handleErrorCommon(error, () => this.getAuditById(workorderPortalId));
             });
     }
 

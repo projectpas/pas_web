@@ -170,7 +170,7 @@ export class AssetMaintenanceWarrantyComponent implements OnInit {
           
             }
             this.currentMaintenance.maintenanceFrequencyMonths=this.currentMaintenance.maintenanceFrequencyMonths ? this.currentMaintenance.maintenanceFrequencyMonths:0;
-            this.currentMaintenance.maintenanceFrequencyDays=this.currentMaintenance.maintenanceFrequencyDa ? this.currentMaintenance.maintenanceFrequencyDa :0;
+            this.currentMaintenance.maintenanceFrequencyDays=this.currentMaintenance.maintenanceFrequencyDays ? this.currentMaintenance.maintenanceFrequencyDays :0;
             if (this.currentMaintenance.isWarrantyRequired == false || this.currentMaintenance.isDepreciable == false) {
                 this.currentMaintenance.warranty = "";
                 this.currentMaintenance.warrantyCompany = "";
