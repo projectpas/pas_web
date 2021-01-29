@@ -76,6 +76,7 @@ export class CustomerWorksListComponent implements OnInit {
     { field: 'partNumber', header: 'MPN' },
     { field: 'partDescription', header: 'MPN Description' },
     { field: 'serialNumber', header: 'Serial Num' },
+    { field: 'stockLineNumber', header: 'StockLine Num' },
     { field: 'woNumber', header: 'WO Num' },
     { field: 'receivingNumber', header: 'Receiver Num' },
     { field: 'receivedDate', header: 'Received Date' },
