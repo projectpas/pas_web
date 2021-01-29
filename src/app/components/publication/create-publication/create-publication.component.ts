@@ -274,6 +274,11 @@ export class CreatePublicationComponent implements OnInit {
       this.getPublishedByModulesList();
     }
 
+    if (localStorage.getItem('currentTab')) {
+      this.changeOfTab(localStorage.getItem('currentTab'))
+    } else {
+      // localStorage.removeItem('currentTab')
+    }
 
   }
 
@@ -448,6 +453,8 @@ export class CreatePublicationComponent implements OnInit {
       this.getAllSubChapters();
 
     }
+
+    localStorage.setItem('currentTab', value);
 
   }
   saveTab(val) {
@@ -1594,4 +1601,5 @@ export class CreatePublicationComponent implements OnInit {
       this.disableGeneralInfoSave = false;
     }
   }
+
 }
