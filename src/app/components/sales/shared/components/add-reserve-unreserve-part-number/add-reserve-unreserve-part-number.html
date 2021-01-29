@@ -135,10 +135,10 @@
                         </ng-container>
                         <ng-container *ngIf="col.field =='reservedById'">
                             <p-autoComplete class="p-autoComplete-ctsm" [(ngModel)]="part.reservedById"
-                                name="reservedById{{i}}" id="value" title="Reserved By" appendTo='body'
-                                [baseZIndex]="9999" field="label"
+                                name="reservedById" title="Reserved By" appendTo='body' [baseZIndex]="9999"
+                                field="label"
                                 required="selectedPartActionType == 'Reserve' || selectedPartActionType == 'Reserve & Issue' || selectedPartActionType == 'Unreserve'"
-                                [suggestions]="employeesList" [disabled]="rowData.isSelected == false"
+                                [suggestions]="employees" [disabled]="rowData.isSelected == false"
                                 (completeMethod)="filterReservedBy($event)" [dropdown]="true">
                             </p-autoComplete>
                         </ng-container>
