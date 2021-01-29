@@ -167,7 +167,7 @@
           <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
             {{
             col.field == 'revisionDate'
-            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'nextReviewDate'
             ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'nextReviewDate'
@@ -434,7 +434,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                    {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
+                    {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
                   </td>
                   <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
