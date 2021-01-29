@@ -327,14 +327,14 @@
                                 [hidden]="!part.visible"
                                 *ngIf="!part.isParent">
                                     <th class="min-width-40"></th>
-                                    <th ></th>
-                                    <th colspan="5">PN</th>
-                                    <th>Qty Ord</th>
-                                    <th colspan="2">Qty Received</th>
-                                    <th>Qty Rejected</th>
-                                    <th>Back Ord</th>
-                                    <th>Status</th>
-                                    <th>User Type</th>
+                                    <th class="min-width-60"></th>
+                                    <th>PN</th>
+                                    <th class="min-width-60" >Qty Ord</th>
+                                    <th class="min-width-60">Qty Received</th>
+                                    <th class="min-width-60">Qty Rejected</th>
+                                    <th class="min-width-60">Back Ord</th>
+                                    <th class="min-width-60" >Status</th>
+                                    <th class="min-width-60" >User Type</th>
                                     <th>User Name</th>
                                     <th colspan="4">Address</th>
                                     <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
@@ -348,12 +348,11 @@
                                     *ngIf="!part.isParent">
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                    <td colspan="5">{{part?.itemMaster?.partNumber}}</td>
-                                    <td>{{part?.quantityOrdered}}</td>
-                                    <td colspan="2">{{part?.stockLineCount}}</td>
-
-                                    <td>{{part?.quantityRejected}}</td>
-                                    <td>{{part.quantityOrdered - part.stockLineCount}}</td>
+                                    <td>{{part?.itemMaster?.partNumber}}</td>
+                                    <td class="right">{{part?.quantityOrdered}}</td>
+                                    <td class="right">{{part?.stockLineCount}}</td>
+                                    <td class="right">{{part?.quantityRejected}}</td>
+                                    <td class="right">{{part.quantityOrdered - part.stockLineCount}}</td>
                                     <td>
                                         {{part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received'}}
                                     </td>
