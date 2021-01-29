@@ -500,10 +500,19 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         model: x.aircraftModel,
                         dashNumber: x.dashNumber,
                     };
-                }, error => {
-                    this.isSpinnerVisible = false;
-
                 });
+                if (this.aircraftList && this.aircraftList.length > 0) {
+                    this.aircraftList.forEach((airCraft, index) => {
+                        if (this.aircraftList[index].dashNumber.toLowerCase() == 'unknown') {
+                            this.aircraftList[index].dashNumber = '';
+                        }
+                        if (this.aircraftList[index].model.toLowerCase() == 'unknown') {
+                            this.aircraftList[index].model = '';
+                        }
+                    });
+                }
+            }, error => {
+                this.isSpinnerVisible = false;
             });
 
         this.isSpinnerVisible = true;

@@ -226,6 +226,7 @@ export class CreatePublicationComponent implements OnInit {
   rowIndex: number;
   disabledPartNumber: boolean = true;
   disableGeneralInfoSave: boolean = true;
+
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -346,11 +347,14 @@ export class CreatePublicationComponent implements OnInit {
           label: x.label, value: x.value
         }
       })
-      // this.publicationType = getObjectById(
-      //   "value",
-      //   this.sourcePublication.publicationTypeId,
-      //   this.publicationTypes
-      // );
+      let publicationType = getObjectById(
+        "value",
+        this.sourcePublication.publicationTypeId,
+        this.publicationTypes
+      );
+      if (publicationType) {
+        this.publicationType = publicationType.label;
+      }
     }, error => {
 
       this.isSpinnerVisible = false;
@@ -451,7 +455,7 @@ export class CreatePublicationComponent implements OnInit {
       this.currentTab = 'General';
       this.activeMenuItem = 1;
       this.formData = new FormData();
-      this.getFilesByPublicationId();
+      // this.getFilesByPublicationId();
 
     } else if (value === 'PnMap') {
       this.currentTab = 'PnMap';
@@ -463,11 +467,13 @@ export class CreatePublicationComponent implements OnInit {
       this.getAllAircraftManufacturer();
       this.getAllAircraftModels();
       this.getAllDashNumbers();
+      this.getAircraftInformationByPublicationId();
     } else if (value === 'Atachapter') {
       this.currentTab = 'Atachapter';
       this.activeMenuItem = 4;
       this.getAllATAChapter();
       this.getAllSubChapters();
+      this.getAtaChapterByPublicationId();
 
     }
     localStorage.setItem('currentTab', value);
@@ -609,6 +615,7 @@ export class CreatePublicationComponent implements OnInit {
             this.alertService.showMessage("Success", `Publication saved Successfully`, MessageSeverity.success);
             const { publicationRecordId } = res;
             this.isEditMode = true;
+            this.route.navigateByUrl(`/singlepages/singlepages/app-publication/edit/${publicationRecordId}`);
             this.publicationRecordId = publicationRecordId,
               role => this.saveSuccessHelper(role),
               error => {
@@ -765,6 +772,11 @@ export class CreatePublicationComponent implements OnInit {
       this.isSpinnerVisible = true;
       this.publicationService.postMappedPartNumbers([mapData]).subscribe(res => {
         this.isDisabledSteps = true;
+        this.alertService.showMessage(
+          'Success',
+          `PN Mapped Successfully`,
+          MessageSeverity.success
+        );
         this.selectedPartNumbers = null;
         this.disabledPartNumber = true;
         this.isSpinnerVisible = false;
@@ -877,6 +889,16 @@ export class CreatePublicationComponent implements OnInit {
             dashNumber: x.dashNumber,
           };
         });
+        if (this.aircraftList && this.aircraftList.length > 0) {
+          this.aircraftList.forEach((airCraft, index) => {
+            if (this.aircraftList[index].dashNumber.toLowerCase() == 'unknown') {
+              this.aircraftList[index].dashNumber = '';
+            }
+            if (this.aircraftList[index].model.toLowerCase() == 'unknown') {
+              this.aircraftList[index].model = '';
+            }
+          });
+        }
       }, error => {
 
         this.isSpinnerVisible = false;
@@ -977,6 +999,16 @@ export class CreatePublicationComponent implements OnInit {
             memo: x.memo
           };
         })
+        if (this.aircraftList && this.aircraftList.length > 0) {
+          this.aircraftList.forEach((airCraft, index) => {
+            if (this.aircraftList[index].dashNumber.toLowerCase() == 'unknown') {
+              this.aircraftList[index].dashNumber = '';
+            }
+            if (this.aircraftList[index].model.toLowerCase() == 'unknown') {
+              this.aircraftList[index].model = '';
+            }
+          });
+        }
       });
   }
 
@@ -1541,19 +1573,19 @@ export class CreatePublicationComponent implements OnInit {
     this.disableSave = false;
   }
 
-  getFilesByPublicationId() {
-    this.publicationService.getFilesBypublication(this.publicationRecordId).subscribe(res => {
-      this.attachmentList = res || [];
-      if (this.attachmentList.length > 0) {
-        this.attachmentList.forEach(item => {
-          item["isFileFromServer"] = true;
-          item.attachmentDetails.forEach(fItem => {
-            fItem["isFileFromServer"] = true;
-          })
-        })
-      }
-    });
-  }
+  // getFilesByPublicationId() {
+  //   this.publicationService.getFilesBypublication(this.publicationRecordId).subscribe(res => {
+  //     this.attachmentList = res || [];
+  //     if (this.attachmentList.length > 0) {
+  //       this.attachmentList.forEach(item => {
+  //         item["isFileFromServer"] = true;
+  //         item.attachmentDetails.forEach(fItem => {
+  //           fItem["isFileFromServer"] = true;
+  //         })
+  //       })
+  //     }
+  //   });
+  // }
   getLocationNameById(event) {
     this.sourcePublication['location'] = this.sourcePublication.locationId.label
     this.onChangeInput();

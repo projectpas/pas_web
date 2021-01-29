@@ -28,15 +28,15 @@ export class SingleComponent {
 			this.loadmethod(this.otherurl);
 
 		});
-		route.events.forEach((event)=>{
+		route.events.forEach((event) => {
 			if (event instanceof NavigationStart) {
 				console.log(event.url, "router value++++=")
 				setTimeout(() => {
 					this.loadmethod(event.url)
 				}, 1000)
-				
+
 				this.currentUrl = event.url;;
-			}			
+			}
 		})
 
 	}
@@ -52,6 +52,7 @@ export class SingleComponent {
 
 	loadmethod(url) {
 		this.currentUrl = url;
+		let publicationRecordId = this.router.snapshot.params['id'];
 		if (this.currentUrl) {
 			let itemLabel = '';
 			switch (this.currentUrl) {
@@ -128,7 +129,7 @@ export class SingleComponent {
 				this.items = [
 					{ label: 'Single Screens' },
 					{ label: 'Publication Type' }
-          ];
+				];
 			}
 
 			else if (this.currentUrl == '/singlepages/singlepages/app-document-type') {
@@ -370,7 +371,7 @@ export class SingleComponent {
 					{ label: 'Create Publication' }
 				];
 			}
-			else if (this.currentUrl.indexOf('app-create-publication/edit') != -1) {
+			else if (this.currentUrl == '/singlepages/singlepages/app-publication/edit/' + publicationRecordId) {
 				this.items = [
 					{ label: 'Publication' },
 					{ label: 'Edit Publication' }
@@ -558,19 +559,20 @@ export class SingleComponent {
 					{ label: 'Single Screens' },
 					{ label: 'Caps Report' }
 				];
-            }
-            else if (this.currentUrl == '/singlepages/singlepages/app-capability-type') {
-                this.items = [
-                    { label: 'Single Screens' },
+			}
+			else if (this.currentUrl == '/singlepages/singlepages/app-capability-type') {
+				this.items = [
+					{ label: 'Single Screens' },
 					{ label: 'Vendor Capability Type' }
-                ];
-            }
+				];
+			}
 		}
 
 
 		if (this.otherurl) {
 
 			let itemLabel = '';
+			let publicationRecordId = this.router.snapshot.params['id'];
 			switch (this.currentUrl) {
 				case '/singlepages/singlepages/app-asset-type':
 					itemLabel = 'Asset Class';
@@ -1075,12 +1077,12 @@ export class SingleComponent {
 					{ label: 'Single Screens' },
 					{ label: 'Caps Report' }
 				];
-            }
-            else if (this.currentUrl == '/singlepages/singlepages/app-capability-type') {
-                this.items = [
-                    { label: 'Single Screens' },
-                    { label: 'Vendor Capability Type' }
-                ];
+			}
+			else if (this.currentUrl == '/singlepages/singlepages/app-capability-type') {
+				this.items = [
+					{ label: 'Single Screens' },
+					{ label: 'Vendor Capability Type' }
+				];
 			}
 			else if (this.currentUrl == '/singlepages/singlepages/app-publication') {
 				this.items = [
@@ -1094,7 +1096,7 @@ export class SingleComponent {
 					{ label: 'Create Publication' }
 				];
 			}
-			else if (this.currentUrl.indexOf('app-create-publication/edit') != -1) {
+			else if (this.currentUrl == '/singlepages/singlepages/app-publication/edit/' + publicationRecordId) {
 				this.items = [
 					{ label: 'Publication' },
 					{ label: 'Edit Publication' }
