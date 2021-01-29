@@ -365,7 +365,7 @@
                                                [(ngModel)]="part.quantityActuallyReceived"
                                                (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum"
                                                class="form-control" style="width: 50px !important;
-                                               margin-right: 10px !important;"  [maxLength]="12" required  />
+                                               margin-right: 10px !important; text-align: right;"  [maxLength]="12" required  />
                                         <button class="btn btn-primary btn-po-details"
                                                [disabled]="!part.quantityActuallyReceived"
                                                *ngIf="part.stockLineCount < part.quantityOrdered"
@@ -378,19 +378,19 @@
                                 </tr>
 
                                 <tr class="more-info" *ngIf="part.showStockLineGrid" [hidden]="!part.visible">
-                                    <td colspan="22">
+                                    <td colspan="13">
                                         <div class="form-row" style="margin-top: 10px;padding: 0px 7px;">
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>PN</label>
                                                     <input type="text" pInputText pKeyFilter="pnum" class="form-control"
-                                                           value="{{part.itemMaster?.partNumber}}" disabled />
+                                                           value="{{part.itemMaster?.partNumber}}" disabled  required/>
                                                 </div>
                                             </div>
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label>PN Description</label>
-                                                    <input type="text" pInputText class="form-control" disabled
+                                                    <input type="text" pInputText class="form-control" disabled required
                                                            [value]="part.itemMaster?.partDescription" />
                                                 </div>
                                             </div>
@@ -439,8 +439,8 @@
                                                 <div class="form-group">
                                                     <label>GL Account <span class="clr-red">*</span></label>
                                                     <select class="form-control"
-                                                            [(ngModel)]="part.itemMaster.glAccountId" #selects="ngModel"
-                                                            [ngModelOptions]="{standalone: true}">
+                                                            [(ngModel)]="part.glAccountId" #selects="ngModel"
+                                                            [ngModelOptions]="{standalone: true}" required>
                                                         <option value="0">Select</option>
                                                         <option *ngFor="let glAccount of GLAccountList"
                                                                 [value]="glAccount.Key">
@@ -1329,6 +1329,10 @@
                                                 </div>
                                             </section>
                                         </div>
+                                    </td>
+                                    <td colspan="8">                                        
+                                    </td>
+                                    <td>                                        
                                     </td>
                                 </tr>
                             </ng-container>
