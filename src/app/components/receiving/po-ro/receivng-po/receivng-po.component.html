@@ -227,34 +227,34 @@
                            class="table table-bordered">
                         <thead>
                             <tr class="header-table-width">
-                                <th></th>
-                                <th>Line Num</th>
+                                <th class="min-width-40"></th>
+                                <th class="min-width-60">Line Num</th>
                                 <th>PN</th>
                                 <th>PN Desc</th>
                                 <th>Alt/Equiv</th>
                                 <th>Item Type</th>
                                 <th>Stock Type</th>
-                                <th>Qty Ord </th>
-                                <th>Qty Drafted</th>
-                                <th>Qty Received</th>
-                                <th>Qty Rejected</th>
-                                <th>Back Ord </th>
-                                <th>Status</th>
+                                <th class="min-width-80">Qty Ord </th>
+                                <th class="min-width-80">Qty Drafted</th>
+                                <th class="min-width-80">Qty Received</th>
+                                <th class="min-width-80">Qty Rejected</th>
+                                <th class="min-width-80">Back Ord </th>
+                                <th class="min-width-60">Status</th>
                                 <!-- <th [attr.colspan]="disableParentSpace ? '0' : '3'" class="text-center"></th> -->
                                 <th colspan="3" class="text-center" *ngIf="disableParentSpace"></th>
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
-                                <th>Is Serialized</th>
-                                <th>Is TimeLife</th>
-                                <th>Qty to Receive <span class="clr-red">*</span></th>
+                                <th class="min-width-80" >Is Serialized</th>
+                                <th class="min-width-80" >Is TimeLife</th>
+                                <th class="min-width-90">Qty to Receive <span class="clr-red">*</span></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let part of purchaseOrderData.purchaseOderPart;let row_index=index">
+                            <ng-container *ngFor="let part of purchaseOrderData.purchaseOderPart; let row_index=index">
                                 <!--this row is for the parent part-->
                                 <tr class="parent-data" *ngIf="part.isParent">
                                     <td class="details-control eachcol" style="padding: 4px 6px;">
-                                        <section *ngIf="isSplitShipmentPart(part.itemMasterId)">
+                                        <section *ngIf="isSplitShipmentPart(part.purchaseOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                (click)="showSplitShipmentParts(part)"></i>
                                         </section>
@@ -317,11 +317,12 @@
                                         </button>
                                     </td>
                                 </tr>
+                               
                                 <tr class="child-header splitship-head child-header-back"
-                                    [hidden]="purchaseOrderData.purchaseOderPart[row_index+1] != undefined && !purchaseOrderData.purchaseOderPart[row_index+1].visible"
-                                    *ngIf="part.isParent && purchaseOrderData.purchaseOderPart[row_index+1] != undefined && (!purchaseOrderData.purchaseOderPart[row_index+1].isParent)">
-                                    <th></th>
-                                    <th></th>
+                                [hidden]="!part.visible"
+                                *ngIf="!part.isParent">
+                                    <th class="min-width-40"></th>
+                                    <th ></th>
                                     <th colspan="5">PN</th>
                                     <th>Qty Ord</th>
                                     <th colspan="2">Qty Received</th>
@@ -330,14 +331,15 @@
                                     <th>Status</th>
                                     <th>User Type</th>
                                     <th>User Name</th>
-                                    <th>Address</th>
-                                    <th colspan="2">Management Structure</th>
+                                    <th colspan="4">Address</th>
+                                    <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                     <th></th>
                                     <th></th>
                                     <th>Receive Quantity</th>
                                     <th> </th>
                                 </tr>
-                                <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
+                                <tr class="child-data splitship-child child-data-back" 
+                                    [hidden]="!part.visible"
                                     *ngIf="!part.isParent">
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
@@ -352,12 +354,9 @@
                                     </td>
                                     <td>{{part.poPartSplitUserTypeName}}</td>
                                     <td>{{part?.poPartSplitUserName}}</td>
-                                    <td>{{part.addressText }}</td>
-                                    <td *ngIf="part.managementStructureName != undefined && part.managementStructureName.length > 0"
-                                        colspan="2">
-                                        {{part.managementStructureName[0]}},
-                                        {{part.managementStructureName[1]}}, {{part.managementStructureName[2]}},
-                                        {{part.managementStructureName[3]}}
+                                    <td colspan="4">{{part.addressText }}</td>
+                                    <td colspan="4">
+                                        {{part.level1}},{{part.level2}}, {{part.level3}},{{part.level4}}
                                     </td>
                                     <td></td>
                                     <td></td>
