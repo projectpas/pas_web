@@ -203,7 +203,7 @@
                                 </span>
                             </label>
                         
-                            <p-dropdown  (onChange)="siteValueChange(receivingForm.siteId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)" (input)="onFilterSite($event.target.value)"  [options]="allSites" filter="true" [(ngModel)]="receivingForm.defaultSiteId" name="DefaultSiteId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                            <p-dropdown  (onChange)="siteValueChange(receivingForm.defaultSiteId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)" (input)="onFilterSite($event.target.value)"  [options]="allSites" filter="true" [(ngModel)]="receivingForm.defaultSiteId" name="DefaultSiteId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
                     <div class="col-md-3" *ngIf="woTypeId">
@@ -214,7 +214,7 @@
                                 </span>
                             </label>
                         
-                            <p-dropdown (onChange)="wareHouseValueChange(receivingForm.warehouseId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allWareHouses" filter="true" [(ngModel)]="receivingForm.defaultWearhouseId" name="defaultWearhouseId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                            <p-dropdown (onChange)="wareHouseValueChange(receivingForm.defaultWearhouseId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allWareHouses" filter="true" [(ngModel)]="receivingForm.defaultWearhouseId" name="defaultWearhouseId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
                     <div class="col-md-3" *ngIf="woTypeId">
@@ -225,7 +225,7 @@
                                 </span>
                             </label>
                         
-                            <p-dropdown (onChange)="locationValueChange(receivingForm.locationId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allLocations" filter="true" [(ngModel)]="receivingForm.defaultLocationId" name="defaultLocationId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                            <p-dropdown (onChange)="locationValueChange(receivingForm.defaultLocationId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allLocations" filter="true" [(ngModel)]="receivingForm.defaultLocationId" name="defaultLocationId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
                     <div class="col-md-3" *ngIf="woTypeId">
@@ -236,7 +236,7 @@
                                 </span>
                             </label>
                         
-                            <p-dropdown  (onChange)="shelfValueChange(receivingForm.shelfId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allShelfs" filter="true" [(ngModel)]="receivingForm.defaultShelfId" name="defaultShelfId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                            <p-dropdown  (onChange)="shelfValueChange(receivingForm.defaultShelfId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allShelfs" filter="true" [(ngModel)]="receivingForm.defaultShelfId" name="defaultShelfId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
                     <div class="col-md-3" *ngIf="woTypeId">

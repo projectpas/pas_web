@@ -290,7 +290,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     onSaveCustomerReceiving() {
-        console.log("formss",this.receivingForm)
         const receivingForm = {
             ...this.receivingForm,
             tearDownTypes: this.getTearDownTypes(),
@@ -504,7 +503,7 @@ this.woTypeId=ev.value
 
         this.setEditArray = [];
         if (this.isEditMode == true) {
-            this.setEditArray.push(this.receivingForm.siteId ? this.receivingForm.siteId : 0);
+            this.setEditArray.push(this.receivingForm.defaultSiteId ? this.receivingForm.defaultSiteId : 0);
 
         } else {
             this.setEditArray.push(0);
