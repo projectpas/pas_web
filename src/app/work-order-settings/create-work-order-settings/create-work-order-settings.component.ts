@@ -232,28 +232,74 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             if (this.receivingForm.defaultShelfId) {
                 this.shelfValueChange(this.receivingForm.defaultShelfId)
             }
-          
+            this.getSiteDetailsOnEdit(this.receivingForm);
         },
         err => {
             this.errorHandling(err);
         });
     }    
 
-    getSiteDetailsOnEdit(res) {
-        this.siteValueChange(res.defaultSiteId);
-        this.wareHouseValueChange(res.defaultWearhouseId);
-        this.locationValueChange(res.defaultLocationId);
-        this.shelfValueChange(res.defaultShelfId);
+    // getSiteDetailsOnEdit(res) {
+        // this.siteValueChange(res.defaultSiteId);
+        // this.wareHouseValueChange(res.defaultWearhouseId);
+        // this.locationValueChange(res.defaultLocationId);
+        // this.shelfValueChange(res.defaultShelfId);
         // this.receivingForm.warehouseId = res.defaultWearhouseId;
         // this.receivingForm.locationId = res.defaultLocationId;
         // this.receivingForm.shelfId = res.defaultShelfId;
         // this.receivingForm.binId = res.defaultBinId;
-    }
+    // }
 
     
-
+    getSiteDetailsOnEdit(res) {
+        // this.getInactiveObjectOnEdit('value', res.defaultSiteId, this.allSites, 'Site', 'SiteId', 'Name');
+        this.getInactiveObjectOnEdit('value', res.defaultWearhouseId, this.allWareHouses, 'Warehouse', 'WarehouseId', 'Name');
+        this.getInactiveObjectOnEdit('value', res.defaultLocationId, this.allLocations, 'Location', 'LocationId', 'Name');
+        this.getInactiveObjectOnEdit('value', res.defaultShelfId, this.allShelfs, 'Shelf', 'ShelfId', 'Name');
+        this.getInactiveObjectOnEdit('value', res.defaultBinId, this.allBins, 'Bin', 'BinId', 'Name');
+    }
  
-
+    getInactiveObjectOnEdit(string, id, originalData, tableName, primaryColumn, description) {
+        if (id) {
+            for (let i = 0; i < originalData.length; i++) {
+                if (originalData[i][string] == id) {
+                    return id;
+                }
+            }
+            let obj: any = {};
+            this.commonService.smartDropDownGetObjectById(tableName, primaryColumn, description, primaryColumn, id).subscribe(res => {
+                obj = res[0];
+                if (tableName == 'Site') {
+                    obj.siteId = obj.value,
+                        obj.name = obj.label,
+                        this.allSites = [...originalData, obj];
+                }
+                else if (tableName == 'Warehouse') {
+                    obj.warehouseId = obj.value,
+                        obj.name = obj.label,
+                        this.allWareHouses = [...originalData, obj];
+                }
+                else if (tableName == 'Location') {
+                    obj.locationId = obj.value,
+                        obj.name = obj.label,
+                        this.allLocations = [...originalData, obj];
+                }
+                else if (tableName == 'Shelf') {
+                    obj.shelfId = obj.value,
+                        obj.name = obj.label,
+                        this.allShelfs = [...originalData, obj];
+                }
+                else if (tableName == 'Bin') {
+                    obj.binId = obj.value,
+                        obj.name = obj.label,
+                        this.allBins = [...originalData, obj];
+                }
+            });
+            return id;
+        } else {
+            return null;
+        }
+    }
 
     resetSerialNoTimeLife() {
         this.receivingForm.isSkipSerialNo = false;
@@ -611,6 +657,8 @@ this.woTypeId=ev.value
         }
     }
 
+
+ 
     // private getAllWorkScpoes(value) {
 
     //     this.setEditArray = [];
