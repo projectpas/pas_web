@@ -439,7 +439,7 @@ export class CreatePublicationComponent implements OnInit {
     } else if (value === 'PnMap') {
       this.currentTab = 'PnMap';
       this.activeMenuItem = 2;
-      this.getPartNumberList();
+      this.getPartNumberList('');
     } else if (value === 'Aircraft') {
       this.currentTab = 'Aircraft';
       this.activeMenuItem = 3;
@@ -666,20 +666,36 @@ export class CreatePublicationComponent implements OnInit {
 
   }
 
-  async getPartNumberList() {
+  async getPartNumberList(event) {
     this.isSpinnerVisible = false;
-    await this.itemMasterService.getPrtnumberslistList().subscribe(list => {
-      const responseData = list[0];
+    let setEditArray = [];
+    let strText;
+    if (event != '') {
+      strText = event.query;
+    }
+    this.commonService.autoCompleteSmartDropDownItemMasterList(strText, true, 20, setEditArray.join(), this.masterCompanyId).subscribe(res => {
+      const responseData = res;
       this.isSpinnerVisible = false;
+      // this.partNumbersInfo = this.allPartnumbersList;
       this.partNumberListOriginal = responseData.map(x => {
         return {
-          label: x.partNumber,
+          label: x.label,
           value: x
         };
       });
-    }, error => {
-      this.isSpinnerVisible = false;
-    });
+    })
+    // await this.itemMasterService.getPrtnumberslistList().subscribe(list => {
+    //   const responseData = list[0];
+    //   this.isSpinnerVisible = false;
+    //   this.partNumberListOriginal = responseData.map(x => {
+    //     return {
+    //       label: x.partNumber,
+    //       value: x
+    //     };
+    //   });
+    // }, error => {
+    //   this.isSpinnerVisible = false;
+    // });
   }
 
   openModelPopups(partNumberList) {

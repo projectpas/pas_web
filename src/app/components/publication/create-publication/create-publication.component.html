@@ -293,10 +293,11 @@
                                     Part Number
                                 </label>
                                 <p-autoComplete class="p-autoComplete-ctsm" name="selectedPartNumbers"
-                                    [(ngModel)]="selectedPartNumbers" field="label" [suggestions]="partNumberList"
-                                    [forceSelection]="true" (onSelect)="enablePnMappingSave()"
-                                    emptyMessage="No Match Found" (completeMethod)="filterPartList($event)" [size]="30"
-                                    [minLength]="1" [dropdown]="true" required>
+                                    [(ngModel)]="selectedPartNumbers" field="label"
+                                    [suggestions]="partNumberListOriginal" [forceSelection]="true"
+                                    (onSelect)="enablePnMappingSave()" emptyMessage="No Match Found"
+                                    (completeMethod)="getPartNumberList($event)" [size]="30" [minLength]="1"
+                                    [dropdown]="true" required>
                                 </p-autoComplete>
                                 <!-- <p-multiSelect [options]="partNumberList" [(ngModel)]="selectedPartNumbers"
                                     (click)="openModelPopups(selectedPartNumbers)" class="pub-multi align-x">
@@ -305,7 +306,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <button class="btn btn-primary mtop20 btn-cstm" [disabled]="disabledPartNumber"
+                                <button class="btn btn-primary mtop20" [disabled]="disabledPartNumber"
                                     (click)="savePNMapping()">
                                     Add
                                 </button>
