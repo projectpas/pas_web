@@ -227,9 +227,9 @@
     <div class="card new-card">
         <div class="card-body">
             <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
-                <div class="tableFixHead">
+                <!-- <div class="tableFixHead"> -->
                     <table *ngIf="purchaseOrderData != undefined && purchaseOrderData.purchaseOderPart != undefined"
-                           class="table rro-table-cstm table-bordered">
+                           class="table lastcol-fix tableFixHead table-bordered">
                         <thead>
                             <tr class="header-table-width">
                                 <th class="min-width-40"></th>
@@ -249,7 +249,7 @@
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <th class="min-width-80" >Is Serialized</th>
                                 <th class="min-width-80" >Is TimeLife</th>
-                                <th class="min-width-150"  >Qty to Receive <span class="clr-red">*</span></th>
+                                <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
                                
                             </tr>
                         </thead>
@@ -337,7 +337,7 @@
                                     <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                     <th></th>
                                     <th></th>
-                                    <th class="min-width-120" style="position: sticky !important">Qty to Receive <span class="clr-red">*</span></th>                                   
+                                    <th class="min-width-120">Qty to Receive <span class="clr-red">*</span></th>                                   
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back" 
                                     [hidden]="!part.visible"
@@ -1334,7 +1334,7 @@
                             </ng-container>
                         </tbody>
                     </table>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
 
