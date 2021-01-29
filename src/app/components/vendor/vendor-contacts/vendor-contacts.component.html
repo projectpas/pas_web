@@ -22,17 +22,17 @@
         </div>
       </div>
 
-      <div class="card new-card" style="padding: 10px;">
+      <div class="card new-card">
           <div>
 
-              <div class="card-header bg-primary new-card-header">
+              <div class="card-header header">
                   <div class="row">
                       <div class="col">
-                          <h4 class="new-card-heading">Contacts</h4>
+                          <h4 class="header-name">Contacts</h4>
                       </div>
                       <div>
                           <a *ngIf="isViewMode == false" data-toggle="modal" data-target="#addContactInfo">
-                              <button type="button" class="btn-sm new-btn-primary" matTooltip="Add Contacts" matTooltipPosition="above" (click)="onAddContactInfo();">
+                              <button type="button" class="btn-sm header-button" matTooltip="Add Contacts" matTooltipPosition="above" (click)="onAddContactInfo();">
                                   Add Contacts
                               </button>
                           </a>
@@ -41,9 +41,9 @@
               </div>           
 
               <div class="clear"></div>
-              <hr />
+              <!-- <hr /> -->
           </div>
-              <div class="card-body new-card-body">
+              <div class="card-body header-body">
                   <p-table #dt class="ptable-custom lastcol-fix" [value]="allActions" [metaKeySelection]="true" [rows]="pageSize"
                            [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[10, 20, 50, 100]" [columns]="selectedColumns"
                            [style]="{ width: '100%' }" selectionMode="multiple" [(selection)]="selectedColumn"
@@ -53,30 +53,32 @@
                               <div class="col">
                                   <p-multiSelect [options]="vendorContactsColumns" [(ngModel)]="selectedColumns"
                                                  [ngModelOptions]="{ standalone: true }" optionLabel="header" selectedItemsLabel="{0} columns selected"
-                                                 [style]="{ minWidth: '200px' }" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                                 class="multiselect-field" defaultLabel="Choose Columns" 
+                                              ></p-multiSelect>
                               </div>
                               <div class="col">
-                                  <div style="width: auto !important; float: right;"
-                                       class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                                <div					
+                                class="global-search-field inner-addon right-addon inline-block"
+                                >
                                       <i class="fa fa-search"></i>
                                       <input type="text" pInputText size="50"
                                              class="form-control"
                                              (input)="dt.filterGlobal($event.target.value, 'contains')" placeholder=" Filter"
-                                             style="height: 28px !important;" />
+                                             />
                                   </div>
                               </div>
                           </div>
                           <div class="row">
                               <div class="col">
-                                  <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Data" matTooltipPosition="above"
+                                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Data" matTooltipPosition="above"
                                           pButton icon="fa-download" iconPos="left" label="Export Data"
                                           data-toggle="modal" 
                                           (click)="selectedOnly = false; targetData = dt;"
-                                           data-target="#downloadConfirmation"
-                                          style="padding:5px 10px !important; width: 115px !important;"></button>
-                                  <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Selected Data"
+                                           data-target="#downloadConfirmation"></button>
+                                  <button type="button" class="btn btn-primary exports-button" matTooltip="Download Selected Data"
                                           matTooltipPosition="above" pButton icon="fa-download" iconPos="left" label="Export Selected Data"
-                                          (click)="dt.exportCSV({ selectionOnly: true })" style="padding:5px 10px !important;"></button>
+                                          (click)="dt.exportCSV({ selectionOnly: true })" 
+                                          ></button>
 
                                   <!-- <div class="excel-upload excel-upload-cstm">
                                       <button type="button" class="btn btn-primary  new-table-button" matTooltip="Download Sample File"
@@ -94,28 +96,27 @@
                                   </div> -->
                               </div>                             
 
-                              <div class="col">
-                                  <div class="">
-                                      <div class="col"
-                                           style="width: 370px; float: right; padding-top: 3px;">
+                              <div class="pull-right buttons-div-align">
+                                <div class="col">
+                                <div class="col buttons-top-padding">
 
 
                                           <div class="form-group">
 
-                                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                              <div class="pull-left radio-buttons-align">
                                                   <p-radioButton class="custom_set" name="contactstatus" value="Active" label="Active"
                                                                  [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                               </div>
-                                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                              <div class="pull-left radio-buttons-align">
                                                   <p-radioButton class="custom_set" name="contactstatus" value="InActive" label="In-Active"
                                                                  [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
                                               </div>
-                                              <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                              <div class="pull-left radio-buttons-align">
                                                   <p-radioButton class="custom_set" name="contactstatus" value="ALL" label="All"
                                                                  [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
                                               </div>
-                                              <div class="checkbox-cstm" style="margin-left: 0;">
-                                                  <label style="width: auto !important;margin-top: 3px;">
+                                              <div class="checkbox-cstm pull-left checkbox-align">
+                                                <label class="checkbox-label-align">
                                                       <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
                                                              (click)="getDeleteListByStatus($event.target.checked)" />
                                                       <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -131,24 +132,24 @@
                       </ng-template>
                       <ng-template pTemplate="caption" *ngIf="isViewMode == true">
                           <div class="row">
-                            <div class="col">
-                                <div class="">
-                                    <div class="col" style="width: 350px; float: right; padding-top: 3px;">
+                            <div class="pull-right buttons-div-align">
+                              <div class="col">
+                              <div class="col buttons-top-padding">
                                         <div class="form-group">
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <p-radioButton class="custom_set" name="contactstatus" value="Active" label="Active"
                                                                [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                             </div>
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <p-radioButton class="custom_set" name="contactstatus" value="InActive" label="In-Active"
                                                                [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
                                             </div>
-                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                            <div class="pull-left radio-buttons-align">
                                                 <p-radioButton class="custom_set" name="contactstatus" value="ALL" label="All"
                                                                [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
                                             </div>
-                                            <div class="checkbox-cstm" style="margin-left: 0;">
-                                                <label style="width: auto !important;margin-top: 3px;">
+                                            <div class="checkbox-cstm pull-right checkbox-align">
+                                              <label class="checkbox-label-align">
                                                     <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent"
                                                            (click)="getDeleteListByStatus($event.target.checked)" />
                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
@@ -163,42 +164,42 @@
                       </ng-template>
                       <ng-template pTemplate="colgroup" let-columns>
                           <colgroup>
-                              <col *ngFor="let col of columns" style="width:130px"
+                              <col *ngFor="let col of columns" class="table-column-width"
                                    [ngClass]="{ update_withFlag: col.field == 'isDefaultContact' }" />
                           </colgroup>
                       </ng-template>
                       <ng-template pTemplate="header" let-columns>
                           <tr>
-                              <th style="width: 40px;">Flag</th>
-                              <th *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
+                              <th class="table-column-width">Flag</th>
+                              <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                                   [pSortableColumn]="col.field">
                                   {{ col.header }}
                                   <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
 
-                              <th style="width: 150px;">Actions</th>
+                              <th class="table-actions-column">Actions</th>
                           </tr>
                           <tr>
                               <th></th>
-                              <th style="width:auto" *ngFor="let col of columns" [ngSwitch]="col.field"
+                              <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field"
                                   [hidden]="col.field == 'isDefaultContact'">
-                                  <input style="width:100%;" pInputText type="text" (input)="
+                                  <input class="table-header-input-width" pInputText type="text" (input)="
                                     dt.filter($event.target.value, col.field, 'contains') " />
                               </th>                              
-                              <th style="width: 150px;"></th>
+                              <th class="table-actions-column"></th>
                           </tr>
                       </ng-template>
                       <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                           <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                               (dblclick)="opencontactView(view, rowData)">
-                              <td style="width: 30px;">
+                              <td class="table-column-width">
                                   <span class="flag">
                                       <i *ngIf="rowData.isDefaultContact == true" [ngStyle]="{color: rowData.isDefaultContact == true ? 'green' : 'none'
                                   }" class="fa fa-flag" aria-hidden="true" matTooltip="Primary " matTooltipPosition="above">
                                       </i>
                                   </span>
                               </td>
-                              <td *ngFor="let col of columns" [hidden]="col.field == 'isDefaultContact'"
+                              <td class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isDefaultContact'"
                                   class=" uiTable_td_ovrflw_control" pReorderableRowHandle>
                                   {{
                                   col.field == 'createdDate'
@@ -208,7 +209,7 @@
                                     : rowData[col.field]
                                   }}
                               </td>
-                              <td class="text-center" style="width: 150px;">
+                              <td class="action-icons-cstm table-column-width">
                                   <div *ngIf="currentDeletedstatus==false">
                                       <p-inputSwitch *ngIf="!isViewMode" name="isActive{{ rowIndex }}" matTooltip="Active" [disabled]="rowData.isDefaultContact == true"
                                                   matTooltipPosition="above" onLabel="on" offLabel="off" (onChange)="handleChanges(rowData, $event)"
@@ -270,18 +271,18 @@
                       </ng-template>
                       <ng-template pTemplate="emptymessage" let-columns>
                           <tr>
-                              <td [attr.colspan]="13" style="color: red; font-weight: bold; text-align: center">
+                              <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
                                   No records found
                               </td>
                           </tr>
                       </ng-template>
                       <ng-template pTemplate="summary" id="footer">
                           <label id="footer" class="footer">Total:</label>
-                          <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                          <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
                           &nbsp;&nbsp;
                           <label id="footer" class="footer1">Pages Count:</label>
 
-                          <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
+                          <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
                                  pInputText type="text" />
                       </ng-template>
                   </p-table>
@@ -393,8 +394,9 @@
  
   </div>
   <div class="modal-body" *ngIf="contactauditHisory">
-    <div class="table-responsive ">
-      <table class="table table-bordered" *ngIf="contactauditHisory.length > 0; else noDatavailable">
+    <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+      <div class="tableFixHead">  
+      <table class="table table-bordered header-table-width" *ngIf="contactauditHisory.length > 0; else noDatavailable">
         <thead>
           <tr>
             <th style="min-width: 90px;">Is Primary</th>
@@ -566,6 +568,7 @@
           </tr>
         </tbody>
       </table>
+      </div>
       <ng-template #noDatavailable>
         <div class="text-center">
           <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;" />
@@ -1196,7 +1199,7 @@
         <h4 class="modal-title">Edit Memo</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-bordered table-fixed workflow-table-material">
+        <!-- <table class="table table-bordered table-fixed workflow-table-material">
           <thead>
             <th style="color: #fff;">Memo</th>
           </thead>
@@ -1214,19 +1217,25 @@
               </td>
             </tr>
           </tbody>
-        </table>
-        <div style="float: right;">
+        </table> -->
+        <p-editor
+        spellcheck="true"
+        (ngModelChange)="enableSaveMemo()"
+         [(ngModel)]="memoPopupContent"
+         [style]="{ height: '320px' }"
+         name="memoPopupContent"
+         required
+       ></p-editor>
+        <div class="editor-buttons">
           <button
             type="button"
-            class="btn btn-primary"
-            style="padding: 6px 12px !important; margin-top: 10px;"
+            class="btn btn-primary editor-buttons-margin"
             (click)="onClickPopupSave()" [disabled]="disableSaveMemo">
             Save
           </button>
           <button
             type="button"
-            class="btn btn-danger"
-            style="padding: 6px 12px !important; margin-top: 10px;"
+            class="btn btn-danger editor-buttons-margin"
             (click)="closeMemoModel()" >
             Close
           </button>
@@ -1331,7 +1340,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="deleteItemAndCloseModel1()">
+    <button type="button" class="btn btn-primary" (click)="deleteItemAndCloseModel1()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1376,7 +1385,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreItemAndCloseModel()">
+    <button type="button" class="btn btn-primary" (click)="restoreItemAndCloseModel()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1417,8 +1426,9 @@
         </div>
       </div>
       <div class="modal-body" *ngIf="auditHistoryATA">
-        <div class="table-responsive">
-          <table class="table table-bordered" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">  
+					<table class="table table-bordered header-table-width" *ngIf="auditHistoryATA.length > 0; else noDatavailable">
             <thead>
               <tr>
                 <!-- <th>Contact</th> -->
@@ -1504,6 +1514,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
               <h4 style="color: #ff5663;">No History Found</h4>
@@ -1554,7 +1565,7 @@
       </strong>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+      <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
       <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
   </div>
 </ng-template>  

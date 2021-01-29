@@ -1328,7 +1328,7 @@
         <h4 class="modal-title">Edit Memo</h4>
       </div>
       <div class="modal-body">
-        <table class="table table-bordered table-fixed workflow-table-material">
+        <!-- <table class="table table-bordered table-fixed workflow-table-material">
           <thead>
             <th style="color: #fff;">Memo</th>
           </thead>
@@ -1346,19 +1346,25 @@
               </td>
             </tr>
           </tbody>
-        </table>
-        <div style="float: right;">
+        </table> -->
+        <p-editor
+        spellcheck="true"
+        (ngModelChange)="enableSave()"
+         [(ngModel)]="memoPopupContent"
+         [style]="{ height: '320px' }"
+         name="memoPopupContent"
+         required
+       ></p-editor>
+        <div class="editor-buttons">
           <button
             type="button"
-            class="btn btn-primary"
-            style="padding: 6px 12px !important; margin-top: 10px;"
+            class="btn btn-primary editor-buttons-margin"
             (click)="onClickPopupSave()" [disabled]="disableSave">
             Save
           </button>
           <button
             type="button"
-            class="btn btn-danger"
-            style="padding: 6px 12px !important; margin-top: 10px;"
+            class="btn btn-danger editor-buttons-margin"
             (click)="closeMemoModel()" >
             Close
           </button>

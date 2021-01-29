@@ -10,14 +10,14 @@
         <div class="col-md-12">
             <div class="card">
 
-                <div class="card-header bg-primary new-card-header" >
+                <div class="card-header header" >
                     <div class="row">
                       <div class="col">
-                        <h4 class="new-card-heading"> Vendor General Info</h4>
+                        <h4 class="header-name"> Vendor General Info</h4>
                       </div>
                     </div>
                   </div>
-                <div class="card-body">
+                <div class="card-body header-body">
                     <div class="clear"></div>
                     <div class="clear"></div>
                     <div class="col-md-12">
@@ -558,7 +558,7 @@
                 <p>Do you want to create the customer now?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" (click)="isCustomerAlsoaVendor('Yes','goNext')" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-primary" (click)="isCustomerAlsoaVendor('Yes','goNext')" data-dismiss="modal">Yes</button>
                 <button type="button" class="btn btn-danger" (click)="isCustomerAlsoaVendor('No','goNext')" data-dismiss="modal">No</button>
             </div>
         </div>
@@ -1321,7 +1321,7 @@
     </div>
     <div class="modal-footer">
         <button type="button"
-                class="btn btn-success"
+                class="btn btn-primary"
                 (click)="deleteItemAndCloseModel()">
             Yes
         </button>
@@ -1353,7 +1353,7 @@
     </div>
     <div class="modal-footer">
         <button type="button"
-                class="btn btn-success"
+                class="btn btn-primary"
                 (click)="deleteItemAndCloseModelAudit()">
             Yes
         </button>
@@ -1395,7 +1395,7 @@
                   <h4 class="modal-title">Edit Memo</h4>
               </div>
               <div class="modal-body">
-                  <table class="table table-bordered table-fixed workflow-table-material">
+                  <!-- <table class="table table-bordered table-fixed workflow-table-material">
                       <thead>
                       <th style="color: #fff;">Memo</th>
                       </thead>
@@ -1411,18 +1411,22 @@
                               </td>
                           </tr>
                       </tbody>
-                  </table>
-                  <div style="float: right;">
+                  </table> -->
+                  <p-editor spellcheck="true"
+                  (ngModelChange)="enableSaveMemo()"
+                            [(ngModel)]="memoPopupContent"
+                            [style]="{ height: '320px' }"
+                            name="memoPopupContent"
+                            required></p-editor>
+                  <div class="editor-buttons">
                       <button type="button"
-                              class="btn btn-primary"
-                              style="padding: 6px 12px !important; margin-top: 10px;"
+                              class="btn btn-primary editor-buttons-margin"
                               data-dismiss="modal" [disabled]="disableSaveMemo"
                               (click)="onClickPopupSave()">
                           Save
                       </button>
                       <button type="button"
-                              class="btn btn-danger"
-                              style="padding: 6px 12px !important; margin-top: 10px;"
+                              class="btn btn-danger editor-buttons-margin"
                               data-dismiss="modal">
                           Close
                       </button>

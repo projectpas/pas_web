@@ -2,15 +2,15 @@
   <p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 </div>
 <div class="card new-card">
-  <div class="card-header bg-primary new-card-header">
+  <div class="card-header header">
     <div class="row">
       <div class="col">
-        <h4 class="new-card-heading">Vendor List</h4>
+        <h4 class="header-name">Vendor List</h4>
       </div>
       <div>
         <button
           type="button"
-          class="btn-sm new-btn-primary"
+          class="btn-sm header-button"
           (click)="navigateTogeneralInfo()"
         >
           Add Vendor
@@ -18,7 +18,7 @@
       </div>
     </div>
   </div>
-  <div class="card-body new-card-body">
+  <div class="card-body header-body">
     <p-table
       #dt
       class="rpo-table-cstm rro-table-cstm"
@@ -48,16 +48,15 @@
               [(ngModel)]="selectedColumns"
               optionLabel="header"
               selectedItemsLabel="{0} columns selected"
-              [style]="{ minWidth: '200px' }"
+              class="multiselect-field"
               defaultLabel="Choose Columns"
-              style="float: left;"
+             
             ></p-multiSelect>
           </div>
           <div class="col">
-            <div
-              style="width: auto !important; float: right;"
-              class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-            >
+            <div					
+						class="global-search-field inner-addon right-addon inline-block"
+					  >
               <i class="fa fa-search"></i>
               <input
                 type="text"
@@ -74,7 +73,7 @@
           <div class="col">
             <button
               type="button"
-              class="btn btn-primary new-table-button"
+              class="btn btn-primary exports-button"
               matTooltip="Download Data"
               matTooltipPosition="above"
               pButton
@@ -86,7 +85,7 @@
             ></button>
             <button
               type="button"
-              class="btn btn-primary new-table-button"
+              class="btn btn-primary exports-button"
               matTooltip="Download Selected Data"
               matTooltipPosition="above"
               pButton
@@ -98,16 +97,12 @@
             <!-- data-toggle="modal" data-target="#downloadConfirmation"
               (click)="selectedOnly = true; targetData = dt;" -->
           </div>
-          <div class="col">
-            <div class="">
-              <div
-                class="col"
-                style="width: 395px; float: right; padding-top: 3px;"
-              >
+          <div class="pull-right buttons-div-align">
+					  <div class="col">
+						<div class="col buttons-top-padding">
                 <div class="form-group">
                   <div
-                    class="pull-left"
-                    style="margin-top: 4px; margin-right: 15px;"
+                    class="pull-left radio-buttons-align"
                   >
                     <label class="radio-cstm wauto">
                       <input
@@ -122,8 +117,7 @@
                     >
                   </div>
                   <div
-                    class="pull-left"
-                    style="margin-top: 4px; margin-right: 15px;"
+                    class="pull-left radio-buttons-align"
                   >
                     <label class="radio-cstm wauto">
                       <input
@@ -137,8 +131,7 @@
                     >
                   </div>
                   <div
-                    class="pull-left"
-                    style="margin-top: 4px; margin-right: 15px;"
+                    class="pull-left radio-buttons-align"
                   >
                     <label class="radio-cstm wauto">
                       <input
@@ -151,8 +144,8 @@
                       <span class="checkmark"></span>All</label
                     >
                   </div>
-                  <div class="checkbox-cstm" style="margin-left: 0;">
-                    <label style="width: auto !important; margin-top: 3px;">
+                  <div class="checkbox-cstm pull-left checkbox-align">
+                    <label class="checkbox-label-align">
                       <input
                         type="checkbox"
                         [(ngModel)]="currentDeletedstatus"
@@ -174,33 +167,32 @@
       </ng-template>
       <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-          <col *ngFor="let col of columns" style="width: 160px;" />
+          <col *ngFor="let col of columns" class="table-column-width" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th
+          <th class="table-column-width"
             *ngFor="let col of columns"
             pResizableColumn
             pReorderableColumn
             [pSortableColumn]="col.field"
-            style="text-align: center;"
           >
             {{ col.header }}
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th style="width: 200px; text-align: center;">Actions</th>
+          <th  class="table-actions-column">Actions</th>
         </tr>
         <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" style="width: 100%;"
+            <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
+                <input  *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" class="table-header-input-width"
                        pInputText
                        type="text"
                        (keyup)=" dt.filter($event.target.value, col.field, 'contains'); resetGlobalFilter() " />
-                <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
-                <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+                <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
+                <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
             </th>
-          <th style="width: 200px;"></th>
+          <th class="table-actions-column"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -209,7 +201,7 @@
           [pSelectableRowDblClick]="rowData"
           pReorderableRowHandle
           (dblclick)="openView(view, rowData)" >
-            <td
+            <td class="table-column-width"
                 *ngFor="let col of columns"
                 class="ui-resizable-column"
                 pReorderableRowHandle
@@ -225,7 +217,7 @@
                 }}
             </td>
 
-          <td class="action-icons-cstm" style="width: 200px;">
+          <td class="action-icons-cstm table-column-width">
               <div *ngIf="currentDeletedstatus == false">
                   <ng-container *ngIf="!isCreatePO && !isCreateRO">
                       <p-inputSwitch [(ngModel)]="rowData['isActive']"
@@ -358,7 +350,7 @@
         <tr>
           <td
             [attr.colspan]="13"
-            style="color: red; font-weight: bold; text-align: center;">
+            class="no-records-cstm no-records-msg">
             No records found
           </td>
         </tr>
@@ -367,7 +359,7 @@
         <div style="text-align: right;">
           <label id="footer" class="footer">Total:</label>
           <input
-            style="width: 5%;"
+          class="footer-input-width"
             [(ngModel)]="totalRecords"
             [disabled]="true"
             pInputText
@@ -376,7 +368,7 @@
           &nbsp;&nbsp;
           <label id="footer" class="footer1">Pages Count:</label>
           <input
-            style="width: 5%;"
+          class="footer-input-width"
             [(ngModel)]="totalPages"
             [disabled]="true"
             pInputText
@@ -427,9 +419,9 @@
         </button>
       </div>
       <div class="modal-body" *ngIf="auditHisory">
-        <div class="table-responsive ptable-custom">
-          <table
-            class="table table-bordered"
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+          <div class="tableFixHead">  
+          <table class="table table-bordered header-table-width"
             *ngIf="auditHisory.length > 0; else noDatavailable"
           >
             <thead>
@@ -577,6 +569,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
               <img
@@ -1590,8 +1583,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+          <div class="tableFixHead">  
+          <table class="table table-bordered header-table-width">
             <thead>
               <tr>
                 <th>Name</th>
@@ -1667,6 +1661,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -1699,7 +1694,7 @@
   <div class="modal-footer">
     <button
       type="button"
-      class="btn btn-success"
+      class="btn btn-primary"
       (click)="deleteItemAndCloseModel()"
     >
       Yes
@@ -2366,7 +2361,7 @@
     </strong>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="restoreRecord()">
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">
       Yes
     </button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">
