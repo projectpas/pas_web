@@ -181,7 +181,7 @@
             {{ col.header }}
             <p-sortIcon [field]="col.field"></p-sortIcon>
           </th>
-          <th  class="table-actions-column">Actions</th>
+          <th  class="table-actions-column" style="width:200px !important">Actions</th>
         </tr>
         <tr>
             <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -192,7 +192,7 @@
                 <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'createdDate'" name="createdDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
                 <input type="date" class="hidePlaceHolder table-header-input-width" *ngIf="col.field == 'updatedDate'" name="updatedDate"  (change)="dateFilterForTableVendorList($event.target.value, col.field)" />
             </th>
-          <th class="table-actions-column"></th>
+          <th class="table-actions-column" style="width:200px !important"></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -217,7 +217,7 @@
                 }}
             </td>
 
-          <td class="action-icons-cstm table-column-width">
+          <td class="action-icons-cstm table-column-width" style="width:200px !important">
               <div *ngIf="currentDeletedstatus == false">
                   <ng-container *ngIf="!isCreatePO && !isCreateRO">
                       <p-inputSwitch [(ngModel)]="rowData['isActive']"
