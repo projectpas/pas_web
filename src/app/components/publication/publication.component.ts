@@ -35,7 +35,7 @@ import { MenuItem } from 'primeng/api';
     providers: [DatePipe]
 })
 export class PublicationComponent implements OnInit, AfterViewInit {
-    allCustomerFinanceDocumentsListColumns: any[] = [
+    allCustomerFinanceDocumentsLicurrentDeletedstatuscurrentDeletedstatusstColumns: any[] = [
         { field: 'tagTypeName', header: 'Tag Type' },
 
         { field: 'docName', header: 'Name' },
@@ -123,6 +123,9 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     lazyLoadEventDataInput: any;
     inputValue: any;
 
+    viewAircraftData: any = {};
+    viewAtaData: any = {};
+
     breadcrumbs: MenuItem[];
     home: any;
     headersforPNMapping = [
@@ -192,6 +195,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
     moduleName: any = 'Publication';
 
     currentDeletedstatus: boolean = false;
+    currentPnMappingDeletedstatus: boolean = false;
     currentstatus: string = 'Active';
     public allWorkFlows: Publication[] = [];
     restorerecord: any = {};
@@ -223,10 +227,10 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'location', header: 'Location' },
             { field: 'verifiedBy', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
-            { field: 'createdBy', header: 'CreatedBy' },
             { field: 'createdDate', header: 'Created Date' },
-            { field: 'updatedBy', header: 'UpdatedBy' },
+            { field: 'createdBy', header: 'CreatedBy' },
             { field: 'updatedDate', header: 'Updated Date' },
+            { field: 'updatedBy', header: 'UpdatedBy' },
         ];
 
         this.auditCols = [
@@ -454,6 +458,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         this.isSpinnerVisible = true;
         this.loadMasterCompanies();
         this.getFilesByPublicationId(row.publicationRecordId);
+        this.publicationRecordId = row.publicationRecordId;
         this.toGetDocumentsList(row.publicationRecordId);
         this.publicationService.getpublicationbyIdView(row.publicationRecordId).subscribe(res => {
             this.isSpinnerVisible = false;
@@ -473,7 +478,8 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         ...x,
                         partNumber: x.partNumber,
                         partDescription: x.partDescription,
-                        itemClassification: x.itemClassification
+                        itemClassification: x.itemClassification,
+                        manufacturer: x.manufacturerName
                     };
                 }, error => {
                     this.isSpinnerVisible = false;
@@ -969,4 +975,45 @@ export class PublicationComponent implements OnInit, AfterViewInit {
         });
     }
 
+
+    getPnMappingDeleteListByStatus() {
+        this.isSpinnerVisible = true;
+        this.publicationService
+            .getPublicationPNMapping(this.publicationRecordId, !this.currentPnMappingDeletedstatus)
+            .subscribe(res => {
+                this.isSpinnerVisible = false;
+                this.pnMappingList = res.map(x => {
+                    return {
+                        ...x,
+                        partNumber: x.partNumber,
+                        partDescription: x.partDescription,
+                        itemClassification: x.itemClassification,
+                        manufacturer: x.manufacturerName
+                    };
+                });
+            }, error => {
+
+                this.isSpinnerVisible = true;
+            });
+
+    }
+    closeModal() {
+        this.viewAircraftData = {};
+        if (this.modal) {
+            this.modal.close()
+        }
+    }
+
+    openAircraftView(rowData, content) {
+        this.viewAircraftData = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm' });
+        this.modal.result.then(() => {
+        }, () => { })
+    }
+    openAtaView(rowData, content) {
+        this.viewAtaData = rowData;
+        this.modal = this.modalService.open(content, { size: 'sm' });
+        this.modal.result.then(() => {
+        }, () => { })
+    }
 }

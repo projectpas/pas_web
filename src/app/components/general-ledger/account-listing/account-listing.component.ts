@@ -18,7 +18,7 @@ import { Subject } from 'rxjs'
 import * as moment from 'moment';
 import { CommonService } from '../../../services/common.service';
 import { DatePipe } from '@angular/common';
-declare let $ : any;
+declare let $: any;
 
 
 @Component({
@@ -60,9 +60,9 @@ export class AccountListingComponent implements OnInit {
     GlaccountListdata: any = [];
     auditHistory: any[] = [];
     first = 0;
-    @ViewChild('dt',{static:false})
+    @ViewChild('dt', { static: false })
     private table: Table;
-    isDeleteMode: boolean = false;    
+    isDeleteMode: boolean = false;
     public DeleteGlAccountId: any;
     lazyLoadEventData: any;
     filterKeysByValue: object = {};
@@ -78,19 +78,19 @@ export class AccountListingComponent implements OnInit {
     currentDeletedstatus: boolean = false;
     restoreRecordData: any;
     selectedOnly: boolean = false;
-    targetData: any;    
+    targetData: any;
     sourceEmployee: any;
     Active: any;
     isSaving: boolean
 
     constructor(private _route: Router,
         private authService: AuthService,
-        private modalService: NgbModal,      
+        private modalService: NgbModal,
         private alertService: AlertService,
-        public customerService: CustomerService,  
+        public customerService: CustomerService,
         private glAccountService: GlAccountService,
         public commonService: CommonService,
-         private datePipe: DatePipe
+        private datePipe: DatePipe
     ) {
 
     }
@@ -103,7 +103,7 @@ export class AccountListingComponent implements OnInit {
     ngOnDestroy(): void {
         this.onDestroy$.next();
     }
-    
+
     closeDeleteModal() {
         $("#downloadConfirmation").modal("hide");
     }
@@ -119,84 +119,83 @@ export class AccountListingComponent implements OnInit {
                     return {
                         ...x,
                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',                       
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
                     }
                 });
-                this.GlaccountListdata = gList                
+                this.GlaccountListdata = gList
                 this.totalRecords = results['totalRecordsCount']
-                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);  
-                this.isSpinnerVisible = false;             
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                this.isSpinnerVisible = false;
             },
             err => {
-                this.isSpinnerVisible = false;                
+                this.isSpinnerVisible = false;
             }
         );
 
     }
 
-    dateObject:any={}
+    dateObject: any = {}
     dateFilterForTable(date, field) {
-        this.dateObject={}
-                date=moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
-        if(date !="" && moment(date, 'MM/DD/YYYY',true).isValid()){
-            if(field=='createdDate'){
-                this.dateObject={'createdDate':date}
-            }else if(field=='updatedDate'){
-                this.dateObject={'updatedDate':date}
-            }else if(field=='startDate'){
-                this.dateObject={'startDate':date}
-            }            
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters ,...this.dateObject};
+        this.dateObject = {}
+        date = moment(date).format('MM/DD/YYYY'); moment(date).format('MM/DD/YY');
+        if (date != "" && moment(date, 'MM/DD/YYYY', true).isValid()) {
+            if (field == 'createdDate') {
+                this.dateObject = { 'createdDate': date }
+            } else if (field == 'updatedDate') {
+                this.dateObject = { 'updatedDate': date }
+            } else if (field == 'startDate') {
+                this.dateObject = { 'startDate': date }
+            }
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
             const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-            this.getList(PagingData); 
-        }else{
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
-            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate){
+            this.getList(PagingData);
+        } else {
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.createdDate) {
                 delete this.lazyLoadEventDataInput.filters.createdDate;
             }
-            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate){
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.updatedDate) {
                 delete this.lazyLoadEventDataInput.filters.updatedDate;
             }
-            if(this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.startDate){
+            if (this.lazyLoadEventDataInput.filters && this.lazyLoadEventDataInput.filters.startDate) {
                 delete this.lazyLoadEventDataInput.filters.startDate;
             }
-            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters,...this.dateObject};
-                const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-                this.getList(PagingData); 
-        }              
+            this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, ...this.dateObject };
+            const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
+            this.getList(PagingData);
+        }
     }
 
-    exportCSV(dt) {       
-        this.isSpinnerVisible = true;   
+    exportCSV(dt) {
+        this.isSpinnerVisible = true;
         const isdelete = this.currentDeletedstatus ? true : false;
-        let PagingData = {"first":0,"rows":dt.totalRecords,"sortOrder":1,"filters":{"status":this.status ? this.status : 'Active',"isDeleted":isdelete},"globalFilter":""}
-		let filters = Object.keys(dt.filters);
-		filters.forEach(x=>{
-			PagingData.filters[x] = dt.filters[x].value;
-        });        
+        let PagingData = { "first": 0, "rows": dt.totalRecords, "sortOrder": 1, "filters": { "status": this.status ? this.status : 'Active', "isDeleted": isdelete }, "globalFilter": "" }
+        let filters = Object.keys(dt.filters);
+        filters.forEach(x => {
+            PagingData.filters[x] = dt.filters[x].value;
+        });
         this.glAccountService.getglAccountList(PagingData).subscribe(
-             results => {
-                 const gList = results['results'].map(x => {
-                     return {
-                         ...x,
-                         createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
-                         updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
-                     }
-                 });
-                 dt._value = gList;
-                 dt.exportCSV();    
-                 dt.value = gList;                             
+            results => {                
+                dt._value = results['results'].map(x => {
+                    return {
+                        ...x,
+                        createdDate: x.createdDate ? this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a') : '',
+                        updatedDate: x.updatedDate ? this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a') : '',
+                    }
+                });               
+                dt.exportCSV();
+                dt.value = this.GlaccountListdata;
                 this.isSpinnerVisible = false;
-             }, err => {
-                 this.isSpinnerVisible = false;               
-             });
-     }
+            }, err => {
+                this.isSpinnerVisible = false;
+            });
+    }
 
     changePage(event: { first: any; rows: number }) {
-         const pageIndex = (event.first / event.rows);
+        const pageIndex = (event.first / event.rows);
         this.pageSize = event.rows;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-    }  
+    }
 
     resetViewData() {
         this.viewRowData = undefined;
@@ -232,14 +231,14 @@ export class AccountListingComponent implements OnInit {
                 });
                 this.GlaccountListdata = gList
                 this.totalRecords = results['totalRecordsCount']
-                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);  
-                this.isSpinnerVisible = false;             
+                this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+                this.isSpinnerVisible = false;
             },
             err => {
-                this.isSpinnerVisible = false;                
+                this.isSpinnerVisible = false;
             }
         );
-        
+
     }
 
     getListByStatus(status) {
@@ -262,50 +261,50 @@ export class AccountListingComponent implements OnInit {
         this.pageIndex = 0;
         this.pageSize = this.lazyLoadEventDataInput.rows;
         this.lazyLoadEventDataInput.first = pageIndex;
-        this.status = status;       
+        this.status = status;
         this.lazyLoadEventDataInput.filters = { ...this.lazyLoadEventDataInput.filters, status: this.currentstatus };
         const PagingData = { ...this.lazyLoadEventDataInput, filters: listSearchFilterObjectCreation(this.lazyLoadEventDataInput.filters) }
-        this.getList(PagingData);       
+        this.getList(PagingData);
     }
 
     openDelete(content, row) {
-        this.DeleteGlAccountId = row.glAccountId;     
+        this.DeleteGlAccountId = row.glAccountId;
         this.isDeleteMode = true;
         this.sourceEmployee = row
-        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });        
+        this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
-    get userName(): string {	
-		return this.authService.currentUser ? this.authService.currentUser.userName : "";		
-	}
+    get userName(): string {
+        return this.authService.currentUser ? this.authService.currentUser.userName : "";
+    }
 
 
-    deleteItemAndCloseModel() { 
-        this.isSpinnerVisible = true;      
-        this.glAccountService.deleteRestoreGL(this.DeleteGlAccountId,true,this.userName ).subscribe(data => {
-            this.alertService.showMessage('Success','Ledger name deleted successfully.', MessageSeverity.success);
+    deleteItemAndCloseModel() {
+        this.isSpinnerVisible = true;
+        this.glAccountService.deleteRestoreGL(this.DeleteGlAccountId, true, this.userName).subscribe(data => {
+            this.alertService.showMessage('Success', 'Ledger name deleted successfully.', MessageSeverity.success);
             this.modal.close();
-            this.getList(this.lazyLoadEventData);        
+            this.getList(this.lazyLoadEventData);
         }, err => {
-            this.isSpinnerVisible = false;           
+            this.isSpinnerVisible = false;
         });
     }
 
-    restore(restore,row) {
-        this.DeleteGlAccountId = row.glAccountId;     
+    restore(restore, row) {
+        this.DeleteGlAccountId = row.glAccountId;
         this.isDeleteMode = true;
         this.sourceEmployee = row
-        this.modal = this.modalService.open(restore, { size: 'sm', backdrop: 'static', keyboard: false });        
+        this.modal = this.modalService.open(restore, { size: 'sm', backdrop: 'static', keyboard: false });
     }
 
     restoreRecord() {
-        this.isSpinnerVisible = true;  
-        this.glAccountService.deleteRestoreGL(this.DeleteGlAccountId,false,this.userName ).subscribe(data => {
-            this.alertService.showMessage('Success','Ledger name restored successfully.', MessageSeverity.success);
+        this.isSpinnerVisible = true;
+        this.glAccountService.deleteRestoreGL(this.DeleteGlAccountId, false, this.userName).subscribe(data => {
+            this.alertService.showMessage('Success', 'Ledger name restored successfully.', MessageSeverity.success);
             this.modal.close();
-            this.getList(this.lazyLoadEventData);        
+            this.getList(this.lazyLoadEventData);
         }, err => {
-            this.isSpinnerVisible = false;           
+            this.isSpinnerVisible = false;
         });
     }
 
@@ -318,7 +317,7 @@ export class AccountListingComponent implements OnInit {
         this.lazyLoadEventDataInput = event;
         this.lazyLoadEventDataInput.filters = {
             ...this.lazyLoadEventDataInput.filters,
-            status: this.status ? this.status : 'Active',          
+            status: this.status ? this.status : 'Active',
         }
         if (this.filterText == true) {
             this.lazyLoadEventDataInput.filters.isDeleted = true;
@@ -326,7 +325,7 @@ export class AccountListingComponent implements OnInit {
             this.lazyLoadEventDataInput.filters.isDeleted = false;
         }
         this.getList(this.lazyLoadEventDataInput);
-    }   
+    }
 
 
     getAuditHistoryById(rowData) {
@@ -335,9 +334,9 @@ export class AccountListingComponent implements OnInit {
             this.auditHistory = res;
             this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;          
+            this.isSpinnerVisible = false;
         });
-        
+
     }
 
 
@@ -360,29 +359,29 @@ export class AccountListingComponent implements OnInit {
             this.filterText = false;
         }
     }
-    
-    viewRow(rowData) {   
-        this.viewRowData  = 'View'    
+
+    viewRow(rowData) {
+        this.viewRowData = 'View'
         this.isSpinnerVisible = true;
         this.glAccountService.getById(rowData.glAccountId).subscribe(res => {
-        this.viewRowData = res;     
-        this.viewIsActive  = this.viewRowData[0].isActive; 
-        this.isSpinnerVisible = false;           
+            this.viewRowData = res;
+            this.viewIsActive = this.viewRowData[0].isActive;
+            this.isSpinnerVisible = false;
         }, err => {
-            this.isSpinnerVisible = false;            
-        });        
-        
-    } 
-    
-    changeStatus(row, e) {        
+            this.isSpinnerVisible = false;
+        });
+
+    }
+
+    changeStatus(row, e) {
         this.isSpinnerVisible = true;
-        this.glAccountService.updatestatusactive(row.glAccountId,e.checked ,this.userName ).subscribe(data => {
-            this.alertService.showMessage('Success','Ledger status changed successfully.', MessageSeverity.success);
-            this.getList(this.lazyLoadEventData);        
+        this.glAccountService.updatestatusactive(row.glAccountId, e.checked, this.userName).subscribe(data => {
+            this.alertService.showMessage('Success', 'Ledger status changed successfully.', MessageSeverity.success);
+            this.getList(this.lazyLoadEventData);
         }, err => {
-            this.isSpinnerVisible = false;           
+            this.isSpinnerVisible = false;
         });
     }
 
-    columnsChanges() {}
+    columnsChanges() { }
 }

@@ -92,6 +92,7 @@ export class RepairOrderPart {
     memo: string;
     roPartSplitUserTypeId: number;
     roPartSplitUserId: number;
+    roPartSplitUserTypeName:string;
     roPartSplitAddress1: string;
     roPartSplitAddress2: string;
     roPartSplitAddress3: string;

@@ -111,8 +111,8 @@ export class PublicationService {
   newPNATAMappingAction(action: Publication) {
     return this.publicationEndpoint.postPNATAMapping<Publication>(action);
   }
-  getPublicationPNMapping(PNid: number) {
-    return this.publicationEndpoint.getPubPNById<any>(PNid);
+  getPublicationPNMapping(PNid: number, isDeleted = false) {
+    return this.publicationEndpoint.getPubPNById<any>(PNid, isDeleted);
   }
   // Save Part Number Mapping
   postMappedPartNumbers(actionData) {

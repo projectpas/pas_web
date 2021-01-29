@@ -31,6 +31,7 @@ import { StocklineReferenceStorage } from '../../../stockline/shared/stockline-r
 //import { connectableObservableDescriptor } from 'rxjs/observable/ConnectableObservable';
 import { AppModuleEnum } from '../../../../enum/appmodule.enum';
 import { VendorWarningEnum } from '../../../../enum/vendorwarning.enum';
+import { NgbModalRef, NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
 	selector: 'app-purchase-setup',
@@ -271,7 +272,7 @@ export class PurchaseSetupComponent implements OnInit {
 	poTotalCost: number;
 	internalApproversList: any = [];
 	selectallApprovers: boolean;
-	displayWarningModal: boolean = false;
+	displayWarningModal: boolean = false;	
 	poFulfillingstatusID: number = -1;
 	poOpenstatusID: number = -1;
 	poApprovaltaskId = 0;
@@ -374,8 +375,11 @@ export class PurchaseSetupComponent implements OnInit {
 	salesOrderId:number;
 	home: any;
 	
+	modal: NgbModalRef;
+	alertText:string
 	constructor(private route: Router,
 		public legalEntityService: LegalEntityService,
+		private modalService: NgbModal,
 		public currencyService: CurrencyService,
 		public unitofmeasureService: UnitOfMeasureService,
 		public conditionService: ConditionService,
@@ -2522,19 +2526,29 @@ export class PurchaseSetupComponent implements OnInit {
 		}
 	}
 
-	dismissModel() {
-		this.savePurchaseOrderPartsList(true); 
+	dismissModel(status) {
+		this.displayWarningModal = status;
+		this.modal.close();	
+		if(status)
+		this.savePurchaseOrderPartsList(''); 			
     }
-	savePurchaseOrderPartsList(contwithoutVendorPrice = false) {
+	savePurchaseOrderPartsList(content) {
 		this.isSpinnerVisible = true;
 		this.parentObjectArray = [];
 		var errmessage = '';
 		for (let i = 0; i < this.partListData.length; i++) {
 			this.alertService.resetStickyMessage();			
+			// if(this.partListData[i].quantityOrdered == 0) {	
+			// 	this.isSpinnerVisible = false;	
+			// 	errmessage = errmessage + '<br />' + "Please Enter Qty."
+			// }
 			if(this.partListData[i].quantityOrdered == 0) {	
-				this.isSpinnerVisible = false;	
-				errmessage = errmessage + '<br />' + "Please Enter Qty."
-			}
+				this.isSpinnerVisible = false;
+				this.displayWarningModal = false;
+				this.alertText= 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  +'<br/>'+"Please Enter Qty."
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
+				return;
+		    }
 			if(this.partListData[i].minimumOrderQuantity > 0
 				&& this.partListData[i].quantityOrdered > 0
 				&& this.partListData[i].quantityOrdered < this.partListData[i].minimumOrderQuantity) {
@@ -2596,10 +2610,19 @@ export class PurchaseSetupComponent implements OnInit {
 						errmessage = errmessage + '<br />' + "Split Shipment Select Address is required."
 					}					
 
+					// if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
+					// 	this.isSpinnerVisible = false;	
+					// 	errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+					// }
+
 					if(!this.partListData[i].childList[j].quantityOrdered || this.partListData[i].childList[j].quantityOrdered == 0 ) {	
-						this.isSpinnerVisible = false;	
-						errmessage = errmessage + '<br />' + "Split Shipment Qty is required."
+						this.isSpinnerVisible = false;
+						this.displayWarningModal = false;
+						this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  + '<br/>' + "Split Shipment Qty is required."
+						this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });												
+						return;
 					}
+
 					if(!this.partListData[i].childList[j].managementStructureId || this.partListData[i].childList[j].managementStructureId == 0) {	
 						this.isSpinnerVisible = false;	
 						errmessage = errmessage + '<br />' + "Split Shipment Management Structure is required."
@@ -2617,9 +2640,11 @@ export class PurchaseSetupComponent implements OnInit {
 				return;
 		    }
 
-			if(this.partListData[i].vendorListPrice == 0 && contwithoutVendorPrice == false) {	
-				this.isSpinnerVisible = false;
-				this.displayWarningModal = true;										
+			if(this.partListData[i].vendorListPrice == 0 && this.displayWarningModal == false) {	
+				this.isSpinnerVisible = false;	
+				this.displayWarningModal = true;		    								
+				this.alertText = 'Part No: ' + this.getPartnumber(this.partListData[i].itemMasterId)  + '<br />'+"Vendor Price is not populated  - Continue Y/N"
+				this.modal = this.modalService.open(content, { size: 'sm', backdrop: 'static', keyboard: false });
 				return;
 		    }
 			let childDataList = [];

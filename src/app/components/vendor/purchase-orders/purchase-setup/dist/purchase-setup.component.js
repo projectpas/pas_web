@@ -318,6 +318,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
         this.moduleId = 0;
         this.referenceId = 0;
         this.moduleName = "PurchaseOrder";
+        this.adddefaultpart = true;
         this.warningID = 0;
         this.isEditWork = false;
         this.restrictID = 0;
@@ -326,6 +327,8 @@ var PurchaseSetupComponent = /** @class */ (function () {
         this.vendorService.alertObj.next(this.vendorService.ShowPtab);
         this.vendorService.currentUrl = '/vendorsmodule/vendorpages/app-purchase-setup';
         this.vendorService.bredcrumbObj.next(this.vendorService.currentUrl);
+        this.itemMasterId = JSON.parse(localStorage.getItem('itemMasterId'));
+        this.partName = (localStorage.getItem('partNumber'));
     }
     PurchaseSetupComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -410,6 +413,14 @@ var PurchaseSetupComponent = /** @class */ (function () {
                     }, 2200);
                 }
             });
+            setTimeout(function () {
+                if (_this.itemMasterId > 0 && _this.adddefaultpart) {
+                    _this.isSpinnerVisible = true;
+                    _this.addPartNumbers(_this.itemMasterId, _this.partName);
+                    _this.adddefaultpart = false;
+                    _this.isSpinnerVisible = false;
+                }
+            }, 3000);
         }
         else {
             if (this.headerInfo.purchaseOrderNumber == "" || this.headerInfo.purchaseOrderNumber == undefined) {
@@ -2025,22 +2036,32 @@ var PurchaseSetupComponent = /** @class */ (function () {
         if (event.index == 1) {
             this.showAddresstab = true;
         }
-        if (event.index == 2) {
+        if (event.index == 2 && this.posettingModel.IsEnforceApproval) {
             this.getApproversListById(this.poId);
         }
-        if (event.index == 3) {
+        if (event.index == 3 && this.posettingModel.IsEnforceApproval) {
             this.getApproversListById(this.poId);
             this.getApprovalProcessListById(this.poId);
             this.enableApproverSaveBtn = false;
         }
-        if (event.index == 4) {
+        if (event.index == 4 && this.posettingModel.IsEnforceApproval) {
             this.showVendorCaptab = true;
             var id = autocomplete_1.editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
         }
-        if (event.index == 5) {
+        if (event.index == 5 && this.posettingModel.IsEnforceApproval) {
             this.showDocumenttab = true;
         }
-        if (event.index == 6) {
+        if (event.index == 6 && this.posettingModel.IsEnforceApproval) {
+            this.showComunicationtab = true;
+        }
+        if (event.index == 2 && !this.posettingModel.IsEnforceApproval) {
+            this.showVendorCaptab = true;
+            var id = autocomplete_1.editValueAssignByCondition('vendorId', this.headerInfo.vendorId);
+        }
+        if (event.index == 3 && !this.posettingModel.IsEnforceApproval) {
+            this.showDocumenttab = true;
+        }
+        if (event.index == 4 && !this.posettingModel.IsEnforceApproval) {
             this.showComunicationtab = true;
         }
     };
@@ -2316,7 +2337,7 @@ var PurchaseSetupComponent = /** @class */ (function () {
                     _this.route.navigate(['/vendorsmodule/vendorpages/app-purchase-setup/edit/' + _this.poId]);
                     if (_this.poId) {
                         _this.isEditModeHeader = true;
-                        _this.isEditMode = true;
+                        //this.isEditMode = true;
                     }
                     _this.isSpinnerVisible = false;
                 }, function (err) {
@@ -3909,6 +3930,79 @@ var PurchaseSetupComponent = /** @class */ (function () {
         }
         else {
             return null;
+        }
+    };
+    PurchaseSetupComponent.prototype.addPartNumbers = function (partNumberId, partName) {
+        this.inputValidCheck = false;
+        //if (this.vendorService.isEditMode == false) {
+        var newParentObject = new create_po_partslist_model_1.CreatePOPartsList();
+        newParentObject = __assign(__assign({}, newParentObject), { needByDate: this.headerInfo.needByDate, priorityId: this.headerInfo.priorityId ? autocomplete_1.editValueAssignByCondition('value', this.headerInfo.priorityId) : null, conditionId: this.defaultCondtionId, discountPercent: 0, partNumberId: { value: partNumberId, label: partName } });
+        this.partListData.push(newParentObject);
+        for (var i = 0; i < this.partListData.length; i++) {
+            if (!this.partListData[i].ifSplitShip) {
+                this.partListData[i].childList = [];
+            }
+        }
+        if (this.headerInfo.companyId > 0) {
+            for (var i = 0; i < this.partListData.length; i++) {
+                if (i == this.partListData.length - 1) {
+                    this.partListData[i].maincompanylist = this.maincompanylist;
+                    this.partListData[i].parentCompanyId = this.headerInfo.companyId;
+                    this.partListData[i].managementStructureId = this.headerInfo.companyId;
+                    this.partListData[i].parentBulist = this.bulist;
+                    this.partListData[i].parentDivisionlist = this.divisionlist;
+                    this.partListData[i].parentDepartmentlist = this.departmentList;
+                    ;
+                    this.partListData[i].parentbuId = 0;
+                    this.partListData[i].parentDivisionId = 0;
+                    this.partListData[i].parentDeptId = 0;
+                }
+            }
+        }
+        if (this.headerInfo.buId) {
+            for (var i = 0; i < this.partListData.length; i++) {
+                if (i == this.partListData.length - 1) {
+                    this.partListData[i].parentBulist = this.bulist;
+                    this.partListData[i].parentbuId = this.headerInfo.buId;
+                    this.partListData[i].managementStructureId = this.headerInfo.buId;
+                    this.partListData[i].parentDivisionId = 0;
+                    this.partListData[i].parentDeptId = 0;
+                }
+            }
+        }
+        if (this.headerInfo.divisionId) {
+            for (var i = 0; i < this.partListData.length; i++) {
+                if (i == this.partListData.length - 1) {
+                    this.partListData[i].parentDivisionlist = this.divisionlist;
+                    this.partListData[i].parentDivisionId = this.headerInfo.divisionId;
+                    this.partListData[i].managementStructureId = this.headerInfo.divisionId;
+                    this.partListData[i].parentDeptId = 0;
+                }
+            }
+        }
+        if (this.headerInfo.departmentId) {
+            for (var i = 0; i < this.partListData.length; i++) {
+                if (i == this.partListData.length - 1) {
+                    this.partListData[i].parentDepartmentlist = this.departmentList;
+                    this.partListData[i].parentDeptId = this.headerInfo.departmentId;
+                    this.partListData[i].managementStructureId = this.headerInfo.departmentId;
+                }
+            }
+        }
+        for (var i = 0; i < this.partListData.length; i++) {
+            if (i == this.partListData.length - 1) {
+                this.partListData[i].conditionId = this.defaultCondtionId;
+                this.getFunctionalReportCurrencyById(this.partListData[i]);
+            }
+        }
+        this.getPNDetailsById(newParentObject, null);
+        //}
+        //this.getRemainingAllQty();
+    };
+    PurchaseSetupComponent.prototype.ngOnDestroy = function () {
+        if (this.isEditMode) {
+            localStorage.removeItem("itemMasterId");
+            localStorage.removeItem("partNumber");
         }
     };
     __decorate([

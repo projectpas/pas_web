@@ -266,7 +266,20 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.loadingIndicator = false;
         this.isSpinnerVisible = false;
         this.dataSource.data = allWorkFlows;
-        this.allItemMasterCapsList = allWorkFlows;
+        //this.allItemMasterCapsList = allWorkFlows;
+
+        this.allItemMasterCapsList = allWorkFlows.map(x => {
+            return {
+                ...x,
+                isVerified: x.isVerified == 1 ? 'check' : 'unchecked',
+                memo: x.memo.replace(/<[^>]*>/g, ''),
+                addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
+                verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
+                createdDate: x.createdDate ?  this.datePipe.transform(x.createdDate, 'MMM-dd-yyyy hh:mm a'): '',
+                updatedDate: x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MMM-dd-yyyy hh:mm a'): '',
+            }
+        });
+
         this.employeeList.filter(x => {
 
             for(let i = 0; i< this.employeeList.length; i++){
@@ -1245,6 +1258,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     getPageCount(totalNoofRecords, pageSize) {
         return Math.ceil(totalNoofRecords / pageSize)
     }
+
+    pageIndexChange(event) {
+		this.itemMasterCapesPageSize = event.rows;
+	}
 
     getAuditHistory(row){
         this.getItemMasterDetailsById(row.itemMasterId)

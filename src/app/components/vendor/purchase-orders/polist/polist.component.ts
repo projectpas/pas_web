@@ -214,7 +214,8 @@ export class PolistComponent implements OnInit {
                 { label: 'Purchase Order' },
                 { label: 'Purchase Order List' },
             ];
-        } else {
+        }else{
+            this.currentStatusPO="Fulfilling";
             this.breadcrumbs = [
                 { label: 'Receiving' },
                 { label: 'Purchase Order' },
