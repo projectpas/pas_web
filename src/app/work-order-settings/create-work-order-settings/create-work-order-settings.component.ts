@@ -89,7 +89,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     workOrderStagesList: any;
     workOrderOriginalStageList: any;
     workScopesList: any;
-    workOrderTypes: WorkOrderType[];
+    workOrderTypes: any=[];
     // workOrderStatusList: any;
     ReceivingListRBList: any;
     WOListRBList: any;
@@ -136,17 +136,22 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.loadReceivingListRB();
         this.loadWOListRB();
      
-        this.loadSiteData();
-        this.loadConditionData();
-        this.getAllWorkOrderTypes();
+     
+       
+        // this.getAllWorkOrderTypes();
+        this.AcquisitionloadData('');
         this.getAllWorkOrderStatus();
-        this.getAllWorkScpoes();
+        // this.getAllWorkScpoes('');
         this.getAllWorkOrderStages();
 
         this.getAllPriority();
         this.getworblist();
         this.getAllTearDownTypes();
         this.receivingCustomerWorkId = this._actRoute.snapshot.params['id'];
+        if (!this.receivingCustomerWorkId) {
+            this.loadSiteData('');
+            this.loadConditionData('');
+        }
     }
 
     // api/workOrder/getworblist
@@ -163,24 +168,8 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
 
     
 
-    private loadSiteData() {
-        this.siteService.getSiteList().subscribe(res => {
-            this.allSites = res[0];
-        });
-    }
 
-    private loadConditionData() {
-        this.conditionService.getConditionList().subscribe(res => {
-            this.allConditionInfo = res[0];
-            if(!this.isEditMode) {
-                this.allConditionInfo.map(x => {
-                    if(x.description == 'AR') {
-                        this.receivingForm.defaultConditionId = x.conditionId;
-                    }
-                })                
-            }
-        });
-    }
+
 
 //     loadstatusData(){
 //     this.workOrderViewList= [{label: "MPN View",value: 1,woListViewRBId:1},
@@ -229,6 +218,8 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     )
                 }
             )
+            this.loadSiteData('');
+            this.loadConditionData('');
             if (this.receivingForm.defaultSiteId) {
                 this.siteValueChange(this.receivingForm.defaultSiteId)
             }
@@ -249,77 +240,19 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }    
 
     getSiteDetailsOnEdit(res) {
-        this.siteValueChange(res.siteId);
-        this.wareHouseValueChange(res.warehouseId);
-        this.locationValueChange(res.locationId);
-        this.shelfValueChange(res.binId);
-        this.receivingForm.warehouseId = res.warehouseId;
-        this.receivingForm.locationId = res.locationId;
-        this.receivingForm.shelfId = res.shelfId;
-        this.receivingForm.binId = res.binId;
+        this.siteValueChange(res.defaultSiteId);
+        this.wareHouseValueChange(res.defaultWearhouseId);
+        this.locationValueChange(res.defaultLocationId);
+        this.shelfValueChange(res.defaultShelfId);
+        // this.receivingForm.warehouseId = res.defaultWearhouseId;
+        // this.receivingForm.locationId = res.defaultLocationId;
+        // this.receivingForm.shelfId = res.defaultShelfId;
+        // this.receivingForm.binId = res.defaultBinId;
     }
 
     
 
-    siteValueChange(siteId) {
-        this.allWareHouses = [];
-        this.allLocations = [];
-        this.allShelfs = [];
-        this.allBins = [];
-        this.receivingForm.warehouseId = 0;
-        this.receivingForm.locationId = 0;
-        this.receivingForm.shelfId = 0;
-        this.receivingForm.binId = 0;
-        this.binService.getWareHouseDate(siteId).subscribe(res => {
-            this.allWareHouses = res;
-        });
-        this.onChangeSiteName();
-    }
-
-    onChangeSiteName() {
-        if (this.receivingForm.siteId != 0) {
-            this.disableSite = false;
-        } else {
-            this.disableSite = true;
-        }
-    }
-
-    wareHouseValueChange(warehouseId) {
-        this.allLocations = [];
-        this.allShelfs = [];
-        this.allBins = [];
-        this.receivingForm.locationId = 0;
-        this.receivingForm.shelfId = 0;
-        this.receivingForm.binId = 0;
-        this.binService.getLocationDate(warehouseId).subscribe(res => {
-            this.allLocations = res;
-        });
-    }
-
-    locationValueChange(locationId) {
-        this.allShelfs = [];
-        this.allBins = [];
-        this.receivingForm.shelfId = 0;
-        this.receivingForm.binId = 0;
-        this.binService.getShelfDate(locationId).subscribe(res => {
-            this.allShelfs = res;
-        },
-        err => {
-            this.errorHandling(err);
-        });
-    }
-
-    shelfValueChange(binId) {
-        this.allBins = [];
-        this.receivingForm.binId = 0;
-
-        this.binService.getBinDataById(binId).subscribe(res => {
-            this.allBins = res;
-        },
-        err => {
-            this.errorHandling(err);
-        });
-    }
+ 
 
 
     resetSerialNoTimeLife() {
@@ -357,6 +290,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     }
 
     onSaveCustomerReceiving() {
+        console.log("formss",this.receivingForm)
         const receivingForm = {
             ...this.receivingForm,
             tearDownTypes: this.getTearDownTypes(),
@@ -399,21 +333,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
 
 
 
-    getAllWorkScpoes(): void {
-        this.workOrderService.getAllWorkScopes().pipe(takeUntil(this.onDestroy$)).subscribe(
-            result => {
-                this.workScopesList = result.map(x => {
-                    return {
-                        label: x.description,
-                        value: x.workScopeId
-                    }
-                })
-            },
-            err => {
-                this.errorHandling(err);
-            }
-        );
-    }
+   
 
     private loadReceivingListRB() {
         this.commonService.smartDropDownList('ReceivingListRB', 'ReceivingListRBId', 'Name').subscribe(response => {
@@ -471,16 +391,16 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         })
     }
 
-    getAllWorkOrderTypes(): void {
-        this.workOrderService.getAllWorkOrderTypes().pipe(takeUntil(this.onDestroy$)).subscribe(
-            result => {
-                this.workOrderTypes = result;
-            },
-            err => {
-                this.errorHandling(err);
-            }
-        );
-    }
+    // getAllWorkOrderTypes(): void {
+    //     this.workOrderService.getAllWorkOrderTypes().pipe(takeUntil(this.onDestroy$)).subscribe(
+    //         result => {
+    //             this.workOrderTypes = result;
+    //         },
+    //         err => {
+    //             this.errorHandling(err);
+    //         }
+    //     );
+    // }
 
 
 
@@ -512,6 +432,326 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         }
     }
 
+
+    onFilterAcqution(value) {
+        this.AcquisitionloadData(value);
+    }
+    setEditArray: any = [];
+    woTypeId:any;
+    private AcquisitionloadData(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.receivingForm.workOrderTypeId ? this.receivingForm.workOrderTypeId : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('WorkOrderType', 'Id', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.workOrderTypes = res;
+            this.workOrderTypes.forEach(ev=>{
+                if(ev.label=='Customer'){
+this.woTypeId=ev.value
+                }
+            })
+ 
+        });
+    }
+
+
+    onFilterCondition(value) {
+        this.loadConditionData(value);
+    }
+
+    private loadConditionData(value) {
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.receivingForm.defaultConditionId ? this.receivingForm.defaultConditionId : 0);
+        } else {
+            this.setEditArray.push(0);
+        }
+        const strText = value ? value : '';
+        this.commonService.autoSuggestionSmartDropDownList('Condition', 'ConditionId', 'Description', strText, true, 20, this.setEditArray.join()).subscribe(res => {
+            this.allConditionInfo = res;
+
+            if(!this.isEditMode) {
+                this.allConditionInfo.map(x => {
+                    if(x.label == 'AR') {
+                        this.receivingForm.defaultConditionId = x.conditionId;
+                    }
+                })                
+            }
+        });
+    }
+    // private loadConditionData(value) {
+    //     this.conditionService.getConditionList().subscribe(res => {
+    //         this.allConditionInfo = res[0];
+    //         if(!this.isEditMode) {
+    //             this.allConditionInfo.map(x => {
+    //                 if(x.description == 'AR') {
+    //                     this.receivingForm.defaultConditionId = x.conditionId;
+    //                 }
+    //             })                
+    //         }
+    //     });
+    // }
+
+
+
+    onFilterSite(value) {
+        this.loadSiteData(value);
+    }
+    private loadSiteData(value) {
+
+        this.setEditArray = [];
+        if (this.isEditMode == true) {
+            this.setEditArray.push(this.receivingForm.siteId ? this.receivingForm.siteId : 0);
+
+        } else {
+            this.setEditArray.push(0);
+        }
+        const mcId= this.authService.currentUser
+        ? this.authService.currentUser.masterCompanyId
+        : null;
+        this.commonService.autoSuggestionSmartDropDownList('Site', 'SiteId', 'Name', value, true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+            if (res && res.length != 0) {
+                this.allSites = res.map(x => {
+                    return {
+
+                        siteId: x.value,
+                        name: x.label,
+                        ...x
+                    }
+                });
+            }
+        })
+    }
+  
+    siteValueChange(siteId) {
+        this.allWareHouses = [];
+        this.allLocations = [];
+        this.allShelfs = [];
+        this.allBins = [];
+        this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', siteId).subscribe(res => {
+            this.allWareHouses = res.map(x => {
+                return {
+
+                    warehouseId: x.value,
+                    name: x.label,
+                    ...x
+                }
+            });
+        })
+        this.onChangeSiteName();
+    }
+
+    onChangeSiteName() {
+        if (this.receivingForm.siteId != 0) {
+            this.disableSite = false;
+        } else {
+            this.disableSite = true;
+        }
+    }
+
+    wareHouseValueChange(warehouseId) {
+        this.allLocations = [];
+        this.allShelfs = [];
+        this.allBins = [];
+        if (warehouseId != 0) {
+
+            this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', warehouseId).subscribe(res => {
+                this.allLocations = res.map(x => {
+                    return {
+
+                        locationId: x.value,
+                        name: x.label,
+                        ...x
+                    }
+                });
+            })
+
+        } else {
+            this.allLocations = [];
+        }
+    }
+
+    locationValueChange(locationId) {
+        this.allShelfs = [];
+        this.allBins = [];
+        if (locationId != 0) {
+            this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', locationId).subscribe(res => {
+                this.allShelfs = res.map(x => {
+                    return {
+
+                        shelfId: x.value,
+                        name: x.label,
+                        ...x
+                    }
+                });
+            })
+
+        } else {
+            this.allShelfs = [];
+        }
+    }
+
+    shelfValueChange(shelfId) {
+        this.allBins = [];
+        if (shelfId != 0) {
+            this.commonService.smartDropDownList('Bin', 'BinId', 'Name', 'ShelfId', shelfId).subscribe(res => {
+                this.allBins = res.map(x => {
+                    return {
+                        binId: x.value,
+                        name: x.label,
+                        ...x
+                    }
+                });
+            })
+
+        } else {
+            this.allBins = [];
+        }
+    }
+
+    // private getAllWorkScpoes(value) {
+
+    //     this.setEditArray = [];
+    //     if (this.isEditMode == true) {
+    //         this.setEditArray.push(this.receivingForm.siteId ? this.receivingForm.siteId : 0);
+
+    //     } else {
+    //         this.setEditArray.push(0);
+    //     }
+    //     const mcId= this.authService.currentUser
+    //     ? this.authService.currentUser.masterCompanyId
+    //     : null;
+
+    //     this.commonService.autoSuggestionSmartDropDownList('WorkScope', 'SiteId', 'Name', value ? value :'', true, 20, this.setEditArray.join(),mcId).subscribe(res => {
+    //         if (res && res.length != 0) {
+    //             this.workScopesList = res;
+    //         }
+    //     })
+    // }
+
+
+    // getAllWorkScpoes(): void {
+    //     this.workOrderService.getAllWorkScopes().pipe(takeUntil(this.onDestroy$)).subscribe(
+    //         result => {
+    //             this.workScopesList = result.map(x => {
+    //                 return {
+    //                     label: x.description,
+    //                     value: x.workScopeId
+    //                 }
+    //             })
+    //         },
+    //         err => {
+    //             this.errorHandling(err);
+    //         }
+    //     );
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // private loadSiteData() {
+    //     this.siteService.getSiteList().subscribe(res => {
+    //         this.allSites = res[0];
+    //     });
+    // } 
+
+
+    // siteValueChange(siteId) {
+    //     this.allWareHouses = [];
+    //     this.allLocations = [];
+    //     this.allShelfs = [];
+    //     this.allBins = [];
+    //     this.receivingForm.warehouseId = 0;
+    //     this.receivingForm.locationId = 0;
+    //     this.receivingForm.shelfId = 0;
+    //     this.receivingForm.binId = 0;
+    //     this.binService.getWareHouseDate(siteId).subscribe(res => {
+    //         this.allWareHouses = res;
+    //     });
+    //     this.onChangeSiteName();
+    // }
+
+    // onChangeSiteName() {
+    //     if (this.receivingForm.siteId != 0) {
+    //         this.disableSite = false;
+    //     } else {
+    //         this.disableSite = true;
+    //     }
+    // }
+
+    // wareHouseValueChange(warehouseId) {
+    //     this.allLocations = [];
+    //     this.allShelfs = [];
+    //     this.allBins = [];
+    //     this.receivingForm.locationId = 0;
+    //     this.receivingForm.shelfId = 0;
+    //     this.receivingForm.binId = 0;
+    //     this.binService.getLocationDate(warehouseId).subscribe(res => {
+    //         this.allLocations = res;
+    //     });
+    // }
+
+    // locationValueChange(locationId) {
+    //     this.allShelfs = [];
+    //     this.allBins = [];
+    //     this.receivingForm.shelfId = 0;
+    //     this.receivingForm.binId = 0;
+    //     this.binService.getShelfDate(locationId).subscribe(res => {
+    //         this.allShelfs = res;
+    //     },
+    //     err => {
+    //         this.errorHandling(err);
+    //     });
+    // }
+
+    // shelfValueChange(binId) {
+    //     this.allBins = [];
+    //     this.receivingForm.binId = 0;
+
+    //     this.binService.getBinDataById(binId).subscribe(res => {
+    //         this.allBins = res;
+    //     },
+    //     err => {
+    //         this.errorHandling(err);
+    //     });
+    // }
+    getmemo(ev){
+        
+    }
 }
 
 

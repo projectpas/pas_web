@@ -106,7 +106,7 @@ export class AssetListingComponent implements OnInit {
     selectedCol: { field: string; header: string; }[];
     cols = [
         { field: 'name', header: 'Asset Name', colspan: '1' },
-        { field: 'assetId', header: 'Asset ID', colspan: '1' },
+        { field: 'assetId', header: 'ID', colspan: '1' },
         { field: 'alternateAssetId', header: 'Alt Asset ID', colspan: '1' },
         { field: 'manufacturerName', header: 'Manufacturer', colspan: '1' },
         { field: 'isSerializedNew', header: 'Serialized', colspan: '1' },
@@ -454,6 +454,7 @@ export class AssetListingComponent implements OnInit {
     }
     openViewData(content, row) {
         this.assetViewList = row;
+        this.assetViewList.showIsActive=this.assetViewList.isActive;
         this.assetViewList.depreOrIntang = row.isDepreciable == true ? 'Tangible' : 'Intangible';
         this.assetViewList.manufacturerName = row.manufacturer ? row.manufacturer.name : "";
         this.assetViewList.isSerialized = row.isSerialized == true ? 'Yes' : 'No';

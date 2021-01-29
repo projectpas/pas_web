@@ -88,14 +88,25 @@
             <div class="form-row">
                 <div class="col-md-12">
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="form-label"> WO Type</label>
                             <select [(ngModel)]="receivingForm.workOrderTypeId" name="workOrderTypesId" [disabled]="!readonly">
                                 <option value="0">-- Select --</option>
-                                <option *ngFor="let workOrder of workOrderTypes" [ngValue]="workOrder.id">
+                                <option *ngFor="let workOrder of workOrderTypes" [ngValue]="workOrder.value">
                                     {{workOrder.description}}</option>
                             </select>
+                        </div> -->
+
+                        <div class="form-group">
+                            <label>
+                                WO Type <span class="clr-red">*</span> <span
+                                    style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                        
+                            <p-dropdown [disabled]="!readonly" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)" (input)="onFilterAcqution($event.target.value)" required [options]="workOrderTypes" filter="true" [(ngModel)]="receivingForm.workOrderTypeId" name="workOrderType" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
+
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
@@ -130,13 +141,20 @@
                     </div> -->
             
                     <div class="col-md-3">
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label>Default Condition <span class="text-danger">*</span></label>
                             <select class="form-control" name="conditionId" [(ngModel)]="receivingForm.defaultConditionId" (change)="onSelectCondition()" required>
                                 <option value="0">-- Select --</option>
                                 <option *ngFor="let condition of allConditionInfo" [ngValue]="condition.conditionId">{{condition.description}}</option>
                             </select>
-                        </div>
+                        </div> -->
+
+                            <div class="form-group">
+                                <label>Default Condition <span class="text-danger">*</span></label>
+                            
+                                <p-dropdown  (onChange)="onSelectCondition()" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"  required [options]="allConditionInfo" filter="true" [(ngModel)]="receivingForm.defaultConditionId" name="defaultConditionId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                            </div>
+
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
@@ -177,11 +195,66 @@
                         </div>
 
                     </div>
+                    <div class="col-md-3" *ngIf="woTypeId">
+                        <div class="form-group">
+                            <label>
+                               Site  <span
+                                    style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                        
+                            <p-dropdown  (onChange)="siteValueChange(receivingForm.siteId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)" (input)="onFilterSite($event.target.value)"  [options]="allSites" filter="true" [(ngModel)]="receivingForm.defaultSiteId" name="DefaultSiteId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Warehouse  <span
+                                    style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                        
+                            <p-dropdown (onChange)="wareHouseValueChange(receivingForm.warehouseId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allWareHouses" filter="true" [(ngModel)]="receivingForm.defaultWearhouseId" name="defaultWearhouseId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Location  <span
+                                    style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                        
+                            <p-dropdown (onChange)="locationValueChange(receivingForm.locationId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allLocations" filter="true" [(ngModel)]="receivingForm.defaultLocationId" name="defaultLocationId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Shelf  <span
+                                    style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                        
+                            <p-dropdown  (onChange)="shelfValueChange(receivingForm.shelfId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allShelfs" filter="true" [(ngModel)]="receivingForm.defaultShelfId" name="defaultShelfId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="col-md-3" *ngIf="woTypeId">
+                        <div class="form-group">
+                            <label>
+                                Bin  <span
+                                    style="margin-left:3px;cursor:pointer;">
+                                </span>
+                            </label>
+                        
+                            <p-dropdown  [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allBins" filter="true" [(ngModel)]="receivingForm.defaultBinId" name="defaultBinId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
+                        </div>
+                    </div>
                 </div>
                 
             </div>
 
-
+            
             <div class="form-row pull-right m-t-10">
                 <button type="submit" class="btn btn-primary" (click)="onSaveCustomerReceiving()"
                     [disabled]="!customerWorkForm.valid" >{{isEditMode ? 'Update' : 'Save'}}</button>

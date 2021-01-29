@@ -14,9 +14,9 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
     private readonly _workorderUrlAll: string = "/api/workorder/getworkordersettingslist";
 
 
-    private readonly _workorderLiteUrl: string = "/api/workorder/basic";
-    private readonly _workorderPostUrl: string = "/api/workorder/createworkordersettings";
-    private readonly _getAuditById: string = "/api/workorder/audithistorybyid";
+    private readonly _workorderLiteUrl: string =this.configurations.baseUrl+"/api/workorder/basic";
+    private readonly _workorderPostUrl: string = this.configurations.baseUrl+"/api/workorder/createworkordersettings";
+    private readonly _getAuditById: string =this.configurations.baseUrl+ "/api/workorder/audithistorybyid";
 
     private readonly _actionsUrlNewAuditHistory: string = "/api/workorder/workordersettings";
     get workorderUrl() { return this.configurations.baseUrl + this._workorderUrl; }
@@ -85,7 +85,7 @@ export class WorkOrderSettingsEndpointService extends EndpointFactory {
     }
 
     getDeleteActionEndpoint<T>(actionId: number): Observable<T> {
-        let endpointUrl = `${this._workorderPostUrl}/${actionId}`;
+        let endpointUrl = `${this.configurations.baseUrl}/${this._workorderPostUrl}/${actionId}`;
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
