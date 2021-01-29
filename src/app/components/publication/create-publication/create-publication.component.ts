@@ -360,11 +360,14 @@ export class CreatePublicationComponent implements OnInit {
 
   onChangePublicationType() {
 
-    this.publicationType = getObjectById(
+    let publicationType = getObjectById(
       "value",
       this.sourcePublication.publicationTypeId,
       this.publicationTypes
     );
+    if (publicationType) {
+      this.publicationType = publicationType.label;
+    }
     this.onChangeInput();
   }
   PNMappingPageIndexChange(event) {
