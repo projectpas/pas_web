@@ -229,7 +229,7 @@
             <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
                 <div class="tableFixHead">
                     <table *ngIf="purchaseOrderData != undefined && purchaseOrderData.purchaseOderPart != undefined"
-                           class="table table-bordered">
+                           class="table rro-table-cstm table-bordered">
                         <thead>
                             <tr class="header-table-width">
                                 <th class="min-width-40"></th>
@@ -245,13 +245,12 @@
                                 <th class="min-width-80">Qty Rejected</th>
                                 <th class="min-width-80">Back Ord </th>
                                 <th class="min-width-60">Status</th>
-                                <!-- <th [attr.colspan]="disableParentSpace ? '0' : '3'" class="text-center"></th> -->
-                                <th colspan="3" class="text-center" *ngIf="disableParentSpace"></th>
+                                <!-- <th [attr.colspan]="disableParentSpace ? '0' : '3'" class="text-center"></th> -->                               
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
                                 <th class="min-width-80" >Is Serialized</th>
                                 <th class="min-width-80" >Is TimeLife</th>
-                                <th class="min-width-90">Qty to Receive <span class="clr-red">*</span></th>
-                                <th></th>
+                                <th class="min-width-150"  >Qty to Receive <span class="clr-red">*</span></th>
+                               
                             </tr>
                         </thead>
                         <tbody>
@@ -277,8 +276,7 @@
                                     <td class="text-right">{{part.stockLineCount}}</td>
                                     <td class="text-right">{{part.quantityRejected}}</td>
                                     <td class="text-right">{{part.quantityBackOrdered}}</td>
-                                    <td>{{part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received'}}</td>
-                                    <td colspan="3" *ngIf="disableParentSpace"></td>
+                                    <td>{{part.stockLineCount == 0 ? 'Pending' : part.stockLineCount < part.quantityOrdered ? 'Fulfilling' : 'Received'}}</td>                                  
                                     <td colspan="4">{{part?.level1}},{{part?.level2}}, {{part?.level3}},{{part?.level4}}</td>
                                     <td>
                                         <section *ngIf="part.itemMaster != null && part.stockLineCount < part.quantityOrdered">
@@ -311,16 +309,15 @@
                                                [(ngModel)]="part.quantityActuallyReceived"
                                                (keyup)="addStockLine(part, false)" (ngModelChange)="btnactive($event)"
                                                pInputText pKeyFilter="pnum" class="form-control text-right"
-                                               style="width: 50px;float: right;" [maxLength]="12" required />
-                                    </td>
-                                    <td>
+                                               style="width: 50px !important;
+                                               margin-right: 10px !important;" [maxLength]="12" required />
                                         <button *ngIf="!part.hasChildren && part.stockLineCount < part.quantityOrdered"
-                                                [disabled]="!part.quantityActuallyReceived"
-                                                class="btn btn-primary btn-po-details"
-                                                (click)="toggleStockLine($event, part)">
-                                            {{ part.showStockLineGrid ? 'Close' : 'Receive'}}
-                                        </button>
-                                    </td>
+                                               [disabled]="!part.quantityActuallyReceived"
+                                               class="btn btn-primary btn-po-details"
+                                               (click)="toggleStockLine($event, part)">
+                                           {{ part.showStockLineGrid ? 'Close' : 'Receive'}}
+                                       </button>
+                                    </td>                                   
                                 </tr>
                                
                                 <tr class="child-header splitship-head child-header-back"
@@ -336,12 +333,11 @@
                                     <th class="min-width-60" >Status</th>
                                     <th class="min-width-60" >User Type</th>
                                     <th>User Name</th>
-                                    <th colspan="4">Address</th>
+                                    <th colspan="3">Address</th>
                                     <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                     <th></th>
                                     <th></th>
-                                    <th>Receive Quantity</th>
-                                    <th> </th>
+                                    <th class="min-width-120" style="position: sticky !important">Qty to Receive <span class="clr-red">*</span></th>                                   
                                 </tr>
                                 <tr class="child-data splitship-child child-data-back" 
                                     [hidden]="!part.visible"
@@ -358,7 +354,7 @@
                                     </td>
                                     <td>{{part.poPartSplitUserTypeName}}</td>
                                     <td>{{part?.poPartSplitUserName}}</td>
-                                    <td colspan="4">{{part.addressText }}</td>
+                                    <td colspan="3">{{part.addressText }}</td>
                                     <td colspan="4">
                                         {{part.level1}},{{part.level2}}, {{part.level3}},{{part.level4}}
                                     </td>
@@ -368,16 +364,15 @@
                                         <input type="text" *ngIf="part.stockLineCount < part.quantityOrdered"
                                                [(ngModel)]="part.quantityActuallyReceived"
                                                (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum"
-                                               class="form-control" [maxLength]="12" />
-                                    </td>
-                                    <td>
+                                               class="form-control" style="width: 50px !important;
+                                               margin-right: 10px !important;"  [maxLength]="12" required  />
                                         <button class="btn btn-primary btn-po-details"
-                                                [disabled]="!part.quantityActuallyReceived"
-                                                *ngIf="part.stockLineCount < part.quantityOrdered"
-                                                (click)="toggleStockLine($event, part)">
-                                            {{ part.showStockLineGrid ? 'Close' : 'Receive'}}
-                                        </button>
-                                    </td>
+                                               [disabled]="!part.quantityActuallyReceived"
+                                               *ngIf="part.stockLineCount < part.quantityOrdered"
+                                               (click)="toggleStockLine($event, part)">
+                                           {{ part.showStockLineGrid ? 'Close' : 'Receive'}}
+                                       </button>
+                                    </td>                                    
                                     <!--<td><a (click)="addStockLine(part)" class="btn btn-primary btn-po-details">Add Details</a></td>-->
                                     <!--<button type="button" (click)="showDialog()" pButton icon="fa-external-link-square" label="Show"></button>-->
                                 </tr>
