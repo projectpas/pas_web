@@ -1222,6 +1222,7 @@ export class SalesOrderCreateComponent implements OnInit {
         }
         break;
       case SalesOrderActionType.CloseSalesOrder:
+        this.isEmailTabEnabled = false;
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
           this.salesOrderService.close(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);
@@ -1231,6 +1232,7 @@ export class SalesOrderCreateComponent implements OnInit {
         }
         break;
       case SalesOrderActionType.CancelSalesOrder:
+        this.isEmailTabEnabled = false;
         if (eventArgs.confirmType === SalesOrderConfirmationType.Yes) {
           this.salesOrderService.cancel(this.salesOrderView.salesOrder.salesOrderId,this.userName).subscribe(result => {
             this.router.navigateByUrl(`salesmodule/salespages/sales-order-list`);

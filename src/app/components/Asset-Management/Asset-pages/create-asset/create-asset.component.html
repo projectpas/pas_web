@@ -107,7 +107,7 @@
                                         [(ngModel)]="currentAsset.entryDate"></p-calendar>
                                 </div>
                                 <div class="form-group"> 
-                                    <label>Id <span class="clr-red">*</span></label>
+                                    <label>ID <span class="clr-red">*</span></label>
                                     <p-autoComplete field="label" class="pautocomp-cstm" (ngModelChange)="getmemo($event)" (onKeyUp)=assetIdHandler($event)
                                     (onSelect)="onAssetIdselection($event)"  [(ngModel)]="currentAsset.assetId" name="assetIdl"
                                      [suggestions]="localCollection" (completeMethod)="filterAssetId($event)" [size]="30" [minLength]="1"
