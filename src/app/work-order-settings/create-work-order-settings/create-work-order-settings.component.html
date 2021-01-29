@@ -195,7 +195,7 @@
                         </div>
 
                     </div>
-                    <div class="col-md-3" *ngIf="woTypeId">
+                    <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
                         <div class="form-group">
                             <label>
                                Site  <span
@@ -206,7 +206,7 @@
                             <p-dropdown  (onChange)="siteValueChange(receivingForm.defaultSiteId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)" (input)="onFilterSite($event.target.value)"  [options]="allSites" filter="true" [(ngModel)]="receivingForm.defaultSiteId" name="DefaultSiteId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
-                    <div class="col-md-3" *ngIf="woTypeId">
+                    <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
                         <div class="form-group">
                             <label>
                                 Warehouse  <span
@@ -217,7 +217,7 @@
                             <p-dropdown (onChange)="wareHouseValueChange(receivingForm.defaultWearhouseId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allWareHouses" filter="true" [(ngModel)]="receivingForm.defaultWearhouseId" name="defaultWearhouseId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
-                    <div class="col-md-3" *ngIf="woTypeId">
+                    <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
                         <div class="form-group">
                             <label>
                                 Location  <span
@@ -228,7 +228,7 @@
                             <p-dropdown (onChange)="locationValueChange(receivingForm.defaultLocationId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allLocations" filter="true" [(ngModel)]="receivingForm.defaultLocationId" name="defaultLocationId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
-                    <div class="col-md-3" *ngIf="woTypeId">
+                    <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
                         <div class="form-group">
                             <label>
                                 Shelf  <span
@@ -239,7 +239,7 @@
                             <p-dropdown  (onChange)="shelfValueChange(receivingForm.defaultShelfId)" [showClear]="true" class="p-dropdown-100"  (ngModelChange)="getmemo($event)"   [options]="allShelfs" filter="true" [(ngModel)]="receivingForm.defaultShelfId" name="defaultShelfId" [resetFilterOnHide]="true" placeholder="-- Select --" ></p-dropdown>
                         </div>
                     </div>
-                    <div class="col-md-3" *ngIf="woTypeId">
+                    <div class="col-md-3" *ngIf="receivingForm.workOrderTypeId ==woTypeId">
                         <div class="form-group">
                             <label>
                                 Bin  <span
@@ -262,4 +262,9 @@
         </form>
     </div>
 
+</div>
+<div class="preloader" *ngIf="isSpinnerVisible">
+    <div class="loading">
+        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+    </div>
 </div>

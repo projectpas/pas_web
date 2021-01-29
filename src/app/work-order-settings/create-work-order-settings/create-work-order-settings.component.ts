@@ -98,6 +98,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     selectedTearDownTypes: any = [];
     moduleName: string = "WO Settings";
     dropdownSettings = {};
+    isSpinnerVisible:boolean=false;
     constructor(
         private workOrderService: WorkOrderService,
         private commonService: CommonService, private customerService: CustomerService, private binService: BinService, private siteService: SiteService, private conditionService: ConditionService, private datePipe: DatePipe, private _actRoute: ActivatedRoute, private receivingCustomerWorkOrderService: WorkOrderSettingsService, private authService: AuthService, private router: Router, private alertService: AlertService, private stocklineService: StocklineService, private configurations: ConfigurationService) {
@@ -122,6 +123,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         this.receivingForm.updatedBy = 0;
         this.receivingForm.receivedDate = new Date();
     }
+
     ngOnInit() {
         // this.loadstatusData();
         this.dropdownSettings = {
@@ -135,13 +137,8 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
         };
         this.loadReceivingListRB();
         this.loadWOListRB();
-     
-     
-       
-        // this.getAllWorkOrderTypes();
         this.AcquisitionloadData('');
         this.getAllWorkOrderStatus();
-        // this.getAllWorkScpoes('');
         this.getAllWorkOrderStages();
 
         this.getAllPriority();
@@ -165,20 +162,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
             ? this.authService.currentUser.userName
             : '';
     }
-
-    
-
-
-
-
-//     loadstatusData(){
-//     this.workOrderViewList= [{label: "MPN View",value: 1,woListViewRBId:1},
-//     {label: "WO View",value: 2,woListViewRBId:2}]
-//    this.workOrderStatusRbList =[{label: "Open",value: 3,woListStatusRBId:3},
-//     {label: "Closed",value: 4,woListStatusRBId:4},
-//     {label: "Canceled",value: 5,woListStatusRBId:5},
-//     {label: "All",value: 6,woListStatusRBId:6}];
-// }
     getAllTearDownTypes(){
         this.commonService.smartDropDownList('TeardownType', 'TeardownTypeId', 'Name')
         .subscribe(
@@ -189,23 +172,19 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     this.getReceivingCustomerDataonEdit(this.receivingCustomerWorkId);
                    
                 }
-            },
-            err => {
-                this.errorHandling(err);
             }
         )
     }
-
     getReceivingCustomerDataonEdit(id) {
         const mastercompanyid = 1;
         this.readonly = false;
+        this.isSpinnerVisible=true;
         this.receivingCustomerWorkOrderService.getworkflowbyid(mastercompanyid, id).subscribe(res => {
 
              this.receivingForm = {
                  ...res[0]
-                //  woListStatusRBId:res[0].woListStatusDefaultRB,
-                //  woListViewRBId:res[0].woListDefaultRB
             };
+            this.isSpinnerVisible=false;
             let teardowns = res[0].tearDownTypes.split(',');
             this.tearDownTypes.forEach(
                 teardown => {
@@ -218,6 +197,7 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     )
                 }
             )
+        
             this.loadSiteData('');
             this.loadConditionData('');
             if (this.receivingForm.defaultSiteId) {
@@ -233,9 +213,10 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                 this.shelfValueChange(this.receivingForm.defaultShelfId)
             }
             this.getSiteDetailsOnEdit(this.receivingForm);
+         
         },
         err => {
-            this.errorHandling(err);
+            this.isSpinnerVisible=false;
         });
     }    
 
@@ -353,9 +334,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     MessageSeverity.success
                 );
                 this.router.navigateByUrl('/workordersettingsmodule/workordersettings/app-work-order-settings-list');
-            },
-            (err)=>{
-                this.errorHandling(err);
             });
         }
         else {
@@ -368,9 +346,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                 );
                 this.router.navigateByUrl('/workordersettingsmodule/workordersettings/app-work-order-settings-list');
 
-            },
-            (err)=>{
-                this.errorHandling(err);
             });
         }
     }
@@ -383,9 +358,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     private loadReceivingListRB() {
         this.commonService.smartDropDownList('ReceivingListRB', 'ReceivingListRBId', 'Name').subscribe(response => {
             this.ReceivingListRBList = response;
-        },
-        err => {
-            this.errorHandling(err);
         });
     }
 
@@ -397,9 +369,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     value: x.value
                 }
                 // this.woListView=
-            },
-            err => {
-                this.errorHandling(err);
             });
         });
     }
@@ -414,9 +383,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     }
                 })                
             }
-        },
-        err => {
-            this.errorHandling(err);
         });
     }
 
@@ -430,9 +396,6 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
                     }
                 })                
             }
-        },
-        err => {
-            this.errorHandling(err);
         })
     }
 
@@ -452,30 +415,10 @@ export class CreateWorkOrderSettingsComponent implements OnInit {
     getAllWorkOrderStatus(): void {
         this.commonService.smartDropDownList('WorkOrderStatus', 'ID', 'Description').pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.workOrderStatusList = res.sort(function (a, b) { return a.value - b.value; });
-        },
-        err => {
-            this.errorHandling(err);
         })
     }
 
-    errorHandling(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Saving data Failed due to some input error',
-                MessageSeverity.error
-            );
-        }
-    }
+
 
 
     onFilterAcqution(value) {
