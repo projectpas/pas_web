@@ -64,7 +64,7 @@
         <div class="col-md-4">
             <p class="fs12">
                 <label class="control-label labels-font-header" style="width: auto; ">Publication Type :</label>
-                <span class="span-header-red"> {{this.sourcePublication.publicationType}} </span>
+                <span class="span-header-red"> {{publicationType}} </span>
             </p>
         </div>
         <div class="col-md-4">
@@ -105,7 +105,7 @@
                                     Publication Type<span class="clr-red">*</span>
 
                                 </label>
-                                <select name="gPubType" (change)="onChangeInput()"
+                                <select name="gPubType" (change)="onChangePublicationType()"
                                     [(ngModel)]="sourcePublication.publicationTypeId" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let type of publicationTypes" [ngValue]="type.value">
