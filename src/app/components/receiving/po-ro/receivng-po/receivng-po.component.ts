@@ -74,7 +74,7 @@ export class ReceivngPoComponent implements OnInit {
     GLAccountList: DropDownData[] = [];
     ShippingViaList: DropDownData[];
     TagTypeList: any = [];
-    receiving_po_header: boolean = true;
+    receiving_po_header: boolean = false;
     ConditionId: number = 0;
     allPartGLAccountId: number;
     quantityreceive: boolean = false;

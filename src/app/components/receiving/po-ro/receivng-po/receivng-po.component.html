@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
                 <div class="form-row">
-                    <div class="col-md-8 ro-status-radios">
+                    <!-- <div class="col-md-8 ro-status-radios">
                         <div class="form-group">
                             <label style="float:left; width:auto; margin-right:20px; padding-top:3px;">Status:</label>
                             <div>
@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -120,6 +120,11 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input class="form-control" type="text" name="status"
+                                           [(ngModel)]="poDataHeader.status" disabled required>
+                                </div>
                                 <div class="form-group">
                                     <div class="checkbox-cstm" style="margin-top: 15px;">
                                         <label>

@@ -3,7 +3,7 @@
         <div class="card-header header">
             <div class="row">
                 <div class="col">
-                    <h4 class="header-name">Receiving RO
+                    <h4 class="header-name">Receiving/Repair Order
                         <button class="btn-sm header-button header-button-alignment"
                             (click)="receiving_ro_header=!receiving_ro_header" style="margin-left: 20px;">
                             {{receiving_ro_header ? 'Collapse' : 'Expand'}}
@@ -21,7 +21,7 @@
         <div class="card-body">
             <form id="" class="ro-grid-form createPO-form" name="">
                 <div class="form-row">
-                    <div class="col-md-8 ro-status-radios">
+                    <!-- <div class="col-md-8 ro-status-radios">
                         <div class="form-group">
                             <label class="status-radios">Status:</label>
                             <div>
@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <hr *ngIf="receiving_ro_header" />
-                <div class="form-row expand-div-alignment" *ngIf="receiving_ro_header">
+                <div class="form-row" *ngIf="receiving_ro_header" style="margin-top: 10px;">
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -121,6 +121,11 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input class="form-control" type="text" name="status"
+                                           [(ngModel)]="repairOrderHeaderData.status" disabled required>
+                                </div>
                                 <div class="form-group">
                                     <div class="checkbox-cstm resale-align">
                                         <label>
@@ -223,39 +228,39 @@
                 class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
                 <div class="tableFixHead">
                     <table *ngIf="repairOrderData != undefined && repairOrderData != undefined"
-                        class="table table-bordered table-wrap">
+                        class="table table-bordered">
                         <thead>
-                            <tr>
-                                <th class="th-width"></th>
-                                <th>Line Num</th>
+                            <tr class="header-table-width">
+                                <th class="min-width-40"></th>
+                                <th class="min-width-60">Line Num</th>
                                 <th>PN</th>
                                 <th>PN Desc</th>
                                 <th>Alt/Equiv</th>
                                 <th>Item Type</th>
                                 <th>Stock Type</th>
-                                <th>Qty to Repair </th>
+                                <th class="min-width-80">Qty to Repair </th>
                                 <!--Qty Ordered-->
-                                <th>Qty Drafted</th>
-                                <th>Qty Repaired</th>
+                                <th class="min-width-80">Qty Drafted</th>
+                                <th class="min-width-80">Qty Repaired</th>
                                 <!--Qty Received-->
                                 <!-- <th>Qty Rejected</th> -->
-                                <th>Back Ord</th>
-                                <th>Status</th>
+                                <th class="min-width-80">Back Ord</th>
+                                <th class="min-width-60">Status</th>
                                 <th>Stockline Num</th>
                                 <!-- <th>Control Num</th>
     <th>PO Num</th> -->
                                 <th colspan="3" class="text-center" *ngIf="disableParentSpace"></th>
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
-                                <th>Is Serialized</th>
-                                <th>Is TimeLife</th>
-                                <th>Qty to Receive <span class="clr-red">*</span></th>
+                                <th class="min-width-80">Is Serialized</th>
+                                <th class="min-width-80">Is TimeLife</th>
+                                <th class="min-width-90">Qty to Receive <span class="clr-red">*</span></th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <ng-container *ngFor="let part of repairOrderData;let row_index=index">
                                 <!--this row is for the parent part-->
-                                <tr class="basic-info" *ngIf="part.isParent">
+                                <tr class="parent-data" *ngIf="part.isParent">
                                     <td class="details-control eachcol" style="padding: 4px 6px;">
                                         <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
@@ -354,8 +359,8 @@
                                             <th>PO Num</th> -->
                                     <th>User Type</th>
                                     <th>User Name</th>
-                                    <th>Address</th>
-                                    <th colspan="3">Management Structure</th>
+                                    <th colspan="4">Address</th>
+                                    <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                     <th>Receive Quantity</th>
                                     <th> </th>
                                     <th> </th>

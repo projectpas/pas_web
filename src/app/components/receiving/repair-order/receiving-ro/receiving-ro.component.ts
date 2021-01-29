@@ -62,7 +62,7 @@ export class ReceivingRoComponent implements OnInit {
     roDepartmentList: DropDownData[];
     roStatus: any[] = [];
     roUserType: DropDownData[] = [];
-    receiving_ro_header: boolean = true;
+    receiving_ro_header: boolean = false;
     roSelectedCompanyId: number;
     roSelectedBusinessUnitId: number;
     roSelectedDivisionId: number;
