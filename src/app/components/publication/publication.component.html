@@ -239,7 +239,7 @@
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns *ngIf="allpublicationInfo.length == 0">
         <tr>
-          <td [attr.colspan]="14" style="color: red; font-weight: bold; text-align: center;">
+          <td [attr.colspan]="18" style="color: red; font-weight: bold; text-align: center;">
             No records found
           </td>
         </tr>
@@ -875,6 +875,22 @@
                         <p-table #pnTable class="rpo-table-cstm" [columns]="headersforPNMapping" [value]="pnMappingList"
                           [paginator]="true" [rows]="pnMappingPageSize" [first]="first"
                           [rowsPerPageOptions]="[10, 20, 50, 100]">
+                          <ng-template pTemplate="caption">
+
+                            <div class="row">
+                              <div class="col">
+                                <div class="checkbox-cstm pull-right" style="margin-right: 20px;">
+                                  <label style="width: auto !important; margin-top: 3px;">
+                                    <input type="checkbox" [(ngModel)]="currentPnMappingDeletedstatus" name="cparent"
+                                      id="cparent" (click)="getPnMappingDeleteListByStatus()" />
+                                    <span class="cr"><i class="cr-icon pi pi-check"></i></span>
+                                    Show Deleted List
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+
+                          </ng-template>
                           <ng-template pTemplate="header" let-columns>
                             <tr>
                               <!-- <th>Sl.No</th> -->
@@ -957,6 +973,7 @@
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
+                              <th>Actions</th>
                             </tr>
                             <tr>
                               <th *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -968,6 +985,7 @@
                                     )
                                   " />
                               </th>
+                              <th>&nbsp;</th>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -975,6 +993,13 @@
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
                               <td *ngFor="let col of columns">
                                 {{ rowData[col.field] }}
+                              </td>
+                              <td style="text-align: center;">
+                                <span data-toggle="modal" data-target="#airCraftView">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
+                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                </span>
                               </td>
                             </tr>
                           </ng-template>
@@ -1031,6 +1056,7 @@
                                 {{ col.header }}
                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                               </th>
+                              <th>Actions</th>
                             </tr>
                             <tr>
                               <th *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -1042,6 +1068,7 @@
                                     )
                                   " />
                               </th>
+                              <th>&nbsp;</th>
                             </tr>
                           </ng-template>
                           <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
@@ -1049,6 +1076,13 @@
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
                               <td *ngFor="let col of columns">
                                 {{ rowData[col.field] }}
+                              </td>
+                              <td style="text-align: center;">
+                                <span data-toggle="modal" data-target="#ataView">
+                                  <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
+                                    (click)="openAtaView(rowData, ataView)" matTooltip="View"
+                                    matTooltipPosition="above"><i class="fa fa-eye"></i></a>
+                                </span>
                               </td>
                             </tr>
                           </ng-template>
@@ -1282,3 +1316,98 @@
     </div>
   </div>
 </div>
+
+<ng-template #airCraftView let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="closeModal()">&times;</button>
+    <h4 class="modal-title">Aircraft Information</h4>
+  </div>
+  <div class="modal-body">
+    <div class="col-sm-12">
+      <p>
+        <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAircraftData.partNumber
+          }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Part Description: </b></span><span class="value">{{
+          viewAircraftData.partDescription }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAircraftData.manufacturerName
+          }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAircraftData.itemGroup
+          }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Aircraft: </b></span><span class="value">{{ viewAircraftData.aircraftType
+          }}</span>
+      </p>
+
+      <p>
+        <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber
+          }}</span>
+      </p>
+
+
+
+      <div class="clear"></div>
+    </div>
+
+    <!-- <strong>PN Mapping:
+          <span class="new-label">{{selectedRowforDelete.partNumber}}</span>
+      </strong> -->
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+
+  </div>
+
+</ng-template>
+<ng-template #ataView let-c="close" let-d="dismiss" data-backdrop="static">
+  <div class="modal-header">
+    <button type="button" class="close" (click)="closeModal()">&times;</button>
+    <h4 class="modal-title">ATA Information</h4>
+  </div>
+  <div class="modal-body">
+    <div class="col-sm-12">
+      <p>
+        <span class="label"><b>Part Number: </b></span><span class="value">{{ viewAtaData.partNumber }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Part Description: </b></span><span class="value">{{ viewAtaData.partDescription
+          }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Manufacturer: </b></span><span class="value">{{ viewAtaData.manufacturerName
+          }}</span>
+      </p>
+      <p>
+        <span class="label"><b>Item Group: </b></span><span class="value">{{ viewAtaData.itemGroup }}</span>
+      </p>
+      <p>
+        <span class="label"><b>ATA Chapter: </b></span><span class="value">{{ viewAtaData.ataChapterName
+          }}</span>
+      </p>
+
+      <p>
+        <span class="label"><b>Ata SubChapter: </b></span><span class="value">{{
+          viewAtaData.ataSubChapterDescription }}</span>
+      </p>
+
+
+
+      <div class="clear"></div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="closeModal()">Close</button>
+
+  </div>
+
+</ng-template>

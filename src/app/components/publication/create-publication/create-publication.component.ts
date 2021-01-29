@@ -93,6 +93,7 @@ export class CreatePublicationComponent implements OnInit {
   aircraftList: any = [];
   showModelAircraftModel: boolean = false;
   partNumberList = [];
+  partNumberListOriginal = [];
   selectedPartNumbers = [];
   pnMappingList = [];
   publicationRecordId: any;
@@ -223,8 +224,8 @@ export class CreatePublicationComponent implements OnInit {
   allDocumentListOriginal: any = [];
   selectedRowForDelete: any;
   rowIndex: number;
-  disabledPartNumber: boolean = false;
-  disableGeneralInfoSave: boolean = false;
+  disabledPartNumber: boolean = true;
+  disableGeneralInfoSave: boolean = true;
   constructor(
     private publicationService: PublicationService,
     private atasubchapter1service: AtaSubChapter1Service,
@@ -568,7 +569,6 @@ export class CreatePublicationComponent implements OnInit {
         this.isSpinnerVisible = true;
         this.publicationService
           .newAction(this.formData
-
           )
           .subscribe(res => {
             this.isSpinnerVisible = false;
@@ -645,12 +645,24 @@ export class CreatePublicationComponent implements OnInit {
       this.updatePublicationGeneralInfo();
     }
   }
+
+  filterPartList(event) {
+    this.partNumberList = this.partNumberListOriginal;
+    const partListData = [
+      ...this.partNumberListOriginal.filter(x => {
+        return x.label.toLowerCase().includes(event.query.toLowerCase());
+      })
+    ];
+    this.partNumberList = partListData;
+
+  }
+
   async getPartNumberList() {
     this.isSpinnerVisible = false;
     await this.itemMasterService.getPrtnumberslistList().subscribe(list => {
       const responseData = list[0];
       this.isSpinnerVisible = false;
-      this.partNumberList = responseData.map(x => {
+      this.partNumberListOriginal = responseData.map(x => {
         return {
           label: x.partNumber,
           value: x
@@ -669,33 +681,42 @@ export class CreatePublicationComponent implements OnInit {
     }
   }
 
+  enablePnMappingSave() {
+    this.disabledPartNumber = false;
+  }
   savePNMapping() {
-    const mapData = this.selectedPartNumbers.map(obj => {
-      return {
-        PublicationRecordId: this.publicationRecordId,
-        PublicationId: this.generalInformationDetails.PublicationId,
-        PartNumber: obj.partNumber,
-        PartNumberDescription: obj.partDescription,
-        ItemMasterId: obj.itemMasterId,
-        ItemClassification:
-          obj.itemClassification === null ? '-' : obj.itemClassification,
-        ItemClassificationId: obj.itemClassificationId,
-        manufacturer: obj.manufacturer === null ? '-' : obj.manufacturer,
-        ItemGroupId: obj.itemGroupId == null ? 1 : obj.itemGroupId,
-        CreatedBy: this.userName,
-        UpdatedBy: this.userName,
-        MasterCompanyId: obj.masterCompanyId,
-        IsActive: true,
-        IsDeleted: false,
-        CreatedDate: new Date(),
-        UpdatedDate: new Date()
-      };
-    });
-    this.selectedPartNumbers = [];
-    if (mapData && mapData.length > 0) {
+    let selectedPart: any = this.selectedPartNumbers;
+    const mapData = {
+
+      // this.selectedPartNumbers.map(obj => {
+      // return {
+      PublicationRecordId: this.publicationRecordId,
+      PublicationId: this.generalInformationDetails.PublicationId,
+      PartNumber: selectedPart.label,
+      PartNumberDescription: selectedPart.value.partDescription,
+      ItemMasterId: selectedPart.value.itemMasterId,
+      ItemClassification:
+        selectedPart.value.itemClassification === null ? '-' : selectedPart.value.itemClassification,
+      ItemClassificationId: selectedPart.value.itemClassificationId,
+      manufacturer: selectedPart.value.manufacturer === null ? '-' : selectedPart.value.manufacturer,
+      ItemGroupId: selectedPart.value.itemGroupId == null ? 1 : selectedPart.value.itemGroupId,
+      CreatedBy: this.userName,
+      UpdatedBy: this.userName,
+      MasterCompanyId: selectedPart.value.masterCompanyId,
+      IsActive: true,
+      IsDeleted: false,
+      CreatedDate: new Date(),
+      UpdatedDate: new Date()
+      // };
+      // });
+    }
+    // this.selectedPartNumbers = [];
+    if (mapData) {
       this.isSpinnerVisible = true;
       this.publicationService.postMappedPartNumbers(mapData).subscribe(res => {
         this.isDisabledSteps = true;
+        this.selectedPartNumbers = null;
+        this.disabledPartNumber = true;
         this.isSpinnerVisible = false;
         this.getPnMapping();
       }, error => {
@@ -1472,6 +1493,7 @@ export class CreatePublicationComponent implements OnInit {
   }
   getLocationNameById(event) {
     this.sourcePublication['location'] = this.sourcePublication.locationId.label
+    this.onChangeInput();
   }
 
   getPublishedByModulesList() {
@@ -1497,10 +1519,12 @@ export class CreatePublicationComponent implements OnInit {
     this.commonService.autoSuggestionSmartDropDownList(tableName, tableColumnId, tableColumnName, event.query ? event.query : '', true, 20, [publishedBy].join(), this.masterCompanyId).subscribe(res => {
       this.publishedByReferences = res;
     });
+    // this.onChangeInput();
   }
   changePublishedById() {
     this.sourcePublication.publishedByRefId = null;
     this.sourcePublication.publishedByOthers = "";
+    this.onChangeInput()
   }
   nextClick(nextOrPrevious) {
     this.nextOrPreviousTab = nextOrPrevious;
@@ -1534,6 +1558,7 @@ export class CreatePublicationComponent implements OnInit {
       this.isSpinnerVisible = false;
     })
   }
+
   getDeleteListByStatus() {
     this.isSpinnerVisible = true;
     this.publicationService
@@ -1554,5 +1579,10 @@ export class CreatePublicationComponent implements OnInit {
         this.isSpinnerVisible = true;
       });
 
+  }
+  onChangeInput() {
+    if (this.isEditMode) {
+      this.disableGeneralInfoSave = false;
+    }
   }
 }
