@@ -184,6 +184,11 @@ export class ReceivngPoComponent implements OnInit {
         return this.authService.currentUser ? this.authService.currentUser.userName : "";
     }
 
+    // getLegalEntity() {
+    //     this.commonService.getLegalEntityList().subscribe(res => {
+    //         this.legalEntityList = res;
+    //     })
+    // } 
     getLegalEntity(strText = '') {
         if (this.arrayLegalEntitylsit.length == 0) {
             this.arrayLegalEntitylsit.push(0);
@@ -433,8 +438,8 @@ export class ReceivngPoComponent implements OnInit {
                 // }
                 part.userName = part.poPartSplitUser;
                 part.userTypeName = part.poPartSplitUserTypeName;//this.getUserTypeById(part.poPartSplitUserTypeId.toLocaleString());
-                part.statusText = this.getStatusById(part.status);
-                part.managementStructureName = parentPart.managementStructureName;
+                part.statusText = part.status;//this.getStatusById(part.status);
+                //part.managementStructureName = parentPart.managementStructureName;
             }
             //this.getManagementStructureCodesForPart(part);
         }

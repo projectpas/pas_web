@@ -331,8 +331,8 @@
                                     <th>Status</th>
                                     <th>User Type</th>
                                     <th>User Name</th>
-                                    <th>Address</th>
-                                    <th colspan="2">Management Structure</th>
+                                    <th colspan="4">Address</th>
+                                    <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
                                     <th></th>
                                     <th></th>
                                     <th>Receive Quantity</th>
@@ -354,12 +354,9 @@
                                     </td>
                                     <td>{{part.poPartSplitUserTypeName}}</td>
                                     <td>{{part?.poPartSplitUserName}}</td>
-                                    <td>{{part.addressText }}</td>
-                                    <td *ngIf="part.managementStructureName != undefined && part.managementStructureName.length > 0"
-                                        colspan="2">
-                                        {{part.managementStructureName[0]}},
-                                        {{part.managementStructureName[1]}}, {{part.managementStructureName[2]}},
-                                        {{part.managementStructureName[3]}}
+                                    <td colspan="4">{{part.addressText }}</td>
+                                    <td colspan="4">
+                                        {{part.level1}},{{part.level2}}, {{part.level3}},{{part.level4}}
                                     </td>
                                     <td></td>
                                     <td></td>
