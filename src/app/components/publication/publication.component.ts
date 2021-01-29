@@ -242,7 +242,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'publicationType', header: 'Pub Type' },
             { field: 'publishedBy', header: 'Published By' },
             { field: 'location', header: 'Location' },
-            { field: 'verifiedBy', header: 'Verified By' },
+            { field: 'verifiedByName', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
         ];
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-publication';
@@ -500,10 +500,19 @@ export class PublicationComponent implements OnInit, AfterViewInit {
                         model: x.aircraftModel,
                         dashNumber: x.dashNumber,
                     };
-                }, error => {
-                    this.isSpinnerVisible = false;
-
                 });
+                if (this.aircraftList && this.aircraftList.length > 0) {
+                    this.aircraftList.forEach((airCraft, index) => {
+                        if (this.aircraftList[index].dashNumber.toLowerCase() == 'unknown') {
+                            this.aircraftList[index].dashNumber = '';
+                        }
+                        if (this.aircraftList[index].model.toLowerCase() == 'unknown') {
+                            this.aircraftList[index].model = '';
+                        }
+                    });
+                }
+            }, error => {
+                this.isSpinnerVisible = false;
             });
 
         this.isSpinnerVisible = true;

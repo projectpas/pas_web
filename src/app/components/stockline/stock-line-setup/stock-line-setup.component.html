@@ -179,7 +179,7 @@
                                     <label>Days Opened</label>
                                     <input class="form-control text-right" type="text" name="openDays" [(ngModel)]="stockLineForm.openDays" (ngModelChange)="enableSave()" disabled>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <div class="checkbox-cstm checkbox-cstm-d" style="margin-top: 10px;">
                                         <label>
                                             <input type="checkbox" name="shelfLife" [(ngModel)]="stockLineForm.shelfLife" (ngModelChange)="enableSave()" disabled>
@@ -191,7 +191,7 @@
                                 <div class="form-group" *ngIf="stockLineForm.shelfLife">
                                     <label>Shelf Life Exp Date</label>
                                     <p-calendar class="workflow-clder" name="shelfLifeExpirationDate" [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100" [showIcon]="true" [minDate]="minDateValue" [(ngModel)]="stockLineForm.shelfLifeExpirationDate" (ngModelChange)="enableSave()"></p-calendar>
-                                </div> 
+                                </div>  -->
                             </div>
                         </div>
 

@@ -167,7 +167,7 @@
           <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
             {{
             col.field == 'revisionDate'
-            ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
+            ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'nextReviewDate'
             ? (rowData[col.field] | date: 'MM/dd/yyyy')
             : rowData[col.field] && col.field == 'nextReviewDate'
@@ -314,8 +314,13 @@
       </div>
       <div class="modal-body" *ngIf="auditHistory">
         <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
-          <div class="table-responsive">
+          <div class="tableFixHead">
             <table class="table table-bordered header-table-width" *ngIf="auditHistory.length > 0; else noDatavailable">
+              <!-- <div
+              class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+              <div class="table-responsive">
+                <table class="table table-bordered header-table-width"
+                  *ngIf="auditHistory.length > 0; else noDatavailable"> -->
               <thead>
                 <tr>
                   <th *ngFor="let x of auditCols">{{ x.header }}</th>
@@ -417,13 +422,13 @@
                   <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
-                      'verifiedBy',
-                      audit.verifiedBy
+                      'VerifiedByName',
+                      audit.VerifiedByName
                     )
                       ? 'black'
                       : 'red'
                   }">
-                    {{ audit.verifiedBy }}
+                    {{ audit.VerifiedByName }}
                   </td>
                   <td [ngStyle]="{
                     color: getColorCodeForHistory(
@@ -434,7 +439,7 @@
                       ? 'black'
                       : 'red'
                   }">
-                    {{ audit.verifiedDate | date: 'MM/dd/yyyy h:mm a' }}
+                    {{ audit.verifiedDate | date: 'MM/dd/yyyy' }}
                   </td>
                   <!-- <td [ngStyle]="{
                     color: getColorCodeForHistory(i, 'isActive', audit.isActive)
@@ -992,7 +997,18 @@
                             <tr>
                               <!-- <td>{{ rowIndex + 1 }}</td> -->
                               <td *ngFor="let col of columns">
-                                {{ rowData[col.field] }}
+                                <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
+                                  {{
+                                  rowData[col.field] }}
+                                </span>
+                                <span *ngIf="col.field == 'dashNumber'">
+                                  <span *ngIf="rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                    }}</span>
+                                </span>
+                                <span *ngIf=" col.field == 'model'">
+                                  <span *ngIf=" rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                    }}</span>
+                                </span>
                               </td>
                               <td style="text-align: center;">
                                 <span data-toggle="modal" data-target="#airCraftView">
@@ -1346,10 +1362,13 @@
       </p>
 
       <p>
-        <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+        <span class="label"><b>Model: </b></span><span class="value"
+          *ngIf="viewAircraftData.aircraftModel != 'Unknown'">{{ viewAircraftData.aircraftModel }}</span>
       </p>
       <p>
-        <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber
+        <span class="label"><b>Dash Numbers: </b></span><span class="value"
+          *ngIf="viewAircraftData.dashNumber != 'Unknown'">{{
+          viewAircraftData.dashNumber
           }}</span>
       </p>
 

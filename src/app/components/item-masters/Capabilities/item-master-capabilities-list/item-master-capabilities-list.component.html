@@ -140,26 +140,22 @@
         <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" pReorderableRowHandle>
 
-                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                    
+                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                    
                     <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                        : rowData[col.field] && col.field == 'verifiedDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field] && col.field == 'addedDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field]
                                     }}
                     </ng-container>
-                    <ng-container *ngIf="col.field =='verifiedDate'">
-                        {{ rowData['isVerified'] == true ? (rowData[col.field] | date: 'MM/dd/yyyy') : '' }}
-                                        
-                    </ng-container>                    
                     <ng-container *ngIf="col.field =='isVerified'">
                         <input type="checkbox" disabled [checked]="rowData[col.field] == true"
-                            style="margin: 0px auto; display: block;" />
+                               style="margin: 0px auto; display: block;" />
+                    </ng-container>
+                    <ng-container *ngIf="col.field =='verifiedDate'">
+                        {{rowData[col.field] | date: 'MM/dd/yyyy'}}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
@@ -477,7 +473,7 @@
                                         <th style="width: 600px;text-align: center;" colspan="4">Managment Structure
                                             <span class="clr-red">*</span></th>
                                         <th >Date Added</th>
-                                        <th >Verified</th>
+                                        <th>Verified</th>
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
                                         <th style="width: 200px;text-align: center;">Memo</th>
@@ -494,8 +490,8 @@
                                         </td>
                                         <td style="width: 150px;">
                                             <p-dropdown placeholder="Select" name="primaryCompany" #mCompanyName="ngModel"
-                                                [options]="maincompanylist" class="p-dropdown-custom-sm"
-                                                (onChange)="getBUList(selectedItemMasterCapData.companyId)"
+                                                [options]="maincompanylist" class="p-dropdown-custom-sm" 
+                                                (onChange)="getBUList(selectedItemMasterCapData.companyId)" [showClear]="true"
                                                 [(ngModel)]="selectedItemMasterCapData.companyId" [required]="true"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
@@ -504,13 +500,13 @@
                                             <p-dropdown placeholder="Select" name="primaryBU" #mBUName="ngModel"
                                                 [options]="businessUnitList" class="p-dropdown-custom-sm"
                                                 (onChange)="getDivisionlist(selectedItemMasterCapData.buId)"
-                                                [(ngModel)]="selectedItemMasterCapData.buId"
+                                                [(ngModel)]="selectedItemMasterCapData.buId" [showClear]="true"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
                                         <td style="width: 150px;">
                                             <p-dropdown placeholder="Select" name="primaryDivision" #mDivisionName="ngModel"
-                                                [options]="divisionlist" class="p-dropdown-custom-sm"
+                                                [options]="divisionlist" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentlist(selectedItemMasterCapData.divisionId)"
                                                 [(ngModel)]="selectedItemMasterCapData.divisionId"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
@@ -518,7 +514,7 @@
                                         </td>
                                         <td style="width: 150px;">
                                             <p-dropdown placeholder="Select" name="primaryDept" #mDepartmentName="ngModel"
-                                                [options]="departmentList" class="p-dropdown-custom-sm"
+                                                [options]="departmentList" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentId(selectedItemMasterCapData.departmentId)"
                                                 [(ngModel)]="selectedItemMasterCapData.departmentId"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
