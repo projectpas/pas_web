@@ -64,7 +64,7 @@
         <div class="col-md-4">
             <p class="fs12">
                 <label class="control-label labels-font-header" style="width: auto; ">Publication Type :</label>
-                <span class="span-header-red"> {{publicationType}} </span>
+                <span class="span-header-red"> {{this.sourcePublication.publicationType}} </span>
             </p>
         </div>
         <div class="col-md-4">
@@ -412,7 +412,7 @@
                                             <span data-toggle="modal"><a class="btn nobg"
                                                     (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                                                     matTooltipPosition="above">
-                                                    <i class="fa fa-history"></i></a></span>
+                                                    <i class="fa fa-undo"></i></a></span>
                                         </div>
                                     </td>
                                 </tr>
