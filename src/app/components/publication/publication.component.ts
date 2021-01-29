@@ -242,7 +242,7 @@ export class PublicationComponent implements OnInit, AfterViewInit {
             { field: 'publicationType', header: 'Pub Type' },
             { field: 'publishedBy', header: 'Published By' },
             { field: 'location', header: 'Location' },
-            { field: 'VerifiedByName', header: 'Verified By' },
+            { field: 'verifiedByName', header: 'Verified By' },
             { field: 'verifiedDate', header: 'Verified Date' },
         ];
         this.breadCrumb.currentUrl = '/singlepages/singlepages/app-publication';
