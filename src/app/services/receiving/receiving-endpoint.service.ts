@@ -144,7 +144,9 @@ export class ReceivingEndpointService extends EndpointFactory {
     }
 
     getReceivingROPartById(repairOrderId) {
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getRepairOrderPartById/${repairOrderId}`)
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/receivingro/getRepairOrderPartById/${repairOrderId}`).catch(error => {
+            return this.handleErrorCommon(error, () => this.getReceivingROPartById(repairOrderId));
+        });
     }
 
     receiveParts<T>(receiveParts: ReceiveParts[]): Observable<T> {

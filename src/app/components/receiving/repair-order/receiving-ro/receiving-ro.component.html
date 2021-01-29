@@ -256,8 +256,8 @@
                             <ng-container *ngFor="let part of repairOrderData;let row_index=index">
                                 <!--this row is for the parent part-->
                                 <tr class="basic-info" *ngIf="part.isParent">
-                                    <td class="details-control eachcol plus-icon-align">
-                                        <section *ngIf="isSplitShipmentPart(part.itemMasterId)">
+                                    <td class="details-control eachcol" style="padding: 4px 6px;">
+                                        <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                 (click)="showSplitShipmentParts(part)"></i>
                                         </section>
@@ -333,12 +333,12 @@
                                             class="btn btn-primary btn-po-details"
                                             (click)="toggleStockLine($event, part)">{{ part.showStockLineGrid ? 'Close' : 'Receive'}}</button>
                                     </td>
-
                                 </tr>
-
                                 <tr class="child-header splitship-head child-header-back"
-                                    [hidden]="repairOrderData[row_index+1] != undefined && !repairOrderData[row_index+1].visible"
-                                    *ngIf="part.isParent && repairOrderData[row_index+1] != undefined && (!repairOrderData[row_index+1].isParent)">
+                                    [hidden]="!part.visible"
+                                     *ngIf="!part.isParent">
+                                    <!-- [hidden]="repairOrderData[row_index+1] != undefined && !repairOrderData[row_index+1].visible"
+                                    *ngIf="part.isParent && repairOrderData[row_index+1] != undefined && (!repairOrderData[row_index+1].isParent)"> -->
                                     <th></th>
                                     <th></th>
                                     <th colspan="5">PN</th>
@@ -360,7 +360,6 @@
                                     <th> </th>
                                     <th> </th>
                                 </tr>
-
                                 <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
                                     *ngIf="!part.isParent">
                                     <td>&nbsp;</td>

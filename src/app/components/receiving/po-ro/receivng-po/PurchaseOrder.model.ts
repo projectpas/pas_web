@@ -77,7 +77,6 @@ export class PurchaseOrderPart {
     quantityActuallyReceived: number;
     quantityRejected: number;
     uomId: number;
-
     quantityOrdered: number;
     quantityBackOrdered: number;
     unitCost: number;
@@ -111,6 +110,7 @@ export class PurchaseOrderPart {
     updatedDate: Date;
     isActive: boolean;
     isParent: boolean;
+    parentId: number;
     itemMaster: any;
     visible: boolean;
     conditionId: number;
@@ -120,6 +120,7 @@ export class PurchaseOrderPart {
     public stocklineListObj: StockLineDraft[];
     public timeLifeList: TimeLifeDraft[];
     poPartSplitAddress: AddressModel;
+    //poPartSplitAddress:string;
     // UI Properties
     // below properties does not play role on the server side and are being used to show the data on UI and should be limited to UI only.
     siteId: number;

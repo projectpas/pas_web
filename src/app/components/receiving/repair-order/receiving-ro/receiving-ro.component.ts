@@ -168,8 +168,7 @@ export class ReceivingRoComponent implements OnInit {
             // this.getManagementStructureCodes(this.repairOrderHeaderData.managementStructureId);                
         });
 
-        this.receivingService.getReceivingROPartById(this.repairOrderId).subscribe(res => {
-            //console.log(res);
+        this.receivingService.getReceivingROPartById(this.repairOrderId).subscribe(res => {           
             this.loadRepairOrderData(res);
         })
 
@@ -471,7 +470,8 @@ export class ReceivingRoComponent implements OnInit {
             parent.currentSERIndex = 0;
             parent.isDisabledTLboxes = false;
 
-            var splitParts = this.repairOrderData.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
+            //var splitParts = this.repairOrderData.filter(x => !x.isParent && x.itemMaster.partNumber == parent.itemMaster.partNumber);
+            var splitParts = this.repairOrderData.filter(x => x.parentId == parent.repairOrderPartRecordId);
 
             if (splitParts.length > 0) {
 
@@ -537,7 +537,7 @@ export class ReceivingRoComponent implements OnInit {
         //     },
         //     error => this.onDataLoadFailed(error)
         // );
-
+        console.log(this.repairOrderData)
 
     }
 
@@ -740,13 +740,19 @@ export class ReceivingRoComponent implements OnInit {
 
     public showSplitShipmentParts(repairOrderPart: RepairOrderPart): void {
         var selectedParts = this.repairOrderData.filter(function (part) {
-            return part.itemMasterId == repairOrderPart.itemMasterId;
-        });
+            return part.repairOrderPartRecordId == repairOrderPart.repairOrderPartRecordId;
+        });       
 
         selectedParts.forEach(part => {
             part.toggleIcon = !part.toggleIcon;
             part.visible = !part.visible;
         });
+       
+        this.repairOrderData.forEach(part => {   
+            if(part.parentId == repairOrderPart.repairOrderPartRecordId) {        
+                 part.visible = !part.visible;
+            }
+        });  
 
         const data = this.repairOrderData;
         for (var i = 0; i < data.length; i++) {
@@ -759,8 +765,8 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    public isSplitShipmentPart(itemMasterId: number): boolean {
-        return this.repairOrderData.filter(x => x.itemMasterId == itemMasterId && !x.isParent).length > 0;
+    public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {
+        return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId && !x.isParent).length > 0;        
     }
 
     // private getAllPriority() {
@@ -793,8 +799,7 @@ export class ReceivingRoComponent implements OnInit {
     //     );
     // }
 
-    private onDataLoadFailed(error: any): void {
-        console.log(error);
+    private onDataLoadFailed(error: any): void {        
         this.alertService.stopLoadingMessage();
         this.isSpinnerVisible = false;
     }
@@ -913,8 +918,7 @@ export class ReceivingRoComponent implements OnInit {
         for (let i = 0; i < part.stocklineListObj.length; i++) {
             part.stocklineListObj[i].CompanyList = this.legalEntityList;
             this.getManagementStructureOnEdit(part, part.stocklineListObj[i]);
-        }
-        console.log(part.stocklineListObj);
+        }        
         if (visible == undefined) {
             part.showStockLineGrid = !part.showStockLineGrid;
         }
@@ -941,8 +945,7 @@ export class ReceivingRoComponent implements OnInit {
             stock.divisionId = res.Level3 !== undefined ? res.Level3.toString() : 0;
             stock.departmentId = res.Level4 !== undefined ? res.Level4.toString() : 0;
             return stock.companyId;
-        })
-        console.log(stock);
+        })        
     }
 
     selectedLegalEntity(legalEntityId, stockLine) {
@@ -1338,8 +1341,6 @@ export class ReceivingRoComponent implements OnInit {
         if (stockLine.siteId) {
             this.commonService.smartDropDownList('Warehouse', 'WarehouseId', 'Name', 'SiteId', stockLine.siteId).subscribe(
                 results => {
-
-                    console.log(results);
                     for (let wareHouse of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = wareHouse.value.toLocaleString();
@@ -1361,8 +1362,7 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.binId = 0;
         if (stockLine.warehouseId) {
             this.commonService.smartDropDownList('Location', 'LocationId', 'Name', 'WarehouseId', stockLine.warehouseId).subscribe(
-                results => {
-                    console.log(results);
+                results => {                    
                     for (let loc of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = loc.value.toLocaleString();
@@ -1382,8 +1382,7 @@ export class ReceivingRoComponent implements OnInit {
         stockLine.binId = 0;
         if (stockLine.locationId) {
             this.commonService.smartDropDownList('Shelf', 'ShelfId', 'Name', 'LocationId', stockLine.locationId).subscribe(
-                results => {
-                    console.log(results);
+                results => {                    
                     for (let shelf of results) {
                         var dropdown = new DropDownData();
                         dropdown.Key = shelf.value.toLocaleString();
