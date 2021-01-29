@@ -104,7 +104,9 @@ a.fa.fa-plus-circle {
 :host ::ng-deep .ui-table.ui-widget{
     padding: 0px !important 
 }
-
+.financial-card-padding{
+    padding:0px !important;
+}
 .total_records_section label{
     width: 100%;
     right: 10px;
