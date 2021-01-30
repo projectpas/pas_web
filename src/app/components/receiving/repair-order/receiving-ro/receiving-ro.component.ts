@@ -765,7 +765,7 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {
+    public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {        
         return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId && !x.isParent).length > 0;        
     }
 
@@ -2093,4 +2093,10 @@ export class ReceivingRoComponent implements OnInit {
         }
         // }
     }
+
+    public counter : number = 0;
+    rownum(){
+        return this.counter += 1;
+    }
+
 }

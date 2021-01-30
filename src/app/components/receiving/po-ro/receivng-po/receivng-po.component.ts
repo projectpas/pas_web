@@ -1989,8 +1989,8 @@ export class ReceivngPoComponent implements OnInit {
         if (part.itemMaster.isSerialized == null) {
             part.itemMaster.isSerialized == false;
         }
-
-        this.itemmaster.updateItemMasterSerialized(part.itemMasterId, part.itemMaster.isSerialized).subscribe(
+        
+        this.itemmaster.updateItemMasterSerialized(part.itemMaster.itemMasterId, part.itemMaster.isSerialized).subscribe(
             result => {
                 var obj = part.stocklineListObj[this.currentSLIndex];
                 // part.stocklineListObj = [];
@@ -2017,7 +2017,7 @@ export class ReceivngPoComponent implements OnInit {
         }
 
 
-        this.itemmaster.updateItemMasterTimeLife(part.itemMasterId, part.itemMaster.isTimeLife).subscribe(
+        this.itemmaster.updateItemMasterTimeLife(part.itemMaster.itemMasterId, part.itemMaster.isTimeLife).subscribe(
             result => {
                 part.timeLifeList = [];
                 if (part.quantityActuallyReceived) {
