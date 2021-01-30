@@ -37,14 +37,15 @@ export class SalesOrderpickTicketComponent implements OnInit {
     getSalesPickTicketView() {
         this.salesOrderService.getPickTicket(this.salesOrderCopyParameters.salesOrderId).subscribe(res => {
             this.salesOrderoView = res[0];
-            
+
             this.salesOrder = res[0].soPickTicketViewModel;
             this.parts = res[0].soPickTicketPartViewModel;
             this.management = res[0].managementStructureHeaderData;
             console.log(this.parts);
             console.log(this.salesOrder);
-     })
-  }
+        })
+    }
+    
     close() {
         if (this.modalReference) {
             this.modalReference.close();
@@ -58,9 +59,6 @@ export class SalesOrderpickTicketComponent implements OnInit {
                 cia: this.salesOrderCopyParameters.copyInternalApprovals
             }
         };
-
         this.onConfirm.emit(navigationExtras);
     }
-
-   
 }

@@ -105,7 +105,7 @@
                                     Publication Type<span class="clr-red">*</span>
 
                                 </label>
-                                <select name="gPubType" (change)="onChangeInput()"
+                                <select name="gPubType" (change)="onChangePublicationType()"
                                     [(ngModel)]="sourcePublication.publicationTypeId" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let type of publicationTypes" [ngValue]="type.value">
@@ -143,7 +143,11 @@
                                 </select>
                                 <div class="form-row"
                                     *ngIf="sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3">
-                                    <div class="col-sm-12 align_published_by">
+                                    <label for="manufacturer" *ngIf="sourcePublication.publishedById == 3"> Manufacturer
+                                        <span class=" clr-red">*</span></label>
+                                    <label for="vendor" *ngIf="sourcePublication.publishedById == 2"> Vendor
+                                        <span class=" clr-red">*</span></label>
+                                    <div class="col-sm-12">
                                         <p-autoComplete class="p-autoComplete-ctsm" name="publishedByRefId "
                                             [(ngModel)]="sourcePublication.publishedByRefId" field="label"
                                             [suggestions]="publishedByReferences" [forceSelection]="true"
@@ -293,10 +297,11 @@
                                     Part Number
                                 </label>
                                 <p-autoComplete class="p-autoComplete-ctsm" name="selectedPartNumbers"
-                                    [(ngModel)]="selectedPartNumbers" field="label" [suggestions]="partNumberList"
-                                    [forceSelection]="true" (onSelect)="enablePnMappingSave()"
-                                    emptyMessage="No Match Found" (completeMethod)="filterPartList($event)" [size]="30"
-                                    [minLength]="1" [dropdown]="true" required>
+                                    [(ngModel)]="selectedPartNumbers" field="label"
+                                    [suggestions]="partNumberListOriginal" [forceSelection]="true"
+                                    (onSelect)="enablePnMappingSave()" emptyMessage="No Match Found"
+                                    (completeMethod)="getPartNumberList($event)" [size]="30" [minLength]="1"
+                                    [dropdown]="true" required>
                                 </p-autoComplete>
                                 <!-- <p-multiSelect [options]="partNumberList" [(ngModel)]="selectedPartNumbers"
                                     (click)="openModelPopups(selectedPartNumbers)" class="pub-multi align-x">
@@ -305,7 +310,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <button class="btn btn-primary mtop20 btn-cstm" [disabled]="disabledPartNumber"
+                                <button class="btn btn-primary mtop20" [disabled]="disabledPartNumber"
                                     (click)="savePNMapping()">
                                     Add
                                 </button>
@@ -412,7 +417,7 @@
                                             <span data-toggle="modal"><a class="btn nobg"
                                                     (click)="restore(restoreId, rowData)" matTooltip="Restore Record"
                                                     matTooltipPosition="above">
-                                                    <i class="fa fa-history"></i></a></span>
+                                                    <i class="fa fa-undo"></i></a></span>
                                         </div>
                                     </td>
                                 </tr>
@@ -597,10 +602,24 @@
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                        {{ rowData[col.field] }}
+
+                                        <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
+                                            {{
+                                            rowData[col.field] }}
+                                        </span>
+                                        <span *ngIf="col.field == 'dashNumber'">
+                                            <span *ngIf="rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                                }}</span>
+                                        </span>
+                                        <span *ngIf=" col.field =='model'">
+                                            <span *ngIf=" rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                                }}</span>
+                                        </span>
+
                                     </td>
+
                                     <td>
-                                        <span data-toggle="modal" data-target="#airCraftView">
+                                        <span data-toggle=" modal" data-target="#airCraftView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                 (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
                                                 matTooltipPosition="above"><i class="fa fa-eye"></i></a>
@@ -1022,10 +1041,12 @@
             </p>
 
             <p>
-                <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+                <span class="label"><b>Model: </b></span><span class="value"
+                    *ngIf="viewAircraftData.aircraftModel != 'Unknown'">{{ viewAircraftData.aircraftModel }}</span>
             </p>
             <p>
-                <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber
+                <span class="label"><b>Dash Numbers: </b></span><span class="value"
+                    *ngIf="viewAircraftData.dashNumber != 'Unknown'">{{ viewAircraftData.dashNumber
                     }}</span>
             </p>
 
