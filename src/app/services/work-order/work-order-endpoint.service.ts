@@ -45,7 +45,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllWorkOrders());
+                return this.handleErrorCommon(error, () => this.getAllWorkOrders());
             });
     }
 
@@ -54,7 +54,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
     //     return this.http.get<T>(endpointUrl, this.getRequestHeaders())
     //         .catch(error => {
-    //             return this.handleError(error, () => this.getWorkOrderById(workOrderId));
+    //             return this.handleErrorCommon(error, () => this.getWorkOrderById(workOrderId));
     //         });
     // }
 
@@ -81,7 +81,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeWorkOrderById(workOrderId));
+                return this.handleErrorCommon(error, () => this.removeWorkOrderById(workOrderId));
             });
     }
 
@@ -90,7 +90,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endPointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllWorkOrderTypes());
+                return this.handleErrorCommon(error, () => this.getAllWorkOrderTypes());
             });
     }
 
@@ -99,7 +99,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endPointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllWorkOrderStatus());
+                return this.handleErrorCommon(error, () => this.getAllWorkOrderStatus());
             });
     }
 
@@ -107,7 +107,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
         let endPointUrl = this.getAllWorkScopesURL;
         return this.http.get<T>(endPointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllWorkScopes());
+                return this.handleErrorCommon(error, () => this.getAllWorkScopes());
             });
     }
 
@@ -115,7 +115,7 @@ export class WorkOrderEndpointService extends EndpointFactory {
         let endPointURL = this.getAllWorkOrderStagesURL;
         return this.http.get<T>(endPointURL, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllWorkOrderStages());
+                return this.handleErrorCommon(error, () => this.getAllWorkOrderStages());
             });
     }
 
@@ -124,14 +124,14 @@ export class WorkOrderEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetStatusAuditById(workOrderId));
+                return this.handleErrorCommon(error, () => this.getAssetStatusAuditById(workOrderId));
             });
     }
     postLabourEndpoint<T>(userObject: any): Observable<T> {
 
         return this.http.post<T>(this.addLabourURL, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.postLabourEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.postLabourEndpoint(userObject));
             });
     }
 
@@ -962,6 +962,8 @@ reserveSubWoAltPartData(data){
         return this.http.post<any>(`${this.configurations.baseUrl}/api/workOrder/savewocheckininventory`, AssetData, this.getRequestHeaders());
     }
     getWoAssetInventoryHistory(workOrderAssetId){
-        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/woassetinventoryhistory?workOrderAssetId=${workOrderAssetId}`);
+        return this.http.get<any>(`${this.configurations.baseUrl}/api/workorder/woassetinventoryhistory?workOrderAssetId=${workOrderAssetId}`) .catch(error => {
+            return this.handleErrorCommon(error, () => this.getWoAssetInventoryHistory(workOrderAssetId));
+        });;
     }
 }
