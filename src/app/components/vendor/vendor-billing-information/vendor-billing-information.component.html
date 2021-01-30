@@ -20,17 +20,17 @@
                         </p>
                     </div>
                 </div>
-                <div class="card new-card" style="padding: 10px;">
+                <div class="card new-card">
                     <div>
-                        <div class="card-header bg-primary new-card-header">
+                        <div class="card-header header">
                             <div class="row">
                                 <div class="col">
-                                    <h4 class="new-card-heading"> Billing Information</h4>
+                                    <h4 class="header-name"> Billing Information</h4>
                                 </div>
                                 <div>
                                     <a *ngIf="!isViewMode"
                                        data-toggle="modal" data-target="#addBillingInfo">
-                                        <button type="button" class="btn-sm new-btn-primary" matTooltip="Add Billing Information" matTooltipPosition="above" (click)="onAddBillingInfo();">
+                                        <button type="button" class="btn-sm header-button" matTooltip="Add Billing Information" matTooltipPosition="above" (click)="onAddBillingInfo();">
                                             Add Billing Information
                                         </button>
                                     </a>
@@ -38,10 +38,10 @@
                             </div>
                         </div>
                         <div class="clear"></div>
-                        <hr />
+                        <!-- <hr /> -->
                     </div>              
                         <div>
-                            <div class="card-body new-card-body"> 
+                            <div class="card-body header-body"> 
                                 <p-table #dt class="ptable-custom lastcol-fix" 
                                             [value]="allActions"                                             
                                             [metaKeySelection]="true" 
@@ -62,38 +62,39 @@
                                             <div class="col">
                                                 <p-multiSelect [options]="cols" [(ngModel)]="selectedColumns"
                                                                [ngModelOptions]="{standalone: true}" optionLabel="header"
-                                                               selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}"
-                                                               defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                                               selectedItemsLabel="{0} columns selected"
+                                                               class="multiselect-field"
+                                                               defaultLabel="Choose Columns"></p-multiSelect>
                                             </div>
                                             <div class="col">
-                                                <div style="width: auto !important; float: right;"
-                                                     class="inner-addon right-addon w50 inline-block g-filter-search-cstm">
+                                                <div					
+                                                class="global-search-field inner-addon right-addon inline-block"
+                                              >
                                                     <i class="fa fa-search"></i>
                                                     <input type="text" pInputText size="50"
                                                            class="form-control"
                                                            (input)="dt.filterGlobal($event.target.value, 'contains')"
-                                                           placeholder=" Filter" style="height: 28px !important;">
+                                                           placeholder=" Filter">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col">
-                                                <button type="button" class="btn btn-primary  new-table-button" matTooltip="Download Data"
+                                                <button type="button" class="btn btn-primary  exports-button" matTooltip="Download Data"
                                                         matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                                         label="Export Data" 
                                                         data-toggle="modal" 
                                                         (click)="selectedOnly = false; targetData = dt;"
-                                                        data-target="#downloadConfirmation"
-                                                        style="padding:5px 10px !important;"></button>
-                                                <button type="button" class="btn btn-primary  new-table-button" matTooltip="Download Selected Data"
+                                                        data-target="#downloadConfirmation"></button>
+                                                <button type="button" class="btn btn-primary  exports-button" matTooltip="Download Selected Data"
                                                         matTooltipPosition="above" pButton icon="fa-download" iconPos="left"
                                                         label="Export Selected Data" (click)="dt.exportCSV({selectionOnly:true})"
-                                                        style="padding:5px 10px !important;"></button>
+                                                       ></button>
 
                                                 <div class="excel-upload  excel-upload-cstm">
-                                                    <button type="button" class="btn btn-primary new-table-button" matTooltip="Download Sample File"
+                                                    <button type="button" class="btn btn-primary exports-button" matTooltip="Download Sample File"
                                                             matTooltipPosition="above" (click)="sampleExcelDownload()"
-                                                            style="padding: 5px 10px !important;">
+                                                            >
                                                         Sample File Download
                                                     </button>
 
@@ -112,17 +113,17 @@
                                                     <div class="col"
                                                          style="width: 370px; float: right; padding-top: 3px;">
                                                         <div class="form-group">
-                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                            <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                                             </div>
-                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                            <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
                                                             </div>
-                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                            <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
                                                             </div>
-                                                            <div class="checkbox-cstm" style="margin-left: 0;">
-                                                                <label style="width: auto !important;margin-top: 3px;">
+                                                            <div class="checkbox-cstm pull-left checkbox-align">
+                                                                <label class="checkbox-label-align">
                                                                     <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
                                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                                     Show  Deleted List
@@ -133,7 +134,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </ng-template>
+                                    </ng-template> 
                                     <ng-template *ngIf="isViewMode" pTemplate="caption">
                                         <div class="row">
                                             <div class="col">
@@ -141,17 +142,17 @@
                                                     <div class="col"
                                                          style="width: 350px; float: right; padding-top: 3px;">
                                                         <div class="form-group">
-                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                            <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="Active" label="Active" [(ngModel)]="currentstatus" (click)="geListByStatus('Active')"></p-radioButton>
                                                             </div>
-                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                            <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="InActive" label="In-active" [(ngModel)]="currentstatus" (click)="geListByStatus('InActive')"></p-radioButton>
                                                             </div>
-                                                            <div class="pull-left" style="margin-top: 4px; margin-right: 15px;">
+                                                            <div class="pull-left radio-buttons-align">
                                                                 <p-radioButton class="custom_set" name="billinggroupname" value="ALL" label="All" [(ngModel)]="currentstatus" (click)="geListByStatus('ALL')"></p-radioButton>
                                                             </div>
-                                                            <div class="checkbox-cstm" style="margin-left: 0;">
-                                                                <label style="width: auto !important;margin-top: 3px;">
+                                                            <div class="checkbox-cstm pull-left checkbox-align">
+                                                                <label class="checkbox-label-align">
                                                                     <input type="checkbox" [(ngModel)]="currentDeletedstatus" name="cparent" id="cparent" (click)="getDeleteListByStatus($event.target.checked)" />
                                                                     <span class="cr"><i class="cr-icon pi pi-check"></i></span>
                                                                     Show  Deleted List
@@ -165,34 +166,34 @@
                                     </ng-template>
                                     <ng-template pTemplate="colgroup" let-columns>
                                         <colgroup>
-                                            <col *ngFor="let col of columns" style="width:130px" />
+                                            <col *ngFor="let col of columns" class="table-column-width" />
                                         </colgroup>
                                     </ng-template>
                                     <ng-template pTemplate="header" let-columns>
                                         <tr>
-                                            <th style="width: 40px;">Flag</th>
-                                            <th style="width: 150px;" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
+                                            <th class="table-column-width">Flag</th>
+                                            <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn
                                                 [pSortableColumn]="col.field">
                                                 {{ col.header }}
                                                 <p-sortIcon [field]="col.field"></p-sortIcon>
                                             </th>
-                                            <th style="width:140px;position:sticky">Actions</th>
+                                            <th class="table-actions-column">Actions</th>
                                         </tr>
                                         <tr>
-                                            <th style="width: 40px;"></th>
-                                            <th style="width: 150px;" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
+                                            <th class="table-column-width"></th>
+                                            <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'"
                                                 [ngSwitch]="col.field">
-                                                <input style="width:100%;" pInputText type="text" (input)="dt.filter($event.target.value,
+                                                <input class="table-header-input-width" pInputText type="text" (input)="dt.filter($event.target.value,
                                                        col.field, 'contains') " />
                                             </th>
-                                            <th style="width:140px;position:sticky"></th>
+                                            <th class="table-actions-column"></th>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                         <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" pReorderableRowHandle
                                             (dblclick)="openView(view,rowData)">
 
-                                            <td style="width: 40px;">
+                                            <td class="table-column-width">
                                                 <span class="flag">
                                                     <i *ngIf="rowData.isPrimary == true"
                                                        [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
@@ -200,12 +201,12 @@
                                                 </span>
                                             </td>
 
-                                            <td style="width: 150px;" *ngFor="let col of columns" class="ui-resizable-column"
+                                            <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column"
                                                 [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                                 {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a '):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                             </td>
 
-                                            <td class="text-center" style="width:140px">
+                                            <td class="action-icons-cstm table-column-width">
                                                 <div *ngIf="currentDeletedstatus==false">
                                                     <ng-container *ngIf="!isViewMode">
                                                         <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary == true" name="isActive{{ rowIndex }}" matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
@@ -260,18 +261,18 @@
 
                                     <ng-template pTemplate="emptymessage" let-columns>
                                         <tr>
-                                            <td [attr.colspan]="13" style="color: red; font-weight: bold; text-align: center">
+                                            <td [attr.colspan]="13" class="no-records-cstm no-records-msg">
                                                 No records found
                                             </td>
                                         </tr>
                                     </ng-template>
                                     <ng-template pTemplate="summary" id="footer">
                                         <label id="footer" class="footer">Total:</label>
-                                        <input style="width: 5%;" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
+                                        <input class="footer-input-width" [(ngModel)]="dt._totalRecords" [disabled]="true" pInputText type="text" />
                                         &nbsp;&nbsp;
                                         <label id="footer" class="footer1">Pages Count:</label>
               
-                                        <input style="width: 5%;" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
+                                        <input class="footer-input-width" [ngModel]="getPageCount(dt._totalRecords, pageSize)" [disabled]="true"
                                                pInputText type="text" />
                                     </ng-template>
                                 </p-table>
@@ -345,8 +346,9 @@
 
     </div>
     <div class="modal-body" *ngIf="billingauditHisory">
-        <div class="table-responsive">
-            <table class="table table-bordered" *ngIf="billingauditHisory.length> 0 else noDatavailable">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
+            <table class="table table-bordered header-table-width" *ngIf="billingauditHisory.length> 0 else noDatavailable">
                 <thead>
                     <tr>
                         <th>Tag</th>
@@ -437,10 +439,11 @@
                     </tr>
                 </tbody>
             </table>
+            </div>
             <ng-template #noDatavailable>
                 <div class="text-center">
                     <img src="../../../assets/images/binoculars.png" style="height: 100px; width: 100px;">
-                    <h4 style="color: #ff5663;">No History Found </h4>
+                    <h4 class="no-history-found-msg">No History Found </h4>
                 </div>
             </ng-template>
         </div>
@@ -780,7 +783,7 @@
         </strong>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" (click)="restoreRecord()">Yes</button>
+        <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
         <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
     </div>
   </ng-template> 
