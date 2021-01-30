@@ -749,7 +749,7 @@ export class ItemMasterCreateCapabilitiesComponent implements OnInit {
     private saveFailedHelper(error: any) {
         this.isSpinnerVisible = false;
         this.alertService.stopLoadingMessage();
-        this.alertService.showStickyMessage(error, null, MessageSeverity.error);
+        //this.alertService.showStickyMessage(error, null, MessageSeverity.error);
         setTimeout(() => this.alertService.stopLoadingMessage(), 5000);
     }
 
