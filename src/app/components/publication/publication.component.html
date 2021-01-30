@@ -422,13 +422,13 @@
                   <td [ngStyle]="{
                     color: getColorCodeForHistory(
                       i,
-                      'VerifiedByName',
-                      audit.VerifiedByName
+                      'verifiedBy',
+                      audit.verifiedBy
                     )
                       ? 'black'
                       : 'red'
                   }">
-                    {{ audit.VerifiedByName }}
+                    {{ audit.verifiedBy }}
                   </td>
                   <td [ngStyle]="{
                     color: getColorCodeForHistory(
