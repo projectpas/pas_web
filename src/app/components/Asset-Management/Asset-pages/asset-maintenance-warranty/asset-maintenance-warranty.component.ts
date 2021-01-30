@@ -218,6 +218,7 @@ export class AssetMaintenanceWarrantyComponent implements OnInit {
          }
          this.isSpinnerVisible=true;
             this.assetService.addAssetMaintance(this.finalData).subscribe(data => {
+                this.disableSaveForEdit=true;
                 this.currentMaintenance.assetMain=true;
         setTimeout(() => {
             this.isSpinnerVisible=false;
@@ -438,35 +439,6 @@ maintannaceCheckBoxHndl(maintanance){
 
 errorMessageHandler(log) {
     this.isSpinnerVisible=false;
-    this.alertService.showMessage(
-        'Error',
-        log,
-        MessageSeverity.error
-    ); 
-//     var msg = '';
-
-//     if( typeof log.error == 'string' ) {
-//         this.alertService.showMessage(
-//             'Error',
-//             log.error,
-//             MessageSeverity.error
-//         ); 
-
-//     }else{
-    
-
-//       if (log.error && log.error.errors.length > 0) {
-//                 for (let i = 0; i < log.error.errors.length; i++){
-//                     msg = msg + log.error.errors[i].message + '<br/>'
-//                 }
-//             }
-//             this.alertService.showMessage(
-//                 log.error.message,
-//                 msg,
-//                 MessageSeverity.error
-//             );
-       
-// }
 }
 
 parsedText(text) {

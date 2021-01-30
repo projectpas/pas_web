@@ -154,13 +154,13 @@ export class AssetListingComponent implements OnInit {
         this.assetService.indexObj.next(this.activeIndex);
         if (this.isWorkOrder) {
             this.assetService.getAssetsById(this.assetsId).subscribe(res => {
-                this.openView('', res[0]);
-            }, err => {
-                const errorLog = err;
-                this.errorMessageHandler(errorLog);
-            })
+                this.openView('', res[0]); 
+                }, err => {
+                    const errorLog = err;
+                    this.errorMessageHandler(errorLog);
+                })
+            }
         }
-    }
     loadEventData(event) {
         this.lazyLoadEventData = event;
         const pageIndex = parseInt(event.first) / event.rows;
@@ -287,7 +287,18 @@ export class AssetListingComponent implements OnInit {
         this.isSpinnerVisible = false;
         this.allAssetInfo = [];
         this.allAssetInfo = allWorkFlows.results;
-        this.allAssetInfoOriginal = allWorkFlows.results;
+       this.allAssetInfo.forEach(x=>{
+         if(x.assetClass=='Tangible' ){
+    x.deprAmort=x.isDepreciable==true ? 'yes' :'No';
+         }
+         if(x.assetClass=='Intangible' ){
+                x.deprAmort=x.isAmortizable==true? 'yes' :'No';
+                     }
+            x.createdDate=x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '';
+						x.updatedDate=x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '';
+        
+                              })
+        this.allAssetInfoOriginal = this.allAssetInfo
         this.lazyLoadEventDataInput.first = allWorkFlows.first;
     }
     private onDataLoadFailed(error: any) {
@@ -304,11 +315,11 @@ export class AssetListingComponent implements OnInit {
     getAuditHistoryById(rowData) {
         this.assetService.getAssetCapesAudit(rowData.assetCapesId).subscribe(res => {
             this.auditHistory = res;
-        }, err => {
-            const errorLog = err;
-            this.errorMessageHandler(errorLog);
-        })
-    }
+            }, err => {
+                const errorLog = err;
+                this.errorMessageHandler(errorLog);
+            })
+        }
     getColorCodeForHistory(i, field, value) {
         const data = this.auditHistory;
         const dataLength = data.length;
@@ -351,9 +362,8 @@ export class AssetListingComponent implements OnInit {
                     ...lazyEvent.filters,
                     status: this.status
                 }
-            })
-
-        }, err => {
+            }) 
+               }, err => {
             const errorLog = err;
             this.errorMessageHandler(errorLog);
         });
@@ -457,14 +467,12 @@ export class AssetListingComponent implements OnInit {
         this.assetViewList.showIsActive=this.assetViewList.isActive;
         this.assetViewList.depreOrIntang = row.isDepreciable == true ? 'Tangible' : 'Intangible';
         this.assetViewList.manufacturerName = row.manufacturer ? row.manufacturer.name : "";
-        this.assetViewList.isSerialized = row.isSerialized == true ? 'Yes' : 'No';
         this.assetViewList.currencyId = row.currency ? row.currency.code : '';
         this.assetViewList.calibrationDefaultCost = row.calibrationDefaultCost ? formatNumberAsGlobalSettingsModule(row.calibrationDefaultCost, 2) : "";
         this.assetViewList.certificationDefaultCost = row.certificationDefaultCost ? formatNumberAsGlobalSettingsModule(row.certificationDefaultCost, 2) : "";
         this.assetViewList.inspectionDefaultCost = row.inspectionDefaultCost ? formatNumberAsGlobalSettingsModule(row.inspectionDefaultCost, 2) : "";
         this.assetViewList.verificationDefaultCost = row.verificationDefaultCost ? formatNumberAsGlobalSettingsModule(row.verificationDefaultCost, 2) : "";
         this.assetViewList.residualPer = row.residualPer ? formatNumberAsGlobalSettingsModule(row.residualPer, 2) : "";
-        this.assetViewList.isSerialized = row.isSerialized == true ? 'Yes' : 'No';
         this.assetViewList.unitOfMeasureId = this.getUOMName(row.unitOfMeasureId);
         this.assetViewList.assetTypeId = row.assetType ? row.assetType.assetTypeName : "";
         this.assetRecordId = row.assetRecordId;
@@ -606,12 +614,8 @@ export class AssetListingComponent implements OnInit {
     }
     errorMessageHandler(log) {
         this.isSpinnerVisible = false;
-        this.alertService.showMessage(
-            'Error',
-            log,
-            MessageSeverity.error
-        );
     }
+
     parsedText(text) {
         if (text) {
             const dom = new DOMParser().parseFromString(
