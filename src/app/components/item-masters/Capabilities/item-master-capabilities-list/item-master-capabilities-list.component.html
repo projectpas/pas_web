@@ -397,28 +397,15 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="capes-memo" style="z-index: 15000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
+          <h4 class="modal-title">Edit Memo</h4>
         </div>
         <div class="modal-body">
-          <!-- <table class="table table-bordered table-fixed workflow-table-material">
-            <thead>
-              <th style="color: #fff;">{{textAreaLabel}}</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
-                  [style]="{'height':'320px'}" name="textAreaInfo" 
-                  required></p-editor>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
           <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
           [style]="{'height':'320px'}" name="textAreaInfo" 
           required></p-editor>
@@ -546,8 +533,6 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
                                         <td style="width: 130px;">
-                                         
-
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedDate"
@@ -563,9 +548,11 @@
                                             <i class="fa fa-pencil pull-right" 
                                             style="color: #337ab7;margin-top:-16px; margin-right: -2px;"
                                             data-toggle="modal"
-                                            data-target="#capes-memo" matTooltip="Memo"
+                                            matTooltip="Memo"
+                                            data-target="#capes-memo"
                                             matTooltipPosition="above"
-                                            (click)="onAddTextAreaInfo('memo')"></i>
+                                            (click)="onAddTextAreaInfo('memo', capes-memo)"></i>
+                                            <!-- data-target="#capes-memo" -->
                                         </td>
                                     </tr>
                                     <tr style="min-height: 10px;">
@@ -588,6 +575,7 @@
             </form>
         </div>
     </div>
+    
 </div>
 
 <ng-template #deleteCapabilityContent let-c="close" let-d="dismiss" data-backdrop="static">

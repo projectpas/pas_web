@@ -1314,17 +1314,21 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         })
     }
 
-    onAddTextAreaInfo(value) {
-		if(value == 'memo') {
-			this.textAreaLabel = 'Memo';
-			this.textAreaInfo = this.selectedItemMasterCapData.memo;
-		}
+    onAddTextAreaInfo(value , content) {
+        this.textAreaInfo = this.selectedItemMasterCapData.memo;
+        $('#capes-memo').modal('show');
+        //this.modal = this.modalService.open(content, { size: 'sm' });
+		// if(value == 'memo') {
+		// 	//this.textAreaLabel = 'Memo';
+		// 	this.textAreaInfo = this.selectedItemMasterCapData.memo;
+		// }
     }
     
     onSaveTextAreaInfo() {
-		if(this.textAreaLabel == 'Memo') {
-			this.selectedItemMasterCapData.memo = this.textAreaInfo;
-        }
+        this.selectedItemMasterCapData.memo = this.textAreaInfo;
+		// if(this.textAreaLabel == 'Memo') {
+		// 	this.selectedItemMasterCapData.memo = this.textAreaInfo;
+        // }
     }
 
     getCapesListOnDeleteStatus(value) {
