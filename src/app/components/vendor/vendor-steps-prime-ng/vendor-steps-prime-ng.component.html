@@ -1,23 +1,23 @@
 ﻿<p-breadcrumb [model]="breadcrumbs"></p-breadcrumb>
 <div class="card new-card">
-    <div class="card-header bg-primary">
+    <div class="card-header header">
         <div class="row">
             <div class="col">
-                <h4 class="new-card-heading">
+                <h4 class="header-name">
                     {{ vendorService.isEditMode ? 'Edit' : 'Create' }}
                     Vendor</h4>
             </div>
             <div>
                 <button
                     type="button"
-                    class="btn-sm new-btn-primary"
+                    class="btn-sm header-button"
                     [routerLink]="['/vendorsmodule/vendorpages/app-vendors-list']">
                     Vendor List
                 </button>
             </div>
         </div>
     </div>
-    <div class="card-body new-card-body">
+    <div class="card-body header-body">
         <div class="md-stepper-horizontal orange new-stepper-align">
             <div
                 class="md-step"

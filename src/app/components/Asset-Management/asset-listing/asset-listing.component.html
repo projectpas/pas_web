@@ -160,13 +160,15 @@
                                     <td style="width:auto" *ngFor="let col of columns" class="ui-resizable-column"
                                         pReorderableRowHandle>
                                          <ng-container *ngIf="col.field !='calibrationRequiredNew' && col.field!='isSerializedNew' && col.field!='deprAmort'">
-                                            {{
+                                            {{rowData[col.field] 
+                                              }}
+                                              <!-- {{
                                                 col.field == 'createdDate'
                                                   ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                                   : rowData[col.field] && col.field == 'updatedDate'
                                                   ? (rowData[col.field] | date: 'MM/dd/yyyy h:mm a')
                                                   : rowData[col.field] 
-                                              }}
+                                              }} -->
                                         </ng-container>
                                         <ng-container *ngIf="col.field =='calibrationRequiredNew' || col.field =='isSerializedNew'">
                                             <input type="checkbox" disabled [checked]="rowData[col.field] == 'Yes'"
@@ -415,7 +417,7 @@
                                         </p>
                                        
                                         <p *ngIf="assetViewList.isIntangible==false">
-                                            <span class="label"><b>Asset Location: </b></span><span class="value">{{assetViewList.assetLocationName}}</span> 
+                                            <span class="label"><b>Asset Location:  <span class="text-danger">*</span></b></span><span class="value">{{assetViewList.assetLocationName}}</span> 
                                         </p>
                                        
                                         <div style="display: inline-flex;width: 100%;" *ngIf="assetViewList.isIntangible==false">

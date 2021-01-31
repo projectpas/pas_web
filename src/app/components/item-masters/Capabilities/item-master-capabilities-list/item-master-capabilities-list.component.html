@@ -140,26 +140,22 @@
         <ng-template pTemplate="body" let-row_no="rowIndex" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData" pReorderableRowHandle>
 
-                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                    
+                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>                    
                     <ng-container *ngIf="col.field !='isVerified' && col.field !='memo' && col.field !='verifiedDate' && col.field != 'createdDate' && col.field != 'updatedDate'">
                                     {{
                                         col.field == 'entryDate'
-                                        ? (rowData[col.field] | date: 'MM/dd/yyyy')
-                                        : rowData[col.field] && col.field == 'verifiedDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field] && col.field == 'addedDate'
                                         ? (rowData[col.field] | date: 'MM/dd/yyyy')
                                         : rowData[col.field]
                                     }}
                     </ng-container>
-                    <ng-container *ngIf="col.field =='verifiedDate'">
-                        {{ rowData['isVerified'] == true ? (rowData[col.field] | date: 'MM/dd/yyyy') : '' }}
-                                        
-                    </ng-container>                    
                     <ng-container *ngIf="col.field =='isVerified'">
                         <input type="checkbox" disabled [checked]="rowData[col.field] == true"
-                            style="margin: 0px auto; display: block;" />
+                               style="margin: 0px auto; display: block;" />
+                    </ng-container>
+                    <ng-container *ngIf="col.field =='verifiedDate'">
+                        {{rowData[col.field] | date: 'MM/dd/yyyy'}}
                     </ng-container>
                     <ng-container *ngIf="col.field == 'createdDate' || col.field == 'updatedDate'">
                         {{rowData[col.field] | date: 'MM/dd/yyyy, h:mm a'}}
@@ -401,28 +397,15 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="capes-memo" style="z-index: 15000 !important;" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Edit {{textAreaLabel}}</h4>
+          <h4 class="modal-title">Edit Memo</h4>
         </div>
         <div class="modal-body">
-          <!-- <table class="table table-bordered table-fixed workflow-table-material">
-            <thead>
-              <th style="color: #fff;">{{textAreaLabel}}</th>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
-                  [style]="{'height':'320px'}" name="textAreaInfo" 
-                  required></p-editor>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
           <p-editor [(ngModel)]="textAreaInfo" (ngModelChange)="enableSave()"
           [style]="{'height':'320px'}" name="textAreaInfo" 
           required></p-editor>
@@ -477,7 +460,7 @@
                                         <th style="width: 600px;text-align: center;" colspan="4">Managment Structure
                                             <span class="clr-red">*</span></th>
                                         <th >Date Added</th>
-                                        <th >Verified</th>
+                                        <th>Verified</th>
                                         <th>Verified By</th>
                                         <th>Verified Date</th>
                                         <th style="width: 200px;text-align: center;">Memo</th>
@@ -494,8 +477,8 @@
                                         </td>
                                         <td style="width: 150px;">
                                             <p-dropdown placeholder="Select" name="primaryCompany" #mCompanyName="ngModel"
-                                                [options]="maincompanylist" class="p-dropdown-custom-sm"
-                                                (onChange)="getBUList(selectedItemMasterCapData.companyId)"
+                                                [options]="maincompanylist" class="p-dropdown-custom-sm" 
+                                                (onChange)="getBUList(selectedItemMasterCapData.companyId)" [showClear]="true"
                                                 [(ngModel)]="selectedItemMasterCapData.companyId" [required]="true"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
@@ -504,13 +487,13 @@
                                             <p-dropdown placeholder="Select" name="primaryBU" #mBUName="ngModel"
                                                 [options]="businessUnitList" class="p-dropdown-custom-sm"
                                                 (onChange)="getDivisionlist(selectedItemMasterCapData.buId)"
-                                                [(ngModel)]="selectedItemMasterCapData.buId"
+                                                [(ngModel)]="selectedItemMasterCapData.buId" [showClear]="true"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
                                             </p-dropdown>
                                         </td>
                                         <td style="width: 150px;">
                                             <p-dropdown placeholder="Select" name="primaryDivision" #mDivisionName="ngModel"
-                                                [options]="divisionlist" class="p-dropdown-custom-sm"
+                                                [options]="divisionlist" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentlist(selectedItemMasterCapData.divisionId)"
                                                 [(ngModel)]="selectedItemMasterCapData.divisionId"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
@@ -518,7 +501,7 @@
                                         </td>
                                         <td style="width: 150px;">
                                             <p-dropdown placeholder="Select" name="primaryDept" #mDepartmentName="ngModel"
-                                                [options]="departmentList" class="p-dropdown-custom-sm"
+                                                [options]="departmentList" class="p-dropdown-custom-sm" [showClear]="true"
                                                 (onChange)="getDepartmentId(selectedItemMasterCapData.departmentId)"
                                                 [(ngModel)]="selectedItemMasterCapData.departmentId"
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999">
@@ -550,8 +533,6 @@
                                                 (ngModelChange)="enableSave()" appendTo='body' [baseZIndex]="9999"></p-dropdown>
                                         </td>
                                         <td style="width: 130px;">
-                                         
-
                                             <p-calendar class="pcal-item-capes"
                                             [yearNavigator]="true" [monthNavigator]="true" yearRange="1900:2100"
                                                 [(ngModel)]="selectedItemMasterCapData.verifiedDate"
@@ -567,9 +548,11 @@
                                             <i class="fa fa-pencil pull-right" 
                                             style="color: #337ab7;margin-top:-16px; margin-right: -2px;"
                                             data-toggle="modal"
-                                            data-target="#capes-memo" matTooltip="Memo"
+                                            matTooltip="Memo"
+                                            data-target="#capes-memo"
                                             matTooltipPosition="above"
-                                            (click)="onAddTextAreaInfo('memo')"></i>
+                                            (click)="onAddTextAreaInfo('memo', capes-memo)"></i>
+                                            <!-- data-target="#capes-memo" -->
                                         </td>
                                     </tr>
                                     <tr style="min-height: 10px;">
@@ -592,6 +575,7 @@
             </form>
         </div>
     </div>
+    
 </div>
 
 <ng-template #deleteCapabilityContent let-c="close" let-d="dismiss" data-backdrop="static">

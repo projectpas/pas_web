@@ -64,7 +64,7 @@
         <div class="col-md-4">
             <p class="fs12">
                 <label class="control-label labels-font-header" style="width: auto; ">Publication Type :</label>
-                <span class="span-header-red"> {{this.sourcePublication.publicationType}} </span>
+                <span class="span-header-red"> {{publicationType}} </span>
             </p>
         </div>
         <div class="col-md-4">
@@ -105,7 +105,7 @@
                                     Publication Type<span class="clr-red">*</span>
 
                                 </label>
-                                <select name="gPubType" (change)="onChangeInput()"
+                                <select name="gPubType" (change)="onChangePublicationType()"
                                     [(ngModel)]="sourcePublication.publicationTypeId" required>
                                     <option value="null"> -- Select --</option>
                                     <option *ngFor="let type of publicationTypes" [ngValue]="type.value">
@@ -143,7 +143,11 @@
                                 </select>
                                 <div class="form-row"
                                     *ngIf="sourcePublication.publishedById == 2 || sourcePublication.publishedById == 3">
-                                    <div class="col-sm-12 align_published_by">
+                                    <label for="manufacturer" *ngIf="sourcePublication.publishedById == 3"> Manufacturer
+                                        <span class=" clr-red">*</span></label>
+                                    <label for="vendor" *ngIf="sourcePublication.publishedById == 2"> Vendor
+                                        <span class=" clr-red">*</span></label>
+                                    <div class="col-sm-12">
                                         <p-autoComplete class="p-autoComplete-ctsm" name="publishedByRefId "
                                             [(ngModel)]="sourcePublication.publishedByRefId" field="label"
                                             [suggestions]="publishedByReferences" [forceSelection]="true"
@@ -598,10 +602,24 @@
                             <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                                 <tr [pSelectableRow]="rowData" [pContextMenuRow]="rowData">
                                     <td *ngFor="let col of columns" class="ui-resizable-column" pReorderableRowHandle>
-                                        {{ rowData[col.field] }}
+
+                                        <span *ngIf="col.field != 'dashNumber' ||  col.field != 'model'">
+                                            {{
+                                            rowData[col.field] }}
+                                        </span>
+                                        <span *ngIf="col.field == 'dashNumber'">
+                                            <span *ngIf="rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                                }}</span>
+                                        </span>
+                                        <span *ngIf=" col.field =='model'">
+                                            <span *ngIf=" rowData[col.field] != 'Unknown'">{{ rowData[col.field]
+                                                }}</span>
+                                        </span>
+
                                     </td>
+
                                     <td>
-                                        <span data-toggle="modal" data-target="#airCraftView">
+                                        <span data-toggle=" modal" data-target="#airCraftView">
                                             <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip"
                                                 (click)="openAircraftView(rowData, airCraftView)" matTooltip="View"
                                                 matTooltipPosition="above"><i class="fa fa-eye"></i></a>
@@ -1023,10 +1041,12 @@
             </p>
 
             <p>
-                <span class="label"><b>Model: </b></span><span class="value">{{ viewAircraftData.aircraftModel }}</span>
+                <span class="label"><b>Model: </b></span><span class="value"
+                    *ngIf="viewAircraftData.aircraftModel != 'Unknown'">{{ viewAircraftData.aircraftModel }}</span>
             </p>
             <p>
-                <span class="label"><b>Dash Numbers: </b></span><span class="value">{{ viewAircraftData.dashNumber
+                <span class="label"><b>Dash Numbers: </b></span><span class="value"
+                    *ngIf="viewAircraftData.dashNumber != 'Unknown'">{{ viewAircraftData.dashNumber
                     }}</span>
             </p>
 

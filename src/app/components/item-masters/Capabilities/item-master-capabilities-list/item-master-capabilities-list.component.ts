@@ -266,12 +266,10 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         this.loadingIndicator = false;
         this.isSpinnerVisible = false;
         this.dataSource.data = allWorkFlows;
-        //this.allItemMasterCapsList = allWorkFlows;
-
         this.allItemMasterCapsList = allWorkFlows.map(x => {
             return {
                 ...x,
-                isVerified: x.isVerified == 1 ? 'check' : 'unchecked',
+                isVerified: x.isVerified == 1 ? true : false,
                 memo: x.memo.replace(/<[^>]*>/g, ''),
                 addedDate: x.addedDate ?  this.datePipe.transform(x.addedDate, 'MMM-dd-yyyy hh:mm a'): '',
                 verifiedDate: x.verifiedDate ?  this.datePipe.transform(x.verifiedDate, 'MMM-dd-yyyy'): '',
@@ -1156,6 +1154,7 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
     saveCapability() {     
         this.selectedItemMasterCapData["updatedBy"]="admin";  
         this.selectedItemMasterCapData["createdBy"]="admin";  
+        this.selectedItemMasterCapData["isVerified"] = (this.selectedItemMasterCapData.isVerified == true || this.selectedItemMasterCapData.isVerified == 'check') ? true : false,
         this.selectedItemMasterCapData["companyId"]=this.selectedItemMasterCapData.levelId1;  
         this.selectedItemMasterCapData["buId"]=this.selectedItemMasterCapData.levelId2;  
         this.selectedItemMasterCapData["divisionId"]=this.selectedItemMasterCapData.levelId3;  
@@ -1315,17 +1314,21 @@ export class ItemMasterCapabilitiesListComponent implements OnInit {
         })
     }
 
-    onAddTextAreaInfo(value) {
-		if(value == 'memo') {
-			this.textAreaLabel = 'Memo';
-			this.textAreaInfo = this.selectedItemMasterCapData.memo;
-		}
+    onAddTextAreaInfo(value , content) {
+        this.textAreaInfo = this.selectedItemMasterCapData.memo;
+        $('#capes-memo').modal('show');
+        //this.modal = this.modalService.open(content, { size: 'sm' });
+		// if(value == 'memo') {
+		// 	//this.textAreaLabel = 'Memo';
+		// 	this.textAreaInfo = this.selectedItemMasterCapData.memo;
+		// }
     }
     
     onSaveTextAreaInfo() {
-		if(this.textAreaLabel == 'Memo') {
-			this.selectedItemMasterCapData.memo = this.textAreaInfo;
-        }
+        this.selectedItemMasterCapData.memo = this.textAreaInfo;
+		// if(this.textAreaLabel == 'Memo') {
+		// 	this.selectedItemMasterCapData.memo = this.textAreaInfo;
+        // }
     }
 
     getCapesListOnDeleteStatus(value) {

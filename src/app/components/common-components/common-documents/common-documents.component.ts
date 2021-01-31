@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges } from '@angular/core';
+﻿import { Component, OnInit, ViewChild, Output, EventEmitter, Input, SimpleChanges,OnDestroy  } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder } from '@angular/forms';
@@ -22,7 +22,7 @@ import { editValueAssignByCondition, getValueFromArrayOfObjectById, getObjectByV
     providers: [DatePipe]
 })
 /** common component*/
-export class CommonDocumentsComponent implements OnInit {
+export class CommonDocumentsComponent implements OnInit,OnDestroy {
     disableSave: boolean = true;
     moduleId: any;
     targetData: any;
@@ -97,7 +97,6 @@ export class CommonDocumentsComponent implements OnInit {
     constructor(private commonService: CommonService, private router: ActivatedRoute, private route: Router, private authService: AuthService, private modalService: NgbModal, private activeModal: NgbActiveModal, private _fb: FormBuilder, private alertService: AlertService, public customerService: CustomerService,
         private dialog: MatDialog, private datePipe: DatePipe, private configurations: ConfigurationService) {
     }
-
     ngOnInit() {
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         if (this.generalInformtionData) {
@@ -108,9 +107,10 @@ export class CommonDocumentsComponent implements OnInit {
 
  if(this.uploadDocsToser !=undefined || this.uploadDocsToser !=null){
     this.id = this.referenceId;
-                this.uploadDocsToser.subscribe(v => { 
+               this.uploadDocsToser.subscribe(v => { 
                     this.hideUpoladThing=true;
               setTimeout(() => {
+                  console.log("event")
                 this.onUploadDocumentListToServer();
               }, 1500);
                  });
@@ -119,7 +119,10 @@ export class CommonDocumentsComponent implements OnInit {
 
     generalCode: any;
     generalName: any;
-
+    ngOnDestroy() {
+        console.log("chhcc")
+        // if (this.uploadDocsToser) this.uploadDocsToser.unsubscribe();
+      }
     ngOnChanges(changes: SimpleChanges) {
         for (let property in changes) {
             if (property == 'generalInformtionData') {
@@ -144,6 +147,7 @@ export class CommonDocumentsComponent implements OnInit {
         this.offLineUpload = this.offLineUpload ? this.offLineUpload : false;
         this.moduleName = this.moduleName;
     }
+ 
     attachmoduleList: any = [];
     arrayCustlist:any=[];
     getModuleList(): void {
@@ -217,7 +221,7 @@ export class CommonDocumentsComponent implements OnInit {
     docviewdblclick(data) {
         this.sourceViewforDocument = data;
         this.openDocument(data);
-        $('#docView').modal('show');
+        $('#commondocView').modal('show');
     }
 
     openEdit(rowdata) {
@@ -325,13 +329,13 @@ export class CommonDocumentsComponent implements OnInit {
     onClickPopupSave() {
         this.documentInformation.docMemo = this.memoPopupContent;
         this.memoPopupContent = '';
-        $('#memo-popup-Doc').modal("hide");
+        $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
         this.disableSave = false;
     }
 
     closeMemoModel() {
-        $('#memo-popup-Doc').modal("hide");
+        $('#memo-popup-Doc-common').modal("hide");
         this.disabledMemo = true;
     }
 
@@ -462,7 +466,7 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     dismissModelHistory() {
-        $('#contentAuditHist').modal("hide");
+        $('#commoncontentAuditHist').modal("hide");
     }
 
     updateCollection: any = [];
@@ -486,7 +490,7 @@ export class CommonDocumentsComponent implements OnInit {
         for (var key in vdata) {
             this.formData.append(key, vdata[key]);
         }
-
+       
         if (this.documentCollection.length > 0) {
             const docList: any = [];
             if (this.isEditButton == true && this.newDocumentDetails) {
@@ -600,7 +604,7 @@ export class CommonDocumentsComponent implements OnInit {
     }
 
     viewModelDismiss() {
-        $('#docView').modal("hide");
+        $('#commondocView').modal("hide");
     }
 
     exportCSV(documents) {
@@ -737,7 +741,7 @@ export class CommonDocumentsComponent implements OnInit {
         this.index = 0;
         this.disableSave == false;
      
-        $('#addDocumentDetails').modal("hide");
+        $('#commonaddDocumentDetails').modal("hide");
         if (this.fileUploadInput) {
             this.fileUploadInput.clear()
         }

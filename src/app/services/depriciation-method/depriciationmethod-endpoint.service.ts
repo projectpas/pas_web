@@ -40,7 +40,7 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAlldepriciationMethod());
+                return this.handleErrorCommon(error, () => this.getAlldepriciationMethod());
             });
     }
 
@@ -49,7 +49,7 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getdepriciationMethodById(assetDepreciationMethodId));
+                return this.handleErrorCommon(error, () => this.getdepriciationMethodById(assetDepreciationMethodId));
             });
     }
 
@@ -58,7 +58,7 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(depriciationMethod), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.adddepriciationMethod(depriciationMethod));
+                return this.handleErrorCommon(error, () => this.adddepriciationMethod(depriciationMethod));
             });
     }
 
@@ -67,7 +67,7 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(depriciationMethod), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updatedepriciationMethod(depriciationMethod));
+                return this.handleErrorCommon(error, () => this.updatedepriciationMethod(depriciationMethod));
             });
     }
 
@@ -76,7 +76,7 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removedepriciationMethodById(assetDepreciationMethodId));
+                return this.handleErrorCommon(error, () => this.removedepriciationMethodById(assetDepreciationMethodId));
             });
     }
 
@@ -85,7 +85,7 @@ export class DepriciationMethodEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAssetDepreciationAudits(assetDepreciationMethodId));
+                return this.handleErrorCommon(error, () => this.getAssetDepreciationAudits(assetDepreciationMethodId));
             });
     }
 

@@ -1334,30 +1334,6 @@ export class CreateAssetComponent implements OnInit {
     }
     errorMessageHandler(log) {
         this.isSpinnerEnable = false;
-        this.alertService.showMessage(
-            'Error',
-            log,
-            MessageSeverity.error
-        ); 
-        // var msg = '';
-        // if (typeof log.error == 'string') {
-        //     this.alertService.showMessage(
-        //         'Error',
-        //         log.error,
-        //         MessageSeverity.error
-        //     );
-        // } else {
-        //     if (log.error && log.error.errors.length > 0) {
-        //         for (let i = 0; i < log.error.errors.length; i++) {
-        //             msg = msg + log.error.errors[i].message + '<br/>'
-        //         }
-        //     }
-        //     this.alertService.showMessage(
-        //         log.error.message,
-        //         msg,
-        //         MessageSeverity.error
-        //     );
-        // }
     }
     parsedText(text) {
         if (text) {
