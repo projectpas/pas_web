@@ -903,6 +903,7 @@ export class VendorGeneralInformationComponent implements OnInit {
                         // if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
                                 // this.onUploadDocumentListNew(data.vendorId);
                         // }
+                        this.isSpinnerVisible = false;
                         this.uploadDocs.next(true);
                         if (this.sourceVendor.isVendorAlsoCustomer == true) {
                             this.vendorService.isVendorAlsoCustomer = this.sourceVendor.isVendorAlsoCustomer;
@@ -914,7 +915,7 @@ export class VendorGeneralInformationComponent implements OnInit {
                         this.savesuccessCompleted(this.sourceVendor, goNxt);
                         this.enableUpdate = true;
                         this.disableSaveForEdit = true;
-                        this.isSpinnerVisible = false;
+                        
                         this.vendorService.isEditMode =  true;
                         this.vendorService.vendorId = data.vendorId;
                         this.vendorService.checkVendorEditmode(true);
@@ -949,10 +950,11 @@ export class VendorGeneralInformationComponent implements OnInit {
                         // if(this.sourceViewforDocumentList && this.sourceViewforDocumentList.length>0){
                             // this.onUploadDocumentListNew(data.vendorId);
                         // }
+                        this.isSpinnerVisible = false;
                         this.uploadDocs.next(true);
                         this.savesuccessCompleted(this.sourceVendor, goNxt);
                         this.disableSaveForEdit = true;
-                        this.isSpinnerVisible = false;
+                       
                     },
                     error => { this.isSpinnerVisible = false; })
             }

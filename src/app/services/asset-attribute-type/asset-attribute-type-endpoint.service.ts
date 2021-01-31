@@ -38,7 +38,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
         let endpointUrl = this.add;
         return this.http.post<T>(endpointUrl, JSON.stringify(item), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addItem(item));
+                return this.handleErrorCommon(error, () => this.addItem(item));
             });
     }
 
@@ -51,7 +51,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllItems());
+                return this.handleErrorCommon(error, () => this.getAllItems());
             });
     }
 
@@ -60,7 +60,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getByAssetType(id));
+                return this.handleErrorCommon(error, () => this.getByAssetType(id));
             });
     }
 
@@ -69,7 +69,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getItemAudit(id));
+                return this.handleErrorCommon(error, () => this.getItemAudit(id));
             });
     }
 
@@ -78,7 +78,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getItemById(id));
+                return this.handleErrorCommon(error, () => this.getItemById(id));
             });
     }
 
@@ -87,7 +87,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeItemById(id));
+                return this.handleErrorCommon(error, () => this.removeItemById(id));
             });
     }
 
@@ -95,7 +95,7 @@ export class AssetAttributeTypeEndpointService extends EndpointFactory {
         let endpointUrl = this.update;
         return this.http.post<T>(endpointUrl, JSON.stringify(item), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateItem(item));
+                return this.handleErrorCommon(error, () => this.updateItem(item));
             });
     }
 }

@@ -1792,7 +1792,6 @@ if(this.currentAsset.isTangible==true){
                     this.alertService.showMessage("Success", `Asset Inventory Created Successfully.`, MessageSeverity.success);
                     this.route.navigateByUrl(`/assetmodule/assetpages/app-asset-inventory-listing`);
                    
-                    // this.location.replaceState(`/assetmodule/assetpages/app-edit-asset-inventory/${data.assetRecordId}`);
                 }
                 else{
                     this.alertService.showMessage("Failed", `Asset Inventory not created successfully.`, MessageSeverity.error);
@@ -1808,11 +1807,7 @@ if(this.currentAsset.isTangible==true){
                     this.disableSaveForEdit=true;
                     this.currentAsset.updatedBy = this.userName;
                     this.assetInventoryId = data.assetInventoryId;
-                    // this.onUploadDocumentListMain();
-                    // this.onUploadDocumentListWarranty();
-                    // this.onUploadDocumentListInt();
-                    this.alertService.showMessage("Success", `Asset Inventory Updated Successfully.`, MessageSeverity.success);
-                    // this.route.navigateByUrl(`/assetmodule/assetpages/app-asset-inventory-listing`);
+                   this.alertService.showMessage("Success", `Asset Inventory Updated Successfully.`, MessageSeverity.success);
                 }
                 else {
                     this.alertService.showMessage("Failed", `Asset Inventory not Updated Successfully.`, MessageSeverity.error);
@@ -1828,7 +1823,6 @@ if(this.currentAsset.isTangible==true){
     }
     assetStatusList:any=[];
     assetInventoryStatusList:any=[];
-    // setEditArray:any=[];
     basicValue:any;
   getAssetStatusList(value){
     this.setEditArray=[];
@@ -1850,15 +1844,7 @@ if(this.currentAsset.isTangible==true){
     },err => {			
         const errorLog = err;
         this.errorMessageHandler(errorLog);});
-//     }else{
-//     this.commonService.smartDropDownList('AssetStatus', 'AssetStatusId', 'Name').subscribe(res => {
 
-// this.assetStatusList=res;
-
-//     },err => {			
-//         const errorLog = err;
-//         this.errorMessageHandler(errorLog);});
-//   }  
   }
 
   getAssetInventoryStatusList(){
@@ -1899,33 +1885,7 @@ this.assetInventoryStatusList.forEach(element => {
 
   errorMessageHandler(log) {
     this.isSpinnerVisible=false;
-    this.alertService.showMessage(
-        'Error',
-        log,
-        MessageSeverity.error
-    ); 
-//     var msg = '';
 
-//     if( typeof log.error == 'string' ) {
-//         this.alertService.showMessage(
-//             'Error',
-//             log.error,
-//             MessageSeverity.error
-//         ); 
- 
-//     }else{
-//       if (log.error && log.error.errors.length > 0) {
-//                 for (let i = 0; i < log.error.errors.length; i++){
-//                     msg = msg + log.error.errors[i].message + '<br/>'
-//                 }
-//             }
-//             this.alertService.showMessage(
-//                 log.error.message,
-//                 msg,
-//                 MessageSeverity.error
-//             );
-       
-// }
 }
 
   parsedText(text) {

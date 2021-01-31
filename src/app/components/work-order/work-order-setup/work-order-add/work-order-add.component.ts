@@ -6,13 +6,8 @@ import { Customer } from '../../../../models/customer.model';
 import { AlertService, MessageSeverity} from '../../../../services/alert.service';
 import { addressesForm } from '../../../../models/work-order-address.model';
 import { WorkOrderService } from '../../../../services/work-order/work-order.service';
-import { CreditTermsService } from '../../../../services/Credit Terms.service';
-import { CustomerService } from '../../../../services/customer.service';
 import { EmployeeService } from '../../../../services/employee.service';
-import { StocklineService } from '../../../../services/stockline.service';
-import { ItemMasterService } from '../../../../services/itemMaster.service';
 import { VendorService } from '../../../../services/vendor.service';
-import { WorkOrderPartNumberService } from '../../../../services/work-order/work-order-part-number.service';
 import { Documents } from '../../../../models/work-order-documents.modal';
 import { WorkOrderQuote } from '../../../../models/work-order-quote.modal';
 import { WorkOrderLabor, AllTasks} from '../../../../models/work-order-labor.modal';
@@ -169,11 +164,9 @@ export class WorkOrderAddComponent implements OnInit {
     revisedPartId: any;
     csrList: any;
     customerReferencelist: { label: string; value: number; }[];
-    // workOrderStatus:any;
     private onDestroy$: Subject<void> = new Subject<void>();
     workOrderFreightList: Object;
     requiredFileds: boolean = true;
-    // isSpinnerVisible: boolean = false;
     selectedMPN: any;
     worOrderStatus: any;
     workOrderStatusvalue: any;
@@ -251,12 +244,7 @@ isSpinnerVisible: boolean = false;
     constructor(
         private alertService: AlertService,
         private workOrderService: WorkOrderService,
-        private creditTermsService: CreditTermsService,
-        private customerService: CustomerService,
         private employeeService: EmployeeService,
-        private itemMasterService: ItemMasterService,
-        private workOrderPartNumberService: WorkOrderPartNumberService,
-        private stocklineService: StocklineService,
         private commonService: CommonService,
         private authService: AuthService,
         private acRouter: ActivatedRoute,
@@ -264,7 +252,6 @@ isSpinnerVisible: boolean = false;
         private workFlowtService: WorkFlowtService,
         private modalService: NgbModal,
         private quoteService: WorkOrderQuoteService,
-        private salesOrderService: SalesOrderService,
         private salesOrderReferenceStorage: SalesOrderReferenceStorage,
 		public vendorService: VendorService,
 
@@ -787,10 +774,8 @@ isSpinnerVisible: boolean = false;
             this.isBillAction=true;
             this.isQuoteAction=false;
             this.isCustomerAction=false;
-            // this.isQuoteActionTab==false;
             this.showQuoteDetails=false;
             this.isEditWorkordershowMsg=false;
-            // this.getQuoteIdByWfandWorkOrderId();
             this.billingCreateOrEdit();
             const {customerId}=this.workOrderGeneralInformation.customerId;
           
@@ -808,14 +793,11 @@ isSpinnerVisible: boolean = false;
             });
         }
         if (value == 'quote') {
-            this.onClickQuoteTab()
-            // this.isQuoteActionTab=true;
+            this.onClickQuoteTab();
               this.isBillAction=false;
               this.isQuoteAction=false;
               this.isCustomerAction=false;
               this.isEditWorkordershowMsg=false;
-            //   this.isQuoteActionTab==false;
-            //   this.showQuoteDetails=false;
             const {customerId}=this.workOrderGeneralInformation.customerId;
             if(this.isView==false){
                 this.customerWarnings(customerId);
@@ -922,9 +904,7 @@ isSpinnerVisible: boolean = false;
     deleteMPN() {
         if(this.showTabsGrid==true && this.workOrderGeneralInformation.partNumbers[this.currentIndex].workOrderId !=0){
             this.isDeleteMpnPart=true;
-                // this.workOrderGeneralInformation.partNumbers[this.currentIndex].isDeleted=true;
-        // this.saveWorkOrder();
-        const data={
+          const data={
             workOrderId :this.workOrderGeneralInformation.partNumbers[this.currentIndex].workOrderId,
             workOrderPartNoId :this.workOrderGeneralInformation.partNumbers[this.currentIndex].id,
             workFlowWorkOrderId :this.workOrderGeneralInformation.partNumbers[this.currentIndex].workFlowWorkOrderId ? this.workOrderGeneralInformation.partNumbers[this.currentIndex].workFlowWorkOrderId :0,
@@ -943,7 +923,6 @@ isSpinnerVisible: boolean = false;
 this.getWorkOrderWorkFlowNos();
         },
         err => {
-            // this.isSpinnerVisible = false;
             this.handleError(err);
         })
        
@@ -1008,22 +987,12 @@ this.getWorkOrderWorkFlowNos();
                     this.isSpinnerVisible = false;
                     this.disableSaveForEdit=true;
                     this.saveWorkOrderGridLogic(result, generalInfo);
-                    // if(this.isDeleteMpnPart==true){
-                    //     this.workorderByIdCall();
-                    // }
-                    // if(this.isDeleteMpnPart==true){
-                        // this.alertService.showMessage(
-                        //     this.moduleName,
-                        //     'Deleted Succesfully',
-                        //     MessageSeverity.success
-                        // ); 
-                    // }else{
+             
                         this.alertService.showMessage(
                             this.moduleName,
                             'Work Order Updated Succesfully',
                             MessageSeverity.success
                         );
-                    // }
                 },
                 err => {
                     this.handleError(err);
@@ -1154,11 +1123,11 @@ if(!this.workOrderQuoteId){
         currentRecord.customerRequestDate = new Date(object.custReqDate);
         this.revisedPartId = object.revisedPartId;
         currentRecord.managementStructureId = object.managementStructureId;
-        // refresh data when part number chnage
+
         if (!this.isEdit) {
             let currentdate: any = new Date();
             currentRecord.tatDaysCurrent = moment(currentdate).diff(currentRecord.receivedDate, 'days');
-            // this.getWorkFlowByPNandScope(currentRecord);
+
         } 
         else {
             this.calculatePartTat(currentRecord);
@@ -1277,8 +1246,6 @@ if(!this.workOrderQuoteId){
 
     filterRevisedPartNumber(event, index) {
         this['revisedPartNumberList' + index] = this['revisedPartOriginalData' + index]
-        // this.revisedPartNumberList = this.revisedPartOriginalData;
-
         if (event.query !== undefined && event.query !== null) {
             const partNumbers = [...this['revisedPartOriginalData' + index].filter(x => {
 
@@ -1307,9 +1274,7 @@ if(!this.workOrderQuoteId){
         }
     }
     getWorkFlowByPNandScope(workOrderPart) {
-        // workOrderPart.workflowId = 0;
         const itemMasterId = editValueAssignByCondition('itemMasterId', workOrderPart.masterPartId)
-        // const itemMasterId = workOrderPart.masterPartId;
         const { workOrderScopeId } = workOrderPart;
         if ((itemMasterId !== 0 && itemMasterId !== null) && (workOrderScopeId !== null && workOrderScopeId !== 0)) {
             this.isSpinnerVisible = true;
@@ -1373,13 +1338,8 @@ if(!this.workOrderQuoteId){
         }
     }
     changeofMPN(data) {
-        console.log("Data",data)
-        // this.quotestatusofCurrentPart="Approved";
         this.quotestatusofCurrentPart=data.quoteStatus;
-        // this.isViewForApprovedPart = false;
-        // if(this.quotestatusofCurrentPart == 'Approved'){
-        //     this.isViewForApprovedPart = true;
-        // }
+
         this.selectedPartNumber = data;
         this.mpnGridData = data.datas;
         this.workFlowId = data.workflowId,
@@ -1545,11 +1505,7 @@ if(!this.workOrderQuoteId){
                     else{
                         this.quotestatusofCurrentPart = this.mpnPartNumbersList[0].value.quoteStatus;
                           console.log("quote status",this.quotestatusofCurrentPart);
-                        // this.quotestatusofCurrentPart='Approved';
-                        // console.log("quote status",this.quotestatusofCurrentPart);
-                        // if(this.quotestatusofCurrentPart == 'Approved'){
-                        //     this.isViewForApprovedPart = true;
-                        // }
+                      
                     }
                     if(this.workFlowId ==0){
                         this.workFlowWorkOrderId = this.mpnPartNumbersList[0].value.workOrderWorkFlowId; 
@@ -1644,8 +1600,6 @@ if(!this.workOrderQuoteId){
                     updatedBy: this.userName,
                     workOrderId: this.subWorkOrderDetails.workOrderId,
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
-                    // subWOPartNoId:11,
-                    // subWorkOrderMaterialsId:0,
                     subWorkOrderId:this.subWorkOrderDetails.subWorkOrderId ?  this.subWorkOrderDetails.subWorkOrderId : this.workOrderId              
                 }
             })
@@ -1720,25 +1674,9 @@ if(!this.workOrderQuoteId){
                 }
 
          })
-        // this.workOrderService.getAllTasks()
-        //     .pipe(takeUntil(this.onDestroy$)).subscribe(
-        //         (taskList) => {
-        //             if(this.labor.workOrderLaborList && this.labor.workOrderLaborList.length !=0){
-        //                 this.labor.workOrderLaborList[0] = {}
-        //             }
-        //             this.taskList = taskList;
-        //             this.taskList.forEach(task => {
-        //                 if(this.labor.workOrderLaborList && this.labor.workOrderLaborList.length !=0){
-        //                     this.labor.workOrderLaborList[0][task.description.toLowerCase()] = [];
-        //                 }
-        //             });
-        //         },
-        //         (error) => {
-        //         }
-        //     )
+
     },
     err => {
-        // this.isSpinnerVisible = false;
         this.handleError(err);
     })
 }
@@ -2069,7 +2007,6 @@ if(!this.workOrderQuoteId){
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderIdForSubWO();
-                // this.getWorkFlowLaborList();
             },
             err => {
                 this.isSpinnerVisible = false;
@@ -2083,7 +2020,6 @@ if(!this.workOrderQuoteId){
                     MessageSeverity.success
                 );
                 this.getMaterialListByWorkOrderId();
-                // this.getWorkFlowLaborList();
             },
             err => {
                 this.isSpinnerVisible = false;
@@ -2327,9 +2263,6 @@ if(!this.workOrderQuoteId){
                     res[charge]['refNum'] =  res[charge]['referenceNo'];
                 }
                 this.workOrderChargesList = res;
-                // if(this.gridActiveTab === 'billorInvoice'){
-                //     this.workOrderChargesList=this.workOrderChargesList;
-                // }
             },
             err => {
                 this.handleError(err);
@@ -2520,7 +2453,6 @@ if(!this.workOrderQuoteId){
                     workFlowWorkOrderId: this.workFlowWorkOrderId,
                     estimtPercentOccurranceId: x.estimtPercentOccurrance,
                     subWOPartNoId:this.subWOPartNoId,
-                    // isSubWorkOrder:true,
                     subWorkOrderId:this.subWorkOrderDetails.subWorkOrderId ?  this.subWorkOrderDetails.subWorkOrderId : this.workOrderId 
                 }
             });
@@ -2658,7 +2590,6 @@ if(!this.workOrderQuoteId){
                     customerRef: res.customerReference,
                     woType: res.workOrderType,
                     shipAccountInfo: res.shippingAccountinfo,
-                    // workFlowWorkOrderId:this.workFlowWorkOrderId
                 }
                 this.isEditBilling = true;
             }
@@ -2687,7 +2618,6 @@ if(!this.workOrderQuoteId){
                 managementStructureId: data.managementStructureId,
                 soldToCustomerId: { customerId: this.workOrderGeneralInformation.customerId.customerId, customerName:this.workOrderGeneralInformation.customerId.customerName },
                 shipToCustomerId: { customerId: this.workOrderGeneralInformation.customerId.customerId, customerName: this.workOrderGeneralInformation.customerId.customerName},
-                // workFlowWorkOrderId:this.workFlowWorkOrderId
             }
         },
         err => {
@@ -2738,7 +2668,6 @@ if(!this.workOrderQuoteId){
         await this.quoteService.getQuoteMaterialList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteMaterialList = res;
-            // this.sumOfMaterialList();
         },
         err => {
             this.handleError(err);
@@ -2761,7 +2690,6 @@ if(!this.workOrderQuoteId){
         await this.quoteService.getQuoteChargesList(this.workOrderQuoteId, buildMethodId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.isSpinnerVisible = false;
             this.quoteChargesList = res;
-             // this.sumofCharges();
         },
         err => {
             this.handleError(err);
@@ -2813,16 +2741,12 @@ if(!this.workOrderQuoteId){
         })
     }
     sumOfMaterialList() {
-        // this.billing = { ...this.billing, materialCost: 0 }
         this.billing.materialCost = this.quoteMaterialList.reduce((acc, x) => acc + x.billingAmount, 0);
     }
     sumofLaborOverHead() {
-        // labourCostPlus
-        // this.billing.laborOverHeadCost = this.quoteLaborList.reduce((acc, x) => acc + x.billingAmount, 0);
     }
 
     sumofCharges() {
-        // chargesCostPlus
         this.billing.miscChargesCost = this.quoteChargesList.reduce((acc, x) => acc + x.billingAmount, 0);
         this.calculateTotalWorkOrderCost();
     }
@@ -2849,7 +2773,6 @@ if(!this.workOrderQuoteId){
     }
 
     async getPartNosByCustomer(customerId, workOrderId) {
-// this.workOrderGeneralInformation.workOrderPartNumber[0].masterPartId=null;
         await this.workOrderService.getPartNosByCustomer(customerId, workOrderId).pipe(takeUntil(this.onDestroy$)).subscribe(res => {
             this.partNumberOriginalData = res;
             if(this.partNumberOriginalData.length > 0){
@@ -2868,7 +2791,6 @@ if(!this.workOrderQuoteId){
             this.partNumberOriginalData = res;
         },
         err => {
-            // this.isSpinnerVisible = false;
             this.handleError(err);
         })
     }
@@ -2879,13 +2801,11 @@ if(!this.workOrderQuoteId){
         .pipe(takeUntil(this.onDestroy$)).subscribe(
             (res: any) => {
                 if (res) {
-                    //  = res;
                      this.quoteCreatedDate = res;
                   
                 }
             },
             err => {
-                // this.isSpinnerVisible = false;
                 this.handleError(err);
             }
         )
@@ -2924,7 +2844,6 @@ if(!this.workOrderQuoteId){
             this.customerContactList = res.map(x => {
                 return {
                     ...x,
-                    // workPhone: `${x.workPhone} ${x.phoneExt}`,
                     workPhone: `${x.workPhone} ${x.workPhoneExtn}`,
                     customerContact:x.name
                 }
@@ -3060,7 +2979,6 @@ this.restrictID=0;
           }
             if(this.isBillAction==true){
 
-                // this.billingCreateOrEdit();
             }
             this.isBillAction=false;
             this.isQuoteAction=false;
@@ -3076,11 +2994,9 @@ this.restrictID=0;
       showAlertMessage(){
        
           $('#warnRestrictMesg').modal("show");
-        //   this.modal.close();
       }
   
       WarnRescticModel(){
-          // this.modal.close();
           if(this.isQuoteAction==true && this.restrictID==0){
             window.open(`/workordersmodule/workorderspages/app-work-order-quote?workorderid=${this.workOrderId}`);
           }
@@ -3143,7 +3059,6 @@ this.restrictID=0;
 			this.customerNames = customers;
 		}
     }
-    
     loadcustomerData() {
 		this.commonService.smartDropDownList('Customer', 'CustomerId', 'Name').subscribe(response => {
 			this.allCustomers = response;
@@ -3153,53 +3068,6 @@ this.restrictID=0;
             this.handleError(err);
         });
     }	
-     
-    // onShipToCustomerSelected(customerId, res?, id?, value?) {
-	// 	this.clearInputOnClickUserIdShipTo();
-    //     this.shipToSelectedvalue = customerId;
-    //     this.isSpinnerVisible = true;
-	// 	this.customerService.getCustomerShipAddressGet(customerId).subscribe(
-	// 		returnddataforbill => {
-    //             this.isSpinnerVisible = false;
-	// 			this.shipToCusData = returnddataforbill[0];
-	// 			for(var i =0; i < this.shipToCusData.length; i++) {
-	// 				if(this.shipToCusData[i].isPrimary && value != 'shipEdit') {
-	// 					this.sourcePoApproval.shipToAddressId = this.shipToCusData[i].customerShippingAddressId;
-	// 				}
-	// 			}
-	// 			if (id) {
-	// 				res.shipToAddressId = id;
-	// 			}
-	// 			if (this.isEditMode) {
-	// 				if (res.shipToAddressId == 0) {
-	// 					this.shipToCusData.push({ customerShippingAddressId: 0, address1: res.shipToAddress1, address2: res.shipToAddress2, city: res.shipToCity, stateOrProvince: res.shipToStateOrProvince, postalCode: res.shipToPostalCode, country: res.shipToCountry, siteName: res.shipToSiteName })
-	// 				}
-	// 			}
-	// 			this.onShipToGetAddress(res, res.shipToAddressId);
-    //         },
-    //         err => {
-    //             this.handleError(err);
-    //             this.isSpinnerVisible = false;
-    //         });
-    //         this.isSpinnerVisible = true;
-	// 	this.customerService.getContacts(customerId).subscribe(data => {
-    //         this.isSpinnerVisible = false;
-	// 		this.shipToContactData = data[0];
-	// 		for(var i =0; i < this.shipToContactData.length; i++) {
-	// 			if(this.shipToContactData[i].isDefaultContact) {
-	// 				this.sourcePoApproval.shipToContactId = this.shipToContactData[i];
-	// 			}
-	// 		}
-	// 		if (this.isEditMode && value == 'shipEdit') {
-	// 			this.sourcePoApproval.shipToContactId = getObjectById('contactId', res.shipToContactId, this.shipToContactData);
-	// 		}
-    //     },
-    //     err => {
-    //         this.handleError(err);
-    //         this.isSpinnerVisible = false;
-    //     });
-	// 	this.getShipViaDetailsForShipTo();
-    // }
     clearInputOnClickUserIdShipTo() {
 		this.sourcePoApproval.shipToAddressId = "null";
 		this.sourcePoApproval.shipToContactId = null;
@@ -3279,23 +3147,7 @@ this.restrictID=0;
 			this.firstNamesShipTo = customerContacts;
 		}
     }
-    
-    // filterVendorNames(event) {
-	// 	this.vendorNames = this.allActions;
 
-	// 	if (event.query !== undefined && event.query !== null) {
-	// 		const vendorFilter = [...this.allActions.filter(x => {
-	// 			return x.vendorName.toLowerCase().includes(event.query.toLowerCase())
-	// 		})]
-	// 		this.vendorNames = vendorFilter;
-	// 	}
-    // }
-    
-    // loadVendorList() {
-	// 	this.vendorService.getVendorNameCodeList().subscribe(res => {
-	// 		this.allActions = res;
-	// 	});
-    // }
     
     filterCompanyNameforBilling(event) {
 		this.legalEntityList_ForBilling = this.legalEntity;
@@ -3322,20 +3174,14 @@ this.restrictID=0;
 			this.legalEntity = res;
 		},
         err => {
-            // this.isSpinnerVisible = false;
             this.handleError(err);
         })
     }
     
     errorHandling(err){
-        // if(err['status'] && err['status'] == 422){
-        //     this.alertService.showMessage(
-        //         this.moduleName,
-        //         'Saving data Failed due to some input error',
-        //         MessageSeverity.error
-        //     );
+
             this.handleError(err);
-        // }
+
     }
     getMaterialListByWorkOrderIdForSubWO(){
         this.workOrderMaterialList = [];
@@ -3347,34 +3193,15 @@ this.restrictID=0;
                         if(element.currency)element.currency= element.currency.symbol;
                     });
             this.workOrderMaterialList = res;
-            // if(this.gridActiveTab === 'billorInvoice'){
-            //     this.quoteMaterialList=res;
-            // }
                 this.materialStatus = res[0].partStatusId;
             }
         },
         err => {
-            // this.isSpinnerVisible = false;
             this.handleError(err);
         })
     }
 
     handleError(err){
-        if(err['error']['errors']){
-            err['error']['errors'].forEach(x=>{
-                this.alertService.showMessage(
-                    this.moduleName,
-                    x['message'],
-                    MessageSeverity.error
-                );
-            })
-        }
-        else{
-            this.alertService.showMessage(
-                this.moduleName,
-                'Failed due to some  error',
-                MessageSeverity.error
-            );
-        }
-    }
+        this.isSpinnerVisible = false;
+      }
 } 
