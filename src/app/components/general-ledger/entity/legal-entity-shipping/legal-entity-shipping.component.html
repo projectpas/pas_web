@@ -23,7 +23,7 @@
                   <div class="panel-heading">
                       <h4 class="panel-title">                    
                           <!-- <a data-toggle="collapsed" href="#step1">Domestic Shipping Info</a> -->
-                          <a class="" data-toggle="collapse"
+                          <a class="collapsed" data-toggle="collapse"
                            href="#step1">Domestic Shipping Info</a>
                       </h4>
                   </div>
@@ -45,7 +45,7 @@
                             </a>                       
                     </div>
                    
-                <div class="card-body new-card-body">
+                <div class="card-body header-body">
                     <p-table #domestictable class="rpo-table-cstm rro-table-cstm"
                              [value]="domesticShippingData"
                              [(selection)]="selectedrowsFromDomestic"
@@ -65,13 +65,13 @@
                             <div class="row">
                                 <div class="col">
                                 <p-multiSelect *ngIf="isViewMode == false" [options]="domesticShippingHeaders" [(ngModel)]="selectedColumnsForDomesticTable" name="domesticShiipingTable" optionLabel="header"
-                                               selectedItemsLabel="{0} columns selected" [style]="{minWidth: '200px'}" defaultLabel="Choose Columns" style="float:left"></p-multiSelect>
+                                               selectedItemsLabel="{0} columns selected" class="multiselect-field" defaultLabel="Choose Columns" 
+                                               ></p-multiSelect>
                                             </div>
                                             <div class="col">
-                                              <div
-                                                style="width: auto !important; float: right;"
-                                                class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                                              >
+                                                <div					
+                                                class="global-search-field inner-addon right-addon inline-block"
+                                                >
                                     <i class="fa fa-search"></i>
                                     <input type="text" pInputText size="50"  autocomplete="off"
                                      class="form-control" 
@@ -128,23 +128,20 @@
                                              style="width: auto; float: right; padding-top: 3px;padding-right: 0px;">
                                             <div class="form-group">
                                                 <!-- <label class="radiobtn-label new-radio-btn-label">Status:</label> -->
-                                                <div class="pull-left"
-                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                <div class="pull-left radio-buttons-align">
                                                     <label class="radio-cstm wauto">
             
                                                         <input type="radio" name="EmpStatus" class="form-control" value="Active" (click)=" geListByStatusForDomestic('Active')" [(ngModel)]="currentStatusForDomestic">
                                                         <span class="checkmark"></span>Active
                                                     </label>
                                                 </div>
-                                                <div class="pull-left"
-                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                <div class="pull-left radio-buttons-align">
                                                     <label class="radio-cstm wauto">
                                                         <input type="radio" name="EmpStatus" class="form-control" value="InActive" (click)=" geListByStatusForDomestic('InActive')" [(ngModel)]="currentStatusForDomestic">
                                                         <span class="checkmark"></span>In-active
                                                     </label>
                                                 </div>
-                                                <div class="pull-left"
-                                                     style="margin-top: 4px; margin-right: 15px;">
+                                                <div class="pull-left radio-buttons-align">
                                                     <label class="radio-cstm wauto">
                                                         <input type="radio" name="EmpStatus" class="form-control" value="ALL" (click)=" geListByStatusForDomestic('ALL')" [(ngModel)]="currentStatusForDomestic">
                                                         <span class="checkmark"></span>All
@@ -166,42 +163,42 @@
                             </ng-template>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th style="width: 40px;">Flag</th>
-                                <th style="width:160px" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.header == 'IsPrimary'">
+                                <th class="table-column-width">Flag</th>
+                                <th class="table-column-width" *ngFor="let col of columns" pResizableColumn pReorderableColumn [pSortableColumn]="col.field" [hidden]="col.header == 'IsPrimary'">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
                                 </th>
-                                <th style="width:200px;position:sticky"> Actions</th>
+                                <th class="table-actions-column" style="width:150px !important"> Actions</th>
                             </tr>
                             <tr>
-                                <th></th>
+                                <th class="table-column-width"></th>
                                 <!-- <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
                                     <input style="width:100%;"  autocomplete="off" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
                                 </th> -->
-                                <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                    <input style="width:100%;" name="domesticShip" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
+                                <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
+                                    <input class="table-header-input-width" name="domesticShip" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'" pInputText type="text" (input)="domestictable.filter($event.target.value, col.field, 'contains')">
            
-                                    <input type="date" name="domesticShip"  style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                    <input type="date" name="domesticShip"  class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
                                     name="createdDate"  (change)="dateFilterForTable($event.target.value, col.field)" />
-                               <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+                               <input type="date" class="table-header-input-width"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
                                (change)="dateFilterForTable($event.target.value,col.field)" />
                                 </th>
-                                <th style="width:200px;position:sticky"></th>
+                                <th class="table-actions-column" style="width:150px !important"></th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewSelectedRowdbl(rowData)"> 
-                                <td   style="width: 40px;">
+                                <td class="table-column-width">
                                     <span class="flag">
                                         <i *ngIf="rowData.isPrimary == true" [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                            class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                                     </span>
                                 </td>
-                                <td style="width:160px" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
+                                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                     {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                 </td>
-                                <td style="width:200px" *ngIf="isViewMode == false" style="text-align: center">
+                                <td class="action-icons-cstm table-column-width" style="width:150px !important" *ngIf="isViewMode == false" style="text-align: center">
                                     <div *ngIf="currentDeletedstatus==false">
     <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" (onChange)="updateActiveorInActiveForShipping(rowData)"></p-inputSwitch> 
@@ -245,7 +242,7 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td *ngIf="isViewMode == true" style="text-align: center">
+                                <td class="action-icons-cstm table-column-width" style="width:150px !important" *ngIf="isViewMode == true" style="text-align: center">
                                     <p-inputSwitch [(ngModel)]="rowData['isActive']"  [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch> 
                                     <span data-toggle="modal" data-target="#viewShipping"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openShippinggView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
@@ -269,17 +266,17 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" let-columns>
                             <tr>
-                                <td [attr.colspan]="9" style="color: red; font-weight: bold; text-align: center">
+                                <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="domestictable._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                            <input class="footer-input-width" [(ngModel)]="domestictable._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
 
-                            <input style="width: 5%;" [ngModel]="getPageCount(domestictable._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
+                            <input class="footer-input-width" [ngModel]="getPageCount(domestictable._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
                         </ng-template>
                     </p-table>
                 </div>
@@ -318,7 +315,7 @@
                 <hr />
                 <div class="clear"></div>
                 <!--  -->
-                <div class="card-body new-card-body">
+                <div class="card-body header-body">
                     <p-table #intlShippingTable class="rpo-table-cstm rro-table-cstm"
                              [value]="internationalShippingData"
                              [paginator]="true"
@@ -439,45 +436,45 @@
 
                         <ng-template pTemplate="header" let-columns>
                             <tr>
-                                <th style="width: 40px;">Flag</th>
-                                <th style="width:160px" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
+                                <th class="table-column-width">Flag</th>
+                                <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.header == 'IsPrimary'" pResizableColumn pReorderableColumn [pSortableColumn]="col.field">
                                     {{col.header}}
                                     <p-sortIcon [field]="col.field"></p-sortIcon>
                                 </th>
-                                <th style="width:200px;position:sticky" *ngIf="selectedColumnsForInternationTable.length > 0"> Actions</th>
+                                <th class="table-actions-column" style="width:150px !important" *ngIf="selectedColumnsForInternationTable.length > 0"> Actions</th>
                             </tr>
                             <tr>
-                                <th></th>
-                                <th style="width:auto" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
-                                    <input name="shippingInt"style="width:100%;" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'startDate' && col.field != 'expirationDate' " pInputText type="text" (input)="intlShippingTable.filter($event.target.value, col.field, 'contains')">
+                                <th class="table-column-width"></th>
+                                <th class="table-column-width" *ngFor="let col of columns" [hidden]="col.field == 'isPrimary'" [ngSwitch]="col.field">
+                                    <input name="shippingInt" class="table-header-input-width" *ngIf="col.field != 'createdDate' && col.field != 'updatedDate'  && col.field != 'startDate' && col.field != 'expirationDate' " pInputText type="text" (input)="intlShippingTable.filter($event.target.value, col.field, 'contains')">
            
-                                    <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
+                                    <input type="date"   class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'createdDate'"
                                     name="createdDate"  (change)="dateFilterForTableForInternational($event.target.value, col.field)" />
-                               <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
+                               <input type="date" class="table-header-input-width"  class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'"   name="updatedDate"
                                (change)="dateFilterForTableForInternational($event.target.value,col.field)" />
-                               <input type="date"   style="width:100%" class="hidePlaceHolder" *ngIf="col.field == 'startDate'"
+                               <input type="date"   class="table-header-input-width" class="hidePlaceHolder" *ngIf="col.field == 'startDate'"
                                name="startDate"  (change)="dateFilterForTableForInternational($event.target.value, col.field)" />
-                          <input type="date" style="width:100%"  class="hidePlaceHolder" *ngIf="col.field == 'expirationDate'"   name="expirationDate"
+                          <input type="date" class="table-header-input-width"  class="hidePlaceHolder" *ngIf="col.field == 'expirationDate'"   name="expirationDate"
                           (change)="dateFilterForTableForInternational($event.target.value,col.field)" />
                                 </th>
-                                <th style="width:200px;position:sticky"></th>
+                                <th class="table-actions-column" style="width:150px !important"></th>
                             </tr>
                         </ng-template>
 
                         <ng-template pTemplate="body" let-rowData let-columns="columns" let-rowIndex="rowIndex">
                             <tr [pSelectableRow]="rowData" [pSelectableRowDblClick]="rowData" (dblclick)="viewInterShipping(rowData)">
                                 <!-- [ngClass]="{'row-primary': rowData.isPrimary === true}" -->
-                                <td style="width: 40px;">
+                                <td class="table-column-width">
                                     <span class="flag">
                                         <i *ngIf="rowData.isPrimary == true" [ngStyle]="{'color': rowData.isPrimary == true ? 'green' : 'none'}"
                                            class="fa fa-flag" matTooltip="Primary" matTooltipPosition="above" aria-hidden="true"></i>
                                     </span>
                                 </td>
-                                <td style="width:160px" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
+                                <td class="table-column-width" *ngFor="let col of columns" class="ui-resizable-column" [hidden]="col.field == 'isPrimary'" pReorderableRowHandle>
                                     {{col.field == 'createdDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'updatedDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'expirationDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field] && col.field == 'startDate'?  (rowData[col.field] | date: 'MM/dd/yyyy h:mm a'):rowData[col.field]}}
                                 </td>
 
-                                <td style="width:200px" *ngIf="isViewMode == false" style="text-align: center">
+                                <td class="action-icons-cstm table-column-width" style="width:150px !important" *ngIf="isViewMode == false" style="text-align: center">
                                     <div *ngIf="currentDeletedstatusForInternational==false">
                                     <p-inputSwitch [(ngModel)]="rowData['isActive']" (onChange)="updateActiveorInActiveForIS(rowData)" [disabled]="rowData.isPrimary" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch>  
@@ -525,7 +522,7 @@
     </span>
 </div>
                                 </td>
-                                <td *ngIf="isViewMode == true" style="text-align: center">
+                                <td *ngIf="isViewMode == true" class="action-icons-cstm table-column-width" style="width:150px !important">
                                     <p-inputSwitch [(ngModel)]="rowData['isActive']" [disabled]="true" name="isActive{{ rowIndex }}"   matTooltip="{{rowData['isActive'] ? 'Active': 'In Active'}}"
                                     matTooltipPosition="above" ></p-inputSwitch> 
                                     <span data-toggle="modal" data-target="#viewInter"> <a class="btn btn-info boxed-float-btn nobg" data-toggle="tooltip" (click)="openInterShippingView(rowData)" matTooltipPosition="above" matTooltip="View"><i class="fa fa-eye"></i></a> </span>
@@ -546,17 +543,17 @@
                         </ng-template>
                         <ng-template pTemplate="emptymessage" let-columns >
                             <tr>
-                                <td [attr.colspan]="9" style="color: red; font-weight: bold; text-align: center">
+                                <td [attr.colspan]="9" class="no-records-cstm no-records-msg">
                                     No records found
                                 </td>
                             </tr>
                         </ng-template>
                         <ng-template pTemplate="summary" id="footer">
                             <label id="footer" class="footer">Total:</label>
-                            <input style="width: 5%;" [(ngModel)]="intlShippingTable._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
+                            <input class="footer-input-width" [(ngModel)]="intlShippingTable._totalRecords" [disabled]="true" pInputText type="text" /> &nbsp;&nbsp;
                             <label id="footer" class="footer1">Pages Count:</label>
 
-                            <input style="width: 5%;" [ngModel]="getPageCount(intlShippingTable._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
+                            <input class="footer-input-width" [ngModel]="getPageCount(intlShippingTable._totalRecords,pageSize)" [disabled]="true" pInputText type="text" />
                         </ng-template>
 
                     </p-table>
@@ -597,8 +594,9 @@
     </div>
     <div class="modal-body">
 
-        <div class="table-responsive">
-            <table class="table table-bordered">
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+            <div class="tableFixHead">  
+            <table class="table table-bordered header-table-width">
                 <thead>
                     <tr>
                         <th>PID</th>
@@ -618,6 +616,7 @@
                     <td>{{audit.updatedDate}}</td>
                 </tr>
             </table>
+            </div>
         </div>
     </div>
     <div class="modal-footer">
