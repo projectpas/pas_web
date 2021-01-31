@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import * as $ from "jquery";
-import { NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
 import { AuthService } from "../../../../services/auth.service";
@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { MenuItem } from "primeng/api";
 import { SalesOrderService } from "../../../../services/salesorder.service";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
+import { SalesOrderpickTicketComponent } from "../sales-order-pickTicket/sales-order-pickTicket.component";
 
 @Component({
   selector: "app-sales-order-pick-tickets",
@@ -50,7 +51,8 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
     public currencyService: CurrencyService,
-    private authService: AuthService
+    private authService: AuthService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() {
@@ -80,19 +82,19 @@ export class SalesOrderPickTicketsComponent implements OnInit {
       { field: "uom", header: "UOM", width: "130px" },
       { field: "qty", header: "Qty Ordered", width: "130px" },
       { field: "serialNumber", header: "Qty to Pick", width: "130px" },
-      { field: "woNumber", header: "Qty Picked", width: "130px" },
+      { field: "qtyToShip", header: "Qty Picked", width: "130px" },
       { field: "uomName", header: "Qty Remaining", width: "130px" },
-      { field: "woNumber", header: "Status", width: "130px" },
+      { field: "strStatus", header: "Status", width: "130px" },
       { field: "salesOrderQuoteNumber", header: "SO Quote Num", width: "130px" },
       { field: "woNumber", header: "SO Num", width: "130px" },
       { field: "woNumber", header: "WO Num", width: "130px" },
-      { field: "woNumber", header: "Customer", width: "130px" },
+      { field: "customer", header: "Customer", width: "130px" },
       { field: "woNumber", header: "PO Num", width: "130px" },
-      { field: "woNumber", header: "Ship To City", width: "130px" },
-      { field: "woNumber", header: "Ship to Country", width: "130px" },
+      { field: "shipToCity", header: "Ship To City", width: "130px" },
+      { field: "shipToCountry", header: "Ship to Country", width: "130px" },
       { field: "woNumber", header: "Picked By", width: "130px" },
       { field: "woNumber", header: "Confirmed By", width: "130px" },
-      { field: "woNumber", header: "Memo", width: "130px" }
+      { field: "memo", header: "Memo", width: "130px" }
     ];
     this.selectedColumns = this.headers;
   }
@@ -155,10 +157,24 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   }
 
   convertDate(key, data) {
-    if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate') && data[key]) {
+    if ((key === 'quoteDate' || key === 'updatedDate' || key === 'createdDate' || key === 'soPickTicketDate') && data[key]) {
       return moment(data[key]).format('MM/DD/YYYY');
     } else {
       return data[key];
     }
+  }
+
+  printPickTicket(rowData: any) {
+    this.modal = this.modalService.open(SalesOrderpickTicketComponent, { size: "lg" });
+    let instance: SalesOrderpickTicketComponent = (<SalesOrderpickTicketComponent>this.modal.componentInstance)
+    instance.modalReference = this.modal;
+
+    instance.onConfirm.subscribe($event => {
+      if (this.modal) {
+        this.modal.close();
+      }
+    });
+    instance.salesOrderId = rowData.salesOrderId;
+    instance.salesOrderPartId = rowData.salesOrderPartId;
   }
 }

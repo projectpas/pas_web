@@ -55,7 +55,12 @@
         <tr [pSelectableRow]="rowData" pReorderableRowHandle>
           <td [ngStyle]="{'width': col.width}" *ngFor="let col of columns" class="ui-resizable-column"
             pReorderableRowHandle>
-            <span>{{rowData[col.field]}}</span>
+            <span *ngIf="col.field == 'soPickTicketDate'" class="float-right">
+              {{convertDate(col.field , rowData)}}
+            </span>
+            <span *ngIf="col.field != 'soPickTicketDate'">
+              {{rowData[col.field]}}
+            </span>
           </td>
           <td class="action-icons-cstm table-column-width">
             <div>
@@ -63,7 +68,8 @@
                 <a class="btn nobg" matTooltip="View" matTooltipPosition="above"><i class="fa fa-eye"></i></a>
               </span>
               <span>
-                <a class="btn nobg" matTooltip="Print" matTooltipPosition="above"><i class="fa fa-print"></i></a>
+                <a class="btn nobg" matTooltip="Print" matTooltipPosition="above" (click)="printPickTicket(rowData);"><i
+                    class="fa fa-print"></i></a>
               </span>
             </div>
           </td>

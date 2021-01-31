@@ -24,6 +24,8 @@ export class SalesOrderpickTicketComponent implements OnInit {
     parts: any = [];
     management: any = {};
     salesOrderpartConditionDescription: any;
+    salesOrderId: number;
+    salesOrderPartId: number;
 
     constructor(private modalService: NgbModal, private salesOrderService: SalesOrderService,
         private router: Router) {
@@ -35,7 +37,7 @@ export class SalesOrderpickTicketComponent implements OnInit {
     }
 
     getSalesPickTicketView() {
-        this.salesOrderService.getPickTicket(this.salesOrderCopyParameters.salesOrderId).subscribe(res => {
+        this.salesOrderService.getPickTicket(this.salesOrderId).subscribe(res => {
             this.salesOrderoView = res[0];
 
             this.salesOrder = res[0].soPickTicketViewModel;
