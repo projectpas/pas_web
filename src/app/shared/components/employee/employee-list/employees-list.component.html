@@ -1,20 +1,20 @@
 ﻿﻿﻿﻿<div class="card new-card">
-  <div class="card-header bg-primary new-card-header">
+  <div class="card-header header">
     <div class="row">
       <div class="col">
-        <h4 class="new-card-heading">Employee List</h4>
+        <h4 class="header-name">Employee List</h4>
       </div>
       <div>
         <button
           type="button"
-          class="btn-sm new-btn-primary"
+          class="btn-sm header-button"
           (click)="navigateTogeneralInfo()">
           Add Employee
         </button>
       </div>
     </div>
   </div>
-  <div class="card-body new-card-body">
+  <div class="card-body header-body">
       <p-table
                #dt
                class="rpo-table-cstm rro-table-cstm"
@@ -43,16 +43,12 @@
                                      [(ngModel)]="selectedColumns"
                                      optionLabel="header"
                                      selectedItemsLabel="{0} columns selected"
-                                     [style]="{ minWidth: '200px' }"
+                                     class="multiselect-field"
                                      defaultLabel="Choose Columns"
-                                     style="float: left;"
                                      ></p-multiSelect>
                   </div>
                   <div class="col">
-                      <div
-                           style="width: auto !important; float: right;"
-                           class="inner-addon right-addon w50 inline-block g-filter-search-cstm"
-                           >
+                    <div class="global-search-field inner-addon right-addon inline-block">
                           <i class="fa fa-search"></i>
                           <input
                                  type="text"
@@ -69,7 +65,7 @@
                   <div class="col">
                       <button
                               type="button"
-                              class="btn btn-primary new-table-button"
+                              class="btn btn-primary exports-button"
                               matTooltip="Download Data"
                               matTooltipPosition="above"
                               pButton
@@ -80,7 +76,7 @@
                               ></button>
                       <button
                               type="button"
-                              class="btn btn-primary new-table-button"
+                              class="btn btn-primary exports-button"
                               matTooltip="Download Selected Data"
                               matTooltipPosition="above"
                               pButton
@@ -102,8 +98,7 @@
                                >
                               <div class="form-group">
                                   <div
-                                       class="pull-left"
-                                       style="margin-top: 4px; margin-right: 15px;"
+                                       class="pull-left radio-buttons-align"
                                        >
                                       <label class="radio-cstm wauto">
                                           <input
@@ -120,8 +115,7 @@
                                       </label>
                                   </div>
                                   <div
-                                       class="pull-left"
-                                       style="margin-top: 4px; margin-right: 15px;"
+                                       class="pull-left radio-buttons-align"
                                        >
                                       <label class="radio-cstm wauto">
                                           <input
@@ -138,8 +132,7 @@
                                       </label>
                                   </div>
                                   <div
-                                       class="pull-left"
-                                       style="margin-top: 4px; margin-right: 15px;"
+                                       class="pull-left radio-buttons-align"
                                        >
                                       <label class="radio-cstm wauto">
                                           <input
@@ -154,8 +147,8 @@
                                           <span class="checkmark"></span>All
                                       </label>
                                   </div>
-                                  <div class="checkbox-cstm" style="margin-left: 0;">
-                                      <label style="width: auto !important; margin-top: 3px;">
+                                  <div class="checkbox-cstm pull-left checkbox-align">
+                                    <label class="checkbox-label-align">
                                           <input
                                                  type="checkbox"
                                                  [(ngModel)]="currentDeletedstatus"
@@ -178,14 +171,14 @@
 
           <ng-template pTemplate="colgroup" let-columns>
               <colgroup>
-                  <col *ngFor="let col of columns" style="width:140px"> />
+                  <col *ngFor="let col of columns" class="table-column-width"> />
               </colgroup>
           </ng-template>
 
           <ng-template pTemplate="header" let-columns style="padding-top: 1% !important">
               <tr>
                 <ng-container *ngFor="let col of columns">
-                  <th style="width:150px;"                     
+                  <th class="table-column-width"                     
                       pResizableColumn
                       pReorderableColumn
                       [pSortableColumn]="col.field">
@@ -193,14 +186,14 @@
                       <p-sortIcon [field]="col.field"></p-sortIcon>
                   </th>
                 </ng-container>
-                  <th style="width:150px; position: sticky !important;" *ngIf="selectedColumns.length > 0">
+                  <th class="table-actions-column" *ngIf="selectedColumns.length > 0">
                     Actions
                  </th>
               </tr>
 
               <tr>
                   <!--(keyup)="dt.filter($event.target.value, col.field, 'contains')"-->
-                  <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                  <th class="table-column-width" *ngFor="let col of columns" [ngSwitch]="col.field">
                       <!-- <input style="width: 100%;"
                              pInputText
                              type="text"
@@ -212,7 +205,7 @@
                          style="width:100%;"  (change)="dt.filter($event.target.value, col.field, 'contains')">
                      <input type="date" class="hidePlaceHolder" *ngIf="col.field == 'updatedDate'" name="updatedDate" 
                          style="width:100%;"  (change)="dt.filter($event.target.value, col.field, 'contains')"> -->
-                     <input style="width: 100%;"
+                     <input class="table-header-input-width"
                              pInputText  *ngIf="col.field !== 'startDate' && col.field !== 'createdDate' && col.field !== 'updatedDate'"
                              type="text"
                              (input)="dt.filter($event.target.value, col.field, 'contains'); activeStatus($event.target.value)" />
@@ -227,7 +220,7 @@
           (change)="dateFilterForTable($event.target.value,col.field)" />
 					       
                   </th>
-                  <th  style="width:150px; position: sticky !important;"></th>
+                  <th  class="table-actions-column"></th>
               </tr>
           </ng-template>
 
@@ -237,7 +230,7 @@
                   pReorderableRowHandle
                   (dblclick)="openEdit(rowData)"
                   >
-                  <td
+                  <td class="table-column-width"
                       *ngFor="let col of columns"
                       class="ui-resizable-column"
                       pReorderableRowHandle
@@ -259,7 +252,7 @@
                      
                   </td>
 
-                  <td style="width: 150px; position: sticky !important;" >
+                  <td class="action-icons-cstm table-column-width" >
                       <div *ngIf="currentDeletedstatus == false">
                           <!-- <p-inputSwitch *ngIf="rowData['isActive']==true" matTooltip="Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
                                   <p-inputSwitch *ngIf="rowData['isActive']==false" matTooltip="In Active" onLabel="on" offLabel="off" (onChange)="handleChange(rowData,$event)" [(ngModel)]="rowData['isActive']"></p-inputSwitch>
@@ -361,7 +354,7 @@
           </ng-template>
           <ng-template pTemplate="emptymessage" let-columns>
             <tr>
-              <td [attr.colspan]="15"   class="no-records-cstm" style="color: red; font-weight: bold; text-align: center">
+              <td [attr.colspan]="15"   class="no-records-cstm no-records-msg">
                 No records found
               </td>	
             </tr>
@@ -370,7 +363,7 @@
           <ng-template pTemplate="summary" id="footer">
               <label id="footer" class="footer">Total:</label>
               <input
-                     style="width: 5%;"
+              class="footer-input-width"
                      [(ngModel)]="totalRecords"
                      [disabled]="true"
                      pInputText
@@ -379,7 +372,7 @@
               &nbsp;&nbsp;
               <label id="footer" class="footer1">Pages Count:</label>
               <input
-                     style="width: 5%;"
+              class="footer-input-width"
                      [(ngModel)]="totalPages"
                      [disabled]="true"
                      pInputText
@@ -440,7 +433,7 @@
           </div>
 
           <div class="modal-footer">
-              <button type="button" class="btn btn-success" (click)="restoreRecord()">
+              <button type="button" class="btn btn-primary" (click)="restoreRecord()">
                   Yes
               </button>
               <button type="button" class="btn btn-danger" (click)="dismissModel()">
@@ -1359,8 +1352,9 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered">
+                      <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+                        <div class="tableFixHead">
+                          <table class="table table-bordered header-table-width">
                           <thead>
                             <tr>
                               <th>Name</th>
@@ -1460,6 +1454,7 @@
                             </tr>
                           </tbody>
                         </table>
+                        </div>
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -1548,9 +1543,9 @@
         <h4 class="modal-title">History of Employee</h4>
       </div>
       <div class="modal-body">
-        <div class="table-responsive">
-          <table
-            class="table table-bordered"
+        <div class="table-responsive pas-table-cstm poro-table-cstm parts-list-table-align">
+					<div class="tableFixHead">
+						<table class="table table-bordered header-table-width"
             *ngIf="auditHistory.length > 0; else noDatavailable"
           >
             <thead>
@@ -1719,6 +1714,7 @@
               </tr>
             </tbody>
           </table>
+          </div>
           <ng-template #noDatavailable>
             <div class="text-center">
               <img

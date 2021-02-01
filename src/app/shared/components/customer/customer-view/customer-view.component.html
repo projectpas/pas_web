@@ -1077,9 +1077,11 @@
                 <div class="panel-body m-lr-7">
                     <div class="col-sm-12">
                         <div>
-                            <app-customer-documents [customerDataFromExternalComponents]="
+                            <!-- <app-customer-documents [customerDataFromExternalComponents]="
                   viewDataGeneralInformation
-                "></app-customer-documents>
+                "></app-customer-documents> -->
+                <app-common-documents [moduleName]="moduleName"  [referenceId]="customerId"
+                [isViewMode]="true" [offLineUpload]="true"></app-common-documents>
                         </div>
                     </div>
                 </div>

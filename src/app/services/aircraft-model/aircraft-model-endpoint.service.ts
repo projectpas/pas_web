@@ -44,7 +44,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAllAircraftModel());
+                return this.handleErrorCommon(error, () => this.getAllAircraftModel());
             });
     }
 
@@ -53,7 +53,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAircraftModelById(aircraftModelId));
+                return this.handleErrorCommon(error, () => this.getAircraftModelById(aircraftModelId));
             });
     }
 
@@ -62,7 +62,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(aircraftModel), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.addAircraftModel(aircraftModel));
+                return this.handleErrorCommon(error, () => this.addAircraftModel(aircraftModel));
             });
     }
 
@@ -71,7 +71,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.post<T>(endpointUrl, JSON.stringify(aircraftModel), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.updateAircraftModel(aircraftModel));
+                return this.handleErrorCommon(error, () => this.updateAircraftModel(aircraftModel));
             });
     }
 
@@ -80,7 +80,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.removeAircraftModelById(aircraftModelId));
+                return this.handleErrorCommon(error, () => this.removeAircraftModelById(aircraftModelId));
             });
     }
 
@@ -89,7 +89,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateForActive(roleObject, id));
+                return this.handleErrorCommon(error, () => this.getUpdateForActive(roleObject, id));
             });
     }
 
@@ -98,7 +98,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAudit(aircraftModelId));
+                return this.handleErrorCommon(error, () => this.getAudit(aircraftModelId));
             });
     }
 
@@ -118,7 +118,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getAircraftModelsRecords(paginationOption));
+                return this.handleErrorCommon(error, () => this.getAircraftModelsRecords(paginationOption));
             });
     }
     getLandingPageList<T>(): Observable<T> {
@@ -126,7 +126,7 @@ export class AircraftModelEndpointService extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getLandingPageList());
+                return this.handleErrorCommon(error, () => this.getLandingPageList());
             });
     }
 

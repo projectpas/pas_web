@@ -242,11 +242,13 @@
         </tr>
       </tbody>
       </table>
-      <div style="float:right">
-      <button type="button" class="btn btn-primary"						 
-        style="padding: 6px 12px !important;margin-top: 10px;"
+      <p-editor [(ngModel)]="textAreaInfo" 
+          [style]="{'height':'320px'}" name="textAreaInfo" 
+          required></p-editor>
+      <div class="editor-buttons">
+      <button type="button" class="btn btn-primary editor-buttons-margin"	
          (click)="onSaveTextAreaInfo()">Save</button>
-      <button type="button" class="btn btn-danger" style="padding: 6px 12px !important;margin-top: 10px;" (click)="closeMemoModel()"
+      <button type="button" class="btn btn-danger editor-buttons-margin" (click)="closeMemoModel()"
         >Close</button>
       </div>
     </div>

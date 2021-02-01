@@ -21,16 +21,16 @@
                       </div>
                   </div>
                   <form #empform="ngForm" class="form-horizontal add-custustomer" style="padding-bottom: 16px;">
-                      <div class="card">
-                          <div class="card-header">
-                              <div class="card-header bg-primary">
-                                  <h4 class="new-card-heading">                                    
+                      <div class="card new-card">
+                          <!-- <div class="card-header"> -->
+                              <div class="card-header header">
+                                  <h4 class="header-name">                                    
                                       Management Structure
                                   </h4>
                               </div>
                               
-                          </div>
-                          <div class="card-body">
+                          <!-- </div> -->
+                          <div class="card-body header-body">
                               <div class="employee-setup">
 
                                   <div class="col-12 employer-block">
@@ -49,6 +49,7 @@
                                                                   <option *ngFor="let certificationtype of ['allCertification','jlkjsdf']" [ngValue]="certificationtype">{{certificationtype}}</option>
                                                               </select> -->
                                                               <ng-multiselect-dropdown  name ="selectedRoles" 
+                                                              class="form-control multiple-custom-select"
                                                                                        [data]="employeeRoleLabel"
                                                                                        [(ngModel)]="selectedRoles"
                                                                                        [settings]="dropdownSettings"
@@ -132,7 +133,7 @@
                 <h4 class="modal-title">Edit Memo</h4>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered table-fixed workflow-table-material">
+                <!-- <table class="table table-bordered table-fixed workflow-table-material">
                     <thead>
                     <th style="color: #fff;">Memo</th>
                     </thead>
@@ -148,19 +149,23 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-                <div style="float: right;">
+                </table> -->
+                <p-editor spellcheck="true"
+                                (ngModelChange)="editorgetmemo($event)"
+                                          [(ngModel)]="memoPopupContent"
+                                          [style]="{ height: '320px' }"
+                                          name="memoPopupContent"
+                                          required></p-editor>
+                <div class="editor-buttons">
                     <button type="button"
-                            class="btn btn-primary"
-                            style="padding: 6px 12px !important; margin-top: 10px;"
+                            class="btn btn-primary editor-buttons-margin"
                             data-dismiss="modal"
                             [disabled]="disableEditor"
                             (click)="onClickPopupSave()">
                         Save
                     </button>
                     <button type="button"
-                            class="btn btn-danger"
-                            style="padding: 6px 12px !important; margin-top: 10px;"
+                            class="btn btn-danger editor-buttons-margin"
                             data-dismiss="modal">
                         Close
                     </button>
