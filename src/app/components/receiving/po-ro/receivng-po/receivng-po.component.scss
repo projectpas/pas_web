@@ -123,6 +123,11 @@ input[type="text"], input[type="number"], select, textarea {
     min-width: 80px !important;
     text-align: center !important;
 }
+.min-width-150
+{
+    min-width: 150px !important;
+    text-align: center !important;
+}
 @media (min-width: 768px) {
     .col-md-3 {
         max-width: 22%;
