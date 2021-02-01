@@ -86,6 +86,7 @@ export class SalesOrderEndpointService extends EndpointFactory {
   private readonly salesorderShippingPartsGet: string = environment.baseUrl + "/api/SalesOrder//GetSalesOrderPartsShippingView";
   private readonly getFreightAudihistory: string = environment.baseUrl + '/api/SalesOrder/sales-order-freight-history';
   private readonly getChargesAudihistory: string = environment.baseUrl + '/api/SalesOrder/sales-order-charges-history';
+  private readonly updatepickticket: string = environment.baseUrl + "/api/SalesOrder/updatepickticket";
   //**End  savesarvice end point creation implementation --nitin
 
 
@@ -633,6 +634,18 @@ export class SalesOrderEndpointService extends EndpointFactory {
 
   getSalesOrderPartsViewById(salesOrderId) {
     return this.http.get<any>(`${this._getSalesOrderPartsViewByIdUrl}/${salesOrderId}`, this.getRequestHeaders())
+  }
+
+  updatePickTicket(data) {
+    return this.http
+      .post(
+        this.updatepickticket,
+        JSON.stringify(data),
+        this.getRequestHeaders()
+      )
+      .catch(error => {
+        return this.handleErrorCommon(error, () => this.updatePickTicket(data));
+      });
   }
   //end nitin
 }

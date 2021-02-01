@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import * as $ from "jquery";
+declare var $ : any;
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CurrencyService } from "../../../../services/currency.service";
 import { EmployeeService } from "../../../../services/employee.service";
@@ -9,6 +9,8 @@ import { MenuItem } from "primeng/api";
 import { SalesOrderService } from "../../../../services/salesorder.service";
 import { listSearchFilterObjectCreation } from "../../../../generic/autocomplete";
 import { SalesOrderpickTicketComponent } from "../sales-order-pickTicket/sales-order-pickTicket.component";
+import { SOPickTicket } from "../../../../models/sales/SOPickTicket";
+import { AlertService, MessageSeverity } from '../../../../services/alert.service';
 
 @Component({
   selector: "app-sales-order-pick-tickets",
@@ -46,13 +48,15 @@ export class SalesOrderPickTicketsComponent implements OnInit {
   home: any;
   salesOrderId: any;
   searchParameters: any;
-  
+  PickTicketDetails = new SOPickTicket();
+  disableSave: boolean = true;
   constructor(
     private salesOrderService: SalesOrderService,
     public employeeService: EmployeeService,
     public currencyService: CurrencyService,
     private authService: AuthService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private alertService: AlertService
   ) { }
 
   ngOnInit() {
@@ -176,5 +180,97 @@ export class SalesOrderPickTicketsComponent implements OnInit {
     });
     instance.salesOrderId = rowData.salesOrderId;
     instance.salesOrderPartId = rowData.salesOrderPartId;
+  }
+
+  // PickTicketDetails = {
+  //   salesOrderId: 0,
+  //   salesOrderPartId:0,
+  //   stockLineNumber:'',
+  //   qty:0,
+  //   qtyToShip:0,
+  //   partNumber: '',
+  //   partDescription: '',
+  //   soPickTicketNumber:'',
+  //   soPickTicketDate:null,
+  //   soPickTicketId:0,
+  //   memo:''
+  // }
+
+  openEdit(rowData){
+    // this.soPickTicket = rowData;
+    this.PickTicketDetails = rowData;
+  }
+  memoPopupContent: any;
+  onClickMemo() {
+    this.memoPopupContent = this.PickTicketDetails.memo;
+  }
+
+  onClickPopupSave() {
+    this.PickTicketDetails.memo = this.memoPopupContent;
+    this.memoPopupContent = '';
+    $('#memo-popup-pt').modal("hide");
+    this.disabledMemo = true;
+    //this.disableSave = false;
+}
+
+  disabledMemo: boolean = false;
+
+  enableSaveMemo() {
+      this.disabledMemo = false;
+  }
+
+  closeMemoModel() {
+    $('#memo-popup-pt').modal("hide");
+    this.disabledMemo = true;
+  }
+
+  parsedText(text) {
+    if (text) {
+        const dom = new DOMParser().parseFromString(
+            '<!doctype html><body>' + text,
+            'text/html');
+        const decodedString = dom.body.textContent;
+        return decodedString;
+    }
+  }
+
+  closeMyModel(type) {
+    $(type).modal("hide");
+    //this.disableSave = true;
+  }
+
+  get employeeId() {
+    return this.authService.currentUser
+      ? this.authService.currentUser.employeeId
+      : "";
+  }
+
+  updatePickTicket(){
+    const data = {
+      ...this.PickTicketDetails,
+      IsActive : true,
+      CreatedBy:this.userName,
+      UpdatedBy:this.userName,
+      pickedById: this.employeeId,
+      confirmedById: this.employeeId
+     }
+    debugger;
+     this.salesOrderService.updatePickTicket(data).subscribe(response => {
+      this.alertService.showMessage(
+        'Success',
+        `Updated Pick Ticket Sucessfully`,
+        MessageSeverity.success
+      );
+      $('#editpickticket').modal("hide");
+      this.onSearch();
+      console.log("response",response);
+    },err => {
+      this.isSpinnerVisible = false;		
+    })
+     console.log("data ", data);
+  }
+
+  enableSave() {
+      this.disableSave = false;
   }
 }

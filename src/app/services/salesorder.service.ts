@@ -555,5 +555,9 @@ export class SalesOrderService {
   GetSalesOrderPartsViewById(salesOrderId) {
     return this.salesOrderEndPointSevice.getSalesOrderPartsViewById(salesOrderId)
   }
+
+  updatePickTicket(data) {
+    return this.salesOrderEndPointSevice.updatePickTicket(data);
+  }
   //ed --nitin
 }
