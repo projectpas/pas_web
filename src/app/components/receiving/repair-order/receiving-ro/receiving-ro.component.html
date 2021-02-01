@@ -3,7 +3,7 @@
         <div class="card-header header">
             <div class="row">
                 <div class="col">
-                    <h4 class="header-name">Receiving RO
+                    <h4 class="header-name">Receiving/Repair Order
                         <button class="btn-sm header-button header-button-alignment"
                             (click)="receiving_ro_header=!receiving_ro_header" style="margin-left: 20px;">
                             {{receiving_ro_header ? 'Collapse' : 'Expand'}}
@@ -13,7 +13,7 @@
                 <div>
                     <button type="button" class="btn-sm header-button pull-right"
                         [routerLink]="['/receivingmodule/receivingpages/app-ro']">
-                        Receiving RO
+                        Receiving RO List
                     </button>
                 </div>
             </div>
@@ -21,7 +21,7 @@
         <div class="card-body">
             <form id="" class="ro-grid-form createPO-form" name="">
                 <div class="form-row">
-                    <div class="col-md-8 ro-status-radios">
+                    <!-- <div class="col-md-8 ro-status-radios">
                         <div class="form-group">
                             <label class="status-radios">Status:</label>
                             <div>
@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <hr *ngIf="receiving_ro_header" />
-                <div class="form-row expand-div-alignment" *ngIf="receiving_ro_header">
+                <div class="form-row" *ngIf="receiving_ro_header" style="margin-top: 10px;">
                     <div class="col-md-9">
                         <div class="form-row">
                             <div class="col-md-4">
@@ -121,6 +121,11 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <input class="form-control" type="text" name="status"
+                                           [(ngModel)]="repairOrderHeaderData.status" disabled required>
+                                </div>
                                 <div class="form-group">
                                     <div class="checkbox-cstm resale-align">
                                         <label>
@@ -219,71 +224,61 @@
 <div id="adminsearchlocationajax">
     <div class="card new-card">
         <div class="card-body">
-            <div
-                class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">
+            <div class="table-responsive pas-table-cstm header-table-width poro-table-cstm parts-list-table-align parts-zindex">                
                 <div class="tableFixHead">
                     <table *ngIf="repairOrderData != undefined && repairOrderData != undefined"
-                        class="table table-bordered table-wrap">
+                        class="table lastcol-fix table-bordered">
                         <thead>
-                            <tr>
-                                <th class="th-width"></th>
-                                <th>Line Num</th>
+                            <tr class="header-table-width">
+                                <th class="min-width-40"></th>
+                                <!-- <th class="min-width-60">Line Num</th> -->
                                 <th>PN</th>
                                 <th>PN Desc</th>
                                 <th>Alt/Equiv</th>
                                 <th>Item Type</th>
                                 <th>Stock Type</th>
-                                <th>Qty to Repair </th>
+                                <th class="min-width-80">Qty to Repair </th>
                                 <!--Qty Ordered-->
-                                <th>Qty Drafted</th>
-                                <th>Qty Repaired</th>
+                                <th class="min-width-80">Qty Drafted</th>
+                                <th class="min-width-80">Qty Repaired</th>
                                 <!--Qty Received-->
                                 <!-- <th>Qty Rejected</th> -->
-                                <th>Back Ord</th>
-                                <th>Status</th>
+                                <th class="min-width-80">Back Ord</th>
+                                <th class="min-width-60">Status</th>
                                 <th>Stockline Num</th>
                                 <!-- <th>Control Num</th>
-    <th>PO Num</th> -->
-                                <th colspan="3" class="text-center" *ngIf="disableParentSpace"></th>
+                                     <th>PO Num</th> -->
+                                <!-- <th colspan="3" class="text-center" *ngIf="disableParentSpace"></th> -->
                                 <th colspan="4" class="mgmt-structure-td-width">Management Structure <span _ngcontent-c22="" class="clr-red">*</span></th>
-                                <th>Is Serialized</th>
-                                <th>Is TimeLife</th>
-                                <th>Qty to Receive <span class="clr-red">*</span></th>
-                                <th></th>
+                                <th class="min-width-80">Is Serialized</th>
+                                <th class="min-width-80">Is TimeLife</th>
+                                <th class="min-width-150">Qty to Receive <span class="clr-red">*</span></th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            <ng-container *ngFor="let part of repairOrderData;let row_index=index">
+                            <ng-container *ngFor="let part of repairOrderData; let row_index=index">
                                 <!--this row is for the parent part-->
-                                <tr class="basic-info" *ngIf="part.isParent">
+                                <tr class="parent-data" *ngIf="part.isParent">
                                     <td class="details-control eachcol" style="padding: 4px 6px;">
                                         <section *ngIf="isSplitShipmentPart(part.repairOrderPartRecordId)">
                                             <i class="fa fa-{{ part.toggleIcon ? 'minus':'plus'}} btn btn-success btn-cstm poro-plus-cstm btn-xs"
                                                 (click)="showSplitShipmentParts(part)"></i>
                                         </section>
                                     </td>
-                                    <td class="text-right">{{row_index + 1}}</td>
-                                    <td>
-                                        {{part.itemMaster.partNumber}}
-                                    </td>
+                                    <!-- <td class="text-right">{{row_index+1}}</td> -->
+                                    <td>{{part.itemMaster.partNumber}}</td>
                                     <td>{{part.itemMaster.partDescription}}</td>
                                     <td>{{part.altEquiPartNumber}}</td>
                                     <td>{{part.itemType}}</td>
                                     <td>{{part.stockType}}</td>
                                     <td class="text-right">{{part?.quantityToRepair}}</td>
                                     <td class="text-right">{{part.quantityDrafted}}</td>
-                                    <td class="text-right">{{part.quantityRepaired}}</td>
-                                    <!-- <td>{{part?.userName}}</td> -->
+                                    <td class="text-right">{{part.quantityRepaired}}</td>                                    
                                     <td class="text-right">{{part.quantityBackOrdered}}</td>
                                     <td>{{part.quantityRepaired == 0 ? 'Pending' : part.quantityRepaired < part.quantityToRepair ? 'Fulfilling' : 'Received'}}</td>
                                     <td>{{part.stockLine.stockLineNumber}}</td>
-                                    <!-- <td>{{part.stockLine.controlNumber}}</td>
-                                            <td>{{part.stockLine.purchaseOrderNumber}}</td> -->
-                                    <td colspan="3" *ngIf="disableParentSpace"></td>
-                                    <td colspan="4">{{part?.level1}}, {{part?.level2}},{{part?.level3}}, {{part?.level4}}</td>
-                                    <td colspan="2"
-                                        *ngIf="part.managementStructureName == undefined || part.managementStructureName.length < 1">
-                                    </td>
+                                    <td colspan="4">{{part?.level1}}, {{part?.level2}},{{part?.level3}}, {{part?.level4}}</td>                                    
                                     <td>
                                         <section
                                             *ngIf="part.itemMaster != null && part.quantityRepaired < part.quantityToRepair">
@@ -323,93 +318,69 @@
                                             *ngIf="!part.hasChildren && part.quantityRepaired < part.quantityToRepair"
                                             [(ngModel)]="part.quantityActuallyReceived"
                                             (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum"
-                                            class="form-control text-right" [maxLength]="12" required />
-
-                                        <!--<a *ngIf="part.quantityBackOrdered" (click)="addDetailsClick(part)" style="color:red">Add Details</a>-->
-                                    </td>
-                                    <td><button
+                                            class="form-control text-right" [maxLength]="12" required  style="width: 50px !important;
+                                            margin-right: 10px !important;"/>
+                                        <button
                                             *ngIf="!part.hasChildren && part.quantityRepaired < part.quantityToRepair"
                                             [disabled]="!part.quantityActuallyReceived"
                                             class="btn btn-primary btn-po-details"
                                             (click)="toggleStockLine($event, part)">{{ part.showStockLineGrid ? 'Close' : 'Receive'}}</button>
-                                    </td>
+                                    </td>                                    
                                 </tr>
                                 <tr class="child-header splitship-head child-header-back"
                                     [hidden]="!part.visible"
                                      *ngIf="!part.isParent">
-                                    <!-- [hidden]="repairOrderData[row_index+1] != undefined && !repairOrderData[row_index+1].visible"
-                                    *ngIf="part.isParent && repairOrderData[row_index+1] != undefined && (!repairOrderData[row_index+1].isParent)"> -->
-                                    <th></th>
-                                    <th></th>
-                                    <th colspan="5">PN</th>
-                                    <th>Qty to Repair </th>
-                                    <!--Qty Ordered-->
-                                    <th colspan="2">Qty Repaired</th>
-                                    <!--Qty Received-->
-                                    <!-- <th>Qty Rejected</th> -->
-                                    <th>Back Ord</th>
+                                    <th class="min-width-40"></th>
+                                    <th class="min-width-60"></th>
+                                    <th>PN</th>
+                                    <th class="min-width-60">Qty to Repair </th>                                    
+                                    <th class="min-width-60">Qty Repaired</th>                                   
+                                    <th class="min-width-60">Back Ord</th>
                                     <th>Status</th>
-                                    <th>Stockline Num</th>
-                                    <!-- <th>Control Num</th>
-                                            <th>PO Num</th> -->
+                                    <th>Stockline Num</th>                                    
                                     <th>User Type</th>
                                     <th>User Name</th>
-                                    <th>Address</th>
-                                    <th colspan="3">Management Structure</th>
-                                    <th>Receive Quantity</th>
-                                    <th> </th>
-                                    <th> </th>
+                                    <th colspan="3">Address</th>
+                                    <th colspan="4" class="mgmt-structure-td-width">Management Structure</th>
+                                    <!-- <th>Receive Quantity</th> -->
+                                    <th></th>
+                                    <th></th>
+                                    <th class="min-width-120">Qty to Receive <span class="clr-red">*</span></th>                                   
                                 </tr>
-                                <tr class="child-data splitship-child child-data-back" [hidden]="!part.visible"
+                                <tr class="child-data splitship-child child-data-back" 
+                                    [hidden]="!part.visible"
                                     *ngIf="!part.isParent">
                                     <td>&nbsp;</td>
                                     <td>&nbsp;</td>
-                                    <td colspan="5">{{part?.itemMaster?.partNumber}}</td>
-                                    <td>{{part?.quantityToRepair}}</td>
-                                    <!--quantityOrdered-->
-                                    <td colspan="2">{{part?.quantityRepaired}}</td>
-                                    <!--stockLineCount-->
-
-                                    <!-- <td>{{'NA'}}</td> -->
-                                    <td>{{part.quantityToRepair - part.quantityRepaired}}</td>
-                                    <td>
-                                        {{part.quantityRepaired == 0 ? 'Pending' : part.quantityRepaired < part.quantityToRepair ? 'Fulfilling' : 'Received'}}
-                                    </td>
-                                    <td>
-                                        {{part.stockLine.stockLineNumber}}
-                                    </td>
-                                    <!-- <td>{{part.stockLine.controlNumber}}</td>
-                                            <td>{{part.stockLine.purchaseOrderNumber}}</td> -->
-                                    <!-- <td>{{part.roPartSplitUserTypeId == 3 ? 'Vendor' : part.roPartSplitUserTypeId == 1 ? 'Customer' : 'Company'}}</td> -->
+                                    <td>{{part?.itemMaster?.partNumber}}</td>
+                                    <td class="right">{{part?.quantityToRepair}}</td>                                   
+                                    <td class="right">{{part?.quantityRepaired}}</td>
+                                    <td class="right">{{part.quantityToRepair - part.quantityRepaired}}</td>                                    
+                                    <td>{{part.quantityRepaired == 0 ? 'Pending' : part.quantityRepaired < part.quantityToRepair ? 'Fulfilling' : 'Received'}}</td>
+                                    <td>{{part.stockLine.stockLineNumber}}</td>
                                     <td>{{part.roPartSplitUserTypeName}}</td>
-                                    <td>{{part.roPartSplitUserName}}</td>
-                                    <!-- <td>{{part?.userName}}</td> -->
-                                    <!-- <td></td> -->
-                                    <td>{{part?.roPartSplitAddress1}}, {{part?.roPartSplitCity}},
+                                    <td>{{part.roPartSplitUserName}}</td>                                   
+                                    <td colspan="3">{{part?.roPartSplitAddress1}}, {{part?.roPartSplitCity}},
                                         {{part?.roPartSplitCountry}}, {{part?.roPartSplitPostalCode}}</td>
-                                    <td colspan="3"
-                                        *ngIf="part.managementStructureName != undefined && part.managementStructureName.length > 0">
-                                        {{part.managementStructureName[0]}}, {{part.managementStructureName[1]}},
-                                        {{part.managementStructureName[2]}}, {{part.managementStructureName[3]}}</td>
-                                    <td colspan="3"
-                                        *ngIf="part.managementStructureName == undefined || part.managementStructureName.length < 1">
-                                    </td>
+                                    <td colspan="4">                                        
+                                        {{part.level1}}, {{part.level2}},{{part.level3}}, {{part.level4}}</td> 
+                                        <td></td>
+                                        <td></td>
                                     <td><input type="text" *ngIf="part.quantityRepaired < part.quantityToRepair"
                                             [(ngModel)]="part.quantityActuallyReceived"
                                             (keyup)="addStockLine(part, false)" pInputText pKeyFilter="pnum"
-                                            class="form-control" [maxLength]="12" /></td>
-                                    <td><button class="btn btn-primary btn-po-details-child"
+                                            class="form-control" style="width: 50px !important;
+                                            margin-right: 10px !important; text-align: right;" [maxLength]="12" required/>
+                                        <button class="btn btn-primary btn-po-details"
                                             *ngIf="part.quantityRepaired < part.quantityToRepair"
                                             [disabled]="!part.quantityActuallyReceived"
                                             (click)="toggleStockLine($event, part)">{{ part.showStockLineGrid ? 'Close' : 'Receive'}}</button>
-                                    </td>
-                                    <td></td>
-                                    <!--<td><a (click)="addStockLine(part)" class="btn btn-primary btn-po-details">Add Details</a></td>-->
-                                    <!--<button type="button" (click)="showDialog()" pButton icon="fa-external-link-square" label="Show"></button>-->
-                                </tr>
+                                    
+                                    </td>                                    
+                                 </tr>
 
                                 <tr class="more-info" *ngIf="part.showStockLineGrid" [hidden]="!part.visible">
-                                    <td colspan="22">
+                                    <td colspan="13">
                                         <div class="form-row" style="margin-top: 10px;padding: 0px 7px;">
                                             <div class="col-md-2">
                                                 <div class="form-group">
@@ -1387,6 +1358,10 @@
                                                 </div>
                                             </section>
                                         </div>
+                                    </td>
+                                    <td colspan="8">                                        
+                                    </td>
+                                    <td>                                        
                                     </td>
                                 </tr>
                             </ng-container>

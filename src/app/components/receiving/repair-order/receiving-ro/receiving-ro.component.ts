@@ -62,7 +62,7 @@ export class ReceivingRoComponent implements OnInit {
     roDepartmentList: DropDownData[];
     roStatus: any[] = [];
     roUserType: DropDownData[] = [];
-    receiving_ro_header: boolean = true;
+    receiving_ro_header: boolean = false;
     roSelectedCompanyId: number;
     roSelectedBusinessUnitId: number;
     roSelectedDivisionId: number;
@@ -765,7 +765,7 @@ export class ReceivingRoComponent implements OnInit {
         }
     }
 
-    public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {
+    public isSplitShipmentPart(repairOrderPartRecordId: number): boolean {        
         return this.repairOrderData.filter(x => x.parentId == repairOrderPartRecordId && !x.isParent).length > 0;        
     }
 
@@ -2093,4 +2093,10 @@ export class ReceivingRoComponent implements OnInit {
         }
         // }
     }
+
+    public counter : number = 0;
+    rownum(){
+        return this.counter += 1;
+    }
+
 }

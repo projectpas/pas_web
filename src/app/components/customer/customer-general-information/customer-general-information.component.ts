@@ -239,7 +239,6 @@ export class CustomerGeneralInformationComponent implements OnInit {
         for (let property in changes) {
             if (property == 'selectedCustomerTab') {
                 if (changes[property].currentValue != {} && changes.selectedCustomerTab.currentValue == "General") {
-
                 }
             }
         }
