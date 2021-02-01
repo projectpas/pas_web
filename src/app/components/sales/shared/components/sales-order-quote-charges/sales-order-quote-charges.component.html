@@ -1,274 +1,291 @@
 <div class="form-group">
   <div class="card new-card">
-  <!-- <div class="row" *ngIf="!isView"> -->
+    <!-- <div class="row" *ngIf="!isView"> -->
     <!-- <button data-target="#addNewCharges" data-toggle="modal" (click)="createNew()" class="btn btn-primary"
       style="margin-left: 10px;">
       Add Charges
     </button> -->
-    
+
     <div class="card-header header" *ngIf="!isView">
       <div class="row">
         <div class="col">
-          <h4 class="header-name">  Charges</h4>
+          <h4 class="header-name"> Charges</h4>
         </div>
         <div>
-          <button
-            type="button"
-            class="btn-sm header-button" data-target="#addNewCharges" data-toggle="modal" (click)="createNew()">
+          <button type="button" class="btn-sm header-button" data-target="#addNewCharges" data-toggle="modal"
+            (click)="createNew()">
             Add Charges
           </button>
         </div>
       </div>
     </div>
-  <!-- </div> -->
-  <div  [ngClass]="(isView) ? 'pull-right' : ''">
-    <div class="checkbox-cstm show_cst">
-      <label style="width: auto !important;margin-top: 3px;">
-          <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55" (click)="getDeleteListByStatus($event.target.checked)" />
+    <!-- </div> -->
+    <div [ngClass]="(isView) ? 'pull-right' : ''">
+      <div class="checkbox-cstm show_cst">
+        <label style="width: auto !important;margin-top: 3px;">
+          <input type="checkbox" [(ngModel)]="deletedStatusInfo" name="cparent55" id="cparent55"
+            (click)="getDeleteListByStatus($event.target.checked)" />
           <span class="cr"><i class="cr-icon pi pi-check"></i></span>
           Show Deleted List
-      </label>
+        </label>
+      </div>
     </div>
-  </div>
-  <div class="clearfix"></div>
-  <div class="card-body header-body" style="overflow:auto">
-    <p-table [columns]="cols" [value]="salesOrderChargesList" [lazy]="false" [paginator]="true" [rows]="10"
-      class="rpo-table-cstm rro-table-cstm ptable-f10" [paginator]="true">
-      <!--chargess-->
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th colspan="7" style="width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
-            &nbsp;
-          </th>
-          <ng-container *ngIf="isView">
-            <th colspan="4" style="width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
-              <div class="display-flex" style="padding-left: 10px;">
-                <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
-                  <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
-                    label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
-                  </p-radioButton>
+    <div class="clearfix"></div>
+    <div class="card-body header-body" style="overflow:auto">
+      <p-table [columns]="cols" [value]="salesOrderChargesList" [lazy]="false" [paginator]="true" [rows]="10"
+        class="rpo-table-cstm rro-table-cstm ptable-f10" [paginator]="true">
+        <!--chargess-->
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th colspan="7"
+              style="width:650px;color:#333 !important; border: 1px solid #fff;border-right: 1px solid #e7ecf1;">
+              &nbsp;
+            </th>
+            <ng-container *ngIf="isView">
+              <th colspan="4" style="width:650px;color:#333 !important; border: 1px solid #e7ecf1;padding-left: 5px;">
+                <div class="display-flex" style="padding-left: 10px;">
+                  <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
+                    <p-radioButton class="p-radiobutton-label-horizontal p-radiobutton-label-w92" name="costPlusType"
+                      label="T&M - Mark Up" value="1" [(ngModel)]="costPlusType" [disabled]="isView"
+                      (click)="tmchange()">
+                    </p-radioButton>
+                    <div>
+                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
+                        [(ngModel)]="overAllMarkup" id="hideDisabled" [disabled]="isView || costPlusType != 1"
+                        style="margin-top: 10px;">
+                        <option value="" selected>Select</option>
+                        <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
+                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2" label="Actual"
+                      [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
+                  </div>
                   <div>
-                    <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                      [(ngModel)]="overAllMarkup" id="hideDisabled" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
-                      <option value="" selected>Select</option>
-                      <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
-                    </select>
+                    <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="3"
+                      label="Flat Rate" [(ngModel)]="costPlusType" [disabled]="isView"
+                      (click)="(!isView)?tmchange():''">
+                    </p-radioButton>
                   </div>
                 </div>
-                <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="2" label="Actual"
-                    [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''"></p-radioButton>
-                </div>
-                <div>
-                  <p-radioButton class="p-radiobutton-label-horizontal" name="costPlusType" value="3" label="Flat Rate"
-                    [(ngModel)]="costPlusType" [disabled]="isView" (click)="(!isView)?tmchange():''">
-                  </p-radioButton>
-                </div>
-              </div>
-            </th>
-            <th style="width:130px;color:#fff !important;"></th>
-          </ng-container>
-          <ng-container *ngIf="!isView">
-            <th colspan="4" style="width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;">
-              <div class="display-flex" style=" padding-left: 10px;">
-                <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
-                  <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92" name="costPlusType"
-                    label="T&M - Mark Up" value="1" (ngModelChange)="validated()" [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
-                  </p-radioButton>
+              </th>
+              <th style="width:130px;color:#fff !important;"></th>
+            </ng-container>
+            <ng-container *ngIf="!isView">
+              <th colspan="4" style="width:650px;background: #fff; border: 1px solid #e7ecf1;padding: 0;">
+                <div class="display-flex" style=" padding-left: 10px;">
+                  <div class="form-group" style="text-align: center; display: flex;    margin-bottom: 0px;">
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio p-radiobutton-label-w92"
+                      name="costPlusType" label="T&M - Mark Up" value="1" (ngModelChange)="validated()"
+                      [(ngModel)]="costPlusType" [disabled]="isView" (click)="tmchange()">
+                    </p-radioButton>
+                    <div>
+                      <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
+                        [(ngModel)]="overAllMarkup" (ngModelChange)="validated()"
+                        [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
+                        <option value="" selected>Select</option>
+                        <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType"
+                      value="2" label="Actual" [(ngModel)]="costPlusType" (ngModelChange)="validated()"
+                      [disabled]="isView" (click)="tmchange()"></p-radioButton>
+                  </div>
                   <div>
-                    <select class="form-group select-markup" (change)="markupChanged({}, 'all')"
-                      [(ngModel)]="overAllMarkup" (ngModelChange)="validated()" [disabled]="isView || costPlusType != 1" style="margin-top: 10px;">
-                      <option value="" selected>Select</option>
-                      <option *ngFor="let markUp of markupList" [value]="markUp.value">{{markUp.label}}</option>
-                    </select>
+                    <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType"
+                      value="3" label="Flat Rate" [(ngModel)]="costPlusType" (ngModelChange)="validated()"
+                      [disabled]="isView" (click)="(!isView)?tmchange():''">
+                    </p-radioButton>
                   </div>
                 </div>
-                <div style="float: left; margin-bottom: 7px; margin-left: 4px; margin-right: 4px;">
-                  <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType" value="2" label="Actual"
-                    [(ngModel)]="costPlusType" (ngModelChange)="validated()" [disabled]="isView" (click)="tmchange()"></p-radioButton>
-                </div>
-                <div>
-                  <p-radioButton class="p-radiobutton-label-horizontal sales-quote-radio" name="costPlusType" value="3" label="Flat Rate"
-                    [(ngModel)]="costPlusType" (ngModelChange)="validated()" [disabled]="isView" (click)="(!isView)?tmchange():''">
-                  </p-radioButton>
-                </div>
-              </div>
-            </th>
-            <th style="width:130px;color:#fff !important;"></th>
-          </ng-container>
-        </tr>
-        <tr>
-          <th rowspan="2" class="table-column-width">Type<span class="clr-red">*</span></th>
-          <th rowspan="2" class="table-column-width">Description</th>
-          <th rowspan="2" class="table-column-width">Qty<span class="clr-red">*</span></th>
-          <th rowspan="2" class="table-column-width">Ref Num</th>
-          <th rowspan="2" class="table-column-width">Unit Cost<span class="clr-red">*</span></th>
-          <th rowspan="2" class="table-column-width">Extended Cost<span class="clr-red">*</span></th>
-          <th rowspan="2" class="table-column-width">Vendor Name</th>
-          <ng-container>
-            <th rowspan="2" class="table-column-width">Billing Method</th>
-            <th rowspan="2" class="table-column-width">Mark Up</th>
-            <th rowspan="2" class="table-column-width">Billing Rate</th>
-            <th rowspan="2" class="table-column-width">Billing Amount</th>
-          </ng-container>
-          <th rowspan="2"  class="table-column-width">Actions</th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-charge let-columns="columns" let-rowIndex="rowIndex">
-        <tr >
-          <td class="table-column-width">
-            <select class="form-control custom-select wf-pub-id" id="hideDisabled" [(ngModel)]="charge.chargesTypeId"
-              style="width: 130px;" name="type_{{rowIndex}}" [disabled]="true">
-              <option [value]="0">Select</option>
-              <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
+              </th>
+              <th style="width:130px;color:#fff !important;"></th>
+            </ng-container>
+          </tr>
+          <tr>
+            <th rowspan="2" class="table-column-width">Type<span class="clr-red">*</span></th>
+            <th rowspan="2" class="table-column-width">Description</th>
+            <th rowspan="2" class="table-column-width">Qty<span class="clr-red">*</span></th>
+            <th rowspan="2" class="table-column-width">Ref Num</th>
+            <th rowspan="2" class="table-column-width">Unit Cost<span class="clr-red">*</span></th>
+            <th rowspan="2" class="table-column-width">Extended Cost<span class="clr-red">*</span></th>
+            <th rowspan="2" class="table-column-width">Vendor Name</th>
+            <ng-container>
+              <th rowspan="2" class="table-column-width">Billing Method</th>
+              <th rowspan="2" class="table-column-width">Mark Up</th>
+              <th rowspan="2" class="table-column-width">Billing Rate</th>
+              <th rowspan="2" class="table-column-width">Billing Amount</th>
+            </ng-container>
+            <th rowspan="2" class="table-column-width">Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-charge let-columns="columns" let-rowIndex="rowIndex">
+          <tr>
+            <td class="table-column-width">
+              <select class="form-control custom-select wf-pub-id" id="hideDisabled" [(ngModel)]="charge.chargesTypeId"
+                name="type_{{rowIndex}}" [disabled]="true">
+                <option [value]="0">Select</option>
+                <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
                 ctype.chargeType
               }}</option>
-            </select>
-          </td>
-          <td class="table-column-width">
-            {{charge.description}}
-          </td>
-          <td class="table-column-width" style="text-align: right;">
-            {{charge.quantity | globalNmberFormat}}
-          </td>
-          <td class="table-column-width">
-            {{charge.refNum}}
-          </td>
-          <td class="table-column-width" style="text-align: right;">
-            {{charge.unitCost | twoDecimalGlobalNumberFormatPipe}}
-          </td>
-          <td class="table-column-width" style="text-align: right;">
-            {{charge.extendedCost | twoDecimalGlobalNumberFormatPipe}}
-          </td>
-          <!-- <td>
+              </select>
+            </td>
+            <td class="table-column-width">
+              {{charge.description}}
+            </td>
+            <td class="table-column-width" style="text-align: right;">
+              {{charge.quantity | globalNmberFormat}}
+            </td>
+            <td class="table-column-width">
+              {{charge.refNum}}
+            </td>
+            <td class="table-column-width" style="text-align: right;">
+              {{charge.unitCost | twoDecimalGlobalNumberFormatPipe}}
+            </td>
+            <td class="table-column-width" style="text-align: right;">
+              {{charge.extendedCost | twoDecimalGlobalNumberFormatPipe}}
+            </td>
+            <!-- <td>
             {{getVendorNameById(charge.vendorId)}}
           </td> -->
-          <td class="table-column-width">
-            {{charge.vendor ? charge.vendor.vendorName : ''}}
-          </td>
-          <ng-container>
             <td class="table-column-width">
-              <select class="form-control"  (ngModelChange)="validated()" [(ngModel)]="charge.billingMethodId" [disabled]="isView || costPlusType == 3"
-                (change)="charge.markupPercentageId = '';charge.billingRate = 0;charge.billingAmount = 0;(charge.billingMethodId == '2')?charge.billingAmount = charge.extendedCost:'';">
-                <option value="" selected>Select</option>
-                <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
-                  [value]="bm.value">{{bm.label}}</option>
-              </select>
+              {{charge.vendor ? charge.vendor.vendorName : ''}}
             </td>
-            <td class="table-column-width">
-              <select class="form-control select-markup" (ngModelChange)="validated()" (change)="markupChanged(charge, 'row')"
-                [(ngModel)]="charge.markupPercentageId" [disabled]="isView || charge.billingMethodId != '1'">
-                <option value="" selected>Select</option>
-                <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
-              </select>
-            </td>
-            <td class="table-column-width">
-              <input type="text" pInputText (ngModelChange)="validated()" pKeyFilter="money" class="form-control text_right"
-                value="{{ formateCurrency(charge.billingRate) }}"
-                (change)="charge.billingRate = formateCurrency(charge.billingRate)" [(ngModel)]="charge.billingRate"
-                [disabled]="true" />
-            </td>
-            <td class="table-column-width">
-              <input type="text"  (ngModelChange)="validated()" pInputText pKeyFilter="money" class="form-control text_right"
-                value="{{ formateCurrency(charge.billingAmount) }}"
-                (blur)="charge.billingAmount = (charge.billingAmount)?formateCurrency(charge.billingAmount):'0.00'"
-                (change)="charge.billingAmount = formateCurrency(charge.billingAmount)"
-                [(ngModel)]="charge.billingAmount" [disabled]="isView || charge.billingMethodId != '2'" />
-            </td>
-          </ng-container>
-          <td class="table-column-width" class="btn-spaces text-center" >
-            <div *ngIf="deletedStatusInfo==false">
-              <span data-target="#addNewCharges" data-toggle="modal" *ngIf="!isView">
-                <a class="btn nobg btn-edit-cstm" (click)="edit(charge, rowIndex)" matTooltip="Edit">
-                  <i class="fa fa-pencil"></i>
-                </a>
-              </span>
-              <span *ngIf="!isView">
-                <a class="btn nobg btn-delete-cstm" (click)="openDelete(content,charge,rowIndex)" matTooltip="Delete">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </span>
-              <span>
-                <!-- <a class="btn nobg"
+            <ng-container>
+              <td class="table-column-width">
+                <select class="form-control" (ngModelChange)="validated()" [(ngModel)]="charge.billingMethodId"
+                  [disabled]="isView || costPlusType == 3"
+                  (change)="charge.markupPercentageId = '';charge.billingRate = 0;charge.billingAmount = 0;(charge.billingMethodId == '2')?charge.billingAmount = charge.extendedCost:'';">
+                  <option value="" selected>Select</option>
+                  <option *ngFor="let bm of [{'label': 'T&M', 'value': '1'}, {'label': 'Actual', 'value': '2'}]"
+                    [value]="bm.value">{{bm.label}}</option>
+                </select>
+              </td>
+              <td class="table-column-width">
+                <select class="form-control select-markup" (ngModelChange)="validated()"
+                  (change)="markupChanged(charge, 'row')" [(ngModel)]="charge.markupPercentageId"
+                  [disabled]="isView || charge.billingMethodId != '1'">
+                  <option value="" selected>Select</option>
+                  <option *ngFor="let markUp of markupList" [value]="markUp.value">{{ markUp.label }}</option>
+                </select>
+              </td>
+              <td class="table-column-width">
+                <input type="text" pInputText (ngModelChange)="validated()" pKeyFilter="money"
+                  class="form-control text_right" value="{{ formateCurrency(charge.billingRate) }}"
+                  (change)="charge.billingRate = formateCurrency(charge.billingRate)" [(ngModel)]="charge.billingRate"
+                  [disabled]="true" />
+              </td>
+              <td class="table-column-width">
+                <input type="text" (ngModelChange)="validated()" pInputText pKeyFilter="money"
+                  class="form-control text_right" value="{{ formateCurrency(charge.billingAmount) }}"
+                  (blur)="charge.billingAmount = (charge.billingAmount)?formateCurrency(charge.billingAmount):'0.00'"
+                  (change)="charge.billingAmount = formateCurrency(charge.billingAmount)"
+                  [(ngModel)]="charge.billingAmount" [disabled]="isView || charge.billingMethodId != '2'" />
+              </td>
+            </ng-container>
+            <td class="table-column-width" class="btn-spaces text-center">
+              <div *ngIf="deletedStatusInfo==false">
+                <span data-target="#addNewCharges" data-toggle="modal" *ngIf="!isView">
+                  <a class="btn nobg btn-edit-cstm" (click)="edit(charge, rowIndex)" matTooltip="Edit">
+                    <i class="fa fa-pencil"></i>
+                  </a>
+                </span>
+                <span *ngIf="!isView">
+                  <a class="btn nobg btn-delete-cstm" (click)="openDelete(content,charge,rowIndex)" matTooltip="Delete">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </span>
+                <span>
+                  <!-- <a class="btn nobg"
                    (click)="openInterShipViaHistory(contentAuditHist1,charge)"
                    matTooltip="History" matTooltipPosition="above">
                     <i class="fa fa-history">
                     </i>
                 </a> -->
-                <button class="btn  nobg grey_btn_icon" style="padding:0px" [disabled]="charge.salesOrderQuoteChargesId==0"  (click)="openInterShipViaHistory(contentAuditHist1,charge)"
-                matTooltip="History" matTooltipPosition="above">
-                <i class="fa fa-history">
-                </i>
-                </button>
-            </span>
-            </div>
-            <div *ngIf="deletedStatusInfo==true">
-              <span *ngIf="!isView"><a class="btn nobg" (click)="restore(restoreId,charge,rowIndex);"  matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
-              <span>
-                <!-- <a class="btn nobg"
+                  <button class="btn  nobg grey_btn_icon" style="padding:0px"
+                    [disabled]="charge.salesOrderQuoteChargesId==0"
+                    (click)="openInterShipViaHistory(contentAuditHist1,charge)" matTooltip="History"
+                    matTooltipPosition="above">
+                    <i class="fa fa-history">
+                    </i>
+                  </button>
+                </span>
+              </div>
+              <div *ngIf="deletedStatusInfo==true">
+                <span *ngIf="!isView"><a class="btn nobg" (click)="restore(restoreId,charge,rowIndex);"
+                    matTooltip="Restore Record" matTooltipPosition="above"><i class="fa fa-undo"
+                      aria-hidden="true"></i></a> </span>
+                <span>
+                  <!-- <a class="btn nobg"
                    (click)="openInterShipViaHistory(contentAuditHist1,charge)"
                    matTooltip="History" matTooltipPosition="above">
                     <i class="fa fa-history">
                     </i>
                 </a> -->
-                <button class="btn  nobg grey_btn_icon" style="padding:0px" [disabled]="charge.salesOrderQuoteChargesId==0"  (click)="openInterShipViaHistory(contentAuditHist1,charge)"
-                matTooltip="History" matTooltipPosition="above">
-                <i class="fa fa-history">
-                </i>
-                </button>
-            </span>
-            </div>
-       
-          </td>
-        </tr>
-      </ng-template>
-      <!-- <ng-template pTemplate="emptymessage" let-columns >
+                  <button class="btn  nobg grey_btn_icon" style="padding:0px"
+                    [disabled]="charge.salesOrderQuoteChargesId==0"
+                    (click)="openInterShipViaHistory(contentAuditHist1,charge)" matTooltip="History"
+                    matTooltipPosition="above">
+                    <i class="fa fa-history">
+                    </i>
+                  </button>
+                </span>
+              </div>
+
+            </td>
+          </tr>
+        </ng-template>
+        <!-- <ng-template pTemplate="emptymessage" let-columns >
         <tr>
           <td [attr.colspan]="30" style="color: red; font-weight: bold; text-align: center">
             No records found
           </td>
         </tr>
       </ng-template> -->
-      <ng-template pTemplate="footer">
-        <tr class="footer">
-          <td class="table-column-width">Total</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width" class="content-to-end">{{formateCurrency(calculateExtendedCostSummation())}}</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width">&nbsp;</td>
-          <td class="table-column-width">&nbsp;</td>
-          <ng-container *ngIf="costPlusType != 3">
-            <td class="table-column-width" class="content-to-end">{{formateCurrency(getTotalBillingAmount())}}</td>
-          </ng-container>
-          <ng-container *ngIf="costPlusType == 3">
-            <td class="table-column-width">
-              <input type="text" pInputText pKeyFilter="money" style="text-align: right;"
-                [ngModel]="chargesFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
-                [ngModelOptions]="{updateOn:'blur'}"
-                (ngModelChange)="chargesFlatBillingAmount=formatStringToNumberGlobal($event)"
-                (blur)="chargesFlatBillingAmount = (chargesFlatBillingAmount)?formateCurrency(chargesFlatBillingAmount):'0.00'"
-                [disabled]="isView" />
+        <ng-template pTemplate="footer">
+          <tr class="footer">
+            <td class="table-column-width">Total</td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width" class="content-to-end">{{formateCurrency(calculateExtendedCostSummation())}}
             </td>
-            <!-- <td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width">&nbsp;</td>
+            <td class="table-column-width">&nbsp;</td>
+            <ng-container *ngIf="costPlusType != 3">
+              <td class="table-column-width" class="content-to-end">{{formateCurrency(getTotalBillingAmount())}}</td>
+            </ng-container>
+            <ng-container *ngIf="costPlusType == 3">
+              <td class="table-column-width">
+                <input type="text" pInputText pKeyFilter="money" style="text-align: right;"
+                  [ngModel]="chargesFlatBillingAmount  | twoDecimalGlobalNumberFormatPipe"
+                  [ngModelOptions]="{updateOn:'blur'}"
+                  (ngModelChange)="chargesFlatBillingAmount=formatStringToNumberGlobal($event)"
+                  (blur)="chargesFlatBillingAmount = (chargesFlatBillingAmount)?formateCurrency(chargesFlatBillingAmount):'0.00'"
+                  [disabled]="isView" />
+              </td>
+              <!-- <td>
               <input type="text" style="text-align: right;" pInputText pKeyFilter="money"
                 (blur)="chargesFlatBillingAmount = (chargesFlatBillingAmount)?formateCurrency(chargesFlatBillingAmount):'0.00'"
                 [(ngModel)]="chargesFlatBillingAmount" [disabled]="isView" />
             </td> -->
-          </ng-container>
-          <td class="table-column-width" *ngIf="!isView">&nbsp;</td>
-        </tr>
-      </ng-template>
-    </p-table>
+            </ng-container>
+            <td class="table-column-width" *ngIf="!isView">&nbsp;</td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
-    </div>
-  
+  </div>
+
   <div *ngIf="!isView" style="padding: 10px;">
     <button class="btn btn-primary pull-right side" [disabled]="isSaveChargesDesabled" (click)="createChargesQuote()">
-       <span *ngIf="isUpdate">Update</span>
+      <span *ngIf="isUpdate">Update</span>
       <span *ngIf="!isUpdate">Save</span>
     </button>
   </div>
@@ -314,7 +331,8 @@
                   <tr *ngFor="let charge of chargeForm; let i = index">
                     <td>
                       <select class="form-control custom-select1 wf-pub-id" id="dllChargesType"
-                        [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" style="width: 130px;" name="type_{{i}}" required>
+                        [(ngModel)]="charge.chargesTypeId" (ngModelChange)="enableUpdate()" style="width: 130px;"
+                        name="type_{{i}}" required>
                         <option [value]="">Select</option>
                         <option [value]="ctype.chargeId" *ngFor="let ctype of chargesTypes">{{
                           ctype.chargeType
@@ -337,18 +355,21 @@
                     <td>
                       <input type="text" pInputText pKeyFilter="money" class="form-control text-right"
                         value="{{ charge.unitCost }}" (change)="calculateExtendedCost(charge)"
-                        [(ngModel)]="charge.unitCost" (ngModelChange)="enableUpdate()" name="unitCost_{{i}}" required maxlength="15" />
+                        [(ngModel)]="charge.unitCost" (ngModelChange)="enableUpdate()" name="unitCost_{{i}}" required
+                        maxlength="15" />
                     </td>
                     <td>
                       <input type="text" pInputText pKeyFilter="money" class="form-control text-right" [disabled]="true"
-                        value="{{ charge.extendedCost }}" [(ngModel)]="charge.extendedCost" (ngModelChange)="enableUpdate()"
-                        (change)="calculateExtendedCostSummation()" name="exd_{{i}}" required disabled maxlength="15" />
+                        value="{{ charge.extendedCost }}" [(ngModel)]="charge.extendedCost"
+                        (ngModelChange)="enableUpdate()" (change)="calculateExtendedCostSummation()" name="exd_{{i}}"
+                        required disabled maxlength="15" />
                     </td>
                     <td>
-                      <p-autoComplete class="autocomp-customer-cstm" name="vendorName" [(ngModel)]="charge.vendor" (ngModelChange)="enableUpdate()"
-                        [ngModelOptions]="{standalone: true}" [suggestions]="vendorCollection" [forceSelection]="true"
-                        emptyMessage="No Match Found" field="vendorName" (completeMethod)="filterVendor($event)"
-                        [size]="30" [minLength]="1" [dropdown]="true">
+                      <p-autoComplete class="autocomp-customer-cstm" name="vendorName" [(ngModel)]="charge.vendor"
+                        (ngModelChange)="enableUpdate()" [ngModelOptions]="{standalone: true}"
+                        [suggestions]="vendorCollection" [forceSelection]="true" emptyMessage="No Match Found"
+                        field="vendorName" (completeMethod)="filterVendor($event)" [size]="30" [minLength]="1"
+                        [dropdown]="true">
                       </p-autoComplete>
                       <!-- <p-autoComplete [(ngModel)]="charge.vendorId" [suggestions]="vendorCollection"
                         [forceSelection]="true" (completeMethod)="filterVendor($event)" [dropdown]="true" [size]="30"
@@ -356,7 +377,8 @@
                       </p-autoComplete> -->
                     </td>
                     <td>
-                      <button class="btn btn-danger nobg" [disabled]="isEdit==true"  (click)="deleteRow(i, frieghtsCreateForm)">
+                      <button class="btn btn-danger nobg" [disabled]="isEdit==true"
+                        (click)="deleteRow(i, frieghtsCreateForm)">
                         <i class="fa fa-trash"></i>
                       </button>
                     </td>
@@ -366,10 +388,11 @@
             </form>
           </div>
         </div>
-      </div> 
+      </div>
       <div class="modal-footer">
         <!-- [disabled]="!chargesCreateForm.valid" -->
-        <button class="btn btn-primary pull-right " (click)="saveFreightList()" [disabled]="!chargesCreateForm.valid || isEnableUpdateButton">
+        <button class="btn btn-primary pull-right " (click)="saveFreightList()"
+          [disabled]="!chargesCreateForm.valid || isEnableUpdateButton">
           {{ isEdit ? 'Update' : (isQuote)?'Save':'Save' }}
         </button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">
@@ -389,11 +412,11 @@
   <div class="modal-body">
     <strong style="display: inline-flex;">
       Charge Type:
-        <span class="new-label" *ngIf="selectedRowForDelete">
-         {{selectedRowForDelete.chargeType}}
-        </span>
+      <span class="new-label" *ngIf="selectedRowForDelete">
+        {{selectedRowForDelete.chargeType}}
+      </span>
     </strong>
-</div>
+  </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-success" (click)="delete()">Yes</button>
     <button type="button" class="btn btn-danger" (click)="dismissModel()">No</button>
@@ -401,93 +424,106 @@
 
 </ng-template>
 <ng-template #restoreId let-c="close" let-d="dismiss" data-backdrop="static">
-    
-  <div class="modal-header">
-      <h4 class="modal-title">Are You Sure Want to Restore?</h4>
 
-      <button type="button" class="close" aria-label="Close" (click)="dismissModelAlett()">
-          <span aria-hidden="true">&times;</span>
-      </button>
+  <div class="modal-header">
+    <h4 class="modal-title">Are You Sure Want to Restore?</h4>
+
+    <button type="button" class="close" aria-label="Close" (click)="dismissModelAlett()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
-        <strong style="display: inline-flex;">
-          Charge Type:
-            <span class="new-label" *ngIf="restorerecord">
-             {{restorerecord.chargeType}}
-            </span>
-        </strong>
+    <strong style="display: inline-flex;">
+      Charge Type:
+      <span class="new-label" *ngIf="restorerecord">
+        {{restorerecord.chargeType}}
+      </span>
+    </strong>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
-      <button type="button" class="btn btn-danger" (click)="dismissModelAlett()">No</button>
+    <button type="button" class="btn btn-primary" (click)="restoreRecord()">Yes</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModelAlett()">No</button>
   </div>
-</ng-template> 
+</ng-template>
 <ng-template #contentAuditHist1 let-c="close" let-d="dismiss" style="width:auto" data-backdrop="static">
   <div class="modal-header">
-      <h4 class="modal-title">History of Charges</h4>
-      <button type="button" class="close" aria-label="Close" (click)="dismissModelHistory()">
-          <span aria-hidden="true">&times;</span>
-      </button>
+    <h4 class="modal-title">History of Charges</h4>
+    <button type="button" class="close" aria-label="Close" (click)="dismissModelHistory()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
   <div class="modal-body">
-      <div class="table-responsive history_hg">
-          <table class="table table-bordered">
-              <thead>
-                  <tr>
-                      <th>Type <span class="clr-red">*</span></th>
-                      <th>Description</th>
-                      <th>Qty <span class="clr-red">*</span></th>
-                      <th>Ref Num</th>
-                      <th>Unit Cost <span class="clr-red">*</span></th>
-                      <th>Extended Cost <span class="clr-red">*</span></th>
-                      <th>Vendor Name</th>
-                      <th>Billing Rate</th>
-                      <th >Billing Method</th> 
-                      <th>Billing Amount</th>
-                      <th>Is Active</th>
-                      <th>Created Date</th>
-                      <th>Created By</th>
-                      <th>Updated Date</th>
-                      <th>Updated By</th>
-                      <th>Is Deleted</th>
-                  </tr>
-              </thead>
-              <tr *ngFor="let audit of chargesAudiHistory; let i = index;">
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'chargeType', audit.chargeType)  ? 'black' : 'red'  }">{{audit.chargeType}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">{{audit.description}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'quantity', audit.quantity)  ? 'black' : 'red'  }">{{audit.quantity}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'refNum', audit.refNum)  ? 'black' : 'red'  }">{{audit.refNum}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'unitCost', audit.unitCost)  ? 'black' : 'red'  }">{{audit.unitCost}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'extendedCost', audit.extendedCost)  ? 'black' : 'red'  }">{{audit.extendedCost}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorName', audit.vendorName)  ? 'black' : 'red'  }">{{audit.vendorName}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingRate', audit.billingRate)  ? 'black' : 'red'  }">{{audit.billingRate}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">{{audit.billingMethodName}}</td>
-                  <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">{{audit.billingAmount}}</td>
-                  <td style="text-align: center;">
-                      <span class="value">
-                        <label class="wauto">
-                            <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
-                        </label>
-                      </span>
-                    </td>
-   
-                  <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                  <td>{{audit.createdBy}}</td>
-                  <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
-                  <td>{{audit.updatedBy}}</td>
-                  <td style="text-align: center;">
-                      <span class="value">
-                        <label class="wauto">
-                            <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
-                        </label>
-                      </span>
-                    </td>
-              </tr>
-          </table>
-      </div>
+    <div class="table-responsive history_hg">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Type <span class="clr-red">*</span></th>
+            <th>Description</th>
+            <th>Qty <span class="clr-red">*</span></th>
+            <th>Ref Num</th>
+            <th>Unit Cost <span class="clr-red">*</span></th>
+            <th>Extended Cost <span class="clr-red">*</span></th>
+            <th>Vendor Name</th>
+            <th>Billing Rate</th>
+            <th>Billing Method</th>
+            <th>Billing Amount</th>
+            <th>Is Active</th>
+            <th>Created Date</th>
+            <th>Created By</th>
+            <th>Updated Date</th>
+            <th>Updated By</th>
+            <th>Is Deleted</th>
+          </tr>
+        </thead>
+        <tr *ngFor="let audit of chargesAudiHistory; let i = index;">
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'chargeType', audit.chargeType)  ? 'black' : 'red'  }">
+            {{audit.chargeType}}</td>
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'description', audit.description)  ? 'black' : 'red'  }">
+            {{audit.description}}</td>
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'quantity', audit.quantity)  ? 'black' : 'red'  }">
+            {{audit.quantity}}</td>
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'refNum', audit.refNum)  ? 'black' : 'red'  }">
+            {{audit.refNum}}</td>
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'unitCost', audit.unitCost)  ? 'black' : 'red'  }">
+            {{audit.unitCost}}</td>
+          <td
+            [ngStyle]="{'color':  getColorCodeForHistory(i, 'extendedCost', audit.extendedCost)  ? 'black' : 'red'  }">
+            {{audit.extendedCost}}</td>
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'vendorName', audit.vendorName)  ? 'black' : 'red'  }">
+            {{audit.vendorName}}</td>
+          <td [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingRate', audit.billingRate)  ? 'black' : 'red'  }">
+            {{audit.billingRate}}</td>
+          <td
+            [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingMethodName', audit.billingMethodName)  ? 'black' : 'red'  }">
+            {{audit.billingMethodName}}</td>
+          <td
+            [ngStyle]="{'color':  getColorCodeForHistory(i, 'billingAmount', audit.billingAmount)  ? 'black' : 'red'  }">
+            {{audit.billingAmount}}</td>
+          <td style="text-align: center;">
+            <span class="value">
+              <label class="wauto">
+                <input type="checkbox" name="isActive" [checked]="audit.isActive == true" disabled>
+              </label>
+            </span>
+          </td>
+
+          <td>{{audit.createdDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+          <td>{{audit.createdBy}}</td>
+          <td>{{audit.updatedDate | date: 'MM/dd/yyyy h:mm a '}}</td>
+          <td>{{audit.updatedBy}}</td>
+          <td style="text-align: center;">
+            <span class="value">
+              <label class="wauto">
+                <input type="checkbox" name="isDeleted" [checked]="audit.isDeleted == true" disabled>
+              </label>
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
   <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
+    <button type="button" class="btn btn-danger" (click)="dismissModelHistory()">Close</button>
   </div>
 </ng-template>
 <div class="preloader" *ngIf="isSpinnerVisible">

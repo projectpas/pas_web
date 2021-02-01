@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import {
   NgForm,
   FormBuilder,
@@ -192,6 +192,7 @@ export class SalesQuoteCreateComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private modalService: NgbModal,
+    private changeDetector: ChangeDetectorRef
   ) {
     this.salesQuote = new SalesQuote();
     this.copyConsiderations = new CopyConsiderationsForSalesQuote();
@@ -706,17 +707,17 @@ export class SalesQuoteCreateComponent implements OnInit {
     if (this.arrayEmplsit && this.arrayEmplsit.length == 0) {
       this.arrayEmplsit.push(0);
     }
-    let currentEmployeeId = this.salesQuote.employeeId;
+    //let currentEmployeeId = this.salesQuote.employeeId;
     this.arrayEmplsit.push(this.employeeId == null ? 0 : this.employeeId);
-    if (this.salesQuote.employeeId) {
-      let employeeObject: any = this.salesQuote.employeeId;
-      if (employeeObject.employeeId) {
-        currentEmployeeId = employeeObject.employeeId;
-        this.arrayEmplsit.push(employeeObject.employeeId);
-      }
-    } else {
-      currentEmployeeId = this.employeeId;
-    }
+    // if (this.salesQuote.employeeId) {
+    //   let employeeObject: any = this.salesQuote.employeeId;
+    //   if (employeeObject.employeeId) {
+    //     currentEmployeeId = employeeObject.employeeId;
+    //     this.arrayEmplsit.push(employeeObject.employeeId);
+    //   }
+    // } else {
+    //   currentEmployeeId = this.employeeId;
+    // }
     this.isSpinnerVisible = true;
     this.commonService.autoCompleteDropdownsEmployeeByMS(strText, true, 20, this.arrayEmplsit.join(), manStructID).subscribe(res => {
       this.isSpinnerVisible = false;
@@ -724,13 +725,15 @@ export class SalesQuoteCreateComponent implements OnInit {
       this.firstCollection = res;
       this.currentUserEmployeeName = getValueFromArrayOfObjectById('label', 'value', this.employeeId, res);
       if (!this.isEdit) {
-        this.getEmployeerOnLoad(currentEmployeeId);
+        this.getEmployeerOnLoad(this.salesQuote.employeeId ? this.salesQuote.employeeId.value : this.employeeId);
       }
+
+      this.changeDetector.detectChanges();
     }, err => {
       this.isSpinnerVisible = false;
-      const errorLog = err;
-      this.errorMessageHandler(errorLog);
-    })
+      // const errorLog = err;
+      // this.errorMessageHandler(errorLog);
+    });
   }
 
   setEditArray: any = [];
@@ -1358,6 +1361,7 @@ export class SalesQuoteCreateComponent implements OnInit {
           this.alertService.resetStickyMessage();
           this.alertService.showStickyMessage('Sales Order Quote', "Please select valid Dates for Sales Order Quote PartsList!", MessageSeverity.error);
         } else {
+          this.isSpinnerVisible = false;
           this.marginSummary.salesOrderQuoteId = this.id;
           this.marginSummary.misc = this.totalCharges;
           this.salesQuoteService.createSOQMarginSummary(this.marginSummary).subscribe(result => {

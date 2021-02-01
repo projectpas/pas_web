@@ -3,7 +3,6 @@ import { ISalesQuote } from "../../../../../models/sales/ISalesQuote.model";
 import { IPartJson } from "../../models/ipart-json";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { PartDetail } from "../../models/part-detail";
-import { AddSalesPartNumberComponent } from "../add-sales-part-number/add-sales-part-number.component";
 import { SalesQuoteService } from "../../../../../services/salesquote.service";
 import { ItemMasterSearchQuery } from "../../../quotes/models/item-master-search-query";
 import {
@@ -11,9 +10,8 @@ import {
   DialogType,
   MessageSeverity
 } from "../../../../../services/alert.service";
-import { formatNumberAsGlobalSettingsModule, formatStringToNumber } from "../../../../../generic/autocomplete";
+import { formatNumberAsGlobalSettingsModule } from "../../../../../generic/autocomplete";
 import { ISalesQuoteView } from "../../../../../models/sales/ISalesQuoteView";
-import { SalesOrderQuotePart } from "../../../../../models/sales/SalesOrderQuotePart";
 import { AuthService } from "../../../../../services/auth.service";
 import { CommonService } from "../../../../../services/common.service";
 import { ISalesOrderQuotePart } from "../../../../../models/sales/ISalesOrderQuotePart";
@@ -81,10 +79,6 @@ export class SalesPartNumberComponent {
     this.show = false;
     this.part = new PartDetail();
   }
-  /*addPartNumber(value) {
-    this.show = true;
-  }
-  */
 
   ngOnInit() {
     this.salesQuoteService.getSearchPartObject().subscribe(data => {
@@ -125,11 +119,9 @@ export class SalesPartNumberComponent {
     });
     this.columns = [];
     this.initColumns();
-
   }
 
   onPaging(event) {
-
   }
 
   refresh() {
@@ -166,6 +158,7 @@ export class SalesPartNumberComponent {
       })
     }
   }
+
   getDefaultCurrency() {
     this.legalEntity = 19;
     this.commonService.getDefaultCurrency(this.legalEntity).subscribe(res => {
@@ -226,6 +219,7 @@ export class SalesPartNumberComponent {
       { field: 'idNumber', header: "Cntrl ID Num", width: "90px" },
       { field: 'notes', header: "Notes", width: "120px" },
     ];
+
     this.summaryColumns = [
       { field: 'partNumber', header: 'PN' },
       { field: 'partDescription', header: 'PN Description', width: '67px' },
@@ -268,12 +262,10 @@ export class SalesPartNumberComponent {
       this.openPartNumber(false);
     }
   }
+
   onClosePartDelete() {
-
     this.deletePartModal.close();
-
   }
-
 
   addPartNumber(summaryRow: any = '', rowIndex = null) {
     this.salesQuoteService.resetSearchPart();
@@ -288,6 +280,7 @@ export class SalesPartNumberComponent {
     }
     this.openPartNumber(false);
   }
+
   viewPartNumber(summaryRow: any = '', rowIndex = null) {
     this.salesQuoteService.resetSearchPart();
     //this.salesQuoteService.getSearchPartResult();
@@ -300,14 +293,11 @@ export class SalesPartNumberComponent {
     }
     this.openPartNumber(true);
   }
+
   openPartNumber(viewMode) {
     this.isStockLineViewMode = viewMode;
     let contentPart = this.addPart;
     this.addPartModal = this.modalService.open(contentPart, { windowClass: "myCustomModalClass", backdrop: 'static', keyboard: false });
-    this.addPartModal.result.then(
-      () => { },
-      () => { }
-    );
   }
 
   get masterCompanyId(): number {
@@ -315,6 +305,7 @@ export class SalesPartNumberComponent {
       ? this.authService.currentUser.masterCompanyId
       : 1;
   }
+
   openSalesMargin(event) {
     this.isEdit = false;
     let contentMargin = this.salesMargin;
@@ -405,6 +396,7 @@ export class SalesPartNumberComponent {
       }
     }
   }
+
   openSalesMarginSave(event) {
     // if(!this.checkForDuplicates(event)){
     this.salesQuoteService.getSearchPartObject().subscribe(data => {
@@ -439,6 +431,7 @@ export class SalesPartNumberComponent {
     this.salesMarginModal.close();
     this.canSaveParts = false;
   }
+
   openPartToEdit(part) {
     this.isEdit = true;
     let contentPartEdit = this.salesMargin;
@@ -484,7 +477,6 @@ export class SalesPartNumberComponent {
         MessageSeverity.success
       );
     }
-
   }
 
   checkForDuplicates(selectedPart) {
@@ -508,6 +500,7 @@ export class SalesPartNumberComponent {
       return false;
     }
   }
+
   removePartNamber(selectedPart) {
     let selectedPartNamber = selectedPart.partNumber;
     let selectedStockLineNumber = selectedPart.stockLineNumber;
@@ -538,7 +531,6 @@ export class SalesPartNumberComponent {
     } else {
       return true;
     }
-
   }
 
   isDeleteDisabled(quote: ISalesQuote, part: any) {
@@ -550,13 +542,7 @@ export class SalesPartNumberComponent {
   }
 
   openConfirmationModal() {
-
     this.modal = this.modalService.open(this.updatePNDetailsModal, { size: "sm", backdrop: 'static', keyboard: false });
-    this.modal.result.then(
-      () => { },
-      () => { }
-    );
-
   }
 
   closeConfirmationModal() {
@@ -564,12 +550,12 @@ export class SalesPartNumberComponent {
       this.modal.close();
     }
   }
+
   get userName(): string {
     return this.authService.currentUser
       ? this.authService.currentUser.userName
       : "";
   }
-
 
   onCustomerDateChange(stockIndex, rowIndex) {
     let requestDate = this.summaryParts[rowIndex].childParts[stockIndex].customerRequestDate;
@@ -577,13 +563,11 @@ export class SalesPartNumberComponent {
     this.summaryParts[rowIndex].childParts[stockIndex].estimatedShipDate = requestDate;
     this.combineParts(this.summaryParts);
     this.canSaveParts = false;
-
   }
 
   onEditPartDetails() {
     this.combineParts(this.summaryParts);
     this.canSaveParts = false;
-
   }
 
   checkUpdateOrsaveButton() {
@@ -606,6 +590,7 @@ export class SalesPartNumberComponent {
   }
 
   enableUpdateButton: boolean = false;
+
   approve() {
     this.enableUpdateButton = true;
     let partList: any = [];
@@ -708,13 +693,14 @@ export class SalesPartNumberComponent {
       });
     }
     this.closeConfirmationModal();
-
   }
+
   onSave(event) {
   }
 
   onClosePart(event) {
   }
+
   onDataLoadFailed(log) {
     const errorLog = log;
     var msg = '';
@@ -741,12 +727,15 @@ export class SalesPartNumberComponent {
 
   notesIndex;
   notesSummaryRowIndex;
+
   onAddTextAreaInfo(material, index, summaryIndex) {
     this.notesIndex = index;
     this.notesSummaryRowIndex = summaryIndex;
     this.textAreaInfo = material.notes;
   }
+
   textAreaInfo: any;
+
   onSaveTextAreaInfo(notes) {
     if (notes) {
       this.textAreaInfo = notes;
@@ -756,6 +745,7 @@ export class SalesPartNumberComponent {
     this.canSaveParts = false;
     $("#textarea-popupNotes").modal("hide");
   }
+
   onCloseTextAreaInfo() {
     $("#textarea-popupNotes").modal("hide");
   }
@@ -821,7 +811,6 @@ export class SalesPartNumberComponent {
     return Number(num1) + Number(num2);
   }
 
-
   getUniqueParts(myArr, prop1, prop2, prop3) {
     let uniqueParts = JSON.parse(JSON.stringify(myArr));
     uniqueParts.reduceRight((acc, v, i) => {
@@ -834,6 +823,7 @@ export class SalesPartNumberComponent {
     }, []);
     return uniqueParts;
   }
+
   combineParts(parts) {
     this.selectedParts = [];
     parts.forEach(part => {
@@ -850,6 +840,7 @@ export class SalesPartNumberComponent {
   closeHistoryModal() {
     $("#soqPartHistory").modal("hide");
   }
+
   getAuditHistoryById(rowData) {
     this.isSpinnerVisible = true;
     this.salesQuoteService.getSOQPartHistory(rowData.salesOrderQuotePartId).subscribe(res => {
@@ -861,6 +852,7 @@ export class SalesPartNumberComponent {
       this.onDataLoadFailed(errorLog);
     });
   }
+
   getColorCodeForHistory(i, field, value) {
     const data = this.auditHistory;
     const dataLength = data.length;
@@ -882,24 +874,25 @@ export class SalesPartNumberComponent {
     this.modal.componentInstance.stockLineId = rowData.stockLineId;
   }
 
-  deletedata:number[] = [];
+  deletedata: number[] = [];
   deleteAllPartModal: NgbModalRef;
-  openmultiplepartDelete(summarypart, index,deletepartcontent) {
+
+  openmultiplepartDelete(summarypart, index, deletepartcontent) {
     this.selectedSummaryRow = summarypart;
     this.deletedata = [];
-    for(let i=0;i<summarypart.childParts.length;i++)
-    {
-      if(this.selectedSummaryRow.childParts[i].salesOrderQuotePartId){
+    for (let i = 0; i < summarypart.childParts.length; i++) {
+      if (this.selectedSummaryRow.childParts[i].salesOrderQuotePartId) {
         this.deletedata.push(this.selectedSummaryRow.childParts[i].salesOrderQuotePartId);
       }
     }
     this.deleteAllPartModal = this.modalService.open(deletepartcontent, { size: "sm", backdrop: 'static', keyboard: false });
   }
+
   deleteMultiplePart(): void {
     if (this.deletedata.length > 0) {
       let data = { "salesOrderQuotePartIds": this.deletedata }
       this.salesQuoteService.deleteMultiplePart(data).subscribe(response => {
-        for(let i=0;i< this.selectedSummaryRow.childParts.length;i++){
+        for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
           this.removePartNamber(this.selectedSummaryRow.childParts[i]);
         }
         this.deleteAllPartModal.close();
@@ -912,7 +905,7 @@ export class SalesPartNumberComponent {
         this.isSpinnerVisible = false;
       });
     } else {
-      for(let i=0;i< this.selectedSummaryRow.childParts.length;i++){
+      for (let i = 0; i < this.selectedSummaryRow.childParts.length; i++) {
         this.removePartNamber(this.selectedSummaryRow.childParts[i]);
       }
       //this.removePartNamber(this.part);
