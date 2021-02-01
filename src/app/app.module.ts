@@ -267,8 +267,9 @@ import { CommunicationService } from './shared/services/communication.service';
 
 import { TabViewModule } from 'primeng/tabview';
 import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-access.component';
+import { CommonDocumentsModule } from "./components/common-components/common-documents/common-documents.module";
 
-
+ 
 @NgModule({
   imports: [
     CardModule,
@@ -295,7 +296,8 @@ import { UnauthorizedAccessComponent } from './unauthorizedaccess/unauthorized-a
     ChartsModule,
     AppSharedModule,
     NgbModule,
-    TabViewModule
+    TabViewModule,
+    CommonDocumentsModule
   ],
   declarations: [
     AppComponent,

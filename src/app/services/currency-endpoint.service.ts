@@ -31,11 +31,11 @@ export class CurrencyEndpoint extends EndpointFactory {
         super(http, configurations, injector);
     }
 
-    getCountryEndpoint<T>(): Observable<T> {
+    getCountryEndpoint<T>(): Observable<T> { 
 
         return this.http.get<T>(this.CountryAll, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCountryEndpoint());
+                return this.handleErrorCommon(error, () => this.getCountryEndpoint());
             });
     }
 
@@ -43,7 +43,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.CurrencyUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCurrencyEndpoint());
+                return this.handleErrorCommon(error, () => this.getCurrencyEndpoint());
             });
     }
 
@@ -51,7 +51,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this.CurrencyUrlAll, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCurrencyEndpoint());
+                return this.handleErrorCommon(error, () => this.getCurrencyEndpoint());
             });
     }
 
@@ -59,7 +59,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.post<T>(this._currencyPostUrl, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewCurrencyEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewCurrencyEndpoint(userObject));
             });
     }
     getEditcurrencyEndpoint<T>(currencyId?: number): Observable<T> {
@@ -67,7 +67,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditcurrencyEndpoint(currencyId));
+                return this.handleErrorCommon(error, () => this.getEditcurrencyEndpoint(currencyId));
             });
     }
 
@@ -76,7 +76,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdatecurrencyEndpoint(roleObject, currencyId));
+                return this.handleErrorCommon(error, () => this.getUpdatecurrencyEndpoint(roleObject, currencyId));
             });
     }
     getDeletecurrencyEndpoint<T>(actionId: number): Observable<T> {
@@ -84,7 +84,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeletecurrencyEndpoint(actionId));
+                return this.handleErrorCommon(error, () => this.getDeletecurrencyEndpoint(actionId));
             });
     }
     getHistorycurrencyEndpoint<T>(actionId: number): Observable<T> {
@@ -92,7 +92,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getHistorycurrencyEndpoint(actionId));
+                return this.handleErrorCommon(error, () => this.getHistorycurrencyEndpoint(actionId));
             });
     }
     
@@ -101,7 +101,7 @@ export class CurrencyEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCurrencyDataAuditById(currencyId));
+                return this.handleErrorCommon(error, () => this.getCurrencyDataAuditById(currencyId));
             });
     }
     
@@ -110,7 +110,7 @@ export class CurrencyEndpoint extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getCurrencyRecords(paginationOption));
+                return this.handleErrorCommon(error, () => this.getCurrencyRecords(paginationOption));
             });
     }
 

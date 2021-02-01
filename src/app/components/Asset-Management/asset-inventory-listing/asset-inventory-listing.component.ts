@@ -208,7 +208,14 @@ export class AssetInventoryListingComponent implements OnInit {
     private onDataLoadSuccessful(allWorkFlows) {
         this.isSpinnerVisible = false;
         this.allAssetInfo = allWorkFlows.results;
-        this.allAssetInfoOriginal=allWorkFlows.results;
+
+        this.allAssetInfo.forEach(x=>{
+
+               x.createdDate=x.createdDate ?  this.datePipe.transform(x.createdDate, 'MM/dd/yyyy h:mm a'): '';
+                           x.updatedDate=x.updatedDate ?  this.datePipe.transform(x.updatedDate, 'MM/dd/yyyy h:mm a'): '';
+           
+                                 })
+        this.allAssetInfoOriginal=this.allAssetInfo;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
         this.totalRecords = allWorkFlows.totalRecordsCount;
         this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
@@ -452,7 +459,7 @@ get userName(): string {
             this.isSpinnerVisible = false;
             this.showhistorylist=false;
             const errorLog = err;
-            this.errorMessageHandler(errorLog);
+             this.errorMessageHandler(errorLog);
         })
     }
     }
@@ -501,12 +508,7 @@ get userName(): string {
                 warrantyEndDate: res.warrantyEndDate ? new Date(res.warrantyEndDate) : null,
             };
            }
-        //    if(this.currentAsset.isTangible==true){
-        //         this.toGetDocumentsListNew(row.assetInventoryId);
-        //         this.toGetDocumentsListWarranty(row.assetInventoryId);
-        //     }else{
-        //         this.toGetDocumentsListInt(row.assetInventoryId);
-        //     }
+
           
             
             this.assetInventoryId=row.assetInventoryId
@@ -754,38 +756,9 @@ parsedText(text) {
     }
       }
 
-
       errorMessageHandler(log) {
-        // this.isSpinnerEnable=false;
-        var msg = '';
-        this.alertService.showMessage(
-            'Error',
-            log,
-            MessageSeverity.error
-        ); 
-    //     if( typeof log.error == 'string' ) {
-    //         this.alertService.showMessage(
-	// 			'Error',
-	// 			log.error,
-	// 			MessageSeverity.error
-	// 		); 
-
-    //     }else{
-        
-
-	// 	  if (log.error && log.error.errors.length > 0) {
-	// 				for (let i = 0; i < log.error.errors.length; i++){
-	// 					msg = msg + log.error.errors[i].message + '<br/>'
-	// 				}
-	// 			}
-	// 			this.alertService.showMessage(
-    //                 log.error.message,
-	// 				msg,
-	// 				MessageSeverity.error
-	// 			);
-		   
-    // }
-}
+        this.isSpinnerVisible=false;
+      }
 
 isDeletedDocumentlist:boolean=false;
 warrentyDeletedList:boolean=false;

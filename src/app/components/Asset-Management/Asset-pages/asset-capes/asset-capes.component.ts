@@ -661,12 +661,6 @@ export class AssetCapesComponent implements OnInit {
         this.aircraftManfacturerData(value)
     }
     aircraftManfacturerData(value) {
-        //     this.commonservice.smartDropDownList('AircraftType','AircraftTypeId','Description').subscribe(res => {
-        //         this.manufacturerData=res;
-        //         this.loadingIndicator = false;
-        // },err => {			
-        //     const errorLog = err;
-        //     this.errorMessageHandler(errorLog);})
 
         this.setEditArray = [];
         if (this.assetServices.isCapsEditMode == true) {
@@ -690,11 +684,7 @@ export class AssetCapesComponent implements OnInit {
 
     loadModalsForExistingRecords(capData) {
         if (capData.selectedAircraftTypes) {
-            // this.itemMasterService.getAircraftTypes(capData.selectedAircraftTypes).subscribe(
-            //     results =>{ this.onDataLoadaircrafttypeSuccessfulForExisting(results[0], capData)},err => {			
-            //         const errorLog = err;
-            //         this.errorMessageHandler(errorLog);}
-            // );
+           
             this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe(results => {
                 const newResp = results.map(x => {
                     return {
@@ -726,17 +716,11 @@ export class AssetCapesComponent implements OnInit {
                 const errorLog = err;
                 this.errorMessageHandler(errorLog);
             })
-            // this.itemMasterService.getAircraftTypes(aircrafttypeid).subscribe(
-            //     results => {this.onDataLoadaircrafttypeSuccessfulForExisting(results[0], capData)},err => {			
-            //         const errorLog = err;
-            //         this.errorMessageHandler(errorLog);}
-            // );
         }
     }
 
     private onDataLoadaircrafttypeSuccessfulForExisting(allWorkFlows: any[], capData) //getting Models Based on Manfacturer Selection
     {
-        // console.log("caps",capData)
         if (allWorkFlows && allWorkFlows.length != 0) {
             capData.selectedAircraftDataModels = [];
             allWorkFlows.forEach(element => {
@@ -795,11 +779,7 @@ export class AssetCapesComponent implements OnInit {
     openModelPopups(capData) {
         if (this.itemMasterService.isEditMode == false) {
             if (capData.selectedAircraftTypes) {
-                // this.itemMasterService.getAircraftTypes(capData.selectedAircraftTypes).subscribe(
-                //     results =>{ this.onDataLoadaircrafttypeSuccessful(results[0], capData)},err => {			
-                //         const errorLog = err;
-                //         this.errorMessageHandler(errorLog);}
-                // );
+            
                 this.commonservice.smartDropDownList('AircraftModel', 'AircraftModelId', 'ModelName', 'AircraftTypeId', capData.selectedAircraftTypes).subscribe(results => {
                     const newResp = results.map(x => {
                         return {
@@ -1250,11 +1230,7 @@ export class AssetCapesComponent implements OnInit {
             this.capabilityForm.selectedDashNumbers = undefined;
             this.capabilityForm.selectedDashNumbers2 = undefined;
 
-            // if(newCapesData.selectedDashNumbers && newCapesData.selectedDashNumbers.length==0){
-            //     this.dashNumberUnknown=true;
-            // }
-
-
+    
         }
         if (type == 1 && event.target.checked == false && this.assetServices.isCapsEditMode == false) {
 
@@ -1860,7 +1836,6 @@ export class AssetCapesComponent implements OnInit {
 
         this.assetServices.updateCapes({ assetCapesId: rowData.assetCapesId, isActive: rowData.isActive }, this.userName).subscribe(res => {
             this.alertService.showMessage("Success", `Asset capes updated successfully.`, MessageSeverity.success);
-            //this.loadCapesData();
             this.getList(this.lazyLoadEventData);
         }, err => {
             const errorLog = err;
@@ -1920,40 +1895,7 @@ export class AssetCapesComponent implements OnInit {
 
 
     errorMessageHandler(log) {
-        // console.log("error",log);
-
         this.isSpinnerVisible = false;
-        // var msg = '';
-        this.alertService.showMessage(
-            'Error',
-            log,
-            MessageSeverity.error
-        );
-        // if( typeof log == 'string' ) {
-        //     this.alertService.showMessage(
-        // 		'Error',
-        // 		log,
-        // 		MessageSeverity.error
-        // 	); 
-
-        // }else  if (log && log.error && log.error.errors.length > 0) {
-        // 			for (let i = 0; i < log.error.errors.length; i++){
-        // 				msg = msg + log.error.errors[i].message + '<br/>'
-        // 			}
-        //             this.alertService.showMessage(
-        //                 log.error.message,
-        //                 msg,
-        //                 MessageSeverity.error
-        //                 );
-        //             }else{
-        //                 this.alertService.showMessage(
-        //                     'Error',
-        //                     log,
-        //                     MessageSeverity.error
-        //                 ); 
-        //             }
-
-
     }
 
     changeStatus(rowData) {}

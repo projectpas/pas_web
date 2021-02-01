@@ -31,14 +31,14 @@ export class ManufacturerEndpoint extends EndpointFactory {
 
         return this.http.get<T>(this._manufacturerUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getManufacturerEndpoint());
+                return this.handleErrorCommon(error, () => this.getManufacturerEndpoint());
             });
     }
     getNewGatecodeEndpoint<T>(userObject: any): Observable<T> {
 
         return this.http.post<T>(this._manufacturerUrlNew, JSON.stringify(userObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getNewGatecodeEndpoint(userObject));
+                return this.handleErrorCommon(error, () => this.getNewGatecodeEndpoint(userObject));
             });
     }
 
@@ -47,7 +47,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getEditManufacturerEndpoint(ManufacturerId));
+                return this.handleErrorCommon(error, () => this.getEditManufacturerEndpoint(ManufacturerId));
             });
     }
 
@@ -56,7 +56,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
 
         return this.http.put<T>(endpointUrl, JSON.stringify(roleObject), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getUpdateManufacturerEndpoint(roleObject, manufacturerId));
+                return this.handleErrorCommon(error, () => this.getUpdateManufacturerEndpoint(roleObject, manufacturerId));
             });
     }
 
@@ -65,7 +65,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
 
         return this.http.delete<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getDeleteManufacturerIdEndpoint(manufacturerId));
+                return this.handleErrorCommon(error, () => this.getDeleteManufacturerIdEndpoint(manufacturerId));
             });
     }
     getHistoryManufacturerIdEndpoint<T>(manufacturerId: number): Observable<T> {
@@ -73,7 +73,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
 
         return this.http.get<T>(endpointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getHistoryManufacturerIdEndpoint(manufacturerId));
+                return this.handleErrorCommon(error, () => this.getHistoryManufacturerIdEndpoint(manufacturerId));
             });
     }
 
@@ -81,7 +81,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
         let endPointUrl = `${this._auditUrl}/${Id}`;
         return this.http.get<T>(endPointUrl, this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getManufacturerAuditDetails(Id));
+                return this.handleErrorCommon(error, () => this.getManufacturerAuditDetails(Id));
             });
     }
 
@@ -90,7 +90,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.getManufacturerRecords(paginationOption));
+                return this.handleErrorCommon(error, () => this.getManufacturerRecords(paginationOption));
             });
     }
     ManufacturerCustomUpload(file){
@@ -103,7 +103,7 @@ export class ManufacturerEndpoint extends EndpointFactory {
         //let endpointUrl = `${this.getPaginationData}/${data}`;
         return this.http.post<T>(endpointUrl, JSON.stringify(paginationOption), this.getRequestHeaders())
             .catch(error => {
-                return this.handleError(error, () => this.SearchData(paginationOption));
+                return this.handleErrorCommon(error, () => this.SearchData(paginationOption));
             });
     }
 

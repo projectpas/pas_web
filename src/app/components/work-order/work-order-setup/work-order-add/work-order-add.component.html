@@ -4,33 +4,21 @@
             <div class="col-md-12">
                 <div class="card new-card" *ngIf="!isSubWorkOrder">
                     <div class="x_content">
-                        <!-- <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item" aria-current="page">Work Order</li>
-                                <li class="breadcrumb-item active" aria-current="page" *ngIf="!isView">Create Work Order</li>
-                                <li *ngIf="isSubWorkOrder" class="breadcrumb-item active" aria-current="page">
-                                    Sub
-                                    WOrkOrder
-                                </li>
-                            </ol>
-                        </nav> -->
-                        <div class="card-header bg-primary" *ngIf="!isSubWorkOrder && !isView">
+                        <div class="header " *ngIf="!isSubWorkOrder && !isView">
                             
                               <div class="pull-left">
-                                  <h4  class="new-card-heading">
+                                  <h4  class="header-name">
                                       {{ isEdit ? 'Edit' : 'Create' }} Work Order</h4>
 
-                                      <!-- <h4  class="new-card-heading">
-                                        {{ isEdit ? 'Edit' : 'Create' }} Sub Work Order</h4>    -->
                               </div>
 
-                              <button class="btn-sm new-btn-primary" style="margin-left:20px" (click)="toggleDisplayMode()">
+                              <button class="btn-sm header-button" style="margin-left:20px" (click)="toggleDisplayMode()">
                                 {{isDetailedView ? 'Collapse' : 'Expand'}}
                             </button>
 
-                                <button
+                                <button 
                                   type="button"
-                                  class="btn-sm new-btn-primary pull-right"
+                                  class="btn-sm header-button pull-right"
                                   [routerLink]="['/workordersmodule/workorderspages/app-work-order-list']"
                                 >
                                   Work Order List

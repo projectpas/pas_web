@@ -6,7 +6,7 @@
               </div>
               <div>
                 <a *ngIf="isViewMode == false" 
-                 data-toggle="modal" data-target="#addDocumentDetails">
+                 data-toggle="modal" data-target="#commonaddDocumentDetails">
                   <button type="button" class="btn-sm header-button"
                     matTooltip="Add Documents" matTooltipPosition="above"
                      (click)="addDocumentDetails();">
@@ -201,7 +201,7 @@
                           <a 
                             class="btn btn-info boxed-float-btn nobg"
                             data-toggle="modal"
-                            data-target="#docView"
+                            data-target="#commondocView"
                             (click)="openDocument(rowData)"
                             matTooltip="View"  matTooltipPosition="above"
                           >
@@ -209,7 +209,7 @@
                           </a>
                         </span>
                         <span *ngIf="isViewMode == false"><a class="btn nobg" (click)="restore(restoreId,rowData);" matTooltip="Restore Record"  matTooltipPosition="above"><i class="fa fa-undo" aria-hidden="true"></i></a> </span>
-                        <span><button class="btn nobg greyHistory" data-toggle="modal" data-target="#contentAuditHist" 
+                        <span><button class="btn nobg greyHistory" data-toggle="modal" data-target="#commoncontentAuditHist" 
                           (click)="openHistory(rowData)"   [disabled]="rowData.attachmentId ==0"
                           matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></button>
                         </span>
@@ -220,7 +220,7 @@
                         <a
                           class="btn btn-info boxed-float-btn nobg"
                           data-toggle="modal"
-                          data-target="#docView"
+                          data-target="#commondocView"
                           (click)="openDocument(rowData)"
                           matTooltip="View"  matTooltipPosition="above"
                         >
@@ -229,7 +229,7 @@
                       </span>
     
                       <span data-toggle="modal" *ngIf="isViewMode == false"
-                      data-target="#addDocumentDetails">
+                      data-target="#commonaddDocumentDetails">
                         <a class="btn nobg" 
                         (click)="openEdit(rowData)" matTooltip="Edit" 
                         matTooltipPosition="above"><i class="fa fa-pencil"></i></a> </span>
@@ -238,7 +238,7 @@
                         (click)="openDelete(deleteContent, rowData); documents.reset()"
                         matTooltip="Delete" matTooltipPosition="above"><i class="fa fa-trash"></i></a> </span>
     
-                        <span><button class="btn nobg greyHistory" data-toggle="modal" data-target="#contentAuditHist"
+                        <span><button class="btn nobg greyHistory" data-toggle="modal" data-target="#commoncontentAuditHist"
                           (click)="openHistory(rowData)" [disabled]="rowData.attachmentId ==0"
                           matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
                     </div>
@@ -248,14 +248,14 @@
                       <a
                         class="btn btn-info boxed-float-btn nobg"
                         data-toggle="modal"
-                        data-target="#docView"
+                        data-target="#commondocView"
                         (click)="openDocument(rowData)"
                         matTooltip="View"  matTooltipPosition="above"
                       >
                         <i class="fa fa-eye"></i>
                       </a>
                     </span>
-                    <span><button class="btn nobg"data-toggle="modal" data-target="#contentAuditHist"
+                    <span><button class="btn nobg"data-toggle="modal" data-target="#commoncontentAuditHist"
                       (click)="openHistory(rowData)" [disabled]="rowData.attachmentId ==0"
                       matTooltip="History" matTooltipPosition="above"><i class="fa fa-history"></i></button></span>
                   </td>
@@ -426,7 +426,7 @@
     </div> 
   </div>
   
-  <div id="docView" class="modal fade" role="dialog" data-backdrop="static">
+  <div id="commondocView" class="modal fade" role="dialog" data-backdrop="static">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -574,7 +574,7 @@
   
   <div
     class="modal fade"
-    id="addDocumentDetails"
+    id="commonaddDocumentDetails"
     role="dialog"
     data-backdrop="static"
     >
@@ -584,7 +584,7 @@
           <button 
             type="button"
             class="close font_chck"
-            (click)="closeMyModel('#addDocumentDetails')"
+            (click)="closeMyModel('#commonaddDocumentDetails')"
           >
             &times;
           </button>
@@ -703,7 +703,7 @@
                       class="btn nobg" 
                       data-toggle="modal"
                       (ngModelChange)="enableSave()"
-                      data-target="#memo-popup-Doc"
+                      data-target="#memo-popup-Doc-common"
                       (click)="onClickMemo()"
                       matTooltip="Add Memo"
                       matTooltipPosition="above"><i class="fa fa-pencil" style="color: #2275ce;
@@ -840,7 +840,7 @@
             <button
               type="button"
               class="btn btn-danger editor-buttons-margin"
-              (click)="dismissDocumentPopupModel(); closeMyModel('#addDocumentDetails')"
+              (click)="dismissDocumentPopupModel(); closeMyModel('#commonaddDocumentDetails')"
             >
               Close
             </button>
@@ -849,7 +849,7 @@
        
       </div>
     </div>
-    <div class="modal fade" id="memo-popup-Doc" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="memo-popup-Doc-common" style="z-index: 15000 !important;"  role="dialog" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog modal-sm">
         <div class="modal-content">
           <div class="modal-header">
@@ -904,7 +904,7 @@
     </div>
   </div>
   
-  <div  id="contentAuditHist" #contentAuditHist class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div  id="commoncontentAuditHist" #commoncontentAuditHist class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-xlg">
         <div class="modal-content">
             <div class="modal-header">
